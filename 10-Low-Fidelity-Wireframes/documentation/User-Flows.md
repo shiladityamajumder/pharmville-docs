@@ -1,6 +1,10 @@
 # Connected user flows
 
-All links below open the same local Explorer application and persistent fictional records. The initial order is `PV-DEMO-001`, with P item A and a wellness product waiting for review. Reset between independent demonstrations. A new submitted customer basket replaces this example; clinical/payment/stock gates are reset when its evidence changes.
+The prototype opens in Experience mode with **Start with a customer order** as the recommended first action. **Explore by user**, **Choose another journey**, and the collapsed screen directory remain available. Journey progress follows the current route and shared mock data. It never performs an approval, payment, stock allocation or delivery action for the reviewer.
+
+The landing page offers these guided tasks: **Create an account**, **Find and order a product**, **Order a prescription medicine**, **Pay for an order**, **Prepare an order at a store**, **Deliver an order**, **Request a return**, **Process a refund**, and **Receive stock at a warehouse**. At each journey start, keep the current data or load that journey’s prepared demo fixture. Replacing existing progress requires confirmation. Cross-role handoffs offer **Continue as [role]** in the journey itself, preserve the same record, and retain permission and business gates.
+
+All links below open the same local application and persistent fictional records. The first visit is a fresh shopping state with an empty cart and no order or payment. Prepared fixtures are visibly labelled as demo data; any prior completed action they contain is historical. Reset between independent demonstrations.
 
 ## New customer, profile and delivery address
 

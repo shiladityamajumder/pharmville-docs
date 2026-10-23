@@ -8,20 +8,21 @@ Customer and rider are mobile-first experiences. Administration, pharmacy, fulfi
 
 ## UX choices
 
-- The always-visible prototype banner separates fictional demonstration from real actions. Role/scenario/reset controls belong to the reviewer shell, while domain forms live inside the screen.
+- Experience mode is the initial view. Product screens show the user task and its next action; feature IDs, screen IDs, role selection, scenario details and reset controls live in the Review tools dialog. The fictional-demo banner is compact and stays outside the workflow.
+- Explore Pharmville recommends starting with a customer order, with role exploration, other journeys and the collapsed screen directory as secondary choices. The directory keeps searchable feature mappings and filters inside a collapsed section.
+- Journey controls preserve the current demo record across route changes. Required actions gate progress and explain what is missing. Guided role handoffs change the simulated workspace directly while preserving the same record; permission checks and business approvals still apply.
+- Mobile, tablet and desktop previews size the app surface, and container queries apply the matching internal layout independently of the browser window. Responsive mode follows the actual viewport. Customer navigation uses a single header or bottom bar at the matching app width.
+- The first visit starts with an empty shopping demo. Guided journeys offer to keep that state or load a clearly labelled prepared fictional fixture; replacing existing progress requires confirmation. Prepared historical fixtures are labelled and never imply a new payment, approval, stock movement or delivery.
 - White/gray/black, borders, system fonts and labelled placeholders emphasize hierarchy and behavior. Mobile operational tables become cards retaining column labels; no dense table is simply clipped.
-- Reusable views handle edit/detail/state variants. Hash routes support direct links, Back/Forward and refresh under a project subpath.
-- One shared order and append-only demonstration movements connect customer, pharmacy, stock, fulfillment, rider and finance. Browser storage persists the demo and updates other local tabs, not real devices.
+- Hash routes support direct links, Back/Forward and refresh under a project subpath. One shared order and append-only demonstration movements connect customer, pharmacy, stock, fulfillment, rider and finance. Browser storage persists the demo and updates other local tabs, not real devices.
 - Entering a workspace selects its illustrative role/site. Selecting an inappropriate role denies that view. These controls simulate permissions; they are not production authentication. Explicit session revocation blocks protected staff forms until demo MFA completes.
-- Native confirmation dialogs support keyboard focus, Escape and return to the invoking action. Inputs have labels and visible focus; errors/statuses are announced without relying on color.
+- Native dialogs support keyboard focus, Escape and return to the invoking action. Inputs have labels and visible focus; errors/statuses are announced without relying on color.
 
 ## Clinical, payment and stock sequence
 
 P lines require current patient/evidence and pharmacist choices before payment. M/O-only baskets skip that branch. Partial decisions preserve eligible lines and require explicit customer acceptance. The detailed journey takes priority for this demonstration; RX-02 deferred upload remains blocked because its deadline/capture/compensation rules conflict with that path.
 
 The accepted quote and exact eligible site stock gate payment. “Paid, confirmation lost” stores one pending attempt and permits reconciliation of its trusted synthetic record. Packing/delivery cannot interpret a redirect, map point or message as clinical/financial truth. COD begins as amount due and becomes actual collection only with accepted doorstep proof. Refund intent, approval, trusted completion and reconciliation stay separate.
-
-The available SQL/V0030 discrepancy remains a database release decision; this prototype connects to no database and cannot settle it. The business safety gates are UX expectations, not evidence for either intended SQL release.
 
 ## Deliberate limits and blocked work
 

@@ -1,6 +1,6 @@
 # Pharmville interactive low-fidelity wireframes
 
-A local, connected HTML/CSS/vanilla JavaScript prototype for reviewing screen structure, role handoffs, forms and failure recovery. The Explorer contains 83 reusable screens across customer, shared staff and rider experiences. All 110 existing draft feature IDs are mapped; blocked policy-dependent work is explicitly distinguished from demonstrated UX.
+A local, connected HTML/CSS/vanilla JavaScript prototype for exploring Pharmville as a customer, staff member or rider. It contains 83 reusable screens, 35 scenarios and mappings for all 110 existing draft feature IDs.
 
 ## Open the prototype
 
@@ -12,11 +12,11 @@ node 10-Low-Fidelity-Wireframes/server.mjs
 
 Open [the local Explorer](http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/). No install or backend is required to run the prototype. ES modules need the local server; GitHub’s Markdown view does not execute this app. The Node server serves only local static files on loopback. Stop it with Ctrl+C.
 
-## Review a journey
+## Explore Pharmville
 
-Choose a workspace or search the directory by screen name/feature ID. Screen links preserve the route in the URL; use browser Back/Forward or copy a URL containing a scenario. The role selector and scenario panel are reviewer controls, separate from the user’s domain action. Moving to a new workspace selects its illustrative role; selecting a different role deliberately shows access denial.
+The first screen recommends **Start with a customer order**, with **Explore by user**, **Choose another journey**, and **Browse all screens** available as secondary paths. Product screens open in Experience mode without technical IDs or QA controls. Select **Review tools** to inspect IDs, choose a role or scenario, view expected/recovery details, change the preview size, or reset the shared fictional data. Guided journeys preserve the current record, stop at business gates that still need a user action, and can load clearly labelled prepared demo data after confirmation.
 
-The starting example has a fictional P/M/O order awaiting pharmacy review and an empty shopping cart. A new accepted customer checkout replaces that example’s contents. Do not add products to a submitted order as an implicit post-order edit. Use **Reset demo data** to restore the starting records for every role in this browser.
+The default example is an empty shopping state with no submitted order, payment, approval or stock movement. A guided journey can load a prepared fictional starting state; the app asks before replacing existing progress. Completed actions in a fixture are labelled as historical demo state. Use **Reset demo data** to restore the fresh shopping state for every role in this browser.
 
 ## Documentation
 
@@ -30,7 +30,7 @@ The starting example has a fictional P/M/O order awaiting pharmacy review and an
 
 ## Files and verification
 
-`customer/`, `staff/` and `operations/` export screen metadata, renderers and action handlers. `shared/` supplies controls and staff access. `assets/js/` owns the router, shell, scenarios, generated feature catalog and synthetic state; CSS is shared and responsive. `tools/generate-documentation.mjs` regenerates inventories from the implemented registry and authoritative feature source.
+`customer/`, `staff/` and `operations/` export screen metadata, renderers and action handlers. `shared/` supplies controls and staff access. `assets/js/` owns the router, Experience/Review shell, guided journeys, scenarios, generated feature catalog and synthetic state; CSS is shared and responsive. `tools/generate-documentation.mjs` regenerates inventories from the implemented registry and authoritative feature source.
 
 Browser QA reuses the repository’s existing development-only Puppeteer dependency; the prototype itself has no dependencies. With the preview running, run `node 10-Low-Fidelity-Wireframes/tests/browser.mjs`. Screenshots and actual results are written to ignored `artifacts/` inside this folder. See the test plan for the precise evidence boundary.
 

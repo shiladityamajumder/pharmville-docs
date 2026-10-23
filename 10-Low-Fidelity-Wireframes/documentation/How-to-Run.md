@@ -19,14 +19,15 @@ node 10-Low-Fidelity-Wireframes/server.mjs
 
 Then use `http://127.0.0.1:4174/10-Low-Fidelity-Wireframes/`. The server binds only to your machine. It serves relative local assets and documentation; it blocks hidden folders, node_modules and artifacts. Serve from the repository root so links back to the source documentation resolve.
 
-## Explore and share
+## Explore Pharmville
 
-1. Choose a workspace, use the screen directory or start a listed flow.
-2. Read the visible role, screen ID, requirement IDs and record status.
-3. Use real local forms/buttons; change the reviewer scenario to inspect a failure.
-4. Move to the responsible role to complete a handoff. Reopen the customer order to observe the change.
-5. Use browser Back/Forward or refresh. A direct example is [pending-payment recovery](../index.html#/customer/payment-recovery?scenario=confirmation-lost).
-6. Choose **Reset demo data**, then confirm in the dialog, to restore all fictional records. Escape cancels the reset.
+The prototype opens in **Experience mode** with a recommended **Start with a customer order** action. **Explore by user**, **Choose another journey**, and the collapsed **Browse all screens** directory remain available as secondary paths. The first visit starts with an empty shopping demo.
+
+On an app screen, **Review tools** opens a separate keyboard-accessible side panel. It contains the screen ID, feature IDs, current role, relevant scenarios, expected result, recovery guidance and requirement links. Choose a scenario in the panel to see its effect on the app screen. Close the panel to return to the product view. Use **Continue as [role]** at a guided handoff to change the simulated role while keeping the same order.
+
+To start a guided journey, choose whether to keep the current demo data or load its prepared fictional starting state. Replacing existing progress requires confirmation. Mobile, tablet and desktop previews apply responsive rules to the selected app frame, even inside a desktop browser. **Responsive** follows the actual browser width; resizing the browser directly also changes that layout.
+
+Use browser Back/Forward or refresh. A direct example is [pending-payment recovery](../index.html#/customer/payment-recovery?scenario=confirmation-lost). Choose **Reset demo data** in Review tools, then confirm in the dialog, to restore the fresh shopping state across roles. Escape cancels the reset.
 
 The browser stores only the demonstration state under `pharmville-wireframe-demo-v1`. Storage is shared between tabs on this origin, not between real devices. If storage is unavailable the app continues in memory and warns that refresh resets data. Use synthetic inputs; do not enter real contact, patient, payment or medical information.
 
