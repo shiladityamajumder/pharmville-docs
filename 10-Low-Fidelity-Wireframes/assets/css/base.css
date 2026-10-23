@@ -7,7 +7,19 @@
   --ink:#202020;
   --muted:#5a5a5a;
   --line:#b8b8b4;
-  --paper:#fff
+  --paper:#fff;
+  --surface:#fff;
+  --surface-soft:#f3f3f1;
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-6:24px;
+  --space-8:32px;
+  --radius-control:2px;
+  --radius-panel:3px;
+  --target-min:44px;
+  --content-max:1200px
 }
 
 [hidden] {
@@ -52,7 +64,7 @@ button,a,input,select,textarea {
 }
 
 button,a.button {
-  min-height:44px
+  min-height:var(--target-min)
 }
 
 button {
@@ -242,7 +254,7 @@ img {
 }
 
 .screen-content {
-  max-width:1200px
+  max-width:var(--content-max)
 }
 
 .screen-content.customer {

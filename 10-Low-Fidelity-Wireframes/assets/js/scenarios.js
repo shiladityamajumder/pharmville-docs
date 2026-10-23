@@ -36,4 +36,4 @@ offline:row('SCN-RID-001','Rider offline','Current device has no connection','Su
 'access-revoked':row('SCN-REP-002','Access revoked before download','A report exists but role/location access changed','Download the export','Deny protected download and keep it private','Security reviews current access','03-Modules/Reporting/Edge-Cases.md'),
 'provider-error':row('SCN-EXT-001','External adapter unavailable','The required provider evidence cannot be obtained','Send or reconcile the local demonstration','Leave the operation pending/failed as appropriate','Review the existing reference after adapter recovery','07-Engineering/State-and-Recovery-Contracts.md')
 };
-export const genericBlocks=new Set(['loading','empty','network','permission','session']);
+export const genericBlocks=new Set(['loading','empty','permission','session']);

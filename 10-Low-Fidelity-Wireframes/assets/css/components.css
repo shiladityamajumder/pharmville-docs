@@ -7,7 +7,7 @@ button,.button {
   border:1px solid #666;
   background:white;
   text-decoration:none;
-  border-radius:3px;
+  border-radius:var(--radius-control);
   font-size:.85rem;
   font-weight:550;
   line-height:1.35
@@ -34,7 +34,7 @@ button:hover,.button:hover {
 
 .button.small {
   padding:7px 11px;
-  min-height:36px;
+  min-height:var(--target-min);
   font-size:.77rem
 }
 
@@ -47,10 +47,10 @@ button:hover,.button:hover {
 }
 
 .panel,.card {
-  background:white;
+  background:var(--surface);
   border:1px solid var(--line);
-  padding:22px;
-  border-radius:3px
+  padding:var(--space-6);
+  border-radius:var(--radius-panel)
 }
 
 .grid,.two-column,.two-col,.form-grid,.cards {
@@ -91,11 +91,11 @@ button:hover,.button:hover {
 
 .field input,.field select,.field textarea,form>input,form>select,form>textarea {
   width:100%;
-  min-height:44px;
-  padding:10px 12px;
+  min-height:var(--target-min);
+  padding:var(--space-2) var(--space-3);
   border:1px solid #8c8c87;
   background:white;
-  border-radius:2px
+  border-radius:var(--radius-control)
 }
 
 .field textarea,textarea {
@@ -461,6 +461,21 @@ thead th {
 .toast {
   margin-bottom:20px
 }
+
+.network-notice {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-4);
+  margin:0 0 var(--space-4);
+  padding:var(--space-4);
+  border:1px solid var(--line);
+  border-left:4px solid var(--ink);
+  background:var(--surface-soft)
+}
+
+.network-notice h2 {margin-bottom:var(--space-1)}
+.network-notice p {margin:0}
 
 .loading-state {
   border:1px dashed #999;
