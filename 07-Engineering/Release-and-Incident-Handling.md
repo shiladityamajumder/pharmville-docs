@@ -1,14 +1,10 @@
 # Release and incident handling
 
-## Canary Release
-
 ## Canary release plan — future activity
 
 **Not deployed.** Begin with small approved test cohorts or staff pilots after signed UAT and database/provider readiness. Compare accepted checkout and order truth, money/stock reconciliation, clinical safety denials and user-visible API failures against the established baseline. Numeric traffic and time windows require SRE/product approval, not invented defaults.
 
 Stop or roll back application traffic if mismatch, sensitive-data exposure, unsafe permission or pharmacy-review bypass is observed. Never delete clinical, audit or accounting records to reverse a failed canary.
-
-## Feature Flags
 
 ## Feature flags and rollout controls
 
@@ -16,15 +12,11 @@ Flags are proposed for noncritical rollout features: search suggestions, alterna
 
 Unknown or stale flag evaluation should default to the approved safe behavior. Flag changes require audit events; cross-module features should use an explicit state-versioned rollout contract.
 
-## Iteration Process
-
 ## Controlled iteration and change management
 
 Create a change request with source approval, impact on REQ/FEAT, HLD/LLD, API DTOs, DB migration, security, acceptance tests, rollout and rollback. Do not silently adjust sensitive business rules through configuration or a migration.
 
 Every approved change updates traceability IDs and affected documentation in the same review. Recheck compatibility of existing clients and replay queues after release.
-
-## Production Monitoring
 
 ## Production monitoring plan
 
@@ -33,8 +25,6 @@ Every approved change updates traceability IDs and affected documentation in the
 **Privacy:** logs and traces must not contain raw prescriptions, names, coordinates or payment secrets. Retain incident metadata in an approved restricted store with documented retention.
 
 **Alert assignment:** propose operations owner for payment/stock, pharmacist for clinical review, and security lead for access/PII alerts. Actual staff and escalation contacts are not available.
-
-## Release Strategy
 
 ## Release strategy — proposed
 
@@ -48,15 +38,11 @@ Every approved change updates traceability IDs and affected documentation in the
 
 **Status:** release procedure proposal, not proof a canary, staging environment or deployment exists.
 
-## Rollback Plan
-
 ## Controlled recovery and rollback
 
 Freeze writes only under an approved incident action. For a bad application build, restore compatible code behind a feature flag; verify database ledger and provider state before replay. For already committed payments, refunds, stock movements or clinical decisions, prefer forward correction and compensating events with auditable reason codes rather than deleting records.
 
 SQL history the checked-in SQL migration history is immutable in shared environments. A broken migration requires a reviewed forward-fix and restored snapshot only under DBA control. Record the decision owner, incident timestamp, business exposure, communication plan and evidence.
-
-## Incident Triage
 
 ## Runbook — suspected production incident
 
@@ -70,8 +56,6 @@ SQL history the checked-in SQL migration history is immutable in shared environm
 6. Restore service, verify safe gates, reconcile pending events and publish incident outcome with redacted records and follow-up test.
 
 Related Runbook: Unknown Payment/Stock and Backup and Recovery.
-
-## Payment or Stock Unknown
 
 ## Runbook — payment or stock truth is unknown
 

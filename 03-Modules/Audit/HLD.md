@@ -1,6 +1,6 @@
 # Audit HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Reporting-and-Audit.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-016: Immutable change evidence — HLD
 
@@ -25,8 +25,6 @@
 
 ## Risk
 All privileged and denied actions generate minimum necessary audit evidence without raw secrets. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-016 — Immutable change evidence
 

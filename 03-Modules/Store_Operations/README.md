@@ -1,6 +1,6 @@
 # Store Operations
 
-## Purpose and feature scope
+[Business flow](../../00-Business-Guide/Store-and-Warehouse.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-008 — Picking, packing and store replenishment
 
@@ -25,8 +25,6 @@
 - [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
 
 **Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
-
-## Module design
 
 ## MOD-008: Picking, packing and store replenishment — HLD
 

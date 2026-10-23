@@ -1,7 +1,5 @@
 # Database relationships
 
-## Relationships
-
 ## Database relationships by business flow
 
 **Identity:** `identity.users` connects to customer/family, clinical, order and staff actor references. Numeric paired FKs mirror UUID aliases for entities; keep both scope relationships consistent.
@@ -16,8 +14,6 @@
 
 For exact FK columns and delete actions, open the per-table contracts; this overview is a readable path, not a substitute for migration DDL.
 
-## Data lifecycle
-
 ## Data lifecycle, retention and lawful changes
 
 Account/consent → catalogue publication → cart/quote → immutable order revision → clinical/payment/stock/fulfillment/delivery evidence → invoice/returns/refunds/closure. The database implements row timestamps, version fields, audit and selected soft-delete patterns, but a consistent legal retention schedule is not supplied.
@@ -27,8 +23,6 @@ Identity/contact, dependent patients, prescriptions, diagnostics, location sampl
 Preserve immutable order/clinical/financial history and make corrections through new accepted revisions or compensating records. A pending deletion must be reconciled against legal holds and business records. Avoid hard-coded number of years, GPS retention days or medical licensing assertions; document approval D-013.
 
 See Privacy and Compliance Considerations.
-
-## Transactions
 
 ## Transaction boundaries and concurrency
 

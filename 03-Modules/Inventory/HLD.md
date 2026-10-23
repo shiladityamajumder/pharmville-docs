@@ -1,6 +1,6 @@
 # Inventory HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Inventory-and-Stock.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-009: Lot-aware inventory and reservation — HLD
 
@@ -30,8 +30,6 @@
 
 ## Risk
 A reservation must not create negative eligible stock and must not use expired/blocked lots. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-009 — Lot-aware inventory and reservation
 

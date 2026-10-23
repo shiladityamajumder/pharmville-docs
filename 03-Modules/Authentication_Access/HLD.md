@@ -1,6 +1,6 @@
 # Authentication Access HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Accounts-and-Login.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-017: Login, sessions, roles and access control — HLD
 
@@ -27,8 +27,6 @@
 
 ## Risk
 Client-supplied actor, role and location are never trusted as authorisation context. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-017 — Login, sessions, roles and access control
 

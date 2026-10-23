@@ -1,6 +1,6 @@
 # System architecture (HLD)
 
-## System Architecture
+[Business journey](../00-Business-Guide/Pharmville-Complete-Business-Flow.md) · [command/data ownership](../07-Engineering/State-and-Recovery-Contracts.md) · [module designs](../03-Modules/README.md)
 
 ## Master High-Level Design (HLD)
 
@@ -16,7 +16,7 @@ flowchart TB
  API --> OMS[Checkout / orders / pharmacy]
  API --> OPS[Inventory / store / delivery]
  API --> FIN[Payments / reports / audit]
- IAM & CAT & OMS & OPS & FIN --> PG[(PostgreSQL the checked-in SQL migration history)]
+ IAM & CAT & OMS & OPS & FIN --> PG[(PostgreSQL)]
  API --> Q[Redis + BullMQ queued jobs]
  API --> FS[Private S3 objects]
  Q --> EXT[Cashfree / MSG91 / SES / POS / maps]
@@ -29,8 +29,6 @@ The database remains source of truth for money, stock, clinical decisions and st
 
 **Critical architecture risks:** stale POS stock, unapproved production pharmacy licenses, webhook ambiguity, money/stock concurrency, unapproved retention and incomplete external provider contracts. Related Module dependencies, Cross-module order flow, Database, and Decisions.
 
-## Platform Architecture
-
 ## Customer, staff, rider and database platform boundaries
 
 Customer Web is mobile-first Next.js and displays browse/search, dependent patient selection, Rx upload and a safe order timeline. Staff Web is a separate protected role- and location-scoped surface for product admin, pharmacist workbench, stock, store/warehouse, rider assignment, finance, reports and audit. Riders use an Android workflow in later Phase 1 decisions, but the mobile framework/distribution rules remain open. Native customer apps are future-phase scope.
@@ -40,8 +38,6 @@ All clients call REST v1 through a controlled API ingress. Session refresh and O
 Database deploys independently from NestJS and Next.js using versioned SQL runners in the database repository. Python/SQLAlchemy model tooling validates database parity and is not permission to introduce a second migration authority. Staff operational and financial actions require auditable immutable business events and separate capability grants.
 
 **Delivery units:** independent repositories are a proposed preference; agree API version, shared schema migration ownership and coordinated release contracts to avoid drift. See Environments, API and Source conflicts.
-
-## System Components
 
 ## System components and responsibility boundaries
 
@@ -57,8 +53,6 @@ Database deploys independently from NestJS and Next.js using versioned SQL runne
 | Adapter processes | Cashfree, MSG91/SES/FCM, Maps/OSRM, POS, GPS | Trust unsigned callbacks or make blind money retries |
 
 **Cross-cutting services:** authentication, permission policies, audit records, configuration/controlled masters, telemetry, notification templates and versioned events. Source HLDs are proposals. The modules each have an actual design folder under LLD.
-
-## Module Dependencies
 
 ## Module dependencies and interaction matrix
 
@@ -87,8 +81,6 @@ A domain schema can be referenced by multiple modules. The table below denotes *
 
 Use synchronous in-process service APIs for transactional reads and validated commands. Where eventual processing is acceptable, persist a local outbox event in the same transaction and handle it idempotently. A new microservice is not justified by a domain folder alone. The manual next-step dependency ordering is in Implementation_Order.
 
-## Security Architecture
-
 ## Security trust boundaries
 
 Trust boundaries exist between public customer browser, protected staff web, rider Android app, backend API, DB capability roles, private S3, payment/OTP services and workers. Each request is untrusted until session, per-object scope, version and business policy are checked by a backend service.
@@ -99,19 +91,15 @@ Encryption of RDS/S3/ElastiCache with KMS, Secrets Manager, TLS, staff MFA, acce
 
 See Threat Model, Auth flows and Audit.
 
-## Database Architecture
-
 ## PostgreSQL architecture and identity strategy
 
-**Authoritative implementation:** the checked-in SQL migration history SQL migrations in `healthcare_db/postgresql/migrations/`; historical Alembic execution is frozen. Final local PostgreSQL 18 evidence records 24 schemas, 266 tables, 4,438 columns, 1,461 FKs, 1,204 indexes, 56 functions, 879 triggers and 3 RLS policies. PostgreSQL 15 hosted validation and production authorization remain unproven.
+**Available source; intended release unresolved (D-015):** the checked-in SQL migration history in `healthcare_db/postgresql/migrations/`; historical Alembic execution is frozen. Historical V0030-based local PostgreSQL 18 evidence records 24 schemas, 266 tables, 4,438 columns, 1,461 FKs, 1,204 indexes, 56 functions, 879 triggers and 3 RLS policies. PostgreSQL 15 hosted validation and production authorization remain unproven.
 
 **Primary keys:** `identity.users.id` is UUID; 257 older entity tables use BIGINT `internal_id` as their primary key with original immutable UNIQUE public UUID `id`; eight newer tables use BIGINT `id` identity PK. Key crosswalks and paired numeric FKs preserve existing public contracts. Internal numeric IDs are join keys, not access tokens; service authorization always checks actor, owner, scope and state.
 
 **Deployment rule:** write new forward-only SQL versions, rehearse on an isolated copy, run the repo's verified `status/migrate/verify` runner with explicitly approved database URL, compare schema/ORM/catalog and release only after approvals. Never stamp, reset or run Alembic side by side. Schema migration and application rollout must use compatibility-aware expand/backfill/contract transitions.
 
-Full existing table/field/constraint inventories are generated under Database design. The source final database acceptance says structural/local tests pass, but production remains **NOT APPROVED**.
-
-## Scalability
+Full existing table/field/constraint inventories are generated under Database design. The recorded acceptance report covers the available V0030 baseline, while the user’s intended baseline excludes it. [Migration evidence](../04-Database/Migrations.md) records that unresolved difference; neither deployment nor production approval is established here.
 
 ## Growth without premature distributed systems
 
@@ -120,8 +108,6 @@ The proposed architecture is a modular monolith, so maintain cohesive domain own
 Primary scaling risks: hot inventory lot rows during last-unit holds, checkout peak concurrency, large order/history/report scans, POS reconciliation lag, rider GPS write volume, and Rx/private-file access throughput. Use measured scoped indexes and representative workloads. The database repo records a synthetic 19-query benchmark and 50,000-row key experiment, but neither proves production capacity or a business SLA.
 
 Redis may cache published catalogue summaries or rate limits, never authoritative payment/stock/Rx approval. Add asynchronous jobs for provider callbacks, notifications and large reports with durability/replay controls. Keep partitioning, pooling, replicas and service extraction as evidence-based future choices. Track latency, connection pool saturation, inventory conflicts, webhook delay and queue backlog. See Performance testing.
-
-## Reliability
 
 ## Reliability and disaster recovery design
 

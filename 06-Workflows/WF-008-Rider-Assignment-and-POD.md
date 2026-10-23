@@ -1,52 +1,53 @@
 # WF-008 — Rider Assignment and POD
 
-**Status:** Proposed orchestration based on draft requirements and existing DB contracts. This is not an observed deployed workflow.
+**Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
 
-**Actor:** Dispatcher / rider. **Trigger:** assign or complete delivery.
-**Preconditions:** Valid session and per-resource scope; approved policy data and current serviceability or eligibility where relevant.
-**Expected outcome:** delivery proof or documented failure.
+## Actors and preconditions
 
-## Normal path
+Dispatcher or rider, Delivery and Customer. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.
 
-1. Resolve trusted identity and current entity version.
-2. Check classifications, licensing, money, consent and location conditions appropriate to this workflow.
-3. Validate request payload and expected state.
-4. Commit owning module rows and audit/outbox atomically.
-5. Publish any external side effect only after commit and record correlation IDs.
-6. Return an honest status and allow safe resume.
+## Normal path and committed outcomes
+
+1. A scoped dispatcher confirms an eligible rider for a ready parcel; competing assignments cannot both become current.
+2. Assigned rider accepts and records pickup only after current fulfillment/payment/clinical/stock gates pass.
+3. Location updates identify capture time and active assignment. Enforce approved privacy/cadence/retention; GPS never proves delivery.
+4. Completion checks current rider/assignment, server-side customer OTP and approved photo proof. Record actual COD through Finance rather than inferring cash settlement.
+5. Offline actions are unconfirmed until replay is validated; incorrect proof, reassignment or a failed attempt leaves a visible dispatch exception.
 
 ## Data ownership and API boundary
-**Modules:** Delivery_Operations, Rider_App, Notifications.
-**Existing tables involved (candidates):** `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_otp_challenges`, `logistics.shipments`.
-**Related proposed APIs:** API-064, API-065, API-066, API-067, API-068, API-094, API-095, API-096, API-097, API-069; additional related contracts are in module API indexes.
 
-## Alternative / failure flows
-- **Example failure:** OTP replay, rider outside shift, missing GPS consent. Do not make an optimistic success assertion.
-- **Duplicate operation:** accept only the same idempotent result or issue a version conflict; never duplicate stock or money movements.
-- **Provider/network timeout:** leave a pending reconciliation state; never infer a paid/delivered/reviewed outcome.
-- **Unauthorized or expired identity:** deny, audit outcome as policy allows, and avoid revealing another user’s resource.
-- **Compensation:** when separate providers or ledgers are involved, use explicit compensating actions after durable evidence. Never silently reverse historic finance or clinical records.
+Delivery owns assignment, proof, custody and attempts. Rider is a scoped client; Finance separately owns collected COD.
 
-## Sequence (design)
+Candidate existing tables: `logistics.shipments`, `logistics.delivery_assignments`, `logistics.delivery_otp_challenges`, `logistics.delivery_attempts`, `logistics.delivery_location_updates`, `payment.cod_collections`. Exact write fields and runtime grants remain per-operation review under D-024.
+
+Related proposed operations: API-064/API-065 and API-070–API-074. [Delivery Operations](../05-APIs/Delivery_Operations.md) · [Rider App](../05-APIs/Rider_App.md).
+
+## Sequence
+
 ```mermaid
 sequenceDiagram
-  participant A as Dispatcher
-  participant API as API gateway
-  participant O as Owning module
-  participant PG as PostgreSQL
-  participant P as Outbox/provider
-  A->>API: assign or complete delivery
-  API->>O: Trusted actor + validated intent
-  O->>PG: Scope + version/constraint check
-  alt policy or concurrency conflict
-    PG-->>O: Denied / no commit
-    O-->>A: Correctable error or pending state
-  else accepted
-    O->>PG: Atomic facts + outbox/audit
-    PG-->>O: Commit + accepted public ID
-    O-->>A: Safe status
-    O-->>P: Post-commit side effect, if needed
+  participant C as Dispatcher or rider
+  participant O as Delivery
+  participant S as Customer
+  participant D as PostgreSQL
+  C->>O: Confirm eligible assignment and pickup
+  O->>D: Guard current task and custody
+  O-->>S: Permitted tracking and delivery OTP view
+  C->>O: Submit OTP, proof and actual COD
+  O->>D: Validate proof and current assignment
+  alt Valid proof and commit
+    O-->>S: Delivered status
+  else Invalid proof or stale offline command
+    O-->>C: Not completed, retry or contact dispatch
   end
 ```
 
-**Required QA:** approved happy path, denial, replay, race, provider outage, stale state, and actor-scope negative test; testing strategy.
+## Failure, transaction and recovery boundaries
+
+The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the [state and recovery contract](../07-Engineering/State-and-Recovery-Contracts.md): local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.
+
+## Feature-specific verification and navigation
+
+Designed cases: `TC-DLV-02-DENY`, `TC-RID-02-DENY`, `TC-RID-04-DENY`, `TC-RID-03-DENY`. Locate their owning LLD/edge pages through the [feature register](../09-References/Coverage-and-Traceability.md). Record fixtures, approved policies and actual execution before claiming success.
+
+[Business journey](../00-Business-Guide/Pharmville-Complete-Business-Flow.md) · [module designs](../03-Modules/README.md) · [operation contracts](../05-APIs/Critical-Operation-Contracts.md) · [data mapping](../04-Database/Module-Mapping.md) · [testing](../07-Engineering/Testing.md) · [workflow index](README.md)

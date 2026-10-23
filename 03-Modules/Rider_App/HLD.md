@@ -1,6 +1,6 @@
 # Rider App HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Delivery-and-Rider-App.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-013: Rider shifts and delivery actions — HLD
 
@@ -30,8 +30,6 @@
 
 ## Risk
 Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-013 — Rider shifts and delivery actions
 

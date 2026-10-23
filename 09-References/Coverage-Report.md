@@ -2,14 +2,26 @@
 
 ## Measured feature evidence
 
-The inventory has 110 unique draft feature IDs across 18 modules. All 110 are preserved in the [master register](Coverage-and-Traceability.md). All have ID mentions in their module HLD/LLD/edge document and the shared testing document. This is textual traceability, not complete engineering design.
+The [authoritative feature inventory](../01-Project/Features-and-Modules.md) retains 110 unique draft IDs across 18 module groups. The [master register](Coverage-and-Traceability.md) links each to Business Flow, HLD, LLD, APIs, data mapping, edge cases, tests and original development task. There are no missing navigation mappings in the executed checks; navigation is not approved implementation.
 
-After authentication corrections, 87/110 have an exact feature-ID mention in the owning API document; 23 do not. Cross-module candidates are recorded in the register. Most operation schemas, feature-specific transaction boundaries and concrete failure assertions remain incomplete under D-024. Candidate database links do not establish table write ownership. No feature is certified fully ready by this count. ACC-01 and ACC-02 have distinct designs, but their onboarding/consent and contact-change decisions remain open.
+The 17-page [Business Guide](../00-Business-Guide/README.md) covers all current module groups, normal and alternate paths, failed steps, responsible teams, visible outcomes and approval gaps. Future schema domains do not create launch requirements.
 
-## Schema verification
+## API and test readiness
 
-All 266 table-page field inventories match the available final table register. A static scan of explicitly backticked schema-qualified table and column references found no missing names. Material identity claims were checked against initial SQL and the recorded catalog. This is not live schema introspection or a semantic proof of every prose reference. See [migration evidence](../04-Database/Migrations.md).
+87/110 features have an exact ID mention in the owning API file. The 23 remaining historical gaps are preserved with specific explanations in the register; some are cross-module supporting commands, others absent contracts. We do not inflate this metric by inserting feature names without mapping real behavior.
 
-## Validation and readiness
+[Critical operation contracts](../05-APIs/Critical-Operation-Contracts.md) refine checkout, hold/release, pharmacy decisions, payment evidence, cancellation/return, refund and delivery proof with proposed typed fields and concrete outcomes. Exact DTO bounds, field writes, runtime grants, enum mappings and provider signatures still need D-024/D-016 review. No feature is declared fully ready from these counts.
 
-Read the [independent audit](Engineering-Audit.md) for severity, exact locations, corrections and validation results. Application/provider tests have not run. Documentation completeness, feature-ID mentions, recorded database acceptance, and deployed product readiness are separate claims.
+All features now have specific normal/adverse assertions in LLD/Edge-Cases. There are 234 distinct named application test designs, including the detailed account cases and nine additional payment-loss, stock-expiry, last-unit, clinical-revision, refund-race and offline-proof scenarios. They are Designed / NOT RUN. The shared [testing strategy](../07-Engineering/Testing.md) links module views instead of copying generic per-feature tables.
+
+## Schema and source verification
+
+Read-only checks compare 266 table pages and 4,438 column names with the available final catalog and 30 versioned SQL checksums with the [evidence snapshot](Database-Evidence.json). All 103 migration SQL files including fragments remain unchanged. This establishes consistency with the inspected source, not live deployment or the intended latest release.
+
+The user’s intended V0030 removal conflicts with its presence in the current sibling checkout and historical acceptance report. D-015 remains open; [migration evidence](../04-Database/Migrations.md) records the release-owner action and explains why recorded counts cannot be relabelled as another migration version.
+
+## Documentation checks and remaining limits
+
+449 Markdown files, 3,835 relative links/anchors and 1,594 tables pass structural checks. All 52 Mermaid blocks parse and render; the original 51 contained 18 actual parser failures. Feature/test-reference checks and the validator’s negative regression fixture pass. Seven representative images received visual review; interactive VS Code preview, hosted GitHub rendering and hosted CI remain unverified.
+
+No application/provider/live-database tests ran. Read the [engineering audit](Engineering-Audit.md) for exact evidence, blocker owners and production-readiness limits, and [conventions](Documentation-Conventions.md) to reproduce local checks.

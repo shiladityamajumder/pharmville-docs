@@ -1,6 +1,6 @@
 # Warehouse HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Store-and-Warehouse.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-010: Warehouse replenishment and transfers — HLD
 
@@ -28,8 +28,6 @@
 
 ## Risk
 Receiving and transfers create a traceable stock ledger and require location/lot scope. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-010 — Warehouse replenishment and transfers
 

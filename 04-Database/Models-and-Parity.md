@@ -1,7 +1,5 @@
 # ORM models and parity
 
-## Model inventory
-
 ## Complete ORM class-to-table inventory
 
 **Recorded model inventory:** 266 table-declaring SQLAlchemy classes across model modules; every registered class resolves to one of the 266 PostgreSQL tables in the recorded catalog, including six reason-code masters whose schema is supplied by `master_args(...)`.
@@ -35,10 +33,8 @@
 | `support` | 8 | Open |
 | `warehouse` | 18 | Open |
 
-**Source:** [database models](../../healthcare_db/healthcare_db/app/models/) (static parsing), `docs/upgrade/final_inventory.json` (recorded PG18 catalog).
+**Source:** database models (`healthcare_db/app/models/` in the sibling checkout) (static parsing), `docs/upgrade/final_inventory.json` (recorded PG18 catalog).
 **Caution:** imports, SQLAlchemy metadata construction, live ORM-column parity and PostgreSQL migrations were not executed during this documentation task. For planned NestJS runtime, establish a separate typed SQL access layer and verify its permissions.
-
-## appointment
 
 ## SQLAlchemy models for `appointment`
 
@@ -55,8 +51,6 @@
 | `ServiceTypes` | `app/models/appointment.py:30` | `appointment.service_types` | all columns |
 | `TeleconsultationSessions` | `app/models/appointment.py:203` | `appointment.teleconsultation_sessions` | all columns |
 | `WaitingRoomEvents` | `app/models/appointment.py:225` | `appointment.waiting_room_events` | all columns |
-
-## catalog
 
 ## SQLAlchemy models for `catalog`
 
@@ -84,8 +78,6 @@
 | `SubstitutionGroups` | `app/models/catalog.py:454` | `catalog.substitution_groups` | all columns |
 | `UnitsOfMeasure` | `app/models/catalog.py:152` | `catalog.units_of_measure` | all columns |
 
-## clinical
-
 ## SQLAlchemy models for `clinical`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -109,8 +101,6 @@
 | `PrescriptionItems` | `app/models/clinical.py:366` | `clinical.prescription_items` | all columns |
 | `Prescriptions` | `app/models/clinical.py:298` | `clinical.prescriptions` | all columns |
 | `ReviewReasonCodes` | `app/models/reference_data.py:70` | `clinical.review_reason_codes` | all columns |
-
-## commerce
 
 ## SQLAlchemy models for `commerce`
 
@@ -136,8 +126,6 @@
 | `ReturnReasonCodes` | `app/models/reference_data.py:80` | `commerce.return_reason_codes` | all columns |
 | `Returns` | `app/models/commerce.py:370` | `commerce.returns` | all columns |
 
-## compliance
-
 ## SQLAlchemy models for `compliance`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -153,8 +141,6 @@
 | `RegulatoryAuthorities` | `app/models/compliance.py:26` | `compliance.regulatory_authorities` | all columns |
 | `RegulatoryRegistrations` | `app/models/compliance.py:39` | `compliance.regulatory_registrations` | all columns |
 
-## customer
-
 ## SQLAlchemy models for `customer`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -169,8 +155,6 @@
 | `Profiles` | `app/models/customer.py:30` | `customer.profiles` | all columns |
 | `WishlistItems` | `app/models/customer.py:225` | `customer.wishlist_items` | all columns |
 | `Wishlists` | `app/models/customer.py:205` | `customer.wishlists` | all columns |
-
-## diagnostics
 
 ## SQLAlchemy models for `diagnostics`
 
@@ -192,8 +176,6 @@
 | `TestPackageItems` | `app/models/diagnostics.py:114` | `diagnostics.test_package_items` | all columns |
 | `TestPackages` | `app/models/diagnostics.py:96` | `diagnostics.test_packages` | all columns |
 
-## finance
-
 ## SQLAlchemy models for `finance`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -208,8 +190,6 @@
 | `JournalLines` | `app/models/finance.py:151` | `finance.journal_lines` | all columns |
 | `SettlementItems` | `app/models/finance.py:198` | `finance.settlement_items` | all columns |
 | `SettlementRuns` | `app/models/finance.py:172` | `finance.settlement_runs` | all columns |
-
-## fulfillment
 
 ## SQLAlchemy models for `fulfillment`
 
@@ -227,8 +207,6 @@
 | `PickTasks` | `app/models/fulfillment.py:109` | `fulfillment.pick_tasks` | all columns |
 | `PickingWaveOrders` | `app/models/fulfillment.py:94` | `fulfillment.picking_wave_orders` | all columns |
 | `PickingWaves` | `app/models/fulfillment.py:76` | `fulfillment.picking_waves` | all columns |
-
-## identity
 
 ## SQLAlchemy models for `identity`
 
@@ -251,8 +229,6 @@
 | `UserRoles` | `app/models/identity.py:276` | `identity.user_roles` | all columns |
 | `Users` | `app/models/identity.py:30` | `identity.users` | all columns |
 
-## insurance
-
 ## SQLAlchemy models for `insurance`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -267,8 +243,6 @@
 | `InsurancePolicies` | `app/models/insurance.py:64` | `insurance.policies` | all columns |
 | `PolicyMembers` | `app/models/insurance.py:97` | `insurance.policy_members` | all columns |
 | `Tpas` | `app/models/insurance.py:49` | `insurance.tpas` | all columns |
-
-## logistics
 
 ## SQLAlchemy models for `logistics`
 
@@ -292,8 +266,6 @@
 | `ShipmentEvents` | `app/models/logistics.py:158` | `logistics.shipment_events` | all columns |
 | `Shipments` | `app/models/logistics.py:114` | `logistics.shipments` | all columns |
 
-## marketplace
-
 ## SQLAlchemy models for `marketplace`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -308,8 +280,6 @@
 | `SellerServiceLevels` | `app/models/marketplace.py:154` | `marketplace.seller_service_levels` | all columns |
 | `Sellers` | `app/models/marketplace.py:29` | `marketplace.sellers` | all columns |
 
-## membership
-
 ## SQLAlchemy models for `membership`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -322,8 +292,6 @@
 | `PlanBenefits` | `app/models/membership.py:47` | `membership.plan_benefits` | all columns |
 | `MembershipPlans` | `app/models/membership.py:28` | `membership.plans` | all columns |
 | `Subscriptions` | `app/models/membership.py:65` | `membership.subscriptions` | all columns |
-
-## notification
 
 ## SQLAlchemy models for `notification`
 
@@ -342,8 +310,6 @@
 | `Templates` | `app/models/notification.py:30` | `notification.templates` | all columns |
 | `UserChannelPreferences` | `app/models/notification.py:295` | `notification.user_channel_preferences` | all columns |
 
-## organization
-
 ## SQLAlchemy models for `organization`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -356,8 +322,6 @@
 | `Locations` | `app/models/organization.py:54` | `organization.locations` | all columns |
 | `Memberships` | `app/models/organization.py:104` | `organization.memberships` | all columns |
 | `Organizations` | `app/models/organization.py:27` | `organization.organizations` | all columns |
-
-## payment
 
 ## SQLAlchemy models for `payment`
 
@@ -378,8 +342,6 @@
 | `RefundAllocations` | `app/models/pharmville.py:280` | `payment.refund_allocations` | all columns |
 | `RefundReasonCodes` | `app/models/reference_data.py:95` | `payment.refund_reason_codes` | all columns |
 | `Refunds` | `app/models/payment.py:170` | `payment.refunds` | all columns |
-
-## platform
 
 ## SQLAlchemy models for `platform`
 
@@ -409,8 +371,6 @@
 | `WebhookDeliveries` | `app/models/platform.py:417` | `platform.webhook_deliveries` | all columns |
 | `WebhookEndpoints` | `app/models/platform.py:402` | `platform.webhook_endpoints` | all columns |
 
-## pricing
-
 ## SQLAlchemy models for `pricing`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -425,8 +385,6 @@
 | `PromotionVersions` | `app/models/pricing.py:127` | `pricing.promotion_versions` | all columns |
 | `Promotions` | `app/models/pricing.py:101` | `pricing.promotions` | all columns |
 | `TaxRules` | `app/models/pricing.py:82` | `pricing.tax_rules` | all columns |
-
-## procurement
 
 ## SQLAlchemy models for `procurement`
 
@@ -448,8 +406,6 @@
 | `SupplierProducts` | `app/models/procurement.py:79` | `procurement.supplier_products` | all columns |
 | `Suppliers` | `app/models/procurement.py:30` | `procurement.suppliers` | all columns |
 
-## risk
-
 ## SQLAlchemy models for `risk`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -462,8 +418,6 @@
 | `RiskRules` | `app/models/risk.py:28` | `risk.rules` | all columns |
 | `RiskSignals` | `app/models/risk.py:65` | `risk.signals` | all columns |
 
-## search
-
 ## SQLAlchemy models for `search`
 
 **Confirmed from Python AST:** `__tablename__` and `__table_args__` map to the exact existing database tables; static declarations are not proof that the application runtime has been implemented.
@@ -475,8 +429,6 @@
 | `SearchQueryEvents` | `app/models/search.py:90` | `search.query_events` | all columns |
 | `SearchRedirects` | `app/models/search.py:39` | `search.redirects` | all columns |
 | `SearchSynonyms` | `app/models/search.py:24` | `search.synonyms` | all columns |
-
-## support
 
 ## SQLAlchemy models for `support`
 
@@ -492,8 +444,6 @@
 | `TicketTagAssignments` | `app/models/support.py:181` | `support.ticket_tag_assignments` | all columns |
 | `TicketTags` | `app/models/support.py:170` | `support.ticket_tags` | all columns |
 | `Tickets` | `app/models/support.py:44` | `support.tickets` | all columns |
-
-## warehouse
 
 ## SQLAlchemy models for `warehouse`
 

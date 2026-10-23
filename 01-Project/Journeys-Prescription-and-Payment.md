@@ -1,7 +1,5 @@
 # Prescription review and payment
 
-## S09 Review only the P medicines
-
 ## S09 — Review only the P medicines
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Pharmacist_Review. **Actor:** Pharmacist.
@@ -40,8 +38,6 @@ Primary affected database domain(s): `clinical`, `commerce`, `compliance`. Repre
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S10 Fix a prescription problem
 
 ## S10 — Fix a prescription problem
 
@@ -82,8 +78,6 @@ Primary affected database domain(s): `clinical`, `platform`, `customer`. Represe
 
 See module test plan and end-to-end sequence.
 
-## S11 Approve a changed basket
-
 ## S11 — Approve a changed basket
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Cart_Checkout. **Actor:** Customer.
@@ -122,8 +116,6 @@ Primary affected database domain(s): `commerce`, `pricing`, `customer`, `warehou
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S12 Confirm the prescription step is complete
 
 ## S12 — Confirm the prescription step is complete
 
@@ -164,8 +156,6 @@ Primary affected database domain(s): `clinical`, `commerce`, `compliance`. Repre
 
 See module test plan and end-to-end sequence.
 
-## S13 Choose payment with stock briefly held
-
 ## S13 — Choose payment with stock briefly held
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Cart_Checkout. **Actor:** Customer.
@@ -204,8 +194,6 @@ Primary affected database domain(s): `commerce`, `pricing`, `customer`, `warehou
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S14 Pay online
 
 ## S14 — Pay online
 
@@ -246,8 +234,6 @@ Primary affected database domain(s): `payment`, `finance`, `commerce`. Represent
 
 See module test plan and end-to-end sequence.
 
-## S15 Check a payment with an uncertain result
-
 ## S15 — Check a payment with an uncertain result
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Finance_Payments. **Actor:** Payment support.
@@ -286,8 +272,6 @@ Primary affected database domain(s): `payment`, `finance`, `commerce`. Represent
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S16 Recognise paid or COD order
 
 ## S16 — Recognise paid or COD order
 

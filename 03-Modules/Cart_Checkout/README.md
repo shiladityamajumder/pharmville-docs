@@ -1,6 +1,6 @@
 # Cart Checkout
 
-## Purpose and feature scope
+[Business flow](../../00-Business-Guide/Cart-and-Checkout.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-003 — Cart, quote and placement intent
 
@@ -28,8 +28,6 @@
 - [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
 
 **Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
-
-## Module design
 
 ## MOD-003: Cart, quote and placement intent — HLD
 

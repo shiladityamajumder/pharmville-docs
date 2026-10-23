@@ -1,6 +1,6 @@
 # Cart Checkout HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Cart-and-Checkout.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-003: Cart, quote and placement intent — HLD
 
@@ -31,8 +31,6 @@
 
 ## Risk
 A changed fee, classification or inventory observation invalidates a quote until reaccepted; replay cannot create two orders. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-003 — Cart, quote and placement intent
 

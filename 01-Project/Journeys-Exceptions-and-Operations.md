@@ -1,7 +1,5 @@
 # Exceptions and operations
 
-## S27 Handle a failed delivery
-
 ## S27 — Handle a failed delivery
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Delivery_Operations. **Actor:** Rider / dispatch.
@@ -40,8 +38,6 @@ Primary affected database domain(s): `logistics`, `fulfillment`, `organization`.
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S28 Cancel safely at the correct stage
 
 ## S28 — Cancel safely at the correct stage
 
@@ -82,8 +78,6 @@ Primary affected database domain(s): `commerce`, `finance`, `logistics`, `fulfil
 
 See module test plan and end-to-end sequence.
 
-## S29 Raise a return wrong item or quality complaint
-
 ## S29 — Raise a return, wrong item or quality complaint
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Customer_Orders. **Actor:** Customer / support.
@@ -122,8 +116,6 @@ Primary affected database domain(s): `commerce`, `finance`, `logistics`, `fulfil
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S30 Receive and inspect returned items
 
 ## S30 — Receive and inspect returned items
 
@@ -164,8 +156,6 @@ Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. 
 
 See module test plan and end-to-end sequence.
 
-## S31 Return the correct money once
-
 ## S31 — Return the correct money once
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Finance_Payments. **Actor:** Finance / payment team.
@@ -204,8 +194,6 @@ Primary affected database domain(s): `payment`, `finance`, `commerce`. Represent
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S32 Close the order records
 
 ## S32 — Close the order records
 
@@ -246,8 +234,6 @@ Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `or
 
 See module test plan and end-to-end sequence.
 
-## S33 Investigate an unusual problem
-
 ## S33 — Investigate an unusual problem
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Audit. **Actor:** Customer support / specialist.
@@ -287,8 +273,6 @@ Primary affected database domain(s): `platform`, `compliance`, `risk`. Represent
 
 See module test plan and end-to-end sequence.
 
-## S34 Stop unsafe products immediately
-
 ## S34 — Stop unsafe products immediately
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Product_Catalog. **Actor:** Pharmacy quality / operations.
@@ -327,8 +311,6 @@ Primary affected database domain(s): `catalog`, `search`, `pricing`, `marketplac
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## Screen State Inventory
 
 ## Phase 1 screen and interaction state inventory
 

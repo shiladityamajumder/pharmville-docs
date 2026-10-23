@@ -1,6 +1,6 @@
 # Product Catalog LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Catalog-and-Product-Discovery.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Product discovery and classification — implementation acceptance
 
@@ -24,8 +24,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Product Catalog & Search — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -41,15 +39,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Product Catalog & Search — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -78,8 +74,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Product Catalog & Search — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -94,9 +88,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Product Catalog & Search — existing database usage
 
@@ -118,9 +110,7 @@ Proposed owning service: `Product_Catalog`. Main read concerns: product identity
 
 **Safety:** The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Product Catalog & Search — dependencies and ownership
 
@@ -133,9 +123,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Product Catalog & Search — domain objects and DTO boundaries
 
@@ -149,9 +137,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `Product_CatalogReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Product_CatalogEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`, `search.query_events`, `search.redirects`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`, `search.query_events`, `search.redirects`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Product Catalog & Search — failure handling
 
@@ -164,9 +150,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Product discovery and classification — proposed interfaces and DTOs
 
@@ -183,8 +167,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `catalog.products`, `catalog.product_variants`, `catalog.product_classification_history`, `catalog.categories`, `search.documents`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Product discovery and classification — internal architecture
 
@@ -219,8 +201,6 @@ Only approved and classified items can enter a legally permitted checkout path.
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Product discovery and classification — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -230,8 +210,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Product Catalog & Search — permission model
 
@@ -244,9 +222,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Product Catalog & Search — functional requirements
 
@@ -269,36 +245,25 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Product discovery and classification — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Customer
+  participant O as Catalog
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Find exact published product
+  O->>D: Read approved classification and current product variant
+  alt Gate fails or current version conflicts
+    O-->>A: Do not enable ordering unknown class
+  else Gate satisfied
+    O->>D: Return safe product and availability projection
+    D-->>O: Committed evidence
+    O-->>A: Product detail and prescription label
   end
 ```
-
-## Service Design
 
 ## Product Catalog & Search — service design
 
@@ -321,9 +286,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Product Catalog & Search — state and transition policy
 
@@ -331,21 +294,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Find exact published product"] --> B{"Published and approved class?"}
+  B -->|No| C["Do not enable ordering unknown class"]
+  B -->|Yes| D["Return safe product and availability projection"]
+  D --> E["Product detail and prescription label"]
 ```
 
 **Module-specific invariant:** The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Product Catalog & Search — verification and acceptance
 
@@ -353,18 +312,18 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-CAT-01-OK` | Browse by category and sub-category | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CAT-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CAT-02-OK` | Product page: brand, manufacturer, composition, pack size, MRP, price, images, "Prescription required" label | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CAT-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CAT-03-OK` | Search by name, brand and composition, with typo tolerance and autosuggest | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CAT-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CAT-04-OK` | Availability for the customer's pin code (in stock / out of stock) | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CAT-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CAT-05-OK` | Alternative medicines: same composition, strength and dosage form, ranked by a configurable rule | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CAT-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CAT-06-OK` | Placeholder image when a product has none | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CAT-06-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-CAT-01-OK` | Browse by category and sub-category | Published category results exclude inactive/unpublished products |
+| `TC-CAT-01-DENY` | Inactive category is requested from an old link | No unpublished contents leak; clear empty/unavailable result; Catalog editor corrects publication; customer browses current categories |
+| `TC-CAT-02-OK` | Product page: brand, manufacturer, composition, pack size, MRP, price, images, "Prescription required" label | Exact variant, pack, price and P label are displayed |
+| `TC-CAT-02-DENY` | Product commerce classification is unknown | Ordering blocked rather than defaulting to M/O; Catalog and Pharmacy approve classification |
+| `TC-CAT-03-OK` | Search by name, brand and composition, with typo tolerance and autosuggest | Name/brand/composition query returns matching published results |
+| `TC-CAT-03-DENY` | Search backend fails | Unavailable result differs from valid no matches; no fabricated substitution; Search owner restores service; customer can browse |
+| `TC-CAT-04-OK` | Availability for the customer's pin code (in stock / out of stock) | Availability is scoped to selected delivery location |
+| `TC-CAT-04-DENY` | Stock observation exceeds approved freshness | Availability cannot authorize a new hold; Inventory restores authoritative evidence |
+| `TC-CAT-05-OK` | Alternative medicines: same composition, strength and dosage form, ranked by a configurable rule | Alternatives match approved composition/strength/form ranking |
+| `TC-CAT-05-DENY` | Similar-name product has different strength | Not treated as an interchangeable approved P line; Pharmacy reviews candidate; customer accepts a permitted revision |
+| `TC-CAT-06-OK` | Placeholder image when a product has none | Missing image uses the approved placeholder with intact product details |
+| `TC-CAT-06-DENY` | Image asset returns not found | Product remains readable; no broken-image-only purchase cue; Catalog editor replaces missing asset |
 
 ## Cross-module contract tests
 
@@ -374,9 +333,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Product Catalog & Search — validation checkpoints
 
@@ -390,8 +347,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `CAT-01`, `CAT-02`, `CAT-03`, `CAT-04`, `CAT-05`, `CAT-06`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Product Catalog & Search — operational workflows
 
@@ -409,4 +364,4 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** The product_type descriptive taxonomy is not the approved commerce_class gate. A controlled versioned P/M/O classification is required; never infer pharmacy eligibility from keywords or substitute another strength.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).

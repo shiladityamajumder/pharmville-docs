@@ -1,6 +1,6 @@
 # Authentication Access LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Accounts-and-Login.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Login, sessions, roles and access control — implementation acceptance
 
@@ -22,8 +22,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Authentication & Authorization — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -36,15 +34,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Authentication & Authorization — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -73,8 +69,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Authentication & Authorization — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -89,9 +83,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Authentication & Authorization — existing database usage
 
@@ -116,9 +108,7 @@ Proposed owning service: `Authentication_Access`. Main read concerns: otp, privi
 
 **Safety:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Authentication & Authorization — dependencies and ownership
 
@@ -137,9 +127,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Authentication & Authorization — domain objects and DTO boundaries
 
@@ -153,9 +141,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `Authentication_AccessReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Authentication_AccessEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `identity.api_client_secrets`, `identity.api_clients`, `identity.login_attempts`, `identity.mfa_factors`, `identity.otp_challenges`, `identity.password_history`, `identity.permissions`, `identity.role_permissions`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `identity.api_client_secrets`, `identity.api_clients`, `identity.login_attempts`, `identity.mfa_factors`, `identity.otp_challenges`, `identity.password_history`, `identity.permissions`, `identity.role_permissions`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Authentication & Authorization — failure handling
 
@@ -168,9 +154,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Login, sessions, roles and access control — proposed interfaces and DTOs
 
@@ -187,8 +171,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `identity.users`, `identity.sessions`, `identity.roles`, `identity.user_roles`, `identity.permissions`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Login, sessions, roles and access control — internal architecture
 
@@ -223,8 +205,6 @@ Client-supplied actor, role and location are never trusted as authorisation cont
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Login, sessions, roles and access control — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -234,8 +214,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Authentication & Authorization — permission model
 
@@ -248,9 +226,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Authentication & Authorization — functional requirements
 
@@ -271,36 +247,25 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Login, sessions, roles and access control — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Pre-login caller
+  participant O as Authentication
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Submit required role proof
+  O->>D: Consume purpose-bound proof and recheck role
+  alt Gate fails or current version conflicts
+    O-->>A: No privileged session, retry approved proof
+  else Gate satisfied
+    O->>D: Create eligible session atomically
+    D-->>O: Committed evidence
+    O-->>A: Committed scoped session
   end
 ```
-
-## Service Design
 
 ## Authentication & Authorization — service design
 
@@ -320,9 +285,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Authentication & Authorization — state and transition policy
 
@@ -330,21 +293,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Submit required role proof"] --> B{"Required proof and account active?"}
+  B -->|No| C["No privileged session, retry approved proof"]
+  B -->|Yes| D["Create eligible session atomically"]
+  D --> E["Committed scoped session"]
 ```
 
 **Module-specific invariant:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Authentication & Authorization — verification and acceptance
 
@@ -352,14 +311,14 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-AUTH-01-OK` | Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-AUTH-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-AUTH-02-OK` | Lockout rules, session limits, one session per staff account | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-AUTH-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-AUTH-03-OK` | OTP rate limits per number and IP | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-AUTH-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-AUTH-04-OK` | Permissions checked on the server for every request | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-AUTH-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-AUTH-01-OK` | Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager | Privileged role receives session only after password and authenticator proof |
+| `TC-AUTH-01-DENY` | Valid password with missing/invalid second factor | No privileged session; User retries approved proof; Security reviews recovery |
+| `TC-AUTH-02-OK` | Lockout rules, session limits, one session per staff account | Approved lockout/session/revocation rules are checked against current account |
+| `TC-AUTH-02-DENY` | Refresh replays after session rotation or revocation | No unauthorized replacement session; security response per D-003; Security applies approved replay response |
+| `TC-AUTH-03-OK` | OTP rate limits per number and IP | Concurrent OTP attempts obey phone and IP limits |
+| `TC-AUTH-03-DENY` | Parallel requests exceed configured shared limit | Rate-limited without account enumeration or bypass by race; Security reviews redacted abuse evidence |
+| `TC-AUTH-04-OK` | Permissions checked on the server for every request | Every command checks actor, object, patient and location permissions |
+| `TC-AUTH-04-DENY` | Client supplies trusted actor/context of another user | Untrusted context ignored; no out-of-scope read/write; Security validates restricted runtime role and server-derived scope |
 
 ## Cross-module contract tests
 
@@ -369,9 +328,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Authentication & Authorization — validation checkpoints
 
@@ -385,8 +342,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `AUTH-01`, `AUTH-02`, `AUTH-03`, `AUTH-04`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Authentication & Authorization — operational workflows
 
@@ -402,4 +357,4 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).

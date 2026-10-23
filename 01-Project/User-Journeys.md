@@ -1,7 +1,5 @@
 # User journeys
 
-## README
-
 ## Customer journey stages — inherited draft
 
 **34 journey stages** are documented as proposed flows. Confirm business policy and recovery outcomes in the linked workflow and decision documents.

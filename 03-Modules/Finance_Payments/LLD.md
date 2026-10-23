@@ -1,6 +1,6 @@
 # Finance Payments LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Finance-and-Reconciliation.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Payment truth, refunds and invoice evidence — implementation acceptance
 
@@ -25,8 +25,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Payments, Invoices & Refunds — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -41,15 +39,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Payments, Invoices & Refunds — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -78,8 +74,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Payments, Invoices & Refunds — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -94,9 +88,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Payments, Invoices & Refunds — existing database usage
 
@@ -121,9 +113,7 @@ Proposed owning service: `Finance_Payments`. Main read concerns: cashfree, payme
 
 **Safety:** Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Payments, Invoices & Refunds — dependencies and ownership
 
@@ -139,9 +129,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Payments, Invoices & Refunds — domain objects and DTO boundaries
 
@@ -155,9 +143,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `Finance_PaymentsReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Finance_PaymentsEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `commerce.orders`, `finance.accounts`, `finance.credit_notes`, `finance.invoice_items`, `finance.invoices`, `finance.journal_entries`, `finance.journal_lines`, `finance.settlement_items`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `commerce.orders`, `finance.accounts`, `finance.credit_notes`, `finance.invoice_items`, `finance.invoices`, `finance.journal_entries`, `finance.journal_lines`, `finance.settlement_items`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Payments, Invoices & Refunds — failure handling
 
@@ -170,9 +156,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Payment truth, refunds and invoice evidence — proposed interfaces and DTOs
 
@@ -189,8 +173,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `payment.payment_intents`, `payment.payment_attempts`, `payment.payment_webhooks`, `payment.refunds`, `finance.invoices`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Payment truth, refunds and invoice evidence — internal architecture
 
@@ -225,8 +207,6 @@ Unknown provider outcomes stay pending; external callbacks cannot double-apply m
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Payment truth, refunds and invoice evidence — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -236,8 +216,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Payments, Invoices & Refunds — permission model
 
@@ -250,9 +228,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Payments, Invoices & Refunds — functional requirements
 
@@ -276,38 +252,27 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Payment truth, refunds and invoice evidence — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Signed provider adapter
+  participant O as Finance
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Process trusted payment evidence
+  O->>D: Deduplicate source event and compare amount currency revision
+  alt Gate fails or current version conflicts
+    O-->>A: Reject invalid evidence or keep unknown pending
+  else Gate satisfied
+    O->>D: Commit money fact and reconciliation work
+    D-->>O: Committed evidence
+    O-->>A: Trusted payment outcome
   end
 ```
 
 **Concurrency rule:** Hold locks for minimal local SQL work only; repeated calls use the same idempotency key or expected-version check. Provider timeouts leave state pending and require authoritative reconciliation.
-
-## Service Design
 
 ## Payments, Invoices & Refunds — service design
 
@@ -329,9 +294,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Payments, Invoices & Refunds — state and transition policy
 
@@ -339,21 +302,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Process trusted payment evidence"] --> B{"Authentic current evidence?"}
+  B -->|No| C["Reject invalid evidence or keep unknown pending"]
+  B -->|Yes| D["Commit money fact and reconciliation work"]
+  D --> E["Trusted payment outcome"]
 ```
 
 **Module-specific invariant:** Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Payments, Invoices & Refunds — verification and acceptance
 
@@ -361,20 +320,20 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-FIN-01-OK` | Payment records from Cashfree webhooks and COD collections | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-FIN-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-FIN-02-OK` | GST invoice per order, from the right GSTIN | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-FIN-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-FIN-03-OK` | Automatic refunds; manual refunds need approval above a set amount | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-FIN-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-FIN-04-OK` | COD refunds by bank transfer or UPI | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-FIN-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-FIN-05-OK` | Daily reconciliation: Cashfree settlements vs orders | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-FIN-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-FIN-06-OK` | COD reconciliation: collected vs deposited | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-FIN-06-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-FIN-07-OK` | Credit notes for refunds and returns | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-FIN-07-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-FIN-01-OK` | Payment records from Cashfree webhooks and COD collections | Trusted provider/COD facts yield one authoritative money record |
+| `TC-FIN-01-DENY` | Unsigned, repeated or out-of-order webhook arrives | Unsigned rejected; replay has no second effect; older failure cannot undo success; Finance reconciles trusted provider evidence |
+| `TC-FIN-02-OK` | GST invoice per order, from the right GSTIN | Invoice uses correct seller/site GSTIN and accepted amounts |
+| `TC-FIN-02-DENY` | GSTIN/tax setup is missing | Invoice pending/blocked; no invented tax document or recharge; Finance/CA corrects approved tax setup |
+| `TC-FIN-03-OK` | Automatic refunds; manual refunds need approval above a set amount | Approved refund obeys remaining refundable value and instruction identity |
+| `TC-FIN-03-DENY` | Duplicate refund races with another refund | Cumulative payout cannot exceed permitted paid value; one instruction per intent; Finance reloads refunded totals and reconciles unknown provider result |
+| `TC-FIN-04-OK` | COD refunds by bank transfer or UPI | COD refund uses an approved verified bank/UPI destination |
+| `TC-FIN-04-DENY` | Unverified replacement destination is supplied | No money sent; refund awaits verified details; Finance obtains approved proof securely |
+| `TC-FIN-05-OK` | Daily reconciliation: Cashfree settlements vs orders | Settlement comparison retains matched and unmatched evidence |
+| `TC-FIN-05-DENY` | Provider amount/currency/reference differs from order | Unresolved reconciliation item, no fabricated settlement; Finance investigates provider/bank and posts approved correction |
+| `TC-FIN-06-OK` | COD reconciliation: collected vs deposited | COD collected/deposited totals retain both actual amounts |
+| `TC-FIN-06-DENY` | Rider deposit is short | Cash exception remains open; delivery not rewritten; Finance/Operations investigates shortage |
+| `TC-FIN-07-OK` | Credit notes for refunds and returns | Approved credit note links eligible refund/return/invoice once |
+| `TC-FIN-07-DENY` | Same credit note intent repeats | No duplicate credit or journal effect; original invoice retained; Finance checks existing credit reference and policy |
 
 ## Cross-module contract tests
 
@@ -384,9 +343,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Payments, Invoices & Refunds — validation checkpoints
 
@@ -400,8 +357,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `FIN-01`, `FIN-02`, `FIN-03`, `FIN-04`, `FIN-05`, `FIN-06`, `FIN-07`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Payments, Invoices & Refunds — operational workflows
 
@@ -420,4 +375,13 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Only authoritative signed payment/cash evidence can satisfy dispatch gates. Persist provider event deduplication, money ledger/reversal, refund amounts and finance approval thresholds; unknown charge stays pending.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).
+
+## Critical recovery scenarios
+
+**Designed; NOT RUN.** Run against approved policy fixtures and actual restricted database roles. Inspect customer/staff result, state/history, stock and money effects together.
+
+| Test | Input / interruption | Expected result and record assertions |
+| --- | --- | --- |
+| `TC-FIN-03-01` | Concurrent distinct refunds each request the same remaining refundable amount | Serialize against authoritative paid/refunded evidence: cumulative accepted payout cannot exceed eligible paid value. A pending unknown instruction cannot be duplicated to consume the same balance again. |
+| `TC-FIN-05-01` | Provider settlement evidence for the period is missing | Run/period remains pending or exception, never matched/closed. Finance retains missing-evidence references and resumes comparison after authentic evidence arrives; no automatic balancing journal. |

@@ -1,6 +1,6 @@
 # Prescription Upload LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Prescription-and-Pharmacy.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Private prescription intake — implementation acceptance
 
@@ -23,8 +23,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Prescription Upload & Private Files — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -35,15 +33,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Prescription Upload & Private Files — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -72,8 +68,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Prescription Upload & Private Files — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -88,9 +82,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Prescription Upload & Private Files — existing database usage
 
@@ -111,9 +103,7 @@ Proposed owning service: `Prescription_Upload`. Main read concerns: private uplo
 
 **Safety:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Prescription Upload & Private Files — dependencies and ownership
 
@@ -132,9 +122,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Prescription Upload & Private Files — domain objects and DTO boundaries
 
@@ -148,9 +136,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `Prescription_UploadReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Prescription_UploadEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `clinical.prescription_documents`, `clinical.prescriptions`, `platform.file_access_events`, `platform.file_access_grants`, `platform.file_objects`, `platform.file_scan_events`, `platform.file_upload_sessions`, `platform.file_variants`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `clinical.prescription_documents`, `clinical.prescriptions`, `platform.file_access_events`, `platform.file_access_grants`, `platform.file_objects`, `platform.file_scan_events`, `platform.file_upload_sessions`, `platform.file_variants`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Prescription Upload & Private Files — failure handling
 
@@ -163,9 +149,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Private prescription intake — proposed interfaces and DTOs
 
@@ -182,8 +166,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `clinical.prescriptions`, `clinical.prescription_documents`, `platform.file_objects`, `platform.file_access_events`, `platform.file_upload_sessions`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Private prescription intake — internal architecture
 
@@ -218,8 +200,6 @@ An uploaded file is quarantined until inspected and can only be accessed by perm
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Private prescription intake — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -229,8 +209,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Prescription Upload & Private Files — permission model
 
@@ -243,9 +221,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Prescription Upload & Private Files — functional requirements
 
@@ -267,36 +243,25 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Private prescription intake — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Customer
+  participant O as Prescription intake
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Confirm private patient prescription file
+  O->>D: Check upload complete scan outcome and patient order scope
+  alt Gate fails or current version conflicts
+    O-->>A: Keep file unusable and request correction
+  else Gate satisfied
+    O->>D: Link usable evidence and enqueue review
+    D-->>O: Committed evidence
+    O-->>A: Private evidence ready for pharmacist
   end
 ```
-
-## Service Design
 
 ## Prescription Upload & Private Files — service design
 
@@ -314,9 +279,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Prescription Upload & Private Files — state and transition policy
 
@@ -324,21 +287,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Confirm private patient prescription file"] --> B{"Safe file and authorized patient?"}
+  B -->|No| C["Keep file unusable and request correction"]
+  B -->|Yes| D["Link usable evidence and enqueue review"]
+  D --> E["Private evidence ready for pharmacist"]
 ```
 
 **Module-specific invariant:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Prescription Upload & Private Files — verification and acceptance
 
@@ -346,16 +305,16 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-RX-01-OK` | Upload one or more prescriptions (JPG, PNG, PDF) at checkout | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RX-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RX-02-OK` | Upload within 24 hours after ordering; auto-cancel after that | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RX-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RX-03-OK` | Reuse a saved, still-valid prescription | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RX-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RX-04-OK` | Link each prescription to the patient (self or family member) | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RX-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RX-05-OK` | See the pharmacist's decision and reason; re-upload after rejection | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RX-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-RX-01-OK` | Upload one or more prescriptions (JPG, PNG, PDF) at checkout | Completed safe JPG/PNG/PDF is private and available to permitted review |
+| `TC-RX-01-DENY` | Upload is interrupted or malware check fails | File cannot become usable prescription evidence; Customer retries/replaces upload; file owner investigates |
+| `TC-RX-02-OK` | Upload within 24 hours after ordering; auto-cancel after that | Deferred-upload route stays disabled until deadline/payment rules are approved |
+| `TC-RX-02-DENY` | Deadline job runs with no approved policy | No invented 24-hour cancellation or refund behavior; Product, Pharmacy and Finance settle conflicting journey before enabling |
+| `TC-RX-03-OK` | Reuse a saved, still-valid prescription | Saved evidence is rechecked for patient, validity and current items |
+| `TC-RX-03-DENY` | Previously saved prescription is no longer valid | Reuse denied; no inherited approval for changed evidence; Customer uploads valid evidence; Pharmacy reviews |
+| `TC-RX-04-OK` | Link each prescription to the patient (self or family member) | Prescription link matches the authorized patient/order |
+| `TC-RX-04-DENY` | Wrong patient prescription ID is submitted | No wrong-patient linkage; safe denial; Customer corrects evidence; Pharmacy checks match |
+| `TC-RX-05-OK` | See the pharmacist's decision and reason; re-upload after rejection | Decision reason is shown and a corrected file returns to review |
+| `TC-RX-05-DENY` | Rejected file is resubmitted as if still approved | Earlier decision retained; new evidence requires current decision; Customer corrects file; authorized pharmacist reviews again |
 
 ## Cross-module contract tests
 
@@ -365,9 +324,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Prescription Upload & Private Files — validation checkpoints
 
@@ -381,8 +338,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `RX-01`, `RX-02`, `RX-03`, `RX-04`, `RX-05`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Prescription Upload & Private Files — operational workflows
 
@@ -399,4 +354,4 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).

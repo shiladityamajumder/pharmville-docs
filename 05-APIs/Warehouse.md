@@ -1,9 +1,7 @@
 # Warehouse API contracts
 
-**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#high).
+**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#rechecked-earlier-findings).
 
-
-## API-056
 
 ## API-056 — POST `/v1/staff/warehouse/receipts`
 
@@ -39,9 +37,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-057
+Related: [api conventions](README.md); real table mappings.
 
 ## API-057 — GET `/v1/staff/warehouse/replenishments`
 
@@ -81,9 +77,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-058
+Related: [api conventions](README.md); real table mappings.
 
 ## API-058 — POST `/v1/staff/warehouse/transfers/{transfer_id}/dispatch`
 
@@ -119,9 +113,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-059
+Related: [api conventions](README.md); real table mappings.
 
 ## API-059 — GET `/v1/staff/warehouse/fallback-orders`
 
@@ -161,4 +153,4 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
+Related: [api conventions](README.md); real table mappings.

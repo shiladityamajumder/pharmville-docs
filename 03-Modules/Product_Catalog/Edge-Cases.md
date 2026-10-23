@@ -1,21 +1,20 @@
 # Product Catalog edge cases
 
-**Coverage status:** the rows below are module review prompts. Repeated failure text does not establish feature-specific edge coverage. Specify input, ownership, transaction, retry and recovery assertions for each feature under [D-024](../../09-References/Sources-and-Decisions.md#decisions-that-block-implementation).
+**Status: Designed; NOT RUN.** These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to [decisions](../../09-References/Sources-and-Decisions.md); provider behavior and application execution are not certified.
 
+[Business explanation](../../00-Business-Guide/Catalog-and-Product-Discovery.md) · [LLD and normal tests](LLD.md) · [API](../../05-APIs/Product_Catalog.md) · [recovery contracts](../../07-Engineering/State-and-Recovery-Contracts.md)
 
-## Edge Cases
+| Case | Feature | Trigger | Expected result and record impact | Responsible recovery | Test |
+| --- | --- | --- | --- | --- | --- |
+| `EC-CAT-01-01` | `CAT-01` | Inactive category is requested from an old link | No unpublished contents leak; clear empty/unavailable result | Catalog editor corrects publication; customer browses current categories | `TC-CAT-01-DENY` |
+| `EC-CAT-02-01` | `CAT-02` | Product commerce classification is unknown | Ordering blocked rather than defaulting to M/O | Catalog and Pharmacy approve classification | `TC-CAT-02-DENY` |
+| `EC-CAT-03-01` | `CAT-03` | Search backend fails | Unavailable result differs from valid no matches; no fabricated substitution | Search owner restores service; customer can browse | `TC-CAT-03-DENY` |
+| `EC-CAT-04-01` | `CAT-04` | Stock observation exceeds approved freshness | Availability cannot authorize a new hold | Inventory restores authoritative evidence | `TC-CAT-04-DENY` |
+| `EC-CAT-05-01` | `CAT-05` | Similar-name product has different strength | Not treated as an interchangeable approved P line | Pharmacy reviews candidate; customer accepts a permitted revision | `TC-CAT-05-DENY` |
+| `EC-CAT-06-01` | `CAT-06` | Image asset returns not found | Product remains readable; no broken-image-only purchase cue | Catalog editor replaces missing asset | `TC-CAT-06-DENY` |
 
-## Product Catalog & Search — documented edge cases
+## Verification procedure
 
-**Source:** v0.1 feature inventory, journey v3 exception rules and final DB guard report. These are minimum testable failure outcomes, not replacements for pharmacy/owner policy signoff.
+For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are `TC-<feature>-OK` in the LLD. Use approved policy fixtures, not production assumptions.
 
-| Feature | Affected behavior | Trigger | Expected recovery |
-| --- | --- | --- | --- |
-| `CAT-01` | Browse by category and sub-category | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `CAT-02` | Product page: brand, manufacturer, composition, pack size, MRP, price, images, "Prescription required" label | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `CAT-03` | Search by name, brand and composition, with typo tolerance and autosuggest | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `CAT-04` | Availability for the customer's pin code (in stock / out of stock) | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `CAT-05` | Alternative medicines: same composition, strength and dosage form, ranked by a configurable rule | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `CAT-06` | Placeholder image when a product has none | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-
-Across every route also test expired sessions, cross-tenant or location IDOR attempts, duplicate taps, two workers updating the same object, timeout after commit, out-of-order events and unapproved values. Never quietly continue a safety-sensitive workflow by interpreting a missing answer as consent. See Error_Handling and Testing.
+For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.

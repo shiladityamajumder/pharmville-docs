@@ -1,9 +1,9 @@
 # Finance Payments API contracts
 
-**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#high).
+[Operation-specific refinements](Critical-Operation-Contracts.md) · [ownership and recovery](../07-Engineering/State-and-Recovery-Contracts.md)
 
+**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#rechecked-earlier-findings).
 
-## API-075
 
 ## API-075 — POST `/v1/payments/intents`
 
@@ -39,7 +39,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
+Related: [api conventions](README.md); real table mappings.
 
 ## API-076 — POST `/v1/webhooks/cashfree`
 
@@ -58,8 +58,6 @@ After commit, publish the order/payment outcome through the outbox. Delivery fai
 ### Data and verification
 
 Use `payment.payment_webhooks` for provider facts and the matched `payment.payment_intents`/`payment.payment_transactions` records, with `platform.inbox_messages` and `platform.outbox_events` where the approved adapter design uses them. These are local schema references, not an implemented adapter. Required tests cover signature tampering, wrong merchant/amount/currency, duplicate and reordered callbacks, concurrent consumers, transaction rollback, lost acknowledgement, late payment and outbox replay. No live provider test is claimed.
-
-## API-077
 
 ## API-077 — GET `/v1/admin/finance/payments`
 
@@ -99,9 +97,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-078
+Related: [api conventions](README.md); real table mappings.
 
 ## API-078 — POST `/v1/admin/finance/refunds`
 
@@ -137,9 +133,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-079
+Related: [api conventions](README.md); real table mappings.
 
 ## API-079 — GET `/v1/admin/finance/settlements`
 
@@ -179,9 +173,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-080
+Related: [api conventions](README.md); real table mappings.
 
 ## API-080 — POST `/v1/admin/finance/cod-reconciliation`
 
@@ -217,9 +209,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-081
+Related: [api conventions](README.md); real table mappings.
 
 ## API-081 — GET `/v1/admin/finance/invoices/{order_id}`
 
@@ -259,4 +249,4 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
+Related: [api conventions](README.md); real table mappings.

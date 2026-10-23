@@ -1,9 +1,7 @@
 # Reporting API contracts
 
-**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#high).
+**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#rechecked-earlier-findings).
 
-
-## API-082
 
 ## API-082 — GET `/v1/admin/reports/sales`
 
@@ -43,9 +41,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-083
+Related: [api conventions](README.md); real table mappings.
 
 ## API-083 — GET `/v1/admin/reports/tax`
 
@@ -85,9 +81,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-084
+Related: [api conventions](README.md); real table mappings.
 
 ## API-084 — GET `/v1/admin/reports/stock`
 
@@ -127,9 +121,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-085
+Related: [api conventions](README.md); real table mappings.
 
 ## API-085 — GET `/v1/admin/reports/deliveries`
 
@@ -169,9 +161,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-086
+Related: [api conventions](README.md); real table mappings.
 
 ## API-086 — POST `/v1/admin/reports/exports`
 
@@ -207,4 +197,4 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
+Related: [api conventions](README.md); real table mappings.

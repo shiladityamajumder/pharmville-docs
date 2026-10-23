@@ -1,18 +1,14 @@
 # Development setup and operations
 
-## Local Setup
-
 ## Local setup and developer environment
 
-**Verified repo:** [database repository](../../healthcare_db/healthcare_db/README.md) is PostgreSQL SQL migrations plus Python/SQLAlchemy verification tools, not a runnable NestJS HTTP application. Build the web/API repos only after team approval of their structure.
+**Verified repo:** database repository (`healthcare_db/README.md` in the sibling checkout) is PostgreSQL SQL migrations plus Python/SQLAlchemy verification tools, not a runnable NestJS HTTP application. Build the web/API repos only after team approval of their structure.
 
 **Database safe setup (repository-described, not run here):** use a dedicated empty PostgreSQL 15+ local database and direct `DATABASE_URL`, install `requirements.txt` for Python tooling, inspect `postgresql/docs/RELEASE_RUNBOOK.md`, then `postgresql/db status`, `postgresql/db migrate`, and `postgresql/db verify` (or the Windows `.ps1` equivalents). Do not run these against an existing Alembic-managed production database without a separately approved ledger adoption plan. The DB repository does not provision PostgreSQL.
 
 **Application build (proposed):** separate Next.js customer and admin web apps, NestJS modular API, optional worker, and rider Android technology awaiting decision. Add typed env validation, isolated sandbox provider credentials, no secrets in Git, migration owner separate from runtime users.
 
 **Pre-commit:** lint, unit tests, API DTO checks, migration history checksum diff, SQL catalog/ORM parity, and secret scan. Confirm target PostgreSQL minor-version behavior and permissions before integrating APIs.
-
-## Configuration
 
 ## Environment and secrets configuration
 
@@ -22,8 +18,6 @@ Use Git-ignored local example files and AWS Secrets Manager for deployed credent
 
 Make unknown clinical/stock/payment policy fail closed, not default to a convenient number. System clocks should be timezone-aware and persistence timestamps unambiguous (UTC by convention after approval). See Decisions.
 
-## Environments
-
 ## Environments and isolation
 
 Use separately controlled dev, staging and production deployments. The master checklist selects AWS ap-south-1, a scaled-down staging topology and PostgreSQL RDS for production. The supplied repository's latest checks ran on isolated local PostgreSQL 18, not a shared production DB; hosted PG15/18 CI and production promotion are not confirmed by the evidence.
@@ -31,8 +25,6 @@ Use separately controlled dev, staging and production deployments. The master ch
 Development uses fake/synthetic patients, product/stock/licensing and provider credentials; never copy real Rx or legal identification. Staging reproduces runtime role/ACL/RLS, object-storage privacy, versioned SQL migrations and Cashfree/MSG91 provider sandbox behavior. Production needs owner-managed credentials, signed policies, backout/forward-fix and an approved restore plan.
 
 Separate network/data permissions for API, worker, migration owner, reporting capability and encrypted file storage. Document DNS/certificate choice, environment secrets and actual service resource sizes after load validation. See Infrastructure and Config.
-
-## Infrastructure
 
 ## AWS deployment component plan
 
@@ -42,8 +34,6 @@ Run API and background BullMQ workers with separate IAM and connection pools. Th
 
 Availability zones, backups/PITR, WAF, TLS certificate supplier, scaling rules, actual RDS/PgBouncer need deployment review. See Master HLD.
 
-## CI CD
-
 ## CI/CD checks and promotion stages
 
 GitHub Actions is selected. The database repo already contains `.github/workflows/database-ci.yml` targeting PostgreSQL 15/18, Python 3.13, sealed migration verification, parity, tests and restore evidence. The final report confirms local PG18 checks but not independently observed hosted CI/PG15 completion; do not claim a green hosted run.
@@ -51,8 +41,6 @@ GitHub Actions is selected. The database repo already contains `.github/workflow
 For the application repositories add build/lint/typecheck, unit/contract tests, NestJS OpenAPI drift detection, restricted-runtime integration tests, Next.js/rider UI tests, secret/SAST/dependency scanning and tagged deployment to staging. The migration stage must check checksums and existing-ledger provenance, take backups, apply only forward versions and verify catalog after deployment.
 
 Promote to prod only with owner/pharmacist/finance signoff and tested provider sandbox integration, recovery, security and operating readiness. Use short-lived cloud credentials rather than static GitHub secrets where practical. See Migration.
-
-## Deployment
 
 ## Safe deploy sequence
 
@@ -65,8 +53,6 @@ Promote to prod only with owner/pharmacist/finance signoff and tested provider s
 
 A nonempty pre-Alembic managed DB needs a separate ledger-adoption plan; do not assume V0001 is safe on existing data. Any failure after real writes may need forward-fix or compensating business records rather than naive schema rollback. See Release Runbook.
 
-## Backup and Recovery
-
 ## Backup, restore and disaster recovery
 
 The master checklist states daily backups, 30-day retention, enabled point-in-time recovery, target RPO 15–30 min and RTO 1–2 h. These are decisions/targets, not evidence they have been attained on production. The DB repo includes a local synthetic ACL-preserving restore check across 266 tables, but real multi-zone RDS and encrypted S3/Rx recovery still need staging proof.
@@ -75,8 +61,6 @@ Run restore drills on an isolated environment: validate ledger/checksums, table/
 
 Record timestamp, RPO/RTO observed, loss window, approved business compensation and signoff. Never include sensitive production dump in CI artifacts. See Reliability.
 
-## Logging
-
 ## Structured logs and data minimization
 
 Include request ID, service/module, safe actor category, transaction ID, stage transition, state revision, provider correlation ID, duration and error classification. For Cashfree webhooks log signature-check result and opaque event ID but not payment details or raw request. For pharmacist and private file access log object reference and purpose but never Rx image, diagnosis or link token.
@@ -84,8 +68,6 @@ Include request ID, service/module, safe actor category, transaction ID, stage t
 CloudWatch is selected in the checklist, with Sentry and OpenTelemetry/New Relic options. Export and warehouse activity can become sensitive at large volume; apply per-role dashboards and retention approved by security/legal. The checklist describes operational logging retention 14–30 days as a decision note; confirm exact policies per log class.
 
 Use sampled traces for high-volume GPS, never unbounded storage of precise rider location. Logs cannot serve as substitutes for immutable financial and clinical audit tables. See Audit.
-
-## Monitoring
 
 ## Operational monitoring and alerts
 

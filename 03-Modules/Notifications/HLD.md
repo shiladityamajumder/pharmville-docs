@@ -1,6 +1,6 @@
 # Notifications HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Notifications-and-Support.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-018: Transactional customer/staff messaging — HLD
 
@@ -28,8 +28,6 @@
 
 ## Risk
 Notification delivery is best effort after commit; it must never determine success of a stock or money action. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-018 — Transactional customer/staff messaging
 

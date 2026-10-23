@@ -1,7 +1,5 @@
 # User roles and access
 
-## Proposed Role Module Matrix
-
 ## Proposed role-to-module access matrix
 
 **Not an approved grant list.** Names are business roles inferred from inherited user journeys and database schemas. The exact identity.roles/user_roles/role_permissions seeded values and live runtime grants must be reviewed separately. Do not grant these based on this table alone.
@@ -30,8 +28,6 @@
 **Database evidence:** the final snapshot contains four restricted capability groups and three RLS policies; actual service DB credentials and privilege grants need a target-runtime validation.
 
 Existing row-level policies
-
-## Roles and Permissions
 
 ## Role and object-level authorization
 

@@ -1,33 +1,26 @@
 # API contracts
 
-## API conventions and shared contracts
+[Business Guide](../00-Business-Guide/README.md) · [critical operation schemas](Critical-Operation-Contracts.md) · [ownership and recovery](../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Proposed API contracts
 
 **Proposed API catalog:** the historical identifiers run from API-001 through API-097. No application server routes were available for verification. Many operation schemas remain incomplete; use the readiness notes and feature register before implementation.
 
-- Customer_Accounts
-- Product_Catalog
-- Cart_Checkout
-- Prescription_Upload
-- Customer_Orders
-- Admin_CMS
-- Order_Operations
-- Store_Operations
-- Inventory
-- Warehouse
-- Pharmacist_Review
-- Delivery_Operations
-- Rider_App
-- Finance_Payments
-- Reporting
-- Audit
-- Authentication_Access
-- Notifications
+### Module API documents
+
+| Domain | Contracts | Domain | Contracts |
+| --- | --- | --- | --- |
+| Customer accounts | [Accounts](Customer_Accounts.md) | Access | [Authentication](Authentication_Access.md) |
+| Catalog | [Products](Product_Catalog.md) | Checkout | [Cart and quote](Cart_Checkout.md) |
+| Prescriptions | [Intake](Prescription_Upload.md) | Pharmacy | [Review](Pharmacist_Review.md) |
+| Customer orders | [Order experience](Customer_Orders.md) | Operations | [Order commands](Order_Operations.md) |
+| Store | [Store work](Store_Operations.md) | Warehouse | [Receiving and transfers](Warehouse.md) |
+| Inventory | [Stock and holds](Inventory.md) | Delivery | [Dispatch](Delivery_Operations.md) |
+| Rider | [Rider actions](Rider_App.md) | Finance | [Payments and refunds](Finance_Payments.md) |
+| Administration | [CMS and settings](Admin_CMS.md) | Notifications | [Messages](Notifications.md) |
+| Reporting | [Reports](Reporting.md) | Audit | [Evidence](Audit.md) |
 
 [Measured feature reference gaps](../09-References/Coverage-and-Traceability.md#direct-api-reference-gaps-measured-by-owner)
-
-## Shared API standards
 
 ## REST API contract index
 

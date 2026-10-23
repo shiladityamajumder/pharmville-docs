@@ -1,6 +1,6 @@
 # Admin CMS HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Admin-and-Operations.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-006: Admin masters and editorial pages — HLD
 
@@ -32,8 +32,6 @@
 
 ## Risk
 Master data publication is an approved versioned action; staff scope is checked server-side. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-006 — Admin masters and editorial pages
 

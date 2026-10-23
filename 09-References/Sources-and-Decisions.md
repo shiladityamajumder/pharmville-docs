@@ -9,14 +9,14 @@
 
 The `healthcare_db` checkout is the available database source. Its README names PostgreSQL SQL migrations as the deployment authority and freezes historical Alembic execution. Local migration evidence and deployment limits are recorded in [Database migrations](../04-Database/Migrations.md).
 
-No application source repository or signed client PRD was present. The 110 feature IDs, 18 module groupings, API contracts, workflows, and most technology choices came from inherited draft documentation. Treat them as proposals until the product owner supplies approved sources.
+No signed client PRD is checked into this documentation repository. Sibling application directories are available but their behavior was not audited in this documentation pass. The 110 feature IDs, 18 module groupings, API contracts, workflows, and most technology choices came from inherited draft documentation. Treat them as proposals until the product owner supplies approved sources.
 
 ## Confirmed repository facts
 
-- SQL under `healthcare_db/healthcare_db/postgresql/migrations/` is described as the deployment history.
+- SQL under `healthcare_db/postgresql/migrations/` is described as the deployment history.
 - The database repository contains SQLAlchemy models and PostgreSQL catalog validation tools. The database README describes the ORM as a consistency companion.
 - Local database validation evidence is dated 2026-10-22. Its exact counts and limits are in [Database migrations](../04-Database/Migrations.md).
-- The workspace has Git metadata. The current documentation and database directories are untracked in that outer repository; upstream revision and deployment state are not established by its history.
+- The documentation and sibling database directories each have Git metadata. The inspected database revision/checksums are retained in the evidence snapshot; the intended release and live deployment state remain unverified. The available source contains V0030 despite the user’s intended removal; D-015 must reconcile that discrepancy.
 
 ## Proposed product and engineering decisions
 
@@ -51,6 +51,8 @@ No application source repository or signed client PRD was present. The 110 featu
 | D-020 | Set support ownership, SLA, and ticket integration | Support lead |
 | D-021 | Confirm rider Android release and app-store ownership | Product owner and Engineering |
 | D-022 | Approve security controls and GitHub protections | Security and DevOps |
+| D-023 | Approve replacement-contact proof and storage without weakening verified identity | Security and Product owner |
+| D-024 | Review exact per-operation schemas, table write fields, transitions and execution evidence | Tech lead, module owners and QA lead |
 
 Decisions D-004 through D-013, D-016, and D-017 need evidence before production. D-001, D-002, D-003, D-005, D-015, D-019, and D-021 affect kickoff scope or architecture.
 
@@ -67,6 +69,10 @@ These recommendations are proposals, not substituted business approvals. Develop
 | D-006 / D-013 | Approve prescription review/eligibility, consent, retention and privacy policy. | Clinical access and dispensing cannot be invented from table presence. | Clinical decisions, regulated fulfillment and deletion. | Pharmacist, Privacy and Legal |
 | D-016 | Supply exact provider API/signature versions and permitted test accounts. | Raw callback contracts and retry behavior require provider evidence. | Live payment/notification adapters. | Security and provider owner |
 | D-023 | Use purpose-bound verification before atomically replacing a contact; approve proof transport/storage and separate user/profile versions. | Existing schema lacks dedicated pending-contact columns. Preserve verified destinations during proof. | Email/phone change implementation and recovery. | Security and Product owner |
-| D-024 | Approve operation-specific schemas, table write owner, failure transitions and named test cases per vertical slice; treat generic rows as review prompts. | ID mentions and shared schemas cannot establish implementable feature contracts. | Features with incomplete API/schema or failure contracts in the traceability register. | Tech lead, module owner and QA lead |
+| D-024 | Approve operation-specific schemas, table write owner, failure transitions and named test cases per vertical slice; require feature-specific normal/adverse assertions and execution evidence. | ID mentions and shared schemas cannot establish implementable feature contracts. | Features with incomplete API/schema or failure contracts in the traceability register. | Tech lead, module owner and QA lead |
 
-D-023 and D-024 record gaps found in the independent engineering audit. D-015 additionally requires the deployment owner to reconcile the intended upstream revision and target migration ledger; no unsupported migration-removal claim is deployment authority.
+D-023 and D-024 record gaps found in the independent engineering audit. D-015 requires the release owner to reconcile the user’s intended V0030 removal with its presence in the inspected checkout and V0030-based catalog/report. Select the intended revision, compare target ledger/checksums and regenerate evidence for that release before claiming migration parity.
+
+## Conflicting order paths requiring explicit resolution
+
+RX-02 retains a draft 24-hour post-order upload/auto-cancel requirement. Detailed journey S07–S14 instead supplies prescription evidence and completes P-line review before payment. Product, Pharmacy and Finance must approve whether a deferred route exists, its request/payment timing, deadline, stock treatment and compensation. Until then the Business Guide explains the detailed path and labels the deferred route blocked; it does not invent a universal sequence or approved deadline.

@@ -1,19 +1,18 @@
 # Authentication Access edge cases
 
-**Coverage status:** the rows below are module review prompts. Repeated failure text does not establish feature-specific edge coverage. Specify input, ownership, transaction, retry and recovery assertions for each feature under [D-024](../../09-References/Sources-and-Decisions.md#decisions-that-block-implementation).
+**Status: Designed; NOT RUN.** These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to [decisions](../../09-References/Sources-and-Decisions.md); provider behavior and application execution are not certified.
 
+[Business explanation](../../00-Business-Guide/Accounts-and-Login.md) · [LLD and normal tests](LLD.md) · [API](../../05-APIs/Authentication_Access.md) · [recovery contracts](../../07-Engineering/State-and-Recovery-Contracts.md)
 
-## Edge Cases
+| Case | Feature | Trigger | Expected result and record impact | Responsible recovery | Test |
+| --- | --- | --- | --- | --- | --- |
+| `EC-AUTH-01-01` | `AUTH-01` | Valid password with missing/invalid second factor | No privileged session | User retries approved proof; Security reviews recovery | `TC-AUTH-01-DENY` |
+| `EC-AUTH-02-01` | `AUTH-02` | Refresh replays after session rotation or revocation | No unauthorized replacement session; security response per D-003 | Security applies approved replay response | `TC-AUTH-02-DENY` |
+| `EC-AUTH-03-01` | `AUTH-03` | Parallel requests exceed configured shared limit | Rate-limited without account enumeration or bypass by race | Security reviews redacted abuse evidence | `TC-AUTH-03-DENY` |
+| `EC-AUTH-04-01` | `AUTH-04` | Client supplies trusted actor/context of another user | Untrusted context ignored; no out-of-scope read/write | Security validates restricted runtime role and server-derived scope | `TC-AUTH-04-DENY` |
 
-## Authentication & Authorization — documented edge cases
+## Verification procedure
 
-**Source:** v0.1 feature inventory, journey v3 exception rules and final DB guard report. These are minimum testable failure outcomes, not replacements for pharmacy/owner policy signoff.
+For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are `TC-<feature>-OK` in the LLD. Use approved policy fixtures, not production assumptions.
 
-| Feature | Affected behavior | Trigger | Expected recovery |
-| --- | --- | --- | --- |
-| `AUTH-01` | Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager | Expired OTP, replay, locked session or other account data | Rate-limit and deny; avoid account enumeration |
-| `AUTH-02` | Lockout rules, session limits, one session per staff account | Expired OTP, replay, locked session or other account data | Rate-limit and deny; avoid account enumeration |
-| `AUTH-03` | OTP rate limits per number and IP | Expired OTP, replay, locked session or other account data | Rate-limit and deny; avoid account enumeration |
-| `AUTH-04` | Permissions checked on the server for every request | Expired OTP, replay, locked session or other account data | Rate-limit and deny; avoid account enumeration |
-
-Across every route also test expired sessions, cross-tenant or location IDOR attempts, duplicate taps, two workers updating the same object, timeout after commit, out-of-order events and unapproved values. Never quietly continue a safety-sensitive workflow by interpreting a missing answer as consent. See Error_Handling and Testing.
+For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.

@@ -1,6 +1,6 @@
 # Rider App LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Delivery-and-Rider-App.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Rider shifts and delivery actions — implementation acceptance
 
@@ -25,8 +25,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Rider Android App — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -40,15 +38,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Rider Android App — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -77,8 +73,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Rider Android App — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -93,9 +87,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Rider Android App — existing database usage
 
@@ -116,9 +108,7 @@ Proposed owning service: `Rider_App`. Main read concerns: shift, pickup, locatio
 
 **Safety:** Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Rider Android App — dependencies and ownership
 
@@ -135,9 +125,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Rider Android App — domain objects and DTO boundaries
 
@@ -151,9 +139,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `Rider_AppReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Rider_AppEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`, `logistics.delivery_otp_challenges`, `logistics.delivery_routes`, `logistics.delivery_slots`, `logistics.rider_shifts`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`, `logistics.delivery_otp_challenges`, `logistics.delivery_routes`, `logistics.delivery_slots`, `logistics.rider_shifts`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Rider Android App — failure handling
 
@@ -166,9 +152,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Rider shifts and delivery actions — proposed interfaces and DTOs
 
@@ -185,8 +169,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `logistics.rider_shifts`, `logistics.delivery_assignments`, `logistics.delivery_otp_challenges`, `logistics.delivery_location_updates`, `payment.cod_collections`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Rider shifts and delivery actions — internal architecture
 
@@ -221,8 +203,6 @@ Rider sees only assigned delivery and masked necessary information; OTP outcome 
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Rider shifts and delivery actions — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -232,8 +212,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Rider Android App — permission model
 
@@ -246,9 +224,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Rider Android App — functional requirements
 
@@ -272,36 +248,25 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Rider shifts and delivery actions — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Assigned rider
+  participant O as Delivery command service
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Submit delivery OTP proof and actual COD
+  O->>D: Check current assignment proof validity and command identity
+  alt Gate fails or current version conflicts
+    O-->>A: Remain incomplete, retry or contact dispatch
+  else Gate satisfied
+    O->>D: Commit completion and coordinate one cash fact
+    D-->>O: Committed evidence
+    O-->>A: Evidenced delivery and separate cash state
   end
 ```
-
-## Service Design
 
 ## Rider Android App — service design
 
@@ -322,9 +287,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Rider Android App — state and transition policy
 
@@ -332,21 +295,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Submit delivery OTP proof and actual COD"] --> B{"Valid current proof and assignment?"}
+  B -->|No| C["Remain incomplete, retry or contact dispatch"]
+  B -->|Yes| D["Commit completion and coordinate one cash fact"]
+  D --> E["Evidenced delivery and separate cash state"]
 ```
 
 **Module-specific invariant:** Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Rider Android App — verification and acceptance
 
@@ -354,20 +313,20 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-RID-01-OK` | OTP login; on duty, off duty and break | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RID-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RID-02-OK` | Task list; accept; open Google Maps to navigate; mark picked up | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RID-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RID-03-OK` | Background location: every 5–10 s on delivery, 15–30 s idle | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RID-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RID-04-OK` | Complete delivery with customer OTP and photo; record COD collected | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RID-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RID-05-OK` | Door checks for prescription medicines | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RID-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RID-06-OK` | Failed attempt with a reason from a fixed list | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RID-06-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-RID-07-OK` | Daily deliveries and incentive earned | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-RID-07-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-RID-01-OK` | OTP login; on duty, off duty and break | OTP login and shift transitions use rider-specific authorization |
+| `TC-RID-01-DENY` | Old session tries to start a revoked rider’s shift | Protected shift denied; no availability activation; Security/Dispatch resolves status |
+| `TC-RID-02-OK` | Task list; accept; open Google Maps to navigate; mark picked up | Assigned rider accepts and picks up current parcel once |
+| `TC-RID-02-DENY` | Other rider posts pickup | No custody change or task disclosure; Dispatch corrects assignment; authorized rider retries |
+| `TC-RID-03-OK` | Background location: every 5–10 s on delivery, 15–30 s idle | Permitted locations carry captured time and active assignment |
+| `TC-RID-03-DENY` | Offline device uploads delayed coordinates | Stale samples do not masquerade as live; access/retention policy applies; Dispatch uses last-known state; Privacy approves cadence/retention |
+| `TC-RID-04-OK` | Complete delivery with customer OTP and photo; record COD collected | Current rider completes using valid OTP/proof and actual COD once |
+| `TC-RID-04-DENY` | Wrong OTP or repeated offline completion | No completion on invalid proof; replay cannot duplicate collection; Rider retries approved proof or contacts Dispatch |
+| `TC-RID-05-OK` | Door checks for prescription medicines | Approved door-check scope is enforced without replacing pharmacy review |
+| `TC-RID-05-DENY` | Rider is asked to approve a prescription at doorstep | No pharmacist decision fabricated by rider; Pharmacy/Operations approves door-check SOP before enabling |
+| `TC-RID-06-OK` | Failed attempt with a reason from a fixed list | Failed attempt records approved reason and current custody |
+| `TC-RID-06-DENY` | Free-text unsupported failure reason is submitted | No false completed delivery or invented reason code; Rider selects approved reason; Dispatch decides next step |
+| `TC-RID-07-OK` | Daily deliveries and incentive earned | Daily delivery/incentive view uses approved calculation version |
+| `TC-RID-07-DENY` | Incentive configuration is missing or disputed | No invented earnings total or payout; Product/Finance approves incentive contract; rider sees pending availability |
 
 ## Cross-module contract tests
 
@@ -377,9 +336,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Rider Android App — validation checkpoints
 
@@ -393,8 +350,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `RID-01`, `RID-02`, `RID-03`, `RID-04`, `RID-05`, `RID-06`, `RID-07`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Rider Android App — operational workflows
 
@@ -411,4 +366,13 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Treat background GPS as sensitive: consent, scoped task identity, retention approval and access enforcement. OTP validation must be server-side with attempt limits, and failed delivery requires reason.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).
+
+## Critical recovery scenarios
+
+**Designed; NOT RUN.** Run against approved policy fixtures and actual restricted database roles. Inspect customer/staff result, state/history, stock and money effects together.
+
+| Test | Input / interruption | Expected result and record assertions |
+| --- | --- | --- |
+| `TC-RID-04-01` | Offline completion arrives after reassignment or OTP expiry | Reject stale assignment/expired proof without delivery completion or extra COD effect. Rider sees conflict and dispatch resolves custody; captured device time cannot override current server authorization. |
+| `TC-RID-04-02` | Current rider submits incorrect delivery OTP with a valid-looking photo | Photo does not bypass OTP. Shipment remains incomplete, challenge attempts follow approved policy, and no cash or delivered event is fabricated. |

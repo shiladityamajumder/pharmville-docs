@@ -1,7 +1,5 @@
 # Customer discovery and checkout
 
-## S01 Find the right product
-
 ## S01 — Find the right product
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Product_Catalog. **Actor:** Customer.
@@ -40,8 +38,6 @@ Primary affected database domain(s): `catalog`, `search`, `pricing`, `marketplac
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S02 Understand the item
 
 ## S02 — Understand the item
 
@@ -82,8 +78,6 @@ Primary affected database domain(s): `catalog`, `search`, `pricing`, `marketplac
 
 See module test plan and end-to-end sequence.
 
-## S03 Build one shopping cart
-
 ## S03 — Build one shopping cart
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Cart_Checkout. **Actor:** Customer.
@@ -122,8 +116,6 @@ Primary affected database domain(s): `commerce`, `pricing`, `customer`, `warehou
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S04 Check the delivery address
 
 ## S04 — Check the delivery address
 
@@ -164,8 +156,6 @@ Primary affected database domain(s): `customer`, `clinical`, `identity`. Represe
 
 See module test plan and end-to-end sequence.
 
-## S05 Log in and choose patient when needed
-
 ## S05 — Log in and choose patient when needed
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Customer_Accounts. **Actor:** Customer.
@@ -204,8 +194,6 @@ Primary affected database domain(s): `customer`, `clinical`, `identity`. Represe
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S06 Confirm what will actually be ordered
 
 ## S06 — Confirm what will actually be ordered
 
@@ -246,8 +234,6 @@ Primary affected database domain(s): `commerce`, `pricing`, `customer`, `warehou
 
 See module test plan and end-to-end sequence.
 
-## S07 Upload prescription only for P
-
 ## S07 — Upload prescription only for P
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Prescription_Upload. **Actor:** Customer.
@@ -286,8 +272,6 @@ Primary affected database domain(s): `clinical`, `platform`, `customer`. Represe
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S08 Record the order request once
 
 ## S08 — Record the order request once
 

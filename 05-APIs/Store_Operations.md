@@ -1,9 +1,7 @@
 # Store Operations API contracts
 
-**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#high).
+**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#rechecked-earlier-findings).
 
-
-## API-044
 
 ## API-044 — GET `/v1/staff/store/orders`
 
@@ -43,9 +41,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-045
+Related: [api conventions](README.md); real table mappings.
 
 ## API-045 — POST `/v1/staff/store/orders/{order_id}/accept`
 
@@ -81,9 +77,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-046
+Related: [api conventions](README.md); real table mappings.
 
 ## API-046 — POST `/v1/staff/store/picks/{pick_id}/scan`
 
@@ -119,9 +113,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-047
+Related: [api conventions](README.md); real table mappings.
 
 ## API-047 — POST `/v1/staff/store/packs/{pack_id}/close`
 
@@ -157,9 +149,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-048
+Related: [api conventions](README.md); real table mappings.
 
 ## API-048 — POST `/v1/staff/store/replenishments`
 
@@ -195,9 +185,7 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
-
-## API-049
+Related: [api conventions](README.md); real table mappings.
 
 ## API-049 — POST `/v1/staff/store/transfers/{transfer_id}/receipt`
 
@@ -233,4 +221,4 @@ Exact success code and response fields remain a contract-review task for this op
 
 Test successful authorized request, schema validation, cross-customer or cross-location denial, duplicate replay, concurrent conflict, stale state, provider delay and audit/correlation consistency. This contract must pass a database-backed test referencing the actual migrated schema before being labeled ready.
 
-Related: API_Conventions; real table mappings.
+Related: [api conventions](README.md); real table mappings.

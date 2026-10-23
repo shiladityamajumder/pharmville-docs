@@ -119,26 +119,26 @@
 
 **18 module groupings** derived from the 110 inherited feature IDs (not a newly signed launch scope). Database schemas are cross-product and do not each imply a Phase 1 module.
 
-| Module | Features | HLD | LLD | APIs | DB mapping | Test plan |
+| Module | Features | HLD | LLD | API contracts | DB mapping | Test plan |
 | --- | --- | --- | --- | --- | --- | --- |
-| Customer_Accounts | 7 | HLD | LLD | 9 | DB | tests |
-| Product_Catalog | 6 | HLD | LLD | 8 | DB | tests |
-| Cart_Checkout | 8 | HLD | LLD | 4 | DB | tests |
-| Prescription_Upload | 5 | HLD | LLD | 3 | DB | tests |
-| Customer_Orders | 9 | HLD | LLD | 7 | DB | tests |
-| Admin_CMS | 9 | HLD | LLD | 7 | DB | tests |
-| Order_Operations | 7 | HLD | LLD | 5 | DB | tests |
-| Store_Operations | 5 | HLD | LLD | 6 | DB | tests |
-| Inventory | 7 | HLD | LLD | 6 | DB | tests |
-| Warehouse | 5 | HLD | LLD | 4 | DB | tests |
-| Pharmacist_Review | 5 | HLD | LLD | 4 | DB | tests |
-| Delivery_Operations | 5 | HLD | LLD | 5 | DB | tests |
-| Rider_App | 7 | HLD | LLD | 6 | DB | tests |
-| Finance_Payments | 7 | HLD | LLD | 7 | DB | tests |
-| Reporting | 7 | HLD | LLD | 5 | DB | tests |
-| Audit | 2 | HLD | LLD | 2 | DB | tests |
-| Authentication_Access | 4 | HLD | LLD | 5 | DB | tests |
-| Notifications | 5 | HLD | LLD | 4 | DB | tests |
+| Customer_Accounts | 7 | [HLD](../03-Modules/Customer_Accounts/HLD.md) | [LLD](../03-Modules/Customer_Accounts/LLD.md) | [Contracts](../05-APIs/Customer_Accounts.md) | [DB](../04-Database/Module-Mapping.md#customer-accounts) | [Tests](../03-Modules/Customer_Accounts/Edge-Cases.md) |
+| Product_Catalog | 6 | [HLD](../03-Modules/Product_Catalog/HLD.md) | [LLD](../03-Modules/Product_Catalog/LLD.md) | [Contracts](../05-APIs/Product_Catalog.md) | [DB](../04-Database/Module-Mapping.md#product-catalog) | [Tests](../03-Modules/Product_Catalog/Edge-Cases.md) |
+| Cart_Checkout | 8 | [HLD](../03-Modules/Cart_Checkout/HLD.md) | [LLD](../03-Modules/Cart_Checkout/LLD.md) | [Contracts](../05-APIs/Cart_Checkout.md) | [DB](../04-Database/Module-Mapping.md#cart-checkout) | [Tests](../03-Modules/Cart_Checkout/Edge-Cases.md) |
+| Prescription_Upload | 5 | [HLD](../03-Modules/Prescription_Upload/HLD.md) | [LLD](../03-Modules/Prescription_Upload/LLD.md) | [Contracts](../05-APIs/Prescription_Upload.md) | [DB](../04-Database/Module-Mapping.md#prescription-upload) | [Tests](../03-Modules/Prescription_Upload/Edge-Cases.md) |
+| Customer_Orders | 9 | [HLD](../03-Modules/Customer_Orders/HLD.md) | [LLD](../03-Modules/Customer_Orders/LLD.md) | [Contracts](../05-APIs/Customer_Orders.md) | [DB](../04-Database/Module-Mapping.md#customer-orders) | [Tests](../03-Modules/Customer_Orders/Edge-Cases.md) |
+| Admin_CMS | 9 | [HLD](../03-Modules/Admin_CMS/HLD.md) | [LLD](../03-Modules/Admin_CMS/LLD.md) | [Contracts](../05-APIs/Admin_CMS.md) | [DB](../04-Database/Module-Mapping.md#admin-cms) | [Tests](../03-Modules/Admin_CMS/Edge-Cases.md) |
+| Order_Operations | 7 | [HLD](../03-Modules/Order_Operations/HLD.md) | [LLD](../03-Modules/Order_Operations/LLD.md) | [Contracts](../05-APIs/Order_Operations.md) | [DB](../04-Database/Module-Mapping.md#order-operations) | [Tests](../03-Modules/Order_Operations/Edge-Cases.md) |
+| Store_Operations | 5 | [HLD](../03-Modules/Store_Operations/HLD.md) | [LLD](../03-Modules/Store_Operations/LLD.md) | [Contracts](../05-APIs/Store_Operations.md) | [DB](../04-Database/Module-Mapping.md#store-operations) | [Tests](../03-Modules/Store_Operations/Edge-Cases.md) |
+| Inventory | 7 | [HLD](../03-Modules/Inventory/HLD.md) | [LLD](../03-Modules/Inventory/LLD.md) | [Contracts](../05-APIs/Inventory.md) | [DB](../04-Database/Module-Mapping.md#inventory) | [Tests](../03-Modules/Inventory/Edge-Cases.md) |
+| Warehouse | 5 | [HLD](../03-Modules/Warehouse/HLD.md) | [LLD](../03-Modules/Warehouse/LLD.md) | [Contracts](../05-APIs/Warehouse.md) | [DB](../04-Database/Module-Mapping.md#warehouse) | [Tests](../03-Modules/Warehouse/Edge-Cases.md) |
+| Pharmacist_Review | 5 | [HLD](../03-Modules/Pharmacist_Review/HLD.md) | [LLD](../03-Modules/Pharmacist_Review/LLD.md) | [Contracts](../05-APIs/Pharmacist_Review.md) | [DB](../04-Database/Module-Mapping.md#pharmacist-review) | [Tests](../03-Modules/Pharmacist_Review/Edge-Cases.md) |
+| Delivery_Operations | 5 | [HLD](../03-Modules/Delivery_Operations/HLD.md) | [LLD](../03-Modules/Delivery_Operations/LLD.md) | [Contracts](../05-APIs/Delivery_Operations.md) | [DB](../04-Database/Module-Mapping.md#delivery-operations) | [Tests](../03-Modules/Delivery_Operations/Edge-Cases.md) |
+| Rider_App | 7 | [HLD](../03-Modules/Rider_App/HLD.md) | [LLD](../03-Modules/Rider_App/LLD.md) | [Contracts](../05-APIs/Rider_App.md) | [DB](../04-Database/Module-Mapping.md#rider-app) | [Tests](../03-Modules/Rider_App/Edge-Cases.md) |
+| Finance_Payments | 7 | [HLD](../03-Modules/Finance_Payments/HLD.md) | [LLD](../03-Modules/Finance_Payments/LLD.md) | [Contracts](../05-APIs/Finance_Payments.md) | [DB](../04-Database/Module-Mapping.md#finance-payments) | [Tests](../03-Modules/Finance_Payments/Edge-Cases.md) |
+| Reporting | 7 | [HLD](../03-Modules/Reporting/HLD.md) | [LLD](../03-Modules/Reporting/LLD.md) | [Contracts](../05-APIs/Reporting.md) | [DB](../04-Database/Module-Mapping.md#reporting) | [Tests](../03-Modules/Reporting/Edge-Cases.md) |
+| Audit | 2 | [HLD](../03-Modules/Audit/HLD.md) | [LLD](../03-Modules/Audit/LLD.md) | [Contracts](../05-APIs/Audit.md) | [DB](../04-Database/Module-Mapping.md#audit) | [Tests](../03-Modules/Audit/Edge-Cases.md) |
+| Authentication_Access | 4 | [HLD](../03-Modules/Authentication_Access/HLD.md) | [LLD](../03-Modules/Authentication_Access/LLD.md) | [Contracts](../05-APIs/Authentication_Access.md) | [DB](../04-Database/Module-Mapping.md#authentication-access) | [Tests](../03-Modules/Authentication_Access/Edge-Cases.md) |
+| Notifications | 5 | [HLD](../03-Modules/Notifications/HLD.md) | [LLD](../03-Modules/Notifications/LLD.md) | [Contracts](../05-APIs/Notifications.md) | [DB](../04-Database/Module-Mapping.md#notifications) | [Tests](../03-Modules/Notifications/Edge-Cases.md) |
 
 **Phase note:** Warehouse core tasks appear as Must in one inherited v0.1 feature list but as Phase 2/stretch in later secondary narrative. Rider Android phase timing also requires signoff; see open decisions.
 

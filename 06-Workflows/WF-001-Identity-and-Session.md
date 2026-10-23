@@ -40,7 +40,7 @@ sequenceDiagram
     D-->>A: Committed
     A-->>C: Session credentials
   else Invalid proof or transaction failure
-    A-->>C: Safe denial; no credentials
+    A-->>C: Safe denial, no credentials
   end
 ```
 

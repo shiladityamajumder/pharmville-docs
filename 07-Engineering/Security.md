@@ -1,7 +1,5 @@
 # Security and healthcare data handling
 
-## Audit Logging
-
 ## Immutable evidence and privileged audit views
 
 Record who performed the action, when, which authorized site/resource/revision was targeted, outcome and reason, and a correlation/provider event ID when applicable. Required events: login attempts, role/permission changes, product class/publish, Rx view and decision, order revision/customer consent, stock move/hold, license rejection, payment/refund/COD reconciliation, rider OTP result, export/download and incident override.
@@ -9,8 +7,6 @@ Record who performed the action, when, which authorized site/resource/revision w
 The database contains `platform.audit_logs`, related compliance and file-access event tables, and trigger-based guards; application events must preserve their expected schema contract. Never log raw clinical files, OTP values, secrets, full payment tokens or unnecessary rider GPS trails. An audit record must not be silently updated to make a correction; add a new compensating event.
 
 Auditors need read-only, scoped, purpose-based export and access logging. Retention and deletion exceptions are unresolved and require legal signoff. See Audit Module and Runbook.
-
-## Authentication Flows
 
 ## Customer, staff and rider authentication
 
@@ -20,8 +16,6 @@ Auditors need read-only, scoped, purpose-based export and access logging. Retent
 
 The documented policy mentions 15-minute access, 30-day refresh, 8-hour staff sessions, 2-hour admin sessions, staff one-active-session rule and escalating lockouts. Reconcile which session limits apply to mobile/rider use before coding. Never store OTP plaintext, disclose auth status in logs or let a valid token bypass ownership tests. See API Auth and User Roles.
 
-## Compliance Considerations
-
 ## Compliance and legal signoff boundaries
 
 Source checklists request retail drug licenses per store, warehouse license checks where relevant, registered pharmacists, product Schedule classification, lawful prescribing/dispensing, invoice/HSN/GST handling, DLT/MSG91 sender/template approval, customer privacy/consent, deletion and retention, grievance contact, refund/return policy and terms. These are project requirements for owner/legal/pharmacist review, **not a legal opinion or independently verified legal mandate**.
@@ -29,8 +23,6 @@ Source checklists request retail drug licenses per store, warehouse license chec
 Keep a signoff artifact per operating location, master classification, controlled product category, pharmacy decision policy, identity notice, approved SMS/WhatsApp template, GST invoice rules, COD/refund policy and prescription retention. A database license row or GSTIN field is not evidence of current legal validity. Record approving professional, date, effective version, applicable territory and escalation if withdrawn.
 
 No fixed retention period, patient right exception, Schedule regulation, GST tax rate or compliance score is invented here. Production must wait for written review and testable operating procedures. See Decisions, Data Lifecycle and Release Plan.
-
-## Compliance Review
 
 ## India healthcare-commerce compliance review — approval needed
 
@@ -40,8 +32,6 @@ Before release, obtain written decisions on P-classified medicine sale gates, pr
 
 **Engineering fail-closed requirement:** unknown product classification, site license, inventory authority or legal access policy must block the sensitive action rather than assume permission.
 
-## Healthcare Data Handling
-
 ## Healthcare-specific application safeguards
 
 Software P/M/O category is a client business classification, not independent medical/legal permission to sell a specific product. Clinical review is applied only to current P lines in the cart, each against the exact patient, item, quantity and prescription version. M/O lines do not enter pharmacist review. Unknown class, missing patient, unapproved prescription or changed accepted revision blocks affected fulfillment.
@@ -49,8 +39,6 @@ Software P/M/O category is a client business classification, not independent med
 Require restricted pharmacist workbench access, access logs, file scanning, reason-coded approvals and re-review after relevant patient/SKU/Rx changes. A store/warehouse also needs current site-specific license and approved stock freshness policy; the database's synthetic test policies are not production legal licenses.
 
 Schedule categories, telemedicine rules, prescription validity, cold-chain, retention, pharmacist registration and supply restrictions require a specialist legal/pharmacy review. The client checklist says Schedule X is not sold in Phase 1 but further scope is not independently certified. See Clinical Rules, Open Decisions.
-
-## Proposed Role Module Matrix
 
 ## Proposed role-to-module access matrix
 
@@ -81,8 +69,6 @@ Schedule categories, telemedicine rules, prescription validity, cold-chain, rete
 
 Existing row-level policies
 
-## Roles and Permissions
-
 ## Role and object-level authorization
 
 Role-based access control (RBAC) grants only actions relevant to a staff/customer role; object-level authorization further verifies that the exact record belongs to that actor's patient, store, assigned rider task or finance scope.
@@ -100,8 +86,6 @@ Role-based access control (RBAC) grants only actions relevant to a staff/custome
 
 Current DB roles are separate NOLOGIN runtime capabilities and have only selective RLS. Build a reviewed explicit `(role, action, resource_scope)` matrix with owner decision D-003 before production; never authorize solely from an internal integer ID. See Source Role List.
 
-## Security Overview
-
 ## Pharmville security controls and trust
 
 The source master checklist calls for JWT/OTP/MFA, least privilege, at-rest encryption with AWS KMS for RDS/S3/ElastiCache, HTTPS/TLS, API rate limiting, secrets management and independent audit. Database migrations V0025/V0029 establish restricted NOLOGIN roles, selected RLS policies and future routine default denial. Production deployment evidence, WAF policy and legal retention remain incomplete.
@@ -110,8 +94,6 @@ Defend the most important assets: prescriptions and patient identities, store/wa
 
 Production gate: threat-model signoff, cloud IAM review, provider secret/signature validation, clinical-file scanning/private access, breach/incident runbooks, rate-limit tests and role-based penetration tests. A SQL table alone is not a security control. Related Threat Model, Healthcare Data and Audit Logging.
 
-## Sensitive Data Protection
-
 ## Sensitive records and private file handling
 
 Protect patient identifiers, prescriptions, clinical documents, account sessions, payment references, invoices, staff credentials, rider location traces, ID/export documents and provider secrets. Use TLS and KMS-managed encryption for AWS data stores as selected; secrets must come from a controlled secret manager rather than `.env` committed to Git.
@@ -119,8 +101,6 @@ Protect patient identifiers, prescriptions, clinical documents, account sessions
 Prescriptions and reports live in private object storage; the database records metadata and access evidence. On upload: authenticate, verify allowed size/format, create short-lived scoped upload intent, scan, validate ownership and mark available only after trusted checks. On download: recheck actor and patient/order authorization **at read time**, issue short-lived URL and audit clinical access. Do not embed Rx content in messages, jobs, logs or support exports.
 
 Tokenize or mask provider references and phone/GPS details in telemetry. Retention, lawful holds, deletion and customer consent need legal approval; do not guess fixed duration. See Healthcare Handling and Database Privacy.
-
-## Threat Model
 
 ## Priority security threat model
 
@@ -137,8 +117,6 @@ Tokenize or mask provider references and phone/GPS details in telemetry. Retenti
 | Insider privilege escalation | Staff role edit, migration owner | No self-grant, separation of duties, runtime NOLOGIN roles |
 
 Test abuse against a synthetic staging database. Do not consider a passed local SQL test equivalent to a deployed WAF, token lifecycle or penetration test. See Security Testing.
-
-## Trust Boundaries
 
 ## Trust boundaries and database capability design
 

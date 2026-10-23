@@ -1,6 +1,6 @@
 # Notifications LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Notifications-and-Support.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Transactional customer/staff messaging — implementation acceptance
 
@@ -23,8 +23,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Notifications & Communications — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -36,15 +34,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Notifications & Communications — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -73,8 +69,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Notifications & Communications — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -89,9 +83,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Notifications & Communications — existing database usage
 
@@ -114,9 +106,7 @@ Proposed owning service: `Notifications`. Main read concerns: transactional what
 
 **Safety:** Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Notifications & Communications — dependencies and ownership
 
@@ -133,9 +123,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Notifications & Communications — domain objects and DTO boundaries
 
@@ -149,9 +137,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `NotificationsReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `NotificationsEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `notification.device_endpoints`, `notification.in_app_notifications`, `notification.message_attachments`, `notification.message_attempts`, `notification.messages`, `notification.provider_configurations`, `notification.provider_webhooks`, `notification.suppressions`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `notification.device_endpoints`, `notification.in_app_notifications`, `notification.message_attachments`, `notification.message_attempts`, `notification.messages`, `notification.provider_configurations`, `notification.provider_webhooks`, `notification.suppressions`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Notifications & Communications — failure handling
 
@@ -164,9 +150,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Transactional customer/staff messaging — proposed interfaces and DTOs
 
@@ -183,8 +167,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `notification.messages`, `notification.message_attempts`, `notification.templates`, `notification.user_channel_preferences`, `platform.outbox_events`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Transactional customer/staff messaging — internal architecture
 
@@ -219,8 +201,6 @@ Notification delivery is best effort after commit; it must never determine succe
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Transactional customer/staff messaging — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -230,8 +210,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Notifications & Communications — permission model
 
@@ -244,9 +222,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Notifications & Communications — functional requirements
 
@@ -268,36 +244,25 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Transactional customer/staff messaging — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Committed event worker
+  participant O as Notifications
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Deliver permitted event template
+  O->>D: Read event identity recipient preference and prior attempts
+  alt Gate fails or current version conflicts
+    O-->>A: Suppress or leave failed attempt for reviewed retry
+  else Gate satisfied
+    O->>D: Persist attempt and approved channel outcome
+    D-->>O: Committed evidence
+    O-->>A: Recorded delivery attempt
   end
 ```
-
-## Service Design
 
 ## Notifications & Communications — service design
 
@@ -316,9 +281,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Notifications & Communications — state and transition policy
 
@@ -326,21 +289,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Deliver permitted event template"] --> B{"Allowed recipient and channel?"}
+  B -->|No| C["Suppress or leave failed attempt for reviewed retry"]
+  B -->|Yes| D["Persist attempt and approved channel outcome"]
+  D --> E["Recorded delivery attempt"]
 ```
 
 **Module-specific invariant:** Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Notifications & Communications — verification and acceptance
 
@@ -348,16 +307,16 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-NOT-01-OK` | One notification service: templates, WhatsApp first, SMS fallback, email | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-NOT-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-NOT-02-OK` | Delivery log with retries | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-NOT-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-NOT-03-OK` | Rider push notifications (FCM) | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-NOT-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-NOT-04-OK` | Staff alerts in the admin panel | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-NOT-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-NOT-05-OK` | Customer browser push notifications | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-NOT-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-NOT-01-OK` | One notification service: templates, WhatsApp first, SMS fallback, email | Approved channel/template follows preferences and fallback rule |
+| `TC-NOT-01-DENY` | Primary channel times out after uncertain delivery | One business event tracked; no uncontrolled fallback fan-out; Notification owner reconciles attempt under provider policy |
+| `TC-NOT-02-OK` | Delivery log with retries | Attempts and retries retain provider outcome and event identity |
+| `TC-NOT-02-DENY` | Retry worker restarts after send acknowledgment is lost | No business action replay; uncertain message remains traceable; Notification owner checks provider-supported deduplication |
+| `TC-NOT-03-OK` | Rider push notifications (FCM) | Push task goes to authorized current rider endpoint |
+| `TC-NOT-03-DENY` | Device token belongs to a previous rider session | No other rider’s task details sent; Rider re-registers permitted endpoint; Security checks ownership |
+| `TC-NOT-04-OK` | Staff alerts in the admin panel | Staff panel alert is visible only to permitted role/location |
+| `TC-NOT-04-DENY` | Staff changes alert location ID | No cross-location or prescription detail leak; Manager reviews role; Notifications filters scope |
+| `TC-NOT-05-OK` | Customer browser push notifications | Browser push requires approved opt-in and endpoint ownership |
+| `TC-NOT-05-DENY` | Customer refuses browser permission | No forced subscription; order status remains available in app; Product approves optional push scope; customer can use ordinary status |
 
 ## Cross-module contract tests
 
@@ -367,9 +326,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Notifications & Communications — validation checkpoints
 
@@ -383,8 +340,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `NOT-01`, `NOT-02`, `NOT-03`, `NOT-04`, `NOT-05`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Notifications & Communications — operational workflows
 
@@ -400,4 +355,4 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Construct from committed events and approved templates. Delivery status is separate from order truth. Retries are bounded and deduplicated; never include protected prescriptions in WhatsApp/email payloads.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).

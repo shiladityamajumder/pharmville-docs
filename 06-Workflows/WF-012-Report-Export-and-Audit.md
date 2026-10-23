@@ -1,52 +1,51 @@
 # WF-012 — Report Export and Audit
 
-**Status:** Proposed orchestration based on draft requirements and existing DB contracts. This is not an observed deployed workflow.
+**Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
 
-**Actor:** Authorised staff. **Trigger:** request scoped report/export.
-**Preconditions:** Valid session and per-resource scope; approved policy data and current serviceability or eligibility where relevant.
-**Expected outcome:** short-lived authorised report or denied export.
+## Actors and preconditions
 
-## Normal path
+Authorized report user, Reporting and Audit. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.
 
-1. Resolve trusted identity and current entity version.
-2. Check classifications, licensing, money, consent and location conditions appropriate to this workflow.
-3. Validate request payload and expected state.
-4. Commit owning module rows and audit/outbox atomically.
-5. Publish any external side effect only after commit and record correlation IDs.
-6. Return an honest status and allow safe resume.
+## Normal path and committed outcomes
+
+1. Authorize report purpose, permitted fields and location/date filters. Definitions distinguish pending from completed financial/operational facts.
+2. Create a scoped report run/job and read allowed owner projections; report generation has no permission to correct source transactions.
+3. Retain filters, data time and explicit incomplete/failure state. Repeated export requests must not duplicate business effects.
+4. Before download, recheck current user/role/scope and private-file grant. Audit sensitive report access with safe references; historical evidence is read-only to user roles.
 
 ## Data ownership and API boundary
-**Modules:** Reporting, Audit, Admin_CMS.
-**Existing tables involved (candidates):** `platform.report_runs`, `platform.file_access_grants`, `platform.file_access_events`, `platform.audit_logs`.
-**Related proposed APIs:** API-032, API-033, API-034, API-035, API-036, API-037, API-038, API-087, API-088, API-082; additional related contracts are in module API indexes.
 
-## Alternative / failure flows
-- **Example failure:** cross-scope report or expired grant. Do not make an optimistic success assertion.
-- **Duplicate operation:** accept only the same idempotent result or issue a version conflict; never duplicate stock or money movements.
-- **Provider/network timeout:** leave a pending reconciliation state; never infer a paid/delivered/reviewed outcome.
-- **Unauthorized or expired identity:** deny, audit outcome as policy allows, and avoid revealing another user’s resource.
-- **Compensation:** when separate providers or ledgers are involved, use explicit compensating actions after durable evidence. Never silently reverse historic finance or clinical records.
+Reporting owns runs/private outputs; Audit owns append-only evidence. Domain source data is read under its approved scope.
 
-## Sequence (design)
+Candidate existing tables: `platform.report_definitions`, `platform.report_runs`, `platform.file_access_grants`, `platform.audit_logs`. Exact write fields and runtime grants remain per-operation review under D-024.
+
+Related proposed operations: API-082–API-088; report datasets still require exact approved field/filter schemas. [Reporting](../05-APIs/Reporting.md) · [Audit](../05-APIs/Audit.md).
+
+## Sequence
+
 ```mermaid
 sequenceDiagram
-  participant A as Authorised staff
-  participant API as API gateway
-  participant O as Owning module
-  participant PG as PostgreSQL
-  participant P as Outbox/provider
-  A->>API: request scoped report/export
-  API->>O: Trusted actor + validated intent
-  O->>PG: Scope + version/constraint check
-  alt policy or concurrency conflict
-    PG-->>O: Denied / no commit
-    O-->>A: Correctable error or pending state
-  else accepted
-    O->>PG: Atomic facts + outbox/audit
-    PG-->>O: Commit + accepted public ID
-    O-->>A: Safe status
-    O-->>P: Post-commit side effect, if needed
+  participant C as Authorized report user
+  participant O as Reporting
+  participant S as Audit
+  participant D as PostgreSQL
+  C->>O: Request scoped export and filters
+  O->>D: Record run and read permitted projections
+  O->>S: Append safe export event
+  C->>O: Download completed report
+  alt Current access still permitted
+    O-->>C: Protected scoped file access
+  else Permission revoked or run incomplete
+    O-->>C: Denied or preparation status
   end
 ```
 
-**Required QA:** approved happy path, denial, replay, race, provider outage, stale state, and actor-scope negative test; testing strategy.
+## Failure, transaction and recovery boundaries
+
+The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the [state and recovery contract](../07-Engineering/State-and-Recovery-Contracts.md): local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.
+
+## Feature-specific verification and navigation
+
+Designed cases: `TC-REP-07-DENY`, `TC-REP-05-DENY`, `TC-AUD-02-DENY`. Locate their owning LLD/edge pages through the [feature register](../09-References/Coverage-and-Traceability.md). Record fixtures, approved policies and actual execution before claiming success.
+
+[Business journey](../00-Business-Guide/Pharmville-Complete-Business-Flow.md) · [module designs](../03-Modules/README.md) · [operation contracts](../05-APIs/Critical-Operation-Contracts.md) · [data mapping](../04-Database/Module-Mapping.md) · [testing](../07-Engineering/Testing.md) · [workflow index](README.md)

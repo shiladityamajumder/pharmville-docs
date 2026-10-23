@@ -1,6 +1,6 @@
 # Store Operations HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Store-and-Warehouse.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-008: Picking, packing and store replenishment — HLD
 
@@ -28,8 +28,6 @@
 
 ## Risk
 Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-008 — Picking, packing and store replenishment
 

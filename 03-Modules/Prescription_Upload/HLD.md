@@ -1,6 +1,6 @@
 # Prescription Upload HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Prescription-and-Pharmacy.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-004: Private prescription intake — HLD
 
@@ -28,8 +28,6 @@
 
 ## Risk
 An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-004 — Private prescription intake
 

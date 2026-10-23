@@ -1,6 +1,6 @@
 # Pharmacist Review LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Prescription-and-Pharmacy.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Clinical review for prescription items — implementation acceptance
 
@@ -23,8 +23,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Pharmacist Verification — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -36,15 +34,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Pharmacist Verification — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -73,8 +69,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Pharmacist Verification — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -89,9 +83,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Pharmacist Verification — existing database usage
 
@@ -107,9 +99,7 @@ Proposed owning service: `Pharmacist_Review`. Main read concerns: line-level p r
 
 **Safety:** Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Pharmacist Verification — dependencies and ownership
 
@@ -128,9 +118,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Pharmacist Verification — domain objects and DTO boundaries
 
@@ -144,9 +132,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `Pharmacist_ReviewReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Pharmacist_ReviewEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `clinical.order_review_items`, `clinical.order_reviews`, `clinical.prescriptions`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `clinical.order_review_items`, `clinical.order_reviews`, `clinical.prescriptions`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Pharmacist Verification — failure handling
 
@@ -159,9 +145,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Clinical review for prescription items — proposed interfaces and DTOs
 
@@ -178,8 +162,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `clinical.order_reviews`, `clinical.order_review_items`, `clinical.prescriptions`, `clinical.review_reason_codes`, `commerce.order_items`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Clinical review for prescription items — internal architecture
 
@@ -214,8 +196,6 @@ Only P-classified products trigger mandatory pharmacist review; M and O do not o
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Clinical review for prescription items — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -225,8 +205,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Pharmacist Verification — permission model
 
@@ -239,9 +217,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Pharmacist Verification — functional requirements
 
@@ -263,38 +239,27 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Clinical review for prescription items — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Authorized pharmacist
+  participant O as Pharmacy review
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Decide current P line
+  O->>D: Lock review and compare patient evidence SKU quantity revision
+  alt Gate fails or current version conflicts
+    O-->>A: Reject stale or unauthorized decision
+  else Gate satisfied
+    O->>D: Append decision actor reason registration time
+    D-->>O: Committed evidence
+    O-->>A: Approved or reasoned correction for exact line
   end
 ```
 
 **Concurrency rule:** Hold locks for minimal local SQL work only; repeated calls use the same idempotency key or expected-version check. Provider timeouts leave state pending and require authoritative reconciliation.
-
-## Service Design
 
 ## Pharmacist Verification — service design
 
@@ -313,9 +278,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Pharmacist Verification — state and transition policy
 
@@ -323,21 +286,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Decide current P line"] --> B{"Current matching evidence and reviewer?"}
+  B -->|No| C["Reject stale or unauthorized decision"]
+  B -->|Yes| D["Append decision actor reason registration time"]
+  D --> E["Approved or reasoned correction for exact line"]
 ```
 
 **Module-specific invariant:** Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Pharmacist Verification — verification and acceptance
 
@@ -345,16 +304,16 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-PHM-01-OK` | Review queue, oldest first, with waiting time | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-PHM-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-PHM-02-OK` | Side-by-side view: zoomable prescription and order items | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-PHM-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-PHM-03-OK` | Approve all, approve some, or reject with a reason | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-PHM-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-PHM-04-OK` | Confirm a chosen alternative matches the prescription | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-PHM-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-PHM-05-OK` | Pharmacist name, registration number and time on every decision | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-PHM-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-PHM-01-OK` | Review queue, oldest first, with waiting time | Waiting queue uses oldest-first with recorded waiting time |
+| `TC-PHM-01-DENY` | No authorized pharmacist is available | P remains waiting; no timeout auto-approval; Pharmacy Operations assigns a licensed authorized reviewer |
+| `TC-PHM-02-OK` | Side-by-side view: zoomable prescription and order items | Reviewer sees permitted current prescription beside exact order lines |
+| `TC-PHM-02-DENY` | Prescription link belongs to another patient | View/decision blocked and protected access audited; Customer corrects evidence; Pharmacy reviews scope |
+| `TC-PHM-03-OK` | Approve all, approve some, or reject with a reason | Per-P-line decision has reason, reviewer and current evidence version |
+| `TC-PHM-03-DENY` | Two pharmacists decide the same old line | One current decision; stale command conflicts without overwriting history; Pharmacist reloads current review |
+| `TC-PHM-04-OK` | Confirm a chosen alternative matches the prescription | Chosen alternative is reviewed for exact composition/strength/form |
+| `TC-PHM-04-DENY` | Alternative changes after original approval | Old approval cannot authorize new SKU/quantity; Pharmacy reviews new evidence; customer accepts revision |
+| `TC-PHM-05-OK` | Pharmacist name, registration number and time on every decision | Every clinical decision retains authorized reviewer/registration/time |
+| `TC-PHM-05-DENY` | Unprivileged staff posts an approval | No decision or approval bypass; denial is auditable; Security/Pharmacy corrects entitlement and preserves original history |
 
 ## Cross-module contract tests
 
@@ -364,9 +323,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Pharmacist Verification — validation checkpoints
 
@@ -380,8 +337,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `PHM-01`, `PHM-02`, `PHM-03`, `PHM-04`, `PHM-05`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Pharmacist Verification — operational workflows
 
@@ -398,4 +353,12 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Only P lines get individual clinical decisions; M/O lines are not sent to review. Decisions are bound to patient, Rx version, exact SKU/quantity and accepted order revision. Customer explicitly accepts a changed basket.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).
+
+## Critical recovery scenarios
+
+**Designed; NOT RUN.** Run against approved policy fixtures and actual restricted database roles. Inspect customer/staff result, state/history, stock and money effects together.
+
+| Test | Input / interruption | Expected result and record assertions |
+| --- | --- | --- |
+| `TC-PHM-03-01` | Customer accepts a changed SKU/quantity revision while pharmacist submits old decision | Old decision cannot authorize the changed line; version check conflicts or retains historical-only evidence. New current evidence needs authorized review; no payment/picking gate is unlocked by stale approval. |

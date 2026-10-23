@@ -1,6 +1,6 @@
 # Cart Checkout LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Cart-and-Checkout.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Cart, quote and placement intent — implementation acceptance
 
@@ -26,8 +26,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Cart & Checkout — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -39,15 +37,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Cart & Checkout — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -76,8 +72,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Cart & Checkout — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -92,9 +86,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Cart & Checkout — existing database usage
 
@@ -112,9 +104,7 @@ Proposed owning service: `Cart_Checkout`. Main read concerns: cart creation, quo
 
 **Safety:** Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Cart & Checkout — dependencies and ownership
 
@@ -133,9 +123,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Cart & Checkout — domain objects and DTO boundaries
 
@@ -149,9 +137,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `Cart_CheckoutReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Cart_CheckoutEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Cart & Checkout — failure handling
 
@@ -164,9 +150,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Cart, quote and placement intent — proposed interfaces and DTOs
 
@@ -183,8 +167,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `commerce.carts`, `commerce.cart_items`, `commerce.checkouts`, `commerce.orders`, `platform.idempotency_keys`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Cart, quote and placement intent — internal architecture
 
@@ -219,8 +201,6 @@ A changed fee, classification or inventory observation invalidates a quote until
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Cart, quote and placement intent — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -230,8 +210,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Cart & Checkout — permission model
 
@@ -244,9 +222,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Cart & Checkout — functional requirements
 
@@ -271,38 +247,27 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Cart, quote and placement intent — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Customer
+  participant O as Checkout
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Accept quote and submit one intent
+  O->>D: Check owned cart and accepted price revision
+  alt Gate fails or current version conflicts
+    O-->>A: Refresh quote and ask for acceptance
+  else Gate satisfied
+    O->>D: Record or replay one request
+    D-->>O: Committed evidence
+    O-->>A: Conditional review then eligible hold and payment
   end
 ```
 
 **Concurrency rule:** Hold locks for minimal local SQL work only; repeated calls use the same idempotency key or expected-version check. Provider timeouts leave state pending and require authoritative reconciliation.
-
-## Service Design
 
 ## Cart & Checkout — service design
 
@@ -321,9 +286,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Cart & Checkout — state and transition policy
 
@@ -331,21 +294,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Accept quote and submit one intent"] --> B{"Current accepted basket?"}
+  B -->|No| C["Refresh quote and ask for acceptance"]
+  B -->|Yes| D["Record or replay one request"]
+  D --> E["Conditional review then eligible hold and payment"]
 ```
 
 **Module-specific invariant:** Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Cart & Checkout — verification and acceptance
 
@@ -353,22 +312,22 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-CHK-01-OK` | Cart saved across devices for logged-in customers | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CHK-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CHK-02-OK` | Checkout: address, patient (self or family), payment method, delivery fee and estimated time shown before paying | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CHK-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CHK-03-OK` | Online payment via Cashfree: UPI, cards, net banking | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CHK-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CHK-04-OK` | Cash on delivery, with a maximum order value and a block after repeated refusals | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CHK-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CHK-05-OK` | Minimum order value and delivery fee applied from settings | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CHK-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CHK-06-OK` | Price or stock change detected before payment; customer confirms | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CHK-06-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CHK-07-OK` | No duplicate orders or charges (double tap, refresh, closed browser after payment) | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CHK-07-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-CHK-08-OK` | Stock reserved during checkout, released automatically if payment does not finish | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-CHK-08-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-CHK-01-OK` | Cart saved across devices for logged-in customers | Cart reopens for the signed-in owner across devices |
+| `TC-CHK-01-DENY` | Two devices edit the same old cart version | One edit wins; stale device reloads without overwriting accepted changes; Customer reconciles desired quantities |
+| `TC-CHK-02-OK` | Checkout: address, patient (self or family), payment method, delivery fee and estimated time shown before paying | Accepted summary includes serviceable address, required patient, fee and estimate |
+| `TC-CHK-02-DENY` | P basket selects an unauthorized patient | No accepted checkout/patient association; Customer selects permitted patient/address |
+| `TC-CHK-03-OK` | Online payment via Cashfree: UPI, cards, net banking | Only trusted provider success confirms the accepted amount |
+| `TC-CHK-03-DENY` | Browser redirects to success without provider evidence | Payment remains unconfirmed; no dispatch authorization; Finance checks provider status under D-004/D-016 |
+| `TC-CHK-04-OK` | Cash on delivery, with a maximum order value and a block after repeated refusals | COD is offered only under approved eligibility and cap |
+| `TC-CHK-04-DENY` | COD policy is absent or order exceeds configured cap | COD is not approved; no collected-cash record; Customer chooses eligible payment; Finance approves policy |
+| `TC-CHK-05-OK` | Minimum order value and delivery fee applied from settings | Configured minimum and delivery fee are included in accepted total |
+| `TC-CHK-05-DENY` | Basket falls below approved minimum after item removal | Summary requires correction/reacceptance; no stale total charged; Customer changes basket; Product approves configuration |
+| `TC-CHK-06-OK` | Price or stock change detected before payment; customer confirms | Customer accepts the refreshed price/stock summary before payment |
+| `TC-CHK-06-DENY` | Price changes after quote | Old version cannot authorize new amount or silent item removal; Customer accepts current revision or cancels |
+| `TC-CHK-07-OK` | No duplicate orders or charges (double tap, refresh, closed browser after payment) | One intent returns the same order/payment-attempt reference on safe replay |
+| `TC-CHK-07-DENY` | Double tap or timeout after checkout commit | One order per intent; different body with same key is a conflict; Customer reopens existing status; Finance checks unknown money |
+| `TC-CHK-08-OK` | Stock reserved during checkout, released automatically if payment does not finish | Eligible exact stock is held once for the accepted revision |
+| `TC-CHK-08-DENY` | Expiry worker races with payment completion | One legal hold outcome; no duplicate release or restored committed stock; Inventory and Finance reconcile late success; duration awaits D-009 |
 
 ## Cross-module contract tests
 
@@ -378,9 +337,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Cart & Checkout — validation checkpoints
 
@@ -394,8 +351,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `CHK-01`, `CHK-02`, `CHK-03`, `CHK-04`, `CHK-05`, `CHK-06`, `CHK-07`, `CHK-08`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Cart & Checkout — operational workflows
 
@@ -415,4 +370,13 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Recalculate and snapshot accepted line prices, fees, scope and commerce classification within a checkout version. An accepted revision is a customer decision, not a background mutation.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).
+
+## Critical recovery scenarios
+
+**Designed; NOT RUN.** Run against approved policy fixtures and actual restricted database roles. Inspect customer/staff result, state/history, stock and money effects together.
+
+| Test | Input / interruption | Expected result and record assertions |
+| --- | --- | --- |
+| `TC-CHK-03-01` | Provider captured payment; browser confirmation is lost | Client shows checking payment and reuses existing reference; trusted provider reconciliation records success once. No immediate second charge. If hold expired, Operations/Finance resolve valid supply or approved compensation. |
+| `TC-CHK-08-01` | Unused active reservation reaches its approved expires_at; expiry job runs twice | Unused eligible quantity is released once. No duplicate balance restoration, no release of already committed stock, and current reservation outcome is returned on replay. |

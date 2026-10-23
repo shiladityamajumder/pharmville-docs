@@ -1,0 +1,17 @@
+{
+  "name": "pharmville-docs",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Local documentation checks; no application runtime",
+  "scripts": {
+    "validate": "node scripts/validate-docs.mjs",
+    "validate:render": "node scripts/validate-docs.mjs --render",
+    "validate:database": "node scripts/validate-database.mjs",
+    "test:validator": "node scripts/test-validator.mjs"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "11.4.2",
+    "github-slugger": "2.0.0",
+    "markdown-it": "14.1.0"
+  }
+}

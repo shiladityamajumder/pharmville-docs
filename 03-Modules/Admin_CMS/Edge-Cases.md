@@ -1,24 +1,23 @@
 # Admin CMS edge cases
 
-**Coverage status:** the rows below are module review prompts. Repeated failure text does not establish feature-specific edge coverage. Specify input, ownership, transaction, retry and recovery assertions for each feature under [D-024](../../09-References/Sources-and-Decisions.md#decisions-that-block-implementation).
+**Status: Designed; NOT RUN.** These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to [decisions](../../09-References/Sources-and-Decisions.md); provider behavior and application execution are not certified.
 
+[Business explanation](../../00-Business-Guide/Admin-and-Operations.md) · [LLD and normal tests](LLD.md) · [API](../../05-APIs/Admin_CMS.md) · [recovery contracts](../../07-Engineering/State-and-Recovery-Contracts.md)
 
-## Edge Cases
+| Case | Feature | Trigger | Expected result and record impact | Responsible recovery | Test |
+| --- | --- | --- | --- | --- | --- |
+| `EC-ADM-01-01` | `ADM-01` | Store user changes location filter to another store | No other-location orders or patient counts disclosed | Manager corrects assignment; Security tests filter enforcement | `TC-ADM-01-DENY` |
+| `EC-ADM-02-01` | `ADM-02` | Deactivated staff uses an old session | Protected command denied under approved revocation policy | Security verifies revocation propagation | `TC-ADM-02-DENY` |
+| `EC-ADM-03-01` | `ADM-03` | Staff attempts to grant itself a privileged role | No self-authorized privilege increase | Authorized Security/manager reviews grants | `TC-ADM-03-DENY` |
+| `EC-ADM-04-01` | `ADM-04` | Two editors publish from the same stale draft | Stale publish conflicts; one accepted version remains | Editor reloads and resolves change | `TC-ADM-04-DENY` |
+| `EC-ADM-05-01` | `ADM-05` | Fee change is applied to an already accepted basket | No silent reprice; explicit revision if allowed | Product/Finance approves setting and customer consent path | `TC-ADM-05-DENY` |
+| `EC-ADM-06-01` | `ADM-06` | Admin submits unsupported HSN/tax or clinical class | Invalid publication blocked; no direct bypass of Catalog/Finance/Pharmacy | Responsible catalog/tax/clinical owner corrects approved master | `TC-ADM-06-DENY` |
+| `EC-ADM-07-01` | `ADM-07` | Sheet contains duplicate SKU and malformed price | Specific row errors; no silent duplicate product or partial unknown outcome | Catalog owner reviews approved import atomicity and retries corrected input | `TC-ADM-07-DENY` |
+| `EC-ADM-08-01` | `ADM-08` | Expired license site is marked operationally open | Open flag cannot make site eligible for regulated fulfillment | Operations/Pharmacy renew approved license evidence | `TC-ADM-08-DENY` |
+| `EC-ADM-09-01` | `ADM-09` | Expired offer is submitted from an old basket | Reprice/reaccept; no stale unapproved discount | Product approves offer; customer reviews total | `TC-ADM-09-DENY` |
 
-## Admin Portal, CMS & Masters — documented edge cases
+## Verification procedure
 
-**Source:** v0.1 feature inventory, journey v3 exception rules and final DB guard report. These are minimum testable failure outcomes, not replacements for pharmacy/owner policy signoff.
+For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are `TC-<feature>-OK` in the LLD. Use approved policy fixtures, not production assumptions.
 
-| Feature | Affected behavior | Trigger | Expected recovery |
-| --- | --- | --- | --- |
-| `ADM-01` | Dashboard per role: orders by status, pending prescriptions, alerts, deliveries in progress | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `ADM-02` | Staff users: invite, assign role and location, deactivate, log out sessions | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `ADM-03` | Roles and permissions for 16 roles, limited to own store or warehouse | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `ADM-04` | CMS: home banners, FAQs, policy pages, with draft and publish | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `ADM-05` | System settings (PRD section 8) | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `ADM-06` | Catalogue admin: products, categories, brands, salt master, prices, GST and HSN | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `ADM-07` | Bulk product import from Excel, with error report | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `ADM-08` | Store and warehouse master: address, hours, GSTIN, service areas | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-| `ADM-09` | Offer settings: start and end dates, maximum discount, first-order offer | Unapproved classification/content, stale import or retired master | Do not publish unsafe record; expose import/approval errors |
-
-Across every route also test expired sessions, cross-tenant or location IDOR attempts, duplicate taps, two workers updating the same object, timeout after commit, out-of-order events and unapproved values. Never quietly continue a safety-sensitive workflow by interpreting a missing answer as consent. See Error_Handling and Testing.
+For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.

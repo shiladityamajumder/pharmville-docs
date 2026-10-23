@@ -1,52 +1,58 @@
 # WF-005 — Payment and Confirmation
 
-**Status:** Proposed orchestration based on draft requirements and existing DB contracts. This is not an observed deployed workflow.
+**Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
 
-**Actor:** Customer / provider webhook. **Trigger:** initiate online payment or observe callback.
-**Preconditions:** Valid session and per-resource scope; approved policy data and current serviceability or eligibility where relevant.
-**Expected outcome:** one authoritative money/order result.
+## Actors and preconditions
 
-## Normal path
+Customer, Finance and Payment provider. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.
 
-1. Resolve trusted identity and current entity version.
-2. Check classifications, licensing, money, consent and location conditions appropriate to this workflow.
-3. Validate request payload and expected state.
-4. Commit owning module rows and audit/outbox atomically.
-5. Publish any external side effect only after commit and record correlation IDs.
-6. Return an honest status and allow safe resume.
+## Normal path and committed outcomes
+
+1. Customer initiation requires an owned accepted revision, current required review and eligible hold. The provider callback instead uses the signed raw-body trust path, with no customer-session requirement.
+2. Persist one payment attempt/reference before provider IO; invoke the exact provider contract outside database locks. An initiation timeout is not permission to repeat a charge.
+3. Authenticate/deduplicate callback evidence, compare amount/currency/order and commit its trusted outcome with audit/outbox before the reviewed acknowledgment.
+4. Order Operations consumes committed money facts and rechecks stock/clinical gates. Do not infer paid or confirmed from the browser redirect.
+5. If success arrives after hold release, record money and route to Operations/Finance for approved stock recovery or compensation. Keep the customer pending until resolved; message delivery does not decide order success.
 
 ## Data ownership and API boundary
-**Modules:** Finance_Payments, Cart_Checkout, Customer_Orders.
-**Existing tables involved (candidates):** `payment.payment_intents`, `payment.payment_attempts`, `payment.payment_webhooks`, `commerce.orders`.
-**Related proposed APIs:** API-018, API-019, API-020, API-021, API-025, API-026, API-027, API-028, API-029, API-030; additional related contracts are in module API indexes.
 
-## Alternative / failure flows
-- **Example failure:** provider timeout, webhook replay, out-of-order callback. Do not make an optimistic success assertion.
-- **Duplicate operation:** accept only the same idempotent result or issue a version conflict; never duplicate stock or money movements.
-- **Provider/network timeout:** leave a pending reconciliation state; never infer a paid/delivered/reviewed outcome.
-- **Unauthorized or expired identity:** deny, audit outcome as policy allows, and avoid revealing another user’s resource.
-- **Compensation:** when separate providers or ledgers are involved, use explicit compensating actions after durable evidence. Never silently reverse historic finance or clinical records.
+Finance owns trusted money evidence; Order Operations consumes it and updates only its order projection/coordination state.
 
-## Sequence (design)
+Candidate existing tables: `payment.payment_intents`, `payment.payment_attempts`, `payment.payment_webhooks`, `commerce.orders`. Exact write fields and runtime grants remain per-operation review under D-024.
+
+Related proposed operations: API-075/API-076/API-077; API-026 reads customer order outcome. [Finance Payments](../05-APIs/Finance_Payments.md) · [Customer Orders](../05-APIs/Customer_Orders.md).
+
+## Sequence
+
 ```mermaid
 sequenceDiagram
-  participant A as Customer
-  participant API as API gateway
-  participant O as Owning module
-  participant PG as PostgreSQL
-  participant P as Outbox/provider
-  A->>API: initiate online payment or observe callback
-  API->>O: Trusted actor + validated intent
-  O->>PG: Scope + version/constraint check
-  alt policy or concurrency conflict
-    PG-->>O: Denied / no commit
-    O-->>A: Correctable error or pending state
-  else accepted
-    O->>PG: Atomic facts + outbox/audit
-    PG-->>O: Commit + accepted public ID
-    O-->>A: Safe status
-    O-->>P: Post-commit side effect, if needed
+  participant C as Customer
+  participant O as Finance
+  participant S as Payment provider
+  participant R as Order Operations
+  participant D as PostgreSQL
+  C->>O: Pay for accepted revision
+  O->>D: Persist one intent and attempt
+  O->>S: Provider request under reviewed idempotency
+  S-->>C: Provider checkout result or return screen
+  S->>O: Authenticated provider evidence
+  O->>D: Deduplicate and commit trusted money outcome
+  O->>R: Publish committed money outcome
+  R->>D: Recheck accepted revision and supply gates
+  alt Verified success and order gates valid
+    R-->>C: Recorded order progress
+  else Uncertain result or expired supply
+    O-->>C: Checking payment or resolving order
+    O->>S: Trusted reconciliation lookup
   end
 ```
 
-**Required QA:** approved happy path, denial, replay, race, provider outage, stale state, and actor-scope negative test; testing strategy.
+## Failure, transaction and recovery boundaries
+
+The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the [state and recovery contract](../07-Engineering/State-and-Recovery-Contracts.md): local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.
+
+## Feature-specific verification and navigation
+
+Designed cases: `TC-CHK-03-DENY`, `TC-CHK-07-DENY`, `TC-FIN-01-DENY`, `TC-ORD-01-DENY`. Locate their owning LLD/edge pages through the [feature register](../09-References/Coverage-and-Traceability.md). Record fixtures, approved policies and actual execution before claiming success.
+
+[Business journey](../00-Business-Guide/Pharmville-Complete-Business-Flow.md) · [module designs](../03-Modules/README.md) · [operation contracts](../05-APIs/Critical-Operation-Contracts.md) · [data mapping](../04-Database/Module-Mapping.md) · [testing](../07-Engineering/Testing.md) · [workflow index](README.md)

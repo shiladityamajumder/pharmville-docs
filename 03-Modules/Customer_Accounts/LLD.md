@@ -1,5 +1,7 @@
 # Customer Accounts low level design
 
+[Business flow](../../00-Business-Guide/Accounts-and-Login.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
+
 This document defines the proposed implementation for customer identity, profile, address, family, consent, and wishlist features. The feature list is inherited draft scope, not signed product approval. API routes are proposals; the SQL schema is the checked-in database contract described in [Database migrations](../../04-Database/Migrations.md).
 
 ## Feature ownership and boundaries
@@ -92,3 +94,20 @@ Proposed contracts are indexed in [Customer Accounts API](../../05-APIs/Customer
 | `TC-ACC-02-04` | `ACC-02` | Email/phone change before verification | Existing verified contact remains unchanged until the replacement proof is accepted; no undocumented pending-contact field is written. |
 
 All tests above are proposed and not run. Full module edge cases are in [Customer Accounts edge cases](Edge-Cases.md).
+
+## Additional account feature tests
+
+**Status: Designed; NOT RUN.** Existing detailed ACC-01/ACC-02 IDs above remain authoritative.
+
+| Test | Feature/input | Expected result |
+| --- | --- | --- |
+| `TC-ACC-03-OK` | Saved addresses with map pin; serviceability checked when the address is entered | Owned address and map pin save; checkout checks current serviceability |
+| `TC-ACC-03-DENY` | Serviceability lookup times out or another customer’s address is submitted | Deny cross-owner address use without mutation; Address-only save may persist but serviceability is unknown; checkout is blocked; Customer retries lookup; integration owner restores service |
+| `TC-ACC-04-OK` | Family profiles for dependents (name, age, relation) | Owned dependent is available to the permitted account |
+| `TC-ACC-04-DENY` | Another household’s patient ID is attached | Association denied; no order/prescription link changed; Customer selects an authorized patient |
+| `TC-ACC-05-OK` | Privacy notice and consent at signup | Explicit choice is stored against the presented current notice version |
+| `TC-ACC-05-DENY` | Client submits an obsolete notice version | No consent to an unseen version is recorded; Customer sees current notice and chooses again |
+| `TC-ACC-06-OK` | Account deletion request | Deletion request is acknowledged and routed for retention review |
+| `TC-ACC-06-DENY` | Legal hold exists at deletion processing | Held evidence remains protected; request is pending, not completed; Privacy reviews permitted deletion and exceptions |
+| `TC-ACC-07-OK` | Wishlist | A wishlist contains the selected item once for its owner |
+| `TC-ACC-07-DENY` | Same item is added twice | One logical wishlist item; another customer’s list is unchanged; Customer reloads the saved list |

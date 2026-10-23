@@ -1,6 +1,6 @@
 # Warehouse LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Store-and-Warehouse.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Warehouse replenishment and transfers — implementation acceptance
 
@@ -23,8 +23,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Warehouse & Store Replenishment — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -36,15 +34,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Warehouse & Store Replenishment — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -73,8 +69,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Warehouse & Store Replenishment — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -89,9 +83,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Warehouse & Store Replenishment — existing database usage
 
@@ -116,9 +108,7 @@ Proposed owning service: `Warehouse`. Main read concerns: basic receiving, stock
 
 **Safety:** Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Warehouse & Store Replenishment — dependencies and ownership
 
@@ -135,9 +125,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Warehouse & Store Replenishment — domain objects and DTO boundaries
 
@@ -151,9 +139,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `WarehouseReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `WarehouseEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `procurement.goods_receipt_items`, `procurement.goods_receipt_quality_checks`, `procurement.goods_receipts`, `procurement.purchase_order_items`, `procurement.purchase_orders`, `procurement.purchase_requisition_items`, `procurement.purchase_requisitions`, `procurement.purchase_return_items`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `procurement.goods_receipt_items`, `procurement.goods_receipt_quality_checks`, `procurement.goods_receipts`, `procurement.purchase_order_items`, `procurement.purchase_orders`, `procurement.purchase_requisition_items`, `procurement.purchase_requisitions`, `procurement.purchase_return_items`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Warehouse & Store Replenishment — failure handling
 
@@ -166,9 +152,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Warehouse replenishment and transfers — proposed interfaces and DTOs
 
@@ -185,8 +169,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `warehouse.warehouses`, `warehouse.stock_transfers`, `warehouse.stock_transfer_items`, `procurement.goods_receipts`, `warehouse.stock_ledger`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Warehouse replenishment and transfers — internal architecture
 
@@ -221,8 +203,6 @@ Receiving and transfers create a traceable stock ledger and require location/lot
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Warehouse replenishment and transfers — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -232,8 +212,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Warehouse & Store Replenishment — permission model
 
@@ -246,9 +224,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Warehouse & Store Replenishment — functional requirements
 
@@ -270,36 +246,25 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Warehouse replenishment and transfers — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Warehouse receiver
+  participant O as Warehouse receiving
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Receive actual supplier batch
+  O->>D: Check site supplier invoice expiry and quality evidence
+  alt Gate fails or current version conflicts
+    O-->>A: Hold or reject goods with discrepancy
+  else Gate satisfied
+    O->>D: Coordinate Inventory receipt for accepted quantity
+    D-->>O: Committed evidence
+    O-->>A: Accepted receipt and separate shortage evidence
   end
 ```
-
-## Service Design
 
 ## Warehouse & Store Replenishment — service design
 
@@ -318,9 +283,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Warehouse & Store Replenishment — state and transition policy
 
@@ -328,21 +291,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Receive actual supplier batch"] --> B{"Usable accepted quantity evidenced?"}
+  B -->|No| C["Hold or reject goods with discrepancy"]
+  B -->|Yes| D["Coordinate Inventory receipt for accepted quantity"]
+  D --> E["Accepted receipt and separate shortage evidence"]
 ```
 
 **Module-specific invariant:** Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Warehouse & Store Replenishment — verification and acceptance
 
@@ -350,16 +309,16 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-WH-01-OK` | Receive stock: batch, manufacturing and expiry dates, quantity, supplier invoice | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-WH-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-WH-02-OK` | Replenishment queue: approve, dispatch with note, stock "in transit" | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-WH-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-WH-03-OK` | Urgent runs, up to two extra a day | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-WH-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-WH-04-OK` | Pick, pack and dispatch fallback online orders | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-WH-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-WH-05-OK` | Basic stock audit | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-WH-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-WH-01-OK` | Receive stock: batch, manufacturing and expiry dates, quantity, supplier invoice | Receipt records accepted supplier quantities, invoice and eligible lots |
+| `TC-WH-01-DENY` | Missing expiry or failed quality check | Unusable receipt cannot become orderable stock; Receiving/Pharmacy reviews; supplier discrepancy retained |
+| `TC-WH-02-OK` | Replenishment queue: approve, dispatch with note, stock "in transit" | Approved transfer dispatch records in-transit stock and note |
+| `TC-WH-02-DENY` | Dispatch repeats before destination receipt | One dispatch; destination gets no saleable credit until receipt; Warehouse/Store reconciles transfer quantities |
+| `TC-WH-03-OK` | Urgent runs, up to two extra a day | Urgent runs follow approved capacity and scope |
+| `TC-WH-03-DENY` | A third extra run is requested under draft two-run wording | No invented operational approval; explicit scheduling exception; Operations approves capacity/limit under D-002 |
+| `TC-WH-04-OK` | Pick, pack and dispatch fallback online orders | Fallback order uses licensed-site and exact fulfillment gates |
+| `TC-WH-04-DENY` | Warehouse has stock but lacks approved dispensing license | No fallback pick/dispatch authorization; Operations selects eligible site or resolves with Pharmacy |
+| `TC-WH-05-OK` | Basic stock audit | Scoped audit records actual counts and approved discrepancies |
+| `TC-WH-05-DENY` | Count disagrees with ledger | No silent stock correction or erased movement history; Inventory manager reviews adjustment evidence |
 
 ## Cross-module contract tests
 
@@ -369,9 +328,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Warehouse & Store Replenishment — validation checkpoints
 
@@ -385,8 +342,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `WH-01`, `WH-02`, `WH-03`, `WH-04`, `WH-05`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Warehouse & Store Replenishment — operational workflows
 
@@ -402,4 +357,4 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Preserve transfer chain of custody across dispatch, in-transit and store receipt. A short shipment posts an exception, not an assumed full receipt. Advanced bin/wave workflows stay outside the agreed minimum.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).

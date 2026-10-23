@@ -1,6 +1,6 @@
 # Customer Orders HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Orders-and-Fulfillment.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-005: Order tracking and aftercare — HLD
 
@@ -32,8 +32,6 @@
 
 ## Risk
 Customer cancellation or return requests must respect current order/fulfillment/payment states. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-005 — Order tracking and aftercare
 

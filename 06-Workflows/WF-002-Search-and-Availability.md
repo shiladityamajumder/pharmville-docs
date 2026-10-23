@@ -1,52 +1,50 @@
 # WF-002 — Search and Availability
 
-**Status:** Proposed orchestration based on draft requirements and existing DB contracts. This is not an observed deployed workflow.
+**Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
 
-**Actor:** Customer. **Trigger:** browse, search and check serviceable products.
-**Preconditions:** Valid session and per-resource scope; approved policy data and current serviceability or eligibility where relevant.
-**Expected outcome:** priced availability projection, not stock reservation.
+## Actors and preconditions
 
-## Normal path
+Customer, Catalog and Inventory. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.
 
-1. Resolve trusted identity and current entity version.
-2. Check classifications, licensing, money, consent and location conditions appropriate to this workflow.
-3. Validate request payload and expected state.
-4. Commit owning module rows and audit/outbox atomically.
-5. Publish any external side effect only after commit and record correlation IDs.
-6. Return an honest status and allow safe resume.
+## Normal path and committed outcomes
+
+1. Validate bounded search/category inputs against published products; browsing must not inherit a post-login-only requirement.
+2. Catalog resolves exact variants and approved P/M/O classification. Search results never authorize clinical substitution.
+3. For a delivery location, Inventory returns scoped availability with observation time and eligibility limits; a view is not a reservation.
+4. Return permitted product fields and distinguish no matches, unavailable search and unknown stock. Checkout revalidates before a hold.
 
 ## Data ownership and API boundary
-**Modules:** Product_Catalog, Inventory, Store_Operations.
-**Existing tables involved (candidates):** `catalog.products`, `catalog.product_classification_history`, `warehouse.stock_balances`.
-**Related proposed APIs:** API-050, API-051, API-052, API-053, API-054, API-055, API-010, API-011, API-012, API-013; additional related contracts are in module API indexes.
 
-## Alternative / failure flows
-- **Example failure:** stale POS or unknown classification. Do not make an optimistic success assertion.
-- **Duplicate operation:** accept only the same idempotent result or issue a version conflict; never duplicate stock or money movements.
-- **Provider/network timeout:** leave a pending reconciliation state; never infer a paid/delivered/reviewed outcome.
-- **Unauthorized or expired identity:** deny, audit outcome as policy allows, and avoid revealing another user’s resource.
-- **Compensation:** when separate providers or ledgers are involved, use explicit compensating actions after durable evidence. Never silently reverse historic finance or clinical records.
+Catalog owns published discovery; Inventory owns availability evidence. A read grants no stock mutation.
 
-## Sequence (design)
+Candidate existing tables: `catalog.products`, `catalog.product_variants`, `search.documents`, `warehouse.stock_balances`. Exact write fields and runtime grants remain per-operation review under D-024.
+
+Related proposed operations: API-013/API-014; Inventory API-050. [Product Catalog](../05-APIs/Product_Catalog.md) · [Inventory](../05-APIs/Inventory.md).
+
+## Sequence
+
 ```mermaid
 sequenceDiagram
-  participant A as Customer
-  participant API as API gateway
-  participant O as Owning module
-  participant PG as PostgreSQL
-  participant P as Outbox/provider
-  A->>API: browse, search and check serviceable products
-  API->>O: Trusted actor + validated intent
-  O->>PG: Scope + version/constraint check
-  alt policy or concurrency conflict
-    PG-->>O: Denied / no commit
-    O-->>A: Correctable error or pending state
-  else accepted
-    O->>PG: Atomic facts + outbox/audit
-    PG-->>O: Commit + accepted public ID
-    O-->>A: Safe status
-    O-->>P: Post-commit side effect, if needed
+  participant C as Customer
+  participant O as Catalog
+  participant S as Inventory
+  participant D as PostgreSQL
+  C->>O: Search published products for location
+  O->>S: Read scoped stock evidence
+  alt Current approved evidence
+    S-->>O: Availability and observation time
+    O-->>C: Exact product results and availability
+  else Stale or unavailable source
+    O-->>C: Products with availability unconfirmed
   end
 ```
 
-**Required QA:** approved happy path, denial, replay, race, provider outage, stale state, and actor-scope negative test; testing strategy.
+## Failure, transaction and recovery boundaries
+
+The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the [state and recovery contract](../07-Engineering/State-and-Recovery-Contracts.md): local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.
+
+## Feature-specific verification and navigation
+
+Designed cases: `TC-CAT-03-DENY`, `TC-CAT-04-DENY`, `TC-CAT-05-DENY`. Locate their owning LLD/edge pages through the [feature register](../09-References/Coverage-and-Traceability.md). Record fixtures, approved policies and actual execution before claiming success.
+
+[Business journey](../00-Business-Guide/Pharmville-Complete-Business-Flow.md) · [module designs](../03-Modules/README.md) · [operation contracts](../05-APIs/Critical-Operation-Contracts.md) · [data mapping](../04-Database/Module-Mapping.md) · [testing](../07-Engineering/Testing.md) · [workflow index](README.md)

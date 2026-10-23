@@ -1,52 +1,54 @@
 # WF-004 — Prescription Intake and Review
 
-**Status:** Proposed orchestration based on draft requirements and existing DB contracts. This is not an observed deployed workflow.
+**Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
 
-**Actor:** Customer / pharmacist. **Trigger:** submit prescription or pharmacy review.
-**Preconditions:** Valid session and per-resource scope; approved policy data and current serviceability or eligibility where relevant.
-**Expected outcome:** line-level approved, rejected or pending review.
+## Actors and preconditions
 
-## Normal path
+Customer, Prescription intake and Pharmacist. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.
 
-1. Resolve trusted identity and current entity version.
-2. Check classifications, licensing, money, consent and location conditions appropriate to this workflow.
-3. Validate request payload and expected state.
-4. Commit owning module rows and audit/outbox atomically.
-5. Publish any external side effect only after commit and record correlation IDs.
-6. Return an honest status and allow safe resume.
+## Normal path and committed outcomes
+
+1. For P only, authorize patient and order linkage and create a private upload session. A file must be complete and pass safety checks before review.
+2. Pharmacy loads authorized evidence and the current accepted revision, then compares each P line’s exact SKU, strength, form, quantity and patient.
+3. Commit a decision with reviewer identity, registration, reason and evidence/revision binding. Concurrent stale decisions cannot overwrite the accepted result.
+4. For rejection/correction, keep affected P lines held and offer re-upload, a permitted revised basket or cancellation. M/O are not automatically rejected.
+5. Payment proceeds only when remaining P lines are approved and any changed basket is accepted under the current detailed journey. Deferred upload RX-02 remains blocked pending D-004/D-006.
 
 ## Data ownership and API boundary
-**Modules:** Prescription_Upload, Pharmacist_Review, Order_Operations.
-**Existing tables involved (candidates):** `clinical.prescriptions`, `clinical.order_reviews`, `clinical.order_review_items`, `platform.file_objects`.
-**Related proposed APIs:** API-039, API-040, API-041, API-042, API-043, API-060, API-061, API-062, API-063, API-022; additional related contracts are in module API indexes.
 
-## Alternative / failure flows
-- **Example failure:** malware, patient mismatch, rejected/expired prescription. Do not make an optimistic success assertion.
-- **Duplicate operation:** accept only the same idempotent result or issue a version conflict; never duplicate stock or money movements.
-- **Provider/network timeout:** leave a pending reconciliation state; never infer a paid/delivered/reviewed outcome.
-- **Unauthorized or expired identity:** deny, audit outcome as policy allows, and avoid revealing another user’s resource.
-- **Compensation:** when separate providers or ledgers are involved, use explicit compensating actions after durable evidence. Never silently reverse historic finance or clinical records.
+Intake owns safe patient/document linkage; Pharmacy owns per-line clinical decisions; Operations/Checkout coordinates an accepted revision.
 
-## Sequence (design)
+Candidate existing tables: `clinical.prescriptions`, `clinical.prescription_documents`, `clinical.order_reviews`, `clinical.order_review_items`, `platform.file_objects`. Exact write fields and runtime grants remain per-operation review under D-024.
+
+Related proposed operations: API-022–API-024 and API-060–API-063; exact revision-command ownership needs D-024 review. [Prescription Upload](../05-APIs/Prescription_Upload.md) · [Pharmacist Review](../05-APIs/Pharmacist_Review.md).
+
+## Sequence
+
 ```mermaid
 sequenceDiagram
-  participant A as Customer
-  participant API as API gateway
-  participant O as Owning module
-  participant PG as PostgreSQL
-  participant P as Outbox/provider
-  A->>API: submit prescription or pharmacy review
-  API->>O: Trusted actor + validated intent
-  O->>PG: Scope + version/constraint check
-  alt policy or concurrency conflict
-    PG-->>O: Denied / no commit
-    O-->>A: Correctable error or pending state
-  else accepted
-    O->>PG: Atomic facts + outbox/audit
-    PG-->>O: Commit + accepted public ID
-    O-->>A: Safe status
-    O-->>P: Post-commit side effect, if needed
+  participant C as Customer
+  participant O as Prescription intake
+  participant S as Pharmacist
+  participant D as PostgreSQL
+  C->>O: Upload for permitted patient and order
+  O->>D: Complete safe private evidence linkage
+  S->>D: Read current P lines and evidence
+  S->>D: Commit scoped per-line decision
+  O->>D: Load committed review outcome
+  alt All remaining P approved
+    O-->>C: Review complete, continue checkout
+  else Correction or partial rejection
+    O-->>C: Reason and correction or revision choices
+    C->>O: Supply evidence or accept permitted revision
   end
 ```
 
-**Required QA:** approved happy path, denial, replay, race, provider outage, stale state, and actor-scope negative test; testing strategy.
+## Failure, transaction and recovery boundaries
+
+The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the [state and recovery contract](../07-Engineering/State-and-Recovery-Contracts.md): local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.
+
+## Feature-specific verification and navigation
+
+Designed cases: `TC-RX-01-DENY`, `TC-RX-04-DENY`, `TC-PHM-03-DENY`, `TC-PHM-05-DENY`. Locate their owning LLD/edge pages through the [feature register](../09-References/Coverage-and-Traceability.md). Record fixtures, approved policies and actual execution before claiming success.
+
+[Business journey](../00-Business-Guide/Pharmville-Complete-Business-Flow.md) · [module designs](../03-Modules/README.md) · [operation contracts](../05-APIs/Critical-Operation-Contracts.md) · [data mapping](../04-Database/Module-Mapping.md) · [testing](../07-Engineering/Testing.md) · [workflow index](README.md)

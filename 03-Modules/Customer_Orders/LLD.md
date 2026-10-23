@@ -1,6 +1,6 @@
 # Customer Orders LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Orders-and-Fulfillment.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Order tracking and aftercare — implementation acceptance
 
@@ -27,8 +27,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Customer Orders & Aftercare — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -43,15 +41,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Customer Orders & Aftercare — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -80,8 +76,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Customer Orders & Aftercare — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -96,9 +90,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Customer Orders & Aftercare — existing database usage
 
@@ -115,9 +107,7 @@ Proposed owning service: `Customer_Orders`. Main read concerns: order status, hi
 
 **Safety:** Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Customer Orders & Aftercare — dependencies and ownership
 
@@ -136,9 +126,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Customer Orders & Aftercare — domain objects and DTO boundaries
 
@@ -152,9 +140,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `Customer_OrdersReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Customer_OrdersEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `commerce.cancellations`, `commerce.order_items`, `commerce.orders`, `commerce.returns`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `commerce.cancellations`, `commerce.order_items`, `commerce.orders`, `commerce.returns`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Customer Orders & Aftercare — failure handling
 
@@ -167,9 +153,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Order tracking and aftercare — proposed interfaces and DTOs
 
@@ -186,8 +170,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `commerce.orders`, `commerce.order_items`, `commerce.cancellations`, `commerce.returns`, `commerce.order_status_history`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Order tracking and aftercare — internal architecture
 
@@ -222,8 +204,6 @@ Customer cancellation or return requests must respect current order/fulfillment/
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Order tracking and aftercare — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -233,8 +213,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Customer Orders & Aftercare — permission model
 
@@ -247,9 +225,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Customer Orders & Aftercare — functional requirements
 
@@ -275,36 +251,25 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Order tracking and aftercare — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Customer
+  participant O as Customer Orders facade
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Read current order or request cancellation
+  O->>D: Check owner and current packing milestone
+  alt Gate fails or current version conflicts
+    O-->>A: Deny or show current eligible actions
+  else Gate satisfied
+    O->>D: Delegate permitted command to Order Operations
+    D-->>O: Committed evidence
+    O-->>A: Current order projection
   end
 ```
-
-## Service Design
 
 ## Customer Orders & Aftercare — service design
 
@@ -326,9 +291,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Customer Orders & Aftercare — state and transition policy
 
@@ -336,21 +299,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Read current order or request cancellation"] --> B{"Owner and cancellation still eligible?"}
+  B -->|No| C["Deny or show current eligible actions"]
+  B -->|Yes| D["Delegate permitted command to Order Operations"]
+  D --> E["Current order projection"]
 ```
 
 **Module-specific invariant:** Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Customer Orders & Aftercare — verification and acceptance
 
@@ -358,24 +317,24 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-ORD-01-OK` | Order confirmation on screen, WhatsApp and email | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-ORD-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-ORD-02-OK` | Status timeline (placed → packed → out for delivery → delivered) | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-ORD-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-ORD-03-OK` | Order history with GST invoice download | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-ORD-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-ORD-04-OK` | Cancel before the order is packed | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-ORD-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-ORD-05-OK` | Return request within the return window | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-ORD-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-ORD-06-OK` | Refund status for cancelled and returned orders | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-ORD-06-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-ORD-07-OK` | Live rider location on a map, estimated arrival, masked call button | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-ORD-07-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-ORD-08-OK` | Delivery OTP shown to the customer | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-ORD-08-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-ORD-09-OK` | Change items or address after placing an order | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-ORD-09-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-ORD-01-OK` | Order confirmation on screen, WhatsApp and email | Committed order reference appears in app and queues approved confirmation |
+| `TC-ORD-01-DENY` | WhatsApp/email delivery fails after order commit | Order survives; failed message is tracked without another order; Notifications retries; customer uses existing status |
+| `TC-ORD-02-OK` | Status timeline (placed → packed → out for delivery → delivered) | Timeline reflects committed clinical/payment/fulfillment/delivery facts |
+| `TC-ORD-02-DENY` | Late event describes an earlier milestone | Timeline does not regress or imply delivery from packing; Order Operations rebuilds projection from authoritative facts |
+| `TC-ORD-03-OK` | Order history with GST invoice download | Owner downloads the issued invoice for the selected order |
+| `TC-ORD-03-DENY` | Another customer’s order ID is requested | No invoice URL or order existence leaked; Customer selects own order; Security reviews suspicious access |
+| `TC-ORD-04-OK` | Cancel before the order is packed | Before-packed cancellation stops eligible work and records a reason |
+| `TC-ORD-04-DENY` | Pack-close and cancellation race | At most one valid transition; no newly packed cancelled order; Operations reloads state; support explains current eligibility |
+| `TC-ORD-05-OK` | Return request within the return window | Eligible return request records items, quantities and reason |
+| `TC-ORD-05-DENY` | Item is outside approved return eligibility | Refusal reason; no refund or saleable-stock credit from request alone; Support reviews dispute under approved return policy |
+| `TC-ORD-06-OK` | Refund status for cancelled and returned orders | Customer sees evidenced refund progress and reference |
+| `TC-ORD-06-DENY` | Provider refund is pending but UI refreshes | Pending remains visible; no false completed payout; Finance checks trusted result; customer waits on same reference |
+| `TC-ORD-07-OK` | Live rider location on a map, estimated arrival, masked call button | Only owner sees current assigned-rider tracking and masked contact |
+| `TC-ORD-07-DENY` | Location stream stops or access expires | Last update is identified; unauthorized access denied; Dispatch checks rider; customer refreshes permitted view |
+| `TC-ORD-08-OK` | Delivery OTP shown to the customer | Current delivery OTP is available only to its permitted customer |
+| `TC-ORD-08-DENY` | Unrelated user requests the code | No OTP disclosure or challenge change; Security investigates; customer uses authenticated order |
+| `TC-ORD-09-OK` | Change items or address after placing an order | Post-order edit requires an approved revision and gate revalidation |
+| `TC-ORD-09-DENY` | New address is outside service area | Old accepted terms remain; no silent reroute or extra charge; Product approves edit contract; Operations reviews request |
 
 ## Cross-module contract tests
 
@@ -385,9 +344,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Customer Orders & Aftercare — validation checkpoints
 
@@ -401,8 +358,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `ORD-01`, `ORD-02`, `ORD-03`, `ORD-04`, `ORD-05`, `ORD-06`, `ORD-07`, `ORD-08`, `ORD-09`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Customer Orders & Aftercare — operational workflows
 
@@ -419,4 +374,4 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Project independent payment, clinical, fulfillment and delivery statuses into customer-friendly read models. Cancellation/return/refund must be distinguished and require stored authority.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).

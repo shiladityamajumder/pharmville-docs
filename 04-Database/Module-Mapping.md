@@ -1,8 +1,10 @@
 # Module to database mapping
 
+[Command/data ownership and transaction boundaries](../07-Engineering/State-and-Recovery-Contracts.md#command-ownership-and-transaction-boundary) define the proposed writers. The lists below discover tables; they do not grant write access.
+
 ## Admin CMS
 
-## Admin masters and editorial pages — existing database usage
+### Admin masters and editorial pages — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -14,14 +16,14 @@
 | `platform.application_settings` | Candidate read/integrate with domain owner | all fields |
 | `organization.locations` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Master data publication is an approved versioned action; staff scope is checked server-side. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Audit
 
-## Immutable change evidence — existing database usage
+### Immutable change evidence — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -33,14 +35,14 @@ Enforce: Master data publication is an approved versioned action; staff scope is
 | `platform.report_runs` | Candidate read/integrate with domain owner | all fields |
 | `identity.login_attempts` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: All privileged and denied actions generate minimum necessary audit evidence without raw secrets. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Authentication Access
 
-## Login, sessions, roles and access control — existing database usage
+### Login, sessions, roles and access control — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -52,14 +54,14 @@ Enforce: All privileged and denied actions generate minimum necessary audit evid
 | `identity.user_roles` | Candidate read/integrate with domain owner | all fields |
 | `identity.permissions` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Client-supplied actor, role and location are never trusted as authorisation context. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Cart Checkout
 
-## Cart, quote and placement intent — existing database usage
+### Cart, quote and placement intent — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -71,14 +73,14 @@ Enforce: Client-supplied actor, role and location are never trusted as authorisa
 | `commerce.orders` | Candidate read/integrate with domain owner | all fields |
 | `platform.idempotency_keys` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: A changed fee, classification or inventory observation invalidates a quote until reaccepted; replay cannot create two orders. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Customer Accounts
 
-## Customer profiles and family access — existing database usage
+### Customer profiles and family access — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -90,14 +92,14 @@ Enforce: A changed fee, classification or inventory observation invalidates a qu
 | `customer.addresses` | Candidate read/integrate with domain owner | all fields |
 | `clinical.patient_profiles` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Customer submits OTP, selects patient/address; sensitive information is never returned to other accounts. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Customer Orders
 
-## Order tracking and aftercare — existing database usage
+### Order tracking and aftercare — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -109,14 +111,14 @@ Enforce: Customer submits OTP, selects patient/address; sensitive information is
 | `commerce.returns` | Candidate read/integrate with domain owner | all fields |
 | `commerce.order_status_history` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Customer cancellation or return requests must respect current order/fulfillment/payment states. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Delivery Operations
 
-## Delivery planning, route and proof — existing database usage
+### Delivery planning, route and proof — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -128,14 +130,14 @@ Enforce: Customer cancellation or return requests must respect current order/ful
 | `logistics.delivery_slots` | Candidate read/integrate with domain owner | all fields |
 | `logistics.ndr_cases` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Finance Payments
 
-## Payment truth, refunds and invoice evidence — existing database usage
+### Payment truth, refunds and invoice evidence — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -147,14 +149,14 @@ Enforce: Order handoff to courier requires authorised assignment; failed attempt
 | `payment.refunds` | Candidate read/integrate with domain owner | all fields |
 | `finance.invoices` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Unknown provider outcomes stay pending; external callbacks cannot double-apply money. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Inventory
 
-## Lot-aware inventory and reservation — existing database usage
+### Lot-aware inventory and reservation — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -166,14 +168,14 @@ Enforce: Unknown provider outcomes stay pending; external callbacks cannot doubl
 | `warehouse.stock_ledger` | Candidate read/integrate with domain owner | all fields |
 | `warehouse.stock_holds` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: A reservation must not create negative eligible stock and must not use expired/blocked lots. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Notifications
 
-## Transactional customer/staff messaging — existing database usage
+### Transactional customer/staff messaging — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -185,14 +187,14 @@ Enforce: A reservation must not create negative eligible stock and must not use 
 | `notification.user_channel_preferences` | Candidate read/integrate with domain owner | all fields |
 | `platform.outbox_events` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Notification delivery is best effort after commit; it must never determine success of a stock or money action. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Order Operations
 
-## Order orchestration and routing — existing database usage
+### Order orchestration and routing — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -204,14 +206,14 @@ Enforce: Notification delivery is best effort after commit; it must never determ
 | `fulfillment.fulfillment_orders` | Candidate read/integrate with domain owner | all fields |
 | `organization.licenses` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: One order must have one accepted revision and an auditable licensed location/fulfillment decision. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Pharmacist Review
 
-## Clinical review for prescription items — existing database usage
+### Clinical review for prescription items — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -223,14 +225,14 @@ Enforce: One order must have one accepted revision and an auditable licensed loc
 | `clinical.review_reason_codes` | Candidate read/integrate with domain owner | all fields |
 | `commerce.order_items` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Only P-classified products trigger mandatory pharmacist review; M and O do not on classification alone. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Prescription Upload
 
-## Private prescription intake — existing database usage
+### Private prescription intake — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -242,14 +244,14 @@ Enforce: Only P-classified products trigger mandatory pharmacist review; M and O
 | `platform.file_access_events` | Candidate read/integrate with domain owner | all fields |
 | `platform.file_upload_sessions` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Product Catalog
 
-## Product discovery and classification — existing database usage
+### Product discovery and classification — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -261,14 +263,14 @@ Enforce: An uploaded file is quarantined until inspected and can only be accesse
 | `catalog.categories` | Candidate read/integrate with domain owner | all fields |
 | `search.documents` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Only approved and classified items can enter a legally permitted checkout path. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Reporting
 
-## Scoped operations and financial reports — existing database usage
+### Scoped operations and financial reports — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -280,14 +282,14 @@ Enforce: Only approved and classified items can enter a legally permitted checko
 | `commerce.orders` | Candidate read/integrate with domain owner | all fields |
 | `platform.file_access_grants` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Reports must be authorised by entity scope and must not export unapproved patient data. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Rider App
 
-## Rider shifts and delivery actions — existing database usage
+### Rider shifts and delivery actions — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -299,14 +301,14 @@ Enforce: Reports must be authorised by entity scope and must not export unapprov
 | `logistics.delivery_location_updates` | Candidate read/integrate with domain owner | all fields |
 | `payment.cod_collections` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Store Operations
 
-## Picking, packing and store replenishment — existing database usage
+### Picking, packing and store replenishment — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -318,14 +320,14 @@ Enforce: Rider sees only assigned delivery and masked necessary information; OTP
 | `warehouse.stock_balances` | Candidate read/integrate with domain owner | all fields |
 | `procurement.purchase_requisitions` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
 
 ## Warehouse
 
-## Warehouse replenishment and transfers — existing database usage
+### Warehouse replenishment and transfers — existing database usage
 
 **Status: Inferred application usage backed by confirmed table existence.** Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.
 
@@ -337,7 +339,7 @@ Enforce: Store actors can mutate only scoped tasks and must report actual shorta
 | `procurement.goods_receipts` | Candidate read/integrate with domain owner | all fields |
 | `warehouse.stock_ledger` | Candidate read/integrate with domain owner | all fields |
 
-## Transaction boundary
+### Transaction boundary
 Enforce: Receiving and transfers create a traceable stock ledger and require location/lot scope. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.

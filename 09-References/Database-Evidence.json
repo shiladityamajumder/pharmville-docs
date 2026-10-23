@@ -1,0 +1,131 @@
+{
+  "checked_on": "2026-10-23",
+  "database_checkout": "healthcare_db (sibling repository)",
+  "git_head": "55dbae9bb27e24f3d5da7786a9e49fe8d364845b",
+  "migration_files": [
+    {
+      "file": "V0001__initial_schema.sql",
+      "sha256": "5941ab656b13bc001d48f6ef4eb56592dc12388650478d196057b1f998a2b1c6"
+    },
+    {
+      "file": "V0002__pharmville_core_safety.sql",
+      "sha256": "25ae8d2aa8e6f07a4bd576a6b11dc26982d9f12e1c5f6fb78cbd668db01b858b"
+    },
+    {
+      "file": "V0003__pharmville_delivery_foundations.sql",
+      "sha256": "c89580edc8317a794bf2897cfbad33d18f78688f89a5b38a6e957055a9a6f549"
+    },
+    {
+      "file": "V0004__pharmville_cms_reporting.sql",
+      "sha256": "89f410a60c958b2a16395e829b31e1ecd3a35002aa3804f78b519a58b60d824b"
+    },
+    {
+      "file": "V0005__pharmville_workflow_guards.sql",
+      "sha256": "1e911eebfec1184ef895588982894edca26acebef4fb0a854efa680880d80b96"
+    },
+    {
+      "file": "V0006__pharmville_stock_dispatch_delivery_guards.sql",
+      "sha256": "98de352085c5b1aa7aa84e2bccffe9d663e3f31d0c3c66b28547a97097571d76"
+    },
+    {
+      "file": "V0007__pharmville_consent_and_audit_guards.sql",
+      "sha256": "a3b5a260194990cd334068dd244a336ae7f46b5aa407ceca65674c8d2d63702c"
+    },
+    {
+      "file": "V0008__pharmville_consent_and_audit_guards.sql",
+      "sha256": "11584407661cf3391363341aebca5479c5093472a9e0f25bb1c9237a28b77d83"
+    },
+    {
+      "file": "V0009__pharmville_consent_and_audit_guards.sql",
+      "sha256": "33caf1c0317fa30c40d1cb85470769971128c20212c15d868c7dd0e198f84e45"
+    },
+    {
+      "file": "V0010__pharmville_consent_and_audit_guards.sql",
+      "sha256": "84ca8accedd01caa0699a1ef8a39429cc1f6e09e886e87fe15223b5368454df8"
+    },
+    {
+      "file": "V0011__identity_masters_and_reason_links.sql",
+      "sha256": "af57fff069946d174b97dbca9c1225125485251dd39593d9dac8390d30b38fd1"
+    },
+    {
+      "file": "V0012__actor_fks_and_numeric_integrity.sql",
+      "sha256": "ac947cba8a442404ca035eb75c4783483371cbd5ae44a01cc03e0d300e741f1b"
+    },
+    {
+      "file": "V0013__pharmville_consent_and_audit_guards.sql",
+      "sha256": "4fe21194980156a97333730033a927e5c713940f4cf85269b8906e6fc1bec573"
+    },
+    {
+      "file": "V0014__pharmville_consent_and_audit_guards.sql",
+      "sha256": "2513e9ac46eb92bf4693d44f33a8eb4eb9d93c8f714046dfabaf664dd45957ca"
+    },
+    {
+      "file": "V0015__order_revision_and_cash_integrity.sql",
+      "sha256": "2d2a690d9eeff394ec765e74a923abb9d4de4a2c02fe8dce428e3dab6432b647"
+    },
+    {
+      "file": "V0016__pharmville_consent_and_audit_guards.sql",
+      "sha256": "39ad2b2e2f10ff763784d26e932ffbb492425096aa4ca9a05b866faad4a85c21"
+    },
+    {
+      "file": "V0017__report_export_access_contract.sql",
+      "sha256": "19cebdf63f9a991d399809b82eaf286065c5b0709910f83881e59841ee20deac"
+    },
+    {
+      "file": "V0018__pharmville_consent_and_audit_guards.sql",
+      "sha256": "ade01b1424135957b4392422e7f7e70f958b57b323562bb7d2effdf63a4448cb"
+    },
+    {
+      "file": "V0019__measured_queue_indexes.sql",
+      "sha256": "167b7a81c4e5b43c475dc7fa78ca5f4d8dba9df79f5ecb04500f637a1da0c29a"
+    },
+    {
+      "file": "V0020__remaining_user_actor_integrity.sql",
+      "sha256": "e1f0e71474d9ef731c76aef9f5d5e0ef9df8aacc5092c0a209a65f6a7ff3379e"
+    },
+    {
+      "file": "V0021__pharmville_consent_and_audit_guards.sql",
+      "sha256": "4955c94e0c4e7f6deec3a5484a5acf9c3ada0619f419432a62922729e14bfa17"
+    },
+    {
+      "file": "V0022__numeric_primary_keys_and_compatibility_crosswalk.sql",
+      "sha256": "dc181726d4fef9ffe55587b6ec182e73fdd7baf950d21762f22c5d630d803fdb"
+    },
+    {
+      "file": "V0023__domain_reference_and_numeric_integrity.sql",
+      "sha256": "dfd5c1a6a28ca466df043619b7860384ce3795b5a12a45a5237f9db8e846a308"
+    },
+    {
+      "file": "V0024__licensed_fulfillment_and_inventory_evidence.sql",
+      "sha256": "ab274315223b402b9aada45b12453ad5658c1eba78d4a72456e1af5dc0bf7d95"
+    },
+    {
+      "file": "V0025__runtime_capabilities_and_scoped_reads.sql",
+      "sha256": "90be8c7ec5ed62bb5e7654c928c98583bbd50827e7247027304bda60c48fdf49"
+    },
+    {
+      "file": "V0026__measured_numeric_order_line_lookup.sql",
+      "sha256": "1100b0d5f0d387a2b6f05b35f41030bdb4e35479c60c60ac3e37b2e32c32401d"
+    },
+    {
+      "file": "V0027__reused_master_identity_contracts.sql",
+      "sha256": "ee02fcf8ece1a9e957f8bce9311f80c9d06f297b0c752be00856a57a6126cea2"
+    },
+    {
+      "file": "V0028__scoped_pick_pack_and_license_rechecks.sql",
+      "sha256": "2d0aa53b259e1554dc3cdaddb12a7cd88ac5d51d44f469a57496d6e05f910f14"
+    },
+    {
+      "file": "V0029__deny_public_execute_for_future_routines.sql",
+      "sha256": "0ebb49f645931bd2f881bbf8df711b1aef7d9a5e3e515ca2d2d6a448fa22b74c"
+    },
+    {
+      "file": "V0030__fulfillment_completion_and_settlement_gates.sql",
+      "sha256": "5e0c2647933d8106d9da4c140aeb0899260f1388a77a04ec21345c3207924043"
+    }
+  ],
+  "register_file": "docs/upgrade/final_assignment/final_table_register.json",
+  "register_sha256": "3ff11f1f5696498dab2d8c27e17efa09540daead0dc86dc2921733cd6e444941",
+  "live_database_inspected": false,
+  "intended_release_baseline": "Unresolved: user reports intended V0030 removal; available checkout retains it"
+}

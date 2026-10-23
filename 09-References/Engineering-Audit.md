@@ -1,63 +1,68 @@
 # Engineering and documentation audit
 
-Audit date: 2026-10-23. Scope: all product documentation Markdown, the 110-feature inventory, 18 module groups, 14 workflow files, and the available database source and schema catalog. This is a static review; no deployed service or live database was accessed. Findings below describe the state before corrections; the disposition section records subsequent changes.
+Review date: **23 October 2026**. Scope: all documentation, 110 draft features, 18 module groups, 14 technical workflows and available sibling database evidence. This is a documentation/source review, not a running-service, provider or live-database acceptance test.
 
-## Critical
+## Current result
 
-No Critical defect in an implemented service was established: application source and a running application are absent. The High findings below block treating the affected documents as approved implementation contracts.
+The Business Guide adds an everyday explanation of the complete business and each existing domain. Technical workflows now distinguish actual pharmacy, money, stock, fulfillment and delivery interactions. Feature IDs and original TASK-001 through TASK-110 are preserved; tests are specific designs with explicit NOT RUN status.
 
-## High
+## Rechecked earlier findings
 
-| ID | Exact location and section | Finding and effect | Required action |
+| Finding | Current evidence and disposition | Remaining action |
+| --- | --- | --- |
+| H-01: login/MFA/refresh trust | Existing corrected [authentication](../05-APIs/Authentication_Access.md) and [identity workflow](../06-Workflows/WF-001-Identity-and-Session.md) preserve public pre-login, challenge and refresh trust paths. No prior session is required to log in. | D-003 security policy and execution evidence remain. |
+| H-02: provider callback trust | [Finance](../05-APIs/Finance_Payments.md) and the rewritten [payment workflow](../06-Workflows/WF-005-Payment-and-Confirmation.md) distinguish signed provider evidence, durable deduplication and reconciliation from customer sessions/redirects. | Exact Cashfree signature/acknowledgment contract remains D-016; no provider-specific values invented. |
+| H-03: generic API contracts | [Critical operation refinements](../05-APIs/Critical-Operation-Contracts.md) add typed proposed inputs/results, validation, ownership, local transaction effects and failure outcomes for the safety-sensitive commands. Other contracts keep explicit incomplete-schema status. | D-024: finish/review field-level mappings, bounds, enum transitions, runtime grants and OpenAPI before implementation. |
+| H-04: traceability and generic tests | [Master register](Coverage-and-Traceability.md) connects all 110 features to Business Flow, HLD, LLD, API/data, edge cases, tests and original task. There are 234 named test designs; repeated generic TEST prompts were superseded. | The 23 historical owning-API exact-ID gaps remain, each with a specific supporting mapping or blocked operation. No mention count certifies contract readiness. |
+| H-05: account/profile consistency | Existing ACC-01/ACC-02 design retains mandatory first_name before profile creation, verified contact preservation and separate identity/profile versions. ACC-03–ACC-07 now have named normal/adverse tests. | D-023 replacement-contact proof/storage remains open. |
+| H-06: migration provenance | Actual sibling directory and Git revision inspected; [30 versioned SQL checksums](Database-Evidence.json) retained. Extra-nested paths and obsolete outer-repository claims corrected. | User’s intended V0030 removal conflicts with available SQL/report. D-015 must identify release and target ledger; current source presence is not release approval. |
+| H-07: stack and write ownership | HLD retains proposed stack status. [Ownership/recovery contracts](../07-Engineering/State-and-Recovery-Contracts.md) distinguish feature, command, data owner and consumer and record inspected V0030 fulfillment transitions. | Proposed writers are not deployed grants. Module owners/Security/DBA must approve exact capabilities; stack/release choices need D-001/D-014. |
+| M-01: tables | Current tables pass separator/width checks. The original checkout already had valid separators; the historical 2,628-fragment finding is not a current defect count. Traceability, API navigation and test views were reworked for readability. | Keep checks in CI; avoid paragraphs growing inside cells. |
+| M-02: stale provenance | No detected archive filenames or old upload-path artifacts. Database evidence now uses portable local links and explicit sibling-source locations. | Keep release evidence current without copying temporary paths. |
+| M-03: navigation/headings | Six original broken external-checkout targets replaced with central portable evidence. Business/technical links and module table navigation added; redundant adjacent heading wrappers reduced and required module anchors preserved. | Interactive editor/host rendering remains separately unverified below. |
+| M-04: repeated workflows | 13 repeated workflow templates and 34 module diagrams rewritten for their domains; existing identity semantics preserved. Important flows name concrete gates and recovery tests. | Actual orchestration and provider integration tests remain application work. |
+| L-01/L-02: wording | Duplicate source phrases removed; underscore pseudo-references now link to real documents. Business explanations avoid technical payloads and use clear responsible roles. | Specialist review of clinical/legal terms remains D-006/D-013. |
+
+## Executed documentation validation
+
+| Check | Measured result |
+| --- | --- |
+| Markdown files reviewed/validated | 449; original checkout 429 |
+| Business Guide | 17 pages covering all 18 module groups |
+| Mermaid in original checkout | 51 found; 33 parsed, 18 failed using the actual installed parser |
+| Current Mermaid | 52 found, 52 parsed, 52 rendered; zero parser/render failures |
+| Relative link/anchor checks | 3,835 checked; zero failures. Six original missing file targets corrected |
+| Markdown table checks | 1,594 tables; zero separator/width errors |
+| Heading/fence/empty/artifact checks | Zero detected errors |
+| Feature definitions | 110 unique original IDs and owning modules preserved |
+| Feature navigation | Zero missing Business Flow/HLD/LLD/API/data/edge/test/task links |
+| Owning-API textual references | 87/110; 23 explicit historical gaps, separately reviewed for supporting commands |
+| Numbered API catalog | API-001 through API-097 preserved; additional unnumbered customer routes remain proposals |
+| Named application test designs | 234; no duplicate definitions; all NOT RUN |
+| Validator regression fixture | Passed: malformed link, table, heading, fence and Mermaid source were rejected |
+| Database static comparison | 266 table pages and 4,438 column names match available catalog; 30 versioned SQL hashes match evidence |
+| Database preservation | All 103 SQL files under the migration directory, including fragments, retain their pre-edit hashes |
+| Git review | Whitespace check passed; original feature/module/task identities preserved; no push |
+
+Executed: `node scripts/test-validator.mjs`, `node scripts/validate-docs.mjs --render`, `node scripts/validate-database.mjs`, source/feature/task preservation checks and `git diff --check`. Local outputs are under ignored `artifacts/`; [documentation CI](../.github/workflows/documentation.yml) repeats regression, parse and rendering checks. Hosted CI has not run in this pass.
+
+Seven representative PNGs were visually inspected: system HLD, Inventory command gate, pharmacy, payment, pick/pack, delivery and fulfillment states. Rendered labels/arrows were readable; the review led to explicit committed-review and Order Operations handoffs. No full visual inspection of all 52 images is claimed.
+
+## Rendering and execution limits
+
+Actual Mermaid browser parsing/rendering used the lockfile dependency and local headless Chrome. The installed VS Code Markdown Preview Enhanced extension was observed, but its interactive preview was not exercised. GitHub’s hosted renderer was not independently exercised; conservative Mermaid/GitHub Markdown and local anchor checks are evidence, not a hosted-rendering pass. Review those two surfaces before declaring full visual acceptance.
+
+Application HTTP/browser/rider tests, provider sandbox signatures, live SQL migration/parity, PostgreSQL 15 and production restore/security/UAT were not run. Historical PostgreSQL 18 results describe the recorded V0030 database, not the user’s still-unresolved intended target.
+
+## Meaningful blockers and approvals
+
+| Issue | Why it matters | Recommended next action | Approver |
 | --- | --- | --- | --- |
-| H-01 | [Authentication API](../05-APIs/Authentication_Access.md), API-089–API-091; [identity workflow](../06-Workflows/WF-001-Identity-and-Session.md), Preconditions | Login, MFA completion, and refresh inherit an authenticated-session requirement. Login payload contains no credentials. This prevents a valid pre-login flow. | State credential/challenge/refresh-token trust separately and remove generic session examples. |
-| H-02 | [Finance API](../05-APIs/Finance_Payments.md), API-076 Caller and HTTP request | Cashfree webhook inherits a bearer-session requirement and a generic request body. A provider callback needs provider authentication and raw-body verification, not a customer session. | Define signature, deduplication, commit/acknowledgement, out-of-order handling, and reconciliation boundaries. |
-| H-03 | [API index](../05-APIs/README.md), Shared API standards; module API files, HTTP request contract and Success response | Most contracts use the same request_id/version/reason body and generic accepted response for unrelated operations. The index claims a degree of completeness the schemas do not provide. | Remove misleading executable examples, label unresolved schemas accurately, and require operation-specific contracts before affected implementation. |
-| H-04 | [Traceability](Coverage-and-Traceability.md), Mapping status; [Testing](../07-Engineering/Testing.md), module scenarios; module Edge-Cases.md tables | All 110 IDs have navigation links, but 24 initially lacked a direct same-owner API reference. Generic edge and test rows repeat unrelated failure behavior. Mere ID mentions do not verify coverage. | Publish measured feature-level evidence and explicit gaps; do not count generic rows as complete coverage. |
-| H-05 | [Customer LLD](../03-Modules/Customer_Accounts/LLD.md), ACC-01 Flow, ACC-02 validation and Data mapping; [Customer API](../05-APIs/Customer_Accounts.md), OTP and profile | New signup says to create a profile although first_name is required and absent from OTP input. Contact-change text assumes pending-contact storage not defined in the schema. Two table versions are represented as a single profile version. | Separate identity/session creation from profile completion; preserve verified contacts until an approved verification flow; check both row versions when updating both records. |
-| H-06 | [Migration evidence](../04-Database/Migrations.md), Source of truth; [Decisions](Sources-and-Decisions.md), Confirmed facts; [database table pages](../04-Database/Tables/README.md), introductory text | Documents assert no Git metadata and attribute a specific V0030 removal to the current task without available supporting evidence. These claims can cause a developer to select an incorrect migration baseline. | Describe only the available SQL directory and repository state; distinguish local evidence from deployment history. |
-| H-07 | [System HLD](../02-Architecture/System-HLD.md), Decided technology direction and Growth; [Decisions](Sources-and-Decisions.md), Proposed decisions | Technology direction is called both accepted and proposed. Module read candidates are not table write ownership. Clinical, stock and money policies remain unapproved. | Use consistent proposed status and connect unresolved ownership/policy to a central decision with an owner and blocked action. |
+| D-015: intended release versus available V0030 | Counts and completion/dispatch guard claims may describe another baseline | Supply intended Git revision and target ledger; compare checksums and regenerate evidence for it | Product release owner, DBA and Tech lead |
+| D-004/D-006: review/payment/deferred upload | RX-02 conflicts with the detailed review-before-payment journey; wrong sequencing can create unsafe or paid-but-blocked orders | Approve distinct supported order paths, deadlines and compensation with worked cases | Product, Finance, Pharmacist and Legal |
+| D-005/D-009/D-010: stock/site/partial supply | Unknown feed freshness, lot policy or fallback can permit unsafe promises or overselling | Name stock authority and approve hold, shelf-life, site, substitution and revision rules | Operations, Pharmacist and Product |
+| D-007/D-008/D-012/D-016: money/provider evidence | COD, refunds, accounting/tax and provider uncertainty cannot be finalized from generic contracts | Supply approved policy examples and exact provider sandbox contracts; execute replay/reconciliation tests | Finance/CA, Security and provider owner |
+| D-003/D-011/D-013/D-023: access/privacy/proof | Contact changes, rider evidence and medical files need approved proof, scope and retention | Approve security/privacy/doorstep policies and test against real restricted roles | Security, Privacy/Legal and Operations |
+| D-024 and launch scope | Remaining typed schemas/write fields and optional/warehouse/rider scope affect delivery planning | Review each vertical slice and resolve D-001/D-002/D-021 before committing rollout | Tech lead, module owners, QA and Product |
 
-## Medium
-
-| ID | Exact location and section | Finding | Required action |
-| --- | --- | --- | --- |
-| M-01 | Database table pages, Existing constraints / Existing indexes; module design/API tables | 2,628 detected table starts lack an adjacent separator; blank lines split headers from rows. Tables often render as plain text. | Repair separator rows without changing cell content. |
-| M-02 | [Testing](../07-Engineering/Testing.md), Current evidence; [Setup](../07-Engineering/Development-Setup-and-Operations.md), Verified repo; [Models](../04-Database/Models-and-Parity.md), Source | Old ZIP names and document-generation language remain. | Replace with clean repository links and accurate evidence wording. |
-| M-03 | [Customer HLD](../03-Modules/Customer_Accounts/HLD.md), Developer navigation; other module README/HLD/LLD pages | Many navigation labels are plain text; pseudo-links such as API_Conventions and Error_Handling are not resolvable documents. Repeated headings and prose add little detail. | Link existing shared references; preserve useful content. |
-| M-04 | [Workflows](../06-Workflows/README.md), individual workflow Normal path / Sequence sections | Workflow diagrams and normal steps reuse one template; policy/retry numbers and detailed compensation contracts are incomplete. | Treat diagrams as orchestration sketches; require named owner, command outcome and recovery test for each affected vertical slice. |
-
-## Low
-
-| ID | Location | Finding | Action |
-| --- | --- | --- | --- |
-| L-01 | API files, Requirement links | Repeated phrase “documented draft requirements and the documented draft requirements”. | Replace with one link to the feature inventory. |
-| L-02 | Throughout consolidated files | Acronyms such as IDOR and DTO are used without consistent explanations; redundant adjacent headings reduce scanning. | Expand terms in shared engineering guidance and avoid adding more duplicate sections. |
-
-## Database verification method
-
-The local final table register contains 266 tables. Table-page field inventories are compared to that register; schema-qualified table and column references are scanned across all product Markdown. Source SQL and model declarations are inspected for material account and payment claims. The register is a recorded catalog, not a fresh database introspection. No database tests or migrations are executed by this audit. Numeric fields containing digits must be included by the validator (line1, line2, card_last4, account_number_last4 and sha256 are legitimate columns).
-
-## Corrections and development readiness
-
-H-01/H-02: corrected login, MFA, refresh and signed-provider trust boundaries and their identity/payment workflow contracts. H-05: corrected required profile-name handling, separate identity/profile concurrency tokens, and unsupported pending-contact storage assumptions. H-06: removed unsupported migration-removal and missing-Git claims throughout product documentation; retained valid local migration evidence. H-07: aligned the master architecture status as proposed and added decision recommendations, owners and blocked actions.
-
-H-03/H-04 remain partially open: misleading generic payload examples and completeness claims were removed, but full operation schemas, explicit table write ownership and concrete per-feature failure/test specifications still require engineering work under D-024. This work cannot be resolved by a product signoff alone. The register now records a review status on each of the 110 features and lists 23 remaining direct same-owner API reference gaps after AUTH-03 was corrected. Supporting cross-module candidates are recorded separately. Do not interpret these corrections as complete feature readiness.
-
-M-01/M-02 and clear M-03/L-01 instances were corrected: table separators/spacing, old file/provenance language, navigation links and duplicated source phrases. M-04 and L-02 remain review work where content-specific rewriting is needed. Existing structure and feature descriptions were preserved.
-
-### Validation results
-
-- 429 Markdown files scanned; each has one H1; no empty files, heading-level jumps or unclosed fences detected.
-- Relative file paths and heading anchors checked by a local static validator: no detected broken targets. Anchor checking uses a GitHub-style slug approximation, not a renderer.
-- Markdown table header separators and row widths checked after repair: no detected errors. Initially 2,628 table starts lacked an adjacent separator; this count included detached fragments within the same intended table.
-- All 266 table-page field inventories match the available final table register, including field names containing digits. No missing explicitly backticked schema-qualified table or column references detected. Prose semantics and a live deployed schema are not proven by this check.
-- The 110 original feature IDs remain unique and all appear in the register, HLD, LLD, edge-case and testing artifacts. API mentions in owning module documents: 87/110. Mention counts do not establish completeness.
-- 51 Mermaid fences checked for closure and manually reviewed for obvious structural issues in changed diagrams. Mermaid CLI and Markdown lint executables were unavailable; full Mermaid parsing/rendering was not performed.
-- Database file hashes compared before/after: no changes. No application, migration, ORM, database execution or provider test changes.
-
-### Development readiness
-
-Ready for architecture review, isolated infrastructure and explicitly approved exploratory slices. Full feature development is blocked where D-024 contracts remain incomplete. Clinical, stock, financial, consent and security flows also require the specific decisions D-003–D-013, provider evidence D-016 and contact-change decision D-023. No feature is certified fully implementable by navigation or historical database tests alone.
-
-See [Sources and decisions](Sources-and-Decisions.md) for recommendations and owners and [traceability](Coverage-and-Traceability.md) for each feature's current evidence and gaps.
+Documentation is ready for that review; these unresolved decisions and execution gaps prevent certifying the entire product ready for implementation or release.

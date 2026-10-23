@@ -1,6 +1,6 @@
 # Pharmacist Review HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Prescription-and-Pharmacy.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-011: Clinical review for prescription items — HLD
 
@@ -28,8 +28,6 @@
 
 ## Risk
 Only P-classified products trigger mandatory pharmacist review; M and O do not on classification alone. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-011 — Clinical review for prescription items
 

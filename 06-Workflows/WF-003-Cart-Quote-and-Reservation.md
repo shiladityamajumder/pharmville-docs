@@ -1,52 +1,55 @@
 # WF-003 — Cart Quote and Reservation
 
-**Status:** Proposed orchestration based on draft requirements and existing DB contracts. This is not an observed deployed workflow.
+**Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
 
-**Actor:** Customer. **Trigger:** request checkout quote.
-**Preconditions:** Valid session and per-resource scope; approved policy data and current serviceability or eligibility where relevant.
-**Expected outcome:** accepted versioned checkout, otherwise correction.
+## Actors and preconditions
 
-## Normal path
+Customer, Checkout and Inventory. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.
 
-1. Resolve trusted identity and current entity version.
-2. Check classifications, licensing, money, consent and location conditions appropriate to this workflow.
-3. Validate request payload and expected state.
-4. Commit owning module rows and audit/outbox atomically.
-5. Publish any external side effect only after commit and record correlation IDs.
-6. Return an honest status and allow safe resume.
+## Normal path and committed outcomes
+
+1. Load only the caller’s cart; validate quantities, selected address and required patient against current versions.
+2. Compute a versioned quote including current class, prices, minimum and fee. A price/stock change requires explicit customer acceptance.
+3. Create/replay one order request. P lines go through review and revision acceptance before the detailed journey reaches payment; M/O skip review.
+4. Before payment, request Inventory’s eligible licensed-site/lot hold for the exact accepted revision. Allocation and hold must agree on one site.
+5. Return the recorded quote/order/hold status. No hold means no claim that supply is secured; policy-approved expiry releases unused holds once.
 
 ## Data ownership and API boundary
-**Modules:** Cart_Checkout, Inventory, Product_Catalog, Finance_Payments.
-**Existing tables involved (candidates):** `commerce.carts`, `commerce.checkouts`, `warehouse.stock_reservations`, `platform.idempotency_keys`.
-**Related proposed APIs:** API-018, API-019, API-020, API-021, API-075, API-076, API-077, API-078, API-079, API-080; additional related contracts are in module API indexes.
 
-## Alternative / failure flows
-- **Example failure:** double-click, race for last unit, price update. Do not make an optimistic success assertion.
-- **Duplicate operation:** accept only the same idempotent result or issue a version conflict; never duplicate stock or money movements.
-- **Provider/network timeout:** leave a pending reconciliation state; never infer a paid/delivered/reviewed outcome.
-- **Unauthorized or expired identity:** deny, audit outcome as policy allows, and avoid revealing another user’s resource.
-- **Compensation:** when separate providers or ledgers are involved, use explicit compensating actions after durable evidence. Never silently reverse historic finance or clinical records.
+Checkout owns the cart/quote/intent and delegates order creation to Operations; Inventory alone commands the hold.
 
-## Sequence (design)
+Candidate existing tables: `commerce.carts`, `commerce.cart_items`, `commerce.checkouts`, `commerce.orders`, `commerce.order_revisions`, `warehouse.stock_reservations`. Exact write fields and runtime grants remain per-operation review under D-024.
+
+Related proposed operations: API-018–API-021 and API-052/API-053. [Cart Checkout](../05-APIs/Cart_Checkout.md) · [Inventory](../05-APIs/Inventory.md) · [Order Operations](../05-APIs/Order_Operations.md).
+
+## Sequence
+
 ```mermaid
 sequenceDiagram
-  participant A as Customer
-  participant API as API gateway
-  participant O as Owning module
-  participant PG as PostgreSQL
-  participant P as Outbox/provider
-  A->>API: request checkout quote
-  API->>O: Trusted actor + validated intent
-  O->>PG: Scope + version/constraint check
-  alt policy or concurrency conflict
-    PG-->>O: Denied / no commit
-    O-->>A: Correctable error or pending state
-  else accepted
-    O->>PG: Atomic facts + outbox/audit
-    PG-->>O: Commit + accepted public ID
-    O-->>A: Safe status
-    O-->>P: Post-commit side effect, if needed
+  participant C as Customer
+  participant O as Checkout
+  participant S as Inventory
+  participant D as PostgreSQL
+  C->>O: Accept current quote and submit intent
+  O->>D: Save or replay one request and revision
+  opt P lines present
+    O-->>C: Wait for pharmacy and any revised acceptance
+  end
+  O->>S: Hold eligible stock before payment
+  S->>D: Check fresh lots and atomically hold
+  alt Hold accepted
+    O-->>C: Proceed to eligible payment
+  else Shortage or stale evidence
+    O-->>C: Revise or wait, supply unconfirmed
   end
 ```
 
-**Required QA:** approved happy path, denial, replay, race, provider outage, stale state, and actor-scope negative test; testing strategy.
+## Failure, transaction and recovery boundaries
+
+The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the [state and recovery contract](../07-Engineering/State-and-Recovery-Contracts.md): local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.
+
+## Feature-specific verification and navigation
+
+Designed cases: `TC-CHK-06-DENY`, `TC-CHK-07-DENY`, `TC-CHK-08-DENY`. Locate their owning LLD/edge pages through the [feature register](../09-References/Coverage-and-Traceability.md). Record fixtures, approved policies and actual execution before claiming success.
+
+[Business journey](../00-Business-Guide/Pharmville-Complete-Business-Flow.md) · [module designs](../03-Modules/README.md) · [operation contracts](../05-APIs/Critical-Operation-Contracts.md) · [data mapping](../04-Database/Module-Mapping.md) · [testing](../07-Engineering/Testing.md) · [workflow index](README.md)

@@ -1,7 +1,5 @@
 # Analytics and tracking
 
-## Analytics Event Catalog
-
 ## Proposed analytics event contracts
 
 **Design only:** event definitions and numerical business targets are not approved; no analytics SDK or collection has been deployed. Events must avoid patient names, medical details, raw addresses, GPS paths, OTPs or payment credentials.
@@ -34,8 +32,6 @@
 | `export_denied` | `Reporting` | report export forbidden | `reason_code,role_group` | permission denial |
 | `notification_failed` | `Notifications` | provider send failed | `channel,error_bucket` | delivery rate |
 
-## Analytics Events
-
 ## Proposed analytics event dictionary
 
 | Event name | Trigger from server truth | Minimal safe payload |
@@ -51,8 +47,6 @@
 
 These event names are **Proposed** and do not automatically exist in the checked-in database schema or HTTP service. Minimize data, dedupe events and obey consent/retention policy. Tracking Plan.
 
-## Operational Metrics
-
 ## Technical and staff workflow metrics
 
 Collect order/request dedupe count, P review queue age, stock freshness by location, expired/unknown license blocks, last-unit reservation conflicts, payment webhook signature/replay/settlement backlog, COD collected-vs-deposited exceptions, refund aging, rider missed/late handoff, GPS sample latency, OTP denial, provider timeout, outbox retry/dead-letter queue and audit/report export denials.
@@ -61,8 +55,6 @@ On the service side capture API p50/p95/p99, error-class rates, DB slow plans/lo
 
 No precision claims or production availability are supported by the source. Track only purpose-limited rider/customer fields and keep clinical details out of generic telemetry. See Monitoring.
 
-## Product Metrics
-
 ## Business/product metrics requiring target approval
 
 Track product search success and zero-results, add-to-cart, checkout started/completed, patient/P basket proportion, clinical review turnaround/rework, mixed-basket revision acceptance, safe order fulfillment rate, failed delivery, refund completion, COD eligibility refusal and repeat customer retention. Always distinguish numerator/denominator and filtered segments; separate stock/legal block from infrastructure failure.
@@ -70,8 +62,6 @@ Track product search success and zero-results, add-to-cart, checkout started/com
 No baseline conversion, target revenue, SLA or real-user traffic was supplied. The proposed HLD targets are not confirmed performance promises. Define owner-approved targets after staging and launch instrumentation, with privacy filters so clinical reasons cannot appear in broad marketing reports.
 
 For operational debugging prefer business entity/audit events over generic frontend analytics; customer-visible order success must be reconciled to financial, clinical and delivery sources of truth. See Operational Metrics.
-
-## Success Metrics
 
 ## Proposed business success metrics
 
@@ -87,8 +77,6 @@ Do not fabricate targets, denominators, attribution windows or current values. D
 | Patient safety guard | blocked unsafe P-classified review cases / attempted P-classified orders | Do not treat unsafe bypass as conversion win |
 
 Analytics retention, sampling and marketing permissions require privacy approval.
-
-## Tracking Plan
 
 ## Product analytics tracking plan
 

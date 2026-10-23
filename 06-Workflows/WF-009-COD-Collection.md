@@ -1,52 +1,52 @@
 # WF-009 — COD Collection
 
-**Status:** Proposed orchestration based on draft requirements and existing DB contracts. This is not an observed deployed workflow.
+**Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
 
-**Actor:** Rider / finance. **Trigger:** collect authorised COD amount.
-**Preconditions:** Valid session and per-resource scope; approved policy data and current serviceability or eligibility where relevant.
-**Expected outcome:** auditable cash receipt and reconciliation.
+## Actors and preconditions
 
-## Normal path
+Rider or cash receiver, Finance and Delivery. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.
 
-1. Resolve trusted identity and current entity version.
-2. Check classifications, licensing, money, consent and location conditions appropriate to this workflow.
-3. Validate request payload and expected state.
-4. Commit owning module rows and audit/outbox atomically.
-5. Publish any external side effect only after commit and record correlation IDs.
-6. Return an honest status and allow safe resume.
+## Normal path and committed outcomes
+
+1. Use only approved COD eligibility and amount due for the exact order/revision/shipment. COD authorization is not already collected cash.
+2. Current assigned rider records actual collection with delivery evidence; Finance persists one collection effect per permitted intent.
+3. A cash receiver records actual handover/deposit separately under their permission. Compare collected and handed-over totals by rider/period.
+4. Keep a shortage/overage as an explicit unresolved difference. Finance/Operations investigate; delivery is not rewritten and missing cash is not force-cleared.
 
 ## Data ownership and API boundary
-**Modules:** Rider_App, Finance_Payments, Delivery_Operations.
-**Existing tables involved (candidates):** `payment.cod_collections`, `payment.payment_transactions`, `finance.journal_entries`.
-**Related proposed APIs:** API-064, API-065, API-066, API-067, API-068, API-075, API-076, API-077, API-078, API-079; additional related contracts are in module API indexes.
 
-## Alternative / failure flows
-- **Example failure:** partial collection, missing cash, double COD event. Do not make an optimistic success assertion.
-- **Duplicate operation:** accept only the same idempotent result or issue a version conflict; never duplicate stock or money movements.
-- **Provider/network timeout:** leave a pending reconciliation state; never infer a paid/delivered/reviewed outcome.
-- **Unauthorized or expired identity:** deny, audit outcome as policy allows, and avoid revealing another user’s resource.
-- **Compensation:** when separate providers or ledgers are involved, use explicit compensating actions after durable evidence. Never silently reverse historic finance or clinical records.
+Finance owns amount due, actual collection and reconciliation. Delivery supplies current shipment/assignment evidence, not accounting settlement.
 
-## Sequence (design)
+Candidate existing tables: `payment.cod_collections`, `payment.reconciliation_runs`, `payment.reconciliation_items`, `logistics.shipments`. Exact write fields and runtime grants remain per-operation review under D-024.
+
+Related proposed operations: API-067 views handover, API-073 supplies collection evidence, API-080 reconciles. Complete deposit/approval command fields remain D-007/D-024. [Finance Payments](../05-APIs/Finance_Payments.md) · [Delivery Operations](../05-APIs/Delivery_Operations.md) · [Rider App](../05-APIs/Rider_App.md).
+
+## Sequence
+
 ```mermaid
 sequenceDiagram
-  participant A as Rider
-  participant API as API gateway
-  participant O as Owning module
-  participant PG as PostgreSQL
-  participant P as Outbox/provider
-  A->>API: collect authorised COD amount
-  API->>O: Trusted actor + validated intent
-  O->>PG: Scope + version/constraint check
-  alt policy or concurrency conflict
-    PG-->>O: Denied / no commit
-    O-->>A: Correctable error or pending state
-  else accepted
-    O->>PG: Atomic facts + outbox/audit
-    PG-->>O: Commit + accepted public ID
-    O-->>A: Safe status
-    O-->>P: Post-commit side effect, if needed
+  participant C as Rider or cash receiver
+  participant O as Finance
+  participant S as Delivery
+  participant D as PostgreSQL
+  C->>O: Record actual COD collection
+  O->>S: Check current assigned shipment evidence
+  O->>D: Commit collection once
+  C->>O: Record actual handover or deposit
+  O->>D: Compare due, collected and deposited
+  alt Difference exists
+    O-->>C: Open cash exception for Finance
+  else Evidence matches
+    O-->>C: Reconciled cash outcome
   end
 ```
 
-**Required QA:** approved happy path, denial, replay, race, provider outage, stale state, and actor-scope negative test; testing strategy.
+## Failure, transaction and recovery boundaries
+
+The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the [state and recovery contract](../07-Engineering/State-and-Recovery-Contracts.md): local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.
+
+## Feature-specific verification and navigation
+
+Designed cases: `TC-RID-04-DENY`, `TC-DLV-04-DENY`, `TC-FIN-06-DENY`. Locate their owning LLD/edge pages through the [feature register](../09-References/Coverage-and-Traceability.md). Record fixtures, approved policies and actual execution before claiming success.
+
+[Business journey](../00-Business-Guide/Pharmville-Complete-Business-Flow.md) · [module designs](../03-Modules/README.md) · [operation contracts](../05-APIs/Critical-Operation-Contracts.md) · [data mapping](../04-Database/Module-Mapping.md) · [testing](../07-Engineering/Testing.md) · [workflow index](README.md)

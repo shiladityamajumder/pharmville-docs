@@ -1,5 +1,7 @@
 # Cross-module workflows
 
+For everyday explanations, use the [Business Guide](../00-Business-Guide/README.md). These technical workflows specify ownership, command outcomes, data boundaries and failure assertions.
+
 Each workflow describes one business process across its participating modules. Requirements and owner decisions remain subject to the source status in [Sources and decisions](../09-References/Sources-and-Decisions.md).
 
 - [WF-001 Identity and Session](WF-001-Identity-and-Session.md)

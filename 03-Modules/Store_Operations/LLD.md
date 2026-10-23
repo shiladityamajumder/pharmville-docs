@@ -1,6 +1,6 @@
 # Store Operations LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Store-and-Warehouse.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Picking, packing and store replenishment — implementation acceptance
 
@@ -23,8 +23,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Store Picking & Replenishment — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -38,15 +36,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Store Picking & Replenishment — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -75,8 +71,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Store Picking & Replenishment — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -91,9 +85,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Store Picking & Replenishment — existing database usage
 
@@ -118,9 +110,7 @@ Proposed owning service: `Store_Operations`. Main read concerns: accept store qu
 
 **Safety:** Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Store Picking & Replenishment — dependencies and ownership
 
@@ -137,9 +127,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Store Picking & Replenishment — domain objects and DTO boundaries
 
@@ -153,9 +141,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `Store_OperationsReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Store_OperationsEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`, `fulfillment.package_items`, `fulfillment.packages`, `fulfillment.pick_task_items`, `fulfillment.pick_tasks`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`, `fulfillment.package_items`, `fulfillment.packages`, `fulfillment.pick_task_items`, `fulfillment.pick_tasks`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Store Picking & Replenishment — failure handling
 
@@ -168,9 +154,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Picking, packing and store replenishment — proposed interfaces and DTOs
 
@@ -187,8 +171,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `fulfillment.pick_tasks`, `fulfillment.pack_tasks`, `fulfillment.packages`, `warehouse.stock_balances`, `procurement.purchase_requisitions`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Picking, packing and store replenishment — internal architecture
 
@@ -223,8 +205,6 @@ Store actors can mutate only scoped tasks and must report actual shortages, neve
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Picking, packing and store replenishment — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -234,8 +214,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Store Picking & Replenishment — permission model
 
@@ -248,9 +226,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Store Picking & Replenishment — functional requirements
 
@@ -272,36 +248,25 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Picking, packing and store replenishment — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Store worker
+  participant O as Fulfillment
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Complete exact pick and pack
+  O->>D: Check scoped task P evidence license and reserved batch
+  alt Gate fails or current version conflicts
+    O-->>A: Stop and report shortage or mismatch
+  else Gate satisfied
+    O->>D: Record actual complete nonempty package
+    D-->>O: Committed evidence
+    O-->>A: Prepared package for gated dispatch
   end
 ```
-
-## Service Design
 
 ## Store Picking & Replenishment — service design
 
@@ -322,9 +287,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Store Picking & Replenishment — state and transition policy
 
@@ -332,21 +295,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Complete exact pick and pack"] --> B{"Exact current eligible items packed?"}
+  B -->|No| C["Stop and report shortage or mismatch"]
+  B -->|Yes| D["Record actual complete nonempty package"]
+  D --> E["Prepared package for gated dispatch"]
 ```
 
 **Module-specific invariant:** Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Store Picking & Replenishment — verification and acceptance
 
@@ -354,16 +313,16 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-STO-01-OK` | Incoming order queue for my store, with sound alert | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-STO-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-STO-02-OK` | Accept order, pick list, mark packed, hand over to rider | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-STO-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-STO-03-OK` | Raise replenishment request (normal or urgent) | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-STO-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-STO-04-OK` | Confirm receipt of a transfer; record shortages | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-STO-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-STO-05-OK` | My store's stock, with low-stock and near-expiry alerts | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-STO-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-STO-01-OK` | Incoming order queue for my store, with sound alert | Scoped incoming queue shows current tasks and alerts |
+| `TC-STO-01-DENY` | Alert fails while order is committed | Order remains in queue; alert retry creates no duplicate task; Store refreshes queue; Notifications repairs alert |
+| `TC-STO-02-OK` | Accept order, pick list, mark packed, hand over to rider | Exact accepted items are picked/packed and handed to assigned rider with gates |
+| `TC-STO-02-DENY` | Wrong batch or stale P approval is scanned | Packing blocked; no stock commit or dispatch for mismatched evidence; Store reports discrepancy; Inventory/Pharmacy resolves |
+| `TC-STO-03-OK` | Raise replenishment request (normal or urgent) | Scoped normal/urgent replenishment request records quantities once |
+| `TC-STO-03-DENY` | Store submits the same replenishment after lost response | One request per intent, no duplicate dispatch demand; Store checks recorded request; Warehouse reviews it |
+| `TC-STO-04-OK` | Confirm receipt of a transfer; record shortages | Transfer receipt credits actual accepted quantity once |
+| `TC-STO-04-DENY` | Receiver reports fewer packs than dispatched | Shortage remains recorded; missing stock not credited; Warehouse/Inventory investigates in-transit discrepancy |
+| `TC-STO-05-OK` | My store's stock, with low-stock and near-expiry alerts | Store stock/alerts are location and batch scoped |
+| `TC-STO-05-DENY` | Staff requests another store’s near-expiry report | No cross-location disclosure or adjustment authority; Manager reviews scope; Inventory owns stock records |
 
 ## Cross-module contract tests
 
@@ -373,9 +332,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Store Picking & Replenishment — validation checkpoints
 
@@ -389,8 +346,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `STO-01`, `STO-02`, `STO-03`, `STO-04`, `STO-05`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Store Picking & Replenishment — operational workflows
 
@@ -409,4 +364,12 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Use order revision + license + approved P lines + reserved lot/bin + actor scope at each pick/pack command. A simple UI “packed” button cannot override database guards.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).
+
+## Critical recovery scenarios
+
+**Designed; NOT RUN.** Run against approved policy fixtures and actual restricted database roles. Inspect customer/staff result, state/history, stock and money effects together.
+
+| Test | Input / interruption | Expected result and record assertions |
+| --- | --- | --- |
+| `TC-STO-02-01` | Exact held lot becomes expired/blocked before scan or pack closure | Stop pick/pack completion and dispatch for that lot; record discrepancy, preserve money facts, and route Inventory/Pharmacy/Operations to eligible supply or approved compensation. |

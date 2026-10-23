@@ -1,7 +1,5 @@
 # Fulfillment and delivery
 
-## S17 Find a store with the full order
-
 ## S17 — Find a store with the full order
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Order_Operations. **Actor:** Stock / operations team.
@@ -40,8 +38,6 @@ Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `or
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S18 Resolve a stock or delivery problem
 
 ## S18 — Resolve a stock or delivery problem
 
@@ -82,8 +78,6 @@ Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `or
 
 See module test plan and end-to-end sequence.
 
-## S19 Assign the order to a store
-
 ## S19 — Assign the order to a store
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Order_Operations. **Actor:** Store / warehouse.
@@ -122,8 +116,6 @@ Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `or
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S20 Pick the exact ordered items
 
 ## S20 — Pick the exact ordered items
 
@@ -164,8 +156,6 @@ Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. 
 
 See module test plan and end-to-end sequence.
 
-## S21 Fix a picking mistake or shortage
-
 ## S21 — Fix a picking mistake or shortage
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Store_Operations. **Actor:** Store / operations.
@@ -204,8 +194,6 @@ Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. 
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S22 Check invoice and seal the package
 
 ## S22 — Check, invoice and seal the package
 
@@ -246,8 +234,6 @@ Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. 
 
 See module test plan and end-to-end sequence.
 
-## S23 Assign the rider and hand over the parcel
-
 ## S23 — Assign the rider and hand over the parcel
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Delivery_Operations. **Actor:** Dispatch / rider.
@@ -286,8 +272,6 @@ Primary affected database domain(s): `logistics`, `fulfillment`, `organization`.
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S24 Travel to the delivery address
 
 ## S24 — Travel to the delivery address
 
@@ -328,8 +312,6 @@ Primary affected database domain(s): `logistics`, `identity`, `notification`. Re
 
 See module test plan and end-to-end sequence.
 
-## S25 Verify the recipient and hand over the order
-
 ## S25 — Verify the recipient and hand over the order
 
 **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Rider_App. **Actor:** Rider / customer.
@@ -368,8 +350,6 @@ Primary affected database domain(s): `logistics`, `identity`, `notification`. Re
 3. The correct customer-visible outcome reflects committed subsystem states.
 
 See module test plan and end-to-end sequence.
-
-## S26 Finish delivery and provide documents
 
 ## S26 — Finish delivery and provide documents
 

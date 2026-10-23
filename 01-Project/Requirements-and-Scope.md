@@ -1,7 +1,5 @@
 # Product requirements and scope
 
-## Product vision
-
 ## Product vision and business problem
 
 Pharmville is a location-aware healthcare-commerce experience for customers who need prescription medicines (P), other medicines (M) and non-medicine products (O). A customer should be able to browse one catalogue, see location-dependent availability, order one combined basket and follow one understandable journey, without unnecessary pharmacist review for M/O items.
@@ -11,8 +9,6 @@ For the operations team, the system replaces fragmented phone-order routing and 
 The most valuable promises are safety and correctness: review only P lines, bind decisions to exact item/patient/Rx version, require customer consent for changed baskets, confirm payment rather than trust redirects, ensure licensed and fresh-stock site eligibility, prevent selling the last unit twice, and keep refunds/COD auditable.
 
 **Confirmed intent, not approval of every rule:** Detailed product journeys and draft Phase 1 features are available. Business thresholds, integration access and legal pharmacy requirements remain open. See Scope, Platform inventory and Decisions.
-
-## Scope
 
 ## Scope by phase and evidence level
 
@@ -30,8 +26,6 @@ See Conflicts_and_Gaps, Release_Plan.
 
 ## Business objectives
 
-## Business objectives
-
 **Inherited product goals (Inferred):** customers should discover suitable health-commerce products, clearly know whether a prescription is required, pay only after valid accepted terms, receive traceable fulfillment, and get fair cancellations/refunds. Store and pharmacy staff need a controlled queue; finance needs one source of money truth; owners need visibility and evidence.
 
 **Do not turn these into invented KPIs:** success metrics such as completed checkout rate, denied unsafe P-item checkouts, missing-stock rate, on-time delivery, duplicate-money rate and order exception aging are *proposed* metrics. Numeric targets require real operational baselines.
@@ -39,8 +33,6 @@ See Conflicts_and_Gaps, Release_Plan.
 **Critical quality property:** an unsafe order blocked with a clear explanation is preferable to an incorrect success status. Internal consistency and patient privacy outweigh uncontrolled conversions.
 
 Analytics metrics
-
-## P M O Classification
 
 ## P/M/O medicine eligibility contract
 
@@ -52,19 +44,15 @@ Before picking, packing and dispatch, services must recheck current accepted rev
 
 The pharmacist and legal team must validate Schedule classification, prescription eligibility and storage/retention before production. See Pharmacy LLD and Database Quality.
 
-## Payment Inventory and License
-
 ## Payment, stock and licensed-fulfillment gates
 
-**Source:** unified order journey and SQL the database guard migrations guard evidence. A web callback or return URL alone does not establish money truth. Signed gateway events, provider reconciliation and durable ledger rows determine online payment status. COD is a future receivable, not cash already collected; its permitted amount, products and eligibility are owner policies.
+**Source:** unified order journey and the database guard evidence. A web callback or return URL alone does not establish money truth. Signed gateway events, provider reconciliation and durable ledger rows determine online payment status. COD is a future receivable, not cash already collected; its permitted amount, products and eligibility are owner policies.
 
 Reservation needs authoritative location-specific stock observation, approved freshness policy, eligible batch and an authorized location. Missing/stale POS updates cause a safe block; a generic current stock number does not prove that a specific lot can be packed. One-site per-order is the proposed launch rule. Competing orders for the last safe unit must serialize, reserving at most one.
 
 Pick/pack requires active location-specific license and pharmacist evidence for each P line. Dispatch requires exact committed stock, fulfilment completion evidence and full authoritative payment or approved COD. Order state is composed from distinct clinical, finance, inventory and delivery states; no module may set all statuses by itself.
 
 When funds arrive but stock later fails, inform the customer, obtain any revised consent and reconcile/compensate without duplicate charge or refund. Thresholds and production POS/license catalogs remain open in Decision Register.
-
-## Single Site Routing
 
 ## One-site order routing
 
@@ -74,17 +62,13 @@ Recommended selection pipeline: read delivery address and serviceable zone; enum
 
 Reassignment requires a reason, a safe release of old reservations and an atomic re-hold at the new site. Two concurrent allocators must not assign different sites for the same order. If no site can fulfill the whole basket, stop and present an approved customer intervention; do not silently split or substitute medicines. See Order Ops and D-010 in Decisions.
 
-## Inventory
-
 ## Draft functional requirement source
 
-The inherited feature catalog contains 110 stable feature IDs, with priorities labelled Must/Should/Could in a v0.1 list (92/14/4). The original v0.1 DOCX was not part of the two current uploads, so those priorities remain unapproved draft evidence.
+The inherited feature catalog contains 110 stable feature IDs, with priorities labelled Must/Should/Could in a v0.1 list (92/14/4). The original v0.1 DOCX was not part of the current documentation checkout, so those priorities remain unapproved draft evidence.
 
 Do not silently promote Should/Could functionality to the initial release. The proposed 18 groupings are documented in Module Inventory. Each feature has stable `REQ-###` traceability, a `TEST-<source-ID>-##` proposed case set and a `TASK-###` development slice.
 
 **Critical still-open feature policies:** warehouse Phase 1 vs Phase 2 stretch, rider Android phase, Cashfree capture sequence, stock authority/freshness, licensure/clinical signoff, COD cap and refunds. Review Open Questions before accepting implementation tickets.
-
-## Quality attributes
 
 ## Non-functional requirements
 
@@ -99,8 +83,6 @@ A non-functional requirement describes the quality of a service rather than whic
 - **Recoverability:** backups, point-in-time recovery targets and operational runbooks must be tested in a production-like environment.
 
 Actual load assumptions, user volumes, rate limits, SLOs and accessibility conformance must be approved and recorded before acceptance. See Scalability and Performance Testing.
-
-## Acceptance gates
 
 ## Non-functional requirements — proposed acceptance gates
 

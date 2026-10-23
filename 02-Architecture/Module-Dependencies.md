@@ -1,7 +1,5 @@
 # Module dependencies
 
-## Module Dependencies
-
 ## Planning dependency graph
 
 ```mermaid

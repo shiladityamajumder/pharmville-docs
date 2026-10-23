@@ -1,6 +1,6 @@
 # Customer Orders
 
-## Purpose and feature scope
+[Business flow](../../00-Business-Guide/Orders-and-Fulfillment.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-005 — Order tracking and aftercare
 
@@ -29,8 +29,6 @@
 - [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
 
 **Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
-
-## Module design
 
 ## MOD-005: Order tracking and aftercare — HLD
 

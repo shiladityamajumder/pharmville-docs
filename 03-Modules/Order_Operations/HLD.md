@@ -1,6 +1,6 @@
 # Order Operations HLD
 
-## High-level design
+[Business flow](../../00-Business-Guide/Orders-and-Fulfillment.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-007: Order orchestration and routing — HLD
 
@@ -30,8 +30,6 @@
 
 ## Risk
 One order must have one accepted revision and an auditable licensed location/fulfillment decision. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Feature context
 
 ## MOD-007 — Order orchestration and routing
 

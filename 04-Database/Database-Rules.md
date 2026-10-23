@@ -1,7 +1,5 @@
 # Database rules and ownership
 
-## Data ownership
-
 ## Table-domain ownership and shared access rules
 
 Ownership is service-level responsibility for validating changes, not unrestricted ability to write every schema. The table below associates **schemas** with candidate active modules, using feature behavior. Several domains also contain future-phase data.
@@ -37,8 +35,6 @@ Before implementing a write, name a single command owner, one transaction bounda
 
 See Module Dependency Matrix, Database Coverage and Security.
 
-## Security and privacy
-
 ## Database security and protected records
 
 The final SQL adds four restricted NOLOGIN capability groups, explicit customer-order and staff-warehouse RLS, protected-DML denials and V0029 default `PUBLIC EXECUTE` denial for future routines. These are tested capabilities only for the recorded coverage; they do not mean that every table automatically has RLS.
@@ -48,8 +44,6 @@ Trusted backend transactions must set audit actor context from server-verified a
 Encrypt at rest and in transit in deployed environments, apply S3 private object access, KMS key lifecycle, secrets rotation, export retention rules and detection of mass reads. Simulated integration/ACL test passes do not prove real provider or production cloud setup.
 
 See Security Overview, Database Tests and Runtime Roles.
-
-## Database invariants
 
 ## Database reference — exact checked-in catalog snapshot
 

@@ -1,20 +1,19 @@
 # Delivery Operations edge cases
 
-**Coverage status:** the rows below are module review prompts. Repeated failure text does not establish feature-specific edge coverage. Specify input, ownership, transaction, retry and recovery assertions for each feature under [D-024](../../09-References/Sources-and-Decisions.md#decisions-that-block-implementation).
+**Status: Designed; NOT RUN.** These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to [decisions](../../09-References/Sources-and-Decisions.md); provider behavior and application execution are not certified.
 
+[Business explanation](../../00-Business-Guide/Delivery-and-Rider-App.md) · [LLD and normal tests](LLD.md) · [API](../../05-APIs/Delivery_Operations.md) · [recovery contracts](../../07-Engineering/State-and-Recovery-Contracts.md)
 
-## Edge Cases
+| Case | Feature | Trigger | Expected result and record impact | Responsible recovery | Test |
+| --- | --- | --- | --- | --- | --- |
+| `EC-DLV-01-01` | `DLV-01` | Rider telemetry stops | Last update/offline indicated; no fictitious live location | Dispatcher contacts rider and reviews assignment | `TC-DLV-01-DENY` |
+| `EC-DLV-02-01` | `DLV-02` | Two dispatchers assign the same ready task | Single current assignment; stale write conflicts | Dispatcher refreshes and communicates accepted task | `TC-DLV-02-DENY` |
+| `EC-DLV-03-01` | `DLV-03` | Resolution is submitted after reassignment | Stale resolution denied; parcel remains with current accountable task | Dispatch checks current assignment and reason | `TC-DLV-03-DENY` |
+| `EC-DLV-04-01` | `DLV-04` | Handover is less than collection | Unresolved cash difference remains, no forced clear | Finance/Operations investigates evidence with rider | `TC-DLV-04-DENY` |
+| `EC-DLV-05-01` | `DLV-05` | Off-duty or deactivated rider is assigned | Assignment refused without rewriting rider eligibility | Manager corrects approved shift/access | `TC-DLV-05-DENY` |
 
-## Delivery Management — documented edge cases
+## Verification procedure
 
-**Source:** v0.1 feature inventory, journey v3 exception rules and final DB guard report. These are minimum testable failure outcomes, not replacements for pharmacy/owner policy signoff.
+For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are `TC-<feature>-OK` in the LLD. Use approved policy fixtures, not production assumptions.
 
-| Feature | Affected behavior | Trigger | Expected recovery |
-| --- | --- | --- | --- |
-| `DLV-01` | Live map of riders (available, on delivery, offline) and orders ready for pickup | Offline GPS, invalid OTP, refused COD or no available rider | Record failed attempt and safe reschedule or human queue |
-| `DLV-02` | Suggest the nearest available rider; staff confirm or choose another | Offline GPS, invalid OTP, refused COD or no available rider | Record failed attempt and safe reschedule or human queue |
-| `DLV-03` | Failed-delivery queue: reattempt, reschedule or return to store | Offline GPS, invalid OTP, refused COD or no available rider | Record failed attempt and safe reschedule or human queue |
-| `DLV-04` | COD handover: cash collected vs deposited per rider per day | Offline GPS, invalid OTP, refused COD or no available rider | Record failed attempt and safe reschedule or human queue |
-| `DLV-05` | Rider management: onboard, assign location, shifts | Offline GPS, invalid OTP, refused COD or no available rider | Record failed attempt and safe reschedule or human queue |
-
-Across every route also test expired sessions, cross-tenant or location IDOR attempts, duplicate taps, two workers updating the same object, timeout after commit, out-of-order events and unapproved values. Never quietly continue a safety-sensitive workflow by interpreting a missing answer as consent. See Error_Handling and Testing.
+For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.

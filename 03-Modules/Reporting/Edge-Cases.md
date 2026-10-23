@@ -1,22 +1,21 @@
 # Reporting edge cases
 
-**Coverage status:** the rows below are module review prompts. Repeated failure text does not establish feature-specific edge coverage. Specify input, ownership, transaction, retry and recovery assertions for each feature under [D-024](../../09-References/Sources-and-Decisions.md#decisions-that-block-implementation).
+**Status: Designed; NOT RUN.** These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to [decisions](../../09-References/Sources-and-Decisions.md); provider behavior and application execution are not certified.
 
+[Business explanation](../../00-Business-Guide/Reporting-and-Audit.md) · [LLD and normal tests](LLD.md) · [API](../../05-APIs/Reporting.md) · [recovery contracts](../../07-Engineering/State-and-Recovery-Contracts.md)
 
-## Edge Cases
+| Case | Feature | Trigger | Expected result and record impact | Responsible recovery | Test |
+| --- | --- | --- | --- | --- | --- |
+| `EC-REP-01-01` | `REP-01` | Store filter requests unauthorized location | No out-of-scope totals or order detail | Reporting/Security reviews entitlement | `TC-REP-01-DENY` |
+| `EC-REP-02-01` | `REP-02` | Underlying tax classification is unapproved | Report not described as filing-ready; unresolved data flagged | Finance/CA approves definitions and corrections | `TC-REP-02-DENY` |
+| `EC-REP-03-01` | `REP-03` | Report is generated from stale observation | Data time/staleness visible; report not used as reservation authority | Inventory restores evidence; Reporting reruns | `TC-REP-03-DENY` |
+| `EC-REP-04-01` | `REP-04` | Delivered parcel has unresolved COD shortage | Delivery is not counted as deposited cash | Finance resolves discrepancy; report preserves separate facts | `TC-REP-04-DENY` |
+| `EC-REP-05-01` | `REP-05` | Pending refund is counted as completed payout | Pending and completed separated, no false financial closure | Finance/Reporting corrects definitions and reruns | `TC-REP-05-DENY` |
+| `EC-REP-06-01` | `REP-06` | Dispatched transfer lacks destination acknowledgment | Not reported as fully received | Warehouse/Store investigates receipt | `TC-REP-06-DENY` |
+| `EC-REP-07-01` | `REP-07` | User loses role while export runs | Download denied despite earlier job authorization | Security reviews access; Reporting expires/recreates authorized export | `TC-REP-07-DENY` |
 
-## Operational & Finance Reporting — documented edge cases
+## Verification procedure
 
-**Source:** v0.1 feature inventory, journey v3 exception rules and final DB guard report. These are minimum testable failure outcomes, not replacements for pharmacy/owner policy signoff.
+For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are `TC-<feature>-OK` in the LLD. Use approved policy fixtures, not production assumptions.
 
-| Feature | Affected behavior | Trigger | Expected recovery |
-| --- | --- | --- | --- |
-| `REP-01` | Sales and orders, by date, store and product | Malformed payload, stale record or missing dependency | Reject unsafe transition, show actionable message; keep authoritative state unchanged |
-| `REP-02` | GST report for filing | Malformed payload, stale record or missing dependency | Reject unsafe transition, show actionable message; keep authoritative state unchanged |
-| `REP-03` | Stock, low stock and near-expiry | Malformed payload, stale record or missing dependency | Reject unsafe transition, show actionable message; keep authoritative state unchanged |
-| `REP-04` | COD, rider collections and deliveries per rider | Malformed payload, stale record or missing dependency | Reject unsafe transition, show actionable message; keep authoritative state unchanged |
-| `REP-05` | Refunds, cancellations and failed deliveries | Malformed payload, stale record or missing dependency | Reject unsafe transition, show actionable message; keep authoritative state unchanged |
-| `REP-06` | Replenishment transfers | Malformed payload, stale record or missing dependency | Reject unsafe transition, show actionable message; keep authoritative state unchanged |
-| `REP-07` | Excel export for every report | Malformed payload, stale record or missing dependency | Reject unsafe transition, show actionable message; keep authoritative state unchanged |
-
-Across every route also test expired sessions, cross-tenant or location IDOR attempts, duplicate taps, two workers updating the same object, timeout after commit, out-of-order events and unapproved values. Never quietly continue a safety-sensitive workflow by interpreting a missing answer as consent. See Error_Handling and Testing.
+For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.

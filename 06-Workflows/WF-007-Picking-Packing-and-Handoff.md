@@ -1,52 +1,53 @@
 # WF-007 — Picking Packing and Handoff
 
-**Status:** Proposed orchestration based on draft requirements and existing DB contracts. This is not an observed deployed workflow.
+**Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
 
-**Actor:** Store / warehouse staff. **Trigger:** pick reserved goods and handoff.
-**Preconditions:** Valid session and per-resource scope; approved policy data and current serviceability or eligibility where relevant.
-**Expected outcome:** verified packed order or shortage exception.
+## Actors and preconditions
 
-## Normal path
+Location worker, Fulfillment and Inventory. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.
 
-1. Resolve trusted identity and current entity version.
-2. Check classifications, licensing, money, consent and location conditions appropriate to this workflow.
-3. Validate request payload and expected state.
-4. Commit owning module rows and audit/outbox atomically.
-5. Publish any external side effect only after commit and record correlation IDs.
-6. Return an honest status and allow safe resume.
+## Normal path and committed outcomes
+
+1. Authorize worker/location and current task version. Load the assigned accepted revision and current P decisions, licensed site and exact reserved lots.
+2. Pick exact eligible products/batches and record actual quantities; a shortage blocks completion and goes to Operations, not an automatic substitution.
+3. Complete picking only with required quantities; complete packing only with nonempty authorized package evidence. Preserve actor/time and immutable work identity.
+4. Coordinate committed stock through Inventory and dispatch only with completed package, current clinical/license evidence and authoritative full money or approved shipment-scoped COD.
+5. Record custody handoff to the current assigned rider and publish progress after commit. Cancellation/packing races resolve against authoritative state.
 
 ## Data ownership and API boundary
-**Modules:** Store_Operations, Warehouse, Delivery_Operations.
-**Existing tables involved (candidates):** `fulfillment.pick_tasks`, `fulfillment.pack_tasks`, `fulfillment.packages`, `warehouse.stock_ledger`.
-**Related proposed APIs:** API-064, API-065, API-066, API-067, API-068, API-044, API-045, API-046, API-047, API-048; additional related contracts are in module API indexes.
 
-## Alternative / failure flows
-- **Example failure:** pick shortage, expired lot, duplicate handoff. Do not make an optimistic success assertion.
-- **Duplicate operation:** accept only the same idempotent result or issue a version conflict; never duplicate stock or money movements.
-- **Provider/network timeout:** leave a pending reconciliation state; never infer a paid/delivered/reviewed outcome.
-- **Unauthorized or expired identity:** deny, audit outcome as policy allows, and avoid revealing another user’s resource.
-- **Compensation:** when separate providers or ledgers are involved, use explicit compensating actions after durable evidence. Never silently reverse historic finance or clinical records.
+Scoped Fulfillment/Store commands tasks and packages; Inventory owns reservation/ledger effects; Delivery owns custody.
 
-## Sequence (design)
+Candidate existing tables: `fulfillment.pick_tasks`, `fulfillment.pick_task_items`, `fulfillment.pack_tasks`, `fulfillment.packages`, `fulfillment.package_items`, `warehouse.stock_reservations`. Exact write fields and runtime grants remain per-operation review under D-024.
+
+Related proposed operations: API-045/API-046/API-047; API-071 records permitted rider pickup. [Store Operations](../05-APIs/Store_Operations.md) · [Inventory](../05-APIs/Inventory.md) · [Rider App](../05-APIs/Rider_App.md).
+
+## Sequence
+
 ```mermaid
 sequenceDiagram
-  participant A as Store
-  participant API as API gateway
-  participant O as Owning module
-  participant PG as PostgreSQL
-  participant P as Outbox/provider
-  A->>API: pick reserved goods and handoff
-  API->>O: Trusted actor + validated intent
-  O->>PG: Scope + version/constraint check
-  alt policy or concurrency conflict
-    PG-->>O: Denied / no commit
-    O-->>A: Correctable error or pending state
-  else accepted
-    O->>PG: Atomic facts + outbox/audit
-    PG-->>O: Commit + accepted public ID
-    O-->>A: Safe status
-    O-->>P: Post-commit side effect, if needed
+  participant C as Location worker
+  participant O as Fulfillment
+  participant S as Inventory
+  participant D as PostgreSQL
+  C->>O: Scan assigned pick and batch
+  O->>D: Verify current review, site, task and exact lot
+  alt Mismatch or shortage
+    O-->>C: Stop and record discrepancy
+  else Complete eligible pick and pack
+    O->>D: Save actual quantities and completed package
+    O->>S: Commit exact reserved stock
+    O->>D: Check money or approved COD before dispatch
+    O-->>C: Authorized handoff may proceed
   end
 ```
 
-**Required QA:** approved happy path, denial, replay, race, provider outage, stale state, and actor-scope negative test; testing strategy.
+## Failure, transaction and recovery boundaries
+
+The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the [state and recovery contract](../07-Engineering/State-and-Recovery-Contracts.md): local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.
+
+## Feature-specific verification and navigation
+
+Designed cases: `TC-STO-02-DENY`, `TC-ORD-04-DENY`, `TC-INV-03-DENY`. Locate their owning LLD/edge pages through the [feature register](../09-References/Coverage-and-Traceability.md). Record fixtures, approved policies and actual execution before claiming success.
+
+[Business journey](../00-Business-Guide/Pharmville-Complete-Business-Flow.md) · [module designs](../03-Modules/README.md) · [operation contracts](../05-APIs/Critical-Operation-Contracts.md) · [data mapping](../04-Database/Module-Mapping.md) · [testing](../07-Engineering/Testing.md) · [workflow index](README.md)

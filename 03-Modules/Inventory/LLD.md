@@ -1,6 +1,6 @@
 # Inventory LLD
 
-## Acceptance Criteria
+[Business flow](../../00-Business-Guide/Inventory-and-Stock.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Lot-aware inventory and reservation — implementation acceptance
 
@@ -25,8 +25,6 @@
 
 Module test scenarios
 
-## API Design
-
 ## Inventory & Stock Reservations — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
@@ -40,15 +38,13 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 ## Cross-cutting request contract
 
-Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read API_Conventions before implementing the endpoint.
+Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
 **Business gate:** Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
-## Business Logic
-
 ## Inventory & Stock Reservations — business logic and invariants
 
-**Rule origin:** the documented draft requirements, the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
+**Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
 ## Core procedure
 
@@ -77,8 +73,6 @@ return filter_for_actor(result, context)
 
 Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable `409` and reload state. On an external provider timeout, keep the result pending rather than guessing success.
 
-## Components
-
 ## Inventory & Stock Reservations — internal components
 
 **Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
@@ -93,9 +87,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and Architecture_Overview.
-
-## Database Usage
+Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Inventory & Stock Reservations — existing database usage
 
@@ -118,9 +110,7 @@ Proposed owning service: `Inventory`. Main read concerns: stock by site/batch/ex
 
 **Safety:** Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock.
 
-Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related Migration_Strategy.
-
-## Dependencies
+Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
 ## Inventory & Stock Reservations — dependencies and ownership
 
@@ -136,9 +126,7 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 
 Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock.. Related: Module_Dependencies and Database_Usage.
-
-## Domain Models
+**Data-access contract:** Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Inventory & Stock Reservations — domain objects and DTO boundaries
 
@@ -152,9 +140,7 @@ Use the owning service interface for business changes rather than making uncontr
 | `InventoryReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `InventoryEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `warehouse.inventory_adjustment_items`, `warehouse.inventory_adjustments`, `warehouse.inventory_lots`, `warehouse.stock_balances`, `warehouse.stock_holds`, `warehouse.stock_ledger`, `warehouse.stock_movement_reason_codes`, `warehouse.stock_reservations`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See Database_Usage.
-
-## Error Handling
+**Existing representative tables:** `warehouse.inventory_adjustment_items`, `warehouse.inventory_adjustments`, `warehouse.inventory_lots`, `warehouse.stock_balances`, `warehouse.stock_holds`, `warehouse.stock_ledger`, `warehouse.stock_movement_reason_codes`, `warehouse.stock_reservations`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Inventory & Stock Reservations — failure handling
 
@@ -167,9 +153,7 @@ Use the owning service interface for business changes rather than making uncontr
 - **Partial external failure:** leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.
 - **Safety or compliance policy unknown:** fail closed. Route staff to an exception queue and customer to a non-misleading status.
 
-Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See Error_Responses and Incident_Triage.
-
-## Interfaces And DTOs
+Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See [error responses](../../05-APIs/README.md#standard-problem-response-behavior) and [incident triage](../../07-Engineering/Release-and-Incident-Handling.md).
 
 ## Lot-aware inventory and reservation — proposed interfaces and DTOs
 
@@ -186,8 +170,6 @@ Use structured problem codes, request ID, retryability category and operator run
 **Existing table candidates:** `warehouse.stock_balances`, `warehouse.stock_reservations`, `warehouse.inventory_lots`, `warehouse.stock_ledger`, `warehouse.stock_holds`.
 
 **Per-operation request and response examples:** API contract index. No generic DTO in this document overrides module-specific validation.
-
-## Internal Architecture
 
 ## Lot-aware inventory and reservation — internal architecture
 
@@ -222,8 +204,6 @@ A reservation must not create negative eligible stock and must not use expired/b
 ## Related
 HLD · States · Permissions
 
-## Observability
-
 ## Lot-aware inventory and reservation — observability
 
 **Proposed runtime design:** Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.
@@ -233,8 +213,6 @@ HLD · States · Permissions
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
 Monitoring design
-
-## Permissions
 
 ## Inventory & Stock Reservations — permission model
 
@@ -247,9 +225,7 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult Roles_and_Permissions.
-
-## Requirements
+**Core constraint:** Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Inventory & Stock Reservations — functional requirements
 
@@ -273,38 +249,27 @@ A feature becomes implementation-ready only after its inputs (especially any dep
 
 See requirement coverage and test IDs.
 
-## Sequence Diagrams
-
 ## Lot-aware inventory and reservation — request sequence
 
 **Proposed design**, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.
 
 ```mermaid
 sequenceDiagram
-  participant U as Caller
-  participant C as Controller
-  participant S as UseCase
+  participant A as Authorized order service
+  participant O as Inventory
   participant D as PostgreSQL
-  participant E as Provider or outbox
-  U->>C: Proposed command (actor authenticated)
-  C->>S: Typed DTO + trusted scope
-  S->>D: Read & lock current state
-  D-->>S: Row version and constraints
-  alt Invalid policy, permissions, stale version
-    S-->>C: Domain conflict/error; no commit
-    C-->>U: 4xx with safe recovery action
-  else Valid intent
-    S->>D: Commit versioned state + audit/outbox
-    D-->>S: Durable success
-    S-->>C: Public-id response
-    C-->>U: 2xx with correlation ID
-    S-->>E: Async post-commit work where required
+  A->>O: Hold exact stock for accepted revision
+  O->>D: Lock lots and check source freshness expiry and license
+  alt Gate fails or current version conflicts
+    O-->>A: No hold, return stock exception
+  else Gate satisfied
+    O->>D: Create one eligible reservation set
+    D-->>O: Committed evidence
+    O-->>A: Active hold or committed stock after owner command
   end
 ```
 
 **Concurrency rule:** Hold locks for minimal local SQL work only; repeated calls use the same idempotency key or expected-version check. Provider timeouts leave state pending and require authoritative reconciliation.
-
-## Service Design
 
 ## Inventory & Stock Reservations — service design
 
@@ -325,9 +290,7 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 **Module invariant:** Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See Database_Usage and Monitoring.
-
-## State Transitions
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Inventory & Stock Reservations — state and transition policy
 
@@ -335,21 +298,17 @@ For each mutation: authenticate actor, validate inputs, read affected rows with 
 
 ```mermaid
 flowchart TD
- A[Request received] --> B{Actor and current state valid?}
- B -->|No| C[Denied or actionable correction]
- B -->|Yes| D{Domain gate satisfied?}
- D -->|No| E[Pending, held, or rejected with reason]
- D -->|Yes| F[Persist transition, revision and audit]
- F --> G[Publish committed event]
+  A["Hold exact stock for accepted revision"] --> B{"Safe available lots cover quantity?"}
+  B -->|No| C["No hold, return stock exception"]
+  B -->|Yes| D["Create one eligible reservation set"]
+  D --> E["Active hold or committed stock after owner command"]
 ```
 
 **Module-specific invariant:** Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
-Read actual state constraints in Database_Usage and stage documents in Workflows.
-
-## Testing
+This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
 ## Inventory & Stock Reservations — verification and acceptance
 
@@ -357,20 +316,20 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 
 | Stable test ID | Behavior | Expected result |
 | --- | --- | --- |
-| `TC-INV-01-OK` | Stock per location and batch, with manufacturing and expiry dates | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-INV-01-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-INV-02-OK` | Stock ledger: every movement recorded; stock is the sum of the ledger | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-INV-02-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-INV-03-OK` | Allocate nearest-expiry batch first; block batches below minimum shelf life | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-INV-03-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-INV-04-OK` | Stock adjustments with reason; manager approval above a threshold | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-INV-04-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-INV-05-OK` | Low-stock and near-expiry alerts | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-INV-05-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-INV-06-OK` | Opening stock import per location | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-INV-06-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
-| `TC-INV-07-OK` | Stock sync with Techsmith | Authorized valid input yields committed business effect and correct customer/staff projection |
-| `TC-INV-07-DENY` | Invalid actor, stale state, duplicate or unavailable dependency | No unauthorized/duplicate effect; safe error or pending state |
+| `TC-INV-01-OK` | Stock per location and batch, with manufacturing and expiry dates | Stock view separates batch/location and manufacturing/expiry dates |
+| `TC-INV-01-DENY` | Same product has one expired and one eligible batch | Only eligible batch contributes to orderable quantity; Inventory/Pharmacy assesses blocked stock |
+| `TC-INV-02-OK` | Stock ledger: every movement recorded; stock is the sum of the ledger | Each accepted movement explains quantity and resulting balance |
+| `TC-INV-02-DENY` | Movement reference is replayed | No second ledger effect or unexplained balance overwrite; Inventory reuses result and reconciles differences |
+| `TC-INV-03-OK` | Allocate nearest-expiry batch first; block batches below minimum shelf life | Nearest eligible expiry is chosen under approved shelf-life policy |
+| `TC-INV-03-DENY` | Earliest-expiry lot falls below approved shelf life | Lot skipped/blocked; never selected merely because oldest; Inventory chooses eligible lot; Pharmacy approves policy |
+| `TC-INV-04-OK` | Stock adjustments with reason; manager approval above a threshold | Reasoned adjustment follows configured approval boundary |
+| `TC-INV-04-DENY` | Large adjustment lacks required approval | No unauthorized ledger/balance mutation; Manager reviews evidence and approves/rejects |
+| `TC-INV-05-OK` | Low-stock and near-expiry alerts | Low-stock/expiry alerts identify location, batch and data time |
+| `TC-INV-05-DENY` | Observation is stale when alert job runs | Staleness shown; alerts cannot authorize stock holds; Inventory restores feed and reevaluates thresholds |
+| `TC-INV-06-OK` | Opening stock import per location | Reviewed opening import records location/batch and traceable movement |
+| `TC-INV-06-DENY` | Opening import is replayed after partial/lost acknowledgment | No double opening balance; explicit accepted/rejected rows; Inventory reconciles import identity and policy before retry |
+| `TC-INV-07-OK` | Stock sync with Techsmith | Techsmith observations retain approved source/location/time identity |
+| `TC-INV-07-DENY` | Older or duplicate stock observation arrives | No stale observation replacing newer authority or duplicate movement; Integration owner replays ordered evidence and reconciles |
 
 ## Cross-module contract tests
 
@@ -380,9 +339,7 @@ Read actual state constraints in Database_Usage and stage documents in Workflows
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock.**
 
-Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read Test_Strategy.
-
-## Validations
+Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
 ## Inventory & Stock Reservations — validation checkpoints
 
@@ -396,8 +353,6 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
 **Requirements:** `INV-01`, `INV-02`, `INV-03`, `INV-04`, `INV-05`, `INV-06`, `INV-07`. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.
-
-## Workflows
 
 ## Inventory & Stock Reservations — operational workflows
 
@@ -413,4 +368,12 @@ The requested action is first validated against user scope, current state and ap
 
 **Module-specific rule:** Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock.
 
-See State_Transitions and Unified_Order.
+See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).
+
+## Critical recovery scenarios
+
+**Designed; NOT RUN.** Run against approved policy fixtures and actual restricted database roles. Inspect customer/staff result, state/history, stock and money effects together.
+
+| Test | Input / interruption | Expected result and record assertions |
+| --- | --- | --- |
+| `TC-INV-01-01` | Two accepted orders concurrently request the last eligible pack at one site | At most one active hold succeeds for the pack; the other gets shortage/current availability. No negative orderable balance and both outcomes retain their own order identity. |
