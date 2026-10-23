@@ -1,6 +1,6 @@
 # Prototype validation results
 
-Validated locally on **23 October 2026** using the implemented HTML/CSS/JavaScript, local static server and headless Chrome. These are prototype checks, not production application/provider/clinical acceptance.
+Validated locally on **23 October 2026** using the implemented HTML/CSS/JavaScript, local static server and headless Chrome after the Explorer and documentation-matrix update. These are prototype checks, not production application/provider/clinical acceptance.
 
 ## Measured results
 
@@ -11,15 +11,17 @@ Validated locally on **23 October 2026** using the implemented HTML/CSS/JavaScri
 | Coverage classification | 70 screen, 23 interaction/state, 16 blocked by owner decision, 1 backend-only |
 | Stable scenario definitions | 35, including Normal |
 | Screen/scenario combinations visited | 718 |
-| Browser assertions | 100 passed |
+| Browser assertions | 113 passed |
 | Registered interactive action/form names | 104; all resolve to a handler in static review |
-| Normal-screen responsive sweep | All 83 at 390 × 844, 768 × 1024 and 1440 × 900; no document overflow |
+| Normal-screen responsive sweep | All 83 at 360 × 800, 390 × 844, 430 × 932, 768 × 1024, 1280 × 800 and 1440 × 900; no document overflow |
 | Browser errors / external dependencies | Zero detected JavaScript errors; zero external requests required |
 | Rendered hash links | Zero unresolved screen targets |
 | Basic accessibility | Normal-screen inputs have labels; no duplicate HTML IDs; dialog Escape, reset confirmation and browser history tested |
-| Selected-device preview | Mobile, tablet and desktop layouts verified inside a desktop browser; responsive mode and browser resizing also verified |
-| Repository Markdown validation | 459 Markdown files, 4,388 links, 1,598 tables and 52 Mermaid diagrams parsed; zero validation errors or missing feature mappings |
-| Existing documentation preservation | This UX pass edits the wireframe prototype and its documentation only; the existing business requirements and scenario definitions remain in place |
+| Selected-device preview | Mobile, tablet and desktop layouts verified inside a desktop browser; the landing-page Mobile App, Website and Complete Journeys choices are directly asserted |
+| Repository Markdown validation | 516 Markdown files, 10,603 links, 1,698 tables, and all 96 Mermaid diagrams parsed; zero documentation errors or missing feature mappings |
+| Feature and route mapping | All 110 authoritative feature IDs map to the 83-route screen registry; see [Complete Screen Matrix](Complete-Screen-Matrix.md) |
+| UX review | [Final UX Review](Final-UX-Review.md) records the weighted heuristic score and remaining limits |
+| Existing documentation preservation | Business rules, authoritative feature IDs, and scenario definitions remain unchanged |
 | Git review | `git diff --check` passed; no commit or push |
 
 ## Executed journeys
@@ -30,7 +32,7 @@ Aftercare and operations checks covered delivered-item return requests, COD shor
 
 ## Screenshots and visual review
 
-Local PNGs and JSON results are in ignored `artifacts/` within this folder. They include customer/pharmacy/rider views at all three requested sizes, selected mobile/tablet/desktop previews, an assigned rider task, and the default Explorer. The Explorer, customer home at 390px and 1440px, selected previews inside the desktop browser, and assigned rider at 390px were visually inspected after the final responsive adjustment. This is representative visual review, not a claim of exhaustive human review of every screen/state.
+Local PNGs and JSON results are in ignored `artifacts/` within this folder. They include the Explorer, customer/pharmacy/rider views at all six required viewport widths, selected mobile/tablet/desktop previews, and an assigned rider task. After the final Explorer change, I inspected the Explorer, customer home at 390 × 844 and 1440 × 900, and the assigned rider task at 390 × 844. This is representative visual review, not exhaustive human review of every screen/state.
 
 ## Reproduce
 

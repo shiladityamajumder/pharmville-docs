@@ -1,6 +1,6 @@
 # Screen inventory
 
-Generated from the actual screen registry by `node 10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs`. Stable screen IDs describe reusable views, not one HTML file per feature. The source still contains 110 draft features across 18 modules. The three experiences are customer, shared protected staff and rider; staff domain views are not separate applications.
+Generated from the actual screen registry by `node 10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs`. Stable screen IDs describe reusable views, not one HTML file per feature. The source still contains 110 draft features across 18 modules. Customer routes support Mobile App and Desktop Website presentations; staff workspaces are responsive desktop-first sites, and the rider workspace is mobile-first.
 
 | Screen ID | Screen | Experience / workspace | Illustrative role | Feature IDs | Available states | Prototype link |
 | --- | --- | --- | --- | --- | --- | --- |

@@ -16,16 +16,13 @@ The browser test reuses the repository’s existing `node_modules/puppeteer`; no
 
 ## Automated checks
 
-1. Load every registered screen and verify unique IDs/routes and rendered hash links.
-2. Load every declared applicable scenario and detect browser errors/external requests.
-3. Visit all screens at 390 × 844, 768 × 1024 and 1440 × 900; compare document/viewport width and capture representative customer, pharmacy and rider screenshots.
-4. Submit incorrect/valid OTP, profile/email errors, search, cart and accepted checkout through their actual forms.
-5. Test pending captured-payment recovery and repeated Pay with the same reference; cancellation dialog and separate capped/duplicate-safe refund.
-6. Submit synthetic prescription metadata, refuse payment before review, then complete pharmacy, customer acceptance, exact picking/packing, dispatch assignment, rider acceptance, store handoff, pickup, wrong OTP and offline/reconnect completion.
-7. Verify the customer sees the same delivery/refund state, and return requests do not imply inspection/refund completion.
-8. Test supplier short receipt, replay, source transfer dispatch, actual destination receipt/shortage and duplicate guards.
-9. Generate/sort/export scoped reports; access revoked before download, denied staff form, staff session revocation/MFA recovery, refresh and Escape in reset dialog.
-10. Audit source feature IDs, mapping classes, actual action-bearing views, scenario IDs, asset paths and relative documentation links.
+1. **BR-01 — Route smoke:** load all registered screens and verify unique IDs/routes and rendered hash links.
+2. **BR-02 — Scenario rendering:** load every declared applicable scenario and detect browser errors/external requests. A rendered scenario is not an interaction assertion.
+3. **BR-03 — Responsive sweep:** visit all screens at 360 × 800, 390 × 844, 430 × 932, 768 × 1024, 1280 × 800 and 1440 × 900; compare document/viewport width and capture representative customer, pharmacy and rider screenshots. Separately switch the internal Mobile, Tablet and Desktop previews.
+4. **BR-04 — Core interactions and safeguards:** submit incorrect/valid OTP, profile/email errors, search, cart and accepted checkout through their actual forms; test payment pending/recovery/idempotency, cancellation/refund, prescription review gates, exact batch pick/pack, rider proof/offline recovery, COD and stock receipt, access denial/MFA and report export.
+5. **BR-05 — Basic accessibility and navigation:** check labels and duplicate IDs on each normal screen, route links, keyboard dialog dismissal, browser history and saved form recovery.
+
+The [Complete Screen Matrix](Complete-Screen-Matrix.md) maps each route to the test groups that exercise it. BR-02 is screen/state rendering coverage; only rows that list BR-04 have named direct interaction assertions for that route. Core journeys also cross roles, so assertions are not isolated to a single screen.
 
 ## Manual review checklist
 

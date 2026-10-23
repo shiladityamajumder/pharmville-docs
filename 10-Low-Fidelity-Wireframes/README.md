@@ -14,18 +14,20 @@ Open [the local Explorer](http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/). No
 
 ## Explore Pharmville
 
-The first screen recommends **Start with a customer order**, with **Explore by user**, **Choose another journey**, and **Browse all screens** available as secondary paths. Product screens open in Experience mode without technical IDs or QA controls. Select **Review tools** to inspect IDs, choose a role or scenario, view expected/recovery details, change the preview size, or reset the shared fictional data. Guided journeys preserve the current record, stop at business gates that still need a user action, and can load clearly labelled prepared demo data after confirmation.
+The first screen presents three clear choices: **Explore Mobile App**, **Explore Website**, and **Explore Complete Journeys**. Mobile and desktop open the same synthetic records in purpose-built phone and wide-screen presentations. Role workspaces and an optional all-screens directory remain available for advanced review. Product screens open in Experience mode without technical IDs or QA controls. Select **Review tools** to inspect IDs, choose a role or scenario, view expected/recovery details, change the preview size, or reset the shared fictional data. Guided journeys preserve the current record, stop at business gates that still need a user action, and can load clearly labelled prepared demo data after confirmation.
 
 The default example is an empty shopping state with no submitted order, payment, approval or stock movement. A guided journey can load a prepared fictional starting state; the app asks before replacing existing progress. Completed actions in a fixture are labelled as historical demo state. Use **Reset demo data** to restore the fresh shopping state for every role in this browser.
 
 ## Documentation
 
 - [Screen inventory](documentation/Screen-Inventory.md)
+- [Complete screen matrix](documentation/Complete-Screen-Matrix.md)
 - [Feature coverage and blocked work](documentation/Feature-Coverage.md)
 - [Connected user flows](documentation/User-Flows.md)
 - [Scenarios and recovery](documentation/Edge-Case-Coverage.md)
 - [Design decisions and limits](documentation/Design-Decisions.md)
 - [Prototype test plan](documentation/Prototype-Test-Plan.md)
+- [Final UX review](documentation/Final-UX-Review.md)
 - [Detailed preview instructions](documentation/How-to-Run.md)
 
 ## Files and verification

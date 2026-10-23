@@ -21,7 +21,7 @@ Then use `http://127.0.0.1:4174/10-Low-Fidelity-Wireframes/`. The server binds o
 
 ## Explore Pharmville
 
-The prototype opens in **Experience mode** with a recommended **Start with a customer order** action. **Explore by user**, **Choose another journey**, and the collapsed **Browse all screens** directory remain available as secondary paths. The first visit starts with an empty shopping demo.
+The prototype opens in **Experience mode** with three primary choices: **Explore Mobile App**, **Explore Website**, and **Explore Complete Journeys**. The first two open the same synthetic customer records in phone and desktop layouts. **Explore by user** and the collapsed **Browse all screens** directory remain available for role-based and advanced exploration. The first visit starts with an empty shopping demo.
 
 On an app screen, **Review tools** opens a separate keyboard-accessible side panel. It contains the screen ID, feature IDs, current role, relevant scenarios, expected result, recovery guidance and requirement links. Choose a scenario in the panel to see its effect on the app screen. Close the panel to return to the product view. Use **Continue as [role]** at a guided handoff to change the simulated role while keeping the same order.
 
