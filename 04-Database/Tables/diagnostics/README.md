@@ -1,0 +1,15 @@
+# diagnostics schema
+
+- [diagnostic_order_items](./diagnostic_order_items.md)
+- [diagnostic_orders](./diagnostic_orders.md)
+- [diagnostic_reports](./diagnostic_reports.md)
+- [diagnostic_result_values](./diagnostic_result_values.md)
+- [lab_locations](./lab_locations.md)
+- [lab_offerings](./lab_offerings.md)
+- [lab_providers](./lab_providers.md)
+- [sample_collections](./sample_collections.md)
+- [sample_events](./sample_events.md)
+- [samples](./samples.md)
+- [test_definitions](./test_definitions.md)
+- [test_package_items](./test_package_items.md)
+- [test_packages](./test_packages.md)

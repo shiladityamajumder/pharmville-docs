@@ -1,0 +1,15 @@
+# payment schema
+
+- [chargebacks](./chargebacks.md)
+- [cod_collections](./cod_collections.md)
+- [customer_payment_methods](./customer_payment_methods.md)
+- [payment_attempts](./payment_attempts.md)
+- [payment_intents](./payment_intents.md)
+- [payment_transactions](./payment_transactions.md)
+- [payment_webhooks](./payment_webhooks.md)
+- [provider_accounts](./provider_accounts.md)
+- [reconciliation_items](./reconciliation_items.md)
+- [reconciliation_runs](./reconciliation_runs.md)
+- [refund_allocations](./refund_allocations.md)
+- [refund_reason_codes](./refund_reason_codes.md)
+- [refunds](./refunds.md)

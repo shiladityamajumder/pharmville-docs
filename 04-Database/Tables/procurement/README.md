@@ -1,0 +1,15 @@
+# procurement schema
+
+- [goods_receipt_items](./goods_receipt_items.md)
+- [goods_receipt_quality_checks](./goods_receipt_quality_checks.md)
+- [goods_receipts](./goods_receipts.md)
+- [purchase_order_items](./purchase_order_items.md)
+- [purchase_orders](./purchase_orders.md)
+- [purchase_requisition_items](./purchase_requisition_items.md)
+- [purchase_requisitions](./purchase_requisitions.md)
+- [purchase_return_items](./purchase_return_items.md)
+- [purchase_returns](./purchase_returns.md)
+- [supplier_invoices](./supplier_invoices.md)
+- [supplier_licenses](./supplier_licenses.md)
+- [supplier_products](./supplier_products.md)
+- [suppliers](./suppliers.md)

@@ -1,0 +1,16 @@
+# identity schema
+
+- [api_client_secrets](./api_client_secrets.md)
+- [api_clients](./api_clients.md)
+- [login_attempts](./login_attempts.md)
+- [mfa_factors](./mfa_factors.md)
+- [otp_challenges](./otp_challenges.md)
+- [password_history](./password_history.md)
+- [permissions](./permissions.md)
+- [role_permissions](./role_permissions.md)
+- [roles](./roles.md)
+- [sessions](./sessions.md)
+- [trusted_devices](./trusted_devices.md)
+- [user_profiles](./user_profiles.md)
+- [user_roles](./user_roles.md)
+- [users](./users.md)

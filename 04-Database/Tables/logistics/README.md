@@ -1,0 +1,17 @@
+# logistics schema
+
+- [carrier_accounts](./carrier_accounts.md)
+- [carriers](./carriers.md)
+- [delivery_assignments](./delivery_assignments.md)
+- [delivery_attempts](./delivery_attempts.md)
+- [delivery_failure_reasons](./delivery_failure_reasons.md)
+- [delivery_location_updates](./delivery_location_updates.md)
+- [delivery_otp_challenges](./delivery_otp_challenges.md)
+- [delivery_routes](./delivery_routes.md)
+- [delivery_slots](./delivery_slots.md)
+- [ndr_cases](./ndr_cases.md)
+- [reverse_shipments](./reverse_shipments.md)
+- [rider_shifts](./rider_shifts.md)
+- [serviceability_rules](./serviceability_rules.md)
+- [shipment_events](./shipment_events.md)
+- [shipments](./shipments.md)
