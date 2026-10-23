@@ -37,3 +37,9 @@ The default example is an empty shopping state with no submitted order, payment,
 Browser QA reuses the repository’s existing development-only Puppeteer dependency; the prototype itself has no dependencies. With the preview running, run `node 10-Low-Fidelity-Wireframes/tests/browser.mjs`. Screenshots and actual results are written to ignored `artifacts/` inside this folder. See the test plan for the precise evidence boundary.
 
 No real authentication, clinical validation, provider request, file upload, message, map, tracking stream or financial transaction occurs. Use only fictional input. CSV import and Excel-readable TSV export demonstrate tabular UX; native XLSX processing is not implemented. Real security and clinical/financial policy remain the existing engineering and owner work.
+
+## Product UX redesign
+
+Customer navigation is shell-owned. Product discovery includes working type/price filters; desktop cart and checkout use side summaries while phones use a stacked flow. Native input errors appear beside fields. Opening a different workspace URL preserves the current persona; switch explicitly through Explore by user, Review tools, or a guided role handoff.
+
+The supplemental browser suite is `node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs` from the repository root. See the [final UX review](documentation/Final-UX-Review.md) for the current evidence and remaining gaps.

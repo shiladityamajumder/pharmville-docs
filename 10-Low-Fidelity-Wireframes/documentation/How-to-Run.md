@@ -34,3 +34,9 @@ The browser stores only the demonstration state under `pharmville-wireframe-demo
 ## Later static hosting
 
 All app assets and hash routes use relative paths, so a GitHub Pages project path can host them later. This task does not publish or configure hosting. Documentation backlinks require the surrounding repository to be served. GitHub’s normal repository/Markdown interface does not run HTML/JavaScript; use the local URL above for interaction.
+
+## Roles and access
+
+Use **Explore by user** to explicitly enter a role's demonstration. Opening another workspace URL preserves the current persona and may show **Access restricted**. Open **Review tools → Screen information** to choose an illustrative role or select **Use this workspace role**. Guided cross-role handoffs switch only when you activate their continuation button. Device switching and returning to Explore retain the current records.
+
+Run additional behavioral and visual checks with `node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs` while the preview server is running. Results and 30 mobile/desktop images are written to the ignored `artifacts/product-ux/` directory.

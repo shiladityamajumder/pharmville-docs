@@ -1,6 +1,6 @@
 # Prototype validation results
 
-Validated locally on **23 October 2026** using the implemented HTML/CSS/JavaScript, local static server and headless Chrome after the Explorer and documentation-matrix update. These are prototype checks, not production application/provider/clinical acceptance.
+Validated locally on **23 October 2026** using the implemented HTML/CSS/JavaScript, local static server and headless Chrome after the product-quality layout, access and recovery redesign. These are prototype checks, not production application/provider/clinical acceptance.
 
 ## Measured results
 
@@ -11,14 +11,14 @@ Validated locally on **23 October 2026** using the implemented HTML/CSS/JavaScri
 | Coverage classification | 70 screen, 23 interaction/state, 16 blocked by owner decision, 1 backend-only |
 | Stable scenario definitions | 35, including Normal |
 | Screen/scenario combinations visited | 718 |
-| Browser assertions | 113 passed |
+| Browser assertions | 113 full-suite assertions and 13 supplemental product UX assertions passed |
 | Registered interactive action/form names | 104; all resolve to a handler in static review |
 | Normal-screen responsive sweep | All 83 at 360 × 800, 390 × 844, 430 × 932, 768 × 1024, 1280 × 800 and 1440 × 900; no document overflow |
 | Browser errors / external dependencies | Zero detected JavaScript errors; zero external requests required |
 | Rendered hash links | Zero unresolved screen targets |
 | Basic accessibility | Normal-screen inputs have labels; no duplicate HTML IDs; dialog Escape, reset confirmation and browser history tested |
 | Selected-device preview | Mobile, tablet and desktop layouts verified inside a desktop browser; the landing-page Mobile App, Website and Complete Journeys choices are directly asserted |
-| Repository Markdown validation | 516 Markdown files, 10,603 links, 1,698 tables, and all 96 Mermaid diagrams parsed; zero documentation errors or missing feature mappings |
+| Repository Markdown validation | 516 Markdown files, 10,605 links, 1,699 tables, and all 96 Mermaid diagrams parsed; zero documentation errors or missing feature mappings |
 | Feature and route mapping | All 110 authoritative feature IDs map to the 83-route screen registry; see [Complete Screen Matrix](Complete-Screen-Matrix.md) |
 | UX review | [Final UX Review](Final-UX-Review.md) records the weighted heuristic score and remaining limits |
 | Existing documentation preservation | Business rules, authoritative feature IDs, and scenario definitions remain unchanged |
@@ -32,7 +32,7 @@ Aftercare and operations checks covered delivered-item return requests, COD shor
 
 ## Screenshots and visual review
 
-Local PNGs and JSON results are in ignored `artifacts/` within this folder. They include the Explorer, customer/pharmacy/rider views at all six required viewport widths, selected mobile/tablet/desktop previews, and an assigned rider task. After the final Explorer change, I inspected the Explorer, customer home at 390 × 844 and 1440 × 900, and the assigned rider task at 390 × 844. This is representative visual review, not exhaustive human review of every screen/state.
+Local PNGs and JSON results are in ignored `artifacts/` within this folder. They include the Explorer, customer/pharmacy/rider views at all six required viewport widths, selected mobile/tablet/desktop previews, and an assigned rider task. Fresh product-ux screenshots cover 15 routes at 390 and 1440 px; customer pages and representative pharmacy, store, warehouse, dispatch, rider and finance views were visually inspected. This is representative visual review, not exhaustive human review of every screen/state.
 
 ## Reproduce
 

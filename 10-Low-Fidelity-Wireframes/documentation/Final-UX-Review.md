@@ -1,48 +1,50 @@
 # Final UX Review
 
-Reviewed against the current implementation on **23 October 2026**. This is a documented heuristic assessment supported by the local browser run and a small visual sample. It is not a user study, production acceptance, WCAG certification, or proof that blocked product policy is approved.
+Reviewed on 23 October 2026 against the running prototype. Ratings are heuristic judgments supported by browser execution and screenshot review, not evidence of user satisfaction or accessibility certification.
 
-## Evidence reviewed
+## Audit and corrections
 
-- The registry contains 83 unique routes covering all 110 existing draft feature IDs, 35 stable scenarios, and 718 screen/scenario combinations.
-- The latest Puppeteer run passed **113 assertions**. It visited every route and assigned scenario, exercised the core cross-role flows, and checked all six requested viewport sizes with no horizontal overflow, broken routes, browser errors, accessibility-label findings, or external requests.
-- The main journeys include account setup, customer checkout/payment recovery, prescription submission and pharmacist handoff, store/warehouse fulfillment, rider delivery, return/refund, COD reconciliation, and report/access recovery. Nine guided journeys are available in the Explorer.
-- I visually inspected the Explorer, customer home at 390 × 844 and 1440 × 900, and an assigned rider delivery at 390 × 844. The phone view shows bottom navigation and one-column products; the desktop view uses header navigation and a three-column product grid. These screenshots are representative, not an exhaustive review of every route/state.
-- The default Experience mode hides technical review details. Review tools expose screen/feature IDs, scenario trigger and recovery, preview controls, and reset. Synthetic customer, order, stock, review, delivery, and finance records are shared within the same browser origin.
+| Priority | Verified problem | Result |
+|---|---|---|
+| P0 | Workspace navigation silently granted another role; Review role selector used the wrong DOM identifier | Fixed: URLs preserve the persona; role cards, Review selection and guided handoffs explicitly switch it. Direct customer-to-pharmacy and pharmacist-to-finance routes are denied in behavioral tests. |
+| P1 | Customer renderers injected a second navigation, hidden through CSS | Removed at source; the shell owns customer navigation. Explore remains reachable on phones. |
+| P1 | A fresh payment-result route could say payment received before a payment started | Fixed with a no-payment state. Pending results avoid conflicting downstream order projections. |
+| P1 | Last journey step always disabled Finish; payment steps could advance before the relevant outcome | Fixed the final-step condition and tightened signup, payment and recovery gates. |
+| P2 | Long fixture explanations occupied every task | Full provenance moved to Review tools; prepared examples retain a short visible label. |
+| P2 | Customer pages stretched one composition across devices | Added desktop filter sidebar, two-column product detail, cart/checkout summary sidebar and account layout; phone views stack these deliberately. |
+| P2 | Operational pages repeated six statuses and wide single-column forms | Task-specific status summaries, expandable history, two-column desktop forms and settlement/cash panels. |
+| P2 | Invalid input had only a page notice; success feedback stole focus | Native required/type/range errors now have linked inline feedback and focus. Success announcements do not force-scroll to a notice. Domain rule messages remain handled by their existing business checks. |
 
-## Weighted heuristic score
+## Evidence
 
-Ratings use a 0–5 heuristic scale. Weighted points equal `weight × rating ÷ 5`; the total is not a survey or measured user-success rate.
+The baseline suite passed before edits. The redesigned version retains 83 screens, 110 draft feature IDs, 35 scenarios, nine guided journeys and 718 screen/scenario visits. The full suite passes 113 assertions, including payment uncertainty/idempotency, clinical gating, exact inventory effects, rider proof/offline recovery, refunds and COD. The supplemental product UX suite passes 13 behavioral assertions for role denial/switching, native input feedback, expired OTP, filters, device-state preservation, duplicate checkout and concurrent pharmacy review. Neither count implies each of the 718 scenario combinations is behaviorally tested.
 
-| Category | Weight | Rating | Weighted points | Evidence and limit |
+Every registered route is checked at 360×800, 390×844, 430×932, 768×1024, 1280×800 and 1440×900. The full run reports no overflow, broken hash links, unlabeled inputs, duplicate HTML IDs, external requests or JavaScript errors. Basic accessibility checks do not establish full WCAG conformance.
+
+Fresh screenshots cover 15 representative routes at 390 and 1440 px, using labelled test fixtures appropriate to checkout, pharmacy, rider and payment states. Visual review includes customer home/search/product/cart/checkout/payment/profile/tracking, pharmacy review, store picking, warehouse receipt, delivery assignment, rider tasks/completion and Finance. Images are in the ignored `artifacts/product-ux/` folder; the full suite also captures the Explorer, responsive samples and an assigned rider.
+
+## Weighted evaluation
+
+Scores use a 0–5 scale. Points equal weight × rating ÷ 5. The result is deliberately retained at **81/100 (8.1/10)**: layout and access improvements strengthen the evidence, but there is still no real-user study, complete exception interaction coverage or full assistive-technology review.
+
+| Category | Weight | Rating / 5 | Points | Evidence and remaining gap |
 |---|---:|---:|---:|---|
-| Mobile App usability | 20% | 4.0 / 5 | 16 / 20 | Customer and rider views use touch-sized controls and phone navigation; six viewport widths have no overflow. No real-device or task-based user study. |
-| Desktop Website usability | 20% | 4.0 / 5 | 16 / 20 | Customer product grid/header navigation and staff workspaces are desktop-oriented; representative customer and pharmacist screenshots reviewed. Dense operational views still need stakeholder usability review. |
-| Screen-level edge cases | 20% | 4.0 / 5 | 16 / 20 | 35 scenarios are represented across 718 screen/state visits; payment, prescription, inventory, delivery, access, and refund safeguards have direct assertions. Most individual scenario visits are render-only. |
-| Complete journeys | 15% | 4.0 / 5 | 12 / 15 | Nine guided journeys and explicit role handoffs preserve shared state and gates. Not every journey has a separate full end-to-end assertion. |
-| Interaction quality | 10% | 4.5 / 5 | 9 / 10 | Search, forms, cart, checkout, pharmacy decisions, stock movement, delivery evidence, refunds, and recovery are exercised; all 104 action/form names resolve in static validation. Provider behavior remains simulated. |
-| Accessibility | 5% | 3.5 / 5 | 3.5 / 5 | Normal screens have labeled inputs and unique IDs; keyboard dialog dismissal and visible focus are tested. Screen-reader, contrast, and assistive-technology review remain open. |
-| Visual consistency | 5% | 4.0 / 5 | 4 / 5 | Shared grayscale components, typography, status patterns, and responsive rules are visible in the inspected sample. Only representative screens received human visual review. |
-| Feature coverage | 5% | 4.5 / 5 | 4.5 / 5 | All 110 source feature IDs map to a route or state; 16 remain decision-blocked and one is backend-only, so mapping does not mean implementation approval. |
-| **Total** | **100%** |  | **81 / 100 = 8.1 / 10** | Evidence-backed heuristic score for this low-fidelity prototype only. |
+| Mobile App usability | 20% | 4.0 | 16 | Compact search, one primary navigation, reachable product purchase controls and stacked summaries. Real-device task testing remains open. |
+| Desktop Website usability | 20% | 4.0 | 16 | Actual filtering/sorting, purchase/detail split, cart/checkout side summaries and account navigation. Stakeholder task research remains open. |
+| Edge cases and recovery | 20% | 4.0 | 16 | Contextual empty states, native inline errors, pending-payment recovery and behavioral safeguards. Many combinations are still render-only. |
+| Complete business journeys | 15% | 4.0 | 12 | Explicit persona handoffs, tighter gates and usable Finish. Not every walkthrough has an independent end-to-end assertion. |
+| Interaction quality | 10% | 4.5 | 9 | 113 preserved assertions plus 13 supplemental assertions; 104 action/form names resolve. Domain validation still uses notices in some forms. |
+| Accessibility | 5% | 3.5 | 3.5 | Linked native validation errors, labels, focus, dialog dismissal and status announcements. Screen-reader, contrast and real-device review remain unverified. |
+| Visual consistency | 5% | 4.0 | 4 | Shared grayscale primitives and device-specific layout layer; fresh representative screenshots reviewed. This is not exhaustive visual coverage. |
+| Feature coverage | 5% | 4.5 | 4.5 | All 110 IDs retained: 70 screen, 23 interaction/state, 16 decision-blocked and one backend-only. |
+| **Total** | **100%** | | **81** | **8.1 / 10 heuristic assessment** |
 
-## Improvements made in this pass
+## Remaining work
 
-- Replaced the single recommended-flow landing with the requested **Explore Pharmville** heading, audience description, and three primary choices: **Explore Mobile App**, **Explore Website**, and **Explore Complete Journeys**. The first two open purpose-sized customer presentations; complete journeys expands the supported workflows.
-- Added executable browser assertions for each new Explorer choice.
-- Added the [Complete Screen Matrix](Complete-Screen-Matrix.md), mapping every route to features, role, mobile/desktop applicability, states, scenario IDs, browser test groups, and coverage classification.
-- Updated the test plan with stable test-group IDs and captured phone screenshots at viewport height so fixed navigation is reviewed in its actual on-screen position.
-- Updated the README and required-artifact validation for the new deliverables.
+The 16 policy-dependent features and backend-only authorization remain classified in [Feature Coverage](Feature-Coverage.md). No clinical, tax, refund, stock eligibility, tracking or role-grant policy has been approved by this redesign. The browser persona controls are simulation tools, not server authorization.
 
-## Remaining issues and decisions
+Further work should prioritize moderated customer/staff/rider tasks, direct interaction assertions for currently render-only scenarios, field-specific business-rule errors, screen-reader review and physical-device testing. Demo state is browser-local. Native apps, providers and cross-device backend synchronization are not implemented. Some operational copy still uses internal terminology; that requires owner review alongside the unresolved policies.
 
-- Sixteen features remain blocked by product-owner, clinical, finance, security, or operational decisions; `AUTH-04` is backend-only. The [Feature Coverage](Feature-Coverage.md) report identifies the exact scope and source decisions. A visible proposal or denial state does not resolve those decisions.
-- Scenario loading is broad, but most scenario combinations are smoke-rendered rather than individually operated. Extend direct interaction assertions for the less common exception routes before treating them as behaviorally verified.
-- Field-level inline validation is not consistent across every form. Prioritize checkout, prescription decisions, refunds, stock adjustments, and rider proof.
-- The prototype has responsive web/mobile presentations, not installed native mobile applications. Demo state is browser-local; there is no server-backed synchronization across devices or browser profiles.
-- Real authentication, OTP, payments, file transfer, clinical judgment, maps, notifications, tracking, and backend authorization are not implemented. All records are fictional and local.
-- Screen-reader use, formal contrast measurements, real-device browser behavior, and moderated task testing were not performed. The weighted score should be revisited after those reviews and the remaining policy decisions.
+## Reproduce
 
-## Reproduction
-
-From the repository root, start the preview with `node 10-Low-Fidelity-Wireframes/server.mjs`, then run `node 10-Low-Fidelity-Wireframes/tests/browser.mjs` in another terminal. The executable results and representative screenshots are saved under the ignored `10-Low-Fidelity-Wireframes/artifacts/` directory.
+Start `node 10-Low-Fidelity-Wireframes/server.mjs`, then run `node 10-Low-Fidelity-Wireframes/tests/browser.mjs` and `node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs`. Regenerate [UX State Coverage](UX-State-Coverage.md) with `node 10-Low-Fidelity-Wireframes/tools/generate-ux-state-coverage.mjs`. Review [Complete Screen Matrix](Complete-Screen-Matrix.md) for exact routes, feature mappings and platform applicability.

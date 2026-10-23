@@ -25,17 +25,17 @@ const rows=screens.map(screen=>{
  const keys=Array.from(new Set(['normal',...screen.scenarios]));
  const has=key=>keys.includes(key);
  const errors=keys.filter(key=>!['normal','loading','empty'].includes(key));
- return `| \`${screen.id}\` ${screen.title.replaceAll('|','\\|')}<br>\`${screen.route}\` | ${screen.features.map(id=>`\`${id}\``).join(', ')} | Rendered | ${has('loading')?`Rendered (\`${scenarios.loading.id}\`)`:'N/A'} | ${has('empty')?`Rendered (\`${scenarios.empty.id}\`)`:'N/A'} | ${classify(errors)} | ${success.has(screen.route)?'Interaction asserted':'Not separately asserted'} | ${recovery.has(screen.route)?'Interaction asserted':'Not separately asserted'} | ${screenshots.has(screen.route)?'Screenshot captured':'—'} | ${errors.length?'Other assigned scenarios are render-only':'No error scenario assigned'} |`;
+ return `| \`${screen.id}\` ${screen.title.replaceAll('|','\\|')}<br>\`${screen.route}\` | ${screen.features.map(id=>`\`${id}\``).join(', ')} | ${screen.platform==='staff'?'Responsive website tested; standalone app N/A':'Implemented and tested (layout)'} | ${screen.platform==='rider'?'Responsive preview tested; rider app primary':'Implemented and tested (layout)'} | Implemented and tested (render) | ${has('loading')?`Implemented and tested (render only; \`${scenarios.loading.id}\`)`:'N/A'} | ${has('empty')?`Implemented and tested (render only; \`${scenarios.empty.id}\`)`:'N/A'} | ${classify(errors)} | ${success.has(screen.route)?'Interaction asserted':'Implemented but not independently tested'} | ${recovery.has(screen.route)?'Interaction asserted':'Implemented but not independently tested'} | ${screenshots.has(screen.route)?'Screenshot captured':'—'} | ${errors.length?'Implemented but not behaviorally tested: other assigned scenarios':'No error scenario assigned'} |`;
 });
 const combinations=screens.reduce((sum,screen)=>sum+new Set(['normal',...screen.scenarios]).size,0);
 const doc=`# UX state coverage
 
 Generated from the screen registry, feature catalog, scenario registry, and browser-suite evidence. Regenerate with the command node tools/generate-ux-state-coverage.mjs from 10-Low-Fidelity-Wireframes.
 
-The registry currently maps **${screens.length} screens**, **${combinations} screen/scenario combinations**, and the feature IDs shown below. The browser smoke suite opens every normal screen and every listed scenario at its registered route. “Rendered” means that route and scenario were opened in the browser; it does not claim a task interaction was exercised. “Interaction asserted” means a browser assertion checks a success or recovery behavior for that route. “Not separately asserted” is a test gap, not proof that the behavior is absent. “N/A” means the registry does not assign that state to the screen.
+The registry currently maps **${screens.length} screens**, **${combinations} screen/scenario combinations**, and the feature IDs shown below. The browser smoke suite opens every normal screen and every listed scenario at its registered route. “Rendered” means that route and scenario were opened in the browser; it does not claim a task interaction was exercised. “Interaction asserted” means a browser assertion checks a success or recovery behavior for that route. “Implemented but not independently tested” is a test gap, not proof that the behavior is absent. “N/A” means the registry does not assign that state to the screen.
 
-| Screen (ID and route) | Feature IDs | Normal | Loading | Empty | Error / exception scenario IDs | Success | Recovery | Screenshot | Open gap |
-|---|---|---|---|---|---|---|---|---|---|
+| Screen (ID and route) | Feature IDs | Mobile | Website | Normal | Loading | Empty | Error / exception scenario IDs | Success | Recovery | Screenshot | Open gap |
+|---|---|---|---|---|---|---|---|---|---|---|---|
 ${rows.join('\n')}
 
 ## Cross-screen interaction evidence
@@ -47,14 +47,14 @@ ${rows.join('\n')}
 
 ## Task-based heuristic review checklist
 
-- [x] First screen offers a recommended customer task; technical reviewer controls remain outside the default product view.
+- [x] First screen offers a recommended customer task and separate mobile / website entry points; technical reviewer controls remain outside the default product view.
 - [x] Customer, staff, and rider routes expose role-appropriate navigation and next steps.
 - [x] Keyboard focus moves to the page heading on navigation and to the visible error notice after a failed submission.
 - [x] Error feedback keeps the submitted form values available for correction or retry.
 - [x] Network loss keeps the current screen visible, blocks mutations, and provides an explicit retry to simulated normal operation.
 - [x] Controls retain the 44 px minimum target; all six requested widths are checked for horizontal overflow.
-- [ ] Field-specific inline validation is not consistent across every form; the shared recoverable notice currently handles submission errors.
-- [ ] The full matrix has route/scenario render evidence, but scenarios beyond the listed end-to-end flows still need dedicated interaction assertions.
+- [ ] Native input constraints now have inline linked feedback; domain-specific validation still uses recoverable notices on some forms.
+- [ ] The full matrix has route/scenario render evidence. Supplemental behavioral assertions cover explicit role boundaries, expired OTP, catalog filtering, duplicate checkout and concurrent review; other combinations still need dedicated interaction assertions.
 
 This is a heuristic review of the prototype and automated evidence, not a moderated user study. Remaining checks are ordered by impact: add field-level correction messages on high-risk checkout, pharmacy, refund, and delivery forms; then add interaction assertions for currently unverified route/scenario pairs; finally review any viewport-specific visual findings retained in the generated browser artifacts.
 `;

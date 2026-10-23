@@ -35,3 +35,7 @@ The [Complete Screen Matrix](Complete-Screen-Matrix.md) maps each route to the t
 ## Evidence and gaps
 
 Actual results are recorded after execution in the local browser-results JSON and [validation results](Validation-Results.md). Review screenshots and Git diff before accepting a pass. Production API/provider/security tests, real device GPS/background behavior, native Excel formats, clinical/legal approval and hosted GitHub Pages testing are outside this prototype.
+
+## Product UX behavioral checks
+
+Run `node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs` after starting the server. It tests direct-URL role denial, explicit reviewer changes, removal of duplicate customer navigation, inline required-input errors, actual product filtering, preserved order state during preview changes, expired OTP rejection, duplicate checkout and concurrent pharmacy review. It captures 15 representative routes at 390 and 1440 px using a labelled prepared fixture. The original full suite now explicitly selects reviewer personas before each cross-workspace smoke visit; direct URL denial is tested independently.

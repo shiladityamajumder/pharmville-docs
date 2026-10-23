@@ -92,7 +92,7 @@ export function stepsForJourney(id, state) {
 
 export function journeyGate(id, route, state) {
   const o=state.order;
-  if(id==='signup')return route==='customer/login'?true:route==='customer/otp'?state.customer.otpRequested:route==='customer/profile'?state.customer.loggedIn:true;
+  if(id==='signup')return route==='customer/login'?state.customer.otpRequested:route==='customer/otp'?state.customer.loggedIn:route==='customer/profile'?state.customer.profileComplete:true;
   if(id==='order'||id==='prescription'){
     if(route==='customer/home')return state.cart.length>0;
     if(route==='customer/cart')return state.cart.length>0;
@@ -103,14 +103,14 @@ export function journeyGate(id, route, state) {
     if(route==='pharmacy/queue'||route==='pharmacy/review')return Boolean(state.rx.uploaded);
     if(route==='pharmacy/decision')return o.review==='Approved'||o.review==='Partial'||o.review==='Rejected';
     if(route==='customer/prescription-status')return (o.review==='Approved'||o.review==='Partial')&&o.stock==='Active';
-    if(route==='customer/payment')return o.payment==='Paid'||o.method==='cod'||o.status==='Awaiting payment';
+    if(route==='customer/payment')return ['Paid','Pending','Failed'].includes(o.payment)||(o.method==='cod'&&o.status==='Confirmed');
     if(route==='customer/payment-result')return o.payment!=='Not started'||o.method==='cod';
     if(route==='customer/tracking')return o.status==='Confirmed'||o.payment==='Paid'||o.delivery==='Delivered';
   }
   if(id==='payment'){
     if(route==='customer/payment')return o.quoteAccepted&&o.stock==='Active';
     if(route==='customer/payment-result')return o.payment!=='Not started';
-    if(route==='customer/payment-recovery')return o.payment==='Pending'||o.payment==='Paid';
+    if(route==='customer/payment-recovery')return o.payment==='Paid';
   }
   if(id==='prepare'){
     if(route==='store/queue')return o.pack==='Accepted';

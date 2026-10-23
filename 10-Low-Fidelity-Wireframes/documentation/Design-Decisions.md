@@ -34,3 +34,11 @@ The accepted quote and exact eligible site stock gate payment. “Paid, confirma
 - No put-away workflow is invented; the current scoped receiving/lot flow has no approved put-away requirement. Future diagnostics, insurance, teleconsultation, membership and marketplace schemas do not create extra wireframe scope.
 
 See [feature coverage](Feature-Coverage.md) for each classification and its actual UI evidence.
+
+## Product-quality redesign decisions
+
+The shell owns customer primary navigation; screen renderers no longer inject another copy. Desktop search uses a filter sidebar, product detail separates image from purchase controls, and cart/checkout use a side summary. The same records and business handlers serve phone layouts.
+
+Opening a URL preserves the current simulated role. Role cards, the Review role selector, starting a guided journey and explicit guided handoffs are deliberate persona switches. Protected routes show access restrictions rather than granting another role. These remain browser simulation controls, not backend authentication.
+
+Fixture provenance is available in Review tools. Prepared examples carry a short visible label; fresh browsing no longer repeats a long fixture explanation. Essential policy blocks remain visible; supporting policy references are expandable. Required/native-format errors appear beside fields, while business-rule errors retain the existing domain handlers.
