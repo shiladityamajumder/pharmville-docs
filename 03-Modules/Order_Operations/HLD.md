@@ -1,5 +1,15 @@
 # Order Operations HLD
 
+<!-- ERD-NAV-START -->
+
+## Database relationships
+
+[`commerce` ERD](../../04-Database/ER-Diagrams/04-commerce.md) · [`fulfillment` ERD](../../04-Database/ER-Diagrams/09-fulfillment.md) · [`organization` ERD](../../04-Database/ER-Diagrams/16-organization.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
+
+These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the unresolved target-baseline limit.
+
+<!-- ERD-NAV-END -->
+
 [Business flow](../../00-Business-Guide/Orders-and-Fulfillment.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-007: Order orchestration and routing — HLD

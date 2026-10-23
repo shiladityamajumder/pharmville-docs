@@ -1,0 +1,17 @@
+{
+  "sourceHead": "55dbae9bb27e24f3d5da7786a9e49fe8d364845b",
+  "schemas": 24,
+  "tables": 266,
+  "columns": 4438,
+  "foreignKeys": 1461,
+  "crossSchemaForeignKeys": 894,
+  "crossSchemaPairs": 92,
+  "diagrams": 42,
+  "largestDiagramEntities": 18,
+  "nonForeignReferences": 29,
+  "noFkTables": [
+    "platform.report_definitions"
+  ],
+  "moduleDocumentsUpdated": 0,
+  "output": "D:\\Shiladitya Project\\Final Codes\\pharmville-docs\\04-Database\\ER-Diagrams"
+}

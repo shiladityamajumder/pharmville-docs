@@ -1,5 +1,15 @@
 # Product Catalog LLD
 
+<!-- ERD-NAV-START -->
+
+## Database relationships
+
+[`catalog` ERD](../../04-Database/ER-Diagrams/02-catalog.md) · [`marketplace` ERD](../../04-Database/ER-Diagrams/13-marketplace.md) · [`pricing` ERD](../../04-Database/ER-Diagrams/19-pricing.md) · [`search` ERD](../../04-Database/ER-Diagrams/22-search.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
+
+These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the unresolved target-baseline limit.
+
+<!-- ERD-NAV-END -->
+
 [Business flow](../../00-Business-Guide/Catalog-and-Product-Discovery.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Product discovery and classification — implementation acceptance

@@ -1,5 +1,8 @@
 # Database relationships
 
+<!-- ERD-INDEX-LINK -->
+For every FK column pair, cardinality, optionality, delete/update action, and schema diagram, use the [ER relationship catalog](ER-Diagrams/Relationship-Catalog.md). Logical non-FK identifiers are listed separately in [ER diagrams](ER-Diagrams/Logical-References.md).
+
 ## Database relationships by business flow
 
 **Identity:** `identity.users` connects to customer/family, clinical, order and staff actor references. Numeric paired FKs mirror UUID aliases for entities; keep both scope relationships consistent.

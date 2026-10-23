@@ -7,7 +7,7 @@ import GithubSlugger from 'github-slugger';
 const require = createRequire(import.meta.url);
 const root = path.resolve(import.meta.dirname, '..');
 const md = new MarkdownIt({ html: true });
-const ignored = new Set(['.git', 'node_modules', '.work', 'artifacts']);
+const ignored = new Set(['.git', 'node_modules', '.work', 'artifacts', 'healthcare_db']);
 const errors = [];
 const report = { markdownFiles: 0, links: 0, tables: 0, diagrams: 0, parsed: 0, rendered: 0, features: 0, modules: 0, workflows: 0, apiOperations: 0, apiReferenceGaps: [], missingMappings: [], errors };
 function walk(dir) {
@@ -66,6 +66,7 @@ for (const file of files) {
     }
   }
   if (fence) fail(file, fence.line, 'unclosed code fence');
+  for (const match of source.matchAll(/<a\s+id=["']([^"']+)["'][^>]*>/gi)) anchors.add(match[1]);
   docs.set(file, { source, tokens, anchors });
 }
 report.markdownFiles = files.length;

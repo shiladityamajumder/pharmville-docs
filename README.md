@@ -21,6 +21,9 @@ Pharmville connects a customer web experience, protected staff/admin workspaces 
 | Security and reliability | Review permissions, transactions and recovery | [Engineering](07-Engineering/README.md) |
 | Development | Turn reviewed requirements into delivery slices | [Implementation plan](08-Development-Plan/Implementation-Plan.md) |
 
+<!-- ERD-INDEX-LINK -->
+**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams describe the checked-out V0030 snapshot; target release selection remains unresolved.
+
 ## Product flow
 
 The current detailed journey records a request, reviews P medicines, obtains customer acceptance of any revision, secures eligible stock and proceeds to payment. M/O-only baskets skip prescription review. Deferred upload and payment capture details remain owner decisions. A request, a confirmed payment and a dispatched parcel are different milestones; the [business flow](00-Business-Guide/Pharmville-Complete-Business-Flow.md) explains the branches and failures.

@@ -1,5 +1,15 @@
 # Notifications LLD
 
+<!-- ERD-NAV-START -->
+
+## Database relationships
+
+[`notification` ERD](../../04-Database/ER-Diagrams/15-notification.md) · [`platform` ERD](../../04-Database/ER-Diagrams/18-platform.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
+
+These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the unresolved target-baseline limit.
+
+<!-- ERD-NAV-END -->
+
 [Business flow](../../00-Business-Guide/Notifications-and-Support.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Transactional customer/staff messaging — implementation acceptance

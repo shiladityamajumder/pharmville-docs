@@ -1,5 +1,15 @@
 # Finance Payments LLD
 
+<!-- ERD-NAV-START -->
+
+## Database relationships
+
+[`payment` ERD](../../04-Database/ER-Diagrams/17-payment.md) · [`finance` ERD](../../04-Database/ER-Diagrams/08-finance.md) · [`commerce` ERD](../../04-Database/ER-Diagrams/04-commerce.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
+
+These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the unresolved target-baseline limit.
+
+<!-- ERD-NAV-END -->
+
 [Business flow](../../00-Business-Guide/Finance-and-Reconciliation.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## Payment truth, refunds and invoice evidence — implementation acceptance

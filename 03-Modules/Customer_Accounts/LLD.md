@@ -1,5 +1,15 @@
 # Customer Accounts low level design
 
+<!-- ERD-NAV-START -->
+
+## Database relationships
+
+[`customer` ERD](../../04-Database/ER-Diagrams/06-customer.md) · [`identity` ERD](../../04-Database/ER-Diagrams/10-identity.md) · [`clinical` ERD](../../04-Database/ER-Diagrams/03-clinical.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
+
+These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the unresolved target-baseline limit.
+
+<!-- ERD-NAV-END -->
+
 [Business flow](../../00-Business-Guide/Accounts-and-Login.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 This document defines the proposed implementation for customer identity, profile, address, family, consent, and wishlist features. The feature list is inherited draft scope, not signed product approval. API routes are proposals; the SQL schema is the checked-in database contract described in [Database migrations](../../04-Database/Migrations.md).

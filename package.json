@@ -7,6 +7,8 @@
     "validate": "node scripts/validate-docs.mjs",
     "validate:render": "node scripts/validate-docs.mjs --render",
     "validate:database": "node scripts/validate-database.mjs",
+    "generate:erd": "node 04-Database/ER-Diagrams/tools/generate.mjs",
+    "validate:erd": "node 04-Database/ER-Diagrams/tools/validate.mjs",
     "test:validator": "node scripts/test-validator.mjs"
   },
   "devDependencies": {

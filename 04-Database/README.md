@@ -1,5 +1,8 @@
 # Database reference
 
+- [Entity relationship diagrams](ER-Diagrams/README.md) — verified domain diagrams, FK catalog, and evidence limits.
+<!-- ERD-INDEX-LINK -->
+
 The `healthcare_db` repository owns PostgreSQL schema and SQL migration history. Its SQL migrations are the deployment authority; historical Alembic execution is frozen. The local SQL directory is available, but the target deployment ledger and upstream release revision have not been verified. See [migration evidence](Migrations.md) before relying on catalog counts.
 
 - [Schema overview](Schema-Overview.md)
