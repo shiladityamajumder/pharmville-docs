@@ -39,3 +39,9 @@ The intended database baseline is unresolved: the available source includes V003
 4. Use Node.js 24, run `npm ci`, then `npm run validate`. `npm run validate:render` also writes SVG/PNG diagrams locally. See [documentation conventions](09-References/Documentation-Conventions.md) for existing-browser setup, validator checks and CI.
 
 Changes remain local for review. Documentation checks do not establish production clinical, financial or deployment readiness.
+
+## 🎨 Interactive Low-Fidelity Wireframes
+
+Explore the connected customer, staff and rider experiences through local grayscale HTML/CSS/JavaScript wireframes, including forms, role handoffs and failure scenarios. Run `node 10-Low-Fidelity-Wireframes/server.mjs`, then open `http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/`; the prototype uses synthetic browser-local data and requires no backend.
+
+[Wireframe Explorer](10-Low-Fidelity-Wireframes/index.html) · [Screen Inventory](10-Low-Fidelity-Wireframes/documentation/Screen-Inventory.md) · [User Flows](10-Low-Fidelity-Wireframes/documentation/User-Flows.md) · [Edge-Case Coverage](10-Low-Fidelity-Wireframes/documentation/Edge-Case-Coverage.md) · [Local Preview Instructions](10-Low-Fidelity-Wireframes/documentation/How-to-Run.md)

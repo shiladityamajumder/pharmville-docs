@@ -1,0 +1,35 @@
+# Prototype design decisions
+
+## Scope and source priority
+
+Current sources contain 110 inherited draft features, 18 module groups, a Business Guide and 14 technical workflows. No signed product approval was introduced by this task. [Sources and decisions](../../09-References/Sources-and-Decisions.md) remains the owner register. Wireframes demonstrate proposed UX without changing HLD, LLD, application code or SQL.
+
+Customer and rider are mobile-first experiences. Administration, pharmacy, fulfillment, inventory, delivery management, finance, reporting and audit are views of one shared protected staff experience. The Explorer groups workspaces for navigation; it does not propose fifteen separate applications.
+
+## UX choices
+
+- The always-visible prototype banner separates fictional demonstration from real actions. Role/scenario/reset controls belong to the reviewer shell, while domain forms live inside the screen.
+- White/gray/black, borders, system fonts and labelled placeholders emphasize hierarchy and behavior. Mobile operational tables become cards retaining column labels; no dense table is simply clipped.
+- Reusable views handle edit/detail/state variants. Hash routes support direct links, Back/Forward and refresh under a project subpath.
+- One shared order and append-only demonstration movements connect customer, pharmacy, stock, fulfillment, rider and finance. Browser storage persists the demo and updates other local tabs, not real devices.
+- Entering a workspace selects its illustrative role/site. Selecting an inappropriate role denies that view. These controls simulate permissions; they are not production authentication. Explicit session revocation blocks protected staff forms until demo MFA completes.
+- Native confirmation dialogs support keyboard focus, Escape and return to the invoking action. Inputs have labels and visible focus; errors/statuses are announced without relying on color.
+
+## Clinical, payment and stock sequence
+
+P lines require current patient/evidence and pharmacist choices before payment. M/O-only baskets skip that branch. Partial decisions preserve eligible lines and require explicit customer acceptance. The detailed journey takes priority for this demonstration; RX-02 deferred upload remains blocked because its deadline/capture/compensation rules conflict with that path.
+
+The accepted quote and exact eligible site stock gate payment. “Paid, confirmation lost” stores one pending attempt and permits reconciliation of its trusted synthetic record. Packing/delivery cannot interpret a redirect, map point or message as clinical/financial truth. COD begins as amount due and becomes actual collection only with accepted doorstep proof. Refund intent, approval, trusted completion and reconciliation stay separate.
+
+The available SQL/V0030 discrepancy remains a database release decision; this prototype connects to no database and cannot settle it. The business safety gates are UX expectations, not evidence for either intended SQL release.
+
+## Deliberate limits and blocked work
+
+- OTP codes (`246810`, delivery `135790`), synthetic PIN (`000000`), fees, amounts and approval examples are illustrative, not approved timeout/cap/medical policies.
+- Prescription “upload” takes fictional filenames only. It does not read files, render medical documents or validate prescriptions.
+- No real auth, password storage, provider request, WhatsApp/SMS/push, GPS, map/call or financial transaction occurs. Local code is not a security boundary.
+- Bulk tabular import uses pasted CSV rather than reading Excel workbooks. Export creates Excel-readable TSV, not native XLSX. These format approximations support UX review and are not claimed spreadsheet integrations.
+- Legal invoices, GST filing definitions, credit-note issuance, real COD destination proof, offers activation, warehouse dispensing fallback, urgent capacity, rider earnings and doorstep clinical SOPs are blocked/proposed where policy is missing. Their screens explain the missing decision or record a review request; they do not fabricate approved outcomes.
+- No put-away workflow is invented; the current scoped receiving/lot flow has no approved put-away requirement. Future diagnostics, insurance, teleconsultation, membership and marketplace schemas do not create extra wireframe scope.
+
+See [feature coverage](Feature-Coverage.md) for each classification and its actual UI evidence.

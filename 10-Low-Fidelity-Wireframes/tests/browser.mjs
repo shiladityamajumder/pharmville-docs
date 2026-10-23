@@ -1,0 +1,108 @@
+import puppeteer from 'puppeteer';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const directory=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const base=process.env.WIREFRAME_URL||'http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/';
+const output=path.join(directory,'artifacts');fs.mkdirSync(output,{recursive:true});
+const browser=await puppeteer.launch({headless:true,executablePath:process.env.PUPPETEER_EXECUTABLE_PATH|| (process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/usr/bin/google-chrome')});
+const page=await browser.newPage();
+const errors=[],external=[],broken=[],overflows=[],accessibility=[],checks=[];
+page.on('pageerror',e=>errors.push(e.message));
+page.on('console',m=>{if(m.type()==='error'&&!m.text().includes('favicon'))errors.push(m.text());});
+page.on('request',r=>{if(!r.url().startsWith(new URL(base).origin+'/')&&!r.url().startsWith('blob:')&&!r.url().startsWith('data:'))external.push(r.url());});
+const assert=(condition,message)=>{if(!condition)throw new Error(message);checks.push(message);};
+async function open(route,scenario='normal'){await page.evaluate(({route,scenario})=>window.PHARMVILLE.navigate(route,scenario),{route,scenario});await page.waitForFunction(({route,scenario})=>location.hash==='#/'+route+(scenario!=='normal'?'?scenario='+scenario:'')&&document.querySelector('[name=scenario]')?.value===scenario,{timeout:5000},{route,scenario});}
+async function state(){return page.evaluate(()=>JSON.parse(JSON.stringify(window.PHARMVILLE.state)));}
+async function action(name,data={}){const selector=`[data-action="${name}"]`;await page.waitForSelector(selector);await page.$eval(selector,(el,data)=>{Object.assign(el.dataset,data);el.click();},data);await new Promise(r=>setTimeout(r,50));}
+async function submit(name,values={}){const selector=`form[data-form="${name}"]`;await page.waitForSelector(selector);await page.$eval(selector,(form,values)=>{for(const [key,value]of Object.entries(values)){const input=form.elements.namedItem(key);if(!input)throw new Error(`Missing form field ${key}`);if(input.type==='checkbox')input.checked=Boolean(value);else input.value=String(value);}form.requestSubmit();},values);await new Promise(r=>setTimeout(r,60));}
+async function reset(){await page.evaluate(()=>window.PHARMVILLE.reset());}
+try{
+ await page.setViewport({width:1440,height:900});await page.goto(base,{waitUntil:'networkidle0'});await page.waitForFunction(()=>window.PHARMVILLE?.screens.length>0);
+ const screens=await page.evaluate(()=>window.PHARMVILLE.screens.map(({render,...s})=>s));
+ const known=new Set(screens.map(s=>s.route));
+ assert(screens.length===new Set(screens.map(s=>s.id)).size,'All screen IDs are unique');
+ assert(screens.length===known.size,'All screen routes are unique');
+ for(const screen of (process.env.WIREFRAME_JOURNEYS_ONLY?[]:screens)){
+  await open(screen.route);
+  const links=await page.$$eval('a[href^="#/"]',as=>as.map(a=>a.getAttribute('href').slice(2).split('?')[0]));
+  for(const href of links)if(href&&!known.has(href))broken.push({screen:screen.route,href});
+  const a11y=await page.evaluate(()=>{const counts={};for(const e of document.querySelectorAll('[id]'))counts[e.id]=(counts[e.id]||0)+1;const duplicateIds=Object.keys(counts).filter(k=>counts[k]>1);const unlabeled=[...document.querySelectorAll('input:not([type=hidden]),select,textarea')].filter(e=>!e.labels?.length&&!e.getAttribute('aria-label')&&!e.getAttribute('aria-labelledby')).map(e=>e.name);return {duplicateIds,unlabeled};});
+  if(a11y.duplicateIds.length||a11y.unlabeled.length)accessibility.push({route:screen.route,...a11y});
+ }
+ console.log(`Visited ${screens.length} normal screens.`);
+ let scenarioStates=0;
+ for(const screen of (process.env.WIREFRAME_JOURNEYS_ONLY?[]:screens)){for(const scenario of new Set(['normal',...screen.scenarios])){await open(screen.route,scenario);scenarioStates++;}}
+ console.log(`Visited ${scenarioStates} screen/scenario combinations.`);
+ // Every screen must fit phone, tablet and desktop. Dense tables switch to labelled cards.
+ for(const viewport of (process.env.WIREFRAME_JOURNEYS_ONLY?[]:[{width:390,height:844},{width:768,height:1024},{width:1440,height:900}])){
+  await page.setViewport(viewport);
+  for(const screen of screens){await open(screen.route);const dimensions=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));if(dimensions.width>dimensions.viewport+1)overflows.push({route:screen.route,...viewport,...dimensions});}
+  for(const [route,label]of [['customer/checkout-summary','checkout'],['pharmacy/review','pharmacy'],['rider/completion','rider']]){await open(route);await page.screenshot({path:path.join(output,`${label}-${viewport.width}.png`),fullPage:true});}
+ }
+ await page.setViewport({width:1440,height:900});
+ await reset();await open('customer/login');
+ await submit('customer.request-otp',{phone:'bad',consent:true});assert(!(await state()).customer.otpRequested,'Invalid mobile does not create OTP challenge');
+ await submit('customer.request-otp',{phone:'0000000000',consent:true});await open('customer/otp','otp-wrong');await submit('customer.verify-otp',{otp:'000000'});assert(!(await state()).customer.loggedIn,'Incorrect customer OTP does not sign in');
+ await open('customer/otp');await submit('customer.verify-otp',{otp:'246810'});assert((await state()).customer.loggedIn,'Valid synthetic OTP signs in');
+ await open('customer/profile');await submit('customer.save-profile',{name:'Fictional Review Customer',email:'bad',phone:'0000000000'});assert(!(await state()).customer.profileComplete,'Invalid email does not complete profile');
+ await submit('customer.save-profile',{name:'Fictional Review Customer',email:'review@example.test',phone:'0000000000'});assert((await state()).customer.profileComplete,'Required customer profile saves');
+ await submit('customer.save-profile',{name:'Fictional Review Customer',email:'replacement@example.test',phone:'0000000000'});assert((await state()).customer.email==='review@example.test'&&(await state()).customer.emailPending==='replacement@example.test','Existing email is preserved while replacement proof is pending');
+ await open('customer/search');await submit('customer.search',{query:'wellness'});assert((await page.$eval('.screen-content',e=>e.innerText)).includes('Demo wellness pack'),'Search filters synthetic product records');
+ await open('customer/home');await action('customer.view-product',{productId:'PRD-1'});assert((await page.title()).includes('Product details'),'Product detail navigation works');
+ await action('customer.add-cart',{productId:'PRD-1'});assert((await state()).cart.some(i=>i.productId==='PRD-1'),'Product adds to shared cart');
+ await open('customer/checkout-address');await submit('customer.checkout-address',{addressId:'ADDR-1'});
+ await open('customer/checkout-summary');await submit('customer.accept-summary',{accepted:true});assert((await state()).order.stock==='Active','M/O checkout holds eligible stock and skips pharmacy');
+ await open('customer/payment','confirmation-lost');await submit('customer.pay',{method:'upi'});assert((await state()).order.payment==='Pending'&&(await state()).order.providerCaptured,'Lost confirmation keeps one captured payment pending');
+ const attempt=(await state()).order.paymentAttempt;await open('customer/payment');await submit('customer.pay',{method:'upi'});assert((await state()).order.paymentAttempt===attempt,'Repeated Pay reuses the uncertain attempt');
+ await open('customer/payment-recovery');await action('customer.reconcile-payment');assert((await state()).order.payment==='Paid','Recovery confirms existing trusted demo payment');
+ await open('customer/tracking');assert((await page.$eval('.screen-content',el=>el.innerText)).includes('PV-DEMO-001'),'Customer tracking uses shared order reference');
+ await open('customer/cancellation');await submit('customer.cancel-order',{reason:'No longer needed',acknowledged:true});await page.waitForSelector('dialog[open]');await page.click('#dialog-confirm');await page.waitForFunction(()=>window.PHARMVILLE.state.order.status==='Cancelled',{timeout:3000});assert((await state()).order.refund==='Requested','Confirmed cancellation requests separate refund review');
+ await open('staff/refunds');await submit('staff.refund-request',{reference:'RF-TEST-001',amount:40,reason:'Approved synthetic cancellation',destination:'Original payment method'});assert((await state()).staffUi.refunds.length===1,'Finance creates one capped synthetic refund instruction');
+ await submit('staff.refund-request',{reference:'RF-TEST-001',amount:40,reason:'Same retry',destination:'Original payment method'});assert((await state()).staffUi.refunds.length===1,'Duplicate refund does not create another payout');
+ await action('staff.refund-query',{id:'RF-TEST-001'});assert((await state()).order.refund==='Completed','Finance completion appears in shared refund state');
+ await submit('staff.refund-request',{reference:'RF-TEST-TOO-MUCH',amount:100,reason:'Excess test',destination:'Original payment method'});assert((await state()).staffUi.refunds.length===1,'Cumulative refund is bounded by remaining paid value');
+ await open('customer/refund');assert((await page.$eval('.screen-content',e=>e.innerText)).includes('Completed'),'Customer sees finance refund result');assert((await page.$eval('.screen-content',e=>e.innerText)).includes('RF-TEST-001'),'Customer and Finance show the same refund instruction reference');
+ // Fresh P basket demonstrates the clinical branch and the complete physical custody chain.
+ await reset();await open('customer/login');await submit('customer.request-otp',{phone:'0000000000',consent:true});await open('customer/otp');await submit('customer.verify-otp',{otp:'246810'});await open('customer/profile');await submit('customer.save-profile',{name:'Fictional Clinical Demo',email:'clinical@example.test',phone:'0000000000'});
+ await open('customer/home');await action('customer.add-cart',{productId:'PRD-3'});await action('customer.add-cart',{productId:'PRD-1'});
+ await open('customer/checkout-address');await submit('customer.checkout-address',{addressId:'ADDR-1'});await open('customer/checkout-patient');await submit('customer.checkout-patient',{patientId:'PAT-1',confirmed:true});await open('customer/checkout-summary');await submit('customer.accept-summary',{accepted:true});
+ await open('customer/prescription-upload');await submit('customer.upload-rx',{fileName:'fictional-review.pdf',patientId:'PAT-1',confirmed:true});assert((await state()).order.review==='Pending','Synthetic upload goes to current pharmacist review');
+ await open('customer/payment');await submit('customer.pay',{method:'upi'});assert((await state()).order.payment==='Not started','Unreviewed P lines cannot be paid');
+ await open('pharmacy/decision');await submit('pharmacy.decide',{reviewer:'Demo Reviewer',registration:'DEMO-REG-001',checked:true,'decision_PRD-3':'Approved'});assert((await state()).order.review==='Approved','Authorized pharmacy records current exact-line demo approval');
+ await open('customer/prescription-status');await action('customer.review-continue');await open('customer/payment');await submit('customer.pay',{method:'cod',codEligible:true});assert((await state()).order.method==='cod'&&(await state()).order.codCollected===0,'Eligible COD records amount due without collected cash');
+ await open('store/queue');await action('store.accept');await open('store/pick');await submit('store.pick',{'lot_PRD-3':'LOT-2','qty_PRD-3':1,'lot_PRD-1':'LOT-1','qty_PRD-1':1});assert((await state()).order.pack==='Picked','Store records exact eligible picked batches');
+ await open('store/pack');await submit('store.pack',{packageRef:'PKG-TEST-001',contents:true,sealed:true});assert((await state()).order.pack==='Packed','Packing commits exact batch stock once');
+ const packedQty=(await state()).inventory.find(i=>i.id==='LOT-2').qty;await submit('store.pack',{packageRef:'PKG-TEST-001',contents:true,sealed:true});assert((await state()).inventory.find(i=>i.id==='LOT-2').qty===packedQty,'Duplicate pack does not deduct stock twice');
+ await open('delivery/assignment');await submit('delivery.assign',{riderId:'RID-1',reason:'Synthetic ready parcel'});assert((await state()).order.delivery==='Assigned','Dispatcher confirms one available rider');
+ await open('rider/login');await submit('rider.login',{riderId:'RID-1',otp:'246810'});await open('rider/tasks');await submit('rider.duty',{duty:'On duty'});await action('rider.accept');assert((await state()).order.delivery==='Accepted','Current signed-in rider accepts assigned task');
+ await open('store/pack');await submit('store.handoff',{verified:true});await open('rider/pickup');await submit('rider.pickup',{packageRef:'PKG-TEST-001',verified:true});assert(['Picked up','Out for delivery'].includes((await state()).order.delivery),'Store handoff precedes current-rider pickup');
+ await open('rider/completion');await page.screenshot({path:path.join(output,'rider-assigned-desktop.png'),fullPage:true});await page.setViewport({width:390,height:844});await page.screenshot({path:path.join(output,'rider-assigned-mobile.png'),fullPage:true});await page.setViewport({width:1440,height:900});
+ await open('rider/completion','otp-wrong');await submit('rider.complete',{otp:'000000',proof:'DEMO-PHOTO-001',cod:200,recipient:true});assert((await state()).order.delivery!=='Delivered','Wrong doorstep OTP cannot complete delivery');
+ await open('rider/completion','offline');await submit('rider.complete',{otp:'135790',proof:'DEMO-PHOTO-001',cod:200,recipient:true});assert((await state()).order.delivery!=='Delivered'&&(await state()).ops.offlinePending,'Offline proof queues without false delivery or cash');
+ await action('rider.replay');assert((await state()).order.delivery==='Delivered'&&(await state()).order.codCollected===200,'Reconnected current proof completes delivery and records actual COD once');
+ await open('customer/tracking');assert((await page.$eval('.screen-content',e=>e.innerText)).includes('Delivered'),'Customer observes rider completion across roles');
+ await open('customer/return');await submit('customer.request-return',{productId:'PRD-1',qty:1,reason:'Damaged or quality issue',acknowledged:true});assert((await state()).order.returnStatus==='Requested','Delivered item return waits for eligibility and inspection');
+ await open('staff/reconciliation');await submit('staff.cash-deposit',{amount:190,reference:'CASH-TEST-001'});await action('staff.reconcile-cod');assert((await state()).finance.reconciliation.includes('exception'),'COD shortage remains an unresolved finance exception');
+ // Actual supplier receipt and source/destination transfer quantities, with safe replay.
+ await reset();await open('warehouse/receiving');await submit('warehouse.receive',{receiptRef:'RCPT-TEST-001',invoice:'INV-DEMO-001',productId:'PRD-2',batch:'SUP-TEST-001',manufactured:'2026-01-01',expiry:'2099-12-31',expected:10,qty:8,reason:'Two damaged demo packs',quality:true});assert((await state()).warehouse.receivedQty===8,'Supplier receipt credits accepted quantity and keeps discrepancy');
+ const receivedLot=(await state()).inventory.find(i=>i.batch==='SUP-TEST-001').qty;await submit('warehouse.receive',{receiptRef:'RCPT-TEST-001',invoice:'INV-DEMO-001',productId:'PRD-2',batch:'SUP-TEST-001',manufactured:'2026-01-01',expiry:'2099-12-31',expected:10,qty:8,reason:'Retry',quality:true});assert((await state()).inventory.find(i=>i.batch==='SUP-TEST-001').qty===receivedLot,'Supplier receipt replay does not double-credit');
+ await open('warehouse/replenishment');await action('warehouse.approve');await open('warehouse/dispatch');await submit('warehouse.dispatch',{transferRef:'TRF-TEST-001',inventoryId:'LOT-3',qty:5,note:'Sealed fictional transfer',destination:'Demo Store 01'});assert((await state()).warehouse.transferStatus==='In transit','Warehouse dispatch leaves stock in transit');
+ await open('store/receipt');await submit('store.receive',{transferRef:'TRF-TEST-001',qty:4,reason:'One pack missing',quality:true});assert((await state()).warehouse.shortage===1&&(await state()).warehouse.receivedTransferQty===4,'Destination credits actual receipt and retains shortage');
+ await submit('store.receive',{transferRef:'TRF-TEST-001',qty:4,reason:'Retry',quality:true});assert((await state()).warehouse.receivedTransferQty===4,'Destination receipt retry does not duplicate stock');
+ await open('staff/reports');await submit('staff.report-run',{type:'Stock and expiry',from:'2026-10-01',to:'2026-10-23',site:'Current location',productId:'All'});await open('staff/report-results');await action('staff.report-export');assert((await state()).reports.exportStatus.startsWith('Ready'),'Report filters produce a prepared scoped export');
+ await open('staff/report-results','access-revoked');const exportBefore=(await state()).reports.exportStatus;assert(!(await page.$('.screen-content [data-action="staff.report-download"]')),'Revoked export access hides protected download');assert((await state()).reports.exportStatus===exportBefore,'Access denial preserves the prepared report record');
+ await open('staff/staff','permission');const staffCount=(await state()).staff.length;assert(!(await page.$('.screen-content form[data-form="staff.invite"]')),'Permission-denied staff screen exposes no invitation form');assert((await state()).staff.length===staffCount,'Denied staff view does not modify staff records');
+ await open('access/sessions');await action('access.revoke');await open('staff/cms');assert(!(await page.$('.screen-content form[data-form]')),'Revoked staff session cannot use protected forms');
+ await open('access/login');await submit('access.password',{identifier:'admin@example.test',password:'fictional-only'});await open('access/mfa');await submit('access.mfa',{code:'246810'});assert((await state()).staffSession,'Password plus demo authenticator restores staff session');
+ await page.reload({waitUntil:'networkidle0'});assert((await state()).staffSession,'Important hash route and demo state survive refresh');
+ await action('shell.reset');await page.waitForSelector('dialog[open]');await page.keyboard.press('Escape');assert((await state()).staffSession,'Escape closes reset dialog without clearing state');
+ await open('customer/home');await open('customer/cart');await page.goBack();await page.waitForFunction(()=>location.hash==='#/customer/home');assert((await page.title()).includes('Pharmville shop'),'Browser Back restores previous hash screen');await page.goForward();await page.waitForFunction(()=>location.hash==='#/customer/cart');assert((await page.title()).includes('Your cart'),'Browser Forward restores next hash screen');
+ await page.goto(base,{waitUntil:'networkidle0'});await page.type('[name="screen-search"]','refund');const visibleCards=await page.$$eval('[data-screen-card]',cards=>cards.filter(c=>!c.hidden).length);assert(visibleCards>0&&visibleCards<screens.length,'Explorer search filters screen and feature cards');await page.screenshot({path:path.join(output,'explorer-filtered-desktop.png'),fullPage:true});
+ await action('shell.reset');await page.waitForSelector('dialog[open]');await page.click('#dialog-confirm');await page.waitForFunction(()=>!window.PHARMVILLE.state.customer.loggedIn);assert((await state()).order.review==='Pending'&&(await state()).cart.length===0,'Confirmed Reset restores the starting state across all roles');
+ if(!process.env.WIREFRAME_JOURNEYS_ONLY){assert(!broken.length,`All rendered route links resolve (${broken.length} broken)`);assert(!overflows.length,`All screens fit 390, 768 and 1440 widths (${overflows.length} overflows)`);assert(!accessibility.length,'All normal screen inputs are labelled and HTML IDs are unique');}
+ assert(!errors.length,`No browser JavaScript errors (${errors.length})`);
+ assert(!external.length,'No external network dependencies requested');
+ const result={scope:process.env.WIREFRAME_JOURNEYS_ONLY?'journeys-only':'complete',screens:screens.length,scenarioStates,viewportSizes:process.env.WIREFRAME_JOURNEYS_ONLY?[]:['390×844','768×1024','1440×900'],checks,errors,broken,overflows,accessibility,external,passed:true};
+ fs.writeFileSync(path.join(output,'browser-results.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));
+}catch(error){fs.writeFileSync(path.join(output,'browser-results.json'),JSON.stringify({passed:false,message:error.message,checks,errors,broken,overflows,accessibility,external},null,2));console.error(error);process.exitCode=1;}finally{await browser.close();}

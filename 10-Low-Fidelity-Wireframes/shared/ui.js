@@ -1,0 +1,14 @@
+export const h = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export const link = (label, route, cls='button') => `<a class="${h(cls)}" href="#/${h(route.replace(/^#?\/?/, ''))}">${h(label)}</a>`;
+export const button = (label, action, extra='') => `<button type="button" data-action="${h(action)}" ${extra}>${h(label)}</button>`;
+let fieldIndex=0;
+export const field = (label,name,value='',type='text',extra='') => {const id=`f-${h(name)}-${++fieldIndex}`;return `<div class="field"><label for="${id}">${h(label)}</label><input id="${id}" name="${h(name)}" type="${h(type)}" value="${h(value)}" ${extra}></div>`;};
+export const select = (label,name,options,value='') => {const id=`f-${h(name)}-${++fieldIndex}`;return `<div class="field"><label for="${id}">${h(label)}</label><select id="${id}" name="${h(name)}">${options.map(o => `<option value="${h(Array.isArray(o)?o[0]:o)}" ${String(Array.isArray(o)?o[0]:o)===String(value)?'selected':''}>${h(Array.isArray(o)?o[1]:o)}</option>`).join('')}</select></div>`;};
+export const form = (action,body,submit='Save') => `<form data-form="${h(action)}" novalidate>${body}<div class="actions"><button class="primary" type="submit">${h(submit)}</button></div></form>`;
+export const table = (headers,rows) => `<div class="table-wrap"><table><thead><tr>${headers.map(x=>`<th scope="col">${h(x)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(row=>`<tr>${row.map((cell,i)=>`<td data-label="${h(headers[i]||'Detail')}">${cell??'—'}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${headers.length}">No matching records.</td></tr>`}</tbody></table></div>`;
+export const badge = value => `<span class="badge">${h(value)}</span>`;
+export const panel = (title,body) => `<section class="panel"><h2>${h(title)}</h2>${body}</section>`;
+export const notice = (message,kind='info') => `<div class="notice ${h(kind)}" role="${kind==='error'?'alert':'status'}">${h(message)}</div>`;
+export const money = value => `₹${Number(value||0).toFixed(2)}`;
+export const timeline = items => `<ol class="timeline">${items.map(item=>`<li>${h(typeof item==='object'?item.label||item.action: item)}</li>`).join('')}</ol>`;
+export const empty = (title,body,actionHTML='') => `<section class="empty-state"><div class="placeholder-symbol" aria-hidden="true">□</div><h2>${h(title)}</h2><p>${h(body)}</p>${actionHTML}</section>`;

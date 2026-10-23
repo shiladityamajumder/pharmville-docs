@@ -1,0 +1,13 @@
+{
+  "screens": 83,
+  "features": 110,
+  "modules": 18,
+  "scenarioDefinitions": 35,
+  "screenScenarioCombinations": 718,
+  "coverage": {
+    "Covered by interaction/state": 23,
+    "Covered by screen": 70,
+    "Blocked by an open decision": 16,
+    "Backend-only, with no direct screen": 1
+  }
+}
