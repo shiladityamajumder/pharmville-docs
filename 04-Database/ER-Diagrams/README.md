@@ -38,8 +38,8 @@
 
 ## Evidence boundary
 
-These diagrams describe the checked-out `healthcare_db` catalog snapshot for V0030. Migration source and register checksums are verified against [Database-Evidence.json](../../09-References/Database-Evidence.json). The target release is unresolved and V0030 remains in this checkout; see [migration evidence](../Migrations.md). No production database or shared endpoint was queried.
+These diagrams use the catalog in the user-supplied `healthcare_db/` folder as their reference. Its migration history ends at V0030. All SQL files, the register and supporting sources are verified against [Database-Evidence.json](../../09-References/Database-Evidence.json). See [migration evidence](../Migrations.md) for provenance. No production database or shared endpoint was queried.
 
 ## Regenerate and validate
 
-From the documentation repository root, run `npm run generate:erd`, then `npm run validate:erd` and `npm run validate`. The generator refuses a database checkout whose Git revision, migration checksums, or final catalog hash do not match the recorded evidence. Set `PHARMVILLE_DATABASE_SOURCE` to the selected `healthcare_db` path when it is not the sibling directory. Mermaid parsing is handled by the repository documentation validator.
+From the documentation repository root, run `npm run generate:erd`, then `npm run validate:erd` and `npm run validate`. The generator uses `healthcare_db/` inside this repository by default; set `PHARMVILLE_DATABASE_SOURCE` to explicitly select another folder. Missing or changed migration/fragment, register or supporting-source checksums fail verification. Standalone Git identity is checked only when recorded; parent repository metadata is never used as source identity. Mermaid parsing is handled by the repository documentation validator.

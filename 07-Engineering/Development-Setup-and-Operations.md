@@ -2,7 +2,7 @@
 
 ## Local setup and developer environment
 
-**Verified repo:** database repository (`healthcare_db/README.md` in the sibling checkout) is PostgreSQL SQL migrations plus Python/SQLAlchemy verification tools, not a runnable NestJS HTTP application. Build the web/API repos only after team approval of their structure.
+**Verified source:** the user-supplied database folder (`healthcare_db/README.md` inside this repository) contains PostgreSQL SQL migrations plus Python/SQLAlchemy verification tools. It does not run a NestJS HTTP application. Build the web/API repos only after team approval of their structure.
 
 **Database safe setup (repository-described, not run here):** use a dedicated empty PostgreSQL 15+ local database and direct `DATABASE_URL`, install `requirements.txt` for Python tooling, inspect `postgresql/docs/RELEASE_RUNBOOK.md`, then `postgresql/db status`, `postgresql/db migrate`, and `postgresql/db verify` (or the Windows `.ps1` equivalents). Do not run these against an existing Alembic-managed production database without a separately approved ledger adoption plan. The DB repository does not provision PostgreSQL.
 

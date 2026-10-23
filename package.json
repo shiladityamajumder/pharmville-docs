@@ -9,7 +9,8 @@
     "validate:database": "node scripts/validate-database.mjs",
     "generate:erd": "node 04-Database/ER-Diagrams/tools/generate.mjs",
     "validate:erd": "node 04-Database/ER-Diagrams/tools/validate.mjs",
-    "test:validator": "node scripts/test-validator.mjs"
+    "test:validator": "node scripts/test-validator.mjs",
+    "test:database-source": "node scripts/test-database-source.mjs"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "11.4.2",

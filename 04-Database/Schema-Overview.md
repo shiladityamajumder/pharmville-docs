@@ -5,7 +5,7 @@ See the [ER diagram index](ER-Diagrams/README.md) for domain views and the compl
 
 The checked-in database report describes 24 PostgreSQL schemas. Its local PostgreSQL 18 validation is dated 2026-10-22. The report records 266 tables, 4,438 columns, 1,461 foreign keys, 438 unique constraints, 1,033 checks, 1,204 indexes, 56 functions, and 879 triggers.
 
-These figures describe the inspected checkout and its snapshot. The figures are recorded local catalog evidence; the target deployment ledger and intended release revision were not inspected. See [Migrations](Migrations.md). PostgreSQL 15 and hosted CI were not verified in the cited report.
+These figures describe the user-supplied database folder and its recorded catalog. The documentation source is selected and checksum-verified; the live target deployment ledger was not inspected. See [Migrations](Migrations.md). PostgreSQL 15 and hosted CI were not verified in the cited report.
 
 ## Schemas
 

@@ -33,7 +33,7 @@
 | `support` | 8 | Open |
 | `warehouse` | 18 | Open |
 
-**Source:** database models (`healthcare_db/app/models/` in the sibling checkout) (static parsing), `docs/upgrade/final_inventory.json` (recorded PG18 catalog).
+**Source:** database models (`healthcare_db/app/models/` in the user-supplied folder) (static parsing), `docs/upgrade/final_inventory.json` (recorded PG18 catalog).
 **Caution:** imports, SQLAlchemy metadata construction, live ORM-column parity and PostgreSQL migrations were not executed during this documentation task. For planned NestJS runtime, establish a separate typed SQL access layer and verify its permissions.
 
 ## SQLAlchemy models for `appointment`

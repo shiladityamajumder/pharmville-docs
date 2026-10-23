@@ -1,26 +1,19 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto from 'node:crypto';
-import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {databaseSource,verifyDatabaseSource} from '../../../scripts/database-source.mjs';
 
 const here=path.dirname(fileURLToPath(import.meta.url));
 const erdRoot=path.resolve(here,'..');
 const root=path.resolve(erdRoot,'../..');
 const evidence=JSON.parse(fs.readFileSync(path.join(root,'09-References/Database-Evidence.json'),'utf8'));
-const dbRoot=process.env.PHARMVILLE_DATABASE_SOURCE?path.resolve(process.env.PHARMVILLE_DATABASE_SOURCE):path.resolve(root,'../healthcare_db');
-const sha=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const dbRoot=databaseSource(root);
 const fail=message=>{throw new Error(message);};
 
-if(!fs.existsSync(dbRoot))fail(`Database source unavailable: ${dbRoot}. Set PHARMVILLE_DATABASE_SOURCE to the intended healthcare_db checkout.`);
-const sourceHead=execFileSync('git',['-C',dbRoot,'rev-parse','HEAD'],{encoding:'utf8'}).trim();
-if(sourceHead!==evidence.git_head)fail(`healthcare_db HEAD ${sourceHead} does not match recorded evidence ${evidence.git_head}.`);
+const {sourceHead}=verifyDatabaseSource(dbRoot,evidence);
 const migrationDir=path.join(dbRoot,'postgresql/migrations');
-const migrationFiles=fs.readdirSync(migrationDir).filter(file=>/^V\d+.*\.sql$/.test(file)).sort();
-if(JSON.stringify(migrationFiles)!==JSON.stringify(evidence.migration_files.map(item=>item.file).sort()))fail('Versioned SQL migration set differs from Database-Evidence.json.');
-for(const item of evidence.migration_files){const file=path.join(migrationDir,item.file);if(!fs.existsSync(file)||sha(file)!==item.sha256)fail(`Migration checksum mismatch: ${item.file}`);}
+const migrationFiles=evidence.migration_files.map(item=>item.file).sort();
 const registerPath=path.join(dbRoot,evidence.register_file);
-if(sha(registerPath)!==evidence.register_sha256)fail('Final table register checksum differs from Database-Evidence.json.');
 const rawRegister=JSON.parse(fs.readFileSync(registerPath,'utf8').replace(/^\uFEFF/,''));
 const referencePath=path.join(dbRoot,'docs/upgrade/final_assignment/uuid_reference_classification.json');
 const rawLogicalReferences=JSON.parse(fs.readFileSync(referencePath,'utf8').replace(/^\uFEFF/,''));
@@ -190,7 +183,7 @@ const schemaLink=(schema,display=schema)=>`[${display}](${schemaPageNames[schema
 const exactSourcePhrase='Checked-out healthcare_db V0030 PostgreSQL 18 catalog snapshot';
 
 // Machine-readable evidence cache: key columns, exact FK definitions and non-FK references.
-const inventory={source:{git_head:sourceHead,migration_baseline:'V0001-V0030',catalog_sha256:evidence.register_sha256,checked_on:evidence.checked_on,live_database_inspected:evidence.live_database_inspected,intended_release_baseline:evidence.intended_release_baseline},counts:{schemas:schemas.length,tables:currentTables.size,columns:totalColumns,foreign_keys:relationships.length,cross_schema_foreign_keys:crossSchemaRelationships.length,diagrams:diagrams.length,orm_relationship_declarations:0},schemas:schemaStats,tables:[...currentTables.values()].sort((a,b)=>a.name.localeCompare(b.name)).map(table=>({name:table.name,primary_keys:table.primaryKeys,unique_keys:table.uniqueKeys,diagram:diagramForChild.get(table.name),foreign_key_count:table.foreignKeys.length,key_columns:[...new Set([...table.primaryKeys.flat(),...table.uniqueKeys.flat(),...table.foreignKeys.flatMap(item=>item.childColumns)])].sort().map(column=>({name:column,...table.columns[column]}))})),relationships:relationships.map(item=>({id:item.id,constraint:item.constraint,child:item.child,parent:item.parent,child_columns:item.childColumns,parent_columns:item.parentColumns,required:item.required,child_unique:item.childUnique,on_delete:item.deleteRule,on_update:item.updateRule,match:item.matchType,migration:item.sourceMigration,diagram:`${schemaPageNames[item.childSchema]}#${item.diagram}`})),non_foreign_uuid_references:nonForeignReferences.map(item=>({column:item.column,category:item.category,decision:item.decision,reason:item.reason||'',discriminator:item.discriminator||''})),tables_without_foreign_keys:noFkTables};
+const inventory={source:{git_head:sourceHead,migration_baseline:'V0001-V0030',catalog_sha256:evidence.register_sha256,checked_on:evidence.checked_on,live_database_inspected:evidence.live_database_inspected,source_directory:evidence.source_directory,source_kind:evidence.source_kind,documentation_baseline:evidence.documentation_baseline},counts:{schemas:schemas.length,tables:currentTables.size,columns:totalColumns,foreign_keys:relationships.length,cross_schema_foreign_keys:crossSchemaRelationships.length,diagrams:diagrams.length,orm_relationship_declarations:0},schemas:schemaStats,tables:[...currentTables.values()].sort((a,b)=>a.name.localeCompare(b.name)).map(table=>({name:table.name,primary_keys:table.primaryKeys,unique_keys:table.uniqueKeys,diagram:diagramForChild.get(table.name),foreign_key_count:table.foreignKeys.length,key_columns:[...new Set([...table.primaryKeys.flat(),...table.uniqueKeys.flat(),...table.foreignKeys.flatMap(item=>item.childColumns)])].sort().map(column=>({name:column,...table.columns[column]}))})),relationships:relationships.map(item=>({id:item.id,constraint:item.constraint,child:item.child,parent:item.parent,child_columns:item.childColumns,parent_columns:item.parentColumns,required:item.required,child_unique:item.childUnique,on_delete:item.deleteRule,on_update:item.updateRule,match:item.matchType,migration:item.sourceMigration,diagram:`${schemaPageNames[item.childSchema]}#${item.diagram}`})),non_foreign_uuid_references:nonForeignReferences.map(item=>({column:item.column,category:item.category,decision:item.decision,reason:item.reason||'',discriminator:item.discriminator||''})),tables_without_foreign_keys:noFkTables};
 write('ERD-Inventory.json',JSON.stringify(inventory,null,2));
 
 const workflowMap=new Map();
@@ -252,7 +245,7 @@ ${schemas.map(schema=>`| \`${schema}\` | ${schemaStats[schema].tables} | ${schem
 
 ## Evidence boundary
 
-This documentation is generated from the hashed \`final_table_register.json\` for the checked-out \`healthcare_db\` revision and the migration set whose checksums match [Database-Evidence.json](../../09-References/Database-Evidence.json). The recorded acceptance report describes an isolated PostgreSQL 18 validation for V0030. No live database was queried during this documentation task. The intended release baseline is unresolved: V0030 exists in the checked-out source while the user-reported target excludes it. These diagrams describe the available V0030 snapshot only.
+This documentation is generated from the user-supplied \`healthcare_db/\` folder. The final table register, all migration SQL including fragments, and supporting source files match the SHA-256 evidence in [Database-Evidence.json](../../09-References/Database-Evidence.json). Its supplied migration history is the documentation baseline. The recorded acceptance report describes isolated PostgreSQL 18 validation for V0030; no live database was queried here. The supplied folder has no standalone Git metadata, so identity is established by file checksums.
 `;
 write('00-System-Data-Map.md',mainMap);
 
@@ -350,7 +343,7 @@ const catalogIndex=`# Relationship catalog
 
 The checked-out \`healthcare_db\` snapshot contains **${relationships.length} declared foreign-key constraints**. The catalog keeps every physical constraint as its own row, including the paired public UUID and internal BIGINT relationships. It records source columns, referenced columns, nullability, uniqueness-based cardinality, delete/update actions, and the owning schema diagram.
 
-The records are derived from the SHA-256 verified catalog register for database revision \`${sourceHead}\`; the ordered SQL migration checksums also match [Database-Evidence.json](../../09-References/Database-Evidence.json). The recorded catalog is a local PostgreSQL 18 V0030 snapshot, not a live production inspection. The intended deployment baseline is unresolved because V0030 exists in the checked-out source while the reported intended target excludes it. See [migration evidence](../Migrations.md) before applying this schema to a target.
+The records are derived from the SHA-256 verified catalog register in the user-supplied \`healthcare_db/\` folder. All migration SQL files and supporting sources match [Database-Evidence.json](../../09-References/Database-Evidence.json). The recorded catalog describes the supplied V0030 schema; no live production database was inspected. See [migration evidence](../Migrations.md) for source identity and deployment verification limits.
 
 ## Browse by child schema
 
@@ -462,9 +455,9 @@ ${schemaDocs.map(item=>`| \`${item.schema}\` | ${item.tables} | ${item.foreignKe
 
 ## Evidence and limitations
 
-The generator verifies the \`healthcare_db\` Git revision, every versioned migration SHA-256, and the final PostgreSQL catalog-register SHA-256 against [Database-Evidence.json](../../09-References/Database-Evidence.json). The source checkout has 30 SQL migrations, V0001–V0030. Its recorded acceptance report describes isolated PostgreSQL 18 validation on 22 October 2026. The local validation compared 266 table pages and 4,438 columns with the catalog snapshot; it did not connect to a live database.
+The generator verifies all 103 migration/fragment SQL files, the final PostgreSQL catalog register and supporting source SHA-256 hashes against [Database-Evidence.json](../../09-References/Database-Evidence.json). The user-supplied folder has 30 versioned SQL migrations, V0001–V0030, and no standalone Git metadata. Its recorded acceptance report describes isolated PostgreSQL 18 validation on 22 October 2026. Read-only validation compares 266 table pages and 4,438 columns with the catalog snapshot; it does not connect to a live database.
 
-The intended deployment baseline remains unresolved because the checked-out source includes V0030 while the user-reported intended target excludes it. Therefore these ERDs are **complete for the available checked-out V0030 catalog snapshot**, not for a confirmed deployment target. No migration, SQLAlchemy model, or database schema was modified. No new relationship is proposed as if it were factual.
+These ERDs are **complete for the catalog in the user-supplied healthcare_db folder**, whose migration history ends at V0030. The earlier claim that V0030 was removed is superseded by this supplied source. Source selection is resolved for documentation; live deployment and fresh runtime parity remain separate checks. No migration, SQLAlchemy model, or database schema was modified. No new relationship is proposed as if it were factual.
 
 Potential review items are not declared defects: \`platform.report_definitions\` has no FK in the snapshot; polymorphic and opaque UUID references are explicitly classified and kept outside FK diagrams; and the 24 schema ownership boundaries remain candidate service ownership rather than access grants.
 `;
@@ -488,11 +481,11 @@ ${domainLinks.join('\n')}
 
 ## Evidence boundary
 
-These diagrams describe the checked-out \`healthcare_db\` catalog snapshot for V0030. Migration source and register checksums are verified against [Database-Evidence.json](../../09-References/Database-Evidence.json). The target release is unresolved and V0030 remains in this checkout; see [migration evidence](../Migrations.md). No production database or shared endpoint was queried.
+These diagrams use the catalog in the user-supplied \`healthcare_db/\` folder as their reference. Its migration history ends at V0030. All SQL files, the register and supporting sources are verified against [Database-Evidence.json](../../09-References/Database-Evidence.json). See [migration evidence](../Migrations.md) for provenance. No production database or shared endpoint was queried.
 
 ## Regenerate and validate
 
-From the documentation repository root, run \`npm run generate:erd\`, then \`npm run validate:erd\` and \`npm run validate\`. The generator refuses a database checkout whose Git revision, migration checksums, or final catalog hash do not match the recorded evidence. Set \`PHARMVILLE_DATABASE_SOURCE\` to the selected \`healthcare_db\` path when it is not the sibling directory. Mermaid parsing is handled by the repository documentation validator.
+From the documentation repository root, run \`npm run generate:erd\`, then \`npm run validate:erd\` and \`npm run validate\`. The generator uses \`healthcare_db/\` inside this repository by default; set \`PHARMVILLE_DATABASE_SOURCE\` to explicitly select another folder. Missing or changed migration/fragment, register or supporting-source checksums fail verification. Standalone Git identity is checked only when recorded; parent repository metadata is never used as source identity. Mermaid parsing is handled by the repository documentation validator.
 `;
 write('README.md',readme);
 
@@ -501,7 +494,7 @@ const marker=/<!-- ERD-NAV-START -->[\s\S]*?<!-- ERD-NAV-END -->/;
 const moduleTouched=[];
 for(const [module,moduleDomainSchemas]of Object.entries(moduleSchemas)){
  const links=moduleDomainSchemas.map(schema=>`[\`${schema}\` ERD](${path.relative(path.join(root,'03-Modules',module),output(schemaPageNames[schema])).replaceAll('\\','/')})`).join(' · ');
- const block=`<!-- ERD-NAV-START -->\n\n## Database relationships\n\n${links} · [FK catalog](${path.relative(path.join(root,'03-Modules',module),output('Relationship-Catalog.md')).replaceAll('\\','/')})\n\nThese diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](${path.relative(path.join(root,'03-Modules',module),path.join(root,'04-Database/Migrations.md')).replaceAll('\\','/')}) for the unresolved target-baseline limit.\n\n<!-- ERD-NAV-END -->`;
+ const block=`<!-- ERD-NAV-START -->\n\n## Database relationships\n\n${links} · [FK catalog](${path.relative(path.join(root,'03-Modules',module),output('Relationship-Catalog.md')).replaceAll('\\','/')})\n\nThese diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](${path.relative(path.join(root,'03-Modules',module),path.join(root,'04-Database/Migrations.md')).replaceAll('\\','/')}) for the supplied source and deployment verification limits.\n\n<!-- ERD-NAV-END -->`;
  for(const file of [moduleHldPath(module),moduleLldPath(module)]){
   if(!fs.existsSync(file))continue;
   const original=fs.readFileSync(file,'utf8');
@@ -527,7 +520,7 @@ const linkMarkers=[
  {file:path.join(root,'04-Database/README.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\n- [Entity relationship diagrams](ER-Diagrams/README.md) — verified domain diagrams, FK catalog, and evidence limits.'},
  {file:path.join(root,'04-Database/Schema-Overview.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\nSee the [ER diagram index](ER-Diagrams/README.md) for domain views and the complete foreign-key catalog.'},
  {file:path.join(root,'04-Database/Relationships.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\nFor every FK column pair, cardinality, optionality, delete/update action, and schema diagram, use the [ER relationship catalog](ER-Diagrams/Relationship-Catalog.md). Logical non-FK identifiers are listed separately in [ER diagrams](ER-Diagrams/Logical-References.md).'},
- {file:path.join(root,'README.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\n**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams describe the checked-out V0030 snapshot; target release selection remains unresolved.'}
+ {file:path.join(root,'README.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\n**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams use the catalog in the user-supplied `healthcare_db/` folder; see the migration evidence for provenance.'}
 ];
 for(const item of linkMarkers){let text=fs.readFileSync(item.file,'utf8');if(!text.includes(item.marker)){const insertion=`${item.marker}${item.line}\n`;if(item.file===path.join(root,'README.md')){const anchor='| 🗄️ Database | Inspect available schema and migration evidence | [Database reference](04-Database/README.md) |';const section='\n## Product flow';if(!text.includes(anchor)||!text.includes(section))fail('Root README database navigation row or Product flow section not found.');text=text.replace(section,`\n\n${insertion}${section}`);}else if(item.file.endsWith('Relationships.md')){const anchor='## Database relationships by business flow';text=text.replace(anchor,`${insertion}\n${anchor}`);}else{const firstH1=text.indexOf('\n');text=`${text.slice(0,firstH1+1)}\n${insertion}\n${text.slice(firstH1+1)}`;}fs.writeFileSync(item.file,text);}}
 

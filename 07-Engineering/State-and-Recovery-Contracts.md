@@ -1,6 +1,6 @@
 # State, ownership and recovery contracts
 
-**Status:** Proposed application contracts derived from the existing journey and database catalog. Only the explicitly identified SQL transitions below are confirmed local-source behavior. No application test has run. [D-015](../09-References/Sources-and-Decisions.md#decisions-that-block-implementation) must settle the intended database release, and D-024 requires review of each command’s exact fields and runtime grants.
+**Status:** Proposed application contracts derived from the existing journey and supplied database catalog. Only the explicitly identified SQL transitions below are confirmed local-source behavior. No application test has run. The supplied source is selected for documentation; [D-015](../09-References/Sources-and-Decisions.md#decisions-that-block-implementation) retains target-ledger/runtime-parity checks, and D-024 requires review of each command’s exact fields and runtime grants.
 
 ## Command ownership and transaction boundary
 
@@ -86,7 +86,7 @@ stateDiagram-v2
     packing --> cancelled
 ```
 
-There is no `packed → cancelled` or `created → packed` edge in that local guard. Business cancellation eligibility and fulfillment enum names are different concepts; Operations must coordinate related records through the approved command. This source behavior must be rechecked if the intended baseline excludes V0030.
+There is no `packed → cancelled` or `created → packed` edge in that local guard. Business cancellation eligibility and fulfillment enum names are different concepts; Operations must coordinate related records through the approved command. Verify the same guard on the target database before deployment.
 
 V0028/V0030 task guards permit `created → assigned/in_progress/cancelled`, `assigned → in_progress/cancelled`, and `in_progress → completed/cancelled`. V0030 additionally rejects empty/incomplete pick completion and pack completion without completed package evidence. Packages may start `created` or `packed`; an existing `created` package can become `packed` or `cancelled`. Packed evidence is immutable in the inspected guard.
 

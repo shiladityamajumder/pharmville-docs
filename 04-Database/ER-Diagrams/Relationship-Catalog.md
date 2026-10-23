@@ -4,7 +4,7 @@
 
 The checked-out `healthcare_db` snapshot contains **1461 declared foreign-key constraints**. The catalog keeps every physical constraint as its own row, including the paired public UUID and internal BIGINT relationships. It records source columns, referenced columns, nullability, uniqueness-based cardinality, delete/update actions, and the owning schema diagram.
 
-The records are derived from the SHA-256 verified catalog register for database revision `55dbae9bb27e24f3d5da7786a9e49fe8d364845b`; the ordered SQL migration checksums also match [Database-Evidence.json](../../09-References/Database-Evidence.json). The recorded catalog is a local PostgreSQL 18 V0030 snapshot, not a live production inspection. The intended deployment baseline is unresolved because V0030 exists in the checked-out source while the reported intended target excludes it. See [migration evidence](../Migrations.md) before applying this schema to a target.
+The records are derived from the SHA-256 verified catalog register in the user-supplied `healthcare_db/` folder. All migration SQL files and supporting sources match [Database-Evidence.json](../../09-References/Database-Evidence.json). The recorded catalog describes the supplied V0030 schema; no live production database was inspected. See [migration evidence](../Migrations.md) for source identity and deployment verification limits.
 
 ## Browse by child schema
 

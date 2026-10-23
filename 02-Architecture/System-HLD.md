@@ -93,13 +93,13 @@ See Threat Model, Auth flows and Audit.
 
 ## PostgreSQL architecture and identity strategy
 
-**Available source; intended release unresolved (D-015):** the checked-in SQL migration history in `healthcare_db/postgresql/migrations/`; historical Alembic execution is frozen. Historical V0030-based local PostgreSQL 18 evidence records 24 schemas, 266 tables, 4,438 columns, 1,461 FKs, 1,204 indexes, 56 functions, 879 triggers and 3 RLS policies. PostgreSQL 15 hosted validation and production authorization remain unproven.
+**Supplied database source:** the user-selected `healthcare_db/postgresql/migrations/` history is the documentation baseline; historical Alembic execution is frozen. Its recorded local PostgreSQL 18 evidence describes 24 schemas, 266 tables, 4,438 columns, 1,461 FKs, 1,204 indexes, 56 functions, 879 triggers and 3 RLS policies. PostgreSQL 15 hosted validation and production authorization remain unproven.
 
 **Primary keys:** `identity.users.id` is UUID; 257 older entity tables use BIGINT `internal_id` as their primary key with original immutable UNIQUE public UUID `id`; eight newer tables use BIGINT `id` identity PK. Key crosswalks and paired numeric FKs preserve existing public contracts. Internal numeric IDs are join keys, not access tokens; service authorization always checks actor, owner, scope and state.
 
 **Deployment rule:** write new forward-only SQL versions, rehearse on an isolated copy, run the repo's verified `status/migrate/verify` runner with explicitly approved database URL, compare schema/ORM/catalog and release only after approvals. Never stamp, reset or run Alembic side by side. Schema migration and application rollout must use compatibility-aware expand/backfill/contract transitions.
 
-Full existing table/field/constraint inventories are generated under Database design. The recorded acceptance report covers the available V0030 baseline, while the user’s intended baseline excludes it. [Migration evidence](../04-Database/Migrations.md) records that unresolved difference; neither deployment nor production approval is established here.
+Full existing table/field/constraint inventories are generated under Database design from the supplied catalog. [Migration evidence](../04-Database/Migrations.md) records the source verification and historical acceptance report. The source reference is resolved for documentation; target deployment and production approval remain separate checks.
 
 ## Growth without premature distributed systems
 

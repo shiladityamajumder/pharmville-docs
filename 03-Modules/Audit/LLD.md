@@ -6,7 +6,7 @@
 
 [`compliance` ERD](../../04-Database/ER-Diagrams/05-compliance.md) · [`platform` ERD](../../04-Database/ER-Diagrams/18-platform.md) · [`risk` ERD](../../04-Database/ER-Diagrams/21-risk.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
 
-These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the unresolved target-baseline limit.
+These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the supplied source and deployment verification limits.
 
 <!-- ERD-NAV-END -->
 

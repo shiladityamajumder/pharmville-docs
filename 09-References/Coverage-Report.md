@@ -16,9 +16,9 @@ All features now have specific normal/adverse assertions in LLD/Edge-Cases. Ther
 
 ## Schema and source verification
 
-Read-only checks compare 266 table pages and 4,438 column names with the available final catalog and 30 versioned SQL checksums with the [evidence snapshot](Database-Evidence.json). All 103 migration SQL files including fragments remain unchanged. This establishes consistency with the inspected source, not live deployment or the intended latest release.
+Read-only checks compare 266 table pages and 4,438 column names with the user-supplied final catalog and verify all 103 migration SQL files, including 30 versioned migrations and their fragments, against the [evidence snapshot](Database-Evidence.json). Supporting source hashes are checked as well. This establishes consistency with the selected documentation source; live deployment remains a separate check.
 
-The user’s intended V0030 removal conflicts with its presence in the current sibling checkout and historical acceptance report. D-015 remains open; [migration evidence](../04-Database/Migrations.md) records the release-owner action and explains why recorded counts cannot be relabelled as another migration version.
+The user-supplied `healthcare_db/` folder is the selected documentation baseline. Its included migration history and catalog agree with the recorded snapshot. [Migration evidence](../04-Database/Migrations.md) closes the former source-selection warning and retains actual target-ledger/runtime-parity checks under D-015.
 
 ## Documentation checks and remaining limits
 

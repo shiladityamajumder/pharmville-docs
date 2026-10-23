@@ -1,27 +1,25 @@
-# Migration history and evidence
+# Database source and migration evidence
 
-## Available checkout and authority
+## Supplied database reference
 
-Checked on **23 October 2026**. The sibling `healthcare_db` repository’s README names `postgresql/migrations/` as the SQL deployment authority and freezes historical Alembic execution. The actual directory is `healthcare_db/postgresql/migrations/`, with no second nested directory.
+The user supplied [healthcare_db/](../healthcare_db/README.md) inside this documentation repository as the exact database reference. Its README identifies `postgresql/migrations/` as the deployment source of truth and freezes historical Alembic execution.
 
-The available checkout contains **30 versioned SQL files, V0001 through V0030**. Its Git revision and every versioned migration’s SHA-256 are recorded in [Database-Evidence.json](../09-References/Database-Evidence.json). Both the documentation and database directories have their own Git metadata; earlier outer-repository/untracked claims do not describe this checkout.
+The supplied folder contains **30 versioned SQL migrations, V0001 through V0030**, plus included fragments: **103 SQL files in total**. These files are retained as the database’s history. The documentation now follows this supplied source; the previous claim that V0030 had been removed is retired.
 
-## Intended release discrepancy
+The supplied folder has no standalone Git metadata. Its identity is recorded using SHA-256 checksums in [Database-Evidence.json](../09-References/Database-Evidence.json), covering every migration/fragment, the final table register, supporting model/schema sources and the recorded acceptance report. The earlier sibling checkout revision is retained only as historical provenance; the documentation repository’s Git HEAD must not be mistaken for a database revision.
 
-The user reports that V0030 was removed from their intended latest database. The available checkout nevertheless contains `V0030__fulfillment_completion_and_settlement_gates.sql`; its SHA-256 is `5e0c2647933d8106d9da4c140aeb0899260f1388a77a04ec21345c3207924043`. The recorded acceptance report also explicitly describes V0030.
+## Verification performed
 
-These facts do not establish which release the user intends to deploy. **The discrepancy remains open under D-015.** Do not remove, reintroduce, renumber or execute migrations based on this documentation pass. The database/release owner must identify the intended Git revision, compare its sealed checksums with the target ledger, and regenerate schema/guard evidence for that exact baseline. Product confirms the intended release; the DBA/Tech lead approves compatibility and evidence.
+Read-only validation checks the supplied migration file set and hashes, the catalog hash and all 266 table-page column inventories. The source matches the previously recorded 30 versioned migration hashes and final catalog hash. The [ER diagrams](ER-Diagrams/README.md) are regenerated from that same verified catalog.
 
-V0030 adds fulfillment completion and dispatch money/stock gates in the available source. If excluded from the intended release, those protections cannot be claimed as present in that target until equivalent evidence is supplied. Business safety expectations remain requirements for implementation.
+Source selection is resolved for this documentation. D-015 retains the separate deployment tasks: compare the actual target database ledger and runtime ORM/data-access parity with this source before deployment. No live database connection, migration execution or new PostgreSQL acceptance run is claimed.
 
 ## Recorded schema evidence
 
-The sibling source `docs/upgrade/final_assignment/final_table_register.json` contains 266 table entries. Its checksum is retained in the snapshot. This pass compares table-page column inventories with that catalog; it does not introspect a live database.
-
-The source `FINAL_DATABASE_ACCEPTANCE_REPORT.md` records isolated PostgreSQL 18 validation on **22 October 2026**, explicitly for the V0030 baseline:
+The supplied `FINAL_DATABASE_ACCEPTANCE_REPORT.md` records isolated PostgreSQL 18 validation on **22 October 2026** for this migration history:
 
 | Recorded object | Count |
-| --- | ---: |
+|---|---:|
 | Schemas | 24 |
 | Tables | 266 |
 | Columns | 4,438 |
@@ -32,10 +30,12 @@ The source `FINAL_DATABASE_ACCEPTANCE_REPORT.md` records isolated PostgreSQL 18 
 | Functions | 56 |
 | Triggers | 879 |
 
-These are historical local results for that baseline, not fresh tests or evidence for a hypothetical V0029 release. The report says the temporary test cluster was removed; re-execution needs a new isolated cluster. PostgreSQL 15, hosted CI, production deployment, live providers and the target ledger remain unverified here.
+The machine-readable catalog is `healthcare_db/docs/upgrade/final_assignment/final_table_register.json`. These are supplied historical results, not fresh live-database measurements. PostgreSQL 15, hosted CI and production deployment remain separately unverified here.
 
-## Reproducible documentation evidence
+## Reproduce the source checks
 
-The portable [snapshot](../09-References/Database-Evidence.json) preserves filenames/checksums and source revision without links outside this repository. With the sibling checkout available, `npm run validate:database` compares its revision, SQL bytes and catalog fields against the snapshot and documentation. This read-only check never opens a database connection. Missing source or a different revision is reported as unavailable/mismatched, not passed.
+Run `npm run validate:database` from the documentation repository root. It uses the supplied `healthcare_db/` folder by default. To inspect an explicitly selected copy, set `PHARMVILLE_DATABASE_SOURCE` to its path; the same recorded checksums must match. Missing or changed files fail verification. The checker never opens a database connection.
 
-No migrations, models, application files or database configuration were changed or executed in this pass. Documentation-only CI checks internal references; the intended release still needs owner review.
+Run `npm run generate:erd`, `npm run validate:erd` and `npm run validate` to regenerate and validate the derived documentation. `npm run test:database-source` checks local-folder selection, source identity and rejection of altered or missing migrations, fragments and supporting files.
+
+No supplied SQL migrations, SQLAlchemy models or database configuration were modified or executed.

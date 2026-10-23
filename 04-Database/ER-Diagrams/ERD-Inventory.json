@@ -1,11 +1,13 @@
 {
   "source": {
-    "git_head": "55dbae9bb27e24f3d5da7786a9e49fe8d364845b",
+    "git_head": null,
     "migration_baseline": "V0001-V0030",
     "catalog_sha256": "3ff11f1f5696498dab2d8c27e17efa09540daead0dc86dc2921733cd6e444941",
     "checked_on": "2026-10-23",
     "live_database_inspected": false,
-    "intended_release_baseline": "Unresolved: user reports intended V0030 removal; available checkout retains it"
+    "source_directory": "healthcare_db",
+    "source_kind": "user-supplied-folder",
+    "documentation_baseline": "V0001-V0030 from the user-supplied healthcare_db folder"
   },
   "counts": {
     "schemas": 24,

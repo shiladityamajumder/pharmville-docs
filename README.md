@@ -22,7 +22,7 @@ Pharmville connects a customer web experience, protected staff/admin workspaces 
 | Development | Turn reviewed requirements into delivery slices | [Implementation plan](08-Development-Plan/Implementation-Plan.md) |
 
 <!-- ERD-INDEX-LINK -->
-**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams describe the checked-out V0030 snapshot; target release selection remains unresolved.
+**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams use the catalog in the user-supplied `healthcare_db/` folder; see the migration evidence for provenance.
 
 ## Product flow
 
@@ -32,13 +32,13 @@ The current detailed journey records a request, reviews P medicines, obtains cus
 
 The repository retains **110 draft feature IDs, 18 module groups and 14 technical workflows**. Business approval, proposed design, inspected database evidence and executed product tests are separate statuses. Feature-specific tests are **Designed / NOT RUN**; the [coverage report](09-References/Coverage-Report.md) records measured documentation results and remaining gaps.
 
-The intended database baseline is unresolved: the available source includes V0030, while the user’s intended latest release excludes it. [Migration evidence](04-Database/Migrations.md) records the facts and required release-owner reconciliation. No migration was changed. Review [open decisions](09-References/Sources-and-Decisions.md) and the [engineering audit](09-References/Engineering-Audit.md) before treating an affected feature as ready.
+The user-supplied [healthcare_db](healthcare_db/README.md) folder is the database reference for this repository. [Migration evidence](04-Database/Migrations.md) records its verified source checksums and schema counts. Live deployment and runtime parity remain separate checks. Review [open decisions](09-References/Sources-and-Decisions.md) and the [engineering audit](09-References/Engineering-Audit.md) for remaining readiness work.
 
 ## Start development and maintain documentation
 
 1. Select a feature in the [master register](09-References/Coverage-and-Traceability.md), then read its Business Flow, HLD, LLD and edge cases.
 2. Resolve the decisions affecting that slice, including exact operation schemas and [command/data ownership](07-Engineering/State-and-Recovery-Contracts.md). Use the [critical contracts](05-APIs/Critical-Operation-Contracts.md) as proposals requiring review.
-3. Verify the intended SQL release and restricted runtime permissions before building against it. Follow [setup and operations](07-Engineering/Development-Setup-and-Operations.md) and attach actual test evidence to the feature task.
+3. Verify the supplied SQL source against the target database ledger and restricted runtime permissions. Follow [setup and operations](07-Engineering/Development-Setup-and-Operations.md) and attach actual test evidence to the feature task.
 4. Use Node.js 24, run `npm ci`, then `npm run validate`. `npm run validate:render` also writes SVG/PNG diagrams locally. See [documentation conventions](09-References/Documentation-Conventions.md) for existing-browser setup, validator checks and CI.
 
 Changes remain local for review. Documentation checks do not establish production clinical, financial or deployment readiness.

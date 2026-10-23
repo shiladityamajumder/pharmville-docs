@@ -1,7 +1,7 @@
 {
   "checked_on": "2026-10-23",
-  "database_checkout": "healthcare_db (sibling repository)",
-  "git_head": "55dbae9bb27e24f3d5da7786a9e49fe8d364845b",
+  "database_checkout": "healthcare_db (user-supplied folder in this repository)",
+  "git_head": null,
   "migration_files": [
     {
       "file": "V0001__initial_schema.sql",
@@ -127,5 +127,613 @@
   "register_file": "docs/upgrade/final_assignment/final_table_register.json",
   "register_sha256": "3ff11f1f5696498dab2d8c27e17efa09540daead0dc86dc2921733cd6e444941",
   "live_database_inspected": false,
-  "intended_release_baseline": "Unresolved: user reports intended V0030 removal; available checkout retains it"
+  "source_directory": "healthcare_db",
+  "source_kind": "user-supplied-folder",
+  "historical_source_git_head": "55dbae9bb27e24f3d5da7786a9e49fe8d364845b",
+  "documentation_baseline": "V0001-V0030 from the user-supplied healthcare_db folder",
+  "source_provenance": "Folder supplied by the user as the database reference; no standalone Git metadata. Verified using file SHA-256 checksums.",
+  "sql_files": [
+    {
+      "file": "V0001__initial_schema.sql",
+      "sha256": "5941ab656b13bc001d48f6ef4eb56592dc12388650478d196057b1f998a2b1c6"
+    },
+    {
+      "file": "V0002__pharmville_core_safety.sql",
+      "sha256": "25ae8d2aa8e6f07a4bd576a6b11dc26982d9f12e1c5f6fb78cbd668db01b858b"
+    },
+    {
+      "file": "V0003__pharmville_delivery_foundations.sql",
+      "sha256": "c89580edc8317a794bf2897cfbad33d18f78688f89a5b38a6e957055a9a6f549"
+    },
+    {
+      "file": "V0004__pharmville_cms_reporting.sql",
+      "sha256": "89f410a60c958b2a16395e829b31e1ecd3a35002aa3804f78b519a58b60d824b"
+    },
+    {
+      "file": "V0005__pharmville_workflow_guards.sql",
+      "sha256": "1e911eebfec1184ef895588982894edca26acebef4fb0a854efa680880d80b96"
+    },
+    {
+      "file": "V0006__pharmville_stock_dispatch_delivery_guards.sql",
+      "sha256": "98de352085c5b1aa7aa84e2bccffe9d663e3f31d0c3c66b28547a97097571d76"
+    },
+    {
+      "file": "V0007__pharmville_consent_and_audit_guards.sql",
+      "sha256": "a3b5a260194990cd334068dd244a336ae7f46b5aa407ceca65674c8d2d63702c"
+    },
+    {
+      "file": "V0008__pharmville_consent_and_audit_guards.sql",
+      "sha256": "11584407661cf3391363341aebca5479c5093472a9e0f25bb1c9237a28b77d83"
+    },
+    {
+      "file": "V0009__pharmville_consent_and_audit_guards.sql",
+      "sha256": "33caf1c0317fa30c40d1cb85470769971128c20212c15d868c7dd0e198f84e45"
+    },
+    {
+      "file": "V0010__pharmville_consent_and_audit_guards.sql",
+      "sha256": "84ca8accedd01caa0699a1ef8a39429cc1f6e09e886e87fe15223b5368454df8"
+    },
+    {
+      "file": "V0011__identity_masters_and_reason_links.sql",
+      "sha256": "af57fff069946d174b97dbca9c1225125485251dd39593d9dac8390d30b38fd1"
+    },
+    {
+      "file": "V0012__actor_fks_and_numeric_integrity.sql",
+      "sha256": "ac947cba8a442404ca035eb75c4783483371cbd5ae44a01cc03e0d300e741f1b"
+    },
+    {
+      "file": "V0013__pharmville_consent_and_audit_guards.sql",
+      "sha256": "4fe21194980156a97333730033a927e5c713940f4cf85269b8906e6fc1bec573"
+    },
+    {
+      "file": "V0014__pharmville_consent_and_audit_guards.sql",
+      "sha256": "2513e9ac46eb92bf4693d44f33a8eb4eb9d93c8f714046dfabaf664dd45957ca"
+    },
+    {
+      "file": "V0015__order_revision_and_cash_integrity.sql",
+      "sha256": "2d2a690d9eeff394ec765e74a923abb9d4de4a2c02fe8dce428e3dab6432b647"
+    },
+    {
+      "file": "V0016__pharmville_consent_and_audit_guards.sql",
+      "sha256": "39ad2b2e2f10ff763784d26e932ffbb492425096aa4ca9a05b866faad4a85c21"
+    },
+    {
+      "file": "V0017__report_export_access_contract.sql",
+      "sha256": "19cebdf63f9a991d399809b82eaf286065c5b0709910f83881e59841ee20deac"
+    },
+    {
+      "file": "V0018__pharmville_consent_and_audit_guards.sql",
+      "sha256": "ade01b1424135957b4392422e7f7e70f958b57b323562bb7d2effdf63a4448cb"
+    },
+    {
+      "file": "V0019__measured_queue_indexes.sql",
+      "sha256": "167b7a81c4e5b43c475dc7fa78ca5f4d8dba9df79f5ecb04500f637a1da0c29a"
+    },
+    {
+      "file": "V0020__remaining_user_actor_integrity.sql",
+      "sha256": "e1f0e71474d9ef731c76aef9f5d5e0ef9df8aacc5092c0a209a65f6a7ff3379e"
+    },
+    {
+      "file": "V0021__pharmville_consent_and_audit_guards.sql",
+      "sha256": "4955c94e0c4e7f6deec3a5484a5acf9c3ada0619f419432a62922729e14bfa17"
+    },
+    {
+      "file": "V0022__numeric_primary_keys_and_compatibility_crosswalk.sql",
+      "sha256": "dc181726d4fef9ffe55587b6ec182e73fdd7baf950d21762f22c5d630d803fdb"
+    },
+    {
+      "file": "V0023__domain_reference_and_numeric_integrity.sql",
+      "sha256": "dfd5c1a6a28ca466df043619b7860384ce3795b5a12a45a5237f9db8e846a308"
+    },
+    {
+      "file": "V0024__licensed_fulfillment_and_inventory_evidence.sql",
+      "sha256": "ab274315223b402b9aada45b12453ad5658c1eba78d4a72456e1af5dc0bf7d95"
+    },
+    {
+      "file": "V0025__runtime_capabilities_and_scoped_reads.sql",
+      "sha256": "90be8c7ec5ed62bb5e7654c928c98583bbd50827e7247027304bda60c48fdf49"
+    },
+    {
+      "file": "V0026__measured_numeric_order_line_lookup.sql",
+      "sha256": "1100b0d5f0d387a2b6f05b35f41030bdb4e35479c60c60ac3e37b2e32c32401d"
+    },
+    {
+      "file": "V0027__reused_master_identity_contracts.sql",
+      "sha256": "ee02fcf8ece1a9e957f8bce9311f80c9d06f297b0c752be00856a57a6126cea2"
+    },
+    {
+      "file": "V0028__scoped_pick_pack_and_license_rechecks.sql",
+      "sha256": "2d0aa53b259e1554dc3cdaddb12a7cd88ac5d51d44f469a57496d6e05f910f14"
+    },
+    {
+      "file": "V0029__deny_public_execute_for_future_routines.sql",
+      "sha256": "0ebb49f645931bd2f881bbf8df711b1aef7d9a5e3e515ca2d2d6a448fa22b74c"
+    },
+    {
+      "file": "V0030__fulfillment_completion_and_settlement_gates.sql",
+      "sha256": "5e0c2647933d8106d9da4c140aeb0899260f1388a77a04ec21345c3207924043"
+    },
+    {
+      "file": "initial_schema/00_extensions_and_schemas.sql",
+      "sha256": "523e258875d4e97b0c6d50c99f926cc8b58c5fed684b80e74654531d625e8b74"
+    },
+    {
+      "file": "initial_schema/10_tables/010_identity.sql",
+      "sha256": "d78f981f45882b01bb0b186c5c3aff6aedc3ee7079fd3f0927047f84f4de0e93"
+    },
+    {
+      "file": "initial_schema/10_tables/020_organization.sql",
+      "sha256": "cdd8681b9205c542361419a4e71ed79e0fd01f9b9c2335c6388fa0de3e72d12c"
+    },
+    {
+      "file": "initial_schema/10_tables/030_customer.sql",
+      "sha256": "b99d35dd065b3a31b8dbdc44375b7ac81595446fe3f07f306a484ac1c278e37b"
+    },
+    {
+      "file": "initial_schema/10_tables/040_catalog.sql",
+      "sha256": "0935830e24222c02d0b672904a3a79da3075b45e8e48f8a93ff94519e779d1e6"
+    },
+    {
+      "file": "initial_schema/10_tables/050_clinical.sql",
+      "sha256": "c33e9aadcdd9f399031f8cc00d96ab59be3edc05668127a15d5b9471f37f0689"
+    },
+    {
+      "file": "initial_schema/10_tables/060_appointment.sql",
+      "sha256": "5b953c56f3b6e36db30de88065cffb5bd23f683e44d9a14f479d84e986fd4527"
+    },
+    {
+      "file": "initial_schema/10_tables/070_diagnostics.sql",
+      "sha256": "3197af40dce6cd96c83f490c24a1fcc16654242b6a0d5412221e4b3a1b3489a6"
+    },
+    {
+      "file": "initial_schema/10_tables/080_pricing.sql",
+      "sha256": "369645420beb02c3b01d0d00cef276f2165750fa8b6dbbfd536a087d528ac7a3"
+    },
+    {
+      "file": "initial_schema/10_tables/090_marketplace.sql",
+      "sha256": "11cc6c3830db13d5d9d42e43f02d3c2f10df2dd04dd7b1f3544461b81f210498"
+    },
+    {
+      "file": "initial_schema/10_tables/100_commerce.sql",
+      "sha256": "e3b2ba6c3d5b0d752a370a63afdc5cf305bb32131023b43654bad94ea08db9b0"
+    },
+    {
+      "file": "initial_schema/10_tables/110_payment.sql",
+      "sha256": "82f6fe64b54bd6d3259e0415ee98d0858be56738fcaae3f4f796d41c555ccbe2"
+    },
+    {
+      "file": "initial_schema/10_tables/120_finance.sql",
+      "sha256": "5218d88af3adbe17a397b92f66ecac27a4d7a2a311947ed468da963687d8339b"
+    },
+    {
+      "file": "initial_schema/10_tables/130_insurance.sql",
+      "sha256": "8cbbd06fdaec23a3b165c1e573833c359bb6997d2e5c38ce444adcc6b600bcae"
+    },
+    {
+      "file": "initial_schema/10_tables/140_membership.sql",
+      "sha256": "5577afa608dc56b959c47684dff2bd6fa173d4163307e666edbe1a5188565f55"
+    },
+    {
+      "file": "initial_schema/10_tables/150_procurement.sql",
+      "sha256": "92f5c49d5909d2b3ad558cd7eef07003bdf7fe3e93eae4a24abd750019bfa202"
+    },
+    {
+      "file": "initial_schema/10_tables/160_warehouse.sql",
+      "sha256": "33ed5d9bc8e5e48a0fe4cc6b0f9ab986144f65be5b72ebbdeb1e86a4d5791de3"
+    },
+    {
+      "file": "initial_schema/10_tables/170_fulfillment.sql",
+      "sha256": "2256a4dee89002285681c28299fb5c38a4d75e034628cd3ea7fe8620a93a7d04"
+    },
+    {
+      "file": "initial_schema/10_tables/180_logistics.sql",
+      "sha256": "61ce520015785676668362ba217e29aaefb9262ebfe53a4954477225a0b32a97"
+    },
+    {
+      "file": "initial_schema/10_tables/190_notification.sql",
+      "sha256": "d6875026481a1734f365faf8a7baf7182ec0166a9abfb9af89819d02832db5c7"
+    },
+    {
+      "file": "initial_schema/10_tables/200_support.sql",
+      "sha256": "afe822ada870ba967a7e10eb64e93c694dbbf651a74b4aa0b0b559e9c691d248"
+    },
+    {
+      "file": "initial_schema/10_tables/210_compliance.sql",
+      "sha256": "abcfc4915ebcbac4ebf0892de4b5c1e5d7b988c5e0abf868d648b4e494e3b616"
+    },
+    {
+      "file": "initial_schema/10_tables/220_risk.sql",
+      "sha256": "5bd27aafc0de89267ff9e16ff91f509e2ef041ea5af01926e09e7777c3c40658"
+    },
+    {
+      "file": "initial_schema/10_tables/230_platform.sql",
+      "sha256": "92ebfda51523eebd01dd1b0d74f6f05c4f07e09cb1e55675561701c490ce02fe"
+    },
+    {
+      "file": "initial_schema/10_tables/240_search.sql",
+      "sha256": "c40615aafabe2de66749cef9aa4b2e956f8daa68455513574597acf9ec7e6835"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/010_identity.sql",
+      "sha256": "6c0d9058dfde51b11463b2961c70d68cf37ca4a3b2dd3d51cbb022c6c5e72837"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/020_organization.sql",
+      "sha256": "96daa9ea98a4f2c37c5d7298c30462a161dc09dda62e3ecc55f9071c6e98a7af"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/030_customer.sql",
+      "sha256": "619ffc160978a7839612faf0b5714edef7ab2218f134e59103ef3369fb7ac271"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/040_catalog.sql",
+      "sha256": "f2e85da1809f0b53db5820fbeee0452d3928752d85620f43508e9c68ce86bac0"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/050_clinical.sql",
+      "sha256": "fbdea72b787bc904e7ba38e0c8618a76fa7a42a2d33601f69462638f0b6ed801"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/060_appointment.sql",
+      "sha256": "f1209d69449b796126853c5e6d6960b2f0cfa16f72d8ccacbb4c5042bb183940"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/070_diagnostics.sql",
+      "sha256": "4f1e521c50d9959ef143bcc2e09fea80cae69315fbd317e9183855f8ec3258bf"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/080_pricing.sql",
+      "sha256": "800de62084f6ec6a54f96c56ec60157f198c265df5eaf1205ce5d23d390868af"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/090_marketplace.sql",
+      "sha256": "e4b0fc361e2c75a8e816430536740c14c816c4018a2c4d33fd3a6916b1ad6bee"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/100_commerce.sql",
+      "sha256": "98c27091b5039fc68c7ae52867bbc3ba327a3bd3d59c68225187464a53803e7b"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/110_payment.sql",
+      "sha256": "eb41cbb8984a4602649b8bb264cb692831f98d577eeb3266cfacf8317116a3f5"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/120_finance.sql",
+      "sha256": "5f72796cfc589f55b50735c71832c3191fa5b9c1477e681467e065756517ed9f"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/130_insurance.sql",
+      "sha256": "8fb97d55b8e9addacf487bd8ef2b11155dbb45da6094d96684140d4332ea3298"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/140_membership.sql",
+      "sha256": "635d29ddc1733b054bb1446c4dcf0eb13a0190ac3230923ce2dc9551f44e8020"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/150_procurement.sql",
+      "sha256": "f68b1770c98042555346d1c2ccdb84f205884f6405e754ddb2eb665acab9b210"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/160_warehouse.sql",
+      "sha256": "943eedda1000b78b11453cc776bd516f0021897d516646681ad1815feb38f8c2"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/170_fulfillment.sql",
+      "sha256": "0255e7846b0d22e7f8ed821bddf40b4f886ee834290d87076d9d1bfdb6f105cf"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/180_logistics.sql",
+      "sha256": "9cb6475877390542ec5d931c04276ce5b12bba2d46a49ec4d8e4bc04bda33416"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/190_notification.sql",
+      "sha256": "1c06fb998bdc9daf34ba7f1c77eb010f17918404dcf20f8e6272578d1df4c02e"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/200_support.sql",
+      "sha256": "d1932f9fc10df2e3173076cf84f4585639bc8c22954144cbee39c52916b4e261"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/210_compliance.sql",
+      "sha256": "a3b548bda52edf1d80fddf3c18dda7c4f961edfe6341db030d351c572882b069"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/220_risk.sql",
+      "sha256": "792c07cdcef8326e3f48fb6967b687ad9b3f368780248ea1ab99dc2218528464"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/230_platform.sql",
+      "sha256": "ab70aebd74287d287ec94e9d3fd786c665758635b97f02972eec4e8bdce24531"
+    },
+    {
+      "file": "initial_schema/20_foreign_keys/240_search.sql",
+      "sha256": "563589852389d859e10b7abdcc2054a6d44513b15fedb5b7d88129c11bcc641e"
+    },
+    {
+      "file": "initial_schema/30_indexes/010_identity.sql",
+      "sha256": "86c6b659e521b2dfb89349fba82456832849574a27a3d27c59f51d3507835bd8"
+    },
+    {
+      "file": "initial_schema/30_indexes/020_organization.sql",
+      "sha256": "b3a30920a5012f0e76f43415615b53f682c405380c3fcb21a104b83b4cfd99a7"
+    },
+    {
+      "file": "initial_schema/30_indexes/030_customer.sql",
+      "sha256": "e0ee6e9578c5dfc3834187b65def235ac10c0a5c4cb2efa81275fa0b4f44a638"
+    },
+    {
+      "file": "initial_schema/30_indexes/040_catalog.sql",
+      "sha256": "578bea0dd2d98c9d7bf9e6df714122dbc424d268411fdfb1ad76014c5ddfd854"
+    },
+    {
+      "file": "initial_schema/30_indexes/050_clinical.sql",
+      "sha256": "e713034fa7b7b9038f638f93b849b3f6e4861087de3a0b0f047ab300b3b7c87d"
+    },
+    {
+      "file": "initial_schema/30_indexes/060_appointment.sql",
+      "sha256": "ef34d8520e50f445d74a4ed5f735b5d71e405b38b89a47f4bfa73b656ca0824f"
+    },
+    {
+      "file": "initial_schema/30_indexes/070_diagnostics.sql",
+      "sha256": "8e4872892571ef01f7540d4acdb784387a26c962f228081bc08b4a341874127c"
+    },
+    {
+      "file": "initial_schema/30_indexes/080_pricing.sql",
+      "sha256": "1786b5e78b73309e0e5a428ba4a1ee806f9de851dafd7b7e1cf07c867d3e709d"
+    },
+    {
+      "file": "initial_schema/30_indexes/090_marketplace.sql",
+      "sha256": "9ce0d4379cc65d5e00bbfde4949eb3900ce34b205e26727231aef976aec8c780"
+    },
+    {
+      "file": "initial_schema/30_indexes/100_commerce.sql",
+      "sha256": "ef4de48bb86ac80925acf5e8339752f1a316105f2844cc48054e9e77bd141529"
+    },
+    {
+      "file": "initial_schema/30_indexes/110_payment.sql",
+      "sha256": "95d1f484c1e824cb57ee2c452d3c86cc76f251be2ac160dd0600a8886b342df5"
+    },
+    {
+      "file": "initial_schema/30_indexes/120_finance.sql",
+      "sha256": "c524d75280c812644478c9f90deb2fab8d367e9b491af8446284e14a23b63731"
+    },
+    {
+      "file": "initial_schema/30_indexes/130_insurance.sql",
+      "sha256": "9951952121200094f38cfccafeee896d10764b99ff9bc992702d946e4a5fed6b"
+    },
+    {
+      "file": "initial_schema/30_indexes/140_membership.sql",
+      "sha256": "dd7f290623acf51fd3abbe19b1769c53fac452a7b775f7d30495a3d711ca3468"
+    },
+    {
+      "file": "initial_schema/30_indexes/150_procurement.sql",
+      "sha256": "1914bb59f94ca5fdd0ee76a319fc937170091af860bcf6ebd0a9abbe82846ed9"
+    },
+    {
+      "file": "initial_schema/30_indexes/160_warehouse.sql",
+      "sha256": "62f6dd04e17347b2375ada8b39e3da2dddc6ee4bc768e11a8dcd41f7bc8cf7f6"
+    },
+    {
+      "file": "initial_schema/30_indexes/170_fulfillment.sql",
+      "sha256": "5d36d9ecc2a50e316c2ad204745699cc40d87b087f368efc31befa84e0ddd218"
+    },
+    {
+      "file": "initial_schema/30_indexes/180_logistics.sql",
+      "sha256": "b7cfdbde469710ca83a8ab4850bf9a377d1e399e6fbadf6d328e53d11ebf54f9"
+    },
+    {
+      "file": "initial_schema/30_indexes/190_notification.sql",
+      "sha256": "0b871d6756d044fcc64b41d2335aa5fa68bdc28723f3f02572f35624eb4f55f2"
+    },
+    {
+      "file": "initial_schema/30_indexes/200_support.sql",
+      "sha256": "92fa82128c2b8a43780c83be52a0734aebcb446d5c2b4c0ba89c6c185045ac19"
+    },
+    {
+      "file": "initial_schema/30_indexes/210_compliance.sql",
+      "sha256": "77528a02bed92622ef97f83e5dff20fbe6fcbe0871038eb94e138b370ba95004"
+    },
+    {
+      "file": "initial_schema/30_indexes/220_risk.sql",
+      "sha256": "aaa19b7af4c97bcd9a07055d10bb459387e16eeffe9fe94fc663a8cf63485e19"
+    },
+    {
+      "file": "initial_schema/30_indexes/230_platform.sql",
+      "sha256": "16c610dabec730f003ead2cda079f59ab99e06dfc70c544637e9373921c94cd3"
+    },
+    {
+      "file": "initial_schema/30_indexes/240_search.sql",
+      "sha256": "812214658cb8c9367819cd04e1f7eff482af42ad238837dc7cf59bd8852c4df3"
+    }
+  ],
+  "supporting_files": [
+    {
+      "file": "FINAL_DATABASE_ACCEPTANCE_REPORT.md",
+      "sha256": "2f82f0b27f0150afcb5bb817f6c0762319147a46f24c3f09ecfeefb246eee615"
+    },
+    {
+      "file": "app/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "app/db/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "app/db/base.py",
+      "sha256": "53bfd49c7206093ff1b0d684397955c19d31c4bd69e653652944ef77745407a9"
+    },
+    {
+      "file": "app/db/contracts.py",
+      "sha256": "03c7d712cfea8c704621cb3c571b9bad012e1e446d8ad22d1d5d6cbdb4f84520"
+    },
+    {
+      "file": "app/db/domain_references.py",
+      "sha256": "0c08bfd126341647bb08baa7b24f20a4076a93892a795b2e3d65fd2dbe709374"
+    },
+    {
+      "file": "app/db/eligibility.py",
+      "sha256": "0519e079c522dd77aa8feaa93b00fca4d7c02709bd5e51bcf03637dbdb8bbe98"
+    },
+    {
+      "file": "app/db/numeric_keys.py",
+      "sha256": "ee00d8164210395b666c4777927afa9e295aba983420e9f4479aefc28bc802f9"
+    },
+    {
+      "file": "app/db/query_indexes.py",
+      "sha256": "f7e69a2fd601ab3d566cf4e72a58aea04383e7ea510d6b30ab9eb1f33a037710"
+    },
+    {
+      "file": "app/db/reference_semantics.py",
+      "sha256": "8cf389d93bcc91022fe9ecf3bb1987ad02521bf088d26a3389376fc735116008"
+    },
+    {
+      "file": "app/db/schemas.py",
+      "sha256": "f58fbca9e919c134c24f1bb8e19ef9441ae6939897d08829fea89f781f187859"
+    },
+    {
+      "file": "app/models/__init__.py",
+      "sha256": "b33d2fad8e18b537dfbc5fbe4755dc2690fce8448e126de52e8efebfef699739"
+    },
+    {
+      "file": "app/models/appointment.py",
+      "sha256": "f2a2313caaaf6e9e6e602b3fdc09e2b11d012c084200070b515260e9e8a94803"
+    },
+    {
+      "file": "app/models/catalog.py",
+      "sha256": "50fc4545138aea1bdc9185fa70ece6aa8bb99bb3ce71cbe3cb84c054127e7763"
+    },
+    {
+      "file": "app/models/clinical.py",
+      "sha256": "feafb563ac0e39ed5ba46d8fa2c187426b279710a9a0437afcbfb4cd139c5883"
+    },
+    {
+      "file": "app/models/commerce.py",
+      "sha256": "3411fe51c7b2fb75be856ca42fe3d06469a55fc4a145584ada370113b6e097b0"
+    },
+    {
+      "file": "app/models/common.py",
+      "sha256": "eb2f2a80176eeecb81275ebd1eb9db0483855c7ed1d02c2c3dfebfcaf452ea50"
+    },
+    {
+      "file": "app/models/compliance.py",
+      "sha256": "79ca38e220715a50d9db0dc8dc92afe91b95f049ecad386b4741c7afba038c9f"
+    },
+    {
+      "file": "app/models/customer.py",
+      "sha256": "e3cadd45a74a9ca3e8945e1f2b30e8230861da2c3890378e9060c920c6cf61f2"
+    },
+    {
+      "file": "app/models/diagnostics.py",
+      "sha256": "73dc7b2d8e1d725dd64e2d01fe442e567154b845f0b19532086fca081ba4172e"
+    },
+    {
+      "file": "app/models/enums.py",
+      "sha256": "93be1a3bfe346b908482f3d35c36cd0f4e9721a34721b015fcca065a8272d975"
+    },
+    {
+      "file": "app/models/finance.py",
+      "sha256": "54a379cf7e15573ae58beac68ba249385d756f1fe560f69c3d614e1e06c0a501"
+    },
+    {
+      "file": "app/models/fulfillment.py",
+      "sha256": "cd481a77ec0a4c0643c81dd95c2faa92449c013e84935b343eb09b835f68d45f"
+    },
+    {
+      "file": "app/models/identity.py",
+      "sha256": "d48fbd7c19240b32696f9cce5da0a632dfcf9c9fe2f874caeaf972e5f2522686"
+    },
+    {
+      "file": "app/models/insurance.py",
+      "sha256": "e05bfe4bd93f5be0e1631502fdc076c35cf1de3b41e7f7f0014eac13bc724d4c"
+    },
+    {
+      "file": "app/models/logistics.py",
+      "sha256": "9b4f71c4d98f62e446a41122a13d727fa63a7d4cf307ea76bcc65d474430d60d"
+    },
+    {
+      "file": "app/models/marketplace.py",
+      "sha256": "dd28aed390db29ff198fdb790ae197c1f7c24fd52af857739bba25f06752d5b2"
+    },
+    {
+      "file": "app/models/membership.py",
+      "sha256": "6faced7aa4c92d08a6cbee927e1cb1420b318067652206ae1ec4554ae68e00c1"
+    },
+    {
+      "file": "app/models/notification.py",
+      "sha256": "b934ccd4bd4086f20618a0b67df58b360ae68ff103d321254a4ee1940cb63670"
+    },
+    {
+      "file": "app/models/organization.py",
+      "sha256": "90713274a51f8afd5f1880f516449cae4c36a2b3942be0937f51f7f9ec8776be"
+    },
+    {
+      "file": "app/models/payment.py",
+      "sha256": "053576aa51c03c6681e066976765fa73bbf31681ea9b6cef3f5a2394efcbd189"
+    },
+    {
+      "file": "app/models/pharmville.py",
+      "sha256": "465641ec86cb3ece806277a39521c415d20f371e2533fae3354c8a282561b0b6"
+    },
+    {
+      "file": "app/models/platform.py",
+      "sha256": "860fb7506c345ccf1d2e0ef15fd9dc47dccaad736817f38e61106a4239e5c2a7"
+    },
+    {
+      "file": "app/models/pricing.py",
+      "sha256": "a0d60b5205d38bf75e7d0a8b6123308756aa2c1d295f826dd1b23d29a00a4942"
+    },
+    {
+      "file": "app/models/procurement.py",
+      "sha256": "e930c5463179f9f3513fd5be267af6d18733ae5745b6d9a792f15e7e9e24f4bc"
+    },
+    {
+      "file": "app/models/reference_data.py",
+      "sha256": "98c910a5ab1a26e6d55fb9a48b5cbc38e36f443106cea8cc6961952f3052c14a"
+    },
+    {
+      "file": "app/models/risk.py",
+      "sha256": "8c2931587f2124a598155c03491813126d23bd659658bc2529748de30bd7d9aa"
+    },
+    {
+      "file": "app/models/search.py",
+      "sha256": "df3b611bbd97b50e7a668232627c13badfcffbcae0efa62c3a297b4b226f3a28"
+    },
+    {
+      "file": "app/models/support.py",
+      "sha256": "00266039e59603d5094f4eed5bc729990999d96ae3f248e1e39d6e4fee3004e3"
+    },
+    {
+      "file": "app/models/warehouse.py",
+      "sha256": "a993e21132e5742d306381a9784046441913fc3cda9d1b6f534d8893c6ba6488"
+    },
+    {
+      "file": "app/workflows/__init__.py",
+      "sha256": "7fe55e2bc0a2ca0cb67ba69e3ed219903665785351076cc41f53e53aaa2cbbcc"
+    },
+    {
+      "file": "app/workflows/operations.py",
+      "sha256": "c8352b9d26f25e3fdf8426165b88c3ecaf943e30d81a9b4dceedfe1493a4b6e9"
+    },
+    {
+      "file": "app/workflows/payments.py",
+      "sha256": "49889c46ea1692c63880c6d56da1a8876391508c266c91cad32d511032bc4587"
+    },
+    {
+      "file": "app/workflows/pharmville.py",
+      "sha256": "caeffa95ac5ffd0272a9f8fdfefebfb31d64d12c26985b77bd1b97fa688de18c"
+    },
+    {
+      "file": "app/workflows/references.py",
+      "sha256": "c0bd15ec9f48e10cf24b49666088957cf8971c02fc4ffb1fe500023f6b72aa13"
+    },
+    {
+      "file": "docs/upgrade/final_assignment/uuid_reference_classification.json",
+      "sha256": "9ff1ba6f9d20059bcc17dad199d16a6003ab43b582fcb4d59182d3897a1af866"
+    },
+    {
+      "file": "postgresql/docs/SCHEMA_REFERENCE.md",
+      "sha256": "36c0a6b79be7658c0886c728bf16c91da1a3b8da3d9dc82b279673185099fb80"
+    }
+  ]
 }

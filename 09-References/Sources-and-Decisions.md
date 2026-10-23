@@ -7,7 +7,7 @@
 - **Inferred** means an interpretation that lacks an approved source.
 - **Open** means an owner decision or verification is still needed.
 
-The `healthcare_db` checkout is the available database source. Its README names PostgreSQL SQL migrations as the deployment authority and freezes historical Alembic execution. Local migration evidence and deployment limits are recorded in [Database migrations](../04-Database/Migrations.md).
+The user-supplied `healthcare_db/` folder inside this repository is the database documentation source. Its README names PostgreSQL SQL migrations as the deployment authority and freezes historical Alembic execution. Source checksums and deployment verification limits are recorded in [Database migrations](../04-Database/Migrations.md).
 
 No signed client PRD is checked into this documentation repository. Sibling application directories are available but their behavior was not audited in this documentation pass. The 110 feature IDs, 18 module groupings, API contracts, workflows, and most technology choices came from inherited draft documentation. Treat them as proposals until the product owner supplies approved sources.
 
@@ -16,7 +16,7 @@ No signed client PRD is checked into this documentation repository. Sibling appl
 - SQL under `healthcare_db/postgresql/migrations/` is described as the deployment history.
 - The database repository contains SQLAlchemy models and PostgreSQL catalog validation tools. The database README describes the ORM as a consistency companion.
 - Local database validation evidence is dated 2026-10-22. Its exact counts and limits are in [Database migrations](../04-Database/Migrations.md).
-- The documentation and sibling database directories each have Git metadata. The inspected database revision/checksums are retained in the evidence snapshot; the intended release and live deployment state remain unverified. The available source contains V0030 despite the user’s intended removal; D-015 must reconcile that discrepancy.
+- The supplied database folder has no standalone Git metadata. Its migration history, catalog and supporting source hashes are recorded in the evidence snapshot. The user selected this folder as the documentation reference. D-015 retains target-ledger and live runtime-parity checks; it no longer blocks source selection.
 
 ## Proposed product and engineering decisions
 
@@ -43,7 +43,7 @@ No signed client PRD is checked into this documentation repository. Sibling appl
 | D-012 | Approve invoice, HSN, tax rate, and jurisdiction rules | Finance and CA |
 | D-013 | Approve consent versions, retention, and deletion exceptions | Privacy and Legal |
 | D-014 | Select vendors and billing for each use case | Tech lead and Product owner |
-| D-015 | Define migration and ORM parity checks | Tech lead |
+| D-015 | Supplied documentation source resolved; verify target migration ledger and runtime ORM/data-access parity before deployment | Tech lead and DBA |
 | D-016 | Provision production accounts, provider sandbox, and signed webhook contract | Product owner and Security |
 | D-017 | Demonstrate CI, restore, load, TLS, rollback, and operations ownership | DevOps and DBA |
 | D-018 | Approve Phase 1 changes or defer them | Product owner |
@@ -71,7 +71,7 @@ These recommendations are proposals, not substituted business approvals. Develop
 | D-023 | Use purpose-bound verification before atomically replacing a contact; approve proof transport/storage and separate user/profile versions. | Existing schema lacks dedicated pending-contact columns. Preserve verified destinations during proof. | Email/phone change implementation and recovery. | Security and Product owner |
 | D-024 | Approve operation-specific schemas, table write owner, failure transitions and named test cases per vertical slice; require feature-specific normal/adverse assertions and execution evidence. | ID mentions and shared schemas cannot establish implementable feature contracts. | Features with incomplete API/schema or failure contracts in the traceability register. | Tech lead, module owner and QA lead |
 
-D-023 and D-024 record gaps found in the independent engineering audit. D-015 requires the release owner to reconcile the user’s intended V0030 removal with its presence in the inspected checkout and V0030-based catalog/report. Select the intended revision, compare target ledger/checksums and regenerate evidence for that release before claiming migration parity.
+D-023 and D-024 record gaps found in the independent engineering audit. The user has resolved D-015 source selection for documentation by supplying `healthcare_db/`. Read-only checks confirm its migration and catalog hashes. Compare the actual target ledger and runtime behavior with this reference before claiming deployed migration parity; no additional decision about excluding V0030 is pending in this documentation.
 
 ## Conflicting order paths requiring explicit resolution
 

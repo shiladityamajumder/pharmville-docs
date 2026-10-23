@@ -2,7 +2,7 @@
 
 ## Files and navigation
 
-Keep the numbered top-level folders. Use descriptive `Title-Case-Words.md` filenames and existing underscore module directories. Add working relative links; do not link outside the checkout. Record sibling-source paths and immutable verification evidence centrally in [migration evidence](../04-Database/Migrations.md).
+Keep the numbered top-level folders. Use descriptive `Title-Case-Words.md` filenames and existing underscore module directories. Add working relative links; do not link outside the checkout. Record supplied-source paths and immutable verification evidence centrally in [migration evidence](../04-Database/Migrations.md).
 
 Use one H1 per page, H2 sections and H3 subsections without skipping levels. Prefer paragraphs for explanations, numbered steps for chronology and short tables for comparison. Tables need an adjacent separator and the same number of cells in every row; escape literal pipes as `\|`. Keep blank lines around blocks.
 
@@ -37,6 +37,6 @@ npm run validate:render
 npm run validate:database
 ```
 
-Default validation checks all Markdown, portable links/anchors, table widths, headings, fences, empty files, archive artifacts, exact feature references and actual Mermaid parsing. Render validation writes local SVG/PNG files and JSON results under ignored `artifacts/`. The database check is optional for contributors without the sibling checkout and explicitly fails unavailable; documentation CI does not claim live database parity.
+Default validation checks all Markdown, portable links/anchors, table widths, headings, fences, empty files, archive artifacts, exact feature references and actual Mermaid parsing. Render validation writes local SVG/PNG files and JSON results under ignored `artifacts/`. The database check uses healthcare_db/ inside this repository or an explicitly selected PHARMVILLE_DATABASE_SOURCE and fails if unavailable or mismatched. Supplied copies without standalone Git metadata use recorded file hashes; the parent documentation Git revision is never treated as the database revision. Documentation CI does not claim live database parity.
 
 To add a feature: obtain its scope/decision source, assign one unused ID in the inventory, define owner/command/data boundaries, update the master register, add domain BFD coverage and technical/API/data contracts, specify normal and meaningful failure tests, add its development task, and run checks. A new module also needs README, HLD, LLD, Edge-Cases and API entry points. Do not promote a draft threshold or provider detail to an approved requirement.
