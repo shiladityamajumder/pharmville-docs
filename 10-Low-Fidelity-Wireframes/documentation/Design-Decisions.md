@@ -9,13 +9,13 @@ Customer and rider are mobile-first experiences. Administration, pharmacy, fulfi
 ## UX choices
 
 - Experience mode is the initial view. Product screens show the user task and its next action; feature IDs, screen IDs, role selection, scenario details and reset controls live in the Review tools dialog. The fictional-demo banner is compact and stays outside the workflow.
-- Explore Pharmville recommends starting with a customer order, with role exploration, other journeys and the collapsed screen directory as secondary choices. The directory keeps searchable feature mappings and filters inside a collapsed section.
+- The initial chooser contains three entry cards. Mobile App and Website have independent searchable screen selectors; the full technical directory is a secondary destination. Customer/rider belong to Mobile; Customer/staff belong to Website. This does not invent native apps for backend modules.
 - Journey controls preserve the current demo record across route changes. Required actions gate progress and explain what is missing. Guided role handoffs change the simulated workspace directly while preserving the same record; permission checks and business approvals still apply.
 - Mobile, tablet and desktop previews size the app surface, and container queries apply the matching internal layout independently of the browser window. Responsive mode follows the actual viewport. Customer navigation uses a single header or bottom bar at the matching app width.
 - The first visit starts with an empty shopping demo. Guided journeys offer to keep that state or load a clearly labelled prepared fictional fixture; replacing existing progress requires confirmation. Prepared historical fixtures are labelled and never imply a new payment, approval, stock movement or delivery.
 - White/gray/black, borders, system fonts and labelled placeholders emphasize hierarchy and behavior. Mobile operational tables become cards retaining column labels; no dense table is simply clipped.
 - Hash routes support direct links, Back/Forward and refresh under a project subpath. One shared order and append-only demonstration movements connect customer, pharmacy, stock, fulfillment, rider and finance. Browser storage persists the demo and updates other local tabs, not real devices.
-- Entering a workspace selects its illustrative role/site. Selecting an inappropriate role denies that view. These controls simulate permissions; they are not production authentication. Explicit session revocation blocks protected staff forms until demo MFA completes.
+- Selecting a screen card explicitly chooses its illustrative role/site. Entering a workspace URL retains the current persona and denies inappropriate access. These controls simulate permissions; they are not production authentication. Explicit session revocation blocks protected staff forms until demo MFA completes.
 - Native dialogs support keyboard focus, Escape and return to the invoking action. Inputs have labels and visible focus; errors/statuses are announced without relying on color.
 
 ## Clinical, payment and stock sequence
@@ -42,3 +42,11 @@ The shell owns customer primary navigation; screen renderers no longer inject an
 Opening a URL preserves the current simulated role. Role cards, the Review role selector, starting a guided journey and explicit guided handoffs are deliberate persona switches. Protected routes show access restrictions rather than granting another role. These remain browser simulation controls, not backend authentication.
 
 Fixture provenance is available in Review tools. Prepared examples carry a short visible label; fresh browsing no longer repeats a long fixture explanation. Essential policy blocks remain visible; supporting policy references are expandable. Required/native-format errors appear beside fields, while business-rule errors retain the existing domain handlers.
+
+## Experience routing and on-screen situations
+
+Experience-prefixed hash routes determine Mobile or Website presentation. A preview override can temporarily inspect tablet/responsive layouts; refresh restores the URL’s experience. Internal legacy screen links are qualified at render time. Supported old links keep working without silently changing roles. Switching experience retains the shared browser records.
+
+“What if something goes wrong?” uses ordinary language separate from the stable technical scenario definitions. Payment conditions invoke the existing payment handler and preserve its reference, quote, stock and clinical gates. Pending operations must be checked before exploring a different outcome; confirmed orders cannot be relabelled pending. Other scenario selections are condition previews with existing command guards, not automatic business decisions. Returning to normal never rolls back a recorded action. A checkout example requires explicit replacement confirmation and creates no payment or clinical approval.
+
+Actual rejection reasons and delivery-failure reasons project to Customer and operational views. An unsuccessful delivery retains custody and actual cash separately. [Platform coverage](Platform-and-Screen-Coverage.md) and [scenario coverage](UX-State-Coverage.md) distinguish normal-layout verification from interaction evidence. Unverified behavior is deliberately left unverified.

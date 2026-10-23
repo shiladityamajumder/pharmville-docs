@@ -7,6 +7,8 @@ import {screens as access} from '../shared/access-screens.js';
 import {initialState} from '../assets/js/mock-data.js';
 import {scenarios} from '../assets/js/scenarios.js';
 import {featureCatalog} from '../assets/js/feature-catalog.js';
+import {chooser,selector,journeyChooser} from '../assets/js/experience-pages.js';
+import {journeys} from '../assets/js/journeys.js';
 const root=path.resolve(import.meta.dirname,'..');
 const screens=[...customer,...staff,...operations,...access];
 const errors=[],actions=new Set(),links=new Set();
@@ -21,7 +23,11 @@ for(const s of screens){for(const key of new Set(['normal',...s.scenarios])){
  }catch(e){errors.push(s.route+'/'+key+': '+e.message);}
 }}
 for(const action of actions)if(!source.includes("'"+action+"'")&&!source.includes('"'+action+'"'))errors.push('Control has no registered handler: '+action);
-for(const route of links)if(route&&!known.has(route))errors.push('Unknown rendered route: '+route);
+for(const html of [chooser(),selector('mobile',screens),selector('website',screens),journeyChooser(journeys)]){
+ for(const m of html.matchAll(/data-action="([^"]+)"/g))if(!source.includes("'"+m[1]+"'"))errors.push('Entry control has no registered handler: '+m[1]);
+ for(const m of html.matchAll(/href="#\/([^"]*)"/g))links.add(m[1].split('?')[0]);
+}
+for(const route of links){const parts=route.split('/');if(['mobile','website'].includes(parts[0])&&parts.length>1)parts.shift();const target=parts.join('/');if(target&&!known.has(target)&&!['choose','mobile','website','journeys','directory'].includes(target))errors.push('Unknown rendered route: '+route);}
 const authoritative=fs.readFileSync(path.resolve(root,'../01-Project/Features-and-Modules.md'),'utf8');
 const sourceIds=[...authoritative.matchAll(/^\| `([A-Z]+-\d{2})` \|/gm)].map(m=>m[1]);
 if(JSON.stringify(sourceIds)!==JSON.stringify(featureCatalog.map(f=>f.id)))errors.push('Generated feature catalog differs from authoritative source');
@@ -29,6 +35,7 @@ for(const id of sourceIds)if(!screens.some(s=>s.features.includes(id)))errors.pu
 const ids=new Set(sourceIds);for(const s of screens)for(const id of s.features)if(!ids.has(id))errors.push('Unknown feature '+id+' on '+s.route);
 for(const file of ['index.html','assets/css/base.css','assets/css/components.css','assets/css/responsive.css','assets/js/app.js','documentation/Screen-Inventory.md','documentation/Complete-Screen-Matrix.md','documentation/Feature-Coverage.md','documentation/User-Flows.md','documentation/Edge-Case-Coverage.md','documentation/UX-State-Coverage.md','documentation/Design-Decisions.md','documentation/Final-UX-Review.md','documentation/Prototype-Test-Plan.md','documentation/How-to-Run.md'])if(!fs.existsSync(path.join(root,file)))errors.push('Missing required artifact '+file);
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+for(const file of ['assets/js/experience-pages.js','assets/js/situation-copy.js','assets/css/experience-choice.css','documentation/Platform-and-Screen-Coverage.md'])if(!fs.existsSync(path.join(root,file)))errors.push('Missing experience artifact '+file);
 for(const m of html.matchAll(/(?:src|href)="([^"]+)"/g))if(!m[1].startsWith('#')&&!m[1].startsWith('data:')&&!fs.existsSync(path.join(root,m[1])))errors.push('Broken HTML asset '+m[1]);
 const report={screens:screens.length,features:sourceIds.length,scenarioDefinitions:Object.keys(scenarios).length,screenScenarioCombinations:screens.reduce((n,s)=>n+new Set(['normal',...s.scenarios]).size,0),interactiveActionNames:actions.size,errors};
 fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});fs.writeFileSync(path.join(root,'artifacts/static-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));process.exitCode=errors.length?1:0;

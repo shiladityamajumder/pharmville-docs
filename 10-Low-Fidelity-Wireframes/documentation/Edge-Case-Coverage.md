@@ -1,6 +1,6 @@
 # Edge-case coverage
 
-Scenario IDs are stable across related views. Select a scenario in the reviewer panel; its start, trigger, visible result and recovery are shown on-screen. Generic loading/empty/network/session/permission states replace the action surface, preserving committed business facts. Specialized scenarios alter the relevant domain view and/or its submitted outcome. Choosing a scenario does not silently supply an approval.
+Scenario IDs are stable across related views. Product screens offer relevant situations through What if something goes wrong? with plain-language explanations; Review tools retains technical scenario selection. Loading, empty, session and permission states explain unavailable actions. Network loss retains the current task and blocks unsuccessful mutations. Specialized scenarios alter the domain view and/or its submitted outcome. Choosing a condition does not silently supply an approval. See [per-platform verification](UX-State-Coverage.md) for the distinction between implemented conditions and tested behavior.
 
 The [screen inventory](Screen-Inventory.md) lists every exact screen/state association. Links below open a representative supported screen per workspace, keeping the scenario view compact.
 

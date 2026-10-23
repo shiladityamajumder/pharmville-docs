@@ -1,10 +1,18 @@
 # Connected user flows
 
-The prototype opens in Experience mode with **Start with a customer order** as the recommended first action. **Explore by user**, **Choose another journey**, and the collapsed screen directory remain available. Journey progress follows the current route and shared mock data. It never performs an approval, payment, stock allocation or delivery action for the reviewer.
+The prototype opens at [Choose Experience](../index.html#/choose). [Mobile App](../index.html#/mobile), [Website](../index.html#/website) and [Complete Journeys](../index.html#/journeys) are distinct pages. Each platform has its own searchable screen selector. Journey progress follows the current route and shared mock data; required business actions remain explicit.
 
-The landing page offers these guided tasks: **Create an account**, **Find and order a product**, **Order a prescription medicine**, **Pay for an order**, **Prepare an order at a store**, **Deliver an order**, **Request a return**, **Process a refund**, and **Receive stock at a warehouse**. At each journey start, keep the current data or load that journey’s prepared demo fixture. Replacing existing progress requires confirmation. Cross-role handoffs offer **Continue as [role]** in the journey itself, preserve the same record, and retain permission and business gates.
+The Journeys page offers these guided tasks: **Create an account**, **Find and order a product**, **Order a prescription medicine**, **Pay for an order**, **Prepare an order at a store**, **Deliver an order**, **Request a return**, **Process a refund**, and **Receive stock at a warehouse**. At each journey start, keep the current data or load that journey’s prepared demo fixture. Replacing existing progress requires confirmation. Cross-role handoffs offer **Continue as [role]** in the journey itself, preserve the same record, and retain permission and business gates. Staff handoffs open Website; Rider handoffs open Mobile. Entering the destination URL does not grant its role.
 
 All links below open the same local application and persistent fictional records. The first visit is a fresh shopping state with an empty cart and no order or payment. Prepared fixtures are visibly labelled as demo data; any prior completed action they contain is historical. Reset between independent demonstrations.
+
+## Mobile and Website shopping demonstrations
+
+Choose the experience, select Search medicines, search for “wellness”, open the exact product and add it. Open Cart, continue through delivery address, patient confirmation and summary, then choose payment. Mobile has bottom navigation and stacked summaries; Website has header navigation and a side summary. Both experiences retain the same item, quantity, price and order reference when switching. Sign in and complete the profile if the next action requests them.
+
+On Payment, expand **What if something goes wrong?** and choose **Payment completed but confirmation was lost**. The result shows the original pending payment. **Check payment status** reconciles the captured fictional result without another charge. **Payment is still pending** demonstrates an unknown result that stays pending after a check. To compare outcomes on fresh records, explicitly load a new checkout example and confirm replacement. Returning to normal retains actual operations. See [How to Run](How-to-Run.md) for exact URLs and a quick manual check.
+
+The task links in the detailed reference below retain legacy compatibility. Within an explicit experience, screen navigation preserves its URL prefix.
 
 ## New customer, profile and delivery address
 
@@ -18,15 +26,15 @@ All links below open the same local application and persistent fictional records
 1. [Browse](../index.html#/customer/home), search or open an exact product. Add a wellness/ordinary medicine item to the cart; edit quantity or remove it before submission.
 2. [Select the address](../index.html#/customer/checkout-address) and [accept the current summary](../index.html#/customer/checkout-summary). M/O-only baskets skip prescription review. A stale price needs explicit acceptance.
 3. [Choose payment](../index.html#/customer/payment). Online options are synthetic UPI/card/net banking. COD requires its explicitly labelled eligible demo fixture; no production cap is invented.
-4. Choose the **Paid, confirmation lost** scenario before submitting online payment. The result stays pending on one reference. Repeated Pay must not create another attempt.
+4. On the payment screen, choose **Payment completed but confirmation was lost** in the on-screen situation control. This performs the guarded fictional payment attempt. The result stays pending on one reference; repeated attempts cannot create another charge.
 5. [Recover the payment](../index.html#/customer/payment-recovery) under Normal to check the existing captured fixture. Do not request another charge. The order then appears in all relevant staff views.
 
 ## Prescription medicines, partial approval and acceptance
 
 1. Start a fresh basket with a P item and a wellness item. Select the authorized patient, accept summary and [supply fictional filenames](../index.html#/customer/prescription-upload), confirming the patient association.
 2. The customer waits at [review status](../index.html#/customer/prescription-status). Payment is blocked while current P approval is missing.
-3. Switch to [pharmacist decisions](../index.html#/pharmacy/decision). Record reviewer/registration, check exact-line evidence and choose outcomes with rejection reasons. This records a reviewer’s fictional choice; no medical logic approves a real prescription.
-4. With all remaining P approved, customer **Continue** obtains current eligible stock and reaches payment. With rejection/partial approval, [accept the proposed revised basket](../index.html#/customer/revised-order), replace evidence or cancel. No silent substitution or price change occurs.
+3. In the prescription journey, choose **Continue as Pharmacist**, then open [pharmacist decisions](../index.html#/website/pharmacy/decision). Record reviewer/registration, check exact-line evidence and choose outcomes with rejection reasons. Select the Customer prescription-status card to view the recorded reason. This records a reviewer’s fictional choice; no medical logic approves a real prescription.
+4. With all remaining P approved, customer **Continue** obtains current eligible stock and reaches payment. A partial decision can offer a permitted [revised basket](../index.html#/customer/revised-order) for explicit acceptance. A fully rejected prescription instead requires corrected evidence or cancellation; payment stays blocked. No silent substitution or price change occurs.
 5. Deferred post-order upload remains visibly blocked under RX-02 until its conflicting policy is approved.
 
 ## Fulfillment, dispatch and rider delivery

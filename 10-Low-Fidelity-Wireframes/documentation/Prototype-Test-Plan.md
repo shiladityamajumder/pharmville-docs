@@ -9,6 +9,10 @@ Start the [local preview](How-to-Run.md), then run from repository root:
 ```text
 node 10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs
 node 10-Low-Fidelity-Wireframes/tests/browser.mjs
+node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs
+node 10-Low-Fidelity-Wireframes/tests/experience-flows.mjs
+node 10-Low-Fidelity-Wireframes/tools/generate-experience-coverage.mjs
+node 10-Low-Fidelity-Wireframes/tools/validate-prototype.mjs
 node scripts/validate-docs.mjs
 ```
 
@@ -25,6 +29,10 @@ The browser test reuses the repository’s existing `node_modules/puppeteer`; no
 The [Complete Screen Matrix](Complete-Screen-Matrix.md) maps each route to the test groups that exercise it. BR-02 is screen/state rendering coverage; only rows that list BR-04 have named direct interaction assertions for that route. Core journeys also cross roles, so assertions are not isolated to a single screen.
 
 ## Manual review checklist
+
+The `experience-flows.mjs` suite assigns stable `EXP-nnn` assertion IDs in its results file. It operates Choose Experience → Mobile/Website → Checkout, checks experience URLs and refresh, Back/Forward, actual shared cart quantity/price, unsupported platform/role combinations, and both shopping flows through captured-payment recovery and tracking. Account/address fixtures supply setup; shopping actions, payment, prescription upload, pharmacist rejection, store preparation, rider assignment/pickup and delivery failure use the existing UI handlers. Incorrect OTP checks include the contextual error, denied session and corrected retry. The suite separately checks every supported experience-prefixed route at its intended normal width. Normal route rendering is not treated as full interaction verification.
+
+Fresh screenshots cover all 18 requested categories plus journey selection, stock shortage and refund pending. They are generated from the current run, with actual phone-width customer captures and desktop customer/staff captures. `generate-experience-coverage.mjs` requires a successful results file before recording verified platform/scenario rows. Its legacy `generate-ux-state-coverage.mjs` entry point delegates to the same generator, so it cannot restore the old generic verification claims.
 
 - Use only the keyboard to select workspace/role/scenario, submit forms, open/cancel confirmation and follow cross-role links. Confirm labels, focus visibility and announced errors.
 - Check that each failure explains what happened, who acts next and which record remains pending. Do not treat a scenario panel label as a completed business action.

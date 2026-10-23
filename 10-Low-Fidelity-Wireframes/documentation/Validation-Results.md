@@ -1,54 +1,54 @@
 # Prototype validation results
 
-Validated locally on **23 October 2026** using the implemented HTML/CSS/JavaScript, local static server and headless Chrome after the product-quality layout, access and recovery redesign. These are prototype checks, not production application/provider/clinical acceptance.
+Validated locally on **23 October 2026** against the current HTML/CSS/JavaScript and local Chrome. These checks establish prototype behavior and layout; they do not approve production policies or integrations.
 
 ## Measured results
 
 | Check | Actual result |
-| --- | --- |
-| Implemented screens | 83; unique IDs and routes |
-| Source features mapped | 110 across 18 existing module groups |
-| Coverage classification | 70 screen, 23 interaction/state, 16 blocked by owner decision, 1 backend-only |
-| Stable scenario definitions | 35, including Normal |
-| Screen/scenario combinations visited | 718 |
-| Browser assertions | 113 full-suite assertions and 13 supplemental product UX assertions passed |
-| Registered interactive action/form names | 104; all resolve to a handler in static review |
-| Normal-screen responsive sweep | All 83 at 360 × 800, 390 × 844, 430 × 932, 768 × 1024, 1280 × 800 and 1440 × 900; no document overflow |
-| Browser errors / external dependencies | Zero detected JavaScript errors; zero external requests required |
-| Rendered hash links | Zero unresolved screen targets |
-| Basic accessibility | Normal-screen inputs have labels; no duplicate HTML IDs; dialog Escape, reset confirmation and browser history tested |
-| Selected-device preview | Mobile, tablet and desktop layouts verified inside a desktop browser; the landing-page Mobile App, Website and Complete Journeys choices are directly asserted |
-| Repository Markdown validation | 516 Markdown files, 10,605 links, 1,699 tables, and all 96 Mermaid diagrams parsed; zero documentation errors or missing feature mappings |
-| Feature and route mapping | All 110 authoritative feature IDs map to the 83-route screen registry; see [Complete Screen Matrix](Complete-Screen-Matrix.md) |
-| UX review | [Final UX Review](Final-UX-Review.md) records the weighted heuristic score and remaining limits |
-| Existing documentation preservation | Business rules, authoritative feature IDs, and scenario definitions remain unchanged |
-| Git review | `git diff --check` passed; no commit or push |
+|---|---|
+| Registered screens / draft features | 83 unique screens; all 110 source feature IDs retain mappings |
+| Feature classification | 70 screen, 23 interaction/state, 16 decision-blocked, 1 backend-only |
+| Stable scenarios | 35 definitions; 718 legacy screen/scenario render visits |
+| Full browser regression | 114 assertions passed; no JavaScript errors, unresolved hash links, document overflows, duplicate HTML IDs, unlabeled normal-screen inputs or external requests detected |
+| Product UX regression | 13 assertions passed; 30 fresh representative captures |
+| Experience acceptance | 170 assertions passed; no JavaScript errors |
+| Supported experience layouts | 113 explicit route/platform visits: Mobile at 390 px, Website at 1440 px |
+| Responsive regression | All 83 legacy routes at 360 × 800, 390 × 844, 430 × 932, 768 × 1024, 1280 × 800 and 1440 × 900 |
+| Platform/scenario matrix | 931 associations: 113 normal render/layout checks, 11 named behavior checks, 807 behavior-unverified rows |
+| Static prototype validation | 83 screens, 110 features, 35 scenarios, 104 registered screen action/form names; zero errors; entry controls/routes and required new assets also checked |
+| Repository documentation validation | 517 Markdown files, 11,665 links, 1,699 tables and all 96 Mermaid diagrams parsed; zero errors or missing mappings; 23 existing API-reference gaps remain reported |
+| Git change validation | git diff --check passed; changes stay inside the existing wireframe project |
+| Fresh experience screenshots | 22 captures in ignored artifacts/experiences; all 18 requested categories included |
 
-## Executed journeys
+## Executed demonstrations
 
-The browser suite completed signup/OTP/profile and replacement-contact proof, search/product/cart, M/O checkout, payment pending/captured-response-loss recovery, separate cancellation/refund and duplicate/cumulative refund protection. It checked payment failure and prescription rejection recovery, then exercised a direct guided customer-to-pharmacist handoff while preserving the pending order. It completed P evidence upload, payment denial before current review, pharmacist approval, eligible COD checkout, exact pick/pack, dispatch, rider acceptance, store handoff, pickup, incorrect OTP, offline queue/reconnect and shared customer delivery tracking.
+Mobile and Website each execute experience selection, checkout deep link and refresh, valid fictional checkout preparation, unknown pending payment, repeated attempt/status checks, network interruption and state-preserving scenario exit. Separate shopping paths operate Search → Product → Cart → Address → Patient → Summary → Payment → captured-confirmation recovery → tracking. Identity/address setup is labelled test setup; purchase and payment effects use existing UI handlers. A Mobile-added item retains quantity and price on Website. Browser Back/Forward restores the explicit Website context.
 
-Aftercare and operations checks covered delivered-item return requests, COD short-deposit exceptions, supplier accepted/short receipt and replay, in-transit transfer, actual destination receipt/shortage, and duplicate stock protection. Reports/exports, revoked download access, denied staff forms, revoked session plus MFA recovery, browser refresh/Back/Forward, Explorer filtering and native reset dialog were exercised.
+The prescription path actually adds a prescription medicine, accepts its summary, submits a fictional filename, and uses Continue as Pharmacist. The role changes deliberately to the Website Pharmacist while retaining the same unapproved order. An actual rejected-line reason is projected to Customer and payment remains blocked. The fulfillment failure path starts with a fresh eligible COD purchase, then actually accepts, picks, packs, assigns, signs in the rider, accepts the task, hands over custody, confirms pickup and records failure. Rider, Customer and Dispatch see the same reason without a delivered state or invented collected cash.
 
-## Screenshots and visual review
+Incorrect OTP checks request a challenge, submit the wrong code, assert the contextual error and absent session, and correct the code through the permitted retry. Stock shortage removes checkout and provides a working return to shopping. A labelled refund fixture remains Pending rather than displaying a completed payout. The original regression additionally checks exact stock movements and replay, clinical approval, delivery proof/offline recovery, cancellation/refund idempotency and cumulative bounds, warehouse receipt/transfer, COD exceptions, reports, access revocation and MFA.
 
-Local PNGs and JSON results are in ignored `artifacts/` within this folder. They include the Explorer, customer/pharmacy/rider views at all six required viewport widths, selected mobile/tablet/desktop previews, and an assigned rider task. Fresh product-ux screenshots cover 15 routes at 390 and 1440 px; customer pages and representative pharmacy, store, warehouse, dispatch, rider and finance views were visually inspected. This is representative visual review, not exhaustive human review of every screen/state.
+## Visual review
+
+Fresh chooser/selectors, Mobile and Website home/product/cart/checkout/pending-payment views, prescription rejection, desktop pharmacist review, Rider task, failed delivery and guided handoff were inspected. Review confirms bottom versus header navigation, stacked versus column/table layouts, action placement, status consistency and recovery messages. Supporting captures cover stock shortage, journeys and refund pending. Files are local ignored artifacts, not published assets. Layout checks and screenshot review do not establish full usability or WCAG conformance.
 
 ## Reproduce
 
-With the preview running, execute from repository root:
+Start the server as described in [How to Run](How-to-Run.md), then run from repository root:
 
 ```text
 node 10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs
-node 10-Low-Fidelity-Wireframes/tools/validate-prototype.mjs
 node 10-Low-Fidelity-Wireframes/tests/browser.mjs
-node scripts/validate-docs.mjs
+node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs
+node 10-Low-Fidelity-Wireframes/tests/experience-flows.mjs
+node 10-Low-Fidelity-Wireframes/tools/generate-experience-coverage.mjs
+node 10-Low-Fidelity-Wireframes/tools/validate-prototype.mjs
+npm run validate
+git diff --check
 ```
 
-The prototype needs no install to run. Browser QA reuses existing development dependencies and local Chrome; configure `PUPPETEER_EXECUTABLE_PATH` on another machine. See [How to Run](How-to-Run.md).
+The experience coverage generator requires a successful browser result and links exact EXP assertion IDs. Normal rendering is distinct from tested business behavior. The full regression deliberately selects reviewer personas for broad route visits; direct role denial is independently tested. Browser QA reuses existing development dependencies and local Chrome; set PUPPETEER_EXECUTABLE_PATH where needed. Running the prototype itself requires no install.
 
-## Remaining gaps and decisions
+## Limits
 
-The 16 policy-dependent features remain explicitly blocked/proposed in [Feature Coverage](Feature-Coverage.md). Exact clinical/payment timing, role grants, stock authority/freshness, warehouse fallback, COD/refund/tax/credit rules, rider tracking/proof/incentives and privacy need their original responsible owners. No numeric prototype fixture grants business approval.
-
-Spreadsheet handling is an intentional UX approximation: pasted CSV import and Excel-readable TSV export, without native XLSX parsing/generation. Files, maps, calls, OTP, provider messages, prescriptions and money are simulated only. No backend, medical decision engine, integration account, production data, database connection or hosted deployment is used. Full assistive-technology, real mobile device/background operation and production security/provider testing remain future work.
+[Platform coverage](Platform-and-Screen-Coverage.md) and [scenario coverage](UX-State-Coverage.md) retain untested behavior explicitly. The 16 policy decisions and backend-only AUTH-04 remain classified in [Feature Coverage](Feature-Coverage.md). Role controls are browser simulations. Some domain validation still uses page notices. Full assistive-technology review, real-device/background behavior and exhaustive scenario interaction testing remain open. CSV/TSV, filenames, maps, messages, provider outcomes and money remain local simulations. No database, backend, clinical approval policy, real payment or hosted deployment was changed. No commit or push was made.

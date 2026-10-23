@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node server.mjs",
     "test": "node tests/browser.mjs",
-    "test:ux": "node tests/product-ux.mjs"
+    "test:ux": "node tests/product-ux.mjs",
+    "test:experiences": "node tests/experience-flows.mjs"
   }
 }
