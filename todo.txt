@@ -1,0 +1,31 @@
+Now that the database reference is aligned, these are the most useful changes for the **whole repository**, in priority order:
+
+1. **Complete executable API contracts**
+   - Add OpenAPI specifications with request/response examples, permissions, validation and error responses.
+   - Resolve the **23 feature-to-API mapping gaps**.
+
+2. **Make feature progress measurable**
+   - Track each of the 110 features as designed, approved, implemented, integrated or tested.
+   - Link implementation commits and test evidence from the relevant application repositories.
+
+3. **Make the decision register actionable**
+   - Add status, responsible owner, required evidence and resolution date.
+   - Record the database-source selection as resolved while retaining deployment verification separately.
+
+4. **Prepare runnable contract tests**
+   - Organize the **234 designed application tests** into fixtures and acceptance suites.
+   - Execute them as the corresponding services become available.
+
+5. **Clean unfinished documentation**
+   - Fix placeholder sections and plain-text references such as “Open” and “Module contracts.”
+   - Refresh central coverage summaries while preserving dated historical audit results.
+
+6. **Extend CI**
+   - Validate OpenAPI schemas, examples and feature mappings.
+   - Detect missing implementation/test evidence and publish a current readiness report.
+
+7. **Audit the existing backend services**
+   - Compare authentication, product, file-service and NestJS implementations against the documented contracts.
+   - Record concrete missing endpoints, business rules and integration tests.
+
+**I would start with OpenAPI contracts and the 23 API mapping gaps.** That gives developers a concrete, verifiable implementation contract.
