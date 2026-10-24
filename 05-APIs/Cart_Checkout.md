@@ -1,8 +1,13 @@
 # Cart Checkout API contracts
 
+
+**Shared contract standards:** [conventions](API-Conventions.md) · [authentication/authorization](Authentication-and-Authorization.md) · [response envelope](Standard-Responses.md) · [errors](Error-Catalog.md) · [pagination](Pagination-and-Filtering.md) · [idempotency/concurrency](Idempotency-and-Concurrency.md) · [database-to-DTO mapping](Database-DTO-Mapping.md) · [coverage/readiness](API-Contract-Coverage.md).
+
+**Implementation evidence:** these Pharmville routes are proposed documentation contracts; no executable Pharmville HTTP routes or contract tests were found. A verified response envelope from the separate authentication service does not confirm these operation DTOs. Resolve the operation-specific gaps listed in the coverage ledger before implementation.
+
 [Operation-specific refinements](Critical-Operation-Contracts.md) · [ownership and recovery](../07-Engineering/State-and-Recovery-Contracts.md)
 
-**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#rechecked-earlier-findings).
+**Contract readiness:** Proposed for architectural review. Each route remains blocked from implementation until its operation-specific DTO, permissions, persistence mapping, state transition and tests are approved under D-024. See the [coverage ledger](API-Contract-Coverage.md) and [audit H-03](../09-References/Engineering-Audit.md#rechecked-earlier-findings).
 
 
 ## API-018 — GET `/v1/me/cart`
@@ -13,23 +18,23 @@
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](README.md#caller-trust-and-contract-readiness), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Cart_Checkout`. Primary data: `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Read/write behavior follows the operation: **load active cart**.
+Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Cart_Checkout`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Read/write behavior follows the operation: **load active cart**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
 ```http
-GET /v1/me/cart?limit=25 HTTP/1.1
+GET /v1/me/cart HTTP/1.1
 Authorization: Bearer <scoped-access-token>
 
 ```
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Load active cart; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -53,19 +58,19 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](README.md#caller-trust-and-contract-readiness), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Cart_Checkout`. Primary data: `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Read/write behavior follows the operation: **add/update cart line**.
+Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Cart_Checkout`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Read/write behavior follows the operation: **add/update cart line**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-Request schema is incomplete: the former generic body did not define this operation. Specify the business fields, types, required values, permitted scope and concurrency token before implementation.
+**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Add/update cart line) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Add/update cart line; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -89,19 +94,19 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](README.md#caller-trust-and-contract-readiness), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Cart_Checkout`. Primary data: `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Read/write behavior follows the operation: **reprice and validate quote**.
+Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Cart_Checkout`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Read/write behavior follows the operation: **reprice and validate quote**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-Request schema is incomplete: the former generic body did not define this operation. Specify the business fields, types, required values, permitted scope and concurrency token before implementation.
+**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Reprice and validate quote) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Reprice and validate quote; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -125,19 +130,19 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](README.md#caller-trust-and-contract-readiness), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Cart_Checkout`. Primary data: `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Read/write behavior follows the operation: **create one order intent**.
+Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Cart_Checkout`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `commerce.cart_items`, `commerce.carts`, `commerce.checkouts`, `commerce.order_revisions`, `commerce.orders`. Read/write behavior follows the operation: **create one order intent**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-Request schema is incomplete: the former generic body did not define this operation. Specify the business fields, types, required values, permitted scope and concurrency token before implementation.
+**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Create one order intent) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Create one order intent; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 

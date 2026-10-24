@@ -1,5 +1,10 @@
 # Authentication and Access API contracts
 
+
+**Shared contract standards:** [conventions](API-Conventions.md) · [authentication/authorization](Authentication-and-Authorization.md) · [response envelope](Standard-Responses.md) · [errors](Error-Catalog.md) · [pagination](Pagination-and-Filtering.md) · [idempotency/concurrency](Idempotency-and-Concurrency.md) · [database-to-DTO mapping](Database-DTO-Mapping.md) · [coverage/readiness](API-Contract-Coverage.md).
+
+**Implementation evidence:** these Pharmville routes are proposed documentation contracts; no executable Pharmville HTTP routes or contract tests were found. A verified response envelope from the separate authentication service does not confirm these operation DTOs. Resolve the operation-specific gaps listed in the coverage ledger before implementation.
+
 These are proposed contracts for AUTH-01–AUTH-04, not running endpoints. Customer signup/login remains ACC-01 in [Customer Accounts](Customer_Accounts.md). Authentication_Access owns challenge and session mechanics; customer and staff modules own their user-facing flows. D-003 governs credential methods, lockout, session lifetimes and throttling. No guessed numeric default is approved by this document.
 
 ## API-089 — POST `/v1/auth/staff/login`

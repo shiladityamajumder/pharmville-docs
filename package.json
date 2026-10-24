@@ -5,6 +5,7 @@
   "description": "Local documentation checks; no application runtime",
   "scripts": {
     "validate": "node scripts/validate-docs.mjs",
+    "validate:api": "python3 scripts/validate-api-contracts.py",
     "validate:render": "node scripts/validate-docs.mjs --render",
     "validate:database": "node scripts/validate-database.mjs",
     "generate:erd": "node 04-Database/ER-Diagrams/tools/generate.mjs",

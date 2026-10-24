@@ -1,6 +1,11 @@
 # Product Catalog API contracts
 
-**Contract readiness:** incomplete operation schemas remain below. These sections preserve intent and constraints but do not authorize implementation from generic payloads. See [audit H-03](../09-References/Engineering-Audit.md#rechecked-earlier-findings).
+
+**Shared contract standards:** [conventions](API-Conventions.md) · [authentication/authorization](Authentication-and-Authorization.md) · [response envelope](Standard-Responses.md) · [errors](Error-Catalog.md) · [pagination](Pagination-and-Filtering.md) · [idempotency/concurrency](Idempotency-and-Concurrency.md) · [database-to-DTO mapping](Database-DTO-Mapping.md) · [coverage/readiness](API-Contract-Coverage.md).
+
+**Implementation evidence:** these Pharmville routes are proposed documentation contracts; no executable Pharmville HTTP routes or contract tests were found. A verified response envelope from the separate authentication service does not confirm these operation DTOs. Resolve the operation-specific gaps listed in the coverage ledger before implementation.
+
+**Contract readiness:** Proposed for architectural review. Each route remains blocked from implementation until its operation-specific DTO, permissions, persistence mapping, state transition and tests are approved under D-024. See the [coverage ledger](API-Contract-Coverage.md) and [audit H-03](../09-References/Engineering-Audit.md#rechecked-earlier-findings).
 
 
 ## API-010 — GET `/v1/catalog/categories`
@@ -11,22 +16,22 @@
 
 ## Caller, permissions and dependencies
 
-Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Primary data: `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **browse published categories**.
+Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **browse published categories**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
 ```http
-GET /v1/catalog/categories?limit=25 HTTP/1.1
+GET /v1/catalog/categories HTTP/1.1
 
 ```
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Browse published categories; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -50,22 +55,22 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Primary data: `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **browse and filter products**.
+Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **browse and filter products**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
 ```http
-GET /v1/catalog/products?limit=25 HTTP/1.1
+GET /v1/catalog/products HTTP/1.1
 
 ```
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Browse and filter products; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -89,22 +94,22 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Primary data: `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **get product detail**.
+Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **get product detail**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
 ```http
-GET /v1/catalog/products/<product-uuid>?limit=25 HTTP/1.1
+GET /v1/catalog/products/<product-uuid> HTTP/1.1
 
 ```
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Get product detail; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -128,22 +133,22 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Primary data: `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **search by name, brand or salt**.
+Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **search by name, brand or salt**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
 ```http
-GET /v1/catalog/search?limit=25 HTTP/1.1
+GET /v1/catalog/search HTTP/1.1
 
 ```
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Search by name, brand or salt; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -167,22 +172,22 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Primary data: `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **check location stock**.
+Valid access token AND server-side role/location/patient/order ownership check. Public catalogue reads may be anonymous, subject to throttling. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **check location stock**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
 ```http
-GET /v1/catalog/availability?limit=25 HTTP/1.1
+GET /v1/catalog/availability HTTP/1.1
 
 ```
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Check location stock; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -206,19 +211,19 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](README.md#caller-trust-and-contract-readiness), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Primary data: `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **import catalogue draft**.
+Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **import catalogue draft**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-Request schema is incomplete: the former generic body did not define this operation. Specify the business fields, types, required values, permitted scope and concurrency token before implementation.
+**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Import catalogue draft) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Import catalogue draft; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -242,19 +247,19 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](README.md#caller-trust-and-contract-readiness), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Primary data: `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **approve p/m/o classification**.
+Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **approve p/m/o classification**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-Request schema is incomplete: the former generic body did not define this operation. Specify the business fields, types, required values, permitted scope and concurrency token before implementation.
+**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Approve P/M/O classification) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Approve P/M/O classification; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
@@ -278,19 +283,19 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](README.md#caller-trust-and-contract-readiness), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Primary data: `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **publish approved sku**.
+Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Product_Catalog`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `catalog.brands`, `catalog.categories`, `catalog.product_classification_history`, `catalog.products`, `search.documents`, `search.indexing_jobs`. Read/write behavior follows the operation: **publish approved sku**.
 
 ## HTTP request contract
 
-Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Successful request fields and input names below are **illustrative**, not confirmed DTOs.
+Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-Request schema is incomplete: the former generic body did not define this operation. Specify the business fields, types, required values, permitted scope and concurrency token before implementation.
+**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Publish approved SKU) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
 
 ## Success response (illustrative)
 
-Response schema is incomplete. Define operation-specific fields and status codes before implementation; the shared accepted-object/list envelope is not a business response contract.
+**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Publish approved SKU; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
 
-Exact success code and response fields remain a contract-review task for this operation. Use the correlation ID to connect request, audit event, and downstream external callback. Never expose prescription content or payment secrets in the response.
+The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
 ## Errors, concurrency and failure recovery
 
