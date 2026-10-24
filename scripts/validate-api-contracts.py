@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import argparse
 import re
 import sys
 from pathlib import Path
@@ -101,8 +102,66 @@ def schema_errors(doc: dict, schema: dict, value, location: str) -> list[str]:
     return errors
 
 
+def dereference(doc: dict, schema: dict) -> dict:
+    """Resolve a local schema reference for the audit subset."""
+    seen: set[str] = set()
+    while isinstance(schema, dict) and isinstance(schema.get("$ref"), str):
+        ref = schema["$ref"]
+        if ref in seen or not resolve_ref(doc, ref):
+            return {}
+        seen.add(ref)
+        target = doc
+        for token in ref[2:].split("/"):
+            target = target[token.replace("~1", "/").replace("~0", "~")]
+        schema = target
+    return schema if isinstance(schema, dict) else {}
+
+
+def operation_data_schema(doc: dict, response: dict) -> dict | None:
+    """Return a concrete success data schema, skipping the generic envelope."""
+    schema = response.get("content", {}).get("application/json", {}).get("schema", {})
+    branches = schema.get("allOf", []) if isinstance(schema, dict) else []
+    for branch in branches or [schema]:
+        resolved = dereference(doc, branch)
+        data = resolved.get("properties", {}).get("data")
+        if not isinstance(data, dict):
+            continue
+        concrete = dereference(doc, data)
+        if concrete.get("type") == "array" and isinstance(concrete.get("items"), dict):
+            concrete = dereference(doc, concrete["items"])
+        if concrete.get("type") == "object" and concrete.get("properties"):
+            return data
+    return None
+
+
+def has_example(content: dict) -> bool:
+    return any(
+        bool(media.get("examples") or "example" in media)
+        for media in (content.get("content") or {}).values()
+    )
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="fail when a documented operation still has generic or missing contract details",
+    )
+    args = parser.parse_args()
     errors: list[str] = []
+    incomplete: list[str] = []
+    audit = {
+        "operations": 0,
+        "request_body_operations": 0,
+        "typed_request_schemas": 0,
+        "request_examples": 0,
+        "typed_success_data": 0,
+        "success_examples": 0,
+        "query_operations": 0,
+        "generic_requests": 0,
+        "generic_successes": 0,
+    }
     spec = yaml.safe_load(SPEC_PATH.read_text(encoding="utf-8"))
     if spec.get("openapi") != "3.1.0":
         errors.append("OpenAPI version must be 3.1.0")
@@ -115,6 +174,7 @@ def main() -> int:
             if method not in METHODS:
                 continue
             key = (method, route)
+            audit["operations"] += 1
             if key in actual:
                 errors.append(f"duplicate method/path: {method.upper()} {route}")
             actual[key] = operation.get("operationId", "")
@@ -144,15 +204,77 @@ def main() -> int:
                     errors.append(f"database mapping ledger does not mention {table}: {method.upper()} {route}")
             if method not in {"get", "delete"} and "requestBody" not in operation:
                 errors.append(f"missing requestBody: {method.upper()} {route}")
+            request_body = operation.get("requestBody", {})
+            if request_body:
+                audit["request_body_operations"] += 1
+                request_is_typed = False
+                for media, body in request_body.get("content", {}).items():
+                    request_schema = body.get("schema", {})
+                    resolved_schema = dereference(spec, request_schema)
+                    if resolved_schema.get("type") == "object" and resolved_schema.get("properties"):
+                        request_is_typed = True
+                    if "schema" not in body:
+                        errors.append(f"missing request schema for {media}: {method.upper()} {route}")
+                if request_is_typed:
+                    audit["typed_request_schemas"] += 1
+                else:
+                    audit["generic_requests"] += 1
+                    incomplete.append(f"generic/untyped request DTO: {method.upper()} {route}")
+                if has_example(request_body):
+                    audit["request_examples"] += 1
+                else:
+                    incomplete.append(f"missing request example: {method.upper()} {route}")
+            parameters = operation.get("parameters", [])
+            path_names = set(re.findall(r"{([^}]+)}", route))
+            declared_path_names = set()
+            query_names = set()
+            for parameter in parameters:
+                if "$ref" in parameter:
+                    target = parameter["$ref"]
+                    if resolve_ref(spec, target):
+                        resolved = spec
+                        for token in target[2:].split("/"):
+                            resolved = resolved[token.replace("~1", "/").replace("~0", "~")]
+                        parameter = resolved
+                if parameter.get("in") == "path":
+                    declared_path_names.add(parameter.get("name"))
+                if parameter.get("in") == "query":
+                    query_names.add(parameter.get("name"))
+            if path_names != declared_path_names:
+                errors.append(
+                    f"path parameter mismatch: {method.upper()} {route}; "
+                    f"template={sorted(path_names)}, declared={sorted(declared_path_names)}"
+                )
+            if query_names:
+                audit["query_operations"] += 1
+            if method == "get":
+                query_status = operation.get("x-query-applicability")
+                if query_names and query_status != "parameters":
+                    errors.append(f"query parameters lack applicability marker: GET {route}")
+                elif not query_names and query_status != "not-applicable":
+                    incomplete.append(f"GET query applicability is not resolved: {route}")
+                pagination_strategy = operation.get("x-pagination-strategy")
+                if pagination_strategy not in {"offset", "cursor", "none"}:
+                    errors.append(f"missing/invalid pagination strategy: GET {route}")
+                if pagination_strategy == "cursor" and "cursor" not in query_names:
+                    errors.append(f"cursor pagination requires a cursor query parameter: GET {route}")
+                if pagination_strategy == "offset" and "offset" not in query_names:
+                    errors.append(f"offset pagination requires an offset query parameter: GET {route}")
             for media, body in operation.get("requestBody", {}).get("content", {}).items():
                 if "schema" not in body:
                     errors.append(f"missing request schema for {media}: {method.upper()} {route}")
             if not any(str(code).startswith("2") for code in operation.get("responses", {})):
                 errors.append(f"missing success response: {method.upper()} {route}")
             for response_code, response in operation.get("responses", {}).items():
+                if str(response_code) in {"204", "304"} and response.get("content"):
+                    errors.append(f"HTTP {response_code} must not declare a response body: {method.upper()} {route}")
                 for media, body in response.get("content", {}).items():
                     if "schema" not in body:
                         errors.append(f"missing response schema {response_code}/{media}: {method.upper()} {route}")
+                    if str(response_code).startswith(("4", "5")):
+                        schema = body.get("schema", {})
+                        if schema.get("$ref") != "#/components/schemas/ErrorEnvelope":
+                            errors.append(f"error response does not use ErrorEnvelope: {response_code} {method.upper()} {route}")
             api_id = operation.get("x-api-id")
             if api_id:
                 spec_ids.add(api_id)
@@ -178,6 +300,20 @@ def main() -> int:
                     for example_name, example in content.get("examples", {}).items():
                         if "value" in example:
                             errors.extend(schema_errors(spec, response_schema, example["value"], f"{method.upper()} {route} response {response_code} example {example_name}"))
+            success_responses = [
+                response for code, response in operation.get("responses", {}).items()
+                if str(code).startswith("2") and response.get("content", {}).get("application/json")
+            ]
+            typed_data = any(operation_data_schema(spec, response) is not None for response in success_responses)
+            if typed_data:
+                audit["typed_success_data"] += 1
+            elif success_responses:
+                audit["generic_successes"] += 1
+                incomplete.append(f"missing operation-specific success data DTO: {method.upper()} {route}")
+            if success_responses and any(has_example(response) for response in success_responses):
+                audit["success_examples"] += 1
+            elif success_responses:
+                incomplete.append(f"missing success example: {method.upper()} {route}")
     for route in sorted(set(documented) - set(actual)):
         errors.append(f"Markdown operation missing from OpenAPI: {route[0].upper()} {route[1]}")
     for route in sorted(set(actual) - set(documented)):
@@ -200,6 +336,10 @@ def main() -> int:
             for index, child in enumerate(value):
                 visit_all_refs(child, f"{location}[{index}]")
     visit_all_refs(spec)
+    coverage_text = (API_DIR / "API-Contract-Coverage.md").read_text(encoding="utf-8")
+    for route, api_id in documented.items():
+        if api_id not in coverage_text:
+            errors.append(f"coverage ledger missing operation reference {api_id}: {route[0].upper()} {route[1]}")
     # Every fenced JSON example in the API markdown must at least parse.
     for doc_path in API_DIR.glob("*.md"):
         text = doc_path.read_text(encoding="utf-8")
@@ -216,6 +356,21 @@ def main() -> int:
     additional_refs = len(spec_ids - historical_ids)
     print(f"API contract structure passed: {len(actual)} method/path operations, {len(historical_ids)} historical API IDs, {additional_refs} additional references, {len(operation_ids)} unique operationIds.")
     print("JSON code examples parse. Note: this structural check does not establish DTO approval or runtime behavior.")
+    print(
+        "Contract completeness audit: "
+        f"{audit['typed_request_schemas']}/{audit['request_body_operations']} request schemas typed, "
+        f"{audit['typed_success_data']} operation-specific success DTOs, "
+        f"{audit['request_examples']}/{audit['request_body_operations']} request examples, "
+        f"{audit['success_examples']} success examples, "
+        f"{audit['query_operations']} operations with query parameters; "
+        f"{len(incomplete)} incomplete contract findings."
+    )
+    if args.strict and incomplete:
+        print("Strict completeness check FAILED")
+        print("\n".join(f"- {finding}" for finding in incomplete))
+        return 1
+    if incomplete:
+        print("Use --strict to fail on incomplete contract details; the coverage ledger records these as blockers.")
     return 0
 
 

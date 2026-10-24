@@ -16,17 +16,29 @@
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Prescription_Upload`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `clinical.prescription_documents`, `clinical.prescriptions`, `platform.file_access_events`, `platform.file_access_grants`, `platform.file_objects`, `platform.file_scan_events`. Read/write behavior follows the operation: **prepare private upload**.
+Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve the requesting user from the trusted session. Client: customer web or mobile; server owner: `Prescription_Upload`. Persist upload-session state in `platform.file_upload_sessions` and file metadata in `platform.file_objects`; see field-level evidence and public projection rationale in [Database-DTO-Mapping.md](Database-DTO-Mapping.md). The documented `scope` + `idempotency_key` unique constraint requires the service to define a stable idempotency scope.
 
 ## HTTP request contract
 
 Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Prepare private upload) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
+**Proposed request DTO** (OpenAPI `PrescriptionUploadIntentRequest`):
+
+```json
+{"fileName":"prescription.pdf","contentType":"application/pdf","expectedSizeBytes":245760}
+```
+
+`fileName` maps to `platform.file_objects.original_filename` (varchar(255)); `contentType` maps to `content_type` (varchar(128)); `expectedSizeBytes` maps to positive `expected_size_bytes` (bigint). The server supplies owner identity and type from authenticated context, chooses a private storage key, creates the public file/session UUIDs, and applies configured size/type policy. Do not accept a caller-supplied storage bucket, object key, user ID, status, scan verdict, expiry, or row version. The upload-size ceiling, supported MIME policy, idempotency header contract, and signed-upload protocol remain D-024 decisions.
 
 ## Success response (illustrative)
 
-**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Prepare private upload; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
+**Proposed success response:** `201 Created`, with a short-lived private upload capability. The `uploadSessionId` and `fileId` project the tables' public UUIDs; `expiresAt` projects session expiry; `status` is the documented initial file-object state.
+
+```json
+{"success":true,"data":{"uploadSessionId":"0192a1b2-c3d4-7e8f-9012-3456789abcde","fileId":"0192a1b2-c3d4-7e8f-9012-3456789abcdf","uploadUrl":"https://upload.example.invalid/capability","expiresAt":"2026-10-24T11:00:00Z","status":"pending_upload"},"error":null,"meta":{"requestId":"req_7a3c8b17","correlationId":"corr_018f47b2-7ed0-7a12-8ab2-48df9d439e61","apiVersion":"v1","timestamp":"2026-10-24T10:30:00Z","pagination":null}}
+```
+
+`uploadUrl` is an API-level capability, not a database column, and must be omitted from logs. The placeholder host is illustrative; storage provider, HTTP method, required headers and TTL need D-024 approval. Never expose bucket, object key, encryption-key reference, multipart provider ID, or public URL.
 
 The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
@@ -52,17 +64,29 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Prescription_Upload`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `clinical.prescription_documents`, `clinical.prescriptions`, `platform.file_access_events`, `platform.file_access_grants`, `platform.file_objects`, `platform.file_scan_events`. Read/write behavior follows the operation: **confirm scanned object metadata**.
+The authenticated owner must own the upload session and associated file object; do not allow the client to choose a different file or owner. Update `platform.file_upload_sessions` and file object state through the approved upload-completion/scan workflow. `platform.file_scan_events` are audit evidence, not a client-writable DTO. This endpoint confirms transfer completion; it cannot declare a scan clean.
 
 ## HTTP request contract
 
 Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Confirm scanned object metadata) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
+**Proposed request DTO** (OpenAPI `PrescriptionUploadConfirmRequest`):
+
+```json
+{"uploadSessionId":"0192a1b2-c3d4-7e8f-9012-3456789abcde"}
+```
+
+The identifier resolves the public `platform.file_upload_sessions.id`; ownership, expiry, file association and actual storage metadata are server-validated. The client must not submit final size, checksum, malware verdict, or file status as authoritative values.
 
 ## Success response (illustrative)
 
-**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Confirm scanned object metadata; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
+**Proposed success response:** `202 Accepted` while asynchronous malware scanning remains pending. The response projects `platform.file_objects.id`, `status`, and `malware_scan_status`.
+
+```json
+{"success":true,"data":{"fileId":"0192a1b2-c3d4-7e8f-9012-3456789abcdf","status":"scanning","malwareScanStatus":"scanning"},"error":null,"meta":{"requestId":"req_7a3c8b17","correlationId":"corr_018f47b2-7ed0-7a12-8ab2-48df9d439e61","apiVersion":"v1","timestamp":"2026-10-24T10:30:00Z","pagination":null}}
+```
+
+The documented file status enum is `pending_upload`, `uploaded`, `scanning`, `available`, `quarantined`, `rejected`, `deleted`; malware scan status is `pending`, `scanning`, `clean`, `infected`, `failed`. The schema requires positive final size, SHA-256, and `clean` scan before `available`; neither transfer confirmation nor 202 means the file is safe to attach. A status-read route is not documented here and must be decided under D-024.
 
 The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
@@ -88,17 +112,29 @@ Related: [api conventions](README.md); real table mappings.
 
 ## Caller, permissions and dependencies
 
-Use the caller trust category defined in [API conventions](Authentication-and-Authorization.md), then enforce operation-specific permission and resource ownership. The server must resolve scope using a trusted session, not from a caller-controlled actor ID. Client: role-specific customer web, staff admin or rider app; server owner: `Prescription_Upload`. Domain table candidates (operation-level mapping and exact field evidence: [Database-DTO-Mapping.md](Database-DTO-Mapping.md)): `clinical.prescription_documents`, `clinical.prescriptions`, `platform.file_access_events`, `platform.file_access_grants`, `platform.file_objects`, `platform.file_scan_events`. Read/write behavior follows the operation: **attach prescription to order patient**.
+Resolve `order_id` as the public `commerce.orders.id`, then verify the order belongs to the authenticated customer. Verify `patientId` is an owned/dependent `clinical.patient_profiles.id`; the prescription table requires a patient profile and an authenticated `uploaded_by_user_id`. Each selected item must be an `commerce.order_items.id` belonging to this order and eligible for prescription linkage. Every file must be an owned private `platform.file_objects.id` with status `available` and malware scan `clean`. Persist a `clinical.prescriptions` row, one `clinical.prescription_documents` association per file, and link eligible order items through their nullable `prescription_id`. Candidate tables and fields are listed in [Database-DTO-Mapping.md](Database-DTO-Mapping.md). The DB docs do not define the eligibility predicate for prescription-required items or whether one prescription may cover all selected items; confirm those workflow rules under D-024.
 
 ## HTTP request contract
 
 Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Attach prescription to order patient) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
+**Proposed request DTO** (OpenAPI `PrescriptionAttachRequest`):
+
+```json
+{"patientId":"0192a1b2-c3d4-7e8f-9012-3456789abcde","fileIds":["0192a1b2-c3d4-7e8f-9012-3456789abcdf"],"orderItemIds":["0192a1b2-c3d4-7e8f-9012-3456789abce0"],"expectedOrderVersion":7}
+```
+
+These UUIDs project documented public keys. `expectedOrderVersion` is a proposed concurrency token mapped to `commerce.orders.row_version`; the schema itself does not prescribe a request version header. Recheck ownership, item-to-order membership, item eligibility, clean file state, and current order version inside the write transaction. Reject duplicate IDs, empty arrays, foreign-order items, non-clean files and stale versions.
 
 ## Success response (illustrative)
 
-**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Attach prescription to order patient; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
+**Proposed success response:** `201 Created`, confirming document-to-prescription and item-to-prescription associations. `uploaded` is the documented initial prescription status; it does not mean pharmacist approval.
+
+```json
+{"success":true,"data":{"orderId":"0192a1b2-c3d4-7e8f-9012-3456789abcdf","prescriptionId":"0192a1b2-c3d4-7e8f-9012-3456789abce0","patientId":"0192a1b2-c3d4-7e8f-9012-3456789abce1","linkedOrderItemIds":["0192a1b2-c3d4-7e8f-9012-3456789abce2"],"prescriptionStatus":"uploaded","orderVersion":8},"error":null,"meta":{"requestId":"req_7a3c8b17","correlationId":"corr_018f47b2-7ed0-7a12-8ab2-48df9d439e61","apiVersion":"v1","timestamp":"2026-10-24T10:30:00Z","pagination":null}}
+```
+
+`orderVersion` returns the committed order row version. The response intentionally omits patient details, document contents, storage identifiers, prescriber/reviewer fields, and internal numeric keys. Multi-document association is represented by the created prescription and linked item IDs; a response file list can be added only if the owning module approves the public projection.
 
 The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 

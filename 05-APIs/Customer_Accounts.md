@@ -113,4 +113,26 @@ The following routes make the historical references and unnumbered proposals exp
 | ACC-ROUTE-009 | `POST /v1/me/wishlist/items` | JSON: `productId` UUID; response `201` wishlist item reference and product reference | Customer session; server validates product is visible; duplicate add returns the existing item or a documented conflict after D-024 |
 | ACC-ROUTE-010 | `DELETE /v1/me/wishlist/items/{itemId}` | Path UUID; response `204` with no body; item delete is idempotent | Customer session; item must belong to caller; no effect on catalog or cart |
 
+### Customer creation examples
+
+`API-006` request:
+
+```json
+{"recipientName":"Asha Shah","recipientPhone":"+919876543210","line1":"10 Example Road","line2":null,"locality":"Indiranagar","district":"Bengaluru Urban","city":"Bengaluru","state":"Karnataka","stateCode":"KA","postalCode":"560038","countryCode":"IN","latitude":12.9784,"longitude":77.6408,"isDefault":false}
+```
+
+`API-008` request:
+
+```json
+{"name":"Aarav Shah","relationship":"child","dateOfBirth":"2016-05-12","gender":null}
+```
+
+`API-009` request:
+
+```json
+{"consentType":"service_terms","purpose":"Order processing","version":"2026-01","status":"granted","source":"signup"}
+```
+
+Their `201` response DTOs are `CustomerAddressData`, `FamilyMemberData`, and `ConsentData` in [OpenAPI](openapi.yaml). Server-owned customer linkage, internal keys and consent event actor data are never accepted from the client.
+
 For all these operations, malformed UUID/JSON is `400`, unauthenticated is `401`, cross-customer access is hidden with `404`, invalid fields are `422`, and stale or duplicate state is `409` where applicable. Mutations use the shared idempotency/version policy. A 204 response contains no JSON body. See the [coverage ledger](API-Contract-Coverage.md) for OpenAPI mapping and unresolved field approval.

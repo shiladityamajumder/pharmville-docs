@@ -64,13 +64,19 @@ Use the caller trust category defined in [API conventions](Authentication-and-Au
 
 Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Add/update cart line) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
+**Proposed request DTO:** `cartVersion` is the expected `commerce.carts.row_version`; `items` is the desired set of product lines. Each item has public `productId` and positive decimal-string `quantity` (maximum three fractional digits, from `commerce.cart_items.quantity numeric(12,3)`). Proposed max 50 items requires D-024 approval. The server derives the current cart from the authenticated customer; it does not accept `cartId`, price, currency, seller, prescription status or actor ID from the client. `unit_price_snapshot` is server-owned and revalidated at quote time.
+
+```json
+{"cartVersion":5,"items":[{"productId":"0192a1b2-c3d4-7e8f-9012-3456789abcde","quantity":"2.000"}]}
+```
 
 ## Success response (illustrative)
 
-**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Add/update cart line; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
+**Proposed success DTO:** `cartId`, incremented `cartVersion`, currency and current item projections. `unitPrice` is the persisted snapshot for display only, nullable if no current safe price is available; checkout must reprice. Response `200`; a stale cart version returns `409 STALE_VERSION` with no partial mutation.
 
-The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
+```json
+{"success":true,"data":{"cartId":"0192a1b2-c3d4-7e8f-9012-3456789abcdf","cartVersion":6,"currency":"INR","items":[{"cartItemId":"0192a1b2-c3d4-7e8f-9012-3456789abce0","productId":"0192a1b2-c3d4-7e8f-9012-3456789abcde","quantity":"2.000","unitPrice":"22.50"}]},"error":null,"meta":{"requestId":"0c50f15a-373f-42d3-b1ae-3d90a415cd91","correlationId":"9182b204-cb82-4ddc-a49d-b07743388ed6","apiVersion":"v1","timestamp":"2026-10-24T10:30:00Z","pagination":null}}
+```
 
 ## Errors, concurrency and failure recovery
 
@@ -100,11 +106,19 @@ Use the caller trust category defined in [API conventions](Authentication-and-Au
 
 Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Reprice and validate quote) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
+**Proposed request DTO** (`CheckoutQuoteRequest`): `cartId` and `addressId` are public UUID references; `cartVersion` is the expected `commerce.carts.row_version`; optional `patientId` is the public patient-profile UUID needed only where a P-class product requires an eligible patient. Authenticated ownership and conditional patient rules remain D-024 approval items. The server recalculates prices, discounts, taxes and delivery charges; client totals are not accepted.
+
+```json
+{"cartId":"0192a1b2-c3d4-7e8f-9012-3456789abcde","cartVersion":4,"addressId":"0192a1b2-c3d4-7e8f-9012-3456789abcdf","patientId":"0192a1b2-c3d4-7e8f-9012-3456789abce0"}
+```
 
 ## Success response (illustrative)
 
-**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Reprice and validate quote; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
+**Proposed success response:** `200 OK` returns a short-lived API-only `quoteToken`, evaluated cart version, repriced lines, currency-coded totals, and a derived `nextAction`. Money uses decimal strings to avoid binary floating point. The token is not a database field and must be bound to its customer, cart/version, address and expiry; token format/TTL and quote invalidation are D-009/D-024 decisions. A quote does not reserve stock or guarantee later availability.
+
+```json
+{"success":true,"data":{"quoteToken":"<opaque-signed-quote-token>","cartVersion":4,"lines":[{"productId":"018f47b2-7ed0-7a12-8ab2-48df9d439e61","quantity":"2.000","commerceClass":"O","unitPrice":{"amount":"12.50","currency":"INR"}}],"totals":{"subtotal":"25.00","discountTotal":"0.00","taxTotal":"1.25","shippingTotal":"0.00","otherChargesTotal":"0.00","grandTotal":"26.25","currency":"INR"},"nextAction":"confirm_checkout","deliveryEstimate":"2026-10-25T14:00:00Z","changedLines":[]},"error":null,"meta":{"requestId":"req_7a3c8b17","correlationId":"corr_018f47b2-7ed0-7a12-8ab2-48df9d439e61","apiVersion":"v1","timestamp":"2026-10-24T10:30:00Z","pagination":null}}
+```
 
 The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
@@ -136,11 +150,19 @@ Use the caller trust category defined in [API conventions](Authentication-and-Au
 
 Path parameters (`{...}`) identify public UUID or approved opaque IDs only; internal BIGINT row IDs must never become client authorization claims. Body for changes is JSON unless a specialized signed-object workflow is used. Validate each field's type, status, ownership, input length, allowed enum/master value and accepted record version. Any sample fields below are **proposed**, not confirmed DTOs; approve them under D-024 before implementation.
 
-**Request DTO — Blocked by D-024:** the available sources establish this operation's purpose (Create one order intent) and candidate data owner, but do not establish an approved public request schema. The Tech lead, module owner and QA lead must approve field names, types/nullability/bounds, conditional rules, actor/resource scope, and aggregate version, then align the OpenAPI request schema. No database column is assumed to be a public field; implementation remains blocked until this decision is recorded.
+**Proposed request DTO** (`CheckoutIntentRequest`): `quoteToken` is the opaque server-issued quote capability; `cartVersion` repeats the evaluated `commerce.carts.row_version`; `accepted` must be `true`. Require `Idempotency-Key` and bind it to the authenticated customer and checkout action. The server revalidates token expiry, cart version, address, price and policy before creating the checkout/order/revision. A stale or invalid quote must not create an order.
+
+```json
+{"quoteToken":"<opaque-signed-quote-token>","cartVersion":4,"accepted":true}
+```
 
 ## Success response (illustrative)
 
-**Response DTO — Blocked by D-024:** propose a filtered, operation-specific result for Create one order intent; the exact data fields, nullable fields, success status, response headers and state meaning are not verified in available sources. The Tech lead, module owner and QA lead must approve that DTO and align its OpenAPI schema before implementation.
+**Proposed success response:** `201 Created` returns `checkoutId`, `orderId`, `acceptedRevisionId`, `revisionNumber`, and distinct checkout and order statuses plus `nextAction`. `checkoutStatus: open` represents an accepted intent, not paid or finalized completion; an `orderStatus` such as `prescription_review` remains a separate domain fact.
+
+```json
+{"success":true,"data":{"checkoutId":"018f47b2-7ed0-7a12-8ab2-48df9d439e61","checkoutStatus":"open","orderId":"019047b2-7ed0-7a12-8ab2-48df9d439e62","orderStatus":"prescription_review","acceptedRevisionId":"019147b2-7ed0-7a12-8ab2-48df9d439e63","revisionNumber":1,"nextAction":"prescription_review"},"error":null,"meta":{"requestId":"req_7a3c8b17","correlationId":"corr_018f47b2-7ed0-7a12-8ab2-48df9d439e61","apiVersion":"v1","timestamp":"2026-10-24T10:30:00Z","pagination":null}}
+```
 
 The operation-specific success code remains an owner decision under D-024. On completion, return the committed result and correlation metadata; if downstream work remains, use an explicit pending state rather than claiming completion. Do not expose prescription content, credentials, payment secrets, or hidden-resource details.
 
