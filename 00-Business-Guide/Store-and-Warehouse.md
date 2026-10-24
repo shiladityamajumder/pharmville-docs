@@ -62,8 +62,8 @@ D-002 (warehouse scope), D-006/D-009 (licensed stock), D-010 (fallback/transfers
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Store Operations | [HLD](../03-Modules/Store_Operations/HLD.md) | [LLD](../03-Modules/Store_Operations/LLD.md) | [API](../05-APIs/Store_Operations.md) | [Mapping](../04-Database/Module-Mapping.md#store-operations) | [Cases](../03-Modules/Store_Operations/Edge-Cases.md) |
-| Warehouse | [HLD](../03-Modules/Warehouse/HLD.md) | [LLD](../03-Modules/Warehouse/LLD.md) | [API](../05-APIs/Warehouse.md) | [Mapping](../04-Database/Module-Mapping.md#warehouse) | [Cases](../03-Modules/Warehouse/Edge-Cases.md) |
+| Store Operations | [HLD](../03-Modules/Store-Operations/HLD.md) | [LLD](../03-Modules/Store-Operations/LLD.md) | [API](../03-Modules/Store-Operations/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#store-operations) | [Cases](../03-Modules/Store-Operations/Edge-Cases.md) |
+| Warehouse | [HLD](../03-Modules/Warehouse/HLD.md) | [LLD](../03-Modules/Warehouse/LLD.md) | [API](../03-Modules/Warehouse/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#warehouse) | [Cases](../03-Modules/Warehouse/Edge-Cases.md) |
 
 Technical workflows: [WF-006](../06-Workflows/WF-006-Licensed-Site-Allocation.md) · [WF-007](../06-Workflows/WF-007-Picking-Packing-and-Handoff.md) · [WF-014](../06-Workflows/WF-014-Supplier-Receiving.md).
 

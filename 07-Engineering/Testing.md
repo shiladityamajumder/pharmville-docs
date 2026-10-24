@@ -8,11 +8,11 @@
 
 **Planned coverage:** all 110 draft features have specific normal/adverse assertions in module LLD and Edge-Cases pages. Existing detailed ACC-01/ACC-02 test IDs remain authoritative. These are designed tests, not application execution evidence; mark every case NOT RUN until a harness, fixture/policy version and result are attached.
 
-Module test cases · DB migration policy
+Module test cases · DB schema/release policy
 
 ## Migration and SQL validation plan
 
-Reuse repo's SQL runner and validation scripts, not Alembic. Validate checksum/ledger, V0001 on empty DB, the documented forward upgrade nonempty upgrade, model/catalog parity and numeric crosswalk integrity on isolated PG18 and a clean PG15 environment when available.
+Use `npm run validate:database` and `python3 scripts/validate-database.py --fresh` against newly initialized private PostgreSQL 18.6 only. Verify full catalog parity, all 266 empty tables, constraints, crosswalks, capability roles, grants and RLS. Legacy ORM/runner tests are archived historical evidence. A future populated-database upgrade and earlier-engine compatibility need a separate approved test design.
 
 Exercise all existing PK/FK/UNIQUE/CHECK/index/trigger/RLS semantics through their canonical service operations.
 
@@ -30,7 +30,7 @@ Do not assume UI screenshot screens demonstrate backend readiness. Require trace
 
 ## API and provider integration verification
 
-Boot the proposed NestJS API against a disposable DB migrated through authoritative the checked-in SQL migration history. Validate request schema, object-level authorization, transaction behavior, provider adapter signatures, late callbacks, outbox/inbox event ordering and application ↔ SQL contract parity. Ensure API-created UUID identifiers align with BIGINT internal crosswalks.
+Boot the proposed NestJS API against a disposable database installed from the canonical standalone SQL, with independently reviewed synthetic fixtures. Validate exact DTOs, object authorization, transactions, provider signatures, late/duplicate callbacks, outbox/inbox ordering and application-to-SQL contract parity. Public UUIDs remain separate from BIGINT crosswalk keys. These application/provider tests are designed, not executed by this rework.
 
 Cashfree sandbox tests must cover pending/failed/success, signature and raw-body validation, replay and reconciliation. Techsmith must demonstrate authoritative location-lot observation and loss/reconnect handling; simulate stale stock before allowing reservations.
 
@@ -83,7 +83,7 @@ A passed local DB RLS suite supports defense-in-depth but does not prove the cli
 
 ## Quality strategy and evidence levels
 
-A database-only test is not a delivered customer journey. Test the stack in layers: domain/DTO unit tests, PostgreSQL migration and concurrency tests, API and provider sandbox integration tests, browser/rider end-to-end journeys, privacy/security tests, representative performance tests, owner UAT and operational recovery drills.
+A database-only test is not a delivered customer journey. Test the stack in layers: domain/DTO unit tests, PostgreSQL schema and concurrency tests, API and provider sandbox integration tests, browser/rider end-to-end journeys, privacy/security tests, representative performance tests, owner UAT and operational recovery drills.
 
 The database acceptance report records 108 independently run PostgreSQL 18 local tests passed and zero SQL↔model parity differences, but no implemented NestJS endpoints, Cashfree adapter, production POS sync, rider app or deployed file-signing service. Therefore **application test completion is zero proven by these files**, not 108. Never inherit DB PASS as full-product readiness.
 
@@ -113,23 +113,23 @@ The [master register](../09-References/Coverage-and-Traceability.md) owns featur
 
 | Module | Normal/implementation tests | Adverse cases |
 | --- | --- | --- |
-| Admin CMS (`ADM-01`, `ADM-02`, `ADM-03`, `ADM-04`, `ADM-05`, `ADM-06`, `ADM-07`, `ADM-08`, `ADM-09`) | [LLD](../03-Modules/Admin_CMS/LLD.md) | [Edge cases](../03-Modules/Admin_CMS/Edge-Cases.md) |
+| Admin CMS (`ADM-01`, `ADM-02`, `ADM-03`, `ADM-04`, `ADM-05`, `ADM-06`, `ADM-07`, `ADM-08`, `ADM-09`) | [LLD](../03-Modules/Admin/LLD.md) | [Edge cases](../03-Modules/Admin/Edge-Cases.md) |
 | Audit (`AUD-01`, `AUD-02`) | [LLD](../03-Modules/Audit/LLD.md) | [Edge cases](../03-Modules/Audit/Edge-Cases.md) |
-| Authentication Access (`AUTH-01`, `AUTH-02`, `AUTH-03`, `AUTH-04`) | [LLD](../03-Modules/Authentication_Access/LLD.md) | [Edge cases](../03-Modules/Authentication_Access/Edge-Cases.md) |
-| Cart Checkout (`CHK-01`, `CHK-02`, `CHK-03`, `CHK-04`, `CHK-05`, `CHK-06`, `CHK-07`, `CHK-08`) | [LLD](../03-Modules/Cart_Checkout/LLD.md) | [Edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md) |
-| Customer Accounts (`ACC-01`, `ACC-02`, `ACC-03`, `ACC-04`, `ACC-05`, `ACC-06`, `ACC-07`) | [LLD](../03-Modules/Customer_Accounts/LLD.md) | [Edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md) |
-| Customer Orders (`ORD-01`, `ORD-02`, `ORD-03`, `ORD-04`, `ORD-05`, `ORD-06`, `ORD-07`, `ORD-08`, `ORD-09`) | [LLD](../03-Modules/Customer_Orders/LLD.md) | [Edge cases](../03-Modules/Customer_Orders/Edge-Cases.md) |
-| Delivery Operations (`DLV-01`, `DLV-02`, `DLV-03`, `DLV-04`, `DLV-05`) | [LLD](../03-Modules/Delivery_Operations/LLD.md) | [Edge cases](../03-Modules/Delivery_Operations/Edge-Cases.md) |
-| Finance Payments (`FIN-01`, `FIN-02`, `FIN-03`, `FIN-04`, `FIN-05`, `FIN-06`, `FIN-07`) | [LLD](../03-Modules/Finance_Payments/LLD.md) | [Edge cases](../03-Modules/Finance_Payments/Edge-Cases.md) |
+| Authentication Access (`AUTH-01`, `AUTH-02`, `AUTH-03`, `AUTH-04`) | [LLD](../03-Modules/Authentication/LLD.md) | [Edge cases](../03-Modules/Authentication/Edge-Cases.md) |
+| Cart Checkout (`CHK-01`, `CHK-02`, `CHK-03`, `CHK-04`, `CHK-05`, `CHK-06`, `CHK-07`, `CHK-08`) | [LLD](../03-Modules/Cart-Checkout/LLD.md) | [Edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md) |
+| Customer Accounts (`ACC-01`, `ACC-02`, `ACC-03`, `ACC-04`, `ACC-05`, `ACC-06`, `ACC-07`) | [LLD](../03-Modules/Customer-Accounts/LLD.md) | [Edge cases](../03-Modules/Customer-Accounts/Edge-Cases.md) |
+| Customer Orders (`ORD-01`, `ORD-02`, `ORD-03`, `ORD-04`, `ORD-05`, `ORD-06`, `ORD-07`, `ORD-08`, `ORD-09`) | [LLD](../03-Modules/Customer-Orders/LLD.md) | [Edge cases](../03-Modules/Customer-Orders/Edge-Cases.md) |
+| Delivery Operations (`DLV-01`, `DLV-02`, `DLV-03`, `DLV-04`, `DLV-05`) | [LLD](../03-Modules/Delivery/LLD.md) | [Edge cases](../03-Modules/Delivery/Edge-Cases.md) |
+| Finance Payments (`FIN-01`, `FIN-02`, `FIN-03`, `FIN-04`, `FIN-05`, `FIN-06`, `FIN-07`) | [LLD](../03-Modules/Payments/LLD.md) | [Edge cases](../03-Modules/Payments/Edge-Cases.md) |
 | Inventory (`INV-01`, `INV-02`, `INV-03`, `INV-04`, `INV-05`, `INV-06`, `INV-07`) | [LLD](../03-Modules/Inventory/LLD.md) | [Edge cases](../03-Modules/Inventory/Edge-Cases.md) |
 | Notifications (`NOT-01`, `NOT-02`, `NOT-03`, `NOT-04`, `NOT-05`) | [LLD](../03-Modules/Notifications/LLD.md) | [Edge cases](../03-Modules/Notifications/Edge-Cases.md) |
-| Order Operations (`OMS-01`, `OMS-02`, `OMS-03`, `OMS-04`, `OMS-05`, `OMS-06`, `OMS-07`) | [LLD](../03-Modules/Order_Operations/LLD.md) | [Edge cases](../03-Modules/Order_Operations/Edge-Cases.md) |
-| Pharmacist Review (`PHM-01`, `PHM-02`, `PHM-03`, `PHM-04`, `PHM-05`) | [LLD](../03-Modules/Pharmacist_Review/LLD.md) | [Edge cases](../03-Modules/Pharmacist_Review/Edge-Cases.md) |
-| Prescription Upload (`RX-01`, `RX-02`, `RX-03`, `RX-04`, `RX-05`) | [LLD](../03-Modules/Prescription_Upload/LLD.md) | [Edge cases](../03-Modules/Prescription_Upload/Edge-Cases.md) |
-| Product Catalog (`CAT-01`, `CAT-02`, `CAT-03`, `CAT-04`, `CAT-05`, `CAT-06`) | [LLD](../03-Modules/Product_Catalog/LLD.md) | [Edge cases](../03-Modules/Product_Catalog/Edge-Cases.md) |
+| Order Operations (`OMS-01`, `OMS-02`, `OMS-03`, `OMS-04`, `OMS-05`, `OMS-06`, `OMS-07`) | [LLD](../03-Modules/Order-Management/LLD.md) | [Edge cases](../03-Modules/Order-Management/Edge-Cases.md) |
+| Pharmacist Review (`PHM-01`, `PHM-02`, `PHM-03`, `PHM-04`, `PHM-05`) | [LLD](../03-Modules/Pharmacist-Review/LLD.md) | [Edge cases](../03-Modules/Pharmacist-Review/Edge-Cases.md) |
+| Prescription Upload (`RX-01`, `RX-02`, `RX-03`, `RX-04`, `RX-05`) | [LLD](../03-Modules/Prescription-Management/LLD.md) | [Edge cases](../03-Modules/Prescription-Management/Edge-Cases.md) |
+| Product Catalog (`CAT-01`, `CAT-02`, `CAT-03`, `CAT-04`, `CAT-05`, `CAT-06`) | [LLD](../03-Modules/Product-Catalog/LLD.md) | [Edge cases](../03-Modules/Product-Catalog/Edge-Cases.md) |
 | Reporting (`REP-01`, `REP-02`, `REP-03`, `REP-04`, `REP-05`, `REP-06`, `REP-07`) | [LLD](../03-Modules/Reporting/LLD.md) | [Edge cases](../03-Modules/Reporting/Edge-Cases.md) |
-| Rider App (`RID-01`, `RID-02`, `RID-03`, `RID-04`, `RID-05`, `RID-06`, `RID-07`) | [LLD](../03-Modules/Rider_App/LLD.md) | [Edge cases](../03-Modules/Rider_App/Edge-Cases.md) |
-| Store Operations (`STO-01`, `STO-02`, `STO-03`, `STO-04`, `STO-05`) | [LLD](../03-Modules/Store_Operations/LLD.md) | [Edge cases](../03-Modules/Store_Operations/Edge-Cases.md) |
+| Rider App (`RID-01`, `RID-02`, `RID-03`, `RID-04`, `RID-05`, `RID-06`, `RID-07`) | [LLD](../03-Modules/Rider-Operations/LLD.md) | [Edge cases](../03-Modules/Rider-Operations/Edge-Cases.md) |
+| Store Operations (`STO-01`, `STO-02`, `STO-03`, `STO-04`, `STO-05`) | [LLD](../03-Modules/Store-Operations/LLD.md) | [Edge cases](../03-Modules/Store-Operations/Edge-Cases.md) |
 | Warehouse (`WH-01`, `WH-02`, `WH-03`, `WH-04`, `WH-05`) | [LLD](../03-Modules/Warehouse/LLD.md) | [Edge cases](../03-Modules/Warehouse/Edge-Cases.md) |
 
 ## Interrupted-workflow checks

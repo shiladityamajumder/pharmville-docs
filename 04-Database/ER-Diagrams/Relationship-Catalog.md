@@ -2,9 +2,9 @@
 
 ## Scope and evidence
 
-The checked-out `healthcare_db` snapshot contains **1461 declared foreign-key constraints**. The catalog keeps every physical constraint as its own row, including the paired public UUID and internal BIGINT relationships. It records source columns, referenced columns, nullability, uniqueness-based cardinality, delete/update actions, and the owning schema diagram.
+The validated standalone SQL catalog contains **1461 declared foreign-key constraints**. The catalog keeps every physical constraint as its own row, including the paired public UUID and internal BIGINT relationships. It records source columns, referenced columns, nullability, uniqueness-based cardinality, delete/update actions, and the owning schema diagram.
 
-The records are derived from the SHA-256 verified catalog register in the user-supplied `healthcare_db/` folder. All migration SQL files and supporting sources match [Database-Evidence.json](../../09-References/Database-Evidence.json). The recorded catalog describes the supplied V0030 schema; no live production database was inspected. See [migration evidence](../Migrations.md) for source identity and deployment verification limits.
+The records are derived from the validated standalone-schema catalog, checked against [Database-Evidence.json](../../09-References/Database-Evidence.json). The [installation and provenance reference](../Migrations.md) distinguishes executed isolated parity from production deployment.
 
 ## Browse by child schema
 

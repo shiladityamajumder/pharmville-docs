@@ -21,7 +21,7 @@ Order Operations commands allocation; Inventory commands stock; eligibility cons
 
 Candidate existing tables: `commerce.orders`, `commerce.order_allocations`, `commerce.order_revisions`, `warehouse.stock_reservations`, `organization.licenses`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-041/API-042 and API-052/API-053. [Order Operations](../05-APIs/Order_Operations.md) · [Inventory](../05-APIs/Inventory.md).
+Related proposed operations: API-041/API-042 and API-052/API-053. [Order Operations](../03-Modules/Order-Management/APIs.md) · [Inventory](../03-Modules/Inventory/APIs.md).
 
 ## Sequence
 

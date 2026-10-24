@@ -193,27 +193,27 @@ erDiagram
         bigint organization_id_internal_id FK
         uuid updated_by FK
     }
-    identity__users o|--o{ marketplace__seller_locations : "FK-0839 FK-0846 FK-0838"
+    identity__users o|--o{ marketplace__seller_locations : "FK-0838 FK-0839 FK-0846"
+    organization__licenses o|--o{ marketplace__seller_locations : "FK-0840 FK-0841"
+    organization__locations ||--o{ marketplace__seller_locations : "FK-0842 FK-0843"
     marketplace__sellers ||--o{ marketplace__seller_locations : "FK-0844 FK-0845"
     warehouse__warehouses o|--o{ marketplace__seller_locations : "FK-0847 FK-0848"
-    organization__locations ||--o{ marketplace__seller_locations : "FK-0842 FK-0843"
-    organization__licenses o|--o{ marketplace__seller_locations : "FK-0840 FK-0841"
     identity__users o|--o{ marketplace__seller_service_levels : "FK-0863 FK-0866"
     marketplace__sellers ||--o{ marketplace__seller_service_levels : "FK-0864 FK-0865"
+    marketplace__commission_plans o|--o{ marketplace__sellers : "FK-0867 FK-0868"
     identity__users o|--o{ marketplace__sellers : "FK-0869 FK-0870 FK-0873"
     organization__organizations ||--o{ marketplace__sellers : "FK-0871 FK-0872"
-    marketplace__commission_plans o|--o{ marketplace__sellers : "FK-0867 FK-0868"
-    identity__users o|--o{ marketplace__seller_commission_assignments : "FK-0834 FK-0837"
     marketplace__commission_plans ||--o{ marketplace__seller_commission_assignments : "FK-0832 FK-0833"
-    marketplace__sellers ||--o{ marketplace__seller_commission_assignments : "FK-0836 FK-0835"
+    identity__users o|--o{ marketplace__seller_commission_assignments : "FK-0834 FK-0837"
+    marketplace__sellers ||--o{ marketplace__seller_commission_assignments : "FK-0835 FK-0836"
     identity__users o|--o{ marketplace__commission_plans : "FK-0829 FK-0830 FK-0831"
-    identity__users ||--o{ marketplace__seller_ratings : "FK-0862"
-    marketplace__sellers ||--o{ marketplace__seller_ratings : "FK-0860 FK-0861"
     commerce__orders ||--o{ marketplace__seller_ratings : "FK-0858 FK-0859"
+    marketplace__sellers ||--o{ marketplace__seller_ratings : "FK-0860 FK-0861"
+    identity__users ||--o{ marketplace__seller_ratings : "FK-0862"
     identity__users o|--o{ marketplace__seller_product_listings : "FK-0849 FK-0850 FK-0855"
-    marketplace__sellers ||--o{ marketplace__seller_product_listings : "FK-0854 FK-0853"
+    catalog__products ||--o{ marketplace__seller_product_listings : "FK-0851 FK-0852"
+    marketplace__sellers ||--o{ marketplace__seller_product_listings : "FK-0853 FK-0854"
     catalog__product_variants o|--o{ marketplace__seller_product_listings : "FK-0856 FK-0857"
-    catalog__products ||--o{ marketplace__seller_product_listings : "FK-0852 FK-0851"
 ```
 
 **Entity name mapping**
@@ -263,4 +263,4 @@ No dedicated workflow from the 14 documented workflows is mapped to this schema.
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/marketplace/README.md) · [Product_Catalog HLD](../../03-Modules/Product_Catalog/HLD.md) · [Product_Catalog LLD](../../03-Modules/Product_Catalog/LLD.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/marketplace/README.md) · [Product_Catalog HLD](../../03-Modules/Product-Catalog/HLD.md) · [Product_Catalog LLD](../../03-Modules/Product-Catalog/LLD.md)

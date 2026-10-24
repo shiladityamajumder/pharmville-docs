@@ -200,31 +200,31 @@ erDiagram
         bigint organization_id_internal_id FK
         uuid updated_by FK
     }
-    identity__users o|--o{ fulfillment__fulfillment_orders : "FK-0599 FK-0608"
-    warehouse__warehouses ||--o{ fulfillment__fulfillment_orders : "FK-0610 FK-0609"
-    commerce__order_groups o|--o{ fulfillment__fulfillment_orders : "FK-0601 FK-0600"
-    commerce__order_revisions o|--o{ fulfillment__fulfillment_orders : "FK-0604 FK-0605"
-    commerce__orders ||--o{ fulfillment__fulfillment_orders : "FK-0602 FK-0603"
-    marketplace__sellers o|--o{ fulfillment__fulfillment_orders : "FK-0606 FK-0607"
     fulfillment__picking_waves o|--o{ fulfillment__fulfillment_orders : "FK-0597 FK-0598"
+    identity__users o|--o{ fulfillment__fulfillment_orders : "FK-0599 FK-0608"
+    commerce__order_groups o|--o{ fulfillment__fulfillment_orders : "FK-0600 FK-0601"
+    commerce__orders ||--o{ fulfillment__fulfillment_orders : "FK-0602 FK-0603"
+    commerce__order_revisions o|--o{ fulfillment__fulfillment_orders : "FK-0604 FK-0605"
+    marketplace__sellers o|--o{ fulfillment__fulfillment_orders : "FK-0606 FK-0607"
+    warehouse__warehouses ||--o{ fulfillment__fulfillment_orders : "FK-0609 FK-0610"
     identity__users o|--o{ fulfillment__picking_waves : "FK-0654 FK-0655"
     warehouse__warehouses ||--o{ fulfillment__picking_waves : "FK-0656 FK-0657"
     identity__users o|--o{ fulfillment__pick_tasks : "FK-0641 FK-0642 FK-0645"
+    fulfillment__fulfillment_orders ||--o{ fulfillment__pick_tasks : "FK-0643 FK-0644"
     fulfillment__picking_waves o|--o{ fulfillment__pick_tasks : "FK-0646 FK-0647"
-    fulfillment__fulfillment_orders ||--o{ fulfillment__pick_tasks : "FK-0644 FK-0643"
     identity__users o|--o{ fulfillment__picking_wave_orders : "FK-0648 FK-0651"
-    fulfillment__picking_waves ||--o{ fulfillment__picking_wave_orders : "FK-0653 FK-0652"
-    fulfillment__fulfillment_orders ||--o{ fulfillment__picking_wave_orders : "FK-0650 FK-0649"
+    fulfillment__fulfillment_orders ||--o{ fulfillment__picking_wave_orders : "FK-0649 FK-0650"
+    fulfillment__picking_waves ||--o{ fulfillment__picking_wave_orders : "FK-0652 FK-0653"
     identity__users o|--o{ fulfillment__pack_tasks : "FK-0611 FK-0612 FK-0615"
-    fulfillment__fulfillment_orders ||--o{ fulfillment__pack_tasks : "FK-0614 FK-0613"
-    identity__users o|--o{ fulfillment__packages : "FK-0629 FK-0624 FK-0630"
-    fulfillment__fulfillment_orders ||--o{ fulfillment__packages : "FK-0626 FK-0625"
+    fulfillment__fulfillment_orders ||--o{ fulfillment__pack_tasks : "FK-0613 FK-0614"
+    identity__users o|--o{ fulfillment__packages : "FK-0624 FK-0629 FK-0630"
+    fulfillment__fulfillment_orders ||--o{ fulfillment__packages : "FK-0625 FK-0626"
     fulfillment__pack_tasks o|--o{ fulfillment__packages : "FK-0627 FK-0628"
     identity__users o|--o{ fulfillment__fulfillment_events : "FK-0588"
-    fulfillment__fulfillment_orders ||--o{ fulfillment__fulfillment_events : "FK-0590 FK-0589"
+    fulfillment__fulfillment_orders ||--o{ fulfillment__fulfillment_events : "FK-0589 FK-0590"
     identity__users o|--o{ fulfillment__fulfillment_order_items : "FK-0591 FK-0596"
-    commerce__order_items ||--o{ fulfillment__fulfillment_order_items : "FK-0594 FK-0595"
     fulfillment__fulfillment_orders ||--o{ fulfillment__fulfillment_order_items : "FK-0592 FK-0593"
+    commerce__order_items ||--o{ fulfillment__fulfillment_order_items : "FK-0594 FK-0595"
 ```
 
 **Entity name mapping**
@@ -363,10 +363,10 @@ erDiagram
         uuid warehouse_id FK, UK
         bigint warehouse_id_internal_id FK
     }
+    warehouse__bins ||--o{ fulfillment__pick_task_items : "FK-0631 FK-0632"
     identity__users o|--o{ fulfillment__pick_task_items : "FK-0633 FK-0640"
     warehouse__inventory_lots ||--o{ fulfillment__pick_task_items : "FK-0634 FK-0635"
-    commerce__order_items ||--o{ fulfillment__pick_task_items : "FK-0637 FK-0636"
-    warehouse__bins ||--o{ fulfillment__pick_task_items : "FK-0631 FK-0632"
+    commerce__order_items ||--o{ fulfillment__pick_task_items : "FK-0636 FK-0637"
     fulfillment__pick_tasks ||--o{ fulfillment__pick_task_items : "FK-0638 FK-0639"
     identity__users o|--o{ fulfillment__package_items : "FK-0616 FK-0623"
     warehouse__inventory_lots ||--o{ fulfillment__package_items : "FK-0617 FK-0618"
@@ -414,4 +414,4 @@ See [WF-007](../../06-Workflows/WF-007-Picking-Packing-and-Handoff.md), [WF-008]
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/fulfillment/README.md) · [Order_Operations HLD](../../03-Modules/Order_Operations/HLD.md) · [Order_Operations LLD](../../03-Modules/Order_Operations/LLD.md) · [Store_Operations HLD](../../03-Modules/Store_Operations/HLD.md) · [Store_Operations LLD](../../03-Modules/Store_Operations/LLD.md) · [WF-007](../../06-Workflows/WF-007-Picking-Packing-and-Handoff.md) · [WF-008](../../06-Workflows/WF-008-Rider-Assignment-and-POD.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/fulfillment/README.md) · [Order_Operations HLD](../../03-Modules/Order-Management/HLD.md) · [Order_Operations LLD](../../03-Modules/Order-Management/LLD.md) · [Store_Operations HLD](../../03-Modules/Store-Operations/HLD.md) · [Store_Operations LLD](../../03-Modules/Store-Operations/LLD.md) · [WF-007](../../06-Workflows/WF-007-Picking-Packing-and-Handoff.md) · [WF-008](../../06-Workflows/WF-008-Rider-Assignment-and-POD.md)

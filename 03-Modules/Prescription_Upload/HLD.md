@@ -1,69 +1,35 @@
-# Prescription Upload HLD
+# Compatibility navigation
 
-<!-- ERD-NAV-START -->
+This document moved to the module-first source of truth. [Open the canonical document](../Prescription-Management/HLD.md). Existing paths and section anchors remain available for wireframe and historical references.
 
-## Database relationships
+<a id="prescription-upload-hld"></a>
 
-[`clinical` ERD](../../04-Database/ER-Diagrams/03-clinical.md) · [`platform` ERD](../../04-Database/ER-Diagrams/18-platform.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
+[Open section](../Prescription-Management/HLD.md#prescription-upload-hld)
 
-These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the supplied source and deployment verification limits.
+<a id="database-relationships"></a>
 
-<!-- ERD-NAV-END -->
+[Open section](../Prescription-Management/HLD.md#database-relationships)
 
-[Business flow](../../00-Business-Guide/Prescription-and-Pharmacy.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
+<a id="mod-004-private-prescription-intake--hld"></a>
 
-## MOD-004: Private prescription intake — HLD
+[Open section](../Prescription-Management/HLD.md#mod-004-private-prescription-intake--hld)
 
-> [!NOTE]
-> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+<a id="major-operations"></a>
 
-**Business responsibility:** Private prescription intake. An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers.
+[Open section](../Prescription-Management/HLD.md#major-operations)
 
-**System responsibility:** The `Prescription_Upload` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
+<a id="dependencies-and-trust-boundaries"></a>
 
-### Major operations
+[Open section](../Prescription-Management/HLD.md#dependencies-and-trust-boundaries)
 
-- Upload one or more prescriptions (JPG, PNG, PDF) at checkout (`RX-01`)
-- Upload within 24 hours after ordering; auto-cancel after that (`RX-02`)
-- Reuse a saved, still-valid prescription (`RX-03`)
-- Link each prescription to the patient (self or family member) (`RX-04`)
-- See the pharmacist's decision and reason; re-upload after rejection (`RX-05`)
+<a id="risk"></a>
 
-### Dependencies and trust boundaries
+[Open section](../Prescription-Management/HLD.md#risk)
 
-- Database candidates: `clinical.prescriptions`, `clinical.prescription_documents`, `platform.file_objects`, `platform.file_access_events`, `platform.file_upload_sessions`.
-- Role, patient, store and order scope resolved from trusted access context, not JSON body.
-- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
-- Use local transactions for authoritative state; publish external side effects only after commit.
+<a id="mod-004--private-prescription-intake"></a>
 
-**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
+[Open section](../Prescription-Management/HLD.md#mod-004--private-prescription-intake)
 
-### Risk
+<a id="developer-navigation"></a>
 
-An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## MOD-004 — Private prescription intake
-
-**Source classification:** 5 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
-
-**Purpose:** An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers.
-
-**Feature coverage**
-
-- **RX-01 / REQ-022:** Upload one or more prescriptions (JPG, PNG, PDF) at checkout (Must (draft)).
-- **RX-02 / REQ-023:** Upload within 24 hours after ordering; auto-cancel after that (Should (draft)).
-- **RX-03 / REQ-024:** Reuse a saved, still-valid prescription (Should (draft)).
-- **RX-04 / REQ-025:** Link each prescription to the patient (self or family member) (Must (draft)).
-- **RX-05 / REQ-026:** See the pharmacist's decision and reason; re-upload after rejection (Must (draft)).
-
-### Developer navigation
-
-- [Module HLD](HLD.md)
-- [Module LLD](LLD.md)
-- Internal architecture
-- [API contracts](../../05-APIs/Prescription_Upload.md)
-- [Database mapping](../../04-Database/Module-Mapping.md)
-- [Testing](../../07-Engineering/Testing.md)
-- [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
-
-**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
+[Open section](../Prescription-Management/HLD.md#developer-navigation)

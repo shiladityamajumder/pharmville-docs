@@ -1,35 +1,43 @@
 # `catalog.product_variants`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds product variants records within the catalog domain (product, medicine, and classification masters). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 20 columns, 15 constraints, 4 indexes, 3 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | catalog.product_variants |
+| Classification | Master / Reference |
+| Proposed business write owner | Product_Catalog |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 20 columns; 15 PK/FK/UQ/CHECK/exclusion constraints; 13 named PostgreSQL 18 NOT NULL constraints; 4 indexes; 3 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_catalog_product_variants_created_by_users) |
-| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | See exact constraints |
-| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_catalog_product_variants_deleted_by_users) |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `is_default` | `boolean` | No | `false` | Yes/no flag for is default | Control conditional business behavior | See exact constraints |
-| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | See exact constraints |
-| `name` | `character varying(255)` | No | — | Inferred: stores name for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `pack_quantity` | `numeric(12,3)` | No | — | Pack quantity value | Track resource or item amounts accurately | See exact constraints |
-| `pack_uom_id` | `uuid` | Yes | — | Reference linking this record to units of measure | Ensures related business data can be joined and validated | FK → `catalog.units_of_measure` (fk_catalog_product_variants_pack_uom_id_units_of_measure) |
-| `pack_uom_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `catalog.units_of_measure` (fk_catalog_product_variants_pack_uom_id_units_of_measur_5b35); Numeric/public-key pair verification required |
-| `product_id` | `uuid` | No | — | Reference linking this record to products | Ensures related business data can be joined and validated | FK → `catalog.products` (fk_catalog_product_variants_product_id_products) |
-| `product_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `catalog.products` (fk_catalog_product_variants_product_id_products_numeric); Numeric/public-key pair verification required |
-| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | optimistic concurrency |
-| `status` | `character varying(16)` | No | `'draft'::character varying` | Current business or processing state | Restricts and records allowed actions | See exact constraints |
-| `strength_display` | `character varying(128)` | Yes | — | Inferred: stores strength display for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | See exact constraints |
-| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_catalog_product_variants_updated_by_users) |
-| `variant_sku` | `character varying(64)` | No | — | Inferred: stores variant sku for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_catalog_product_variants_created_by_users` |
+| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | Exact constraints below |
+| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_catalog_product_variants_deleted_by_users` |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `is_default` | `boolean` | No | `false` | Yes/no flag for is default | Control conditional business behavior | Exact constraints below |
+| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | Exact constraints below |
+| `name` | `character varying(255)` | No | — | Inferred: stores name for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `pack_quantity` | `numeric(12,3)` | No | — | Pack quantity value | Track resource or item amounts accurately | Exact constraints below |
+| `pack_uom_id` | `uuid` | Yes | — | Reference linking this record to units of measure | Ensures related business data can be joined and validated | FK → `catalog.units_of_measure` via `fk_catalog_product_variants_pack_uom_id_units_of_measure` |
+| `pack_uom_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `catalog.units_of_measure` via `fk_catalog_product_variants_pack_uom_id_units_of_measur_5b35` |
+| `product_id` | `uuid` | No | — | Reference linking this record to products | Ensures related business data can be joined and validated | FK → `catalog.products` via `fk_catalog_product_variants_product_id_products` |
+| `product_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `catalog.products` via `fk_catalog_product_variants_product_id_products_numeric` |
+| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | Checked positive; optimistic precondition and maintenance trigger |
+| `status` | `character varying(16)` | No | `'draft'::character varying` | Current business or processing state | Restricts and records allowed actions | Collation: default |
+| `strength_display` | `character varying(128)` | Yes | — | Inferred: stores strength display for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | Exact constraints below |
+| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_catalog_product_variants_updated_by_users` |
+| `variant_sku` | `character varying(64)` | No | — | Inferred: stores variant sku for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
 
 ## Record lifecycle and users
 
@@ -38,23 +46,48 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Product_Catalog, Admin_CMS, Inventory. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `catalog.product_variants` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_catalog_product_variants_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `deleted_by` → `identity.users(id)` via `fk_catalog_product_variants_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `updated_by` → `identity.users(id)` via `fk_catalog_product_variants_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `pack_uom_id` → `catalog.units_of_measure(id)` via `fk_catalog_product_variants_pack_uom_id_units_of_measure`; `FOREIGN KEY (pack_uom_id) REFERENCES catalog.units_of_measure(id) ON DELETE SET NULL`
-- `product_id` → `catalog.products(id)` via `fk_catalog_product_variants_product_id_products`; `FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE CASCADE`
-- `pack_uom_id_internal_id` → `catalog.units_of_measure(internal_id)` via `fk_catalog_product_variants_pack_uom_id_units_of_measur_5b35`; `FOREIGN KEY (pack_uom_id_internal_id) REFERENCES catalog.units_of_measure(internal_id) ON DELETE SET NULL`
-- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_catalog_product_variants_product_id_products_numeric`; `FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE CASCADE`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_catalog_product_variants_created_by_users | `created_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_catalog_product_variants_deleted_by_users | `deleted_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_catalog_product_variants_pack_uom_id_units_of_measur_5b35 | `pack_uom_id_internal_id` | [`catalog.units_of_measure`](../../Tables/catalog/units_of_measure.md) | `FOREIGN KEY (pack_uom_id_internal_id) REFERENCES catalog.units_of_measure(internal_id) ON DELETE SET NULL` |
+| fk_catalog_product_variants_pack_uom_id_units_of_measure | `pack_uom_id` | [`catalog.units_of_measure`](../../Tables/catalog/units_of_measure.md) | `FOREIGN KEY (pack_uom_id) REFERENCES catalog.units_of_measure(id) ON DELETE SET NULL` |
+| fk_catalog_product_variants_product_id_products | `product_id` | [`catalog.products`](../../Tables/catalog/products.md) | `FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE CASCADE` |
+| fk_catalog_product_variants_product_id_products_numeric | `product_id_internal_id` | [`catalog.products`](../../Tables/catalog/products.md) | `FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE CASCADE` |
+| fk_catalog_product_variants_updated_by_users | `updated_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 
-**Referenced by 22 FK constraints** (sample): `catalog.product_identifiers`, `catalog.product_media`, `commerce.cart_items`, `commerce.order_items`, `marketplace.seller_product_listings`, `pricing.product_prices`, `procurement.supplier_products`, `procurement.purchase_requisition_items`, `procurement.purchase_order_items`, `warehouse.inventory_lots`, `warehouse.replenishment_rules`, `catalog.product_identifiers`.
+### Dependent tables
+
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`catalog.product_identifiers`](../../Tables/catalog/product_identifiers.md) | fk_catalog_product_identifiers_variant_id_product_varia_946b | `variant_id_internal_id` | `internal_id` |
+| [`catalog.product_identifiers`](../../Tables/catalog/product_identifiers.md) | fk_catalog_product_identifiers_variant_id_product_variants | `variant_id` | `id` |
+| [`catalog.product_media`](../../Tables/catalog/product_media.md) | fk_catalog_product_media_variant_id_product_variants | `variant_id` | `id` |
+| [`catalog.product_media`](../../Tables/catalog/product_media.md) | fk_catalog_product_media_variant_id_product_variants_numeric | `variant_id_internal_id` | `internal_id` |
+| [`commerce.cart_items`](../../Tables/commerce/cart_items.md) | fk_commerce_cart_items_variant_id_product_variants | `variant_id` | `id` |
+| [`commerce.cart_items`](../../Tables/commerce/cart_items.md) | fk_commerce_cart_items_variant_id_product_variants_numeric | `variant_id_internal_id` | `internal_id` |
+| [`commerce.order_items`](../../Tables/commerce/order_items.md) | fk_commerce_order_items_variant_id_product_variants | `variant_id` | `id` |
+| [`commerce.order_items`](../../Tables/commerce/order_items.md) | fk_commerce_order_items_variant_id_product_variants_numeric | `variant_id_internal_id` | `internal_id` |
+| [`marketplace.seller_product_listings`](../../Tables/marketplace/seller_product_listings.md) | fk_marketplace_seller_product_listings_variant_id_produ_4a78 | `variant_id` | `id` |
+| [`marketplace.seller_product_listings`](../../Tables/marketplace/seller_product_listings.md) | fk_marketplace_seller_product_listings_variant_id_produ_69a3 | `variant_id_internal_id` | `internal_id` |
+| [`pricing.product_prices`](../../Tables/pricing/product_prices.md) | fk_pricing_product_prices_variant_id_product_variants | `variant_id` | `id` |
+| [`pricing.product_prices`](../../Tables/pricing/product_prices.md) | fk_pricing_product_prices_variant_id_product_variants_numeric | `variant_id_internal_id` | `internal_id` |
+| [`procurement.purchase_order_items`](../../Tables/procurement/purchase_order_items.md) | fk_procurement_purchase_order_items_variant_id_product__7c24 | `variant_id_internal_id` | `internal_id` |
+| [`procurement.purchase_order_items`](../../Tables/procurement/purchase_order_items.md) | fk_procurement_purchase_order_items_variant_id_product_variants | `variant_id` | `id` |
+| [`procurement.purchase_requisition_items`](../../Tables/procurement/purchase_requisition_items.md) | fk_procurement_purchase_requisition_items_variant_id_pr_3f8f | `variant_id` | `id` |
+| [`procurement.purchase_requisition_items`](../../Tables/procurement/purchase_requisition_items.md) | fk_procurement_purchase_requisition_items_variant_id_pr_f93f | `variant_id_internal_id` | `internal_id` |
+| [`procurement.supplier_products`](../../Tables/procurement/supplier_products.md) | fk_procurement_supplier_products_variant_id_product_var_def8 | `variant_id_internal_id` | `internal_id` |
+| [`procurement.supplier_products`](../../Tables/procurement/supplier_products.md) | fk_procurement_supplier_products_variant_id_product_variants | `variant_id` | `id` |
+| [`warehouse.inventory_lots`](../../Tables/warehouse/inventory_lots.md) | fk_warehouse_inventory_lots_variant_id_product_variants | `variant_id` | `id` |
+| [`warehouse.inventory_lots`](../../Tables/warehouse/inventory_lots.md) | fk_warehouse_inventory_lots_variant_id_product_variants_numeric | `variant_id_internal_id` | `internal_id` |
+| [`warehouse.replenishment_rules`](../../Tables/warehouse/replenishment_rules.md) | fk_warehouse_replenishment_rules_variant_id_product_var_2345 | `variant_id_internal_id` | `internal_id` |
+| [`warehouse.replenishment_rules`](../../Tables/warehouse/replenishment_rules.md) | fk_warehouse_replenishment_rules_variant_id_product_variants | `variant_id` | `id` |
 
 ## `catalog.product_variants` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 20 columns, 15 constraints, 4 indexes, 3 triggers.
 
 ### Existing foreign-key dependencies
 
@@ -62,11 +95,11 @@ Schema contract and field explanations from the documentation catalog. The datab
 | --- | --- | --- |
 | `created_by` | `identity.users` | `fk_catalog_product_variants_created_by_users` |
 | `deleted_by` | `identity.users` | `fk_catalog_product_variants_deleted_by_users` |
-| `updated_by` | `identity.users` | `fk_catalog_product_variants_updated_by_users` |
+| `pack_uom_id_internal_id` | `catalog.units_of_measure` | `fk_catalog_product_variants_pack_uom_id_units_of_measur_5b35` |
 | `pack_uom_id` | `catalog.units_of_measure` | `fk_catalog_product_variants_pack_uom_id_units_of_measure` |
 | `product_id` | `catalog.products` | `fk_catalog_product_variants_product_id_products` |
-| `pack_uom_id_internal_id` | `catalog.units_of_measure` | `fk_catalog_product_variants_pack_uom_id_units_of_measur_5b35` |
 | `product_id_internal_id` | `catalog.products` | `fk_catalog_product_variants_product_id_products_numeric` |
+| `updated_by` | `identity.users` | `fk_catalog_product_variants_updated_by_users` |
 
 ### Existing constraints
 
@@ -87,29 +120,40 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `fk_catalog_product_variants_updated_by_users` | FOREIGN KEY | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 | `pk_catalog_product_variants` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_catalog_product_variants_id` | UNIQUE | `UNIQUE (id)` |
+| `product_variants_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `product_variants_id_not_null` | NOT NULL | `NOT NULL id` |
+| `product_variants_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `product_variants_is_default_not_null` | NOT NULL | `NOT NULL is_default` |
+| `product_variants_is_deleted_not_null` | NOT NULL | `NOT NULL is_deleted` |
+| `product_variants_name_not_null` | NOT NULL | `NOT NULL name` |
+| `product_variants_pack_quantity_not_null` | NOT NULL | `NOT NULL pack_quantity` |
+| `product_variants_product_id_internal_id_not_null` | NOT NULL | `NOT NULL product_id_internal_id` |
+| `product_variants_product_id_not_null` | NOT NULL | `NOT NULL product_id` |
+| `product_variants_row_version_not_null` | NOT NULL | `NOT NULL row_version` |
+| `product_variants_status_not_null` | NOT NULL | `NOT NULL status` |
+| `product_variants_updated_at_not_null` | NOT NULL | `NOT NULL updated_at` |
+| `product_variants_variant_sku_not_null` | NOT NULL | `NOT NULL variant_sku` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `ix_catalog_product_variants_product_id` | `CREATE INDEX ix_catalog_product_variants_product_id ON catalog.product_variants USING btree (product_id)` |
-| `pk_catalog_product_variants` | `CREATE UNIQUE INDEX pk_catalog_product_variants ON catalog.product_variants USING btree (internal_id)` |
-| `uq_catalog_product_variants_id` | `CREATE UNIQUE INDEX uq_catalog_product_variants_id ON catalog.product_variants USING btree (id)` |
-| `uq_catalog_variant_sku_active` | `CREATE UNIQUE INDEX uq_catalog_variant_sku_active ON catalog.product_variants USING btree (variant_sku) WHERE is_deleted = false` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `ix_catalog_product_variants_product_id` | btree | `(product_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_catalog_product_variants_product_id ON catalog.product_variants USING btree (product_id)` |
+| `pk_catalog_product_variants` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_catalog_product_variants ON catalog.product_variants USING btree (internal_id)` |
+| `uq_catalog_product_variants_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_catalog_product_variants_id ON catalog.product_variants USING btree (id)` |
+| `uq_catalog_variant_sku_active` | btree | `(variant_sku)` | is_deleted = false | Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_catalog_variant_sku_active ON catalog.product_variants USING btree (variant_sku) WHERE is_deleted = false` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON catalog.product_variants FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["pack_uom_id","pack_uom_id_internal_id","catalog","units_of_measure"],["product_id","product_id_internal_id","catalog","products"]]', 'internal_id', 'id')` |
-| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON catalog.product_variants FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON catalog.product_variants FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["pack_uom_id","pack_uom_id_internal_id","catalog","units_of_measure"],["product_id","product_id_internal_id","catalog","products"]]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON catalog.product_variants FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["pack_uom_id","pack_uom_id_internal_id","catalog","units_of_measure"],["product_id","product_id_internal_id","catalog","products"]]', 'internal_id', 'id')` | O |
+| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON catalog.product_variants FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON catalog.product_variants FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["pack_uom_id","pack_uom_id_internal_id","catalog","units_of_measure"],["product_id","product_id_internal_id","catalog","products"]]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.
 
 ## Master-data planning
 
@@ -123,7 +167,7 @@ Application code should catch and translate database errors into safe user messa
 | Scope | Global catalog/reference; scope still limits administrative maintenance. |
 | Referencing tables | `catalog.product_identifiers`, `catalog.product_media`, `commerce.cart_items`, `commerce.order_items`, `marketplace.seller_product_listings`, `pricing.product_prices`, `procurement.purchase_order_items`, `procurement.purchase_requisition_items`, `procurement.supplier_products`, `warehouse.inventory_lots`, `warehouse.replenishment_rules` |
 | Features | `ADM-06`, `ADM-07`, `CAT-02`, `CAT-04`, `CHK-01`, `CHK-02`, `CHK-05`, `CHK-06`, `CHK-07`, `CHK-08`, `INV-01`, `INV-03`, `INV-04`, `INV-05`, `INV-07`, `OMS-02`, `OMS-03`, `OMS-04`, `OMS-05`, `ORD-02`, `ORD-04`, `ORD-05`, `PHM-03`, `PHM-05`, `REP-03`, `RX-04`, `RX-05`, `STO-02`, `STO-03`, `STO-04`, `WH-01`, `WH-02` |
-| API consumers | [API-012](../../../05-APIs/Product_Catalog.md), [API-014](../../../05-APIs/Product_Catalog.md), [API-015](../../../05-APIs/Product_Catalog.md), [API-017](../../../05-APIs/Product_Catalog.md), [API-018](../../../05-APIs/Cart_Checkout.md), [API-019](../../../05-APIs/Cart_Checkout.md), [API-020](../../../05-APIs/Cart_Checkout.md), [API-021](../../../05-APIs/Cart_Checkout.md), [API-024](../../../05-APIs/Prescription_Upload.md), [API-026](../../../05-APIs/Customer_Orders.md), [API-027](../../../05-APIs/Customer_Orders.md), [API-028](../../../05-APIs/Customer_Orders.md), [API-040](../../../05-APIs/Order_Operations.md), [API-041](../../../05-APIs/Order_Operations.md), [API-042](../../../05-APIs/Order_Operations.md), [API-043](../../../05-APIs/Order_Operations.md), [API-046](../../../05-APIs/Store_Operations.md), [API-047](../../../05-APIs/Store_Operations.md), [API-048](../../../05-APIs/Store_Operations.md), [API-049](../../../05-APIs/Store_Operations.md), [API-050](../../../05-APIs/Inventory.md), [API-051](../../../05-APIs/Inventory.md), [API-052](../../../05-APIs/Inventory.md), [API-054](../../../05-APIs/Inventory.md), [API-055](../../../05-APIs/Inventory.md), [API-056](../../../05-APIs/Warehouse.md), [API-057](../../../05-APIs/Warehouse.md), [API-058](../../../05-APIs/Warehouse.md), [API-062](../../../05-APIs/Pharmacist_Review.md), [API-063](../../../05-APIs/Pharmacist_Review.md), [API-084](../../../05-APIs/Reporting.md) |
+| API consumers | [API-012](../../../03-Modules/Product-Catalog/APIs.md), [API-014](../../../03-Modules/Product-Catalog/APIs.md), [API-015](../../../03-Modules/Product-Catalog/APIs.md), [API-017](../../../03-Modules/Product-Catalog/APIs.md), [API-018](../../../03-Modules/Cart-Checkout/APIs.md), [API-019](../../../03-Modules/Cart-Checkout/APIs.md), [API-020](../../../03-Modules/Cart-Checkout/APIs.md), [API-021](../../../03-Modules/Cart-Checkout/APIs.md), [API-024](../../../03-Modules/Prescription-Management/APIs.md), [API-026](../../../03-Modules/Customer-Orders/APIs.md), [API-027](../../../03-Modules/Customer-Orders/APIs.md), [API-028](../../../03-Modules/Customer-Orders/APIs.md), [API-040](../../../03-Modules/Order-Management/APIs.md), [API-041](../../../03-Modules/Order-Management/APIs.md), [API-042](../../../03-Modules/Order-Management/APIs.md), [API-043](../../../03-Modules/Order-Management/APIs.md), [API-046](../../../03-Modules/Store-Operations/APIs.md), [API-047](../../../03-Modules/Store-Operations/APIs.md), [API-048](../../../03-Modules/Store-Operations/APIs.md), [API-049](../../../03-Modules/Store-Operations/APIs.md), [API-050](../../../03-Modules/Inventory/APIs.md), [API-051](../../../03-Modules/Inventory/APIs.md), [API-052](../../../03-Modules/Inventory/APIs.md), [API-054](../../../03-Modules/Inventory/APIs.md), [API-055](../../../03-Modules/Inventory/APIs.md), [API-056](../../../03-Modules/Warehouse/APIs.md), [API-057](../../../03-Modules/Warehouse/APIs.md), [API-058](../../../03-Modules/Warehouse/APIs.md), [API-062](../../../03-Modules/Pharmacist-Review/APIs.md), [API-063](../../../03-Modules/Pharmacist-Review/APIs.md), [API-084](../../../03-Modules/Reporting/APIs.md) |
 
 ### Expected initial records
 

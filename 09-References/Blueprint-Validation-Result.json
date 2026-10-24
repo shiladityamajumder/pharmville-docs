@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "modules": 18,
+  "features": 110,
+  "api_operations": 107,
+  "complete_proposed": 97,
+  "planning_percent": 90.65,
+  "approved": 0,
+  "tables_with_owner": 266,
+  "masters": 44,
+  "protected_files": 46,
+  "wireframe_source_targets": 16,
+  "compatibility_targets": 70,
+  "errors": []
+}

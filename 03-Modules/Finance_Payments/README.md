@@ -1,74 +1,35 @@
-# Finance Payments
+# Compatibility navigation
 
-[Business flow](../../00-Business-Guide/Finance-and-Reconciliation.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
+This document moved to the module-first source of truth. [Open the canonical document](../Payments/README.md). Existing paths and section anchors remain available for wireframe and historical references.
 
-## MOD-014 — Payment truth, refunds and invoice evidence
+<a id="finance-payments"></a>
 
-**Source classification:** 7 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
+[Open section](../Payments/README.md#finance-payments)
 
-**Purpose:** Unknown provider outcomes stay pending; external callbacks cannot double-apply money.
+<a id="mod-014--payment-truth-refunds-and-invoice-evidence"></a>
 
-**Feature coverage**
+[Open section](../Payments/README.md#mod-014--payment-truth-refunds-and-invoice-evidence)
 
-- **FIN-01 / REQ-086:** Payment records from Cashfree webhooks and COD collections (Must (draft)).
-- **FIN-02 / REQ-087:** GST invoice per order, from the right GSTIN (Must (draft)).
-- **FIN-03 / REQ-088:** Automatic refunds; manual refunds need approval above a set amount (Must (draft)).
-- **FIN-04 / REQ-089:** COD refunds by bank transfer or UPI (Should (draft)).
-- **FIN-05 / REQ-090:** Daily reconciliation: Cashfree settlements vs orders (Must (draft)).
-- **FIN-06 / REQ-091:** COD reconciliation: collected vs deposited (Must (draft)).
-- **FIN-07 / REQ-092:** Credit notes for refunds and returns (Should (draft)).
+<a id="developer-navigation"></a>
 
-### Developer navigation
+[Open section](../Payments/README.md#developer-navigation)
 
-- 🏗️ [Module HLD](HLD.md)
-- ⚙️ [Module LLD](LLD.md)
-- Internal architecture
-- 🔗 [API contracts](../../05-APIs/Finance_Payments.md)
-- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
-- 🧪 [Testing](../../07-Engineering/Testing.md)
-- 🗓️ [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
+<a id="mod-014-payment-truth-refunds-and-invoice-evidence--hld"></a>
 
-**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
+[Open section](../Payments/README.md#mod-014-payment-truth-refunds-and-invoice-evidence--hld)
 
-## MOD-014: Payment truth, refunds and invoice evidence — HLD
+<a id="major-operations"></a>
 
-> [!NOTE]
-> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+[Open section](../Payments/README.md#major-operations)
 
-**Business responsibility:** Payment truth, refunds and invoice evidence. Unknown provider outcomes stay pending; external callbacks cannot double-apply money.
+<a id="dependencies-and-trust-boundaries"></a>
 
-**System responsibility:** The `Finance_Payments` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
+[Open section](../Payments/README.md#dependencies-and-trust-boundaries)
 
-### Major operations
+<a id="risk"></a>
 
-- Payment records from Cashfree webhooks and COD collections (`FIN-01`)
-- GST invoice per order, from the right GSTIN (`FIN-02`)
-- Automatic refunds; manual refunds need approval above a set amount (`FIN-03`)
-- COD refunds by bank transfer or UPI (`FIN-04`)
-- Daily reconciliation: Cashfree settlements vs orders (`FIN-05`)
-- COD reconciliation: collected vs deposited (`FIN-06`)
-- Credit notes for refunds and returns (`FIN-07`)
+[Open section](../Payments/README.md#risk)
 
-### Dependencies and trust boundaries
+<a id="related-design-and-delivery-references"></a>
 
-- Database candidates: `payment.payment_intents`, `payment.payment_attempts`, `payment.payment_webhooks`, `payment.refunds`, `finance.invoices`.
-- Role, patient, store and order scope resolved from trusted access context, not JSON body.
-- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
-- Use local transactions for authoritative state; publish external side effects only after commit.
-
-**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
-
-### Risk
-
-Unknown provider outcomes stay pending; external callbacks cannot double-apply money. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Related design and delivery references
-
-- 🏗️ [HLD](HLD.md)
-- ⚙️ [LLD](LLD.md)
-- 🧪 [Edge cases](Edge-Cases.md)
-- 🔗 [API contracts](../../05-APIs/Finance_Payments.md)
-- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
-- 🧪 [QA scenarios](../../07-Engineering/Testing.md)
-- 🗓️ [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
-- End-to-end flows: [workflows](../../06-Workflows/README.md)
+[Open section](../Payments/README.md#related-design-and-delivery-references)

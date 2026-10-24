@@ -1,67 +1,35 @@
-# Authentication Access HLD
+# Compatibility navigation
 
-<!-- ERD-NAV-START -->
+This document moved to the module-first source of truth. [Open the canonical document](../Authentication/HLD.md). Existing paths and section anchors remain available for wireframe and historical references.
 
-## Database relationships
+<a id="authentication-access-hld"></a>
 
-[`identity` ERD](../../04-Database/ER-Diagrams/10-identity.md) · [`organization` ERD](../../04-Database/ER-Diagrams/16-organization.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
+[Open section](../Authentication/HLD.md#authentication-access-hld)
 
-These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the supplied source and deployment verification limits.
+<a id="database-relationships"></a>
 
-<!-- ERD-NAV-END -->
+[Open section](../Authentication/HLD.md#database-relationships)
 
-[Business flow](../../00-Business-Guide/Accounts-and-Login.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
+<a id="mod-017-login-sessions-roles-and-access-control--hld"></a>
 
-## MOD-017: Login, sessions, roles and access control — HLD
+[Open section](../Authentication/HLD.md#mod-017-login-sessions-roles-and-access-control--hld)
 
-> [!NOTE]
-> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+<a id="major-operations"></a>
 
-**Business responsibility:** Login, sessions, roles and access control. Client-supplied actor, role and location are never trusted as authorisation context.
+[Open section](../Authentication/HLD.md#major-operations)
 
-**System responsibility:** The `Authentication_Access` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
+<a id="dependencies-and-trust-boundaries"></a>
 
-### Major operations
+[Open section](../Authentication/HLD.md#dependencies-and-trust-boundaries)
 
-- Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager (`AUTH-01`)
-- Lockout rules, session limits, one session per staff account (`AUTH-02`)
-- OTP rate limits per number and IP (`AUTH-03`)
-- Permissions checked on the server for every request (`AUTH-04`)
+<a id="risk"></a>
 
-### Dependencies and trust boundaries
+[Open section](../Authentication/HLD.md#risk)
 
-- Database candidates: `identity.users`, `identity.sessions`, `identity.roles`, `identity.user_roles`, `identity.permissions`.
-- Role, patient, store and order scope resolved from trusted access context, not JSON body.
-- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
-- Use local transactions for authoritative state; publish external side effects only after commit.
+<a id="mod-017--login-sessions-roles-and-access-control"></a>
 
-**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
+[Open section](../Authentication/HLD.md#mod-017--login-sessions-roles-and-access-control)
 
-### Risk
+<a id="developer-navigation"></a>
 
-Client-supplied actor, role and location are never trusted as authorisation context. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## MOD-017 — Login, sessions, roles and access control
-
-**Source classification:** 4 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
-
-**Purpose:** Client-supplied actor, role and location are never trusted as authorisation context.
-
-**Feature coverage**
-
-- **AUTH-01 / REQ-102:** Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager (Must (draft)).
-- **AUTH-02 / REQ-103:** Lockout rules, session limits, one session per staff account (Must (draft)).
-- **AUTH-03 / REQ-104:** OTP rate limits per number and IP (Must (draft)).
-- **AUTH-04 / REQ-105:** Permissions checked on the server for every request (Must (draft)).
-
-### Developer navigation
-
-- [Module HLD](HLD.md)
-- [Module LLD](LLD.md)
-- Internal architecture
-- [API contracts](../../05-APIs/Authentication_Access.md)
-- [Database mapping](../../04-Database/Module-Mapping.md)
-- [Testing](../../07-Engineering/Testing.md)
-- [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
-
-**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
+[Open section](../Authentication/HLD.md#developer-navigation)

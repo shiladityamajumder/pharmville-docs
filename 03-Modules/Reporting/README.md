@@ -1,5 +1,19 @@
 # Reporting
 
+**Stable module ID:** `Reporting` · **Proposed accountable role:** Reporting / Finance analytics.
+
+## Module blueprint navigation
+
+| Planning concern | Canonical reference |
+| --- | --- |
+| Scope, requirements and business flow | [Business flow](Business-Flow.md) |
+| Components, boundaries and design | [HLD](HLD.md) · [LLD](LLD.md) |
+| Operation contracts and DTOs | [APIs](APIs.md) |
+| Owned and consumed database objects | [Database](Database.md) |
+| State, permissions, recovery and tests | [Operating contract](Operations.md) · [edge cases](Edge-Cases.md) |
+| Dependencies and owner decisions | [Dependencies](Dependencies.md) |
+
+
 [Business flow](../../00-Business-Guide/Reporting-and-Audit.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
 ## MOD-015 — Scoped operations and financial reports
@@ -23,7 +37,7 @@
 - 🏗️ [Module HLD](HLD.md)
 - ⚙️ [Module LLD](LLD.md)
 - Internal architecture
-- 🔗 [API contracts](../../05-APIs/Reporting.md)
+- 🔗 [API contracts](APIs.md)
 - 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
 - 🧪 [Testing](../../07-Engineering/Testing.md)
 - 🗓️ [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
@@ -67,7 +81,7 @@ Reports must be authorised by entity scope and must not export unapproved patien
 - 🏗️ [HLD](HLD.md)
 - ⚙️ [LLD](LLD.md)
 - 🧪 [Edge cases](Edge-Cases.md)
-- 🔗 [API contracts](../../05-APIs/Reporting.md)
+- 🔗 [API contracts](APIs.md)
 - 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
 - 🧪 [QA scenarios](../../07-Engineering/Testing.md)
 - 🗓️ [Development tasks](../../08-Development-Plan/Implementation-Plan.md)

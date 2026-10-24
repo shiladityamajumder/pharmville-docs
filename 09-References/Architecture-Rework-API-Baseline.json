@@ -1,0 +1,858 @@
+[
+  {
+    "method": "post",
+    "path": "/v1/auth/customer/otp/request",
+    "id": "API-001",
+    "operationId": "API_001_Request_OTP",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/auth/customer/otp/verify",
+    "id": "API-002",
+    "operationId": "API_002_Verify_OTP",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me",
+    "id": "API-003",
+    "operationId": "API_003_Read_profile",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "patch",
+    "path": "/v1/me",
+    "id": "API-004",
+    "operationId": "API_004_Update_profile",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/addresses",
+    "id": "API-005",
+    "operationId": "API_005_List_customer_addresses",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/me/addresses",
+    "id": "API-006",
+    "operationId": "API_006_Create_customer_address",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/patients",
+    "id": "API-007",
+    "operationId": "API_007_List_dependent_patients",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/me/patients",
+    "id": "API-008",
+    "operationId": "API_008_Create_dependent_patient",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/me/consents",
+    "id": "API-009",
+    "operationId": "API_009_Record_customer_consent",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/consents",
+    "id": "ACC-ROUTE-005",
+    "operationId": "ACC_ROUTE_102_List_customer_consents",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/catalog/categories",
+    "id": "API-010",
+    "operationId": "API_010_GET_v1_catalog_categories",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/catalog/products",
+    "id": "API-011",
+    "operationId": "API_011_GET_v1_catalog_products",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/catalog/products/{product_id}",
+    "id": "API-012",
+    "operationId": "API_012_GET_v1_catalog_products_product_id",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/catalog/search",
+    "id": "API-013",
+    "operationId": "API_013_GET_v1_catalog_search",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/catalog/availability",
+    "id": "API-014",
+    "operationId": "API_014_GET_v1_catalog_availability",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/catalog/imports",
+    "id": "API-015",
+    "operationId": "API_015_POST_v1_admin_catalog_imports",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/catalog/products/{product_id}/classification",
+    "id": "API-016",
+    "operationId": "API_016_POST_v1_admin_catalog_products_product_id_classification",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/catalog/products/{product_id}/publish",
+    "id": "API-017",
+    "operationId": "API_017_POST_v1_admin_catalog_products_product_id_publish",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/cart",
+    "id": "API-018",
+    "operationId": "API_018_GET_v1_me_cart",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "put",
+    "path": "/v1/me/cart/items",
+    "id": "API-019",
+    "operationId": "API_019_PUT_v1_me_cart_items",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/checkouts/quotes",
+    "id": "API-020",
+    "operationId": "API_020_POST_v1_checkouts_quotes",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/checkouts",
+    "id": "API-021",
+    "operationId": "API_021_POST_v1_checkouts",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/prescriptions/upload-intents",
+    "id": "API-022",
+    "operationId": "API_022_POST_v1_prescriptions_upload_intents",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/prescriptions/documents/confirm",
+    "id": "API-023",
+    "operationId": "API_023_POST_v1_prescriptions_documents_confirm",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/orders/{order_id}/prescriptions",
+    "id": "API-024",
+    "operationId": "API_024_POST_v1_orders_order_id_prescriptions",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/orders",
+    "id": "API-025",
+    "operationId": "API_025_GET_v1_me_orders",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/orders/{order_id}",
+    "id": "API-026",
+    "operationId": "API_026_GET_v1_me_orders_order_id",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/me/orders/{order_id}/cancel",
+    "id": "API-027",
+    "operationId": "API_027_POST_v1_me_orders_order_id_cancel",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/me/orders/{order_id}/returns",
+    "id": "API-028",
+    "operationId": "API_028_POST_v1_me_orders_order_id_returns",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/orders/{order_id}/invoice",
+    "id": "API-029",
+    "operationId": "API_029_GET_v1_me_orders_order_id_invoice",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/orders/{order_id}/refunds",
+    "id": "API-030",
+    "operationId": "API_030_GET_v1_me_orders_order_id_refunds",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/orders/{order_id}/delivery",
+    "id": "API-031",
+    "operationId": "API_031_GET_v1_me_orders_order_id_delivery",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/dashboard",
+    "id": "API-032",
+    "operationId": "API_032_GET_v1_admin_dashboard",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/staff",
+    "id": "API-033",
+    "operationId": "API_033_POST_v1_admin_staff",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "patch",
+    "path": "/v1/admin/staff/{staff_id}",
+    "id": "API-034",
+    "operationId": "API_034_PATCH_v1_admin_staff_staff_id",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/settings",
+    "id": "API-035",
+    "operationId": "API_035_GET_v1_admin_settings",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "patch",
+    "path": "/v1/admin/settings",
+    "id": "API-036",
+    "operationId": "API_036_PATCH_v1_admin_settings",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/cms/pages/{page_id}/publish",
+    "id": "API-037",
+    "operationId": "API_037_POST_v1_admin_cms_pages_page_id_publish",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/locations",
+    "id": "API-038",
+    "operationId": "API_038_POST_v1_admin_locations",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/orders",
+    "id": "API-039",
+    "operationId": "API_039_GET_v1_admin_orders",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/orders/{order_id}",
+    "id": "API-040",
+    "operationId": "API_040_GET_v1_admin_orders_order_id",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/orders/{order_id}/allocate",
+    "id": "API-041",
+    "operationId": "API_041_POST_v1_admin_orders_order_id_allocate",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/orders/{order_id}/reassign",
+    "id": "API-042",
+    "operationId": "API_042_POST_v1_admin_orders_order_id_reassign",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/orders/{order_id}/revisions",
+    "id": "API-043",
+    "operationId": "API_043_POST_v1_admin_orders_order_id_revisions",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/staff/store/orders",
+    "id": "API-044",
+    "operationId": "API_044_GET_v1_staff_store_orders",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/store/orders/{order_id}/accept",
+    "id": "API-045",
+    "operationId": "API_045_POST_v1_staff_store_orders_order_id_accept",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/store/picks/{pick_id}/scan",
+    "id": "API-046",
+    "operationId": "API_046_POST_v1_staff_store_picks_pick_id_scan",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/store/packs/{pack_id}/close",
+    "id": "API-047",
+    "operationId": "API_047_POST_v1_staff_store_packs_pack_id_close",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/store/replenishments",
+    "id": "API-048",
+    "operationId": "API_048_POST_v1_staff_store_replenishments",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/store/transfers/{transfer_id}/receipt",
+    "id": "API-049",
+    "operationId": "API_049_POST_v1_staff_store_transfers_transfer_id_receipt",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/staff/inventory",
+    "id": "API-050",
+    "operationId": "API_050_GET_v1_staff_inventory",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/inventory/observations",
+    "id": "API-051",
+    "operationId": "API_051_POST_v1_staff_inventory_observations",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/internal/inventory/reservations",
+    "id": "API-052",
+    "operationId": "API_052_POST_v1_internal_inventory_reservations",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/internal/inventory/reservations/{reservation_id}/release",
+    "id": "API-053",
+    "operationId": "API_053_POST_v1_internal_inventory_reservations_reservation_id_release",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/inventory/adjustments",
+    "id": "API-054",
+    "operationId": "API_054_POST_v1_staff_inventory_adjustments",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/staff/inventory/alerts",
+    "id": "API-055",
+    "operationId": "API_055_GET_v1_staff_inventory_alerts",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/warehouse/receipts",
+    "id": "API-056",
+    "operationId": "API_056_POST_v1_staff_warehouse_receipts",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/staff/warehouse/replenishments",
+    "id": "API-057",
+    "operationId": "API_057_GET_v1_staff_warehouse_replenishments",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/warehouse/transfers/{transfer_id}/dispatch",
+    "id": "API-058",
+    "operationId": "API_058_POST_v1_staff_warehouse_transfers_transfer_id_dispatch",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/staff/warehouse/fallback-orders",
+    "id": "API-059",
+    "operationId": "API_059_GET_v1_staff_warehouse_fallback_orders",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/pharmacy/reviews",
+    "id": "API-060",
+    "operationId": "API_060_GET_v1_pharmacy_reviews",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/pharmacy/reviews/{review_id}",
+    "id": "API-061",
+    "operationId": "API_061_GET_v1_pharmacy_reviews_review_id",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/pharmacy/reviews/{review_id}/lines/{line_id}/decision",
+    "id": "API-062",
+    "operationId": "API_062_POST_v1_pharmacy_reviews_review_id_lines_line_id_decision",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/me/orders/{order_id}/revisions/{revision_id}/accept",
+    "id": "API-063",
+    "operationId": "API_063_POST_v1_me_orders_order_id_revisions_revision_id_accept",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/staff/delivery/tasks",
+    "id": "API-064",
+    "operationId": "API_064_GET_v1_staff_delivery_tasks",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/delivery/tasks/{task_id}/assign",
+    "id": "API-065",
+    "operationId": "API_065_POST_v1_staff_delivery_tasks_task_id_assign",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/delivery/tasks/{task_id}/resolution",
+    "id": "API-066",
+    "operationId": "API_066_POST_v1_staff_delivery_tasks_task_id_resolution",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/staff/delivery/cod-handover",
+    "id": "API-067",
+    "operationId": "API_067_GET_v1_staff_delivery_cod_handover",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/staff/delivery/riders",
+    "id": "API-068",
+    "operationId": "API_068_POST_v1_staff_delivery_riders",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/rider/shifts",
+    "id": "API-069",
+    "operationId": "API_069_POST_v1_rider_shifts",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/rider/tasks",
+    "id": "API-070",
+    "operationId": "API_070_GET_v1_rider_tasks",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/rider/tasks/{task_id}/pickup",
+    "id": "API-071",
+    "operationId": "API_071_POST_v1_rider_tasks_task_id_pickup",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/rider/tasks/{task_id}/location",
+    "id": "API-072",
+    "operationId": "API_072_POST_v1_rider_tasks_task_id_location",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/rider/tasks/{task_id}/complete",
+    "id": "API-073",
+    "operationId": "API_073_POST_v1_rider_tasks_task_id_complete",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/rider/tasks/{task_id}/fail",
+    "id": "API-074",
+    "operationId": "API_074_POST_v1_rider_tasks_task_id_fail",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/payments/intents",
+    "id": "API-075",
+    "operationId": "API_075_POST_v1_payments_intents",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/webhooks/cashfree",
+    "id": "API-076",
+    "operationId": "API_076_POST_v1_webhooks_cashfree",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/finance/payments",
+    "id": "API-077",
+    "operationId": "API_077_GET_v1_admin_finance_payments",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/finance/refunds",
+    "id": "API-078",
+    "operationId": "API_078_POST_v1_admin_finance_refunds",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/finance/settlements",
+    "id": "API-079",
+    "operationId": "API_079_GET_v1_admin_finance_settlements",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/finance/cod-reconciliation",
+    "id": "API-080",
+    "operationId": "API_080_POST_v1_admin_finance_cod_reconciliation",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/finance/invoices/{order_id}",
+    "id": "API-081",
+    "operationId": "API_081_GET_v1_admin_finance_invoices_order_id",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/reports/sales",
+    "id": "API-082",
+    "operationId": "API_082_GET_v1_admin_reports_sales",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/reports/tax",
+    "id": "API-083",
+    "operationId": "API_083_GET_v1_admin_reports_tax",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/reports/stock",
+    "id": "API-084",
+    "operationId": "API_084_GET_v1_admin_reports_stock",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/reports/deliveries",
+    "id": "API-085",
+    "operationId": "API_085_GET_v1_admin_reports_deliveries",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/reports/exports",
+    "id": "API-086",
+    "operationId": "API_086_POST_v1_admin_reports_exports",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/audit/events",
+    "id": "API-087",
+    "operationId": "API_087_GET_v1_admin_audit_events",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/admin/audit/exports",
+    "id": "API-088",
+    "operationId": "API_088_POST_v1_admin_audit_exports",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/auth/staff/login",
+    "id": "API-089",
+    "operationId": "API_089_POST_v1_auth_staff_login",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/auth/staff/mfa/verify",
+    "id": "API-090",
+    "operationId": "API_090_POST_v1_auth_staff_mfa_verify",
+    "documentation": "incomplete",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/auth/sessions/refresh",
+    "id": "API-091",
+    "operationId": "API_091_POST_v1_auth_sessions_refresh",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/auth/sessions/revoke",
+    "id": "API-092",
+    "operationId": "API_092_POST_v1_auth_sessions_revoke",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/auth/permissions",
+    "id": "API-093",
+    "operationId": "API_093_GET_v1_auth_permissions",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/internal/notifications/jobs",
+    "id": "API-094",
+    "operationId": "API_094_POST_v1_internal_notifications_jobs",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/notifications/deliveries",
+    "id": "API-095",
+    "operationId": "API_095_GET_v1_admin_notifications_deliveries",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/rider/push-tokens",
+    "id": "API-096",
+    "operationId": "API_096_POST_v1_rider_push_tokens",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/admin/notifications/alerts",
+    "id": "API-097",
+    "operationId": "API_097_GET_v1_admin_notifications_alerts",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "patch",
+    "path": "/v1/me/addresses/{addressId}",
+    "id": "ACC-ROUTE-001",
+    "operationId": "ACC_ROUTE_098_Update_customer_address",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "delete",
+    "path": "/v1/me/addresses/{addressId}",
+    "id": "ACC-ROUTE-002",
+    "operationId": "ACC_ROUTE_099_Delete_customer_address",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/me/deletion-requests",
+    "id": "ACC-ROUTE-007",
+    "operationId": "ACC_ROUTE_104_Request_account_deletion",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/deletion-requests/{requestId}",
+    "id": "ACC-ROUTE-006",
+    "operationId": "ACC_ROUTE_103_Get_deletion_request",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "patch",
+    "path": "/v1/me/patients/{patientId}",
+    "id": "ACC-ROUTE-003",
+    "operationId": "ACC_ROUTE_100_Update_dependent_patient",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "delete",
+    "path": "/v1/me/patients/{patientId}",
+    "id": "ACC-ROUTE-004",
+    "operationId": "ACC_ROUTE_101_Remove_dependent_patient",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "get",
+    "path": "/v1/me/wishlist/items",
+    "id": "ACC-ROUTE-008",
+    "operationId": "ACC_ROUTE_105_List_wishlist_items",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "post",
+    "path": "/v1/me/wishlist/items",
+    "id": "ACC-ROUTE-009",
+    "operationId": "ACC_ROUTE_106_Add_wishlist_item",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  },
+  {
+    "method": "delete",
+    "path": "/v1/me/wishlist/items/{itemId}",
+    "id": "ACC-ROUTE-010",
+    "operationId": "ACC_ROUTE_107_Remove_wishlist_item",
+    "documentation": "complete-proposed",
+    "approval": "unapproved"
+  }
+]

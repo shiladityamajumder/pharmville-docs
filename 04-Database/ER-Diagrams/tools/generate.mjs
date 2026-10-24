@@ -8,14 +8,14 @@ const erdRoot=path.resolve(here,'..');
 const root=path.resolve(erdRoot,'../..');
 const evidence=JSON.parse(fs.readFileSync(path.join(root,'09-References/Database-Evidence.json'),'utf8'));
 const dbRoot=databaseSource(root);
+const registry=JSON.parse(fs.readFileSync(path.join(root,'03-Modules/Module-Registry.json'),'utf8'));
+const moduleDirectory=Object.fromEntries(registry.map(m=>[m.id,m.directory]));
 const fail=message=>{throw new Error(message);};
 
 const {sourceHead}=verifyDatabaseSource(dbRoot,evidence);
-const migrationDir=path.join(dbRoot,'postgresql/migrations');
-const migrationFiles=evidence.migration_files.map(item=>item.file).sort();
-const registerPath=path.join(dbRoot,evidence.register_file);
-const rawRegister=JSON.parse(fs.readFileSync(registerPath,'utf8').replace(/^\uFEFF/,''));
-const referencePath=path.join(dbRoot,'docs/upgrade/final_assignment/uuid_reference_classification.json');
+const registerPath=path.join(root,evidence.register_file);
+const rawRegister=JSON.parse(fs.readFileSync(registerPath,'utf8'));
+const referencePath=path.join(root,evidence.logical_reference_file);
 const rawLogicalReferences=JSON.parse(fs.readFileSync(referencePath,'utf8').replace(/^\uFEFF/,''));
 const schemaDescriptions={
  appointment:'Appointments and scheduling',catalog:'Products, medicines, and classification',clinical:'Prescriptions and pharmacist decisions',commerce:'Carts, checkout, orders, and returns',compliance:'Regulatory records and retention actions',customer:'Customer profiles and addresses',diagnostics:'Tests and laboratory services',finance:'Invoices, ledgers, and settlements',fulfillment:'Picking, packing, and shipment preparation',identity:'Accounts, sessions, and permissions',insurance:'Policies and claims',logistics:'Riders, shipments, and delivery',marketplace:'Sellers and listings',membership:'Benefits and loyalty',notification:'Templates, messages, and delivery attempts',organization:'Operating companies, sites, and licenses',payment:'Payment attempts, confirmation, and refunds',platform:'Configuration, files, audit, events, and reports',pricing:'Prices, taxes, and promotions',procurement:'Suppliers, purchase orders, and receiving',risk:'Risk rules, cases, and signals',search:'Search indexes and query signals',support:'Customer support cases',warehouse:'Stock balances, lots, and transfers'
@@ -105,12 +105,7 @@ const schemas=[...new Set([...currentTables.values()].map(table=>table.schema))]
 if(schemas.length!==24||currentTables.size!==266||relationships.length!==1461)fail(`Unexpected source inventory: ${schemas.length} schemas, ${currentTables.size} tables, ${relationships.length} FKs.`);
 const totalColumns=[...currentTables.values()].reduce((sum,table)=>sum+Object.keys(table.columns).length,0);
 if(totalColumns!==4438)fail(`Unexpected source column count: ${totalColumns}`);
-const migrationContents=migrationFiles.map(file=>({file,text:fs.readFileSync(path.join(migrationDir,file),'utf8')}));
-for(const relation of relationships){
- const pattern=new RegExp(`(?:ADD\\s+)?CONSTRAINT\\s+"?${escRegExp(relation.constraint)}"?\\s+FOREIGN\\s+KEY`,'i');
- const matches=migrationContents.filter(item=>pattern.test(item.text));
- relation.sourceMigration=matches.length?matches.map(item=>item.file.slice(0,5)).join(', '):'Catalog snapshot only';
-}
+for(const relation of relationships) relation.sourceMigration='Validated standalone SQL / effective V0030';
 const logicalReferences=Object.entries(rawLogicalReferences).map(([column,item])=>({column,...item}));
 const nonForeignReferences=logicalReferences.filter(item=>item.category!=='real domain FK');
 const noFkTables=[...currentTables.values()].filter(table=>table.foreignKeys.length===0).map(table=>table.name);
@@ -147,9 +142,9 @@ const output=relative=>path.join(erdRoot,relative);
 const write=(relative,content)=>{const file=output(relative);fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,content.endsWith('\n')?content:content+'\n');};
 const markdownLink=(text,file)=>`[${text}](${file})`;
 const tableLink=table=>`[\`${table.tableName}\`](../Tables/${table.schema}/${table.tableName}.md)`;
-const moduleHldPath=module=>path.join(root,'03-Modules',module,'HLD.md');
-const moduleLldPath=module=>path.join(root,'03-Modules',module,'LLD.md');
-const moduleLink=(module,kind='HLD')=>`[${module} ${kind}](../../03-Modules/${module}/${kind}.md)`;
+const moduleHldPath=module=>path.join(root,'03-Modules',moduleDirectory[module],'HLD.md');
+const moduleLldPath=module=>path.join(root,'03-Modules',moduleDirectory[module],'LLD.md');
+const moduleLink=(module,kind='HLD')=>`[${module} ${kind}](../../03-Modules/${moduleDirectory[module]}/${kind}.md)`;
 const workflowLink=id=>`[${id}](../../06-Workflows/${id}-*.md)`;
 const relationCardinality=relation=>{
  const each=relation.required?'must reference exactly one':'may reference zero or one';
@@ -180,7 +175,7 @@ const mermaidEntity=(table,visibleColumns)=>{
 };
 const schemaPageNames=Object.fromEntries(schemas.map((schema,index)=>[schema,`${String(index+1).padStart(2,'0')}-${schema}.md`]));
 const schemaLink=(schema,display=schema)=>`[${display}](${schemaPageNames[schema]})`;
-const exactSourcePhrase='Checked-out healthcare_db V0030 PostgreSQL 18 catalog snapshot';
+const exactSourcePhrase='Validated standalone SQL / PostgreSQL 18 effective catalog';
 
 // Machine-readable evidence cache: key columns, exact FK definitions and non-FK references.
 const inventory={source:{git_head:sourceHead,migration_baseline:'V0001-V0030',catalog_sha256:evidence.register_sha256,checked_on:evidence.checked_on,live_database_inspected:evidence.live_database_inspected,source_directory:evidence.source_directory,source_kind:evidence.source_kind,documentation_baseline:evidence.documentation_baseline},counts:{schemas:schemas.length,tables:currentTables.size,columns:totalColumns,foreign_keys:relationships.length,cross_schema_foreign_keys:crossSchemaRelationships.length,diagrams:diagrams.length,orm_relationship_declarations:0},schemas:schemaStats,tables:[...currentTables.values()].sort((a,b)=>a.name.localeCompare(b.name)).map(table=>({name:table.name,primary_keys:table.primaryKeys,unique_keys:table.uniqueKeys,diagram:diagramForChild.get(table.name),foreign_key_count:table.foreignKeys.length,key_columns:[...new Set([...table.primaryKeys.flat(),...table.uniqueKeys.flat(),...table.foreignKeys.flatMap(item=>item.childColumns)])].sort().map(column=>({name:column,...table.columns[column]}))})),relationships:relationships.map(item=>({id:item.id,constraint:item.constraint,child:item.child,parent:item.parent,child_columns:item.childColumns,parent_columns:item.parentColumns,required:item.required,child_unique:item.childUnique,on_delete:item.deleteRule,on_update:item.updateRule,match:item.matchType,migration:item.sourceMigration,diagram:`${schemaPageNames[item.childSchema]}#${item.diagram}`})),non_foreign_uuid_references:nonForeignReferences.map(item=>({column:item.column,category:item.category,decision:item.decision,reason:item.reason||'',discriminator:item.discriminator||''})),tables_without_foreign_keys:noFkTables};
@@ -245,7 +240,7 @@ ${schemas.map(schema=>`| \`${schema}\` | ${schemaStats[schema].tables} | ${schem
 
 ## Evidence boundary
 
-This documentation is generated from the user-supplied \`healthcare_db/\` folder. The final table register, all migration SQL including fragments, and supporting source files match the SHA-256 evidence in [Database-Evidence.json](../../09-References/Database-Evidence.json). Its supplied migration history is the documentation baseline. The recorded acceptance report describes isolated PostgreSQL 18 validation for V0030; no live database was queried here. The supplied folder has no standalone Git metadata, so identity is established by file checksums.
+This documentation is generated from [the canonical standalone SQL](../../pharmville-database/pharmville_schema.sql) and its derived [validated catalog](../Schema-Catalog.json). A private PostgreSQL 18.6 replay through V0030 and a separate empty schema installation produced zero differences across 23 catalog dimensions. [Evidence](../../09-References/Database-Evidence.json) records file checksums and archive provenance. No production database was inspected.
 `;
 write('00-System-Data-Map.md',mainMap);
 
@@ -341,9 +336,9 @@ const catalogIndex=`# Relationship catalog
 
 ## Scope and evidence
 
-The checked-out \`healthcare_db\` snapshot contains **${relationships.length} declared foreign-key constraints**. The catalog keeps every physical constraint as its own row, including the paired public UUID and internal BIGINT relationships. It records source columns, referenced columns, nullability, uniqueness-based cardinality, delete/update actions, and the owning schema diagram.
+The validated standalone SQL catalog contains **${relationships.length} declared foreign-key constraints**. The catalog keeps every physical constraint as its own row, including the paired public UUID and internal BIGINT relationships. It records source columns, referenced columns, nullability, uniqueness-based cardinality, delete/update actions, and the owning schema diagram.
 
-The records are derived from the SHA-256 verified catalog register in the user-supplied \`healthcare_db/\` folder. All migration SQL files and supporting sources match [Database-Evidence.json](../../09-References/Database-Evidence.json). The recorded catalog describes the supplied V0030 schema; no live production database was inspected. See [migration evidence](../Migrations.md) for source identity and deployment verification limits.
+The records are derived from the validated standalone-schema catalog, checked against [Database-Evidence.json](../../09-References/Database-Evidence.json). The [installation and provenance reference](../Migrations.md) distinguishes executed isolated parity from production deployment.
 
 ## Browse by child schema
 
@@ -407,15 +402,15 @@ The source classification contains ${logicalReferences.length} formerly unbound 
 |---|---|---|---|
 ${logicalRows}
 
-## ORM-only relationships
+## Historical ORM relationships
 
-A source scan of \`healthcare_db/app/models/\` found no SQLAlchemy \`relationship(...)\` declarations. The checked-in models provide table mappings, but this source contains no ORM navigation relationships to add as a separate ERD relationship type. Re-run the scan when model source changes.
+Legacy models are privately archived and are not a second schema authority. The earlier source scan found no SQLAlchemy navigation declarations. ERDs derive physical relationships exclusively from the validated standalone SQL catalog.
 
 ## Tables with no declared foreign keys
 
 ${noFkTables.map(name=>`- [\`${name}\`](../Tables/${name.split('.')[0]}/${name.split('.')[1]}.md) — no FK constraint appears in the verified catalog snapshot. This is a review observation, not a claim that the design is wrong.`).join('\n')}
 
-The migration snapshot does not establish whether every logical association is approved for enforcement. Review the database source's reference classification and service ownership before proposing new constraints. Do not draw these relationships as verified FKs.
+The schema catalog does not establish whether every logical association is approved for enforcement. Review the database source's reference classification and service ownership before proposing new constraints. Do not draw these relationships as verified FKs.
 `;
 write('Logical-References.md',logicalDoc);
 
@@ -436,7 +431,7 @@ const coverage=`# ERD coverage report
 | Tables represented as focus entities | ${diagramForChild.size} / ${currentTables.size} | Every table appears as a focus table once |
 | Foreign keys represented by diagram IDs and catalog rows | ${relationships.length} / ${relationships.length} | Complete in snapshot scope |
 | Tables with no declared FK | ${noFkTables.length} | See [logical-reference review](Logical-References.md) |
-| SQLAlchemy ORM \`relationship()\` declarations | 0 | None found in checked-in \`app/models/\` |
+| SQLAlchemy ORM \`relationship()\` declarations | 0 | Historical scan only; archived models are not schema authority |
 | Non-FK UUID references | ${nonForeignReferences.length} | Classified separately; see [Logical References](Logical-References.md) |
 
 ## Schema coverage
@@ -455,9 +450,9 @@ ${schemaDocs.map(item=>`| \`${item.schema}\` | ${item.tables} | ${item.foreignKe
 
 ## Evidence and limitations
 
-The generator verifies all 103 migration/fragment SQL files, the final PostgreSQL catalog register and supporting source SHA-256 hashes against [Database-Evidence.json](../../09-References/Database-Evidence.json). The user-supplied folder has 30 versioned SQL migrations, V0001–V0030, and no standalone Git metadata. Its recorded acceptance report describes isolated PostgreSQL 18 validation on 22 October 2026. Read-only validation compares 266 table pages and 4,438 columns with the catalog snapshot; it does not connect to a live database.
+The generator verifies the standalone SQL, derived catalog/table register and logical-reference decision checksums against [Database-Evidence.json](../../09-References/Database-Evidence.json). All 266 table pages and 4,438 columns are validated against the effective catalog. Private PostgreSQL fresh-install parity is recorded separately; no production connection is used.
 
-These ERDs are **complete for the catalog in the user-supplied healthcare_db folder**, whose migration history ends at V0030. The earlier claim that V0030 was removed is superseded by this supplied source. Source selection is resolved for documentation; live deployment and fresh runtime parity remain separate checks. No migration, SQLAlchemy model, or database schema was modified. No new relationship is proposed as if it were factual.
+These ERDs cover every physical foreign key in the validated effective V0030 schema. SQL installation and zero catalog differences were verified in isolated disposable databases. Future proposals, business ownership approval and production deployment are separate states. The archived migration sources and nested Git history remain intact.
 
 Potential review items are not declared defects: \`platform.report_definitions\` has no FK in the snapshot; polymorphic and opaque UUID references are explicitly classified and kept outside FK diagrams; and the 24 schema ownership boundaries remain candidate service ownership rather than access grants.
 `;
@@ -481,11 +476,11 @@ ${domainLinks.join('\n')}
 
 ## Evidence boundary
 
-These diagrams use the catalog in the user-supplied \`healthcare_db/\` folder as their reference. Its migration history ends at V0030. All SQL files, the register and supporting sources are verified against [Database-Evidence.json](../../09-References/Database-Evidence.json). See [migration evidence](../Migrations.md) for provenance. No production database or shared endpoint was queried.
+These diagrams use the [validated standalone schema](../../pharmville-database/pharmville_schema.sql), with the derived register and all source checksums recorded in [evidence](../../09-References/Database-Evidence.json). No production database or shared endpoint was queried.
 
 ## Regenerate and validate
 
-From the documentation repository root, run \`npm run generate:erd\`, then \`npm run validate:erd\` and \`npm run validate\`. The generator uses \`healthcare_db/\` inside this repository by default; set \`PHARMVILLE_DATABASE_SOURCE\` to explicitly select another folder. Missing or changed migration/fragment, register or supporting-source checksums fail verification. Standalone Git identity is checked only when recorded; parent repository metadata is never used as source identity. Mermaid parsing is handled by the repository documentation validator.
+From the repository root, run \`npm run generate:erd\`, then \`npm run validate:erd\` and \`npm run validate\`. Sources are the canonical SQL and derived catalog/table register; missing or changed checksums fail verification. No legacy checkout, application models or migration runner is needed. Mermaid parsing is handled by the documentation validator.
 `;
 write('README.md',readme);
 
@@ -493,8 +488,8 @@ write('README.md',readme);
 const marker=/<!-- ERD-NAV-START -->[\s\S]*?<!-- ERD-NAV-END -->/;
 const moduleTouched=[];
 for(const [module,moduleDomainSchemas]of Object.entries(moduleSchemas)){
- const links=moduleDomainSchemas.map(schema=>`[\`${schema}\` ERD](${path.relative(path.join(root,'03-Modules',module),output(schemaPageNames[schema])).replaceAll('\\','/')})`).join(' · ');
- const block=`<!-- ERD-NAV-START -->\n\n## Database relationships\n\n${links} · [FK catalog](${path.relative(path.join(root,'03-Modules',module),output('Relationship-Catalog.md')).replaceAll('\\','/')})\n\nThese diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](${path.relative(path.join(root,'03-Modules',module),path.join(root,'04-Database/Migrations.md')).replaceAll('\\','/')}) for the supplied source and deployment verification limits.\n\n<!-- ERD-NAV-END -->`;
+ const links=moduleDomainSchemas.map(schema=>`[\`${schema}\` ERD](${path.relative(path.join(root,'03-Modules',moduleDirectory[module]),output(schemaPageNames[schema])).replaceAll('\\','/')})`).join(' · ');
+ const block=`<!-- ERD-NAV-START -->\n\n## Database relationships\n\n${links} · [FK catalog](${path.relative(path.join(root,'03-Modules',moduleDirectory[module]),output('Relationship-Catalog.md')).replaceAll('\\','/')})\n\nThese diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](${path.relative(path.join(root,'03-Modules',moduleDirectory[module]),path.join(root,'04-Database/Migrations.md')).replaceAll('\\','/')}) for the supplied source and deployment verification limits.\n\n<!-- ERD-NAV-END -->`;
  for(const file of [moduleHldPath(module),moduleLldPath(module)]){
   if(!fs.existsSync(file))continue;
   const original=fs.readFileSync(file,'utf8');
@@ -508,7 +503,7 @@ for(const [module,moduleDomainSchemas]of Object.entries(moduleSchemas)){
 // Put a compact, idempotent ERD crosswalk at the top of Module Mapping.
 const mappingPath=path.join(root,'04-Database/Module-Mapping.md');
 const mappingOriginal=fs.readFileSync(mappingPath,'utf8');
-const mappingBlock=`<!-- ERD-MODULE-MAP-START -->\n\n## ER diagram navigation\n\nThis table links a feature module to the actual database schemas it may read or write; it does not assign exclusive ownership. The candidate modules are inherited from the existing module-to-database map.\n\n| Module | Database ER diagrams |\n|---|---|\n${Object.entries(moduleSchemas).map(([module,moduleDomainSchemas])=>`| [${module}](../03-Modules/${module}/README.md) | ${moduleDomainSchemas.map(schema=>`[\`${schema}\`](ER-Diagrams/${schemaPageNames[schema]})`).join(', ')} |`).join('\n')}\n\n<!-- ERD-MODULE-MAP-END -->`;
+const mappingBlock=`<!-- ERD-MODULE-MAP-START -->\n\n## ER diagram navigation\n\nThis table links a feature module to the actual database schemas it may read or write; it does not assign exclusive ownership. The candidate modules are inherited from the existing module-to-database map.\n\n| Module | Database ER diagrams |\n|---|---|\n${Object.entries(moduleSchemas).map(([module,moduleDomainSchemas])=>`| [${module}](../03-Modules/${moduleDirectory[module]}/README.md) | ${moduleDomainSchemas.map(schema=>`[\`${schema}\`](ER-Diagrams/${schemaPageNames[schema]})`).join(', ')} |`).join('\n')}\n\n<!-- ERD-MODULE-MAP-END -->`;
 const mappingMarker=/<!-- ERD-MODULE-MAP-START -->[\s\S]*?<!-- ERD-MODULE-MAP-END -->/;
 let mappingUpdated;
 if(mappingMarker.test(mappingOriginal))mappingUpdated=mappingOriginal.replace(mappingMarker,mappingBlock);
@@ -520,7 +515,7 @@ const linkMarkers=[
  {file:path.join(root,'04-Database/README.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\n- [Entity relationship diagrams](ER-Diagrams/README.md) — verified domain diagrams, FK catalog, and evidence limits.'},
  {file:path.join(root,'04-Database/Schema-Overview.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\nSee the [ER diagram index](ER-Diagrams/README.md) for domain views and the complete foreign-key catalog.'},
  {file:path.join(root,'04-Database/Relationships.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\nFor every FK column pair, cardinality, optionality, delete/update action, and schema diagram, use the [ER relationship catalog](ER-Diagrams/Relationship-Catalog.md). Logical non-FK identifiers are listed separately in [ER diagrams](ER-Diagrams/Logical-References.md).'},
- {file:path.join(root,'README.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\n**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams use the catalog in the user-supplied `healthcare_db/` folder; see the migration evidence for provenance.'}
+ {file:path.join(root,'README.md'),marker:'<!-- ERD-INDEX-LINK -->',line:'\n**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams use the validated standalone SQL catalog; see database evidence for parity and provenance.'}
 ];
 for(const item of linkMarkers){let text=fs.readFileSync(item.file,'utf8');if(!text.includes(item.marker)){const insertion=`${item.marker}${item.line}\n`;if(item.file===path.join(root,'README.md')){const anchor='| 🗄️ Database | Inspect available schema and migration evidence | [Database reference](04-Database/README.md) |';const section='\n## Product flow';if(!text.includes(anchor)||!text.includes(section))fail('Root README database navigation row or Product flow section not found.');text=text.replace(section,`\n\n${insertion}${section}`);}else if(item.file.endsWith('Relationships.md')){const anchor='## Database relationships by business flow';text=text.replace(anchor,`${insertion}\n${anchor}`);}else{const firstH1=text.indexOf('\n');text=`${text.slice(0,firstH1+1)}\n${insertion}\n${text.slice(firstH1+1)}`;}fs.writeFileSync(item.file,text);}}
 

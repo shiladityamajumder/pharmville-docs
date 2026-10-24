@@ -19,32 +19,15 @@ METHODS = {"get", "post", "put", "patch", "delete", "head", "options", "trace"}
 
 def operation_inventory() -> dict[tuple[str, str], str]:
     found: dict[tuple[str, str], str] = {}
-    for path in API_DIR.glob("*.md"):
-        if path.name in {"README.md", "Critical-Operation-Contracts.md"}:
-            continue
+    registry = json.loads((ROOT / "03-Modules/Module-Registry.json").read_text())
+    for module in registry:
+        path = ROOT / "03-Modules" / module["directory"] / "APIs.md"
         source = path.read_text(encoding="utf-8")
-        for match in re.finditer(r"^## API-(\d{3}) — (GET|POST|PUT|PATCH|DELETE) `([^`]+)`", source, re.M):
-            found[(match.group(2).lower(), match.group(3))] = f"API-{match.group(1)}"
-        if path.name == "Customer_Accounts.md":
-            for api_id, title, method, route in [
-                ("API-001", "Request OTP", "post", "/v1/auth/customer/otp/request"),
-                ("API-002", "Verify OTP", "post", "/v1/auth/customer/otp/verify"),
-                ("API-003", "Read profile", "get", "/v1/me"),
-                ("API-004", "Update profile", "patch", "/v1/me"),
-            ]:
-                found[(method, route)] = api_id
-            for api_id, method, route in [
-                ("API-005", "get", "/v1/me/addresses"),
-                ("API-006", "post", "/v1/me/addresses"),
-                ("API-007", "get", "/v1/me/patients"),
-                ("API-008", "post", "/v1/me/patients"),
-                ("API-009", "post", "/v1/me/consents"),
-            ]:
-                found[(method, route)] = api_id
-            for method, route in re.findall(r"`(GET|POST|PUT|PATCH|DELETE) (/v1/me/[^`]+)`", source):
-                key = (method.lower(), route)
-                if key not in found:
-                    found[key] = "ACC-ROUTE"
+        for match in re.finditer(r"^## ((?:API-\d{3}|ACC-ROUTE-\d{3})) — (GET|POST|PUT|PATCH|DELETE) `([^`]+)`", source, re.M):
+            key = (match[2].lower(), match[3])
+            if key in found:
+                raise ValueError(f"Duplicate canonical contract: {key}")
+            found[key] = match[1]
     return found
 
 
@@ -341,7 +324,7 @@ def main() -> int:
         if api_id not in coverage_text:
             errors.append(f"coverage ledger missing operation reference {api_id}: {route[0].upper()} {route[1]}")
     # Every fenced JSON example in the API markdown must at least parse.
-    for doc_path in API_DIR.glob("*.md"):
+    for doc_path in [*API_DIR.glob("*.md"), *(ROOT / "03-Modules").glob("*/APIs.md")]:
         text = doc_path.read_text(encoding="utf-8")
         for index, block in enumerate(re.findall(r"```json\s*\n(.*?)\n```", text, re.S), 1):
             try:
@@ -363,8 +346,10 @@ def main() -> int:
         f"{audit['request_examples']}/{audit['request_body_operations']} request examples, "
         f"{audit['success_examples']} success examples, "
         f"{audit['query_operations']} operations with query parameters; "
-        f"{len(incomplete)} incomplete contract findings."
+        f"{len(incomplete)} structural schema findings."
     )
+    planning_status = {status: sum(o.get("x-documentation-status") == status for methods in spec["paths"].values() for method, o in methods.items() if method in METHODS) for status in ["complete-proposed", "incomplete"]}
+    print(f"Planning ledger: {planning_status['complete-proposed']} complete proposed, {planning_status['incomplete']} semantically incomplete; approval and implementation remain separate.")
     if args.strict and incomplete:
         print("Strict completeness check FAILED")
         print("\n".join(f"- {finding}" for finding in incomplete))

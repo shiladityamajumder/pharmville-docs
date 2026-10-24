@@ -1,39 +1,27 @@
-# Documentation coverage and audit limits
+# Documentation coverage and evidence
 
-## Measured feature evidence
+## Feature and module evidence
 
-The [authoritative feature inventory](../01-Project/Features-and-Modules.md) retains 110 unique draft IDs across 18 module groups. The [master register](Coverage-and-Traceability.md) links each to Business Flow, HLD, LLD, APIs, data mapping, edge cases, tests and original development task.
+The [feature inventory](../01-Project/Features-and-Modules.md) retains **110** stable IDs in **18** module groups. [The primary module index](../03-Modules/README.md) now leads to business flows, HLD, LLD, endpoint contracts, database usage, workflow/security/test navigation, edge cases and pending decisions. Canonical paths are descriptive; stable IDs remain unchanged. Compatibility targets preserve prior paths and anchors.
 
-There are no missing navigation mappings in the executed checks; navigation is not approved implementation.
+[Requirement-to-delivery traceability](Feature-Delivery-Traceability.md) connects each feature to module workflows, actual API references where present, exact table dependencies, designed tests and existing TASK IDs. Cross-module [14 workflows](../06-Workflows/README.md) remain central. Textual reference coverage is distinct from working end-to-end journeys.
 
-The 17-page [Business Guide](../00-Business-Guide/README.md) covers all current module groups, normal and alternate paths, failed steps, responsible teams, visible outcomes and approval gaps. Future schema domains do not create launch requirements.
+## API planning
 
-## API and test readiness
+The denominator remains **107 operations**, with no new operation added or removed. **97/107 (90.65%)** have documentation-complete proposed contracts; **10/107** remain semantically incomplete. **0/107 (0%)** are approved; no application implementation or application test success is claimed. All detailed bodies/errors/headers/mappings/examples remain in the canonical module documents and synchronized OpenAPI. [Coverage ledger](../05-APIs/API-Contract-Coverage.md) names each incomplete operation. [16 candidate journey-command groups](../05-APIs/Journey-API-Gaps.md) remain outside the denominator and unapproved.
 
-The owning API documents now explicitly account for all 110 feature IDs in operation/feature tables. This is a textual traceability measure, not 110 complete journeys: the [feature-to-operation gap register](../05-APIs/Journey-API-Gaps.md) separates actual cross-module operation links, 16 candidate commands and unresolved workflow/policy gaps. The [API ledger](../05-APIs/API-Contract-Coverage.md) records 97/107 documentation-complete proposals (90.65%), 10 incomplete contracts and 0 approved contracts. The earlier 87/110 mention count is the historical baseline.
+The independent OpenAPI 3.1/JSON Schema audit passed: **1,828 schema/example validations**, **3,606 exact operation-column uses**, **300 DTO database-column annotations**, zero errors. Structural schema checks can pass while a conceptual/provider contract remains incomplete.
 
-[Critical operation contracts](../05-APIs/Critical-Operation-Contracts.md) refine checkout, hold/release, pharmacy decisions, payment evidence, cancellation/return, refund and delivery proof with proposed typed fields and concrete outcomes. Exact DTO bounds, field writes, runtime grants, enum mappings and provider signatures still need D-024/D-016 review. No feature is declared fully ready from these counts.
+## Database evidence
 
-All features now have specific normal/adverse assertions in LLD/Edge-Cases. There are 234 distinct named application test designs, including the detailed account cases and nine additional payment-loss, stock-expiry, last-unit, clinical-revision, refund-race and offline-proof scenarios.
+[Standalone SQL](../pharmville-database/pharmville_schema.sql) is authoritative effective structure through V0030. Executed source replay and separate empty installation agree across **23 catalog dimensions, zero structural differences**. A third independent disposable cluster verified creation of capability roles from scratch and **zero rows in all 266 tables**. No existing database was connected to or modified.
 
-They are Designed / NOT RUN. The shared [testing strategy](../07-Engineering/Testing.md) links module views instead of copying generic per-feature tables.
+The complete reference accounts for 24 schemas, 266 tables, 4,438 columns, 1,461 FKs, 1,204 indexes, 56 functions, 879 user triggers, 265 identity sequences, three RLS policies, 3,198 key/check constraints and 2,929 NOT NULL constraints. Table-page/catalog parity is verified in both directions; [reconciliation](../04-Database/Reconciliation.md) records zero differences from the historical final register.
 
-## Schema and source verification
+All **44 masters** preserve lifecycle/stewardship planning. **11** have explicit confirmed/proposed initial-value lists; **33** await real owner datasets. Confirmed domain/source evidence is separate from proposed values and observed production data. No seed rows are shipped.
 
-Historical source verification compared 266 table pages and 4,438 column names with the user-supplied final catalog and verified all 103 migration SQL files, including 30 versioned migrations and their fragments, against the [evidence snapshot](Database-Evidence.json). Supporting source hashes were checked in that historical pass.
+## Limits and unresolved gates
 
-That historical evidence established consistency with the selected source at its recorded date. The current checkout lacks the selected healthcare_db/ directory; an untracked heathcare_db/ copy has a different catalog and 26 recorded SQL-file hash mismatches. Current planning uses checked-in table pages; live deployment and source parity are unverified.
+Provider wire/signature/acknowledgment, staff MFA/replay design, replacement-contact proof, import persistence/row atomicity, POS evidence and delivery failure progression remain named contract gaps. Clinical/financial/tax/privacy policy, runtime memberships, real master datasets, application/provider execution and release readiness require owner evidence. Future physical domains retain every object and are **Requires Decision / D-027** for ownership/phase; they are not approved launch capabilities.
 
-The user-supplied `healthcare_db/` folder remains the selected documentation baseline; its historical migration/catalog evidence is retained, rather than replaced by the mismatched current copy. [Migration evidence](../04-Database/Migrations.md) closes the former source-selection warning and retains actual target-ledger/runtime-parity checks under D-015.
-
-## Documentation checks and remaining limits
-
-The earlier validation baseline recorded 449 Markdown files, 3,835 relative links/anchors and 1,594 tables passing structural checks. All 52 Mermaid blocks parse and render; the original 51 contained 18 actual parser failures. Feature/test-reference checks and the validator’s negative regression fixture pass.
-
-Seven representative images received visual review; interactive VS Code preview, hosted GitHub rendering and hosted CI remain unverified.
-
-No application/provider/live-database tests ran. Read the [engineering audit](Engineering-Audit.md) for exact evidence, blocker owners and production-readiness limits, and [conventions](Documentation-Conventions.md) to reproduce local checks.
-
-## API and master-data planning validation
-
-The current [validation record](../05-APIs/Planning-Validation.md) reports OpenAPI 3.1, JSON Schema examples, exact documented columns, authorization, feature/master mappings and repository commands. All 266 tables are classified, with 44 master plans and 11 explicit initial-value lists; 33 master datasets remain Open. No application tests, source migrations or seeds were changed.
+The earlier missing-source and untracked-copy reports are superseded by inspected legacy history and isolated reconstruction. Their full text is preserved as historical `.txt` evidence under [Historical](Historical/README.md). [Current validation](../05-APIs/Planning-Validation.md) and [execution ledger](Architecture-Rework-Plan.md) record current results.

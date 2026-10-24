@@ -1,0 +1,318 @@
+{
+  "10-Low-Fidelity-Wireframes/README.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 5248,
+    "sha256": "5245979d865d77c50861b4cc2e9a9be0f3cba324bfc0017d1bf464bb4a460207"
+  },
+  "10-Low-Fidelity-Wireframes/assets": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/assets/css": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/assets/css/base.css": {
+    "mode": 436,
+    "kind": "file",
+    "size": 4459,
+    "sha256": "009c4b2d9aafb5d9b76d2dc257a1290a4c289c75672c5b508a4e5efa8be62e3f"
+  },
+  "10-Low-Fidelity-Wireframes/assets/css/components.css": {
+    "mode": 436,
+    "kind": "file",
+    "size": 8935,
+    "sha256": "f8a6c2a2a7ea664ebbf6272378b02c1753f9d6375aea0b8096465f8cc801a296"
+  },
+  "10-Low-Fidelity-Wireframes/assets/css/experience-choice.css": {
+    "mode": 436,
+    "kind": "file",
+    "size": 1996,
+    "sha256": "aebf939bd260adb3dfce475fe555a609ae9d326c7f2b9c171431e1fbf4e54e31"
+  },
+  "10-Low-Fidelity-Wireframes/assets/css/experience.css": {
+    "mode": 436,
+    "kind": "file",
+    "size": 14447,
+    "sha256": "b84b82910253bc1f3fc620f6233dc199257465441b49b478a0f443907130e676"
+  },
+  "10-Low-Fidelity-Wireframes/assets/css/product-ux.css": {
+    "mode": 436,
+    "kind": "file",
+    "size": 5859,
+    "sha256": "42cb6ca4e2dabdc00e126a45d47171184fed8dbe9bd8aba7230e584b4846ffc8"
+  },
+  "10-Low-Fidelity-Wireframes/assets/css/responsive.css": {
+    "mode": 436,
+    "kind": "file",
+    "size": 4140,
+    "sha256": "a984a39799765aab1c8d4399fd9268a2b9ad4c69de5480cf7077b33ce6679c97"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js/app.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 44049,
+    "sha256": "f469a899cd0d75499771254190599da4c8123d86b121d29fa755f861ed6e5840"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js/demo-fixtures.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 5894,
+    "sha256": "1108a005b264fe8cfc33057a8024b6237903f3941865fd48261155d140b92e1b"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js/experience-pages.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 5343,
+    "sha256": "ab45fa118f94bea5f7e3d8e48fa93f84c6079d3ce8731da2216a3ff6ae9a841b"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js/feature-catalog.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 18690,
+    "sha256": "973a6514320989fcd4a729c1bc98f126f69071343a1675ed5e69a39ff6b5b49c"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js/journeys.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 12226,
+    "sha256": "51b8e413dfb2983d76dfb587581162de4990eb2cc0f7a32c455e8f3a05cf5980"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js/mock-data.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 4993,
+    "sha256": "2781495f6d98af02f66ee79e68b47925c4a16e5e0f8b78c9c65e5c632b971d62"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js/navigation.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 1957,
+    "sha256": "d0d6f770c1e947f629b7defd43228159be6772e9a0b679b01dfd21de8499a785"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js/scenarios.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 9626,
+    "sha256": "9428ba08910845b01cefac6ec068561e731c7f3e0f253202e1e5ae47718124d3"
+  },
+  "10-Low-Fidelity-Wireframes/assets/js/situation-copy.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 7057,
+    "sha256": "5649c3fdddecc9565cdbe05a983b2daae93bc6ea480b8119d56126ecd7ed3886"
+  },
+  "10-Low-Fidelity-Wireframes/customer": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/customer/screens.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 78755,
+    "sha256": "2e3d142b52eef01620f4629ae3841e42d4aff9477343e100554dce7d24267207"
+  },
+  "10-Low-Fidelity-Wireframes/documentation": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/Complete-Screen-Matrix.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 46434,
+    "sha256": "c8da85f09a3f4af07c27bf248506f80b5da137549bb59eb2ed815de1f5dff30e"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/Design-Decisions.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 7873,
+    "sha256": "b562c4bc148839741c15bb9b0231c41e3d23fb15166f2faa2811f4d39a6d91e7"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/Edge-Case-Coverage.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 23505,
+    "sha256": "55d381783c2c4bb6c3f776d87d175dd1d41f101863a8c3c312b62ce3eb8bee5c"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/Feature-Coverage.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 26069,
+    "sha256": "69ac7e77781bbf7761bdd70aaaba2e567e581c81df586a9d1c879583ee9d473d"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/Final-UX-Review.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 5598,
+    "sha256": "1afc3d0fc192e53b7d441c88b3789cb82350d6daa287716e604b6a85255f6a89"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/How-to-Run.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 5754,
+    "sha256": "8dbbeb9936a3b19a846f4cf88438128385e7139b8fd8b6861b4ba3eb9a616033"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/Platform-and-Screen-Coverage.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 30193,
+    "sha256": "fb9cae66e08bdbbc1186b46216f4e178839b2a6ea9674a4ba96d45bc1cda4d1c"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/Prototype-Test-Plan.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 5876,
+    "sha256": "b91465e5fe2ced6e5ae0ae9e7d16ab812fe9083c98b9144bf4beb296f891ff01"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/Screen-Inventory.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 20264,
+    "sha256": "3234dab568a512b6666bcf99986fdd51dcbc519afca0fd567647362ec63fa38a"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/UX-State-Coverage.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 396688,
+    "sha256": "5de150be6eb6e00512e765e72de5d0cefb9a7fecbcc2bda599cd467ac5c116c8"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/User-Flows.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 9983,
+    "sha256": "1cd1f399a001c17ee572bd8edd31cfe3a41f7af8a74a1758e2a00ab3dcf7125e"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/Validation-Results.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 6059,
+    "sha256": "df7e732370aaf8fe9b665e4b0291746c91a3aa3bac7cc9e0ff252f5de90308db"
+  },
+  "10-Low-Fidelity-Wireframes/documentation/coverage-summary.json": {
+    "mode": 436,
+    "kind": "file",
+    "size": 296,
+    "sha256": "e32068c7002bce8b3200eab60650eac1817c79e7f4e61e8749343b8fe5f27a8f"
+  },
+  "10-Low-Fidelity-Wireframes/index.html": {
+    "mode": 436,
+    "kind": "file",
+    "size": 3271,
+    "sha256": "2349ea324a2dba773254418715a9bc6d0777f6558f8426a8fd6bbb4703ab6009"
+  },
+  "10-Low-Fidelity-Wireframes/operations": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/operations/screens.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 69090,
+    "sha256": "a919760e6be6d0e33ca3337921b90a9db3a0a299390a2e85a3aae28a8547acde"
+  },
+  "10-Low-Fidelity-Wireframes/package.json": {
+    "mode": 436,
+    "kind": "file",
+    "size": 269,
+    "sha256": "c0cd42c3b9b3d6d71231364ffd5fbf9fb6cb6a02e815920d24b57d1c0ce5e769"
+  },
+  "10-Low-Fidelity-Wireframes/server.mjs": {
+    "mode": 436,
+    "kind": "file",
+    "size": 1326,
+    "sha256": "9a9ae7332ece30a5f2f7fd3b40b0958fe8e5c61696db7bf28f882879883fcc60"
+  },
+  "10-Low-Fidelity-Wireframes/shared": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/shared/access-screens.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 3202,
+    "sha256": "d47df735d0ce877f8ae46077cc8c484247dddb3fc3987a9ec269b8ed2cb05304"
+  },
+  "10-Low-Fidelity-Wireframes/shared/implementation-contract.md": {
+    "mode": 436,
+    "kind": "file",
+    "size": 4300,
+    "sha256": "81f637de5faeb07bb99c6a169d601724c83361716fbb3d5b01bae8388abb9f4c"
+  },
+  "10-Low-Fidelity-Wireframes/shared/presentation.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 4833,
+    "sha256": "93dd8d827191d238444852fa023d2d4a711990def55cdc52688096e598112347"
+  },
+  "10-Low-Fidelity-Wireframes/shared/ui.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 2436,
+    "sha256": "15c11598898a64673ab8b1f1c74d34e9e11a29ecbeabe6d6c6b0d7f94fa2ea23"
+  },
+  "10-Low-Fidelity-Wireframes/staff": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/staff/screens.js": {
+    "mode": 436,
+    "kind": "file",
+    "size": 65135,
+    "sha256": "f9b5e948d6a372e2cbf8f0602ab5cb254cf30546061a9660a223c3b5e30eb9fd"
+  },
+  "10-Low-Fidelity-Wireframes/tests": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/tests/browser.mjs": {
+    "mode": 436,
+    "kind": "file",
+    "size": 34779,
+    "sha256": "0a004f861e9986d5012b90357615d996e76c69852f028851ac24d9d96651925a"
+  },
+  "10-Low-Fidelity-Wireframes/tests/experience-flows.mjs": {
+    "mode": 436,
+    "kind": "file",
+    "size": 18437,
+    "sha256": "de4a05634ab29ceb8770e8174e9c48dfa968eadf1b6eefb91cd9b67c93fa1005"
+  },
+  "10-Low-Fidelity-Wireframes/tests/product-ux.mjs": {
+    "mode": 436,
+    "kind": "file",
+    "size": 8271,
+    "sha256": "3db82c558bcb5e01c383ffff10709fe6643ed4115a5c5c54a6555934fcc91a06"
+  },
+  "10-Low-Fidelity-Wireframes/tools": {
+    "mode": 509,
+    "kind": "directory"
+  },
+  "10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs": {
+    "mode": 436,
+    "kind": "file",
+    "size": 17814,
+    "sha256": "899e1cd54398d46f455cace8274f9334d23c60e925fd83674fca9948a26cdd8a"
+  },
+  "10-Low-Fidelity-Wireframes/tools/generate-experience-coverage.mjs": {
+    "mode": 436,
+    "kind": "file",
+    "size": 6370,
+    "sha256": "13a7530aaf27e7b68b41ae6bde989f2a4f713a7bbca0baa2f693a36667510eaf"
+  },
+  "10-Low-Fidelity-Wireframes/tools/generate-ux-state-coverage.mjs": {
+    "mode": 436,
+    "kind": "file",
+    "size": 137,
+    "sha256": "a87fe033c497bd1f799a41bab6f1e8dbeca9d440b627d1a765700cfe12841463"
+  },
+  "10-Low-Fidelity-Wireframes/tools/validate-prototype.mjs": {
+    "mode": 436,
+    "kind": "file",
+    "size": 4499,
+    "sha256": "fd5280ad0ca32f0963f06ff5acb274f961514bdc18602e231c8af769ce7b8081"
+  }
+}

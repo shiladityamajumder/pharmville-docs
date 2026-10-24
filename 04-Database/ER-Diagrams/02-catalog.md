@@ -143,25 +143,25 @@ erDiagram
         uuid updated_by FK
         uuid uploaded_by_user_id FK
     }
+    catalog__brands o|--o{ catalog__products : "FK-0125 FK-0126"
+    catalog__categories o|--o{ catalog__products : "FK-0127 FK-0128"
     identity__users o|--o{ catalog__products : "FK-0129 FK-0131 FK-0132 FK-0137"
     catalog__commerce_classes o|--o{ catalog__products : "FK-0130"
     catalog__dosage_forms o|--o{ catalog__products : "FK-0133 FK-0134"
-    catalog__categories o|--o{ catalog__products : "FK-0127 FK-0128"
-    catalog__brands o|--o{ catalog__products : "FK-0125 FK-0126"
     catalog__manufacturers o|--o{ catalog__products : "FK-0135 FK-0136"
     identity__users ||--o{ catalog__product_classification_history : "FK-0076"
     catalog__commerce_classes ||--o{ catalog__product_classification_history : "FK-0077"
     catalog__commerce_classes o|--o{ catalog__product_classification_history : "FK-0078"
-    catalog__products ||--o{ catalog__product_classification_history : "FK-0080 FK-0079"
+    catalog__products ||--o{ catalog__product_classification_history : "FK-0079 FK-0080"
     identity__users o|--o{ catalog__categories : "FK-0057 FK-0058 FK-0061"
     catalog__categories o|--o{ catalog__categories : "FK-0059 FK-0060"
     identity__users o|--o{ catalog__dosage_forms : "FK-0064 FK-0065 FK-0066"
     identity__users o|--o{ catalog__commerce_classes : "FK-0062 FK-0063"
     identity__users o|--o{ catalog__product_relationships : "FK-0106 FK-0111"
-    catalog__products ||--o{ catalog__product_relationships : "FK-0110 FK-0108 FK-0107 FK-0109"
+    catalog__products ||--o{ catalog__product_relationships : "FK-0107 FK-0108 FK-0109 FK-0110"
     identity__users o|--o{ catalog__manufacturers : "FK-0067 FK-0068 FK-0071"
     organization__organizations o|--o{ catalog__manufacturers : "FK-0069 FK-0070"
-    identity__users o|--o{ catalog__brands : "FK-0051 FK-0056 FK-0050"
+    identity__users o|--o{ catalog__brands : "FK-0050 FK-0051 FK-0056"
     platform__file_objects o|--o{ catalog__brands : "FK-0052 FK-0053"
     organization__organizations o|--o{ catalog__brands : "FK-0054 FK-0055"
 ```
@@ -317,14 +317,14 @@ erDiagram
     }
     identity__users o|--o{ catalog__product_media : "FK-0092 FK-0093 FK-0098"
     platform__file_objects ||--o{ catalog__product_media : "FK-0094 FK-0095"
-    catalog__product_variants o|--o{ catalog__product_media : "FK-0099 FK-0100"
     catalog__products ||--o{ catalog__product_media : "FK-0096 FK-0097"
+    catalog__product_variants o|--o{ catalog__product_media : "FK-0099 FK-0100"
     identity__users o|--o{ catalog__product_variants : "FK-0118 FK-0119 FK-0124"
-    catalog__units_of_measure o|--o{ catalog__product_variants : "FK-0121 FK-0120"
+    catalog__units_of_measure o|--o{ catalog__product_variants : "FK-0120 FK-0121"
     catalog__products ||--o{ catalog__product_variants : "FK-0122 FK-0123"
     identity__users o|--o{ catalog__product_identifiers : "FK-0086 FK-0089"
     catalog__products o|--o{ catalog__product_identifiers : "FK-0087 FK-0088"
-    catalog__product_variants o|--o{ catalog__product_identifiers : "FK-0091 FK-0090"
+    catalog__product_variants o|--o{ catalog__product_identifiers : "FK-0090 FK-0091"
     identity__users o|--o{ catalog__units_of_measure : "FK-0152 FK-0153 FK-0154"
     identity__users o|--o{ catalog__product_content : "FK-0081 FK-0082 FK-0085"
     catalog__products ||--o{ catalog__product_content : "FK-0083 FK-0084"
@@ -333,8 +333,8 @@ erDiagram
     identity__users o|--o{ catalog__product_attributes : "FK-0072 FK-0075"
     catalog__products ||--o{ catalog__product_attributes : "FK-0073 FK-0074"
     identity__users o|--o{ catalog__product_salts : "FK-0112 FK-0117"
-    catalog__salts ||--o{ catalog__product_salts : "FK-0115 FK-0116"
     catalog__products ||--o{ catalog__product_salts : "FK-0113 FK-0114"
+    catalog__salts ||--o{ catalog__product_salts : "FK-0115 FK-0116"
 ```
 
 **Entity name mapping**
@@ -421,10 +421,10 @@ erDiagram
         uuid updated_by FK
     }
     identity__users o|--o{ catalog__substitution_group_products : "FK-0141 FK-0146"
-    catalog__products ||--o{ catalog__substitution_group_products : "FK-0145 FK-0144"
-    catalog__substitution_groups ||--o{ catalog__substitution_group_products : "FK-0143 FK-0142"
+    catalog__substitution_groups ||--o{ catalog__substitution_group_products : "FK-0142 FK-0143"
+    catalog__products ||--o{ catalog__substitution_group_products : "FK-0144 FK-0145"
     identity__users o|--o{ catalog__substitution_groups : "FK-0147 FK-0148 FK-0151"
-    catalog__dosage_forms o|--o{ catalog__substitution_groups : "FK-0150 FK-0149"
+    catalog__dosage_forms o|--o{ catalog__substitution_groups : "FK-0149 FK-0150"
     identity__users o|--o{ catalog__salts : "FK-0138 FK-0139 FK-0140"
 ```
 
@@ -466,4 +466,4 @@ See [WF-002](../../06-Workflows/WF-002-Search-and-Availability.md), [WF-003](../
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/catalog/README.md) · [Inventory HLD](../../03-Modules/Inventory/HLD.md) · [Inventory LLD](../../03-Modules/Inventory/LLD.md) · [Product_Catalog HLD](../../03-Modules/Product_Catalog/HLD.md) · [Product_Catalog LLD](../../03-Modules/Product_Catalog/LLD.md) · [WF-002](../../06-Workflows/WF-002-Search-and-Availability.md) · [WF-003](../../06-Workflows/WF-003-Cart-Quote-and-Reservation.md) · [WF-011](../../06-Workflows/WF-011-Inventory-Reconciliation.md) · [WF-014](../../06-Workflows/WF-014-Supplier-Receiving.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/catalog/README.md) · [Inventory HLD](../../03-Modules/Inventory/HLD.md) · [Inventory LLD](../../03-Modules/Inventory/LLD.md) · [Product_Catalog HLD](../../03-Modules/Product-Catalog/HLD.md) · [Product_Catalog LLD](../../03-Modules/Product-Catalog/LLD.md) · [WF-002](../../06-Workflows/WF-002-Search-and-Availability.md) · [WF-003](../../06-Workflows/WF-003-Cart-Quote-and-Reservation.md) · [WF-011](../../06-Workflows/WF-011-Inventory-Reconciliation.md) · [WF-014](../../06-Workflows/WF-014-Supplier-Receiving.md)

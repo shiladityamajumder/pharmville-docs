@@ -105,15 +105,15 @@ erDiagram
     identity__roles ||--o{ identity__role_permissions : "FK-0678 FK-0679"
     identity__users o|--o{ identity__permissions : "FK-0672 FK-0673 FK-0674"
     identity__users o|--o{ identity__roles : "FK-0681 FK-0682 FK-0683"
-    identity__users ||--o{ identity__user_roles : "FK-0700"
     identity__users o|--o{ identity__user_roles : "FK-0696 FK-0699"
     identity__roles ||--o{ identity__user_roles : "FK-0697 FK-0698"
+    identity__users ||--o{ identity__user_roles : "FK-0700"
     identity__users o|--o{ identity__users : "FK-0701 FK-0702"
     identity__users o|--o{ identity__api_clients : "FK-0662 FK-0663 FK-0664"
+    identity__api_clients ||--o{ identity__api_client_secrets : "FK-0658 FK-0659"
     identity__users o|--o{ identity__api_client_secrets : "FK-0660 FK-0661"
-    identity__api_clients ||--o{ identity__api_client_secrets : "FK-0659 FK-0658"
-    identity__users ||--o{ identity__mfa_factors : "FK-0668"
     identity__users o|--o{ identity__mfa_factors : "FK-0666 FK-0667"
+    identity__users ||--o{ identity__mfa_factors : "FK-0668"
 ```
 
 **Entity name mapping**
@@ -197,13 +197,13 @@ erDiagram
         uuid updated_by FK
         uuid uploaded_by_user_id FK
     }
-    identity__users ||--o{ identity__user_profiles : "FK-0695"
-    identity__users o|--o{ identity__user_profiles : "FK-0692 FK-0693 FK-0694"
     platform__file_objects o|--o{ identity__user_profiles : "FK-0690 FK-0691"
-    identity__users ||--o{ identity__sessions : "FK-0686"
+    identity__users o|--o{ identity__user_profiles : "FK-0692 FK-0693 FK-0694"
+    identity__users ||--o{ identity__user_profiles : "FK-0695"
     identity__users o|--o{ identity__sessions : "FK-0684 FK-0685"
-    identity__users ||--o{ identity__trusted_devices : "FK-0689"
+    identity__users ||--o{ identity__sessions : "FK-0686"
     identity__users o|--o{ identity__trusted_devices : "FK-0687 FK-0688"
+    identity__users ||--o{ identity__trusted_devices : "FK-0689"
     identity__users o|--o{ identity__otp_challenges : "FK-0669 FK-0670"
     identity__users o|--o{ identity__login_attempts : "FK-0665"
     identity__users ||--o{ identity__password_history : "FK-0671"
@@ -249,4 +249,4 @@ See [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md), [WF-012](../../
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/identity/README.md) · [Authentication_Access HLD](../../03-Modules/Authentication_Access/HLD.md) · [Authentication_Access LLD](../../03-Modules/Authentication_Access/LLD.md) · [Customer_Accounts HLD](../../03-Modules/Customer_Accounts/HLD.md) · [Customer_Accounts LLD](../../03-Modules/Customer_Accounts/LLD.md) · [Rider_App HLD](../../03-Modules/Rider_App/HLD.md) · [Rider_App LLD](../../03-Modules/Rider_App/LLD.md) · [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) · [WF-012](../../06-Workflows/WF-012-Report-Export-and-Audit.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/identity/README.md) · [Authentication_Access HLD](../../03-Modules/Authentication/HLD.md) · [Authentication_Access LLD](../../03-Modules/Authentication/LLD.md) · [Customer_Accounts HLD](../../03-Modules/Customer-Accounts/HLD.md) · [Customer_Accounts LLD](../../03-Modules/Customer-Accounts/LLD.md) · [Rider_App HLD](../../03-Modules/Rider-Operations/HLD.md) · [Rider_App LLD](../../03-Modules/Rider-Operations/LLD.md) · [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) · [WF-012](../../06-Workflows/WF-012-Report-Export-and-Audit.md)

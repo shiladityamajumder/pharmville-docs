@@ -20,7 +20,7 @@ Inventory owns observations, movement/adjustment evidence and reconciliation out
 
 Candidate existing tables: `warehouse.stock_ledger`, `warehouse.stock_balances`, `warehouse.inventory_lots`, `warehouse.inventory_adjustments`, `warehouse.inventory_adjustment_items`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-050/API-051/API-054/API-055; count/import commands still need feature-specific review. [Inventory](../05-APIs/Inventory.md).
+Related proposed operations: API-050/API-051/API-054/API-055; count/import commands still need feature-specific review. [Inventory](../03-Modules/Inventory/APIs.md).
 
 ## Sequence
 

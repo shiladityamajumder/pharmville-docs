@@ -40,4 +40,4 @@ Payment and deferred-upload order (D-004), clinical rules (D-006), stock/partial
 
 ## Related technical documentation
 
-[Journey stages](../01-Project/User-Journeys.md) · [HLD](../02-Architecture/System-HLD.md) · [customer LLD](../03-Modules/Customer_Orders/LLD.md) · [customer APIs](../05-APIs/Customer_Orders.md) · [data](../04-Database/Module-Mapping.md#customer-orders) · [workflows](../06-Workflows/README.md) · [edge cases/tests and feature IDs](../09-References/Coverage-and-Traceability.md) · [development tasks](../08-Development-Plan/Implementation-Plan.md)
+[Journey stages](../01-Project/User-Journeys.md) · [HLD](../02-Architecture/System-HLD.md) · [customer LLD](../03-Modules/Customer-Orders/LLD.md) · [customer APIs](../03-Modules/Customer-Orders/APIs.md) · [data](../04-Database/Module-Mapping.md#customer-orders) · [workflows](../06-Workflows/README.md) · [edge cases/tests and feature IDs](../09-References/Coverage-and-Traceability.md) · [development tasks](../08-Development-Plan/Implementation-Plan.md)

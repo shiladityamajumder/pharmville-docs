@@ -175,11 +175,11 @@ erDiagram
         bigint organization_id_internal_id FK
         uuid updated_by FK
     }
-    identity__users ||--o{ pricing__promotion_redemptions : "FK-1143"
-    pricing__coupon_codes o|--o{ pricing__promotion_redemptions : "FK-1138 FK-1137"
-    pricing__promotion_versions o|--o{ pricing__promotion_redemptions : "FK-1141 FK-1142"
-    pricing__promotions ||--o{ pricing__promotion_redemptions : "FK-1140 FK-1139"
     commerce__orders o|--o{ pricing__promotion_redemptions : "FK-1135 FK-1136"
+    pricing__coupon_codes o|--o{ pricing__promotion_redemptions : "FK-1137 FK-1138"
+    pricing__promotions ||--o{ pricing__promotion_redemptions : "FK-1139 FK-1140"
+    pricing__promotion_versions o|--o{ pricing__promotion_redemptions : "FK-1141 FK-1142"
+    identity__users ||--o{ pricing__promotion_redemptions : "FK-1143"
     identity__users o|--o{ pricing__coupon_codes : "FK-1113 FK-1114 FK-1115 FK-1118"
     pricing__promotions ||--o{ pricing__coupon_codes : "FK-1116 FK-1117"
     identity__users o|--o{ pricing__promotion_versions : "FK-1144 FK-1147"
@@ -187,13 +187,13 @@ erDiagram
     identity__users o|--o{ pricing__promotions : "FK-1148 FK-1149 FK-1150"
     identity__users o|--o{ pricing__tax_rules : "FK-1151 FK-1152 FK-1153"
     identity__users o|--o{ pricing__pricing_evaluations : "FK-1126"
+    marketplace__sellers o|--o{ pricing__price_books : "FK-1119 FK-1120"
     identity__users o|--o{ pricing__price_books : "FK-1121 FK-1122 FK-1123"
     warehouse__warehouses o|--o{ pricing__price_books : "FK-1124 FK-1125"
-    marketplace__sellers o|--o{ pricing__price_books : "FK-1119 FK-1120"
     identity__users o|--o{ pricing__product_prices : "FK-1127 FK-1132"
     pricing__price_books ||--o{ pricing__product_prices : "FK-1128 FK-1129"
-    catalog__product_variants o|--o{ pricing__product_prices : "FK-1133 FK-1134"
     catalog__products ||--o{ pricing__product_prices : "FK-1130 FK-1131"
+    catalog__product_variants o|--o{ pricing__product_prices : "FK-1133 FK-1134"
 ```
 
 **Entity name mapping**
@@ -242,4 +242,4 @@ See [WF-002](../../06-Workflows/WF-002-Search-and-Availability.md), [WF-003](../
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/pricing/README.md) · [Cart_Checkout HLD](../../03-Modules/Cart_Checkout/HLD.md) · [Cart_Checkout LLD](../../03-Modules/Cart_Checkout/LLD.md) · [Product_Catalog HLD](../../03-Modules/Product_Catalog/HLD.md) · [Product_Catalog LLD](../../03-Modules/Product_Catalog/LLD.md) · [WF-002](../../06-Workflows/WF-002-Search-and-Availability.md) · [WF-003](../../06-Workflows/WF-003-Cart-Quote-and-Reservation.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/pricing/README.md) · [Cart_Checkout HLD](../../03-Modules/Cart-Checkout/HLD.md) · [Cart_Checkout LLD](../../03-Modules/Cart-Checkout/LLD.md) · [Product_Catalog HLD](../../03-Modules/Product-Catalog/HLD.md) · [Product_Catalog LLD](../../03-Modules/Product-Catalog/LLD.md) · [WF-002](../../06-Workflows/WF-002-Search-and-Availability.md) · [WF-003](../../06-Workflows/WF-003-Cart-Quote-and-Reservation.md)

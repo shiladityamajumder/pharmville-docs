@@ -201,25 +201,25 @@ erDiagram
         uuid warehouse_id FK, UK
         bigint warehouse_id_internal_id FK
     }
+    compliance__regulatory_authorities ||--o{ compliance__regulatory_registrations : "FK-0415 FK-0416"
     identity__users o|--o{ compliance__regulatory_registrations : "FK-0417 FK-0418 FK-0425"
-    platform__file_objects o|--o{ compliance__regulatory_registrations : "FK-0420 FK-0419"
-    compliance__regulatory_authorities ||--o{ compliance__regulatory_registrations : "FK-0416 FK-0415"
+    platform__file_objects o|--o{ compliance__regulatory_registrations : "FK-0419 FK-0420"
+    organization__locations o|--o{ compliance__regulatory_registrations : "FK-0421 FK-0422"
     organization__organizations o|--o{ compliance__regulatory_registrations : "FK-0423 FK-0424"
-    organization__locations o|--o{ compliance__regulatory_registrations : "FK-0422 FK-0421"
     identity__users o|--o{ compliance__regulatory_authorities : "FK-0412 FK-0413 FK-0414"
+    compliance__regulatory_authorities o|--o{ compliance__product_recalls : "FK-0400 FK-0401"
     identity__users o|--o{ compliance__product_recalls : "FK-0402 FK-0405"
     catalog__products ||--o{ compliance__product_recalls : "FK-0403 FK-0404"
-    compliance__regulatory_authorities o|--o{ compliance__product_recalls : "FK-0401 FK-0400"
     identity__users o|--o{ compliance__recall_lots : "FK-0406 FK-0411"
     warehouse__inventory_lots ||--o{ compliance__recall_lots : "FK-0407 FK-0408"
     compliance__product_recalls ||--o{ compliance__recall_lots : "FK-0409 FK-0410"
     identity__users o|--o{ compliance__legal_holds : "FK-0394 FK-0395 FK-0396"
-    identity__users ||--o{ compliance__privacy_requests : "FK-0399"
     identity__users o|--o{ compliance__privacy_requests : "FK-0397 FK-0398"
+    identity__users ||--o{ compliance__privacy_requests : "FK-0399"
     platform__file_objects o|--o{ compliance__evidence : "FK-0392 FK-0393"
-    identity__users o|--o{ compliance__adverse_event_reports : "FK-0383 FK-0391 FK-0390"
-    clinical__prescriptions o|--o{ compliance__adverse_event_reports : "FK-0387 FK-0386"
+    identity__users o|--o{ compliance__adverse_event_reports : "FK-0383 FK-0390 FK-0391"
     clinical__patient_profiles o|--o{ compliance__adverse_event_reports : "FK-0384 FK-0385"
+    clinical__prescriptions o|--o{ compliance__adverse_event_reports : "FK-0386 FK-0387"
     catalog__products o|--o{ compliance__adverse_event_reports : "FK-0388 FK-0389"
 ```
 

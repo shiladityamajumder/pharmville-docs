@@ -47,20 +47,20 @@ See Security Overview, Database Tests and Runtime Roles.
 
 ## Database reference — exact checked-in catalog snapshot
 
-**Authoritative deployment:** SQL migrations the checked-in SQL migration history.
+**Authoritative structure:** [standalone effective SQL](../pharmville-database/pharmville_schema.sql), validated on isolated PostgreSQL 18.6. Future populated-database releases require a separately approved procedure.
 
 **Snapshot evidence:** local PG18 final inventory; not a production deployment.
 
 - All 266 tables
 - Stable DB IDs
 - Every recorded foreign key
-- SQL/ORM parity evidence
+- SQL/catalog and documentation parity evidence
 - 1,204 indexes
 - 3,198 constraints
 - 56 functions — exact DDL
 - 879 triggers
 - 3 RLS policies
-- Migration policy
+- Empty-schema installation prerequisites and separate release-policy decisions
 - Gap classification
 
 Every schema has per-table field metadata and structural SQL contracts. Business meanings not backed by an approved PRD are explicitly inferred.

@@ -24,8 +24,7 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - run: npm run test:validator
       - run: npm run test:database-source
-      - name: Verify supplied database source
-        if: ${{ hashFiles('healthcare_db/postgresql/migrations/V*.sql') != '' }}
+      - name: Verify canonical standalone SQL and complete table catalog
         run: npm run validate:database
       - run: npm run validate:erd
       - run: npm run validate:render

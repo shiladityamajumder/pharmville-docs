@@ -20,7 +20,7 @@ Warehouse receiving owns receipt evidence; Inventory applies accepted stock move
 
 Candidate existing tables: `procurement.goods_receipts`, `procurement.goods_receipt_items`, `procurement.goods_receipt_quality_checks`, `procurement.supplier_invoices`, `warehouse.inventory_lots`, `warehouse.stock_ledger`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-056 for receiving; exact receipt-to-stock atomic interface and supplier discrepancy handling remain D-024. [Warehouse](../05-APIs/Warehouse.md) · [Inventory](../05-APIs/Inventory.md).
+Related proposed operations: API-056 for receiving; exact receipt-to-stock atomic interface and supplier discrepancy handling remain D-024. [Warehouse](../03-Modules/Warehouse/APIs.md) · [Inventory](../03-Modules/Inventory/APIs.md).
 
 ## Sequence
 

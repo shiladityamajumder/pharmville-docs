@@ -121,17 +121,17 @@ erDiagram
     identity__users o|--o{ platform__file_variants : "FK-1086 FK-1087 FK-1090"
     platform__file_objects ||--o{ platform__file_variants : "FK-1088 FK-1089 FK-1092"
     platform__file_objects ||--o| platform__file_variants : "FK-1091"
-    identity__users o|--o{ platform__file_objects : "FK-1078 FK-1075 FK-1076 FK-1077"
-    identity__users o|--o{ platform__file_upload_sessions : "FK-1084 FK-1081 FK-1085"
-    platform__file_objects ||--o{ platform__file_upload_sessions : "FK-1083 FK-1082"
+    identity__users o|--o{ platform__file_objects : "FK-1075 FK-1076 FK-1077 FK-1078"
+    identity__users o|--o{ platform__file_upload_sessions : "FK-1081 FK-1084 FK-1085"
+    platform__file_objects ||--o{ platform__file_upload_sessions : "FK-1082 FK-1083"
     identity__users o|--o{ platform__file_access_grants : "FK-1071 FK-1074"
-    platform__file_objects ||--o{ platform__file_access_grants : "FK-1073 FK-1072"
+    platform__file_objects ||--o{ platform__file_access_grants : "FK-1072 FK-1073"
     identity__users o|--o{ platform__file_access_events : "FK-1068"
-    platform__file_objects ||--o{ platform__file_access_events : "FK-1070 FK-1069"
+    platform__file_objects ||--o{ platform__file_access_events : "FK-1069 FK-1070"
+    platform__report_definitions ||--o{ platform__report_runs : "FK-1099 FK-1100"
     identity__users ||--o{ platform__report_runs : "FK-1101"
-    platform__report_definitions ||--o{ platform__report_runs : "FK-1100 FK-1099"
-    platform__file_objects o|--o{ platform__report_runs : "FK-1103 FK-1102"
-    identity__users o|--o{ platform__cms_pages : "FK-1057 FK-1060 FK-1058 FK-1059 FK-1061"
+    platform__file_objects o|--o{ platform__report_runs : "FK-1102 FK-1103"
+    identity__users o|--o{ platform__cms_pages : "FK-1057 FK-1058 FK-1059 FK-1060 FK-1061"
 ```
 
 **Entity name mapping**
@@ -245,7 +245,7 @@ erDiagram
     identity__users o|--o{ platform__feature_flags : "FK-1065 FK-1066 FK-1067"
     identity__users o|--o{ platform__webhook_endpoints : "FK-1110 FK-1111 FK-1112"
     identity__users o|--o{ platform__webhook_deliveries : "FK-1106 FK-1109"
-    platform__webhook_endpoints ||--o{ platform__webhook_deliveries : "FK-1108 FK-1107"
+    platform__webhook_endpoints ||--o{ platform__webhook_deliveries : "FK-1107 FK-1108"
     identity__users o|--o{ platform__idempotency_keys : "FK-1093 FK-1094"
     identity__users o|--o{ platform__inbox_messages : "FK-1095 FK-1096"
 ```
@@ -324,7 +324,7 @@ erDiagram
         uuid updated_by FK
     }
     platform__file_objects o|--o{ platform__cms_banners : "FK-1051 FK-1052"
-    platform__file_objects ||--o{ platform__file_scan_events : "FK-1080 FK-1079"
+    platform__file_objects ||--o{ platform__file_scan_events : "FK-1079 FK-1080"
     identity__users o|--o{ platform__outbox_events : "FK-1097 FK-1098"
     identity__users o|--o{ platform__scheduled_jobs : "FK-1104 FK-1105"
     identity__users o|--o{ platform__audit_logs : "FK-1050"
@@ -369,4 +369,4 @@ See [WF-004](../../06-Workflows/WF-004-Prescription-Intake-and-Review.md), [WF-0
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/platform/README.md) · [Admin_CMS HLD](../../03-Modules/Admin_CMS/HLD.md) · [Admin_CMS LLD](../../03-Modules/Admin_CMS/LLD.md) · [Audit HLD](../../03-Modules/Audit/HLD.md) · [Audit LLD](../../03-Modules/Audit/LLD.md) · [Notifications HLD](../../03-Modules/Notifications/HLD.md) · [Notifications LLD](../../03-Modules/Notifications/LLD.md) · [Prescription_Upload HLD](../../03-Modules/Prescription_Upload/HLD.md) · [Prescription_Upload LLD](../../03-Modules/Prescription_Upload/LLD.md) · [Reporting HLD](../../03-Modules/Reporting/HLD.md) · [Reporting LLD](../../03-Modules/Reporting/LLD.md) · [WF-004](../../06-Workflows/WF-004-Prescription-Intake-and-Review.md) · [WF-012](../../06-Workflows/WF-012-Report-Export-and-Audit.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/platform/README.md) · [Admin_CMS HLD](../../03-Modules/Admin/HLD.md) · [Admin_CMS LLD](../../03-Modules/Admin/LLD.md) · [Audit HLD](../../03-Modules/Audit/HLD.md) · [Audit LLD](../../03-Modules/Audit/LLD.md) · [Notifications HLD](../../03-Modules/Notifications/HLD.md) · [Notifications LLD](../../03-Modules/Notifications/LLD.md) · [Prescription_Upload HLD](../../03-Modules/Prescription-Management/HLD.md) · [Prescription_Upload LLD](../../03-Modules/Prescription-Management/LLD.md) · [Reporting HLD](../../03-Modules/Reporting/HLD.md) · [Reporting LLD](../../03-Modules/Reporting/LLD.md) · [WF-004](../../06-Workflows/WF-004-Prescription-Intake-and-Review.md) · [WF-012](../../06-Workflows/WF-012-Report-Export-and-Audit.md)

@@ -65,7 +65,7 @@ Reports must be authorised by entity scope and must not export unapproved patien
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture
-- [API contracts](../../05-APIs/Reporting.md)
+- [API contracts](APIs.md)
 - [Database mapping](../../04-Database/Module-Mapping.md)
 - [Testing](../../07-Engineering/Testing.md)
 - [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)

@@ -1,6 +1,6 @@
 # Master-data inventory and initial records
 
-**Planning status: Proposed / Unapproved.** Classification uses the table’s role, relationships and lifecycle; no seed/migration changes. All 266 checked-in table pages were inspected. SQL source and live data are unavailable in this checkout, so Confirmed means documented domain/CHECK evidence, not observed rows. [API coverage](../05-APIs/API-Contract-Coverage.md) · [decisions](../05-APIs/Planning-Decisions.md).
+**Planning status: Proposed / Unapproved.** Classification uses the table’s role, relationships and lifecycle; no seed/migration changes. All 266 checked-in table pages were inspected. The standalone SQL and isolated effective catalog are verified. Confirmed means explicit schema/domain or archived source seed evidence, not production records. Final SQL intentionally contains no records; proposed/Open datasets still need owner approval. [API coverage](../05-APIs/API-Contract-Coverage.md) · [decisions](../05-APIs/Planning-Decisions.md).
 
 ## Classification totals
 

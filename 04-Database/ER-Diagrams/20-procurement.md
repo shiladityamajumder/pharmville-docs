@@ -201,36 +201,36 @@ erDiagram
         uuid updated_by FK
     }
     identity__users o|--o{ procurement__purchase_order_items : "FK-1174 FK-1181"
-    procurement__purchase_orders ||--o{ procurement__purchase_order_items : "FK-1177 FK-1178"
-    procurement__supplier_products o|--o{ procurement__purchase_order_items : "FK-1180 FK-1179"
-    catalog__product_variants o|--o{ procurement__purchase_order_items : "FK-1183 FK-1182"
     catalog__products ||--o{ procurement__purchase_order_items : "FK-1175 FK-1176"
+    procurement__purchase_orders ||--o{ procurement__purchase_order_items : "FK-1177 FK-1178"
+    procurement__supplier_products o|--o{ procurement__purchase_order_items : "FK-1179 FK-1180"
+    catalog__product_variants o|--o{ procurement__purchase_order_items : "FK-1182 FK-1183"
     identity__users o|--o{ procurement__supplier_products : "FK-1233 FK-1234 FK-1239"
-    catalog__product_variants o|--o{ procurement__supplier_products : "FK-1241 FK-1240"
     catalog__products ||--o{ procurement__supplier_products : "FK-1235 FK-1236"
     procurement__suppliers ||--o{ procurement__supplier_products : "FK-1237 FK-1238"
+    catalog__product_variants o|--o{ procurement__supplier_products : "FK-1240 FK-1241"
     identity__users o|--o{ procurement__purchase_orders : "FK-1184 FK-1185 FK-1190"
-    warehouse__warehouses ||--o{ procurement__purchase_orders : "FK-1191 FK-1192"
-    procurement__suppliers ||--o{ procurement__purchase_orders : "FK-1188 FK-1189"
     procurement__purchase_requisitions o|--o{ procurement__purchase_orders : "FK-1186 FK-1187"
+    procurement__suppliers ||--o{ procurement__purchase_orders : "FK-1188 FK-1189"
+    warehouse__warehouses ||--o{ procurement__purchase_orders : "FK-1191 FK-1192"
     identity__users o|--o{ procurement__purchase_requisition_items : "FK-1193 FK-1198"
-    catalog__products ||--o{ procurement__purchase_requisition_items : "FK-1195 FK-1194"
+    catalog__products ||--o{ procurement__purchase_requisition_items : "FK-1194 FK-1195"
     procurement__purchase_requisitions ||--o{ procurement__purchase_requisition_items : "FK-1196 FK-1197"
     catalog__product_variants o|--o{ procurement__purchase_requisition_items : "FK-1199 FK-1200"
-    identity__users ||--o{ procurement__purchase_requisitions : "FK-1202"
     identity__users o|--o{ procurement__purchase_requisitions : "FK-1201 FK-1203"
-    warehouse__warehouses ||--o{ procurement__purchase_requisitions : "FK-1205 FK-1204"
+    identity__users ||--o{ procurement__purchase_requisitions : "FK-1202"
+    warehouse__warehouses ||--o{ procurement__purchase_requisitions : "FK-1204 FK-1205"
     identity__users o|--o{ procurement__purchase_returns : "FK-1212 FK-1215"
     procurement__suppliers ||--o{ procurement__purchase_returns : "FK-1213 FK-1214"
     warehouse__warehouses ||--o{ procurement__purchase_returns : "FK-1216 FK-1217"
-    identity__users ||--o{ procurement__goods_receipts : "FK-1168"
     identity__users o|--o{ procurement__goods_receipts : "FK-1165 FK-1171"
-    procurement__purchase_orders ||--o{ procurement__goods_receipts : "FK-1167 FK-1166"
+    procurement__purchase_orders ||--o{ procurement__goods_receipts : "FK-1166 FK-1167"
+    identity__users ||--o{ procurement__goods_receipts : "FK-1168"
+    procurement__supplier_invoices o|--o{ procurement__goods_receipts : "FK-1169 FK-1170"
     warehouse__warehouses ||--o{ procurement__goods_receipts : "FK-1172 FK-1173"
-    procurement__supplier_invoices o|--o{ procurement__goods_receipts : "FK-1170 FK-1169"
     identity__users o|--o{ procurement__supplier_invoices : "FK-1218 FK-1225"
-    platform__file_objects o|--o{ procurement__supplier_invoices : "FK-1220 FK-1219"
-    procurement__purchase_orders o|--o{ procurement__supplier_invoices : "FK-1222 FK-1221"
+    platform__file_objects o|--o{ procurement__supplier_invoices : "FK-1219 FK-1220"
+    procurement__purchase_orders o|--o{ procurement__supplier_invoices : "FK-1221 FK-1222"
     procurement__suppliers ||--o{ procurement__supplier_invoices : "FK-1223 FK-1224"
 ```
 
@@ -395,19 +395,19 @@ erDiagram
         bigint warehouse_id_internal_id FK
     }
     identity__users o|--o{ procurement__supplier_licenses : "FK-1226 FK-1227 FK-1232"
+    platform__file_objects o|--o{ procurement__supplier_licenses : "FK-1228 FK-1229"
     procurement__suppliers ||--o{ procurement__supplier_licenses : "FK-1230 FK-1231"
-    platform__file_objects o|--o{ procurement__supplier_licenses : "FK-1229 FK-1228"
     identity__users o|--o{ procurement__suppliers : "FK-1242 FK-1243 FK-1246"
     organization__organizations o|--o{ procurement__suppliers : "FK-1244 FK-1245"
     identity__users ||--o{ procurement__goods_receipt_quality_checks : "FK-1160"
     identity__users o|--o{ procurement__goods_receipt_quality_checks : "FK-1161 FK-1164"
-    procurement__goods_receipt_items ||--o{ procurement__goods_receipt_quality_checks : "FK-1163 FK-1162"
+    procurement__goods_receipt_items ||--o{ procurement__goods_receipt_quality_checks : "FK-1162 FK-1163"
     identity__users o|--o{ procurement__goods_receipt_items : "FK-1154 FK-1159"
-    procurement__purchase_order_items ||--o{ procurement__goods_receipt_items : "FK-1158 FK-1157"
     procurement__goods_receipts ||--o{ procurement__goods_receipt_items : "FK-1155 FK-1156"
+    procurement__purchase_order_items ||--o{ procurement__goods_receipt_items : "FK-1157 FK-1158"
     identity__users o|--o{ procurement__purchase_return_items : "FK-1206 FK-1211"
-    procurement__purchase_returns ||--o{ procurement__purchase_return_items : "FK-1210 FK-1209"
-    warehouse__inventory_lots ||--o{ procurement__purchase_return_items : "FK-1208 FK-1207"
+    warehouse__inventory_lots ||--o{ procurement__purchase_return_items : "FK-1207 FK-1208"
+    procurement__purchase_returns ||--o{ procurement__purchase_return_items : "FK-1209 FK-1210"
 ```
 
 **Entity name mapping**
@@ -454,4 +454,4 @@ See [WF-011](../../06-Workflows/WF-011-Inventory-Reconciliation.md), [WF-014](..
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/procurement/README.md) · [Inventory HLD](../../03-Modules/Inventory/HLD.md) · [Inventory LLD](../../03-Modules/Inventory/LLD.md) · [Store_Operations HLD](../../03-Modules/Store_Operations/HLD.md) · [Store_Operations LLD](../../03-Modules/Store_Operations/LLD.md) · [Warehouse HLD](../../03-Modules/Warehouse/HLD.md) · [Warehouse LLD](../../03-Modules/Warehouse/LLD.md) · [WF-011](../../06-Workflows/WF-011-Inventory-Reconciliation.md) · [WF-014](../../06-Workflows/WF-014-Supplier-Receiving.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/procurement/README.md) · [Inventory HLD](../../03-Modules/Inventory/HLD.md) · [Inventory LLD](../../03-Modules/Inventory/LLD.md) · [Store_Operations HLD](../../03-Modules/Store-Operations/HLD.md) · [Store_Operations LLD](../../03-Modules/Store-Operations/LLD.md) · [Warehouse HLD](../../03-Modules/Warehouse/HLD.md) · [Warehouse LLD](../../03-Modules/Warehouse/LLD.md) · [WF-011](../../06-Workflows/WF-011-Inventory-Reconciliation.md) · [WF-014](../../06-Workflows/WF-014-Supplier-Receiving.md)

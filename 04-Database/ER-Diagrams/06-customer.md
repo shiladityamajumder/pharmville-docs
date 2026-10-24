@@ -135,23 +135,23 @@ erDiagram
         uuid updated_by FK
         uuid uploaded_by_user_id FK
     }
-    identity__users ||--o{ customer__profiles : "FK-0451"
-    identity__users o|--o{ customer__profiles : "FK-0448 FK-0449 FK-0450"
-    customer__addresses o|--o{ customer__profiles : "FK-0452 FK-0453"
     platform__file_objects o|--o{ customer__profiles : "FK-0446 FK-0447"
-    identity__users ||--o{ customer__addresses : "FK-0429"
+    identity__users o|--o{ customer__profiles : "FK-0448 FK-0449 FK-0450"
+    identity__users ||--o{ customer__profiles : "FK-0451"
+    customer__addresses o|--o{ customer__profiles : "FK-0452 FK-0453"
     identity__users o|--o{ customer__addresses : "FK-0426 FK-0427 FK-0428"
+    identity__users ||--o{ customer__addresses : "FK-0429"
+    identity__users o|--o{ customer__family_members : "FK-0436 FK-0438 FK-0439 FK-0440 FK-0441"
     identity__users ||--o{ customer__family_members : "FK-0437"
-    identity__users o|--o{ customer__family_members : "FK-0440 FK-0439 FK-0436 FK-0438 FK-0441"
-    identity__users ||--o{ customer__preferences : "FK-0445"
     identity__users o|--o{ customer__preferences : "FK-0442 FK-0443 FK-0444"
-    identity__users ||--o{ customer__wishlists : "FK-0463"
+    identity__users ||--o{ customer__preferences : "FK-0445"
     identity__users o|--o{ customer__wishlists : "FK-0460 FK-0461 FK-0462"
+    identity__users ||--o{ customer__wishlists : "FK-0463"
     identity__users o|--o{ customer__wishlist_items : "FK-0454 FK-0457"
-    customer__wishlists ||--o{ customer__wishlist_items : "FK-0458 FK-0459"
     catalog__products ||--o{ customer__wishlist_items : "FK-0455 FK-0456"
-    identity__users ||--o{ customer__consents : "FK-0435"
+    customer__wishlists ||--o{ customer__wishlist_items : "FK-0458 FK-0459"
     identity__users o|--o{ customer__consents : "FK-0433 FK-0434"
+    identity__users ||--o{ customer__consents : "FK-0435"
     identity__users o|--o{ customer__consent_events : "FK-0430"
     customer__consents ||--o{ customer__consent_events : "FK-0431 FK-0432"
 ```
@@ -199,4 +199,4 @@ See [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md), [WF-003](../../
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/customer/README.md) · [Customer_Accounts HLD](../../03-Modules/Customer_Accounts/HLD.md) · [Customer_Accounts LLD](../../03-Modules/Customer_Accounts/LLD.md) · [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) · [WF-003](../../06-Workflows/WF-003-Cart-Quote-and-Reservation.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/customer/README.md) · [Customer_Accounts HLD](../../03-Modules/Customer-Accounts/HLD.md) · [Customer_Accounts LLD](../../03-Modules/Customer-Accounts/LLD.md) · [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) · [WF-003](../../06-Workflows/WF-003-Cart-Quote-and-Reservation.md)

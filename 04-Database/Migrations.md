@@ -1,43 +1,9 @@
-# Database source and migration evidence
+# Historical provenance and consolidation
 
-## Supplied database reference
+This retained link target replaces migration-runner instructions. Deploy the [single effective schema](../pharmville-database/pharmville_schema.sql) using the [installation prerequisites](Installation.md); historical migration files are not required at installation.
 
-The user supplied `healthcare_db/` inside this documentation repository as the exact database reference. Its README identifies `postgresql/migrations/` as the deployment source of truth and freezes historical Alembic execution.
+The actual inspected source was `heathcare_db/` (legacy spelling), with nested Git HEAD `08cdfc2aadad09d415a38f803a6304b5ed675d34`. Earlier documentation called a supplied folder `healthcare_db/` and recorded different source metadata. That claim is superseded by the inspected nested checkout and isolated replay evidence; the previous evidence is retained at [Historical/Database-Evidence-before-consolidation.json](../09-References/Historical/Database-Evidence-before-consolidation.json). The current [evidence](../09-References/Database-Evidence.json) hashes the actual archived replay inputs directly: 30 versioned migrations and 103 SQL files including fragments. Twenty-six SQL checksums differ from the superseded selected-folder manifest; that older manifest is preserved separately and was not used for reconstruction. This resolves source provenance explicitly rather than substituting old hashes.
 
-The supplied folder contains **30 versioned SQL migrations, V0001 through V0030**, plus included fragments: **103 SQL files in total**. These files are retained as the database’s history. The documentation now follows this supplied source; the previous claim that V0030 had been removed is retired.
+Before reconstruction, all 374 source files (18,813,433 bytes), including nested `.git`, local files and original permissions/symlinks, were copied to the private sibling archive `../pharmville-source-archive/2026-10-24-730d284/heathcare_db`. File hashes matched with zero differences. The archive directory is private (0700). Its contents are not copied into public documentation or SQL. The original source checkout is retained alongside it as `original-heathcare_db` when consolidation removes the legacy path from the deliverable. No Git history was rewritten and no existing database was touched.
 
-The supplied folder has no standalone Git metadata. Its identity is recorded using SHA-256 checksums in [Database-Evidence.json](../09-References/Database-Evidence.json), covering every migration/fragment, the final table register, supporting model/schema sources and the recorded acceptance report.
-
-The earlier sibling checkout revision is retained only as historical provenance; the documentation repository’s Git HEAD must not be mistaken for a database revision.
-
-## Verification performed
-
-Read-only validation checks the supplied migration file set and hashes, the catalog hash and all 266 table-page column inventories. The source matches the previously recorded 30 versioned migration hashes and final catalog hash. The [ER diagrams](ER-Diagrams/README.md) are regenerated from that same verified catalog.
-
-Source selection is resolved for this documentation. D-015 retains the separate deployment tasks: compare the actual target database ledger and runtime ORM/data-access parity with this source before deployment. No live database connection, migration execution or new PostgreSQL acceptance run is claimed.
-
-## Recorded schema evidence
-
-The supplied `FINAL_DATABASE_ACCEPTANCE_REPORT.md` records isolated PostgreSQL 18 validation on **22 October 2026** for this migration history:
-
-| Recorded object | Count |
-| --- | ---: |
-| Schemas | 24 |
-| Tables | 266 |
-| Columns | 4,438 |
-| Foreign keys | 1,461 |
-| Unique constraints | 438 |
-| Checks | 1,033 |
-| Indexes | 1,204 |
-| Functions | 56 |
-| Triggers | 879 |
-
-The machine-readable catalog is `healthcare_db/docs/upgrade/final_assignment/final_table_register.json`. These are supplied historical results, not fresh live-database measurements. PostgreSQL 15, hosted CI and production deployment remain separately unverified here.
-
-## Reproduce the source checks
-
-Run `npm run validate:database` from the documentation repository root. It uses the supplied `healthcare_db/` folder by default. To inspect an explicitly selected copy, set `PHARMVILLE_DATABASE_SOURCE` to its path; the same recorded checksums must match. Missing or changed files fail verification. The checker never opens a database connection.
-
-Run `npm run generate:erd`, `npm run validate:erd` and `npm run validate` to regenerate and validate the derived documentation. `npm run test:database-source` checks local-folder selection, source identity and rejection of altered or missing migrations, fragments and supporting files.
-
-No supplied SQL migrations, SQLAlchemy models or database configuration were modified or executed.
+The 30 migrations were replayed in version order, within transactions, through V0030. Effective DDL was extracted from PostgreSQL, not concatenated. There is no migration runner or migration-history table in the final schema. The preserved historical [narrative references](../09-References/Historical/README.md) are archival evidence and may describe superseded deployment instructions.

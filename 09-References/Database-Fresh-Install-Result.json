@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "catalog_dimensions": 23,
+  "structural_differences": 0,
+  "tables_verified_empty": 266,
+  "postgresql": "postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+  "private_evidence": "/tmp/pharmville-schema-validation-7td6i1b1"
+}

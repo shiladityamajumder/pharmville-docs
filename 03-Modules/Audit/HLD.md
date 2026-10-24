@@ -55,7 +55,7 @@ All privileged and denied actions generate minimum necessary audit evidence with
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture
-- [API contracts](../../05-APIs/Audit.md)
+- [API contracts](APIs.md)
 - [Database mapping](../../04-Database/Module-Mapping.md)
 - [Testing](../../07-Engineering/Testing.md)
 - [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)

@@ -1,69 +1,35 @@
-# Delivery Operations HLD
+# Compatibility navigation
 
-<!-- ERD-NAV-START -->
+This document moved to the module-first source of truth. [Open the canonical document](../Delivery/HLD.md). Existing paths and section anchors remain available for wireframe and historical references.
 
-## Database relationships
+<a id="delivery-operations-hld"></a>
 
-[`logistics` ERD](../../04-Database/ER-Diagrams/12-logistics.md) · [`organization` ERD](../../04-Database/ER-Diagrams/16-organization.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
+[Open section](../Delivery/HLD.md#delivery-operations-hld)
 
-These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the supplied source and deployment verification limits.
+<a id="database-relationships"></a>
 
-<!-- ERD-NAV-END -->
+[Open section](../Delivery/HLD.md#database-relationships)
 
-[Business flow](../../00-Business-Guide/Delivery-and-Rider-App.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
+<a id="mod-012-delivery-planning-route-and-proof--hld"></a>
 
-## MOD-012: Delivery planning, route and proof — HLD
+[Open section](../Delivery/HLD.md#mod-012-delivery-planning-route-and-proof--hld)
 
-> [!NOTE]
-> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+<a id="major-operations"></a>
 
-**Business responsibility:** Delivery planning, route and proof. Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence.
+[Open section](../Delivery/HLD.md#major-operations)
 
-**System responsibility:** The `Delivery_Operations` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
+<a id="dependencies-and-trust-boundaries"></a>
 
-### Major operations
+[Open section](../Delivery/HLD.md#dependencies-and-trust-boundaries)
 
-- Live map of riders (available, on delivery, offline) and orders ready for pickup (`DLV-01`)
-- Suggest the nearest available rider; staff confirm or choose another (`DLV-02`)
-- Failed-delivery queue: reattempt, reschedule or return to store (`DLV-03`)
-- COD handover: cash collected vs deposited per rider per day (`DLV-04`)
-- Rider management: onboard, assign location, shifts (`DLV-05`)
+<a id="risk"></a>
 
-### Dependencies and trust boundaries
+[Open section](../Delivery/HLD.md#risk)
 
-- Database candidates: `logistics.shipments`, `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_slots`, `logistics.ndr_cases`.
-- Role, patient, store and order scope resolved from trusted access context, not JSON body.
-- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
-- Use local transactions for authoritative state; publish external side effects only after commit.
+<a id="mod-012--delivery-planning-route-and-proof"></a>
 
-**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
+[Open section](../Delivery/HLD.md#mod-012--delivery-planning-route-and-proof)
 
-### Risk
+<a id="developer-navigation"></a>
 
-Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## MOD-012 — Delivery planning, route and proof
-
-**Source classification:** 5 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
-
-**Purpose:** Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence.
-
-**Feature coverage**
-
-- **DLV-01 / REQ-074:** Live map of riders (available, on delivery, offline) and orders ready for pickup (Must (draft)).
-- **DLV-02 / REQ-075:** Suggest the nearest available rider; staff confirm or choose another (Must (draft)).
-- **DLV-03 / REQ-076:** Failed-delivery queue: reattempt, reschedule or return to store (Must (draft)).
-- **DLV-04 / REQ-077:** COD handover: cash collected vs deposited per rider per day (Must (draft)).
-- **DLV-05 / REQ-078:** Rider management: onboard, assign location, shifts (Must (draft)).
-
-### Developer navigation
-
-- [Module HLD](HLD.md)
-- [Module LLD](LLD.md)
-- Internal architecture
-- [API contracts](../../05-APIs/Delivery_Operations.md)
-- [Database mapping](../../04-Database/Module-Mapping.md)
-- [Testing](../../07-Engineering/Testing.md)
-- [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
-
-**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
+[Open section](../Delivery/HLD.md#developer-navigation)

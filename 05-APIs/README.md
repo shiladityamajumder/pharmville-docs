@@ -6,32 +6,34 @@
 
 All routes in this package are **proposed Pharmville contracts**. No Pharmville HTTP application or route-level contract tests were available for verification. A sibling healthcare authentication service does provide an implemented and unit-tested camelCase response envelope; that is evidence only for the envelope, not for Pharmville routes, authentication policy, domain DTOs, or runtime behavior. See [Standard responses](Standard-Responses.md).
 
-The historical API identifier range API-001–API-097 is preserved. The five historical account references API-005–API-009 are now listed as individual routes in [Customer Accounts](Customer_Accounts.md). Ten additional account operations use stable `ACC-ROUTE-*` documentation references and do not consume historical IDs.
+The historical API identifier range API-001–API-097 is preserved. The five historical account references API-005–API-009 are now listed as individual routes in [Customer Accounts](../03-Modules/Customer-Accounts/APIs.md). Ten additional account operations use stable `ACC-ROUTE-*` documentation references and do not consume historical IDs.
 
 The complete mapping contains 107 HTTP operations and is recorded in the [API contract coverage ledger](API-Contract-Coverage.md).
 
 ## Domain contracts
 
+Canonical endpoint contracts now live in each module’s `APIs.md`; this shared area owns conventions, OpenAPI, indexes and coverage. Historical domain filenames are compatibility navigation only.
+
 | Domain | Contract |
 | --- | --- |
-| Authentication and access | [Authentication_Access.md](Authentication_Access.md) |
-| Customer accounts | [Customer_Accounts.md](Customer_Accounts.md) |
-| Product catalog | [Product_Catalog.md](Product_Catalog.md) |
-| Cart and checkout | [Cart_Checkout.md](Cart_Checkout.md) |
-| Prescription upload | [Prescription_Upload.md](Prescription_Upload.md) |
-| Pharmacist review | [Pharmacist_Review.md](Pharmacist_Review.md) |
-| Customer orders | [Customer_Orders.md](Customer_Orders.md) |
-| Order operations | [Order_Operations.md](Order_Operations.md) |
-| Store operations | [Store_Operations.md](Store_Operations.md) |
-| Warehouse | [Warehouse.md](Warehouse.md) |
-| Inventory | [Inventory.md](Inventory.md) |
-| Delivery operations | [Delivery_Operations.md](Delivery_Operations.md) |
-| Rider app | [Rider_App.md](Rider_App.md) |
-| Finance and payments | [Finance_Payments.md](Finance_Payments.md) |
-| Admin and CMS | [Admin_CMS.md](Admin_CMS.md) |
-| Notifications | [Notifications.md](Notifications.md) |
-| Reporting | [Reporting.md](Reporting.md) |
-| Audit | [Audit.md](Audit.md) |
+| Authentication and access | [Authentication Access](../03-Modules/Authentication/APIs.md) |
+| Customer accounts | [Customer Accounts](../03-Modules/Customer-Accounts/APIs.md) |
+| Product catalog | [Product Catalog](../03-Modules/Product-Catalog/APIs.md) |
+| Cart and checkout | [Cart Checkout](../03-Modules/Cart-Checkout/APIs.md) |
+| Prescription upload | [Prescription Upload](../03-Modules/Prescription-Management/APIs.md) |
+| Pharmacist review | [Pharmacist Review](../03-Modules/Pharmacist-Review/APIs.md) |
+| Customer orders | [Customer Orders](../03-Modules/Customer-Orders/APIs.md) |
+| Order operations | [Order Operations](../03-Modules/Order-Management/APIs.md) |
+| Store operations | [Store Operations](../03-Modules/Store-Operations/APIs.md) |
+| Warehouse | [Warehouse](../03-Modules/Warehouse/APIs.md) |
+| Inventory | [Inventory](../03-Modules/Inventory/APIs.md) |
+| Delivery operations | [Delivery Operations](../03-Modules/Delivery/APIs.md) |
+| Rider app | [Rider App](../03-Modules/Rider-Operations/APIs.md) |
+| Finance and payments | [Finance Payments](../03-Modules/Payments/APIs.md) |
+| Admin and CMS | [Admin CMS](../03-Modules/Admin/APIs.md) |
+| Notifications | [Notifications](../03-Modules/Notifications/APIs.md) |
+| Reporting | [Reporting](../03-Modules/Reporting/APIs.md) |
+| Audit | [Audit](../03-Modules/Audit/APIs.md) |
 
 ## Shared contract standards
 

@@ -1,35 +1,43 @@
 # `commerce.order_revisions`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds order revisions records within the commerce domain (shopping cart, checkout, order and returns). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 20 columns, 15 constraints, 8 indexes, 4 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | commerce.order_revisions |
+| Classification | Transactional |
+| Proposed business write owner | Order_Operations |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 20 columns; 15 PK/FK/UQ/CHECK/exclusion constraints; 18 named PostgreSQL 18 NOT NULL constraints; 8 indexes; 4 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `accepted_at` | `timestamp with time zone` | Yes | — | Time of accepted | Support chronology, deadlines or audit evidence | See exact constraints |
-| `accepted_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_commerce_order_revisions_accepted_by_user_id_users) |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `currency` | `character varying(3)` | No | `'INR'::character varying` | Monetary currency code | Avoid interpreting amounts without a denomination | See exact constraints |
-| `discount_total` | `numeric(16,2)` | No | `0` | Value of discount total | Enable pricing, reconciliation or reporting | See exact constraints |
-| `grand_total` | `numeric(16,2)` | No | — | Value of grand total | Enable pricing, reconciliation or reporting | See exact constraints |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `line_items_snapshot` | `jsonb` | No | — | Structured line items snapshot information | Retain a versioned payload or relevant details | See exact constraints |
-| `order_id` | `uuid` | No | — | Reference linking this record to orders | Ensures related business data can be joined and validated | FK → `commerce.orders` (fk_commerce_order_revisions_order_id_orders) |
-| `order_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `commerce.orders` (fk_commerce_order_revisions_order_id_orders_numeric); Numeric/public-key pair verification required |
-| `other_charges_total` | `numeric(16,2)` | No | `0` | Value of other charges total | Enable pricing, reconciliation or reporting | See exact constraints |
-| `price_snapshot` | `jsonb` | No | — | Structured price snapshot information | Retain a versioned payload or relevant details | See exact constraints |
-| `quote_hash` | `character varying(64)` | No | — | Inferred: stores quote hash for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `revision_number` | `integer` | No | — | Inferred: stores revision number for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `shipping_snapshot` | `jsonb` | No | — | Structured shipping snapshot information | Retain a versioned payload or relevant details | See exact constraints |
-| `shipping_total` | `numeric(16,2)` | No | `0` | Value of shipping total | Enable pricing, reconciliation or reporting | See exact constraints |
-| `status` | `character varying(16)` | No | — | Current business or processing state | Restricts and records allowed actions | See exact constraints |
-| `subtotal` | `numeric(16,2)` | No | — | Inferred: stores subtotal for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `tax_total` | `numeric(16,2)` | No | `0` | Value of tax total | Enable pricing, reconciliation or reporting | See exact constraints |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `accepted_at` | `timestamp with time zone` | Yes | — | Time of accepted | Support chronology, deadlines or audit evidence | Exact constraints below |
+| `accepted_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_commerce_order_revisions_accepted_by_user_id_users` |
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `currency` | `character varying(3)` | No | `'INR'::character varying` | Monetary currency code | Avoid interpreting amounts without a denomination | Collation: default |
+| `discount_total` | `numeric(16,2)` | No | `0` | Value of discount total | Enable pricing, reconciliation or reporting | Exact constraints below |
+| `grand_total` | `numeric(16,2)` | No | — | Value of grand total | Enable pricing, reconciliation or reporting | Exact constraints below |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `line_items_snapshot` | `jsonb` | No | — | Structured line items snapshot information | Retain a versioned payload or relevant details | Exact constraints below |
+| `order_id` | `uuid` | No | — | Reference linking this record to orders | Ensures related business data can be joined and validated | FK → `commerce.orders` via `fk_commerce_order_revisions_order_id_orders` |
+| `order_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `commerce.orders` via `fk_commerce_order_revisions_order_id_orders_numeric` |
+| `other_charges_total` | `numeric(16,2)` | No | `0` | Value of other charges total | Enable pricing, reconciliation or reporting | Exact constraints below |
+| `price_snapshot` | `jsonb` | No | — | Structured price snapshot information | Retain a versioned payload or relevant details | Exact constraints below |
+| `quote_hash` | `character varying(64)` | No | — | Inferred: stores quote hash for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `revision_number` | `integer` | No | — | Inferred: stores revision number for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
+| `shipping_snapshot` | `jsonb` | No | — | Structured shipping snapshot information | Retain a versioned payload or relevant details | Exact constraints below |
+| `shipping_total` | `numeric(16,2)` | No | `0` | Value of shipping total | Enable pricing, reconciliation or reporting | Exact constraints below |
+| `status` | `character varying(16)` | No | — | Current business or processing state | Restricts and records allowed actions | Collation: default |
+| `subtotal` | `numeric(16,2)` | No | — | Inferred: stores subtotal for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
+| `tax_total` | `numeric(16,2)` | No | `0` | Value of tax total | Enable pricing, reconciliation or reporting | Exact constraints below |
 
 ## Record lifecycle and users
 
@@ -38,19 +46,36 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review, Finance_Payments, Reporting. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `commerce.order_revisions` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `accepted_by_user_id` → `identity.users(id)` via `fk_commerce_order_revisions_accepted_by_user_id_users`; `FOREIGN KEY (accepted_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `order_id` → `commerce.orders(id)` via `fk_commerce_order_revisions_order_id_orders`; `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT`
-- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_commerce_order_revisions_order_id_orders_numeric`; `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_commerce_order_revisions_accepted_by_user_id_users | `accepted_by_user_id` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (accepted_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_commerce_order_revisions_order_id_orders | `order_id` | [`commerce.orders`](../../Tables/commerce/orders.md) | `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT` |
+| fk_commerce_order_revisions_order_id_orders_numeric | `order_id_internal_id` | [`commerce.orders`](../../Tables/commerce/orders.md) | `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT` |
 
-**Referenced by 14 FK constraints** (sample): `commerce.orders`, `fulfillment.fulfillment_orders`, `logistics.shipments`, `payment.payment_intents`, `payment.refunds`, `payment.cod_collections`, `warehouse.stock_reservations`, `commerce.orders`, `fulfillment.fulfillment_orders`, `logistics.shipments`, `payment.cod_collections`, `payment.payment_intents`.
+### Dependent tables
+
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`commerce.orders`](../../Tables/commerce/orders.md) | fk_commerce_orders_revision_scope | `current_revision_id, id` | `id, order_id` |
+| [`commerce.orders`](../../Tables/commerce/orders.md) | fk_commerce_orders_revision_scope_numeric | `current_revision_id_internal_id, internal_id` | `internal_id, order_id_internal_id` |
+| [`fulfillment.fulfillment_orders`](../../Tables/fulfillment/fulfillment_orders.md) | fk_fulfillment_fulfillment_orders_revision_scope | `order_revision_id, order_id` | `id, order_id` |
+| [`fulfillment.fulfillment_orders`](../../Tables/fulfillment/fulfillment_orders.md) | fk_fulfillment_fulfillment_orders_revision_scope_numeric | `order_revision_id_internal_id, order_id_internal_id` | `internal_id, order_id_internal_id` |
+| [`logistics.shipments`](../../Tables/logistics/shipments.md) | fk_logistics_shipments_revision_scope | `order_revision_id, order_id` | `id, order_id` |
+| [`logistics.shipments`](../../Tables/logistics/shipments.md) | fk_logistics_shipments_revision_scope_numeric | `order_revision_id_internal_id, order_id_internal_id` | `internal_id, order_id_internal_id` |
+| [`payment.cod_collections`](../../Tables/payment/cod_collections.md) | fk_payment_cod_collections_revision_scope | `order_revision_id, order_id` | `id, order_id` |
+| [`payment.cod_collections`](../../Tables/payment/cod_collections.md) | fk_payment_cod_collections_revision_scope_numeric | `order_revision_id_internal_id, order_id_internal_id` | `internal_id, order_id_internal_id` |
+| [`payment.payment_intents`](../../Tables/payment/payment_intents.md) | fk_payment_intents_revision_order | `order_revision_id, order_id` | `id, order_id` |
+| [`payment.payment_intents`](../../Tables/payment/payment_intents.md) | fk_payment_intents_revision_order_numeric | `order_revision_id_internal_id, order_id_internal_id` | `internal_id, order_id_internal_id` |
+| [`payment.refunds`](../../Tables/payment/refunds.md) | fk_payment_refunds_revision_scope | `order_revision_id, order_id` | `id, order_id` |
+| [`payment.refunds`](../../Tables/payment/refunds.md) | fk_payment_refunds_revision_scope_numeric | `order_revision_id_internal_id, order_id_internal_id` | `internal_id, order_id_internal_id` |
+| [`warehouse.stock_reservations`](../../Tables/warehouse/stock_reservations.md) | fk_warehouse_stock_reservations_revision_scope | `order_revision_id, order_id` | `id, order_id` |
+| [`warehouse.stock_reservations`](../../Tables/warehouse/stock_reservations.md) | fk_warehouse_stock_reservations_revision_scope_numeric | `order_revision_id_internal_id, order_id_internal_id` | `internal_id, order_id_internal_id` |
 
 ## `commerce.order_revisions` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 20 columns, 15 constraints, 8 indexes, 4 triggers.
 
 ### Existing foreign-key dependencies
 
@@ -79,31 +104,47 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_commerce_order_revisions_id_order` | UNIQUE | `UNIQUE (id, order_id)` |
 | `uq_commerce_order_revisions_number` | UNIQUE | `UNIQUE (order_id, revision_number)` |
 | `uq_numeric_commerce_order_revisions_internal_id_order_i_468b` | UNIQUE | `UNIQUE (internal_id, order_id_internal_id)` |
+| `order_revisions_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `order_revisions_currency_not_null` | NOT NULL | `NOT NULL currency` |
+| `order_revisions_discount_total_not_null` | NOT NULL | `NOT NULL discount_total` |
+| `order_revisions_grand_total_not_null` | NOT NULL | `NOT NULL grand_total` |
+| `order_revisions_id_not_null` | NOT NULL | `NOT NULL id` |
+| `order_revisions_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `order_revisions_line_items_snapshot_not_null` | NOT NULL | `NOT NULL line_items_snapshot` |
+| `order_revisions_order_id_internal_id_not_null` | NOT NULL | `NOT NULL order_id_internal_id` |
+| `order_revisions_order_id_not_null` | NOT NULL | `NOT NULL order_id` |
+| `order_revisions_other_charges_total_not_null` | NOT NULL | `NOT NULL other_charges_total` |
+| `order_revisions_price_snapshot_not_null` | NOT NULL | `NOT NULL price_snapshot` |
+| `order_revisions_quote_hash_not_null` | NOT NULL | `NOT NULL quote_hash` |
+| `order_revisions_revision_number_not_null` | NOT NULL | `NOT NULL revision_number` |
+| `order_revisions_shipping_snapshot_not_null` | NOT NULL | `NOT NULL shipping_snapshot` |
+| `order_revisions_shipping_total_not_null` | NOT NULL | `NOT NULL shipping_total` |
+| `order_revisions_status_not_null` | NOT NULL | `NOT NULL status` |
+| `order_revisions_subtotal_not_null` | NOT NULL | `NOT NULL subtotal` |
+| `order_revisions_tax_total_not_null` | NOT NULL | `NOT NULL tax_total` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `ix_commerce_order_revisions_order_time` | `CREATE INDEX ix_commerce_order_revisions_order_time ON commerce.order_revisions USING btree (order_id, created_at DESC)` |
-| `ix_commerce_order_revisions_pending` | `CREATE INDEX ix_commerce_order_revisions_pending ON commerce.order_revisions USING btree (status, created_at) WHERE status::text = 'proposed'::text` |
-| `pk_commerce_order_revisions` | `CREATE UNIQUE INDEX pk_commerce_order_revisions ON commerce.order_revisions USING btree (internal_id)` |
-| `uq_commerce_one_accepted_revision` | `CREATE UNIQUE INDEX uq_commerce_one_accepted_revision ON commerce.order_revisions USING btree (order_id) WHERE status::text = 'accepted'::text` |
-| `uq_commerce_order_revisions_id` | `CREATE UNIQUE INDEX uq_commerce_order_revisions_id ON commerce.order_revisions USING btree (id)` |
-| `uq_commerce_order_revisions_id_order` | `CREATE UNIQUE INDEX uq_commerce_order_revisions_id_order ON commerce.order_revisions USING btree (id, order_id)` |
-| `uq_commerce_order_revisions_number` | `CREATE UNIQUE INDEX uq_commerce_order_revisions_number ON commerce.order_revisions USING btree (order_id, revision_number)` |
-| `uq_numeric_commerce_order_revisions_internal_id_order_i_468b` | `CREATE UNIQUE INDEX uq_numeric_commerce_order_revisions_internal_id_order_i_468b ON commerce.order_revisions USING btree (internal_id, order_id_internal_id)` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `ix_commerce_order_revisions_order_time` | btree | `(order_id, created_at DESC)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_commerce_order_revisions_order_time ON commerce.order_revisions USING btree (order_id, created_at DESC)` |
+| `ix_commerce_order_revisions_pending` | btree | `(status, created_at)` | status::text = 'proposed'::text | Read/join/filter access path; partial predicate limits indexed rows. Performance effectiveness requires measured query plans. | `CREATE INDEX ix_commerce_order_revisions_pending ON commerce.order_revisions USING btree (status, created_at) WHERE status::text = 'proposed'::text` |
+| `pk_commerce_order_revisions` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_commerce_order_revisions ON commerce.order_revisions USING btree (internal_id)` |
+| `uq_commerce_one_accepted_revision` | btree | `(order_id)` | status::text = 'accepted'::text | Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_commerce_one_accepted_revision ON commerce.order_revisions USING btree (order_id) WHERE status::text = 'accepted'::text` |
+| `uq_commerce_order_revisions_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_commerce_order_revisions_id ON commerce.order_revisions USING btree (id)` |
+| `uq_commerce_order_revisions_id_order` | btree | `(id, order_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_commerce_order_revisions_id_order ON commerce.order_revisions USING btree (id, order_id)` |
+| `uq_commerce_order_revisions_number` | btree | `(order_id, revision_number)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_commerce_order_revisions_number ON commerce.order_revisions USING btree (order_id, revision_number)` |
+| `uq_numeric_commerce_order_revisions_internal_id_order_i_468b` | btree | `(internal_id, order_id_internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_numeric_commerce_order_revisions_internal_id_order_i_468b ON commerce.order_revisions USING btree (internal_id, order_id_internal_id)` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON commerce.order_revisions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` |
-| `accepted_revision_sync` | `CREATE TRIGGER accepted_revision_sync AFTER INSERT OR UPDATE ON commerce.order_revisions FOR EACH ROW EXECUTE FUNCTION commerce.sync_accepted_revision()` |
-| `order_revision_guard` | `CREATE TRIGGER order_revision_guard BEFORE INSERT OR DELETE OR UPDATE ON commerce.order_revisions FOR EACH ROW EXECUTE FUNCTION commerce.guard_revision()` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON commerce.order_revisions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON commerce.order_revisions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` | O |
+| `accepted_revision_sync` | `CREATE TRIGGER accepted_revision_sync AFTER INSERT OR UPDATE ON commerce.order_revisions FOR EACH ROW EXECUTE FUNCTION commerce.sync_accepted_revision()` | O |
+| `order_revision_guard` | `CREATE TRIGGER order_revision_guard BEFORE INSERT OR DELETE OR UPDATE ON commerce.order_revisions FOR EACH ROW EXECUTE FUNCTION commerce.guard_revision()` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON commerce.order_revisions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.

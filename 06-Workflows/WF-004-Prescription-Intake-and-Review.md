@@ -21,7 +21,7 @@ Intake owns safe patient/document linkage; Pharmacy owns per-line clinical decis
 
 Candidate existing tables: `clinical.prescriptions`, `clinical.prescription_documents`, `clinical.order_reviews`, `clinical.order_review_items`, `platform.file_objects`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-022–API-024 and API-060–API-063; exact revision-command ownership needs D-024 review. [Prescription Upload](../05-APIs/Prescription_Upload.md) · [Pharmacist Review](../05-APIs/Pharmacist_Review.md).
+Related proposed operations: API-022–API-024 and API-060–API-063; exact revision-command ownership needs D-024 review. [Prescription Upload](../03-Modules/Prescription-Management/APIs.md) · [Pharmacist Review](../03-Modules/Pharmacist-Review/APIs.md).
 
 ## Sequence
 

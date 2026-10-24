@@ -88,7 +88,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ## Inventory & Stock Reservations — internal components
 
-**Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is not code already implemented in the SQLAlchemy repository.
+**Status:** Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is proposed application design; the validated standalone SQL is structure, not an implemented API.
 
 | Component | Responsibility | Failure boundary |
 | --- | --- | --- |
@@ -106,7 +106,7 @@ Network IO belongs outside long-lived locks. Modules should depend on domain int
 
 ## Inventory & Stock Reservations — existing database usage
 
-**Confirmed database:** 24 PostgreSQL schemas; SQL migration authority the checked-in SQL migration history. The tables below exist, but **a schema-domain association does not automatically mean this module owns every row or has write rights**. The database repository is not an HTTP service.
+**Confirmed database:** 24 PostgreSQL schemas; schema authority the canonical standalone SQL. The tables below exist, but **a schema-domain association does not automatically mean this module owns every row or has write rights**. The database repository is not an HTTP service.
 
 - `warehouse.inventory_adjustment_items` — columns · contracts
 - `warehouse.inventory_adjustments` — columns · contracts
@@ -147,7 +147,7 @@ Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; f
 
 ## Inventory & Stock Reservations — domain objects and DTO boundaries
 
-**Proposed objects, not new database tables.** A domain object is a service-level business concept; a DTO is a validated data transfer object (API input/output). Do not confuse them with the Python SQLAlchemy models used for schema verification.
+**Proposed objects, not new database tables.** A domain object is a service-level business concept; a DTO is a validated data transfer object (API input/output). Do not confuse them with the archived historical ORM models.
 
 | Proposed object | Source of truth / evidence | Rules |
 | --- | --- | --- |
@@ -379,7 +379,7 @@ This flow shows command gates, not an entity enum. Legal entity transitions and 
 ### Cross-module contract tests
 
 - Verify authenticated customer/staff/location ownership using actual restricted runtime roles.
-- Verify concurrency and duplicate idempotency behavior against an isolated PostgreSQL database with authoritative migrations.
+- Verify concurrency and duplicate idempotency behavior against an isolated PostgreSQL database installed from the canonical SQL.
 - Verify safe retry when callbacks or files arrive late or malformed.
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
 - Verify this invariant: **Authoritative location-specific POS observation and an owner-approved freshness policy are prerequisites to reservation. Lock exactly the stock rows/hold state; reconcile ledger and physical stock.**

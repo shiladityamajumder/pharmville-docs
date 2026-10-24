@@ -14,7 +14,7 @@ The checked-in [table catalog](../04-Database/Tables/README.md) is the primary a
 
 Public UUID `id` references may be exposed when ownership allows; `internal_id`, `*_internal_id`, audit actors, hashes, provider secrets, and raw clinical/patient fields stay internal. A computed or token field with no persisted column is explicitly labeled as such.
 
-The field-level column mappings and table constraints for these operations are recorded in [Database-to-DTO mapping](Database-DTO-Mapping.md). The exact Pharmville database source folder is absent; these mappings rely on checked-in table documentation and remain subject to migration-source/runtime verification.
+The field-level column mappings and table constraints for these operations are recorded in [Database-to-DTO mapping](Database-DTO-Mapping.md). The standalone SQL and derived catalog now have verified isolated structural parity. Application write ownership and actual runtime permissions remain separate D-024 approval gates.
 
 ## Common typed boundary
 
@@ -97,7 +97,7 @@ Persist one `payment.payment_intents`/`payment.payment_attempts` operation with 
 
 Retain source event identity in `payment.payment_webhooks`, verify amount/currency/order/revision, deduplicate, and commit trusted money effects before the adapter’s agreed acknowledgment. A contradictory or out-of-order event is reconciled, not applied as a blind backward transition.
 
-The [Finance contract](Finance_Payments.md) gives the trust boundary. TC-FIN-01-DENY and TC-CHK-03-DENY require signed sandbox evidence before provider readiness.
+The [Finance contract](../03-Modules/Payments/APIs.md) gives the trust boundary. TC-FIN-01-DENY and TC-CHK-03-DENY require signed sandbox evidence before provider readiness.
 
 COD eligibility belongs to the reviewed checkout/order command and Finance’s approved policy, not the Cashfree callback. A complete COD selection/approval command and DTO remain missing; API-080 is reconciliation, not an invented COD approval endpoint. See CHK-04 and D-007.
 

@@ -89,6 +89,8 @@ for (const [file, doc] of docs) {
     }
   }
 }
+const registry = JSON.parse(fs.readFileSync(path.join(root, '03-Modules/Module-Registry.json'), 'utf8'));
+const moduleDirectory = Object.fromEntries(registry.map(m => [m.id, m.directory]));
 const inventory = docs.get(path.join(root, '01-Project/Features-and-Modules.md')).source;
 const features = [...inventory.matchAll(/^\| `([A-Z]+-\d{2})` \| (\w+) \|[^\n]+$/gm)].map(m => ({ id: m[1], module: m[2] }));
 report.features = features.length;
@@ -105,22 +107,22 @@ const registerRows = register.split('\n').filter(l => /^\| `[A-Z]+-\d{2}`/.test(
 if (registerRows.length !== features.length) errors.push('Traceability register has missing/duplicate feature rows');
 for (const f of features) {
   const row = registerRows.filter(l => l.startsWith('| `' + f.id + '`'));
-  const required = [`03-Modules/${f.module}/HLD.md`, `03-Modules/${f.module}/LLD.md`, `03-Modules/${f.module}/Edge-Cases.md`, '07-Engineering/Testing.md', '08-Development-Plan/Implementation-Plan.md'];
+  const required = [`03-Modules/${moduleDirectory[f.module]}/HLD.md`, `03-Modules/${moduleDirectory[f.module]}/LLD.md`, `03-Modules/${moduleDirectory[f.module]}/Edge-Cases.md`, '07-Engineering/Testing.md', '08-Development-Plan/Implementation-Plan.md'];
   for (const p of required) if (!docs.get(path.join(root, p))?.source.includes(f.id)) report.missingMappings.push(`${f.id}: ${p}`);
-  if (row.length !== 1 || !row[0].includes('00-Business-Guide/') || !row[0].includes('04-Database/') || !row[0].includes('05-APIs/')) report.missingMappings.push(`${f.id}: register links`);
+  if (row.length !== 1 || !row[0].includes('00-Business-Guide/') || !row[0].includes('04-Database/') || !row[0].includes('/APIs.md')) report.missingMappings.push(`${f.id}: register links`);
   const business = row[0]?.match(/\]\(\.\.\/(00-Business-Guide\/[^)]+)\)/)?.[1];
   if (!business || !docs.get(path.join(root, business))?.source.includes(f.id)) report.missingMappings.push(`${f.id}: business evidence`);
-  const api = docs.get(path.join(root, `05-APIs/${f.module}.md`)).source;
+  const api = docs.get(path.join(root, `03-Modules/${moduleDirectory[f.module]}/APIs.md`)).source;
   // This is the historical exact-ID mention metric, not an approval/completeness score.
   const requirementMentions = api;
   if (!new RegExp('(?<![A-Z0-9-])' + f.id + '(?![A-Z0-9-])').test(requirementMentions)) report.apiReferenceGaps.push(f.id);
-  const edge = docs.get(path.join(root, `03-Modules/${f.module}/Edge-Cases.md`)).source;
+  const edge = docs.get(path.join(root, `03-Modules/${moduleDirectory[f.module]}/Edge-Cases.md`)).source;
   if (!new RegExp('TC-' + f.id + '-(?:DENY|\\d{2})').test(edge)) report.missingMappings.push(`${f.id}: named edge test`);
   if (!testDefinitions.has(`TC-${f.id}-OK`) && !testDefinitions.has(`TC-${f.id}-01`)) report.missingMappings.push(`${f.id}: normal test definition`);
 }
 for (const missing of report.missingMappings) errors.push('Missing feature mapping: ' + missing);
 report.workflows = files.filter(p => /06-Workflows[\\/]WF-\d{3}-/.test(p)).length;
-report.apiOperations = new Set([...docs].filter(([p]) => /05-APIs[\\/]/.test(p)).flatMap(([, d]) => [...d.source.matchAll(/\b(API-\d{3})\b/g)].map(m => m[1]))).size;
+report.apiOperations = registry.reduce((sum, module) => sum + module.contract_api_ids.length, 0);
 const diagrams = [...docs].flatMap(([file, d]) => d.tokens.filter(t => t.type === 'fence' && t.info.trim() === 'mermaid').map((t, i) => ({ file: rel(file), line: t.map[0] + 1, code: t.content, index: i })));
 // Real Mermaid parsing runs in a browser, so DOM-dependent sanitization is also exercised.
 let browser;

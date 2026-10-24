@@ -74,8 +74,8 @@ erDiagram
     }
     identity__users o|--o{ risk__blocklists : "FK-1248 FK-1249 FK-1252"
     risk__cases o|--o{ risk__blocklists : "FK-1250 FK-1251"
-    identity__users o|--o{ risk__cases : "FK-1256 FK-1257 FK-1255"
     risk__assessments o|--o{ risk__cases : "FK-1253 FK-1254"
+    identity__users o|--o{ risk__cases : "FK-1255 FK-1256 FK-1257"
     identity__users o|--o{ risk__assessments : "FK-1247"
     identity__users o|--o{ risk__rules : "FK-1258 FK-1259 FK-1260"
     risk__assessments o|--o{ risk__signals : "FK-1261 FK-1262"

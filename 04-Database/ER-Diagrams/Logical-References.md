@@ -38,12 +38,12 @@ The source classification contains 35 formerly unbound UUID references. Six are 
 | `search.query_events.selected_entity_id` | polymorphic subject | `selected_entity_type` | retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK  |
 | `warehouse.stock_ledger.reference_id` | polymorphic subject | `reference_type` | retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK  |
 
-## ORM-only relationships
+## Historical ORM relationships
 
-A source scan of `healthcare_db/app/models/` found no SQLAlchemy `relationship(...)` declarations. The checked-in models provide table mappings, but this source contains no ORM navigation relationships to add as a separate ERD relationship type. Re-run the scan when model source changes.
+Legacy models are privately archived and are not a second schema authority. The earlier source scan found no SQLAlchemy navigation declarations. ERDs derive physical relationships exclusively from the validated standalone SQL catalog.
 
 ## Tables with no declared foreign keys
 
 - [`platform.report_definitions`](../Tables/platform/report_definitions.md) — no FK constraint appears in the verified catalog snapshot. This is a review observation, not a claim that the design is wrong.
 
-The migration snapshot does not establish whether every logical association is approved for enforcement. Review the database source's reference classification and service ownership before proposing new constraints. Do not draw these relationships as verified FKs.
+The schema catalog does not establish whether every logical association is approved for enforcement. Review the database source's reference classification and service ownership before proposing new constraints. Do not draw these relationships as verified FKs.

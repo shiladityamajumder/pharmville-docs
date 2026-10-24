@@ -1,71 +1,35 @@
-# Product Catalog HLD
+# Compatibility navigation
 
-<!-- ERD-NAV-START -->
+This document moved to the module-first source of truth. [Open the canonical document](../Product-Catalog/HLD.md). Existing paths and section anchors remain available for wireframe and historical references.
 
-## Database relationships
+<a id="product-catalog-hld"></a>
 
-[`catalog` ERD](../../04-Database/ER-Diagrams/02-catalog.md) · [`marketplace` ERD](../../04-Database/ER-Diagrams/13-marketplace.md) · [`pricing` ERD](../../04-Database/ER-Diagrams/19-pricing.md) · [`search` ERD](../../04-Database/ER-Diagrams/22-search.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
+[Open section](../Product-Catalog/HLD.md#product-catalog-hld)
 
-These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the supplied source and deployment verification limits.
+<a id="database-relationships"></a>
 
-<!-- ERD-NAV-END -->
+[Open section](../Product-Catalog/HLD.md#database-relationships)
 
-[Business flow](../../00-Business-Guide/Catalog-and-Product-Discovery.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
+<a id="mod-002-product-discovery-and-classification--hld"></a>
 
-## MOD-002: Product discovery and classification — HLD
+[Open section](../Product-Catalog/HLD.md#mod-002-product-discovery-and-classification--hld)
 
-> [!NOTE]
-> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+<a id="major-operations"></a>
 
-**Business responsibility:** Product discovery and classification. Only approved and classified items can enter a legally permitted checkout path.
+[Open section](../Product-Catalog/HLD.md#major-operations)
 
-**System responsibility:** The `Product_Catalog` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
+<a id="dependencies-and-trust-boundaries"></a>
 
-### Major operations
+[Open section](../Product-Catalog/HLD.md#dependencies-and-trust-boundaries)
 
-- Browse by category and sub-category (`CAT-01`)
-- Product page: brand, manufacturer, composition, pack size, MRP, price, images, "Prescription required" label (`CAT-02`)
-- Search by name, brand and composition, with typo tolerance and autosuggest (`CAT-03`)
-- Availability for the customer's pin code (in stock / out of stock) (`CAT-04`)
-- Alternative medicines: same composition, strength and dosage form, ranked by a configurable rule (`CAT-05`)
-- Placeholder image when a product has none (`CAT-06`)
+<a id="risk"></a>
 
-### Dependencies and trust boundaries
+[Open section](../Product-Catalog/HLD.md#risk)
 
-- Database candidates: `catalog.products`, `catalog.product_variants`, `catalog.product_classification_history`, `catalog.categories`, `search.documents`.
-- Role, patient, store and order scope resolved from trusted access context, not JSON body.
-- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
-- Use local transactions for authoritative state; publish external side effects only after commit.
+<a id="mod-002--product-discovery-and-classification"></a>
 
-**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
+[Open section](../Product-Catalog/HLD.md#mod-002--product-discovery-and-classification)
 
-### Risk
+<a id="developer-navigation"></a>
 
-Only approved and classified items can enter a legally permitted checkout path. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## MOD-002 — Product discovery and classification
-
-**Source classification:** 6 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
-
-**Purpose:** Only approved and classified items can enter a legally permitted checkout path.
-
-**Feature coverage**
-
-- **CAT-01 / REQ-008:** Browse by category and sub-category (Must (draft)).
-- **CAT-02 / REQ-009:** Product page: brand, manufacturer, composition, pack size, MRP, price, images, "Prescription required" label (Must (draft)).
-- **CAT-03 / REQ-010:** Search by name, brand and composition, with typo tolerance and autosuggest (Must (draft)).
-- **CAT-04 / REQ-011:** Availability for the customer's pin code (in stock / out of stock) (Must (draft)).
-- **CAT-05 / REQ-012:** Alternative medicines: same composition, strength and dosage form, ranked by a configurable rule (Should (draft)).
-- **CAT-06 / REQ-013:** Placeholder image when a product has none (Must (draft)).
-
-### Developer navigation
-
-- [Module HLD](HLD.md)
-- [Module LLD](LLD.md)
-- Internal architecture
-- [API contracts](../../05-APIs/Product_Catalog.md)
-- [Database mapping](../../04-Database/Module-Mapping.md)
-- [Testing](../../07-Engineering/Testing.md)
-- [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
-
-**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
+[Open section](../Product-Catalog/HLD.md#developer-navigation)

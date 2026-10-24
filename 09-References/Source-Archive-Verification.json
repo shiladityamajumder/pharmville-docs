@@ -1,0 +1,22 @@
+{
+  "checked_on": "2026-10-24",
+  "private_archive_directory_mode": "0700",
+  "result": "PASS",
+  "archives": [
+    {
+      "archive": "/home/shiladitya/Desktop/HealthCare Platform Project/pharmville-source-archive/2026-10-24-730d284/heathcare_db",
+      "files": 374,
+      "bytes": 18813433,
+      "baseline_differences": 0,
+      "git_head": "08cdfc2aadad09d415a38f803a6304b5ed675d34"
+    },
+    {
+      "archive": "/home/shiladitya/Desktop/HealthCare Platform Project/pharmville-source-archive/2026-10-24-730d284/original-heathcare_db",
+      "files": 374,
+      "bytes": 18813433,
+      "baseline_differences": 0,
+      "git_head": "08cdfc2aadad09d415a38f803a6304b5ed675d34"
+    }
+  ],
+  "credentials": "No source file contents or credentials are included in this report."
+}

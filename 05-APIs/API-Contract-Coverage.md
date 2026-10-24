@@ -47,128 +47,128 @@ Unknown external wire payload, missing persistence for a required contract conce
 
 | API | Endpoint | Concrete gap | Decision owner |
 | --- | --- | --- | --- |
-| [API-004](Customer_Accounts.md) | `PATCH /v1/me` | D-023: exact replacement proof DTO/storage is absent. Profile-only subset proposed, full route incomplete. | Customer_Accounts; Security/provider/Finance where referenced |
-| [API-015](Product_Catalog.md) | `POST /v1/admin/catalog/imports` | D-019/D-024: spreadsheet columns, row atomicity and durable import result/status model are not documented. | Product_Catalog; Security/provider/Finance where referenced |
-| [API-051](Inventory.md) | `POST /v1/staff/inventory/observations` | D-005: source authentication, exact quantities-to-ledger reconciliation and atomic batch outcome are unspecified; timestamps alone are not sufficient evidence. | Inventory; Security/provider/Finance where referenced |
-| [API-066](Delivery_Operations.md) | `POST /v1/staff/delivery/tasks/{task_id}/resolution` | D-010/D-011: reattempt limits, custody and precise action-to-status progression need approved policy. | Delivery_Operations; Security/provider/Finance where referenced |
-| [API-075](Finance_Payments.md) | `POST /v1/payments/intents` | D-004/D-016: exact continuation DTO, capture sequence and provider-supported replay contract require evidence. | Finance_Payments; Security/provider/Finance where referenced |
-| [API-076](Finance_Payments.md) | `POST /v1/webhooks/cashfree` | D-016: signature header names, wire schema, canonicalization and acknowledgment status are unknown. Conceptual DTO is explicitly not a provider wire contract. | Finance_Payments; Security/provider/Finance where referenced |
-| [API-079](Finance_Payments.md) | `GET /v1/admin/finance/settlements` | D-008/D-016: settle-vs-reconcile dataset definition and provider report layout need Finance approval. | Finance_Payments; Security/provider/Finance where referenced |
-| [API-080](Finance_Payments.md) | `POST /v1/admin/finance/cod-reconciliation` | D-007/D-008: exact handover/deposit evidence and independent approval model are missing. | Finance_Payments; Security/provider/Finance where referenced |
-| [API-089](Authentication_Access.md) | `POST /v1/auth/staff/login` | D-003: challenge replay prevention and exact MFA enrollment/recovery/session-limits policy require reviewed persistence/credential design. | Authentication_Access; Security/provider/Finance where referenced |
-| [API-090](Authentication_Access.md) | `POST /v1/auth/staff/mfa/verify` | D-003: exact single-use authenticator/challenge persistence is absent in schema documentation. | Authentication_Access; Security/provider/Finance where referenced |
+| [API-004](../03-Modules/Customer-Accounts/APIs.md) | `PATCH /v1/me` | D-023: exact replacement proof DTO/storage is absent. Profile-only subset proposed, full route incomplete. | Customer_Accounts; Security/provider/Finance where referenced |
+| [API-015](../03-Modules/Product-Catalog/APIs.md) | `POST /v1/admin/catalog/imports` | D-019/D-024: spreadsheet columns, row atomicity and durable import result/status model are not documented. | Product_Catalog; Security/provider/Finance where referenced |
+| [API-051](../03-Modules/Inventory/APIs.md) | `POST /v1/staff/inventory/observations` | D-005: source authentication, exact quantities-to-ledger reconciliation and atomic batch outcome are unspecified; timestamps alone are not sufficient evidence. | Inventory; Security/provider/Finance where referenced |
+| [API-066](../03-Modules/Delivery/APIs.md) | `POST /v1/staff/delivery/tasks/{task_id}/resolution` | D-010/D-011: reattempt limits, custody and precise action-to-status progression need approved policy. | Delivery_Operations; Security/provider/Finance where referenced |
+| [API-075](../03-Modules/Payments/APIs.md) | `POST /v1/payments/intents` | D-004/D-016: exact continuation DTO, capture sequence and provider-supported replay contract require evidence. | Finance_Payments; Security/provider/Finance where referenced |
+| [API-076](../03-Modules/Payments/APIs.md) | `POST /v1/webhooks/cashfree` | D-016: signature header names, wire schema, canonicalization and acknowledgment status are unknown. Conceptual DTO is explicitly not a provider wire contract. | Finance_Payments; Security/provider/Finance where referenced |
+| [API-079](../03-Modules/Payments/APIs.md) | `GET /v1/admin/finance/settlements` | D-008/D-016: settle-vs-reconcile dataset definition and provider report layout need Finance approval. | Finance_Payments; Security/provider/Finance where referenced |
+| [API-080](../03-Modules/Payments/APIs.md) | `POST /v1/admin/finance/cod-reconciliation` | D-007/D-008: exact handover/deposit evidence and independent approval model are missing. | Finance_Payments; Security/provider/Finance where referenced |
+| [API-089](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/login` | D-003: challenge replay prevention and exact MFA enrollment/recovery/session-limits policy require reviewed persistence/credential design. | Authentication_Access; Security/provider/Finance where referenced |
+| [API-090](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/mfa/verify` | D-003: exact single-use authenticator/challenge persistence is absent in schema documentation. | Authentication_Access; Security/provider/Finance where referenced |
 
 ## Operation-level ledger
 
 | API | Method/path | Request DTO | Success DTO/status | Planning | Approval / implementation |
 | --- | --- | --- | --- | --- | --- |
-| [API-001](Customer_Accounts.md) | `POST /v1/auth/customer/otp/request` | CustomerOtpRequest | OtpChallengeData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-002](Customer_Accounts.md) | `POST /v1/auth/customer/otp/verify` | CustomerOtpVerification | SessionData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-003](Customer_Accounts.md) | `GET /v1/me` | No request body | ProfileData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-004](Customer_Accounts.md) | `PATCH /v1/me` | CustomerProfileUpdate | ProfileData / 200 | Incomplete | Unapproved / Not Implemented |
-| [API-005](Customer_Accounts.md) | `GET /v1/me/addresses` | No request body | AddressListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-006](Customer_Accounts.md) | `POST /v1/me/addresses` | CustomerAddressCreate | CustomerAddressData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-007](Customer_Accounts.md) | `GET /v1/me/patients` | No request body | PatientListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-008](Customer_Accounts.md) | `POST /v1/me/patients` | FamilyMemberCreate | FamilyMemberData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-009](Customer_Accounts.md) | `POST /v1/me/consents` | ConsentCreate | ConsentData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-005](Customer_Accounts.md) | `GET /v1/me/consents` | No request body | ConsentListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-010](Product_Catalog.md) | `GET /v1/catalog/categories` | No request body | CatalogCategoryListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-011](Product_Catalog.md) | `GET /v1/catalog/products` | No request body | CatalogProductListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-012](Product_Catalog.md) | `GET /v1/catalog/products/{product_id}` | No request body | CatalogProductDetailData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-013](Product_Catalog.md) | `GET /v1/catalog/search` | No request body | CatalogSearchData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-014](Product_Catalog.md) | `GET /v1/catalog/availability` | No request body | CatalogAvailabilityData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-015](Product_Catalog.md) | `POST /v1/admin/catalog/imports` | CatalogImportRequest | CatalogImportAcceptedData / 202 | Incomplete | Unapproved / Not Implemented |
-| [API-016](Product_Catalog.md) | `POST /v1/admin/catalog/products/{product_id}/classification` | CatalogClassificationRequest | CatalogClassificationData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-017](Product_Catalog.md) | `POST /v1/admin/catalog/products/{product_id}/publish` | CatalogPublishRequest | CatalogPublishData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-018](Cart_Checkout.md) | `GET /v1/me/cart` | No request body | CartItemsData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-019](Cart_Checkout.md) | `PUT /v1/me/cart/items` | CartItemsReplaceRequest | CartItemsData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-020](Cart_Checkout.md) | `POST /v1/checkouts/quotes` | CheckoutQuoteRequest | CheckoutQuoteData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-021](Cart_Checkout.md) | `POST /v1/checkouts` | CheckoutIntentRequest | CheckoutIntentData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-022](Prescription_Upload.md) | `POST /v1/prescriptions/upload-intents` | PrescriptionUploadIntentRequest | PrescriptionUploadIntentData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-023](Prescription_Upload.md) | `POST /v1/prescriptions/documents/confirm` | PrescriptionUploadConfirmRequest | PrescriptionUploadConfirmData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-024](Prescription_Upload.md) | `POST /v1/orders/{order_id}/prescriptions` | PrescriptionAttachRequest | PrescriptionAttachData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-025](Customer_Orders.md) | `GET /v1/me/orders` | No request body | OrderListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-026](Customer_Orders.md) | `GET /v1/me/orders/{order_id}` | No request body | OrderDetailData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-027](Customer_Orders.md) | `POST /v1/me/orders/{order_id}/cancel` | CancellationRequest | CancellationData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-028](Customer_Orders.md) | `POST /v1/me/orders/{order_id}/returns` | ReturnRequest | ReturnData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-029](Customer_Orders.md) | `GET /v1/me/orders/{order_id}/invoice` | No request body | InvoiceData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-030](Customer_Orders.md) | `GET /v1/me/orders/{order_id}/refunds` | No request body | RefundListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-031](Customer_Orders.md) | `GET /v1/me/orders/{order_id}/delivery` | No request body | OrderDeliveryData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-032](Admin_CMS.md) | `GET /v1/admin/dashboard` | No request body | DashboardData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-033](Admin_CMS.md) | `POST /v1/admin/staff` | StaffInviteRequest | StaffData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-034](Admin_CMS.md) | `PATCH /v1/admin/staff/{staff_id}` | StaffUpdateRequest | StaffData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-035](Admin_CMS.md) | `GET /v1/admin/settings` | No request body | SettingsData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-036](Admin_CMS.md) | `PATCH /v1/admin/settings` | SettingsUpdateRequest | SettingsData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-037](Admin_CMS.md) | `POST /v1/admin/cms/pages/{page_id}/publish` | CmsPublishRequest | CmsPublishData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-038](Admin_CMS.md) | `POST /v1/admin/locations` | LocationCreateRequest | LocationData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-039](Order_Operations.md) | `GET /v1/admin/orders` | No request body | OrderListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-040](Order_Operations.md) | `GET /v1/admin/orders/{order_id}` | No request body | OrderDetailData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-041](Order_Operations.md) | `POST /v1/admin/orders/{order_id}/allocate` | OrderAllocationRequest | AllocationData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-042](Order_Operations.md) | `POST /v1/admin/orders/{order_id}/reassign` | OrderReassignmentRequest | AllocationData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-043](Order_Operations.md) | `POST /v1/admin/orders/{order_id}/revisions` | OrderRevisionRequest | OrderRevisionData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-044](Store_Operations.md) | `GET /v1/staff/store/orders` | No request body | FulfillmentListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-045](Store_Operations.md) | `POST /v1/staff/store/orders/{order_id}/accept` | StoreAcceptRequest | FulfillmentData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-046](Store_Operations.md) | `POST /v1/staff/store/picks/{pick_id}/scan` | PickScanRequest | PickScanData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-047](Store_Operations.md) | `POST /v1/staff/store/packs/{pack_id}/close` | PackCloseRequest | PackCloseData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-048](Store_Operations.md) | `POST /v1/staff/store/replenishments` | ReplenishmentRequest | ReplenishmentData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-049](Store_Operations.md) | `POST /v1/staff/store/transfers/{transfer_id}/receipt` | TransferReceiptRequest | TransferData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-050](Inventory.md) | `GET /v1/staff/inventory` | No request body | StockListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-051](Inventory.md) | `POST /v1/staff/inventory/observations` | StockObservationRequest | StockObservationData / 200 | Incomplete | Unapproved / Not Implemented |
-| [API-052](Inventory.md) | `POST /v1/internal/inventory/reservations` | ReservationRequest | ReservationData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-053](Inventory.md) | `POST /v1/internal/inventory/reservations/{reservation_id}/release` | ReservationReleaseRequest | ReservationReleaseData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-054](Inventory.md) | `POST /v1/staff/inventory/adjustments` | AdjustmentRequest | AdjustmentData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-055](Inventory.md) | `GET /v1/staff/inventory/alerts` | No request body | InventoryAlertListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-056](Warehouse.md) | `POST /v1/staff/warehouse/receipts` | GoodsReceiptRequest | GoodsReceiptData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-057](Warehouse.md) | `GET /v1/staff/warehouse/replenishments` | No request body | ReplenishmentListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-058](Warehouse.md) | `POST /v1/staff/warehouse/transfers/{transfer_id}/dispatch` | TransferDispatchRequest | TransferData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-059](Warehouse.md) | `GET /v1/staff/warehouse/fallback-orders` | No request body | OrderListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-060](Pharmacist_Review.md) | `GET /v1/pharmacy/reviews` | No request body | ReviewListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-061](Pharmacist_Review.md) | `GET /v1/pharmacy/reviews/{review_id}` | No request body | ReviewDetailData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-062](Pharmacist_Review.md) | `POST /v1/pharmacy/reviews/{review_id}/lines/{line_id}/decision` | PharmacistDecisionRequest | PharmacistDecisionData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-063](Pharmacist_Review.md) | `POST /v1/me/orders/{order_id}/revisions/{revision_id}/accept` | RevisionAcceptanceRequest | OrderRevisionData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-064](Delivery_Operations.md) | `GET /v1/staff/delivery/tasks` | No request body | TaskListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-065](Delivery_Operations.md) | `POST /v1/staff/delivery/tasks/{task_id}/assign` | AssignmentRequest | AssignmentData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-066](Delivery_Operations.md) | `POST /v1/staff/delivery/tasks/{task_id}/resolution` | DeliveryResolutionRequest | DeliveryResolutionData / 200 | Incomplete | Unapproved / Not Implemented |
-| [API-067](Delivery_Operations.md) | `GET /v1/staff/delivery/cod-handover` | No request body | CodListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-068](Delivery_Operations.md) | `POST /v1/staff/delivery/riders` | RiderOnboardingRequest | StaffData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-069](Rider_App.md) | `POST /v1/rider/shifts` | RiderShiftRequest | RiderShiftData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-070](Rider_App.md) | `GET /v1/rider/tasks` | No request body | TaskListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-071](Rider_App.md) | `POST /v1/rider/tasks/{task_id}/pickup` | PickupRequest | AssignmentData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-072](Rider_App.md) | `POST /v1/rider/tasks/{task_id}/location` | LocationUpdateRequest | LocationUpdateData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-073](Rider_App.md) | `POST /v1/rider/tasks/{task_id}/complete` | DeliveryCompletionRequest | DeliveryCompletionData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-074](Rider_App.md) | `POST /v1/rider/tasks/{task_id}/fail` | DeliveryFailureRequest | DeliveryFailureData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [API-075](Finance_Payments.md) | `POST /v1/payments/intents` | PaymentIntentRequest | PaymentIntentData / 202 | Incomplete | Unapproved / Not Implemented |
-| [API-076](Finance_Payments.md) | `POST /v1/webhooks/cashfree` | ProviderEventUnresolved | ProviderAckUnresolved / 200 | Incomplete | Unapproved / Not Implemented |
-| [API-077](Finance_Payments.md) | `GET /v1/admin/finance/payments` | No request body | PaymentListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-078](Finance_Payments.md) | `POST /v1/admin/finance/refunds` | RefundInstructionRequest | RefundInstructionData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-079](Finance_Payments.md) | `GET /v1/admin/finance/settlements` | No request body | SettlementListData / 200 | Incomplete | Unapproved / Not Implemented |
-| [API-080](Finance_Payments.md) | `POST /v1/admin/finance/cod-reconciliation` | CodReconciliationRequest | ReconciliationRunData / 202 | Incomplete | Unapproved / Not Implemented |
-| [API-081](Finance_Payments.md) | `GET /v1/admin/finance/invoices/{order_id}` | No request body | InvoiceData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-082](Reporting.md) | `GET /v1/admin/reports/sales` | No request body | SalesReportData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-083](Reporting.md) | `GET /v1/admin/reports/tax` | No request body | TaxReportData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-084](Reporting.md) | `GET /v1/admin/reports/stock` | No request body | StockReportData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-085](Reporting.md) | `GET /v1/admin/reports/deliveries` | No request body | DeliveriesReportData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-086](Reporting.md) | `POST /v1/admin/reports/exports` | ReportExportRequest | ReportRunData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-087](Audit.md) | `GET /v1/admin/audit/events` | No request body | AuditListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-088](Audit.md) | `POST /v1/admin/audit/exports` | AuditExportRequest | ReportRunData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-089](Authentication_Access.md) | `POST /v1/auth/staff/login` | StaffLoginRequest | StaffChallengeData / 200 | Incomplete | Unapproved / Not Implemented |
-| [API-090](Authentication_Access.md) | `POST /v1/auth/staff/mfa/verify` | StaffMfaRequest | SessionData / 200 | Incomplete | Unapproved / Not Implemented |
-| [API-091](Authentication_Access.md) | `POST /v1/auth/sessions/refresh` | SessionRefreshRequest | SessionData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-092](Authentication_Access.md) | `POST /v1/auth/sessions/revoke` | SessionRevocationRequest | SessionRevocationData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-093](Authentication_Access.md) | `GET /v1/auth/permissions` | No request body | EffectivePermissionListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-094](Notifications.md) | `POST /v1/internal/notifications/jobs` | NotificationJobRequest | NotificationData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-095](Notifications.md) | `GET /v1/admin/notifications/deliveries` | No request body | NotificationListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-096](Notifications.md) | `POST /v1/rider/push-tokens` | PushTokenRequest | PushEndpointData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [API-097](Notifications.md) | `GET /v1/admin/notifications/alerts` | No request body | NotificationAlertListData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-001](Customer_Accounts.md) | `PATCH /v1/me/addresses/{addressId}` | CustomerAddressPatch | CustomerAddressData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-002](Customer_Accounts.md) | `DELETE /v1/me/addresses/{addressId}` | No request body | No response body / 204 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-007](Customer_Accounts.md) | `POST /v1/me/deletion-requests` | PrivacyDeletionRequest | PrivacyRequestData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-006](Customer_Accounts.md) | `GET /v1/me/deletion-requests/{requestId}` | No request body | PrivacyRequestData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-003](Customer_Accounts.md) | `PATCH /v1/me/patients/{patientId}` | FamilyMemberPatch | FamilyMemberData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-004](Customer_Accounts.md) | `DELETE /v1/me/patients/{patientId}` | No request body | No response body / 204 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-008](Customer_Accounts.md) | `GET /v1/me/wishlist/items` | No request body | WishlistData / 200 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-009](Customer_Accounts.md) | `POST /v1/me/wishlist/items` | WishlistItemCreate | WishlistItemData / 201 | Complete proposed | Unapproved / Not Implemented |
-| [ACC-ROUTE-010](Customer_Accounts.md) | `DELETE /v1/me/wishlist/items/{itemId}` | No request body | No response body / 204 | Complete proposed | Unapproved / Not Implemented |
+| [API-001](../03-Modules/Customer-Accounts/APIs.md) | `POST /v1/auth/customer/otp/request` | CustomerOtpRequest | OtpChallengeData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-002](../03-Modules/Customer-Accounts/APIs.md) | `POST /v1/auth/customer/otp/verify` | CustomerOtpVerification | SessionData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-003](../03-Modules/Customer-Accounts/APIs.md) | `GET /v1/me` | No request body | ProfileData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-004](../03-Modules/Customer-Accounts/APIs.md) | `PATCH /v1/me` | CustomerProfileUpdate | ProfileData / 200 | Incomplete | Unapproved / Not Implemented |
+| [API-005](../03-Modules/Customer-Accounts/APIs.md) | `GET /v1/me/addresses` | No request body | AddressListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-006](../03-Modules/Customer-Accounts/APIs.md) | `POST /v1/me/addresses` | CustomerAddressCreate | CustomerAddressData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-007](../03-Modules/Customer-Accounts/APIs.md) | `GET /v1/me/patients` | No request body | PatientListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-008](../03-Modules/Customer-Accounts/APIs.md) | `POST /v1/me/patients` | FamilyMemberCreate | FamilyMemberData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-009](../03-Modules/Customer-Accounts/APIs.md) | `POST /v1/me/consents` | ConsentCreate | ConsentData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-005](../03-Modules/Customer-Accounts/APIs.md) | `GET /v1/me/consents` | No request body | ConsentListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-010](../03-Modules/Product-Catalog/APIs.md) | `GET /v1/catalog/categories` | No request body | CatalogCategoryListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-011](../03-Modules/Product-Catalog/APIs.md) | `GET /v1/catalog/products` | No request body | CatalogProductListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-012](../03-Modules/Product-Catalog/APIs.md) | `GET /v1/catalog/products/{product_id}` | No request body | CatalogProductDetailData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-013](../03-Modules/Product-Catalog/APIs.md) | `GET /v1/catalog/search` | No request body | CatalogSearchData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-014](../03-Modules/Product-Catalog/APIs.md) | `GET /v1/catalog/availability` | No request body | CatalogAvailabilityData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-015](../03-Modules/Product-Catalog/APIs.md) | `POST /v1/admin/catalog/imports` | CatalogImportRequest | CatalogImportAcceptedData / 202 | Incomplete | Unapproved / Not Implemented |
+| [API-016](../03-Modules/Product-Catalog/APIs.md) | `POST /v1/admin/catalog/products/{product_id}/classification` | CatalogClassificationRequest | CatalogClassificationData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-017](../03-Modules/Product-Catalog/APIs.md) | `POST /v1/admin/catalog/products/{product_id}/publish` | CatalogPublishRequest | CatalogPublishData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-018](../03-Modules/Cart-Checkout/APIs.md) | `GET /v1/me/cart` | No request body | CartItemsData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-019](../03-Modules/Cart-Checkout/APIs.md) | `PUT /v1/me/cart/items` | CartItemsReplaceRequest | CartItemsData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-020](../03-Modules/Cart-Checkout/APIs.md) | `POST /v1/checkouts/quotes` | CheckoutQuoteRequest | CheckoutQuoteData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-021](../03-Modules/Cart-Checkout/APIs.md) | `POST /v1/checkouts` | CheckoutIntentRequest | CheckoutIntentData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-022](../03-Modules/Prescription-Management/APIs.md) | `POST /v1/prescriptions/upload-intents` | PrescriptionUploadIntentRequest | PrescriptionUploadIntentData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-023](../03-Modules/Prescription-Management/APIs.md) | `POST /v1/prescriptions/documents/confirm` | PrescriptionUploadConfirmRequest | PrescriptionUploadConfirmData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-024](../03-Modules/Prescription-Management/APIs.md) | `POST /v1/orders/{order_id}/prescriptions` | PrescriptionAttachRequest | PrescriptionAttachData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-025](../03-Modules/Customer-Orders/APIs.md) | `GET /v1/me/orders` | No request body | OrderListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-026](../03-Modules/Customer-Orders/APIs.md) | `GET /v1/me/orders/{order_id}` | No request body | OrderDetailData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-027](../03-Modules/Customer-Orders/APIs.md) | `POST /v1/me/orders/{order_id}/cancel` | CancellationRequest | CancellationData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-028](../03-Modules/Customer-Orders/APIs.md) | `POST /v1/me/orders/{order_id}/returns` | ReturnRequest | ReturnData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-029](../03-Modules/Customer-Orders/APIs.md) | `GET /v1/me/orders/{order_id}/invoice` | No request body | InvoiceData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-030](../03-Modules/Customer-Orders/APIs.md) | `GET /v1/me/orders/{order_id}/refunds` | No request body | RefundListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-031](../03-Modules/Customer-Orders/APIs.md) | `GET /v1/me/orders/{order_id}/delivery` | No request body | OrderDeliveryData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-032](../03-Modules/Admin/APIs.md) | `GET /v1/admin/dashboard` | No request body | DashboardData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-033](../03-Modules/Admin/APIs.md) | `POST /v1/admin/staff` | StaffInviteRequest | StaffData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-034](../03-Modules/Admin/APIs.md) | `PATCH /v1/admin/staff/{staff_id}` | StaffUpdateRequest | StaffData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-035](../03-Modules/Admin/APIs.md) | `GET /v1/admin/settings` | No request body | SettingsData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-036](../03-Modules/Admin/APIs.md) | `PATCH /v1/admin/settings` | SettingsUpdateRequest | SettingsData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-037](../03-Modules/Admin/APIs.md) | `POST /v1/admin/cms/pages/{page_id}/publish` | CmsPublishRequest | CmsPublishData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-038](../03-Modules/Admin/APIs.md) | `POST /v1/admin/locations` | LocationCreateRequest | LocationData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-039](../03-Modules/Order-Management/APIs.md) | `GET /v1/admin/orders` | No request body | OrderListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-040](../03-Modules/Order-Management/APIs.md) | `GET /v1/admin/orders/{order_id}` | No request body | OrderDetailData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-041](../03-Modules/Order-Management/APIs.md) | `POST /v1/admin/orders/{order_id}/allocate` | OrderAllocationRequest | AllocationData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-042](../03-Modules/Order-Management/APIs.md) | `POST /v1/admin/orders/{order_id}/reassign` | OrderReassignmentRequest | AllocationData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-043](../03-Modules/Order-Management/APIs.md) | `POST /v1/admin/orders/{order_id}/revisions` | OrderRevisionRequest | OrderRevisionData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-044](../03-Modules/Store-Operations/APIs.md) | `GET /v1/staff/store/orders` | No request body | FulfillmentListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-045](../03-Modules/Store-Operations/APIs.md) | `POST /v1/staff/store/orders/{order_id}/accept` | StoreAcceptRequest | FulfillmentData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-046](../03-Modules/Store-Operations/APIs.md) | `POST /v1/staff/store/picks/{pick_id}/scan` | PickScanRequest | PickScanData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-047](../03-Modules/Store-Operations/APIs.md) | `POST /v1/staff/store/packs/{pack_id}/close` | PackCloseRequest | PackCloseData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-048](../03-Modules/Store-Operations/APIs.md) | `POST /v1/staff/store/replenishments` | ReplenishmentRequest | ReplenishmentData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-049](../03-Modules/Store-Operations/APIs.md) | `POST /v1/staff/store/transfers/{transfer_id}/receipt` | TransferReceiptRequest | TransferData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-050](../03-Modules/Inventory/APIs.md) | `GET /v1/staff/inventory` | No request body | StockListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-051](../03-Modules/Inventory/APIs.md) | `POST /v1/staff/inventory/observations` | StockObservationRequest | StockObservationData / 200 | Incomplete | Unapproved / Not Implemented |
+| [API-052](../03-Modules/Inventory/APIs.md) | `POST /v1/internal/inventory/reservations` | ReservationRequest | ReservationData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-053](../03-Modules/Inventory/APIs.md) | `POST /v1/internal/inventory/reservations/{reservation_id}/release` | ReservationReleaseRequest | ReservationReleaseData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-054](../03-Modules/Inventory/APIs.md) | `POST /v1/staff/inventory/adjustments` | AdjustmentRequest | AdjustmentData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-055](../03-Modules/Inventory/APIs.md) | `GET /v1/staff/inventory/alerts` | No request body | InventoryAlertListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-056](../03-Modules/Warehouse/APIs.md) | `POST /v1/staff/warehouse/receipts` | GoodsReceiptRequest | GoodsReceiptData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-057](../03-Modules/Warehouse/APIs.md) | `GET /v1/staff/warehouse/replenishments` | No request body | ReplenishmentListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-058](../03-Modules/Warehouse/APIs.md) | `POST /v1/staff/warehouse/transfers/{transfer_id}/dispatch` | TransferDispatchRequest | TransferData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-059](../03-Modules/Warehouse/APIs.md) | `GET /v1/staff/warehouse/fallback-orders` | No request body | OrderListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-060](../03-Modules/Pharmacist-Review/APIs.md) | `GET /v1/pharmacy/reviews` | No request body | ReviewListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-061](../03-Modules/Pharmacist-Review/APIs.md) | `GET /v1/pharmacy/reviews/{review_id}` | No request body | ReviewDetailData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-062](../03-Modules/Pharmacist-Review/APIs.md) | `POST /v1/pharmacy/reviews/{review_id}/lines/{line_id}/decision` | PharmacistDecisionRequest | PharmacistDecisionData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-063](../03-Modules/Pharmacist-Review/APIs.md) | `POST /v1/me/orders/{order_id}/revisions/{revision_id}/accept` | RevisionAcceptanceRequest | OrderRevisionData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-064](../03-Modules/Delivery/APIs.md) | `GET /v1/staff/delivery/tasks` | No request body | TaskListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-065](../03-Modules/Delivery/APIs.md) | `POST /v1/staff/delivery/tasks/{task_id}/assign` | AssignmentRequest | AssignmentData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-066](../03-Modules/Delivery/APIs.md) | `POST /v1/staff/delivery/tasks/{task_id}/resolution` | DeliveryResolutionRequest | DeliveryResolutionData / 200 | Incomplete | Unapproved / Not Implemented |
+| [API-067](../03-Modules/Delivery/APIs.md) | `GET /v1/staff/delivery/cod-handover` | No request body | CodListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-068](../03-Modules/Delivery/APIs.md) | `POST /v1/staff/delivery/riders` | RiderOnboardingRequest | StaffData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-069](../03-Modules/Rider-Operations/APIs.md) | `POST /v1/rider/shifts` | RiderShiftRequest | RiderShiftData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-070](../03-Modules/Rider-Operations/APIs.md) | `GET /v1/rider/tasks` | No request body | TaskListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-071](../03-Modules/Rider-Operations/APIs.md) | `POST /v1/rider/tasks/{task_id}/pickup` | PickupRequest | AssignmentData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-072](../03-Modules/Rider-Operations/APIs.md) | `POST /v1/rider/tasks/{task_id}/location` | LocationUpdateRequest | LocationUpdateData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-073](../03-Modules/Rider-Operations/APIs.md) | `POST /v1/rider/tasks/{task_id}/complete` | DeliveryCompletionRequest | DeliveryCompletionData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-074](../03-Modules/Rider-Operations/APIs.md) | `POST /v1/rider/tasks/{task_id}/fail` | DeliveryFailureRequest | DeliveryFailureData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [API-075](../03-Modules/Payments/APIs.md) | `POST /v1/payments/intents` | PaymentIntentRequest | PaymentIntentData / 202 | Incomplete | Unapproved / Not Implemented |
+| [API-076](../03-Modules/Payments/APIs.md) | `POST /v1/webhooks/cashfree` | ProviderEventUnresolved | ProviderAckUnresolved / 200 | Incomplete | Unapproved / Not Implemented |
+| [API-077](../03-Modules/Payments/APIs.md) | `GET /v1/admin/finance/payments` | No request body | PaymentListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-078](../03-Modules/Payments/APIs.md) | `POST /v1/admin/finance/refunds` | RefundInstructionRequest | RefundInstructionData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-079](../03-Modules/Payments/APIs.md) | `GET /v1/admin/finance/settlements` | No request body | SettlementListData / 200 | Incomplete | Unapproved / Not Implemented |
+| [API-080](../03-Modules/Payments/APIs.md) | `POST /v1/admin/finance/cod-reconciliation` | CodReconciliationRequest | ReconciliationRunData / 202 | Incomplete | Unapproved / Not Implemented |
+| [API-081](../03-Modules/Payments/APIs.md) | `GET /v1/admin/finance/invoices/{order_id}` | No request body | InvoiceData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-082](../03-Modules/Reporting/APIs.md) | `GET /v1/admin/reports/sales` | No request body | SalesReportData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-083](../03-Modules/Reporting/APIs.md) | `GET /v1/admin/reports/tax` | No request body | TaxReportData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-084](../03-Modules/Reporting/APIs.md) | `GET /v1/admin/reports/stock` | No request body | StockReportData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-085](../03-Modules/Reporting/APIs.md) | `GET /v1/admin/reports/deliveries` | No request body | DeliveriesReportData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-086](../03-Modules/Reporting/APIs.md) | `POST /v1/admin/reports/exports` | ReportExportRequest | ReportRunData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-087](../03-Modules/Audit/APIs.md) | `GET /v1/admin/audit/events` | No request body | AuditListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-088](../03-Modules/Audit/APIs.md) | `POST /v1/admin/audit/exports` | AuditExportRequest | ReportRunData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-089](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/login` | StaffLoginRequest | StaffChallengeData / 200 | Incomplete | Unapproved / Not Implemented |
+| [API-090](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/mfa/verify` | StaffMfaRequest | SessionData / 200 | Incomplete | Unapproved / Not Implemented |
+| [API-091](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/sessions/refresh` | SessionRefreshRequest | SessionData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-092](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/sessions/revoke` | SessionRevocationRequest | SessionRevocationData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-093](../03-Modules/Authentication/APIs.md) | `GET /v1/auth/permissions` | No request body | EffectivePermissionListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-094](../03-Modules/Notifications/APIs.md) | `POST /v1/internal/notifications/jobs` | NotificationJobRequest | NotificationData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [API-095](../03-Modules/Notifications/APIs.md) | `GET /v1/admin/notifications/deliveries` | No request body | NotificationListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-096](../03-Modules/Notifications/APIs.md) | `POST /v1/rider/push-tokens` | PushTokenRequest | PushEndpointData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-097](../03-Modules/Notifications/APIs.md) | `GET /v1/admin/notifications/alerts` | No request body | NotificationAlertListData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-001](../03-Modules/Customer-Accounts/APIs.md) | `PATCH /v1/me/addresses/{addressId}` | CustomerAddressPatch | CustomerAddressData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-002](../03-Modules/Customer-Accounts/APIs.md) | `DELETE /v1/me/addresses/{addressId}` | No request body | No response body / 204 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-007](../03-Modules/Customer-Accounts/APIs.md) | `POST /v1/me/deletion-requests` | PrivacyDeletionRequest | PrivacyRequestData / 202 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-006](../03-Modules/Customer-Accounts/APIs.md) | `GET /v1/me/deletion-requests/{requestId}` | No request body | PrivacyRequestData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-003](../03-Modules/Customer-Accounts/APIs.md) | `PATCH /v1/me/patients/{patientId}` | FamilyMemberPatch | FamilyMemberData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-004](../03-Modules/Customer-Accounts/APIs.md) | `DELETE /v1/me/patients/{patientId}` | No request body | No response body / 204 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-008](../03-Modules/Customer-Accounts/APIs.md) | `GET /v1/me/wishlist/items` | No request body | WishlistData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-009](../03-Modules/Customer-Accounts/APIs.md) | `POST /v1/me/wishlist/items` | WishlistItemCreate | WishlistItemData / 201 | Complete proposed | Unapproved / Not Implemented |
+| [ACC-ROUTE-010](../03-Modules/Customer-Accounts/APIs.md) | `DELETE /v1/me/wishlist/items/{itemId}` | No request body | No response body / 204 | Complete proposed | Unapproved / Not Implemented |
 
 ## Validation interpretation
 

@@ -1,3 +1,5 @@
 node_modules/
 .work/
 artifacts/
+__pycache__/
+*.pyc

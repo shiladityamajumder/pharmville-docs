@@ -55,9 +55,9 @@ D-004 (cancellation/refund), D-006/D-009 (medicine safety), D-008/D-012 (account
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Customer Orders | [HLD](../03-Modules/Customer_Orders/HLD.md) | [LLD](../03-Modules/Customer_Orders/LLD.md) | [API](../05-APIs/Customer_Orders.md) | [Mapping](../04-Database/Module-Mapping.md#customer-orders) | [Cases](../03-Modules/Customer_Orders/Edge-Cases.md) |
-| Order Operations | [HLD](../03-Modules/Order_Operations/HLD.md) | [LLD](../03-Modules/Order_Operations/LLD.md) | [API](../05-APIs/Order_Operations.md) | [Mapping](../04-Database/Module-Mapping.md#order-operations) | [Cases](../03-Modules/Order_Operations/Edge-Cases.md) |
-| Finance Payments | [HLD](../03-Modules/Finance_Payments/HLD.md) | [LLD](../03-Modules/Finance_Payments/LLD.md) | [API](../05-APIs/Finance_Payments.md) | [Mapping](../04-Database/Module-Mapping.md#finance-payments) | [Cases](../03-Modules/Finance_Payments/Edge-Cases.md) |
+| Customer Orders | [HLD](../03-Modules/Customer-Orders/HLD.md) | [LLD](../03-Modules/Customer-Orders/LLD.md) | [API](../03-Modules/Customer-Orders/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#customer-orders) | [Cases](../03-Modules/Customer-Orders/Edge-Cases.md) |
+| Order Operations | [HLD](../03-Modules/Order-Management/HLD.md) | [LLD](../03-Modules/Order-Management/LLD.md) | [API](../03-Modules/Order-Management/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#order-operations) | [Cases](../03-Modules/Order-Management/Edge-Cases.md) |
+| Finance Payments | [HLD](../03-Modules/Payments/HLD.md) | [LLD](../03-Modules/Payments/LLD.md) | [API](../03-Modules/Payments/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#finance-payments) | [Cases](../03-Modules/Payments/Edge-Cases.md) |
 
 Technical workflows: [WF-010](../06-Workflows/WF-010-Cancellation-Return-and-Refund.md).
 

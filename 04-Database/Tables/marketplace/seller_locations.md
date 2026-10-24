@@ -1,36 +1,44 @@
 # `marketplace.seller_locations`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds seller locations records within the marketplace domain (sellers and commercial listings). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 21 columns, 21 constraints, 4 indexes, 4 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | marketplace.seller_locations |
+| Classification | Mapping / Junction |
+| Proposed business write owner | Future marketplace owner — Requires Decision D-027 |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 21 columns; 21 PK/FK/UQ/CHECK/exclusion constraints; 12 named PostgreSQL 18 NOT NULL constraints; 4 indexes; 4 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `approval_evidence` | `character varying(512)` | Yes | — | Inferred: stores approval evidence for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `approved_at` | `timestamp with time zone` | Yes | — | Time of approved | Support chronology, deadlines or audit evidence | See exact constraints |
-| `approved_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_marketplace_seller_locations_approved_by_user_id_users) |
-| `authorization_status` | `character varying(16)` | No | `'pending'::character varying` | Inferred: stores authorization status for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_marketplace_seller_locations_created_by_users) |
-| `fulfillment_mode` | `character varying(32)` | No | `'platform'::character varying` | Inferred: stores fulfillment mode for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `is_active` | `boolean` | No | `true` | Yes/no flag for is active | Control conditional business behavior | See exact constraints |
-| `license_id` | `uuid` | Yes | — | Reference linking this record to licenses | Ensures related business data can be joined and validated | FK → `organization.licenses` (fk_marketplace_seller_locations_license_id_licenses) |
-| `license_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.licenses` (fk_marketplace_seller_locations_license_id_licenses_numeric); Numeric/public-key pair verification required |
-| `location_id` | `uuid` | No | — | Reference linking this record to locations | Ensures related business data can be joined and validated | FK → `organization.locations` (fk_marketplace_seller_locations_location_id_locations) |
-| `location_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.locations` (fk_marketplace_seller_locations_location_id_locations_numeric); Numeric/public-key pair verification required |
-| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | optimistic concurrency |
-| `seller_id` | `uuid` | No | — | Reference linking this record to sellers | Ensures related business data can be joined and validated | FK → `marketplace.sellers` (fk_marketplace_seller_locations_seller_id_sellers) |
-| `seller_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `marketplace.sellers` (fk_marketplace_seller_locations_seller_id_sellers_numeric); Numeric/public-key pair verification required |
-| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | See exact constraints |
-| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_marketplace_seller_locations_updated_by_users) |
-| `warehouse_id` | `uuid` | Yes | — | Reference linking this record to warehouses | Ensures related business data can be joined and validated | FK → `warehouse.warehouses` (fk_marketplace_seller_locations_warehouse_id_warehouses) |
-| `warehouse_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `warehouse.warehouses` (fk_marketplace_seller_locations_warehouse_id_warehouses_numeric); Numeric/public-key pair verification required |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `approval_evidence` | `character varying(512)` | Yes | — | Inferred: stores approval evidence for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `approved_at` | `timestamp with time zone` | Yes | — | Time of approved | Support chronology, deadlines or audit evidence | Exact constraints below |
+| `approved_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_marketplace_seller_locations_approved_by_user_id_users` |
+| `authorization_status` | `character varying(16)` | No | `'pending'::character varying` | Inferred: stores authorization status for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_marketplace_seller_locations_created_by_users` |
+| `fulfillment_mode` | `character varying(32)` | No | `'platform'::character varying` | Inferred: stores fulfillment mode for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `is_active` | `boolean` | No | `true` | Yes/no flag for is active | Control conditional business behavior | Exact constraints below |
+| `license_id` | `uuid` | Yes | — | Reference linking this record to licenses | Ensures related business data can be joined and validated | FK → `organization.licenses` via `fk_marketplace_seller_locations_license_id_licenses` |
+| `license_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.licenses` via `fk_marketplace_seller_locations_license_id_licenses_numeric` |
+| `location_id` | `uuid` | No | — | Reference linking this record to locations | Ensures related business data can be joined and validated | FK → `organization.locations` via `fk_marketplace_seller_locations_location_id_locations` |
+| `location_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.locations` via `fk_marketplace_seller_locations_location_id_locations_numeric` |
+| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | Checked positive; optimistic precondition and maintenance trigger |
+| `seller_id` | `uuid` | No | — | Reference linking this record to sellers | Ensures related business data can be joined and validated | FK → `marketplace.sellers` via `fk_marketplace_seller_locations_seller_id_sellers` |
+| `seller_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `marketplace.sellers` via `fk_marketplace_seller_locations_seller_id_sellers_numeric` |
+| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | Exact constraints below |
+| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_marketplace_seller_locations_updated_by_users` |
+| `warehouse_id` | `uuid` | Yes | — | Reference linking this record to warehouses | Ensures related business data can be joined and validated | FK → `warehouse.warehouses` via `fk_marketplace_seller_locations_warehouse_id_warehouses` |
+| `warehouse_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `warehouse.warehouses` via `fk_marketplace_seller_locations_warehouse_id_warehouses_numeric` |
 
 ## Record lifecycle and users
 
@@ -39,40 +47,44 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Product_Catalog. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `marketplace.seller_locations` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_marketplace_seller_locations_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `updated_by` → `identity.users(id)` via `fk_marketplace_seller_locations_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `seller_id` → `marketplace.sellers(id)` via `fk_marketplace_seller_locations_seller_id_sellers`; `FOREIGN KEY (seller_id) REFERENCES marketplace.sellers(id) ON DELETE CASCADE`
-- `warehouse_id` → `warehouse.warehouses(id)` via `fk_marketplace_seller_locations_warehouse_id_warehouses`; `FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE SET NULL`
-- `location_id` → `organization.locations(id)` via `fk_marketplace_seller_locations_location_id_locations`; `FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE RESTRICT`
-- `approved_by_user_id` → `identity.users(id)` via `fk_marketplace_seller_locations_approved_by_user_id_users`; `FOREIGN KEY (approved_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `license_id` → `organization.licenses(id)` via `fk_marketplace_seller_locations_license_id_licenses`; `FOREIGN KEY (license_id) REFERENCES organization.licenses(id) ON DELETE RESTRICT`
-- `license_id_internal_id` → `organization.licenses(internal_id)` via `fk_marketplace_seller_locations_license_id_licenses_numeric`; `FOREIGN KEY (license_id_internal_id) REFERENCES organization.licenses(internal_id) ON DELETE RESTRICT`
-- `location_id_internal_id` → `organization.locations(internal_id)` via `fk_marketplace_seller_locations_location_id_locations_numeric`; `FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE RESTRICT`
-- `seller_id_internal_id` → `marketplace.sellers(internal_id)` via `fk_marketplace_seller_locations_seller_id_sellers_numeric`; `FOREIGN KEY (seller_id_internal_id) REFERENCES marketplace.sellers(internal_id) ON DELETE CASCADE`
-- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_marketplace_seller_locations_warehouse_id_warehouses_numeric`; `FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE SET NULL`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_marketplace_seller_locations_approved_by_user_id_users | `approved_by_user_id` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (approved_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_marketplace_seller_locations_created_by_users | `created_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_marketplace_seller_locations_license_id_licenses | `license_id` | [`organization.licenses`](../../Tables/organization/licenses.md) | `FOREIGN KEY (license_id) REFERENCES organization.licenses(id) ON DELETE RESTRICT` |
+| fk_marketplace_seller_locations_license_id_licenses_numeric | `license_id_internal_id` | [`organization.licenses`](../../Tables/organization/licenses.md) | `FOREIGN KEY (license_id_internal_id) REFERENCES organization.licenses(internal_id) ON DELETE RESTRICT` |
+| fk_marketplace_seller_locations_location_id_locations | `location_id` | [`organization.locations`](../../Tables/organization/locations.md) | `FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE RESTRICT` |
+| fk_marketplace_seller_locations_location_id_locations_numeric | `location_id_internal_id` | [`organization.locations`](../../Tables/organization/locations.md) | `FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE RESTRICT` |
+| fk_marketplace_seller_locations_seller_id_sellers | `seller_id` | [`marketplace.sellers`](../../Tables/marketplace/sellers.md) | `FOREIGN KEY (seller_id) REFERENCES marketplace.sellers(id) ON DELETE CASCADE` |
+| fk_marketplace_seller_locations_seller_id_sellers_numeric | `seller_id_internal_id` | [`marketplace.sellers`](../../Tables/marketplace/sellers.md) | `FOREIGN KEY (seller_id_internal_id) REFERENCES marketplace.sellers(internal_id) ON DELETE CASCADE` |
+| fk_marketplace_seller_locations_updated_by_users | `updated_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_marketplace_seller_locations_warehouse_id_warehouses | `warehouse_id` | [`warehouse.warehouses`](../../Tables/warehouse/warehouses.md) | `FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE SET NULL` |
+| fk_marketplace_seller_locations_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | [`warehouse.warehouses`](../../Tables/warehouse/warehouses.md) | `FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE SET NULL` |
+
+### Dependent tables
+
+No inbound FK is present in the validated catalog.
 
 ## `marketplace.seller_locations` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 21 columns, 21 constraints, 4 indexes, 4 triggers.
 
 ### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
-| `created_by` | `identity.users` | `fk_marketplace_seller_locations_created_by_users` |
-| `updated_by` | `identity.users` | `fk_marketplace_seller_locations_updated_by_users` |
-| `seller_id` | `marketplace.sellers` | `fk_marketplace_seller_locations_seller_id_sellers` |
-| `warehouse_id` | `warehouse.warehouses` | `fk_marketplace_seller_locations_warehouse_id_warehouses` |
-| `location_id` | `organization.locations` | `fk_marketplace_seller_locations_location_id_locations` |
 | `approved_by_user_id` | `identity.users` | `fk_marketplace_seller_locations_approved_by_user_id_users` |
+| `created_by` | `identity.users` | `fk_marketplace_seller_locations_created_by_users` |
 | `license_id` | `organization.licenses` | `fk_marketplace_seller_locations_license_id_licenses` |
 | `license_id_internal_id` | `organization.licenses` | `fk_marketplace_seller_locations_license_id_licenses_numeric` |
+| `location_id` | `organization.locations` | `fk_marketplace_seller_locations_location_id_locations` |
 | `location_id_internal_id` | `organization.locations` | `fk_marketplace_seller_locations_location_id_locations_numeric` |
+| `seller_id` | `marketplace.sellers` | `fk_marketplace_seller_locations_seller_id_sellers` |
 | `seller_id_internal_id` | `marketplace.sellers` | `fk_marketplace_seller_locations_seller_id_sellers_numeric` |
+| `updated_by` | `identity.users` | `fk_marketplace_seller_locations_updated_by_users` |
+| `warehouse_id` | `warehouse.warehouses` | `fk_marketplace_seller_locations_warehouse_id_warehouses` |
 | `warehouse_id_internal_id` | `warehouse.warehouses` | `fk_marketplace_seller_locations_warehouse_id_warehouses_numeric` |
 
 ### Existing constraints
@@ -100,27 +112,37 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_marketplace_seller_locations` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `seller_location` | UNIQUE | `UNIQUE (seller_id, location_id)` |
 | `uq_marketplace_seller_locations_id` | UNIQUE | `UNIQUE (id)` |
+| `seller_locations_authorization_status_not_null` | NOT NULL | `NOT NULL authorization_status` |
+| `seller_locations_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `seller_locations_fulfillment_mode_not_null` | NOT NULL | `NOT NULL fulfillment_mode` |
+| `seller_locations_id_not_null` | NOT NULL | `NOT NULL id` |
+| `seller_locations_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `seller_locations_is_active_not_null` | NOT NULL | `NOT NULL is_active` |
+| `seller_locations_location_id_internal_id_not_null` | NOT NULL | `NOT NULL location_id_internal_id` |
+| `seller_locations_location_id_not_null` | NOT NULL | `NOT NULL location_id` |
+| `seller_locations_row_version_not_null` | NOT NULL | `NOT NULL row_version` |
+| `seller_locations_seller_id_internal_id_not_null` | NOT NULL | `NOT NULL seller_id_internal_id` |
+| `seller_locations_seller_id_not_null` | NOT NULL | `NOT NULL seller_id` |
+| `seller_locations_updated_at_not_null` | NOT NULL | `NOT NULL updated_at` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `ix_marketplace_seller_locations_seller` | `CREATE INDEX ix_marketplace_seller_locations_seller ON marketplace.seller_locations USING btree (seller_id)` |
-| `pk_marketplace_seller_locations` | `CREATE UNIQUE INDEX pk_marketplace_seller_locations ON marketplace.seller_locations USING btree (internal_id)` |
-| `seller_location` | `CREATE UNIQUE INDEX seller_location ON marketplace.seller_locations USING btree (seller_id, location_id)` |
-| `uq_marketplace_seller_locations_id` | `CREATE UNIQUE INDEX uq_marketplace_seller_locations_id ON marketplace.seller_locations USING btree (id)` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `ix_marketplace_seller_locations_seller` | btree | `(seller_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_marketplace_seller_locations_seller ON marketplace.seller_locations USING btree (seller_id)` |
+| `pk_marketplace_seller_locations` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_marketplace_seller_locations ON marketplace.seller_locations USING btree (internal_id)` |
+| `seller_location` | btree | `(seller_id, location_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX seller_location ON marketplace.seller_locations USING btree (seller_id, location_id)` |
+| `uq_marketplace_seller_locations_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_marketplace_seller_locations_id ON marketplace.seller_locations USING btree (id)` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON marketplace.seller_locations FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["license_id","license_id_internal_id","organization","licenses"],["location_id","location_id_internal_id","organization","locations"],["seller_id","seller_id_internal_id","marketplace","sellers"],["warehouse_id","warehouse_id_internal_id","warehouse","warehouses"]]', 'internal_id', 'id')` |
-| `fulfillment_approval_guard` | `CREATE TRIGGER fulfillment_approval_guard BEFORE INSERT OR UPDATE ON marketplace.seller_locations FOR EACH ROW EXECUTE FUNCTION marketplace.guard_fulfillment_approval()` |
-| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON marketplace.seller_locations FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON marketplace.seller_locations FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["license_id","license_id_internal_id","organization","licenses"],["location_id","location_id_internal_id","organization","locations"],["seller_id","seller_id_internal_id","marketplace","sellers"],["warehouse_id","warehouse_id_internal_id","warehouse","warehouses"]]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON marketplace.seller_locations FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["license_id","license_id_internal_id","organization","licenses"],["location_id","location_id_internal_id","organization","locations"],["seller_id","seller_id_internal_id","marketplace","sellers"],["warehouse_id","warehouse_id_internal_id","warehouse","warehouses"]]', 'internal_id', 'id')` | O |
+| `fulfillment_approval_guard` | `CREATE TRIGGER fulfillment_approval_guard BEFORE INSERT OR UPDATE ON marketplace.seller_locations FOR EACH ROW EXECUTE FUNCTION marketplace.guard_fulfillment_approval()` | O |
+| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON marketplace.seller_locations FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON marketplace.seller_locations FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["license_id","license_id_internal_id","organization","licenses"],["location_id","location_id_internal_id","organization","locations"],["seller_id","seller_id_internal_id","marketplace","sellers"],["warehouse_id","warehouse_id_internal_id","warehouse","warehouses"]]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.

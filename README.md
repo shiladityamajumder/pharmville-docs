@@ -15,7 +15,7 @@ Pharmville connects a customer web experience, protected staff/admin workspaces 
 | 📘 Business Guide | Understand people, steps, problems and recovery | [Business Guide](00-Business-Guide/README.md) |
 | 🏗️ HLD | Understand components, trust and boundaries | [System architecture](02-Architecture/System-HLD.md) |
 | ⚙️ LLD | Review module responsibilities and implementation | [Module designs](03-Modules/README.md) |
-| 🗄️ Database | Inspect available schema and migration evidence | [Database reference](04-Database/README.md) |
+| 🗄️ Database | Inspect validated schema, ownership and parity evidence | [Database reference](04-Database/README.md) |
 | 🔗 APIs | Review proposed operations and remaining contract gaps | [API contracts](05-APIs/README.md) |
 | 🧪 Testing | Follow normal, adverse and recovery assertions | [Testing strategy](07-Engineering/Testing.md) |
 | 📋 Requirements | Find stable feature IDs and scope | [Features and modules](01-Project/Features-and-Modules.md) |
@@ -24,7 +24,7 @@ Pharmville connects a customer web experience, protected staff/admin workspaces 
 | 🗓️ Development | Turn reviewed requirements into delivery slices | [Implementation plan](08-Development-Plan/Implementation-Plan.md) |
 
 <!-- ERD-INDEX-LINK -->
-**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams use the catalog in the user-supplied `healthcare_db/` folder; see the migration evidence for provenance.
+**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams derive from the validated standalone SQL/catalog; all 1,461 physical foreign keys are accounted for.
 
 ## Product flow
 
@@ -36,7 +36,7 @@ A request, a confirmed payment and a dispatched parcel are different milestones;
 
 The repository retains **110 draft feature IDs, 18 module groups and 14 technical workflows**. Business approval, proposed design, inspected database evidence and executed product tests are separate statuses. Feature-specific tests are **Designed / NOT RUN**; the [coverage report](09-References/Coverage-Report.md) records measured documentation results and remaining gaps.
 
-The user-supplied `healthcare_db` folder is the database reference for this repository. [Migration evidence](04-Database/Migrations.md) records its verified source checksums and schema counts. Live deployment and runtime parity remain separate checks. Review [open decisions](09-References/Sources-and-Decisions.md) and the [engineering audit](09-References/Engineering-Audit.md) for remaining readiness work.
+The [standalone SQL](pharmville-database/pharmville_schema.sql) installs the effective V0030 structure without historical tooling. Isolated PostgreSQL 18.6 comparisons found zero differences across 23 catalog dimensions. All 266 table pages match the validated catalog. The original sources, local files and nested Git history remain private and intact outside this deliverable. [Installation](04-Database/Installation.md) separates empty-schema setup from runtime provisioning and approved bootstrap data.
 
 ## Detailed API and master-data blueprint
 
@@ -46,7 +46,7 @@ The user-supplied `healthcare_db` folder is the database reference for this repo
 
 1. Select a feature in the [master register](09-References/Coverage-and-Traceability.md), then read its Business Flow, HLD, LLD and edge cases.
 2. Resolve the decisions affecting that slice, including exact operation schemas and [command/data ownership](07-Engineering/State-and-Recovery-Contracts.md). Use the [critical contracts](05-APIs/Critical-Operation-Contracts.md) as proposals requiring review.
-3. Verify the supplied SQL source against the target database ledger and restricted runtime permissions. Follow [setup and operations](07-Engineering/Development-Setup-and-Operations.md) and attach actual test evidence to the feature task.
+3. Verify canonical SQL/catalog hashes, install only into an explicitly empty isolated database, and validate restricted runtime permissions. Follow [setup and operations](07-Engineering/Development-Setup-and-Operations.md) and attach actual test evidence to the feature task.
 4. Use Node.js 24, run `npm ci`, then `npm run validate`. `npm run validate:render` also writes SVG/PNG diagrams locally. See [documentation conventions](09-References/Documentation-Conventions.md) for existing-browser setup, validator checks and CI.
 
 Changes remain local for review. Documentation checks do not establish production clinical, financial or deployment readiness.
@@ -56,3 +56,23 @@ Changes remain local for review. Documentation checks do not establish productio
 Explore the connected customer, staff and rider experiences through local grayscale HTML/CSS/JavaScript wireframes, including forms, role handoffs and failure scenarios. Run `node 10-Low-Fidelity-Wireframes/server.mjs`, then open `http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/`; the prototype uses synthetic browser-local data and requires no backend.
 
 [Wireframe Explorer](10-Low-Fidelity-Wireframes/index.html) · [Screen Inventory](10-Low-Fidelity-Wireframes/documentation/Screen-Inventory.md) · [User Flows](10-Low-Fidelity-Wireframes/documentation/User-Flows.md) · [Edge-Case Coverage](10-Low-Fidelity-Wireframes/documentation/Edge-Case-Coverage.md) · [Local Preview Instructions](10-Low-Fidelity-Wireframes/documentation/How-to-Run.md)
+
+## Repository blueprint
+
+```text
+00-Business-Guide/        Overall business journey and shared actor context
+01-Project/              Stable requirements and phased capability decisions
+02-Architecture/         System, module boundaries and interactions
+03-Modules/              18 canonical business-module blueprints
+04-Database/             Catalog, 266 table references, masters and parity
+05-APIs/                 Shared conventions, OpenAPI, coverage and indexes
+06-Workflows/            14 cross-module orchestration contracts
+07-Engineering/          Security, testing, reliability and operations
+08-Development-Plan/     Existing implementation task IDs and sequencing
+09-References/           Decisions, traceability, execution evidence
+10-Low-Fidelity-Wireframes/  Protected; byte-for-byte preserved
+pharmville-database/     pharmville_schema.sql only
+scripts/                Documentation/catalog generation and validation
+```
+
+Use [the module index](03-Modules/README.md) as the primary module source. Compatibility pages preserve old paths/anchors. [Capability scope](01-Project/Capability-Scope.md), [module ownership](02-Architecture/Module-Boundaries.md) and [requirement-to-delivery trace](09-References/Feature-Delivery-Traceability.md) identify what to build, who owns it and which decisions remain open. [Execution ledger](09-References/Architecture-Rework-Plan.md) records verified outcomes and remaining gates.

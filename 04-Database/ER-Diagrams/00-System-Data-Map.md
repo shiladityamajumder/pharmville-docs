@@ -101,4 +101,4 @@ The diagram focuses on cross-domain connections used to orient readers. Identity
 
 ## Evidence boundary
 
-This documentation is generated from the user-supplied `healthcare_db/` folder. The final table register, all migration SQL including fragments, and supporting source files match the SHA-256 evidence in [Database-Evidence.json](../../09-References/Database-Evidence.json). Its supplied migration history is the documentation baseline. The recorded acceptance report describes isolated PostgreSQL 18 validation for V0030; no live database was queried here. The supplied folder has no standalone Git metadata, so identity is established by file checksums.
+This documentation is generated from [the canonical standalone SQL](../../pharmville-database/pharmville_schema.sql) and its derived [validated catalog](../Schema-Catalog.json). A private PostgreSQL 18.6 replay through V0030 and a separate empty schema installation produced zero differences across 23 catalog dimensions. [Evidence](../../09-References/Database-Evidence.json) records file checksums and archive provenance. No production database was inspected.

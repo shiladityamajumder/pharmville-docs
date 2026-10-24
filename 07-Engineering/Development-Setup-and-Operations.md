@@ -2,15 +2,15 @@
 
 ## Local setup and developer environment
 
-**Verified source:** the user-supplied database folder (`healthcare_db/README.md` inside this repository) contains PostgreSQL SQL migrations plus Python/SQLAlchemy verification tools. It does not run a NestJS HTTP application. Build the web/API repos only after team approval of their structure.
+**Canonical database:** [pharmville_schema.sql](../pharmville-database/pharmville_schema.sql) is the SQL-only effective structure. All historical source/history/local files are privately archived. [Installation](../04-Database/Installation.md) documents prerequisites, empty-schema setup, capability roles and seed exclusions.
 
-**Database safe setup (repository-described, not run here):** use a dedicated empty PostgreSQL 15+ local database and direct `DATABASE_URL`, install `requirements.txt` for Python tooling, inspect `postgresql/docs/RELEASE_RUNBOOK.md`, then `postgresql/db status`, `postgresql/db migrate`, and `postgresql/db verify` (or the Windows `.ps1` equivalents).
+**Verified isolated setup:** the source chain through V0030 and standalone SQL were installed only into newly initialized private PostgreSQL 18.6 databases. Their catalogs have zero structural differences; an additional independent cluster verified the SQL-only bootstrap and zero rows in all 266 tables. Reproduce with `python3 scripts/validate-database.py --fresh`. Earlier PostgreSQL releases are unverified. No existing database URL or `.env` is read by that validator.
 
-Do not run these against an existing Alembic-managed production database without a separately approved ledger adoption plan. The DB repository does not provision PostgreSQL.
+For an existing populated environment, schema upgrade/adoption and backfill design require a separate reviewed release procedure. The standalone fresh-install file is not an upgrade script.
 
-**Application build (proposed):** separate Next.js customer and admin web apps, NestJS modular API, optional worker, and rider Android technology awaiting decision. Add typed env validation, isolated sandbox provider credentials, no secrets in Git, migration owner separate from runtime users.
+**Application build (proposed):** separate Next.js customer and admin web apps, NestJS modular API, optional worker, and rider Android technology awaiting decision. Add typed env validation, isolated sandbox provider credentials, no secrets in Git, schema installation owner separate from runtime users.
 
-**Pre-commit:** lint, unit tests, API DTO checks, migration history checksum diff, SQL catalog/ORM parity, and secret scan. Confirm target PostgreSQL minor-version behavior and permissions before integrating APIs.
+**Pre-commit:** lint, unit tests, API DTO checks, canonical SQL/catalog checksum diff, application data-access/catalog contract parity, and secret scan. Confirm target PostgreSQL minor-version behavior and permissions before integrating APIs.
 
 ## Environment and secrets configuration
 
@@ -24,17 +24,17 @@ Make unknown clinical/stock/payment policy fail closed, not default to a conveni
 
 Use separately controlled dev, staging and production deployments. The master checklist selects AWS ap-south-1, a scaled-down staging topology and PostgreSQL RDS for production. The supplied repository's latest checks ran on isolated local PostgreSQL 18, not a shared production DB; hosted PG15/18 CI and production promotion are not confirmed by the evidence.
 
-Development uses fake/synthetic patients, product/stock/licensing and provider credentials; never copy real Rx or legal identification. Staging reproduces runtime role/ACL/RLS, object-storage privacy, versioned SQL migrations and Cashfree/MSG91 provider sandbox behavior.
+Development uses fake/synthetic patients, product/stock/licensing and provider credentials; never copy real Rx or legal identification. Staging reproduces runtime role/ACL/RLS, object-storage privacy, the reviewed standalone schema and Cashfree/MSG91 provider sandbox behavior.
 
 Production needs owner-managed credentials, signed policies, backout/forward-fix and an approved restore plan.
 
-Separate network/data permissions for API, worker, migration owner, reporting capability and encrypted file storage. Document DNS/certificate choice, environment secrets and actual service resource sizes after load validation. See Infrastructure and Config.
+Separate network/data permissions for API, worker, schema installation owner, reporting capability and encrypted file storage. Document DNS/certificate choice, environment secrets and actual service resource sizes after load validation. See Infrastructure and Config.
 
 ## AWS deployment component plan
 
 Chosen direction: AWS Mumbai with containerized Next.js/NestJS services behind controlled ingress (Nginx selected), RDS PostgreSQL, private S3, Redis/ElastiCache where practical, GitHub Actions deployment and CloudWatch observability. The checklist gives initial instance families, but traffic/load evidence has not validated sizing or redundancy.
 
-Run API and background BullMQ workers with separate IAM and connection pools. The SQL migration owner runs only an explicit release job; runtime uses restricted DB capability credentials. Protect Rx uploads, signed downloads, logs, SES/MSG91/Cashfree keys and stored location samples.
+Run API and background BullMQ workers with separate IAM and connection pools. The SQL schema installation owner runs only an explicit release job; runtime uses restricted DB capability credentials. Protect Rx uploads, signed downloads, logs, SES/MSG91/Cashfree keys and stored location samples.
 
 Apply secure service ingress, HTTPS/TLS, health probes, rate limits, controlled network egress and cost budgets.
 
@@ -42,28 +42,28 @@ Availability zones, backups/PITR, WAF, TLS certificate supplier, scaling rules, 
 
 ## CI/CD checks and promotion stages
 
-GitHub Actions is selected. The database repo already contains `.github/workflows/database-ci.yml` targeting PostgreSQL 15/18, Python 3.13, sealed migration verification, parity, tests and restore evidence. The final report confirms local PG18 checks but not independently observed hosted CI/PG15 completion; do not claim a green hosted run.
+GitHub Actions is selected. The legacy database CI workflow is private historical evidence, not active tooling in the SQL-only deliverable. Current documentation checks cover links, Mermaid, OpenAPI/JSON examples, canonical catalog/table parity and protected wireframes. Fresh SQL installation is an explicit isolated PostgreSQL check. Hosted application/provider CI has not been observed or claimed.
 
-For the application repositories add build/lint/typecheck, unit/contract tests, NestJS OpenAPI drift detection, restricted-runtime integration tests, Next.js/rider UI tests, secret/SAST/dependency scanning and tagged deployment to staging. The migration stage must check checksums and existing-ledger provenance, take backups, apply only forward versions and verify catalog after deployment.
+For application repositories add build/lint/typecheck, meaningful unit/contract tests, NestJS OpenAPI drift detection, restricted-runtime integration/concurrency tests, Next.js/rider journeys, secret/SAST/dependency scanning and staging deployment. A separately approved populated-database release procedure must address compatibility, locks, backups, forward fixes and catalog verification; do not revive legacy runners by assumption.
 
 Promote to prod only with owner/pharmacist/finance signoff and tested provider sandbox integration, recovery, security and operating readiness. Use short-lived cloud credentials rather than static GitHub secrets where practical. See Migration.
 
 ## Safe deploy sequence
 
-1. Obtain authorized environment and record existing SQL ledger/checksums without printing secrets.
-2. Review forward SQL migration for locks, backfills and compatibility; rehearse on a disposable restoration of appropriate sample data.
-3. Run repository `postgresql/db` or `db.ps1` commands as documented for `status`, `migrate`, `verify` using an approved connection; never run Alembic or reset production.
-4. Deploy backward-compatible NestJS API/worker version, then protected staff/customer/rider clients once contracts pass.
-5. Verify DB role grants/RLS, pharmacy/stock/payment gates, sandbox integration and operational dashboards.
-6. Record result, build hash, migration ledger, API schema and authorized release owners.
+1. Record the approved release target and verify SQL/catalog hashes without exposing credentials.
+2. For a fresh empty database, follow the canonical installation prerequisites. For populated databases, require a separate reviewed upgrade/backfill procedure and isolated rehearsal.
+3. Verify restricted capability roles, default privileges, RLS, domain guards and approved bootstrap datasets; application logins never use the installation identity.
+4. Deploy a compatible API/worker and clients only after contract, business-owner and provider gates pass.
+5. Verify pharmacy, stock, payment/COD, privacy and recovery behavior with actual execution evidence.
+6. Record build/schema hashes, observed results and accountable release approvals.
 
-A nonempty pre-Alembic managed DB needs a separate ledger-adoption plan; do not assume V0001 is safe on existing data. Any failure after real writes may need forward-fix or compensating business records rather than naive schema rollback. See Release Runbook.
+No existing database or production environment was modified during this documentation rework.
 
 ## Backup, restore and disaster recovery
 
-The master checklist states daily backups, 30-day retention, enabled point-in-time recovery, target RPO 15–30 min and RTO 1–2 h. These are decisions/targets, not evidence they have been attained on production. The DB repo includes a local synthetic ACL-preserving restore check across 266 tables, but real multi-zone RDS and encrypted S3/Rx recovery still need staging proof.
+The master checklist states daily backups, 30-day retention, enabled point-in-time recovery, target RPO 15–30 min and RTO 1–2 h. These are decisions/targets, not evidence they have been attained on production. The archived DB source describes synthetic restore checks; this rework verified empty-schema restore/catalog parity, while real data/PITR and encrypted S3/Rx recovery still need staging proof.
 
-Run restore drills on an isolated environment: validate ledger/checksums, table/row totals, FK consistency, RLS roles/default privileges, grants, SQL function/trigger behavior, file object metadata, audit/history and ability to resume provider reconciliation. Ensure replay/outbox consumers do not double charge, refund or dispatch after restoration. Test external provider outage while recovered.
+Run restore drills on an isolated environment: validate approved schema/checksums, table/row totals, FK consistency, RLS roles/default privileges, grants, SQL function/trigger behavior, file object metadata, audit/history and ability to resume provider reconciliation. Ensure replay/outbox consumers do not double charge, refund or dispatch after restoration. Test external provider outage while recovered.
 
 Record timestamp, RPO/RTO observed, loss window, approved business compensation and signoff. Never include sensitive production dump in CI artifacts. See Reliability.
 

@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart LR
- DB[SQL migrations + role policies] --> AUTH[Identity/auth]
+ DB[Standalone SQL and role policies] --> AUTH[Identity/auth]
  DB --> CAT[Catalog / approved classification]
  AUTH --> CUST[Customer profiles + patient]
  CAT --> CART[Cart / quote]

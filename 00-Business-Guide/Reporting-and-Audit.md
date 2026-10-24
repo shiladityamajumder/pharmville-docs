@@ -55,8 +55,8 @@ D-008/D-012 (financial definitions), D-013 (export/retention), D-022 (access). T
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Reporting | [HLD](../03-Modules/Reporting/HLD.md) | [LLD](../03-Modules/Reporting/LLD.md) | [API](../05-APIs/Reporting.md) | [Mapping](../04-Database/Module-Mapping.md#reporting) | [Cases](../03-Modules/Reporting/Edge-Cases.md) |
-| Audit | [HLD](../03-Modules/Audit/HLD.md) | [LLD](../03-Modules/Audit/LLD.md) | [API](../05-APIs/Audit.md) | [Mapping](../04-Database/Module-Mapping.md#audit) | [Cases](../03-Modules/Audit/Edge-Cases.md) |
+| Reporting | [HLD](../03-Modules/Reporting/HLD.md) | [LLD](../03-Modules/Reporting/LLD.md) | [API](../03-Modules/Reporting/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#reporting) | [Cases](../03-Modules/Reporting/Edge-Cases.md) |
+| Audit | [HLD](../03-Modules/Audit/HLD.md) | [LLD](../03-Modules/Audit/LLD.md) | [API](../03-Modules/Audit/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#audit) | [Cases](../03-Modules/Audit/Edge-Cases.md) |
 
 Technical workflows: [WF-012](../06-Workflows/WF-012-Report-Export-and-Audit.md).
 

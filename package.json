@@ -8,6 +8,7 @@
     "validate:api": "python3 scripts/validate-api-contracts.py",
     "validate:render": "node scripts/validate-docs.mjs --render",
     "validate:database": "node scripts/validate-database.mjs",
+    "validate:blueprint": "python3 scripts/validate-blueprint.py",
     "generate:erd": "node 04-Database/ER-Diagrams/tools/generate.mjs",
     "validate:erd": "node 04-Database/ER-Diagrams/tools/validate.mjs",
     "test:validator": "node scripts/test-validator.mjs",

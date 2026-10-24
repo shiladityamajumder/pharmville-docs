@@ -38,8 +38,8 @@
 
 ## Evidence boundary
 
-These diagrams use the catalog in the user-supplied `healthcare_db/` folder as their reference. Its migration history ends at V0030. All SQL files, the register and supporting sources are verified against [Database-Evidence.json](../../09-References/Database-Evidence.json). See [migration evidence](../Migrations.md) for provenance. No production database or shared endpoint was queried.
+These diagrams use the [validated standalone schema](../../pharmville-database/pharmville_schema.sql), with the derived register and all source checksums recorded in [evidence](../../09-References/Database-Evidence.json). No production database or shared endpoint was queried.
 
 ## Regenerate and validate
 
-From the documentation repository root, run `npm run generate:erd`, then `npm run validate:erd` and `npm run validate`. The generator uses `healthcare_db/` inside this repository by default; set `PHARMVILLE_DATABASE_SOURCE` to explicitly select another folder. Missing or changed migration/fragment, register or supporting-source checksums fail verification. Standalone Git identity is checked only when recorded; parent repository metadata is never used as source identity. Mermaid parsing is handled by the repository documentation validator.
+From the repository root, run `npm run generate:erd`, then `npm run validate:erd` and `npm run validate`. Sources are the canonical SQL and derived catalog/table register; missing or changed checksums fail verification. No legacy checkout, application models or migration runner is needed. Mermaid parsing is handled by the documentation validator.

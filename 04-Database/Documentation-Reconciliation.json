@@ -1,0 +1,15 @@
+{
+  "status": "resolved against validated effective catalog",
+  "before_field_differences": [],
+  "structural_counts": {
+    "tables": 266,
+    "columns": 4438,
+    "constraints": 3198,
+    "not_null_constraints": 2929,
+    "indexes": 1204,
+    "triggers": 879
+  },
+  "source": "pharmville-database/pharmville_schema.sql",
+  "catalog": "04-Database/Schema-Catalog.json",
+  "remaining_proposals": "Business ownership/initial datasets and future scope remain separately unapproved."
+}

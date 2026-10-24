@@ -1,70 +1,35 @@
-# Store Operations
+# Compatibility navigation
 
-[Business flow](../../00-Business-Guide/Store-and-Warehouse.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
+This document moved to the module-first source of truth. [Open the canonical document](../Store-Operations/README.md). Existing paths and section anchors remain available for wireframe and historical references.
 
-## MOD-008 — Picking, packing and store replenishment
+<a id="store-operations"></a>
 
-**Source classification:** 5 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
+[Open section](../Store-Operations/README.md#store-operations)
 
-**Purpose:** Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute.
+<a id="mod-008--picking-packing-and-store-replenishment"></a>
 
-**Feature coverage**
+[Open section](../Store-Operations/README.md#mod-008--picking-packing-and-store-replenishment)
 
-- **STO-01 / REQ-052:** Incoming order queue for my store, with sound alert (Must (draft)).
-- **STO-02 / REQ-053:** Accept order, pick list, mark packed, hand over to rider (Must (draft)).
-- **STO-03 / REQ-054:** Raise replenishment request (normal or urgent) (Must (draft)).
-- **STO-04 / REQ-055:** Confirm receipt of a transfer; record shortages (Must (draft)).
-- **STO-05 / REQ-056:** My store's stock, with low-stock and near-expiry alerts (Must (draft)).
+<a id="developer-navigation"></a>
 
-### Developer navigation
+[Open section](../Store-Operations/README.md#developer-navigation)
 
-- 🏗️ [Module HLD](HLD.md)
-- ⚙️ [Module LLD](LLD.md)
-- Internal architecture
-- 🔗 [API contracts](../../05-APIs/Store_Operations.md)
-- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
-- 🧪 [Testing](../../07-Engineering/Testing.md)
-- 🗓️ [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
+<a id="mod-008-picking-packing-and-store-replenishment--hld"></a>
 
-**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
+[Open section](../Store-Operations/README.md#mod-008-picking-packing-and-store-replenishment--hld)
 
-## MOD-008: Picking, packing and store replenishment — HLD
+<a id="major-operations"></a>
 
-> [!NOTE]
-> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+[Open section](../Store-Operations/README.md#major-operations)
 
-**Business responsibility:** Picking, packing and store replenishment. Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute.
+<a id="dependencies-and-trust-boundaries"></a>
 
-**System responsibility:** The `Store_Operations` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
+[Open section](../Store-Operations/README.md#dependencies-and-trust-boundaries)
 
-### Major operations
+<a id="risk"></a>
 
-- Incoming order queue for my store, with sound alert (`STO-01`)
-- Accept order, pick list, mark packed, hand over to rider (`STO-02`)
-- Raise replenishment request (normal or urgent) (`STO-03`)
-- Confirm receipt of a transfer; record shortages (`STO-04`)
-- My store's stock, with low-stock and near-expiry alerts (`STO-05`)
+[Open section](../Store-Operations/README.md#risk)
 
-### Dependencies and trust boundaries
+<a id="related-design-and-delivery-references"></a>
 
-- Database candidates: `fulfillment.pick_tasks`, `fulfillment.pack_tasks`, `fulfillment.packages`, `warehouse.stock_balances`, `procurement.purchase_requisitions`.
-- Role, patient, store and order scope resolved from trusted access context, not JSON body.
-- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
-- Use local transactions for authoritative state; publish external side effects only after commit.
-
-**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
-
-### Risk
-
-Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Related design and delivery references
-
-- 🏗️ [HLD](HLD.md)
-- ⚙️ [LLD](LLD.md)
-- 🧪 [Edge cases](Edge-Cases.md)
-- 🔗 [API contracts](../../05-APIs/Store_Operations.md)
-- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
-- 🧪 [QA scenarios](../../07-Engineering/Testing.md)
-- 🗓️ [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
-- End-to-end flows: [workflows](../../06-Workflows/README.md)
+[Open section](../Store-Operations/README.md#related-design-and-delivery-references)

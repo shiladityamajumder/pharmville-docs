@@ -329,6 +329,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-001
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -355,8 +356,7 @@ paths:
                   phoneNumber: '9000000000'
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access
       x-database-tables:
       - identity.otp_challenges
@@ -697,6 +697,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-002
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -724,8 +725,7 @@ paths:
                   code: '583914'
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access
       x-database-tables:
       - identity.otp_challenges
@@ -1082,6 +1082,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-003
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -1094,8 +1095,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.profiles
@@ -1493,6 +1493,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-004
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -1523,8 +1524,7 @@ paths:
                   expectedUserVersion: 1
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.profiles
@@ -1876,6 +1876,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-005
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -1888,8 +1889,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.addresses
@@ -2292,6 +2292,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-006
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -2330,8 +2331,7 @@ paths:
                   isDefault: true
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.addresses
@@ -2692,6 +2692,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-007
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -2704,8 +2705,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.family_members
@@ -3097,6 +3097,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-008
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -3124,8 +3125,7 @@ paths:
                   gender: null
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.family_members
@@ -3526,6 +3526,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-009
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -3554,8 +3555,7 @@ paths:
                   source: customer_web
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.consents
@@ -3893,6 +3893,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-005
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -3905,8 +3906,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.consents
@@ -4188,6 +4188,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-010
+      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -4200,8 +4201,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Product_Catalog
       x-database-tables:
       - catalog.categories
@@ -4484,6 +4484,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-011
+      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -4496,8 +4497,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Product_Catalog
       x-database-tables:
       - catalog.products
@@ -4816,6 +4816,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-012
+      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -4828,8 +4829,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Product_Catalog
       x-database-tables:
       - catalog.products
@@ -5191,6 +5191,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-013
+      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -5203,8 +5204,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Product_Catalog
       x-database-tables:
       - catalog.products
@@ -5518,6 +5518,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-014
+      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -5530,8 +5531,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Product_Catalog
       x-database-tables:
       - catalog.products
@@ -5978,6 +5978,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-015
+      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -6003,8 +6004,7 @@ paths:
                   fileId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Product_Catalog
       x-database-tables:
       - platform.file_objects
@@ -6430,6 +6430,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-016
+      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -6456,8 +6457,7 @@ paths:
                   reasonCode: SOURCE_CORRECTION
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Product_Catalog
       x-database-tables:
       - catalog.products
@@ -6897,6 +6897,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-017
+      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -6921,8 +6922,7 @@ paths:
                   expectedRowVersion: 1
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Product_Catalog
       x-database-tables:
       - catalog.products
@@ -7302,6 +7302,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-018
+      x-contract-document: ../03-Modules/Cart-Checkout/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -7314,8 +7315,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Cart_Checkout
       x-database-tables:
       - commerce.carts
@@ -7724,6 +7724,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-019
+      x-contract-document: ../03-Modules/Cart-Checkout/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -7751,8 +7752,7 @@ paths:
                     quantity: '2.000'
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Cart_Checkout
       x-database-tables:
       - commerce.carts
@@ -8185,6 +8185,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-020
+      x-contract-document: ../03-Modules/Cart-Checkout/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -8214,8 +8215,7 @@ paths:
                   patientId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Cart_Checkout
       x-database-tables:
       - commerce.carts
@@ -8712,6 +8712,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-021
+      x-contract-document: ../03-Modules/Cart-Checkout/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -8739,8 +8740,7 @@ paths:
                   accepted: true
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Cart_Checkout
       x-database-tables:
       - commerce.carts
@@ -9228,6 +9228,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-022
+      x-contract-document: ../03-Modules/Prescription-Management/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -9254,8 +9255,7 @@ paths:
                   expectedSizeBytes: 348220
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Prescription_Upload via platform file service
       x-database-tables:
       - platform.file_objects
@@ -9672,6 +9672,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-023
+      x-contract-document: ../03-Modules/Prescription-Management/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -9696,8 +9697,7 @@ paths:
                   uploadSessionId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Prescription_Upload
       x-database-tables:
       - platform.file_objects
@@ -10114,6 +10114,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-024
+      x-contract-document: ../03-Modules/Prescription-Management/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -10143,8 +10144,7 @@ paths:
                   expectedOrderVersion: 1
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Prescription_Upload
       x-database-tables:
       - commerce.orders
@@ -10556,6 +10556,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-025
+      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -10568,8 +10569,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Orders
       x-database-tables:
       - commerce.orders
@@ -10923,6 +10923,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-026
+      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -10935,8 +10936,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Orders
       x-database-tables:
       - commerce.orders
@@ -11358,6 +11358,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-027
+      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -11384,8 +11385,7 @@ paths:
                   reasonText: Ordered in error
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Order_Operations
       x-database-tables:
       - commerce.orders
@@ -11828,6 +11828,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-028
+      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -11856,8 +11857,7 @@ paths:
                     quantity: '2.000'
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Order_Operations
       x-database-tables:
       - commerce.orders
@@ -12260,6 +12260,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-029
+      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -12273,8 +12274,7 @@ paths:
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-proposed-response-kind: raw-file; D-024 approval required
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments
       x-database-tables:
       - commerce.orders
@@ -12668,6 +12668,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-030
+      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -12680,8 +12681,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments
       x-database-tables:
       - commerce.orders
@@ -13019,6 +13019,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-031
+      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -13031,8 +13032,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations
       x-database-tables:
       - commerce.orders
@@ -13337,6 +13337,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-032
+      x-contract-document: ../03-Modules/Admin/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -13349,8 +13350,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Admin_CMS
       x-database-tables:
       - commerce.orders
@@ -13775,6 +13775,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-033
+      x-contract-document: ../03-Modules/Admin/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -13803,8 +13804,7 @@ paths:
                   - 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access with organization membership owner
       x-database-tables:
       - identity.users
@@ -14252,6 +14252,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-034
+      x-contract-document: ../03-Modules/Admin/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -14281,8 +14282,7 @@ paths:
                   status: active
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access with organization membership owner
       x-database-tables:
       - identity.users
@@ -14642,6 +14642,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-035
+      x-contract-document: ../03-Modules/Admin/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -14654,8 +14655,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Admin_CMS
       x-database-tables:
       - platform.application_settings
@@ -15034,6 +15034,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-036
+      x-contract-document: ../03-Modules/Admin/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -15062,8 +15063,7 @@ paths:
                     expectedVersion: 4
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Admin_CMS
       x-database-tables:
       - platform.application_settings
@@ -15454,6 +15454,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-037
+      x-contract-document: ../03-Modules/Admin/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -15479,8 +15480,7 @@ paths:
                   contentVersionId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Admin_CMS
       x-database-tables:
       - platform.cms_pages
@@ -15874,6 +15874,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-038
+      x-contract-document: ../03-Modules/Admin/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -15908,8 +15909,7 @@ paths:
                   timezone: Asia/Kolkata
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Admin_CMS
       x-database-tables:
       - organization.organizations
@@ -16286,6 +16286,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-039
+      x-contract-document: ../03-Modules/Order-Management/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -16298,8 +16299,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Order_Operations
       x-database-tables:
       - commerce.orders
@@ -16681,6 +16681,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-040
+      x-contract-document: ../03-Modules/Order-Management/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -16693,8 +16694,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Order_Operations
       x-database-tables:
       - commerce.orders
@@ -17134,6 +17134,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-041
+      x-contract-document: ../03-Modules/Order-Management/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -17160,8 +17161,7 @@ paths:
                   warehouseId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Order_Operations
       x-database-tables:
       - commerce.orders
@@ -17668,6 +17668,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-042
+      x-contract-document: ../03-Modules/Order-Management/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -17695,8 +17696,7 @@ paths:
                   reasonCode: CUSTOMER_REQUEST
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Order_Operations
       x-database-tables:
       - commerce.orders
@@ -18130,6 +18130,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-043
+      x-contract-document: ../03-Modules/Order-Management/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -18158,8 +18159,7 @@ paths:
                     quantity: '2.000'
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Order_Operations
       x-database-tables:
       - commerce.orders
@@ -18568,6 +18568,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-044
+      x-contract-document: ../03-Modules/Store-Operations/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -18580,8 +18581,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Store_Operations
       x-database-tables:
       - fulfillment.fulfillment_orders
@@ -18995,6 +18995,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-045
+      x-contract-document: ../03-Modules/Store-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -19020,8 +19021,7 @@ paths:
                   expectedOrderVersion: 4
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Store_Operations
       x-database-tables:
       - fulfillment.fulfillment_orders
@@ -19504,6 +19504,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-046
+      x-contract-document: ../03-Modules/Store-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -19533,8 +19534,7 @@ paths:
                   quantity: '2.000'
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Store_Operations
       x-database-tables:
       - fulfillment.fulfillment_orders
@@ -20043,6 +20043,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-047
+      x-contract-document: ../03-Modules/Store-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -20075,8 +20076,7 @@ paths:
                       quantity: '2.000'
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Store_Operations
       x-database-tables:
       - fulfillment.fulfillment_orders
@@ -20595,6 +20595,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-048
+      x-contract-document: ../03-Modules/Store-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -20623,8 +20624,7 @@ paths:
                   requiredBy: '2026-10-26'
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Warehouse via Procurement requisition command
       x-database-tables:
       - warehouse.warehouses
@@ -21056,6 +21056,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-049
+      x-contract-document: ../03-Modules/Store-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -21083,8 +21084,7 @@ paths:
                     receivedQuantity: '2.000'
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Warehouse
       x-database-tables:
       - warehouse.stock_transfers
@@ -21452,6 +21452,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-050
+      x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -21464,8 +21465,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Inventory
       x-database-tables:
       - warehouse.stock_balances
@@ -21872,6 +21872,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-051
+      x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -21903,8 +21904,7 @@ paths:
                     onHandQuantity: '2.000'
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Inventory
       x-database-tables:
       - warehouse.stock_balances
@@ -22332,6 +22332,7 @@ paths:
       security:
       - serviceIdentity: []
       x-api-id: API-052
+      x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -22361,8 +22362,7 @@ paths:
                   expectedOrderVersion: 1
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Inventory
       x-database-tables:
       - commerce.orders
@@ -22893,6 +22893,7 @@ paths:
       security:
       - serviceIdentity: []
       x-api-id: API-053
+      x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -22921,8 +22922,7 @@ paths:
       - warehouse.stock_reservations has no reason_code column
       - Any release movement reason belongs to controlled warehouse.stock_ledger evidence
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Inventory
       x-database-tables:
       - warehouse.stock_reservations
@@ -23333,6 +23333,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-054
+      x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -23363,8 +23364,7 @@ paths:
                     quantityDelta: '-1.000'
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Inventory
       x-database-tables:
       - warehouse.inventory_lots
@@ -23741,6 +23741,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-055
+      x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -23753,8 +23754,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Inventory
       x-database-tables:
       - warehouse.stock_balances
@@ -24160,6 +24160,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-056
+      x-contract-document: ../03-Modules/Warehouse/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -24196,8 +24197,7 @@ paths:
                     qualityResult: pending
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Warehouse via Procurement receiving owner
       x-database-tables:
       - procurement.purchase_orders
@@ -24581,6 +24581,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-057
+      x-contract-document: ../03-Modules/Warehouse/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -24593,8 +24594,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Warehouse
       x-database-tables:
       - procurement.purchase_requisitions
@@ -25003,6 +25003,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-058
+      x-contract-document: ../03-Modules/Warehouse/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -25031,8 +25032,7 @@ paths:
                     expectedLotVersion: 4
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Warehouse
       x-database-tables:
       - warehouse.stock_transfers
@@ -25414,6 +25414,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-059
+      x-contract-document: ../03-Modules/Warehouse/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -25426,8 +25427,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Warehouse
       x-database-tables:
       - commerce.orders
@@ -25802,6 +25802,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-060
+      x-contract-document: ../03-Modules/Pharmacist-Review/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -25814,8 +25815,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Pharmacist_Review
       x-database-tables:
       - clinical.order_reviews
@@ -26189,6 +26189,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-061
+      x-contract-document: ../03-Modules/Pharmacist-Review/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -26201,8 +26202,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Pharmacist_Review
       x-database-tables:
       - clinical.order_reviews
@@ -26653,6 +26653,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-062
+      x-contract-document: ../03-Modules/Pharmacist-Review/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -26684,8 +26685,7 @@ paths:
                   approvedQuantity: '2.000'
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Pharmacist_Review
       x-database-tables:
       - clinical.order_reviews
@@ -27174,6 +27174,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-063
+      x-contract-document: ../03-Modules/Pharmacist-Review/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -27200,8 +27201,7 @@ paths:
                   accepted: true
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Order_Operations
       x-database-tables:
       - commerce.orders
@@ -27605,6 +27605,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-064
+      x-contract-document: ../03-Modules/Delivery/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -27617,8 +27618,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations
       x-database-tables:
       - logistics.delivery_assignments
@@ -28038,6 +28038,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-065
+      x-contract-document: ../03-Modules/Delivery/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -28063,8 +28064,7 @@ paths:
                   riderId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations
       x-database-tables:
       - logistics.delivery_assignments
@@ -28496,6 +28496,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-066
+      x-contract-document: ../03-Modules/Delivery/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -28524,8 +28525,7 @@ paths:
                   nextAttemptAt: '2026-10-24T10:30:00Z'
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations
       x-database-tables:
       - logistics.delivery_assignments
@@ -28910,6 +28910,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-067
+      x-contract-document: ../03-Modules/Delivery/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -28922,8 +28923,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments projection for Delivery_Operations
       x-database-tables:
       - payment.cod_collections
@@ -29332,6 +29332,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-068
+      x-contract-document: ../03-Modules/Delivery/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -29359,8 +29360,7 @@ paths:
                   riderRoleId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access with Delivery_Operations membership command
       x-database-tables:
       - identity.users
@@ -29782,6 +29782,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-069
+      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -29806,8 +29807,7 @@ paths:
                   action: start
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations
       x-database-tables:
       - logistics.rider_shifts
@@ -30135,6 +30135,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-070
+      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -30147,8 +30148,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations
       x-database-tables:
       - logistics.delivery_assignments
@@ -30554,6 +30554,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-071
+      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -30579,8 +30580,7 @@ paths:
                   packageId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations with Fulfillment handoff command
       x-database-tables:
       - logistics.delivery_assignments
@@ -31089,6 +31089,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-072
+      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -31117,8 +31118,7 @@ paths:
                   recordedAt: '2026-10-24T10:30:00Z'
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations
       x-database-tables:
       - logistics.delivery_assignments
@@ -31526,6 +31526,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-073
+      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -31557,8 +31558,7 @@ paths:
       - delivery_attempts supports one proof_file_id
       - COD amount is persisted by Finance; currency is derived, not stored on payment.cod_collections
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations with Finance COD command
       x-database-tables:
       - logistics.delivery_assignments
@@ -32044,6 +32044,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-074
+      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -32071,8 +32072,7 @@ paths:
                   note: Recipient could not be contacted.
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Delivery_Operations
       x-database-tables:
       - logistics.delivery_assignments
@@ -32519,6 +32519,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-075
+      x-contract-document: ../03-Modules/Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -32548,8 +32549,7 @@ paths:
                   method: online
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments
       x-database-tables:
       - commerce.orders
@@ -32994,6 +32994,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-076
+      x-contract-document: ../03-Modules/Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -33022,8 +33023,7 @@ paths:
       x-security-requirement: Verified provider signature over raw bytes; exact scheme/header contract blocked by
         D-016.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments
       x-database-tables:
       - payment.payment_webhooks
@@ -33418,6 +33418,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-077
+      x-contract-document: ../03-Modules/Payments/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -33430,8 +33431,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments
       x-database-tables:
       - payment.payment_intents
@@ -33832,6 +33832,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-078
+      x-contract-document: ../03-Modules/Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -33864,8 +33865,7 @@ paths:
       - payment.refunds links payment_transaction_id, not payment_intent_id
       - currency is derived through payment.payment_transactions to payment.payment_intents
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments
       x-database-tables:
       - payment.payment_transactions
@@ -34250,6 +34250,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-079
+      x-contract-document: ../03-Modules/Payments/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -34263,8 +34264,7 @@ paths:
       x-open-decision: 'D-008/D-016: settle-vs-reconcile dataset definition and provider report layout need Finance
         approval.'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments
       x-database-tables:
       - payment.reconciliation_runs
@@ -34653,6 +34653,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-080
+      x-contract-document: ../03-Modules/Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -34680,8 +34681,7 @@ paths:
                   - 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments
       x-database-tables:
       - payment.cod_collections
@@ -35071,6 +35071,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-081
+      x-contract-document: ../03-Modules/Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -35083,8 +35084,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Finance_Payments
       x-database-tables:
       - finance.invoices
@@ -35474,6 +35474,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-082
+      x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -35486,8 +35487,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Reporting
       x-database-tables:
       - platform.report_definitions
@@ -35840,6 +35840,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-083
+      x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -35852,8 +35853,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Reporting
       x-database-tables:
       - platform.report_definitions
@@ -36204,6 +36204,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-084
+      x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -36216,8 +36217,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Reporting
       x-database-tables:
       - platform.report_definitions
@@ -36592,6 +36592,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-085
+      x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -36604,8 +36605,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Reporting
       x-database-tables:
       - platform.report_definitions
@@ -37012,6 +37012,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-086
+      x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -37040,8 +37041,7 @@ paths:
                   format: xlsx
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Reporting
       x-database-tables:
       - platform.report_definitions
@@ -37411,6 +37411,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-087
+      x-contract-document: ../03-Modules/Audit/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -37423,8 +37424,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Audit
       x-database-tables:
       - platform.audit_logs
@@ -37805,6 +37805,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-088
+      x-contract-document: ../03-Modules/Audit/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -37834,8 +37835,7 @@ paths:
                   format: xlsx
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Audit
       x-database-tables:
       - platform.audit_logs
@@ -38162,6 +38162,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-089
+      x-contract-document: ../03-Modules/Authentication/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -38189,8 +38190,7 @@ paths:
                   password: SyntheticPasswordForExampleOnly
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access
       x-database-tables:
       - identity.users
@@ -38545,6 +38545,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-090
+      x-contract-document: ../03-Modules/Authentication/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -38571,8 +38572,7 @@ paths:
                   authenticatorCode: '583914'
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access
       x-database-tables:
       - identity.users
@@ -38943,6 +38943,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-091
+      x-contract-document: ../03-Modules/Authentication/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -38967,8 +38968,7 @@ paths:
                   refreshToken: pv_refresh_Kd9hQ7x4m2V6t8r3
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access
       x-database-tables:
       - identity.sessions
@@ -39358,6 +39358,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-092
+      x-contract-document: ../03-Modules/Authentication/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -39382,8 +39383,7 @@ paths:
                   sessionId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access
       x-database-tables:
       - identity.sessions
@@ -39705,6 +39705,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-093
+      x-contract-document: ../03-Modules/Authentication/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -39717,8 +39718,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Authentication_Access
       x-database-tables:
       - identity.user_roles
@@ -40124,6 +40124,7 @@ paths:
       security:
       - serviceIdentity: []
       x-api-id: API-094
+      x-contract-document: ../03-Modules/Notifications/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -40153,8 +40154,7 @@ paths:
                   sourceEventId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Notifications
       x-database-tables:
       - notification.templates
@@ -40546,6 +40546,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-095
+      x-contract-document: ../03-Modules/Notifications/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -40558,8 +40559,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Notifications
       x-database-tables:
       - notification.messages
@@ -40957,6 +40957,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-096
+      x-contract-document: ../03-Modules/Notifications/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -40986,8 +40987,7 @@ paths:
                   timezone: Asia/Kolkata
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Notifications
       x-database-tables:
       - notification.device_endpoints
@@ -41331,6 +41331,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-097
+      x-contract-document: ../03-Modules/Notifications/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -41343,8 +41344,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Notifications
       x-database-tables:
       - notification.messages
@@ -41751,6 +41751,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-001
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -41790,8 +41791,7 @@ paths:
                   isDefault: true
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.addresses
@@ -42233,6 +42233,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-002
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -42246,8 +42247,7 @@ paths:
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-proposed-success-status: '204'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.addresses
@@ -42650,6 +42650,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-007
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -42674,8 +42675,7 @@ paths:
                   confirmation: true
       x-proposed-success-status: '202'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts via Privacy owner command
       x-database-tables:
       - identity.users
@@ -43030,6 +43030,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-006
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -43042,8 +43043,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts via Privacy read projection
       x-database-tables:
       - compliance.privacy_requests
@@ -43438,6 +43438,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-003
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -43466,8 +43467,7 @@ paths:
                   gender: null
       x-proposed-success-status: '200'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.family_members
@@ -43886,6 +43886,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-004
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -43899,8 +43900,7 @@ paths:
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-proposed-success-status: '204'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.family_members
@@ -44232,6 +44232,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-008
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -44244,8 +44245,7 @@ paths:
       - QA lead
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.wishlists
@@ -44635,6 +44635,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-009
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -44659,8 +44660,7 @@ paths:
                   productId: 0192a1b2-c3d4-7e8f-9012-3456789abcde
       x-proposed-success-status: '201'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.wishlists
@@ -45081,6 +45081,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-010
+      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -45094,8 +45095,7 @@ paths:
       x-open-decision: D-024 approval of proposed contract; applicable domain policies remain unapproved.
       x-proposed-success-status: '204'
       x-database-evidence: Database-DTO-Mapping.md
-      x-database-evidence-status: Checked-in table documentation; proposed operation write ownership, no live SQL
-        verification.
+      x-database-evidence-status: Validated standalone SQL/catalog structure; proposed operation ownership and runtime grants remain unapproved; no production SQL verification.
       x-command-owner: Customer_Accounts
       x-database-tables:
       - customer.wishlists

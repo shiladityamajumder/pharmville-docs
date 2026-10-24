@@ -202,29 +202,29 @@ erDiagram
         bigint organization_id_internal_id FK
         uuid updated_by FK
     }
-    identity__users o|--o{ logistics__shipments : "FK-0813 FK-0828"
-    commerce__order_groups o|--o{ logistics__shipments : "FK-0818 FK-0816 FK-0817 FK-0819"
+    logistics__carrier_accounts o|--o{ logistics__shipments : "FK-0809 FK-0810"
     logistics__carriers ||--o{ logistics__shipments : "FK-0811 FK-0812"
-    commerce__orders ||--o{ logistics__shipments : "FK-0820 FK-0821"
-    logistics__carrier_accounts o|--o{ logistics__shipments : "FK-0810 FK-0809"
-    commerce__order_revisions o|--o{ logistics__shipments : "FK-0824 FK-0825"
+    identity__users o|--o{ logistics__shipments : "FK-0813 FK-0828"
     logistics__delivery_slots o|--o{ logistics__shipments : "FK-0814 FK-0815"
+    commerce__order_groups o|--o{ logistics__shipments : "FK-0816 FK-0817 FK-0818 FK-0819"
+    commerce__orders ||--o{ logistics__shipments : "FK-0820 FK-0821"
     fulfillment__packages ||--o{ logistics__shipments : "FK-0822 FK-0823"
-    platform__file_objects o|--o{ logistics__shipments : "FK-0827 FK-0826"
-    identity__users o|--o{ logistics__carrier_accounts : "FK-0747 FK-0748 FK-0749"
+    commerce__order_revisions o|--o{ logistics__shipments : "FK-0824 FK-0825"
+    platform__file_objects o|--o{ logistics__shipments : "FK-0826 FK-0827"
     logistics__carriers ||--o{ logistics__carrier_accounts : "FK-0745 FK-0746"
+    identity__users o|--o{ logistics__carrier_accounts : "FK-0747 FK-0748 FK-0749"
     identity__users o|--o{ logistics__carriers : "FK-0750 FK-0751 FK-0752"
-    identity__users o|--o{ logistics__delivery_attempts : "FK-0762 FK-0761 FK-0767"
     logistics__delivery_failure_reasons o|--o{ logistics__delivery_attempts : "FK-0760"
+    identity__users o|--o{ logistics__delivery_attempts : "FK-0761 FK-0762 FK-0767"
+    platform__file_objects o|--o{ logistics__delivery_attempts : "FK-0763 FK-0764"
     logistics__shipments ||--o{ logistics__delivery_attempts : "FK-0765 FK-0766"
-    platform__file_objects o|--o{ logistics__delivery_attempts : "FK-0764 FK-0763"
     logistics__delivery_failure_reasons o|--o{ logistics__ndr_cases : "FK-0788"
     identity__users o|--o{ logistics__ndr_cases : "FK-0789 FK-0792"
     logistics__shipments ||--o{ logistics__ndr_cases : "FK-0790 FK-0791"
     identity__users o|--o{ logistics__delivery_failure_reasons : "FK-0768 FK-0769"
     identity__users o|--o{ logistics__delivery_slots : "FK-0783 FK-0784 FK-0785"
     warehouse__warehouses o|--o{ logistics__delivery_slots : "FK-0786 FK-0787"
-    identity__users o|--o{ logistics__delivery_routes : "FK-0779 FK-0778 FK-0780"
+    identity__users o|--o{ logistics__delivery_routes : "FK-0778 FK-0779 FK-0780"
     warehouse__warehouses ||--o{ logistics__delivery_routes : "FK-0781 FK-0782"
 ```
 
@@ -378,22 +378,22 @@ erDiagram
         bigint shipping_label_file_id_internal_id FK
         uuid updated_by FK
     }
-    identity__users ||--o{ logistics__delivery_assignments : "FK-0754"
     identity__users o|--o{ logistics__delivery_assignments : "FK-0753 FK-0759"
+    identity__users ||--o{ logistics__delivery_assignments : "FK-0754"
+    logistics__delivery_routes o|--o{ logistics__delivery_assignments : "FK-0755 FK-0756"
     logistics__shipments ||--o{ logistics__delivery_assignments : "FK-0757 FK-0758"
-    logistics__delivery_routes o|--o{ logistics__delivery_assignments : "FK-0756 FK-0755"
-    logistics__shipments ||--o{ logistics__delivery_otp_challenges : "FK-0775 FK-0774"
+    logistics__shipments ||--o{ logistics__delivery_otp_challenges : "FK-0774 FK-0775"
     logistics__delivery_assignments ||--o{ logistics__delivery_otp_challenges : "FK-0776 FK-0777"
+    logistics__delivery_assignments ||--o{ logistics__delivery_location_updates : "FK-0770 FK-0771"
     identity__users ||--o{ logistics__delivery_location_updates : "FK-0772"
     logistics__rider_shifts o|--o{ logistics__delivery_location_updates : "FK-0773"
-    logistics__delivery_assignments ||--o{ logistics__delivery_location_updates : "FK-0771 FK-0770"
     identity__users ||--o{ logistics__rider_shifts : "FK-0799"
-    identity__users o|--o{ logistics__serviceability_rules : "FK-0802 FK-0803 FK-0804"
     logistics__carriers ||--o{ logistics__serviceability_rules : "FK-0800 FK-0801"
+    identity__users o|--o{ logistics__serviceability_rules : "FK-0802 FK-0803 FK-0804"
     logistics__carriers o|--o{ logistics__shipment_events : "FK-0805 FK-0806"
     logistics__shipments ||--o{ logistics__shipment_events : "FK-0807 FK-0808"
-    identity__users o|--o{ logistics__reverse_shipments : "FK-0795 FK-0798"
     logistics__carriers o|--o{ logistics__reverse_shipments : "FK-0793 FK-0794"
+    identity__users o|--o{ logistics__reverse_shipments : "FK-0795 FK-0798"
     commerce__returns ||--o{ logistics__reverse_shipments : "FK-0796 FK-0797"
 ```
 
@@ -441,4 +441,4 @@ See [WF-008](../../06-Workflows/WF-008-Rider-Assignment-and-POD.md), [WF-009](..
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/logistics/README.md) · [Customer_Orders HLD](../../03-Modules/Customer_Orders/HLD.md) · [Customer_Orders LLD](../../03-Modules/Customer_Orders/LLD.md) · [Delivery_Operations HLD](../../03-Modules/Delivery_Operations/HLD.md) · [Delivery_Operations LLD](../../03-Modules/Delivery_Operations/LLD.md) · [Rider_App HLD](../../03-Modules/Rider_App/HLD.md) · [Rider_App LLD](../../03-Modules/Rider_App/LLD.md) · [WF-008](../../06-Workflows/WF-008-Rider-Assignment-and-POD.md) · [WF-009](../../06-Workflows/WF-009-COD-Collection.md) · [WF-010](../../06-Workflows/WF-010-Cancellation-Return-and-Refund.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/logistics/README.md) · [Customer_Orders HLD](../../03-Modules/Customer-Orders/HLD.md) · [Customer_Orders LLD](../../03-Modules/Customer-Orders/LLD.md) · [Delivery_Operations HLD](../../03-Modules/Delivery/HLD.md) · [Delivery_Operations LLD](../../03-Modules/Delivery/LLD.md) · [Rider_App HLD](../../03-Modules/Rider-Operations/HLD.md) · [Rider_App LLD](../../03-Modules/Rider-Operations/LLD.md) · [WF-008](../../06-Workflows/WF-008-Rider-Assignment-and-POD.md) · [WF-009](../../06-Workflows/WF-009-COD-Collection.md) · [WF-010](../../06-Workflows/WF-010-Cancellation-Return-and-Refund.md)

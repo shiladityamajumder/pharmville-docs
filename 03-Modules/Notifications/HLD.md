@@ -61,7 +61,7 @@ Notification delivery is best effort after commit; it must never determine succe
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture
-- [API contracts](../../05-APIs/Notifications.md)
+- [API contracts](APIs.md)
 - [Database mapping](../../04-Database/Module-Mapping.md)
 - [Testing](../../07-Engineering/Testing.md)
 - [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)

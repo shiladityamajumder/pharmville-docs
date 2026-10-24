@@ -1,36 +1,44 @@
 # `clinical.practitioner_profiles`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds practitioner profiles records within the clinical domain (prescriptions and pharmacist decisions). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 21 columns, 8 constraints, 4 indexes, 3 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | clinical.practitioner_profiles |
+| Classification | Master / Reference |
+| Proposed business write owner | Pharmacist_Review |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 21 columns; 8 PK/FK/UQ/CHECK/exclusion constraints; 12 named PostgreSQL 18 NOT NULL constraints; 4 indexes; 3 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_clinical_practitioner_profiles_created_by_users) |
-| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | See exact constraints |
-| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_clinical_practitioner_profiles_deleted_by_users) |
-| `hpr_id` | `character varying(128)` | Yes | — | Identifier associated with hpr | Link the event or entity to its subject; verify constraints | See exact constraints |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | See exact constraints |
-| `practitioner_type` | `character varying(32)` | No | — | Inferred: stores practitioner type for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `profile_metadata` | `jsonb` | No | `'{}'::jsonb` | Structured profile metadata information | Retain a versioned payload or relevant details | See exact constraints |
-| `qualification` | `character varying(255)` | Yes | — | Inferred: stores qualification for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `registration_council` | `character varying(255)` | No | — | Inferred: stores registration council for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `registration_number` | `character varying(128)` | No | — | Inferred: stores registration number for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | optimistic concurrency |
-| `specialization` | `character varying(128)` | Yes | — | Inferred: stores specialization for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | See exact constraints |
-| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_clinical_practitioner_profiles_updated_by_users) |
-| `user_id` | `uuid` | No | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_clinical_practitioner_profiles_user_id_users) |
-| `verification_status` | `character varying(16)` | No | `'pending'::character varying` | Inferred: stores verification status for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `verified_at` | `timestamp with time zone` | Yes | — | Time of verified | Support chronology, deadlines or audit evidence | See exact constraints |
-| `years_of_experience` | `integer` | Yes | — | Inferred: stores years of experience for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_clinical_practitioner_profiles_created_by_users` |
+| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | Exact constraints below |
+| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_clinical_practitioner_profiles_deleted_by_users` |
+| `hpr_id` | `character varying(128)` | Yes | — | Identifier associated with hpr | Link the event or entity to its subject; verify constraints | Collation: default |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | Exact constraints below |
+| `practitioner_type` | `character varying(32)` | No | — | Inferred: stores practitioner type for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `profile_metadata` | `jsonb` | No | `'{}'::jsonb` | Structured profile metadata information | Retain a versioned payload or relevant details | Exact constraints below |
+| `qualification` | `character varying(255)` | Yes | — | Inferred: stores qualification for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `registration_council` | `character varying(255)` | No | — | Inferred: stores registration council for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `registration_number` | `character varying(128)` | No | — | Inferred: stores registration number for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | Checked positive; optimistic precondition and maintenance trigger |
+| `specialization` | `character varying(128)` | Yes | — | Inferred: stores specialization for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | Exact constraints below |
+| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_clinical_practitioner_profiles_updated_by_users` |
+| `user_id` | `uuid` | No | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_clinical_practitioner_profiles_user_id_users` |
+| `verification_status` | `character varying(16)` | No | `'pending'::character varying` | Inferred: stores verification status for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `verified_at` | `timestamp with time zone` | Yes | — | Time of verified | Support chronology, deadlines or audit evidence | Exact constraints below |
+| `years_of_experience` | `integer` | Yes | — | Inferred: stores years of experience for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
 
 ## Record lifecycle and users
 
@@ -39,29 +47,40 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `clinical.practitioner_profiles` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_clinical_practitioner_profiles_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE`
-- `created_by` → `identity.users(id)` via `fk_clinical_practitioner_profiles_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `deleted_by` → `identity.users(id)` via `fk_clinical_practitioner_profiles_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `updated_by` → `identity.users(id)` via `fk_clinical_practitioner_profiles_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_clinical_practitioner_profiles_created_by_users | `created_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_clinical_practitioner_profiles_deleted_by_users | `deleted_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_clinical_practitioner_profiles_updated_by_users | `updated_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_clinical_practitioner_profiles_user_id_users | `user_id` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE` |
 
-**Referenced by 8 FK constraints** (sample): `appointment.practitioner_services`, `appointment.appointments`, `clinical.practitioner_organizations`, `clinical.consultations`, `appointment.appointments`, `appointment.practitioner_services`, `clinical.consultations`, `clinical.practitioner_organizations`.
+### Dependent tables
+
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`appointment.appointments`](../../Tables/appointment/appointments.md) | fk_appointment_appointments_practitioner_profile_id_pra_450f | `practitioner_profile_id` | `id` |
+| [`appointment.appointments`](../../Tables/appointment/appointments.md) | fk_appointment_appointments_practitioner_profile_id_pra_e47a | `practitioner_profile_id_internal_id` | `internal_id` |
+| [`appointment.practitioner_services`](../../Tables/appointment/practitioner_services.md) | fk_appointment_practitioner_services_practitioner_profi_c30c | `practitioner_profile_id_internal_id` | `internal_id` |
+| [`appointment.practitioner_services`](../../Tables/appointment/practitioner_services.md) | fk_appointment_practitioner_services_practitioner_profi_de52 | `practitioner_profile_id` | `id` |
+| [`clinical.consultations`](../../Tables/clinical/consultations.md) | fk_clinical_consultations_practitioner_profile_id_pract_1d98 | `practitioner_profile_id` | `id` |
+| [`clinical.consultations`](../../Tables/clinical/consultations.md) | fk_clinical_consultations_practitioner_profile_id_pract_eab0 | `practitioner_profile_id_internal_id` | `internal_id` |
+| [`clinical.practitioner_organizations`](../../Tables/clinical/practitioner_organizations.md) | fk_clinical_practitioner_organizations_practitioner_pro_46c4 | `practitioner_profile_id` | `id` |
+| [`clinical.practitioner_organizations`](../../Tables/clinical/practitioner_organizations.md) | fk_clinical_practitioner_organizations_practitioner_pro_6ec9 | `practitioner_profile_id_internal_id` | `internal_id` |
 
 ## `clinical.practitioner_profiles` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 21 columns, 8 constraints, 4 indexes, 3 triggers.
 
 ### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
-| `user_id` | `identity.users` | `fk_clinical_practitioner_profiles_user_id_users` |
 | `created_by` | `identity.users` | `fk_clinical_practitioner_profiles_created_by_users` |
 | `deleted_by` | `identity.users` | `fk_clinical_practitioner_profiles_deleted_by_users` |
 | `updated_by` | `identity.users` | `fk_clinical_practitioner_profiles_updated_by_users` |
+| `user_id` | `identity.users` | `fk_clinical_practitioner_profiles_user_id_users` |
 
 ### Existing constraints
 
@@ -75,29 +94,39 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `fk_clinical_practitioner_profiles_user_id_users` | FOREIGN KEY | `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE` |
 | `pk_clinical_practitioner_profiles` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_clinical_practitioner_profiles_id` | UNIQUE | `UNIQUE (id)` |
+| `practitioner_profiles_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `practitioner_profiles_id_not_null` | NOT NULL | `NOT NULL id` |
+| `practitioner_profiles_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `practitioner_profiles_is_deleted_not_null` | NOT NULL | `NOT NULL is_deleted` |
+| `practitioner_profiles_practitioner_type_not_null` | NOT NULL | `NOT NULL practitioner_type` |
+| `practitioner_profiles_profile_metadata_not_null` | NOT NULL | `NOT NULL profile_metadata` |
+| `practitioner_profiles_registration_council_not_null` | NOT NULL | `NOT NULL registration_council` |
+| `practitioner_profiles_registration_number_not_null` | NOT NULL | `NOT NULL registration_number` |
+| `practitioner_profiles_row_version_not_null` | NOT NULL | `NOT NULL row_version` |
+| `practitioner_profiles_updated_at_not_null` | NOT NULL | `NOT NULL updated_at` |
+| `practitioner_profiles_user_id_not_null` | NOT NULL | `NOT NULL user_id` |
+| `practitioner_profiles_verification_status_not_null` | NOT NULL | `NOT NULL verification_status` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `pk_clinical_practitioner_profiles` | `CREATE UNIQUE INDEX pk_clinical_practitioner_profiles ON clinical.practitioner_profiles USING btree (internal_id)` |
-| `uq_clinical_practitioner_profiles_id` | `CREATE UNIQUE INDEX uq_clinical_practitioner_profiles_id ON clinical.practitioner_profiles USING btree (id)` |
-| `uq_clinical_practitioner_registration_active` | `CREATE UNIQUE INDEX uq_clinical_practitioner_registration_active ON clinical.practitioner_profiles USING btree (registration_number, registration_council) WHERE is_deleted = false` |
-| `uq_clinical_practitioner_user_active` | `CREATE UNIQUE INDEX uq_clinical_practitioner_user_active ON clinical.practitioner_profiles USING btree (user_id) WHERE is_deleted = false` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `pk_clinical_practitioner_profiles` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_clinical_practitioner_profiles ON clinical.practitioner_profiles USING btree (internal_id)` |
+| `uq_clinical_practitioner_profiles_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_clinical_practitioner_profiles_id ON clinical.practitioner_profiles USING btree (id)` |
+| `uq_clinical_practitioner_registration_active` | btree | `(registration_number, registration_council)` | is_deleted = false | Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_clinical_practitioner_registration_active ON clinical.practitioner_profiles USING btree (registration_number, registration_council) WHERE is_deleted = false` |
+| `uq_clinical_practitioner_user_active` | btree | `(user_id)` | is_deleted = false | Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_clinical_practitioner_user_active ON clinical.practitioner_profiles USING btree (user_id) WHERE is_deleted = false` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON clinical.practitioner_profiles FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` |
-| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON clinical.practitioner_profiles FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON clinical.practitioner_profiles FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON clinical.practitioner_profiles FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` | O |
+| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON clinical.practitioner_profiles FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON clinical.practitioner_profiles FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.
 
 ## Master-data planning
 
@@ -111,7 +140,7 @@ Application code should catch and translate database errors into safe user messa
 | Scope | User/patient-specific protected party master. |
 | Referencing tables | `appointment.appointments`, `appointment.practitioner_services`, `clinical.consultations`, `clinical.practitioner_organizations` |
 | Features | `PHM-01`, `PHM-03`, `PHM-05`, `RX-05` |
-| API consumers | [API-060](../../../05-APIs/Pharmacist_Review.md), [API-062](../../../05-APIs/Pharmacist_Review.md) |
+| API consumers | [API-060](../../../03-Modules/Pharmacist-Review/APIs.md), [API-062](../../../03-Modules/Pharmacist-Review/APIs.md) |
 
 ### Expected initial records
 

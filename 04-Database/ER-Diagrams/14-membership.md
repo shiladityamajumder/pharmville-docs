@@ -94,18 +94,18 @@ erDiagram
         uuid updated_by FK
         uuid user_id FK, UK
     }
-    identity__users ||--o{ membership__subscriptions : "FK-0897"
     identity__users o|--o{ membership__subscriptions : "FK-0891 FK-0896"
     payment__customer_payment_methods o|--o{ membership__subscriptions : "FK-0892 FK-0893"
     membership__plans ||--o{ membership__subscriptions : "FK-0894 FK-0895"
+    identity__users ||--o{ membership__subscriptions : "FK-0897"
     identity__users o|--o{ membership__plans : "FK-0888 FK-0889 FK-0890"
     identity__users o|--o{ membership__plan_benefits : "FK-0883 FK-0884 FK-0887"
     membership__plans ||--o{ membership__plan_benefits : "FK-0885 FK-0886"
     membership__plan_benefits ||--o{ membership__benefit_usage : "FK-0874 FK-0875"
-    membership__subscriptions ||--o{ membership__benefit_usage : "FK-0877 FK-0876"
-    identity__users ||--o| membership__loyalty_accounts : "FK-0880"
+    membership__subscriptions ||--o{ membership__benefit_usage : "FK-0876 FK-0877"
     identity__users o|--o{ membership__loyalty_accounts : "FK-0878 FK-0879"
-    membership__loyalty_accounts ||--o{ membership__loyalty_ledger : "FK-0882 FK-0881"
+    identity__users ||--o| membership__loyalty_accounts : "FK-0880"
+    membership__loyalty_accounts ||--o{ membership__loyalty_ledger : "FK-0881 FK-0882"
 ```
 
 **Entity name mapping**

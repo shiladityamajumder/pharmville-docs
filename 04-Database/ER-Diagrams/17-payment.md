@@ -187,28 +187,28 @@ erDiagram
     }
     payment__refund_reason_codes o|--o{ payment__refunds : "FK-1036"
     identity__users o|--o{ payment__refunds : "FK-1037 FK-1046"
-    commerce__returns o|--o{ payment__refunds : "FK-1042 FK-1043"
-    payment__payment_transactions o|--o{ payment__refunds : "FK-1041 FK-1040"
-    commerce__order_revisions o|--o{ payment__refunds : "FK-1044 FK-1045"
     commerce__orders ||--o{ payment__refunds : "FK-1038 FK-1039"
+    payment__payment_transactions o|--o{ payment__refunds : "FK-1040 FK-1041"
+    commerce__returns o|--o{ payment__refunds : "FK-1042 FK-1043"
+    commerce__order_revisions o|--o{ payment__refunds : "FK-1044 FK-1045"
     identity__users o|--o{ payment__chargebacks : "FK-0977 FK-0982"
     commerce__orders ||--o{ payment__chargebacks : "FK-0978 FK-0979"
-    payment__payment_transactions ||--o{ payment__chargebacks : "FK-0981 FK-0980"
+    payment__payment_transactions ||--o{ payment__chargebacks : "FK-0980 FK-0981"
     identity__users o|--o{ payment__refund_reason_codes : "FK-1034 FK-1035"
-    identity__users o|--o{ payment__cod_collections : "FK-0984 FK-0991 FK-0983"
+    identity__users o|--o{ payment__cod_collections : "FK-0983 FK-0984 FK-0991"
     commerce__orders ||--o{ payment__cod_collections : "FK-0985 FK-0986"
-    logistics__shipments ||--o| payment__cod_collections : "FK-0989"
     commerce__order_revisions o|--o{ payment__cod_collections : "FK-0987 FK-0988"
+    logistics__shipments ||--o| payment__cod_collections : "FK-0989"
     logistics__shipments ||--o{ payment__cod_collections : "FK-0990"
-    identity__users o|--o{ payment__payment_intents : "FK-1002 FK-1007"
-    payment__provider_accounts o|--o{ payment__payment_intents : "FK-1005 FK-1006"
     commerce__order_revisions o|--o{ payment__payment_intents : "FK-1000 FK-1001"
+    identity__users o|--o{ payment__payment_intents : "FK-1002 FK-1007"
     commerce__orders ||--o{ payment__payment_intents : "FK-1003 FK-1004"
+    payment__provider_accounts o|--o{ payment__payment_intents : "FK-1005 FK-1006"
     identity__users o|--o{ payment__provider_accounts : "FK-1014 FK-1015 FK-1016"
     identity__users o|--o{ payment__payment_attempts : "FK-0996 FK-0999"
-    payment__payment_intents ||--o{ payment__payment_attempts : "FK-0998 FK-0997"
+    payment__payment_intents ||--o{ payment__payment_attempts : "FK-0997 FK-0998"
     payment__payment_attempts o|--o{ payment__payment_transactions : "FK-1008 FK-1009"
-    payment__payment_intents ||--o{ payment__payment_transactions : "FK-1011 FK-1010"
+    payment__payment_intents ||--o{ payment__payment_transactions : "FK-1010 FK-1011"
 ```
 
 **Entity name mapping**
@@ -361,14 +361,14 @@ erDiagram
     commerce__order_items ||--o{ payment__refund_allocations : "FK-1028 FK-1029"
     payment__refunds ||--o{ payment__refund_allocations : "FK-1030 FK-1031"
     payment__refunds o|--o{ payment__refund_allocations : "FK-1032 FK-1033"
-    identity__users ||--o{ payment__customer_payment_methods : "FK-0995"
     identity__users o|--o{ payment__customer_payment_methods : "FK-0992 FK-0993 FK-0994"
+    identity__users ||--o{ payment__customer_payment_methods : "FK-0995"
     identity__users o|--o{ payment__payment_webhooks : "FK-1012 FK-1013"
     identity__users o|--o{ payment__reconciliation_items : "FK-1017 FK-1020"
-    payment__reconciliation_runs ||--o{ payment__reconciliation_items : "FK-1019 FK-1018"
+    payment__reconciliation_runs ||--o{ payment__reconciliation_items : "FK-1018 FK-1019"
+    payment__provider_accounts o|--o{ payment__reconciliation_runs : "FK-1021 FK-1022"
     identity__users o|--o{ payment__reconciliation_runs : "FK-1023 FK-1026"
-    platform__file_objects o|--o{ payment__reconciliation_runs : "FK-1025 FK-1024"
-    payment__provider_accounts o|--o{ payment__reconciliation_runs : "FK-1022 FK-1021"
+    platform__file_objects o|--o{ payment__reconciliation_runs : "FK-1024 FK-1025"
 ```
 
 **Entity name mapping**
@@ -414,4 +414,4 @@ See [WF-005](../../06-Workflows/WF-005-Payment-and-Confirmation.md), [WF-009](..
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/payment/README.md) · [Finance_Payments HLD](../../03-Modules/Finance_Payments/HLD.md) · [Finance_Payments LLD](../../03-Modules/Finance_Payments/LLD.md) · [WF-005](../../06-Workflows/WF-005-Payment-and-Confirmation.md) · [WF-009](../../06-Workflows/WF-009-COD-Collection.md) · [WF-010](../../06-Workflows/WF-010-Cancellation-Return-and-Refund.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/payment/README.md) · [Finance_Payments HLD](../../03-Modules/Payments/HLD.md) · [Finance_Payments LLD](../../03-Modules/Payments/LLD.md) · [WF-005](../../06-Workflows/WF-005-Payment-and-Confirmation.md) · [WF-009](../../06-Workflows/WF-009-COD-Collection.md) · [WF-010](../../06-Workflows/WF-010-Cancellation-Return-and-Refund.md)

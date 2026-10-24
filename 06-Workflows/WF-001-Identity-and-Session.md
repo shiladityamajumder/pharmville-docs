@@ -6,7 +6,7 @@ Status: proposed orchestration for ACC-01 and AUTH-01–AUTH-04. Customer_Accoun
 
 Initial login has no existing-session requirement. It requires a valid normalized destination or approved staff identifier and the proof required by the current role policy. MFA completion uses a purpose-bound pre-session challenge; refresh uses a refresh credential.
 
-Only protected post-login operations require an existing application session. See [authentication contracts](../05-APIs/Authentication_Access.md) and [customer contracts](../05-APIs/Customer_Accounts.md).
+Only protected post-login operations require an existing application session. See [authentication contracts](../03-Modules/Authentication/APIs.md) and [customer contracts](../03-Modules/Customer-Accounts/APIs.md).
 
 ## Normal path and transaction boundary
 
@@ -48,4 +48,4 @@ sequenceDiagram
 
 ## Required tests
 
-Link TC-ACC-01-01 through TC-ACC-01-05 in [Customer LLD](../03-Modules/Customer_Accounts/LLD.md). Also test login without an existing bearer token, MFA bypass, refresh replay, role removal during verification, rollback before credential return, missing profile name, required consent, provider fallback and redacted logs. Proposed tests are not execution evidence.
+Link TC-ACC-01-01 through TC-ACC-01-05 in [Customer LLD](../03-Modules/Customer-Accounts/LLD.md). Also test login without an existing bearer token, MFA bypass, refresh replay, role removal during verification, rollback before credential return, missing profile name, required consent, provider fallback and redacted logs. Proposed tests are not execution evidence.

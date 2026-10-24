@@ -1,25 +1,33 @@
 # `identity.login_attempts`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds login attempts records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 10 columns, 3 constraints, 4 indexes, 3 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | identity.login_attempts |
+| Classification | Audit / History |
+| Proposed business write owner | Authentication_Access |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 10 columns; 3 PK/FK/UQ/CHECK/exclusion constraints; 5 named PostgreSQL 18 NOT NULL constraints; 4 indexes; 3 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `failure_code` | `character varying(64)` | Yes | — | Code for failure | Link to controlled business classification or an external reference | See exact constraints |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `ip_address` | `inet` | Yes | — | Inferred: stores ip address for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `login_identifier_hash` | `character varying(255)` | No | — | Inferred: stores login identifier hash for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `request_id` | `uuid` | Yes | — | Identifier associated with request | Link the event or entity to its subject; verify constraints | See exact constraints |
-| `success` | `boolean` | No | — | Inferred: stores success for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `user_agent` | `text` | Yes | — | Inferred: stores user agent for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_identity_login_attempts_user_id_users) |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `failure_code` | `character varying(64)` | Yes | — | Code for failure | Link to controlled business classification or an external reference | Collation: default |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `ip_address` | `inet` | Yes | — | Inferred: stores ip address for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
+| `login_identifier_hash` | `character varying(255)` | No | — | Inferred: stores login identifier hash for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `request_id` | `uuid` | Yes | — | Identifier associated with request | Link the event or entity to its subject; verify constraints | Exact constraints below |
+| `success` | `boolean` | No | — | Inferred: stores success for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
+| `user_agent` | `text` | Yes | — | Inferred: stores user agent for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_identity_login_attempts_user_id_users` |
 
 ## Record lifecycle and users
 
@@ -28,15 +36,19 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Customer_Accounts, Admin_CMS, Rider_App, Authentication_Access. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `identity.login_attempts` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_identity_login_attempts_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_identity_login_attempts_user_id_users | `user_id` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE SET NULL` |
+
+### Dependent tables
+
+No inbound FK is present in the validated catalog.
 
 ## `identity.login_attempts` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 10 columns, 3 constraints, 4 indexes, 3 triggers.
 
 ### Existing foreign-key dependencies
 
@@ -51,26 +63,29 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `fk_identity_login_attempts_user_id_users` | FOREIGN KEY | `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE SET NULL` |
 | `pk_identity_login_attempts` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_identity_login_attempts_id` | UNIQUE | `UNIQUE (id)` |
+| `login_attempts_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `login_attempts_id_not_null` | NOT NULL | `NOT NULL id` |
+| `login_attempts_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `login_attempts_login_identifier_hash_not_null` | NOT NULL | `NOT NULL login_identifier_hash` |
+| `login_attempts_success_not_null` | NOT NULL | `NOT NULL success` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `ix_identity_login_attempts_ip_created_at` | `CREATE INDEX ix_identity_login_attempts_ip_created_at ON identity.login_attempts USING btree (ip_address, created_at)` |
-| `ix_identity_login_attempts_user_id_created_at` | `CREATE INDEX ix_identity_login_attempts_user_id_created_at ON identity.login_attempts USING btree (user_id, created_at)` |
-| `pk_identity_login_attempts` | `CREATE UNIQUE INDEX pk_identity_login_attempts ON identity.login_attempts USING btree (internal_id)` |
-| `uq_identity_login_attempts_id` | `CREATE UNIQUE INDEX uq_identity_login_attempts_id ON identity.login_attempts USING btree (id)` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `ix_identity_login_attempts_ip_created_at` | btree | `(ip_address, created_at)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_identity_login_attempts_ip_created_at ON identity.login_attempts USING btree (ip_address, created_at)` |
+| `ix_identity_login_attempts_user_id_created_at` | btree | `(user_id, created_at)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_identity_login_attempts_user_id_created_at ON identity.login_attempts USING btree (user_id, created_at)` |
+| `pk_identity_login_attempts` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_identity_login_attempts ON identity.login_attempts USING btree (internal_id)` |
+| `uq_identity_login_attempts_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_identity_login_attempts_id ON identity.login_attempts USING btree (id)` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON identity.login_attempts FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` |
-| `immutable_record_guard` | `CREATE TRIGGER immutable_record_guard BEFORE DELETE OR UPDATE ON identity.login_attempts FOR EACH ROW EXECUTE FUNCTION platform.deny_mutation()` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON identity.login_attempts FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON identity.login_attempts FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` | O |
+| `immutable_record_guard` | `CREATE TRIGGER immutable_record_guard BEFORE DELETE OR UPDATE ON identity.login_attempts FOR EACH ROW EXECUTE FUNCTION platform.deny_mutation()` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON identity.login_attempts FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.

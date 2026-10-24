@@ -20,7 +20,7 @@ Finance owns amount due, actual collection and reconciliation. Delivery supplies
 
 Candidate existing tables: `payment.cod_collections`, `payment.reconciliation_runs`, `payment.reconciliation_items`, `logistics.shipments`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-067 views handover, API-073 supplies collection evidence, API-080 reconciles. Complete deposit/approval command fields remain D-007/D-024. [Finance Payments](../05-APIs/Finance_Payments.md) · [Delivery Operations](../05-APIs/Delivery_Operations.md) · [Rider App](../05-APIs/Rider_App.md).
+Related proposed operations: API-067 views handover, API-073 supplies collection evidence, API-080 reconciles. Complete deposit/approval command fields remain D-007/D-024. [Finance Payments](../03-Modules/Payments/APIs.md) · [Delivery Operations](../03-Modules/Delivery/APIs.md) · [Rider App](../03-Modules/Rider-Operations/APIs.md).
 
 ## Sequence
 

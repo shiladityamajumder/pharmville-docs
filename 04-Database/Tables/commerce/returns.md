@@ -1,32 +1,40 @@
 # `commerce.returns`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds returns records within the commerce domain (shopping cart, checkout, order and returns). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 17 columns, 12 constraints, 5 indexes, 4 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | commerce.returns |
+| Classification | Transactional |
+| Proposed business write owner | Order_Operations |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 17 columns; 12 PK/FK/UQ/CHECK/exclusion constraints; 13 named PostgreSQL 18 NOT NULL constraints; 5 indexes; 4 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `completed_at` | `timestamp with time zone` | Yes | — | Time of completed | Support chronology, deadlines or audit evidence | See exact constraints |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_commerce_returns_created_by_users) |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `order_id` | `uuid` | No | — | Reference linking this record to orders | Ensures related business data can be joined and validated | FK → `commerce.orders` (fk_commerce_returns_order_id_orders) |
-| `order_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `commerce.orders` (fk_commerce_returns_order_id_orders_numeric); Numeric/public-key pair verification required |
-| `pickup_required` | `boolean` | No | `true` | Inferred: stores pickup required for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `reason_code` | `character varying(64)` | No | — | Reference linking this record to return reason codes | Ensures related business data can be joined and validated | FK → `commerce.return_reason_codes` (fk_commerce_returns_controlled_reason) |
-| `reason_code_id` | `bigint` | Yes | — | Reference linking this record to return reason codes | Ensures related business data can be joined and validated | FK → `commerce.return_reason_codes` (fk_commerce_returns_controlled_reason) |
-| `requested_at` | `timestamp with time zone` | No | `now()` | Time of requested | Support chronology, deadlines or audit evidence | See exact constraints |
-| `return_number` | `character varying(64)` | No | — | Inferred: stores return number for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | optimistic concurrency |
-| `status` | `character varying(32)` | No | — | Current business or processing state | Restricts and records allowed actions | See exact constraints |
-| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | See exact constraints |
-| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_commerce_returns_updated_by_users) |
-| `user_id` | `uuid` | No | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_commerce_returns_user_id_users) |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `completed_at` | `timestamp with time zone` | Yes | — | Time of completed | Support chronology, deadlines or audit evidence | Exact constraints below |
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_commerce_returns_created_by_users` |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `order_id` | `uuid` | No | — | Reference linking this record to orders | Ensures related business data can be joined and validated | FK → `commerce.orders` via `fk_commerce_returns_order_id_orders` |
+| `order_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `commerce.orders` via `fk_commerce_returns_order_id_orders_numeric` |
+| `pickup_required` | `boolean` | No | `true` | Inferred: stores pickup required for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
+| `reason_code` | `character varying(64)` | No | — | Reference linking this record to return reason codes | Ensures related business data can be joined and validated | FK → `commerce.return_reason_codes` via `fk_commerce_returns_controlled_reason`; Collation: default |
+| `reason_code_id` | `bigint` | Yes | — | Reference linking this record to return reason codes | Ensures related business data can be joined and validated | FK → `commerce.return_reason_codes` via `fk_commerce_returns_controlled_reason` |
+| `requested_at` | `timestamp with time zone` | No | `now()` | Time of requested | Support chronology, deadlines or audit evidence | Exact constraints below |
+| `return_number` | `character varying(64)` | No | — | Inferred: stores return number for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | Checked positive; optimistic precondition and maintenance trigger |
+| `status` | `character varying(32)` | No | — | Current business or processing state | Restricts and records allowed actions | Collation: default |
+| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | Exact constraints below |
+| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_commerce_returns_updated_by_users` |
+| `user_id` | `uuid` | No | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_commerce_returns_user_id_users` |
 
 ## Record lifecycle and users
 
@@ -35,33 +43,42 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review, Finance_Payments, Reporting. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `commerce.returns` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_commerce_returns_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `reason_code_id, reason_code` → `commerce.return_reason_codes(id, code)` via `fk_commerce_returns_controlled_reason`; `FOREIGN KEY (reason_code_id, reason_code) REFERENCES commerce.return_reason_codes(id, code) ON DELETE RESTRICT`
-- `created_by` → `identity.users(id)` via `fk_commerce_returns_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `updated_by` → `identity.users(id)` via `fk_commerce_returns_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `order_id` → `commerce.orders(id)` via `fk_commerce_returns_order_id_orders`; `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT`
-- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_commerce_returns_order_id_orders_numeric`; `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_commerce_returns_controlled_reason | `reason_code_id, reason_code` | [`commerce.return_reason_codes`](../../Tables/commerce/return_reason_codes.md) | `FOREIGN KEY (reason_code_id, reason_code) REFERENCES commerce.return_reason_codes(id, code) ON DELETE RESTRICT` |
+| fk_commerce_returns_created_by_users | `created_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_commerce_returns_order_id_orders | `order_id` | [`commerce.orders`](../../Tables/commerce/orders.md) | `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT` |
+| fk_commerce_returns_order_id_orders_numeric | `order_id_internal_id` | [`commerce.orders`](../../Tables/commerce/orders.md) | `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT` |
+| fk_commerce_returns_updated_by_users | `updated_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_commerce_returns_user_id_users | `user_id` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 
-**Referenced by 6 FK constraints** (sample): `commerce.return_items`, `logistics.reverse_shipments`, `payment.refunds`, `commerce.return_items`, `logistics.reverse_shipments`, `payment.refunds`.
+### Dependent tables
+
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`commerce.return_items`](../../Tables/commerce/return_items.md) | fk_commerce_return_items_return_id_returns | `return_id` | `id` |
+| [`commerce.return_items`](../../Tables/commerce/return_items.md) | fk_commerce_return_items_return_id_returns_numeric | `return_id_internal_id` | `internal_id` |
+| [`logistics.reverse_shipments`](../../Tables/logistics/reverse_shipments.md) | fk_logistics_reverse_shipments_return_id_returns | `return_id` | `id` |
+| [`logistics.reverse_shipments`](../../Tables/logistics/reverse_shipments.md) | fk_logistics_reverse_shipments_return_id_returns_numeric | `return_id_internal_id` | `internal_id` |
+| [`payment.refunds`](../../Tables/payment/refunds.md) | fk_payment_refunds_return_id_returns | `return_id` | `id` |
+| [`payment.refunds`](../../Tables/payment/refunds.md) | fk_payment_refunds_return_id_returns_numeric | `return_id_internal_id` | `internal_id` |
 
 ## `commerce.returns` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 17 columns, 12 constraints, 5 indexes, 4 triggers.
 
 ### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
-| `user_id` | `identity.users` | `fk_commerce_returns_user_id_users` |
-| `reason_code_id`, `reason_code` | `commerce.return_reason_codes` | `fk_commerce_returns_controlled_reason` |
+| `reason_code_id, reason_code` | `commerce.return_reason_codes` | `fk_commerce_returns_controlled_reason` |
 | `created_by` | `identity.users` | `fk_commerce_returns_created_by_users` |
-| `updated_by` | `identity.users` | `fk_commerce_returns_updated_by_users` |
 | `order_id` | `commerce.orders` | `fk_commerce_returns_order_id_orders` |
 | `order_id_internal_id` | `commerce.orders` | `fk_commerce_returns_order_id_orders_numeric` |
+| `updated_by` | `identity.users` | `fk_commerce_returns_updated_by_users` |
+| `user_id` | `identity.users` | `fk_commerce_returns_user_id_users` |
 
 ### Existing constraints
 
@@ -79,28 +96,39 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_commerce_returns` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `return_number` | UNIQUE | `UNIQUE (return_number)` |
 | `uq_commerce_returns_id` | UNIQUE | `UNIQUE (id)` |
+| `returns_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `returns_id_not_null` | NOT NULL | `NOT NULL id` |
+| `returns_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `returns_order_id_internal_id_not_null` | NOT NULL | `NOT NULL order_id_internal_id` |
+| `returns_order_id_not_null` | NOT NULL | `NOT NULL order_id` |
+| `returns_pickup_required_not_null` | NOT NULL | `NOT NULL pickup_required` |
+| `returns_reason_code_not_null` | NOT NULL | `NOT NULL reason_code` |
+| `returns_requested_at_not_null` | NOT NULL | `NOT NULL requested_at` |
+| `returns_return_number_not_null` | NOT NULL | `NOT NULL return_number` |
+| `returns_row_version_not_null` | NOT NULL | `NOT NULL row_version` |
+| `returns_status_not_null` | NOT NULL | `NOT NULL status` |
+| `returns_updated_at_not_null` | NOT NULL | `NOT NULL updated_at` |
+| `returns_user_id_not_null` | NOT NULL | `NOT NULL user_id` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `ix_commerce_returns_order` | `CREATE INDEX ix_commerce_returns_order ON commerce.returns USING btree (order_id)` |
-| `ix_commerce_returns_user_status` | `CREATE INDEX ix_commerce_returns_user_status ON commerce.returns USING btree (user_id, status)` |
-| `pk_commerce_returns` | `CREATE UNIQUE INDEX pk_commerce_returns ON commerce.returns USING btree (internal_id)` |
-| `return_number` | `CREATE UNIQUE INDEX return_number ON commerce.returns USING btree (return_number)` |
-| `uq_commerce_returns_id` | `CREATE UNIQUE INDEX uq_commerce_returns_id ON commerce.returns USING btree (id)` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `ix_commerce_returns_order` | btree | `(order_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_commerce_returns_order ON commerce.returns USING btree (order_id)` |
+| `ix_commerce_returns_user_status` | btree | `(user_id, status)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_commerce_returns_user_status ON commerce.returns USING btree (user_id, status)` |
+| `pk_commerce_returns` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_commerce_returns ON commerce.returns USING btree (internal_id)` |
+| `return_number` | btree | `(return_number)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX return_number ON commerce.returns USING btree (return_number)` |
+| `uq_commerce_returns_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_commerce_returns_id ON commerce.returns USING btree (id)` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON commerce.returns FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` |
-| `controlled_reason` | `CREATE TRIGGER controlled_reason BEFORE INSERT OR UPDATE ON commerce.returns FOR EACH ROW EXECUTE FUNCTION platform.normalize_reason('commerce.return_reason_codes')` |
-| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON commerce.returns FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON commerce.returns FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON commerce.returns FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` | O |
+| `controlled_reason` | `CREATE TRIGGER controlled_reason BEFORE INSERT OR UPDATE ON commerce.returns FOR EACH ROW EXECUTE FUNCTION platform.normalize_reason('commerce.return_reason_codes')` | O |
+| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON commerce.returns FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON commerce.returns FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.

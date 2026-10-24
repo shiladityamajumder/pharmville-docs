@@ -14,7 +14,7 @@
 | Tables represented as focus entities | 266 / 266 | Every table appears as a focus table once |
 | Foreign keys represented by diagram IDs and catalog rows | 1461 / 1461 | Complete in snapshot scope |
 | Tables with no declared FK | 1 | See [logical-reference review](Logical-References.md) |
-| SQLAlchemy ORM `relationship()` declarations | 0 | None found in checked-in `app/models/` |
+| SQLAlchemy ORM `relationship()` declarations | 0 | Historical scan only; archived models are not schema authority |
 | Non-FK UUID references | 29 | Classified separately; see [Logical References](Logical-References.md) |
 
 ## Schema coverage
@@ -56,8 +56,8 @@
 
 ## Evidence and limitations
 
-The generator verifies all 103 migration/fragment SQL files, the final PostgreSQL catalog register and supporting source SHA-256 hashes against [Database-Evidence.json](../../09-References/Database-Evidence.json). The user-supplied folder has 30 versioned SQL migrations, V0001–V0030, and no standalone Git metadata. Its recorded acceptance report describes isolated PostgreSQL 18 validation on 22 October 2026. Read-only validation compares 266 table pages and 4,438 columns with the catalog snapshot; it does not connect to a live database.
+The generator verifies the standalone SQL, derived catalog/table register and logical-reference decision checksums against [Database-Evidence.json](../../09-References/Database-Evidence.json). All 266 table pages and 4,438 columns are validated against the effective catalog. Private PostgreSQL fresh-install parity is recorded separately; no production connection is used.
 
-These ERDs are **complete for the catalog in the user-supplied healthcare_db folder**, whose migration history ends at V0030. The earlier claim that V0030 was removed is superseded by this supplied source. Source selection is resolved for documentation; live deployment and fresh runtime parity remain separate checks. No migration, SQLAlchemy model, or database schema was modified. No new relationship is proposed as if it were factual.
+These ERDs cover every physical foreign key in the validated effective V0030 schema. SQL installation and zero catalog differences were verified in isolated disposable databases. Future proposals, business ownership approval and production deployment are separate states. The archived migration sources and nested Git history remain intact.
 
 Potential review items are not declared defects: `platform.report_definitions` has no FK in the snapshot; polymorphic and opaque UUID references are explicitly classified and kept outside FK diagrams; and the 24 schema ownership boundaries remain candidate service ownership rather than access grants.

@@ -2,9 +2,9 @@
 
 ## Evidence and precedence
 
-The `04-Database/Tables/` catalog is the **primary available database reference** for this API design. It documents all 266 tables, including field types, nullability, defaults, primary keys, checks, unique constraints, foreign keys, indexes, and triggers. The deployment migration folder named by the database evidence manifest is absent from this workspace; the adjacent `heathcare_db/` folder did not match that manifest.
+The [standalone SQL](../pharmville-database/pharmville_schema.sql) is authoritative effective structure. The derived table catalog documents all 266 tables and exact fields/constraints/indexes/triggers; a private source-chain replay and independent SQL-only install agree across 23 catalog dimensions. See [reconciliation](../04-Database/Reconciliation.md).
 
-Therefore this document uses the checked-in table pages and module map, while deployment-source and runtime verification remain outstanding.
+Structure is validated; application ownership, runtime permissions and API behavior remain proposed. No production records or provider payloads were inspected.
 
 `04-Database/Module-Mapping.md` identifies candidate schema/module relationships and explicitly does not grant write ownership. `03-Modules/*/LLD.md` and `07-Engineering/State-and-Recovery-Contracts.md` define proposed command ownership and boundaries. Relevant `06-Workflows/` pages establish cross-module ordering.
 
@@ -258,3 +258,7 @@ The historical groups above are discovery evidence, not table grants. The comple
 | `warehouse.stock_transfer_items` | [Exact schema](../04-Database/Tables/warehouse/stock_transfer_items.md); read/write determined per operation, not schema membership. |
 | `warehouse.stock_transfers` | [Exact schema](../04-Database/Tables/warehouse/stock_transfers.md); read/write determined per operation, not schema membership. |
 | `warehouse.warehouses` | [Exact schema](../04-Database/Tables/warehouse/warehouses.md); read/write determined per operation, not schema membership. |
+
+## Rework authority update
+
+The [standalone SQL](../pharmville-database/pharmville_schema.sql) and [validated catalog](../04-Database/Schema-Catalog.json) now provide the authoritative effective structure. Both agree across a source-chain replay and independent empty-schema installation. Earlier source-unavailable statements are historical and superseded. All operation table/column references are checked against that catalog; business write ownership, application DTO approval, restricted runtime login grants and provider contracts remain Proposed.

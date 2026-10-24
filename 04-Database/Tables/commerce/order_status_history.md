@@ -1,26 +1,34 @@
 # `commerce.order_status_history`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds order status history records within the commerce domain (shopping cart, checkout, order and returns). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 11 columns, 6 constraints, 4 indexes, 3 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | commerce.order_status_history |
+| Classification | Audit / History |
+| Proposed business write owner | Order_Operations |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 11 columns; 6 PK/FK/UQ/CHECK/exclusion constraints; 7 named PostgreSQL 18 NOT NULL constraints; 4 indexes; 3 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `changed_at` | `timestamp with time zone` | No | `now()` | Time of changed | Support chronology, deadlines or audit evidence | See exact constraints |
-| `changed_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_commerce_order_status_history_changed_by_user_id_users) |
-| `comment` | `text` | Yes | — | Inferred: stores comment for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `from_status` | `character varying(32)` | Yes | — | Inferred: stores from status for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `order_id` | `uuid` | No | — | Reference linking this record to orders | Ensures related business data can be joined and validated | FK → `commerce.orders` (fk_commerce_order_status_history_order_id_orders) |
-| `order_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `commerce.orders` (fk_commerce_order_status_history_order_id_orders_numeric); Numeric/public-key pair verification required |
-| `reason_code` | `character varying(64)` | Yes | — | Code for reason | Link to controlled business classification or an external reference | See exact constraints |
-| `to_status` | `character varying(32)` | No | — | Inferred: stores to status for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `changed_at` | `timestamp with time zone` | No | `now()` | Time of changed | Support chronology, deadlines or audit evidence | Exact constraints below |
+| `changed_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_commerce_order_status_history_changed_by_user_id_users` |
+| `comment` | `text` | Yes | — | Inferred: stores comment for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `from_status` | `character varying(32)` | Yes | — | Inferred: stores from status for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `order_id` | `uuid` | No | — | Reference linking this record to orders | Ensures related business data can be joined and validated | FK → `commerce.orders` via `fk_commerce_order_status_history_order_id_orders` |
+| `order_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `commerce.orders` via `fk_commerce_order_status_history_order_id_orders_numeric` |
+| `reason_code` | `character varying(64)` | Yes | — | Code for reason | Link to controlled business classification or an external reference | Collation: default |
+| `to_status` | `character varying(32)` | No | — | Inferred: stores to status for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
 
 ## Record lifecycle and users
 
@@ -29,17 +37,21 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review, Finance_Payments, Reporting. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `commerce.order_status_history` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `changed_by_user_id` → `identity.users(id)` via `fk_commerce_order_status_history_changed_by_user_id_users`; `FOREIGN KEY (changed_by_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
-- `order_id` → `commerce.orders(id)` via `fk_commerce_order_status_history_order_id_orders`; `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE CASCADE`
-- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_commerce_order_status_history_order_id_orders_numeric`; `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE CASCADE`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_commerce_order_status_history_changed_by_user_id_users | `changed_by_user_id` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (changed_by_user_id) REFERENCES identity.users(id) ON DELETE SET NULL` |
+| fk_commerce_order_status_history_order_id_orders | `order_id` | [`commerce.orders`](../../Tables/commerce/orders.md) | `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE CASCADE` |
+| fk_commerce_order_status_history_order_id_orders_numeric | `order_id_internal_id` | [`commerce.orders`](../../Tables/commerce/orders.md) | `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE CASCADE` |
+
+### Dependent tables
+
+No inbound FK is present in the validated catalog.
 
 ## `commerce.order_status_history` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 11 columns, 6 constraints, 4 indexes, 3 triggers.
 
 ### Existing foreign-key dependencies
 
@@ -59,26 +71,31 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `fk_commerce_order_status_history_order_id_orders_numeric` | FOREIGN KEY | `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE CASCADE` |
 | `pk_commerce_order_status_history` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_commerce_order_status_history_id` | UNIQUE | `UNIQUE (id)` |
+| `order_status_history_changed_at_not_null` | NOT NULL | `NOT NULL changed_at` |
+| `order_status_history_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `order_status_history_id_not_null` | NOT NULL | `NOT NULL id` |
+| `order_status_history_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `order_status_history_order_id_internal_id_not_null` | NOT NULL | `NOT NULL order_id_internal_id` |
+| `order_status_history_order_id_not_null` | NOT NULL | `NOT NULL order_id` |
+| `order_status_history_to_status_not_null` | NOT NULL | `NOT NULL to_status` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `ix_commerce_order_status_history_actor` | `CREATE INDEX ix_commerce_order_status_history_actor ON commerce.order_status_history USING btree (changed_by_user_id)` |
-| `ix_commerce_order_status_history_order_time` | `CREATE INDEX ix_commerce_order_status_history_order_time ON commerce.order_status_history USING btree (order_id, changed_at)` |
-| `pk_commerce_order_status_history` | `CREATE UNIQUE INDEX pk_commerce_order_status_history ON commerce.order_status_history USING btree (internal_id)` |
-| `uq_commerce_order_status_history_id` | `CREATE UNIQUE INDEX uq_commerce_order_status_history_id ON commerce.order_status_history USING btree (id)` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `ix_commerce_order_status_history_actor` | btree | `(changed_by_user_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_commerce_order_status_history_actor ON commerce.order_status_history USING btree (changed_by_user_id)` |
+| `ix_commerce_order_status_history_order_time` | btree | `(order_id, changed_at)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_commerce_order_status_history_order_time ON commerce.order_status_history USING btree (order_id, changed_at)` |
+| `pk_commerce_order_status_history` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_commerce_order_status_history ON commerce.order_status_history USING btree (internal_id)` |
+| `uq_commerce_order_status_history_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_commerce_order_status_history_id ON commerce.order_status_history USING btree (id)` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON commerce.order_status_history FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` |
-| `immutable_record_guard` | `CREATE TRIGGER immutable_record_guard BEFORE DELETE OR UPDATE ON commerce.order_status_history FOR EACH ROW EXECUTE FUNCTION platform.deny_mutation()` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON commerce.order_status_history FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON commerce.order_status_history FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` | O |
+| `immutable_record_guard` | `CREATE TRIGGER immutable_record_guard BEFORE DELETE OR UPDATE ON commerce.order_status_history FOR EACH ROW EXECUTE FUNCTION platform.deny_mutation()` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON commerce.order_status_history FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["order_id","order_id_internal_id","commerce","orders"]]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.

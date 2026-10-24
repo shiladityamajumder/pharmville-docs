@@ -1,36 +1,44 @@
 # `marketplace.sellers`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds sellers records within the marketplace domain (sellers and commercial listings). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 21 columns, 13 constraints, 5 indexes, 3 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | marketplace.sellers |
+| Classification | Master / Reference |
+| Proposed business write owner | Future marketplace owner — Requires Decision D-027 |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 21 columns; 13 PK/FK/UQ/CHECK/exclusion constraints; 15 named PostgreSQL 18 NOT NULL constraints; 5 indexes; 3 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `commission_plan_id` | `uuid` | Yes | — | Reference linking this record to commission plans | Ensures related business data can be joined and validated | FK → `marketplace.commission_plans` (fk_domain_marketplace_sellers_commission_plan_id) |
-| `commission_plan_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `marketplace.commission_plans` (fk_domain_marketplace_sellers_commission_plan_id_numeric); Numeric/public-key pair verification required |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_marketplace_sellers_created_by_users) |
-| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | See exact constraints |
-| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_marketplace_sellers_deleted_by_users) |
-| `display_name` | `character varying(255)` | No | — | Inferred: stores display name for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `is_active` | `boolean` | No | `true` | Yes/no flag for is active | Control conditional business behavior | See exact constraints |
-| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | See exact constraints |
-| `organization_id` | `uuid` | No | — | Reference linking this record to organizations | Ensures related business data can be joined and validated | FK → `organization.organizations` (fk_marketplace_sellers_organization_id_organizations) |
-| `organization_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.organizations` (fk_marketplace_sellers_organization_id_organizations_numeric); Numeric/public-key pair verification required |
-| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | optimistic concurrency |
-| `seller_code` | `character varying(64)` | No | — | Code for seller | Link to controlled business classification or an external reference | See exact constraints |
-| `seller_type` | `character varying(32)` | No | — | Inferred: stores seller type for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `settlement_cycle` | `character varying(32)` | No | `'weekly'::character varying` | Inferred: stores settlement cycle for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `status` | `character varying(32)` | No | `'onboarding'::character varying` | Current business or processing state | Restricts and records allowed actions | See exact constraints |
-| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | See exact constraints |
-| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_marketplace_sellers_updated_by_users) |
-| `verification_status` | `character varying(16)` | No | `'pending'::character varying` | Inferred: stores verification status for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `commission_plan_id` | `uuid` | Yes | — | Reference linking this record to commission plans | Ensures related business data can be joined and validated | FK → `marketplace.commission_plans` via `fk_domain_marketplace_sellers_commission_plan_id` |
+| `commission_plan_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `marketplace.commission_plans` via `fk_domain_marketplace_sellers_commission_plan_id_numeric` |
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_marketplace_sellers_created_by_users` |
+| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | Exact constraints below |
+| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_marketplace_sellers_deleted_by_users` |
+| `display_name` | `character varying(255)` | No | — | Inferred: stores display name for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `is_active` | `boolean` | No | `true` | Yes/no flag for is active | Control conditional business behavior | Exact constraints below |
+| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | Exact constraints below |
+| `organization_id` | `uuid` | No | — | Reference linking this record to organizations | Ensures related business data can be joined and validated | FK → `organization.organizations` via `fk_marketplace_sellers_organization_id_organizations` |
+| `organization_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.organizations` via `fk_marketplace_sellers_organization_id_organizations_numeric` |
+| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | Checked positive; optimistic precondition and maintenance trigger |
+| `seller_code` | `character varying(64)` | No | — | Code for seller | Link to controlled business classification or an external reference | Collation: default |
+| `seller_type` | `character varying(32)` | No | — | Inferred: stores seller type for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `settlement_cycle` | `character varying(32)` | No | `'weekly'::character varying` | Inferred: stores settlement cycle for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `status` | `character varying(32)` | No | `'onboarding'::character varying` | Current business or processing state | Restricts and records allowed actions | Collation: default |
+| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | Exact constraints below |
+| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_marketplace_sellers_updated_by_users` |
+| `verification_status` | `character varying(16)` | No | `'pending'::character varying` | Inferred: stores verification status for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
 
 ## Record lifecycle and users
 
@@ -39,35 +47,64 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Product_Catalog. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `marketplace.sellers` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_marketplace_sellers_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `deleted_by` → `identity.users(id)` via `fk_marketplace_sellers_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `updated_by` → `identity.users(id)` via `fk_marketplace_sellers_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `organization_id` → `organization.organizations(id)` via `fk_marketplace_sellers_organization_id_organizations`; `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE RESTRICT`
-- `commission_plan_id` → `marketplace.commission_plans(id)` via `fk_domain_marketplace_sellers_commission_plan_id`; `FOREIGN KEY (commission_plan_id) REFERENCES marketplace.commission_plans(id) ON DELETE RESTRICT`
-- `commission_plan_id_internal_id` → `marketplace.commission_plans(internal_id)` via `fk_domain_marketplace_sellers_commission_plan_id_numeric`; `FOREIGN KEY (commission_plan_id_internal_id) REFERENCES marketplace.commission_plans(internal_id) ON DELETE RESTRICT`
-- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_marketplace_sellers_organization_id_organizations_numeric`; `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE RESTRICT`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_domain_marketplace_sellers_commission_plan_id | `commission_plan_id` | [`marketplace.commission_plans`](../../Tables/marketplace/commission_plans.md) | `FOREIGN KEY (commission_plan_id) REFERENCES marketplace.commission_plans(id) ON DELETE RESTRICT` |
+| fk_domain_marketplace_sellers_commission_plan_id_numeric | `commission_plan_id_internal_id` | [`marketplace.commission_plans`](../../Tables/marketplace/commission_plans.md) | `FOREIGN KEY (commission_plan_id_internal_id) REFERENCES marketplace.commission_plans(internal_id) ON DELETE RESTRICT` |
+| fk_marketplace_sellers_created_by_users | `created_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_marketplace_sellers_deleted_by_users | `deleted_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_marketplace_sellers_organization_id_organizations | `organization_id` | [`organization.organizations`](../../Tables/organization/organizations.md) | `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE RESTRICT` |
+| fk_marketplace_sellers_organization_id_organizations_numeric | `organization_id_internal_id` | [`organization.organizations`](../../Tables/organization/organizations.md) | `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE RESTRICT` |
+| fk_marketplace_sellers_updated_by_users | `updated_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 
-**Referenced by 26 FK constraints** (sample): `commerce.cart_items`, `commerce.order_groups`, `commerce.order_items`, `commerce.order_allocations`, `finance.invoices`, `finance.settlement_runs`, `fulfillment.fulfillment_orders`, `marketplace.seller_locations`, `marketplace.seller_product_listings`, `marketplace.seller_commission_assignments`, `marketplace.seller_ratings`, `marketplace.seller_service_levels`.
+### Dependent tables
+
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`commerce.cart_items`](../../Tables/commerce/cart_items.md) | fk_commerce_cart_items_seller_id_sellers | `seller_id` | `id` |
+| [`commerce.cart_items`](../../Tables/commerce/cart_items.md) | fk_commerce_cart_items_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`commerce.order_allocations`](../../Tables/commerce/order_allocations.md) | fk_commerce_order_allocations_seller_id_sellers | `seller_id` | `id` |
+| [`commerce.order_allocations`](../../Tables/commerce/order_allocations.md) | fk_commerce_order_allocations_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`commerce.order_groups`](../../Tables/commerce/order_groups.md) | fk_commerce_order_groups_seller_id_sellers | `seller_id` | `id` |
+| [`commerce.order_groups`](../../Tables/commerce/order_groups.md) | fk_commerce_order_groups_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`commerce.order_items`](../../Tables/commerce/order_items.md) | fk_commerce_order_items_seller_id_sellers | `seller_id` | `id` |
+| [`commerce.order_items`](../../Tables/commerce/order_items.md) | fk_commerce_order_items_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`finance.invoices`](../../Tables/finance/invoices.md) | fk_finance_invoices_seller_id_sellers | `seller_id` | `id` |
+| [`finance.invoices`](../../Tables/finance/invoices.md) | fk_finance_invoices_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`finance.settlement_runs`](../../Tables/finance/settlement_runs.md) | fk_finance_settlement_runs_seller_id_sellers | `seller_id` | `id` |
+| [`finance.settlement_runs`](../../Tables/finance/settlement_runs.md) | fk_finance_settlement_runs_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`fulfillment.fulfillment_orders`](../../Tables/fulfillment/fulfillment_orders.md) | fk_fulfillment_fulfillment_orders_seller_id_sellers | `seller_id` | `id` |
+| [`fulfillment.fulfillment_orders`](../../Tables/fulfillment/fulfillment_orders.md) | fk_fulfillment_fulfillment_orders_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`marketplace.seller_commission_assignments`](../../Tables/marketplace/seller_commission_assignments.md) | fk_marketplace_seller_commission_assignments_seller_id__c576 | `seller_id_internal_id` | `internal_id` |
+| [`marketplace.seller_commission_assignments`](../../Tables/marketplace/seller_commission_assignments.md) | fk_marketplace_seller_commission_assignments_seller_id_sellers | `seller_id` | `id` |
+| [`marketplace.seller_locations`](../../Tables/marketplace/seller_locations.md) | fk_marketplace_seller_locations_seller_id_sellers | `seller_id` | `id` |
+| [`marketplace.seller_locations`](../../Tables/marketplace/seller_locations.md) | fk_marketplace_seller_locations_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`marketplace.seller_product_listings`](../../Tables/marketplace/seller_product_listings.md) | fk_marketplace_seller_product_listings_seller_id_seller_b68d | `seller_id_internal_id` | `internal_id` |
+| [`marketplace.seller_product_listings`](../../Tables/marketplace/seller_product_listings.md) | fk_marketplace_seller_product_listings_seller_id_sellers | `seller_id` | `id` |
+| [`marketplace.seller_ratings`](../../Tables/marketplace/seller_ratings.md) | fk_marketplace_seller_ratings_seller_id_sellers | `seller_id` | `id` |
+| [`marketplace.seller_ratings`](../../Tables/marketplace/seller_ratings.md) | fk_marketplace_seller_ratings_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`marketplace.seller_service_levels`](../../Tables/marketplace/seller_service_levels.md) | fk_marketplace_seller_service_levels_seller_id_sellers | `seller_id` | `id` |
+| [`marketplace.seller_service_levels`](../../Tables/marketplace/seller_service_levels.md) | fk_marketplace_seller_service_levels_seller_id_sellers_numeric | `seller_id_internal_id` | `internal_id` |
+| [`pricing.price_books`](../../Tables/pricing/price_books.md) | fk_domain_pricing_price_books_seller_id | `seller_id` | `id` |
+| [`pricing.price_books`](../../Tables/pricing/price_books.md) | fk_domain_pricing_price_books_seller_id_numeric | `seller_id_internal_id` | `internal_id` |
 
 ## `marketplace.sellers` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 21 columns, 13 constraints, 5 indexes, 3 triggers.
 
 ### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
-| `created_by` | `identity.users` | `fk_marketplace_sellers_created_by_users` |
-| `deleted_by` | `identity.users` | `fk_marketplace_sellers_deleted_by_users` |
-| `updated_by` | `identity.users` | `fk_marketplace_sellers_updated_by_users` |
-| `organization_id` | `organization.organizations` | `fk_marketplace_sellers_organization_id_organizations` |
 | `commission_plan_id` | `marketplace.commission_plans` | `fk_domain_marketplace_sellers_commission_plan_id` |
 | `commission_plan_id_internal_id` | `marketplace.commission_plans` | `fk_domain_marketplace_sellers_commission_plan_id_numeric` |
+| `created_by` | `identity.users` | `fk_marketplace_sellers_created_by_users` |
+| `deleted_by` | `identity.users` | `fk_marketplace_sellers_deleted_by_users` |
+| `organization_id` | `organization.organizations` | `fk_marketplace_sellers_organization_id_organizations` |
 | `organization_id_internal_id` | `organization.organizations` | `fk_marketplace_sellers_organization_id_organizations_numeric` |
+| `updated_by` | `identity.users` | `fk_marketplace_sellers_updated_by_users` |
 
 ### Existing constraints
 
@@ -86,30 +123,43 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `fk_marketplace_sellers_updated_by_users` | FOREIGN KEY | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 | `pk_marketplace_sellers` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_marketplace_sellers_id` | UNIQUE | `UNIQUE (id)` |
+| `sellers_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `sellers_display_name_not_null` | NOT NULL | `NOT NULL display_name` |
+| `sellers_id_not_null` | NOT NULL | `NOT NULL id` |
+| `sellers_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `sellers_is_active_not_null` | NOT NULL | `NOT NULL is_active` |
+| `sellers_is_deleted_not_null` | NOT NULL | `NOT NULL is_deleted` |
+| `sellers_organization_id_internal_id_not_null` | NOT NULL | `NOT NULL organization_id_internal_id` |
+| `sellers_organization_id_not_null` | NOT NULL | `NOT NULL organization_id` |
+| `sellers_row_version_not_null` | NOT NULL | `NOT NULL row_version` |
+| `sellers_seller_code_not_null` | NOT NULL | `NOT NULL seller_code` |
+| `sellers_seller_type_not_null` | NOT NULL | `NOT NULL seller_type` |
+| `sellers_settlement_cycle_not_null` | NOT NULL | `NOT NULL settlement_cycle` |
+| `sellers_status_not_null` | NOT NULL | `NOT NULL status` |
+| `sellers_updated_at_not_null` | NOT NULL | `NOT NULL updated_at` |
+| `sellers_verification_status_not_null` | NOT NULL | `NOT NULL verification_status` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `ix_marketplace_sellers_organization` | `CREATE INDEX ix_marketplace_sellers_organization ON marketplace.sellers USING btree (organization_id)` |
-| `ix_marketplace_sellers_status` | `CREATE INDEX ix_marketplace_sellers_status ON marketplace.sellers USING btree (verification_status)` |
-| `pk_marketplace_sellers` | `CREATE UNIQUE INDEX pk_marketplace_sellers ON marketplace.sellers USING btree (internal_id)` |
-| `uq_marketplace_sellers_code_active` | `CREATE UNIQUE INDEX uq_marketplace_sellers_code_active ON marketplace.sellers USING btree (seller_code) WHERE is_deleted = false` |
-| `uq_marketplace_sellers_id` | `CREATE UNIQUE INDEX uq_marketplace_sellers_id ON marketplace.sellers USING btree (id)` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `ix_marketplace_sellers_organization` | btree | `(organization_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_marketplace_sellers_organization ON marketplace.sellers USING btree (organization_id)` |
+| `ix_marketplace_sellers_status` | btree | `(verification_status)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_marketplace_sellers_status ON marketplace.sellers USING btree (verification_status)` |
+| `pk_marketplace_sellers` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_marketplace_sellers ON marketplace.sellers USING btree (internal_id)` |
+| `uq_marketplace_sellers_code_active` | btree | `(seller_code)` | is_deleted = false | Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_marketplace_sellers_code_active ON marketplace.sellers USING btree (seller_code) WHERE is_deleted = false` |
+| `uq_marketplace_sellers_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_marketplace_sellers_id ON marketplace.sellers USING btree (id)` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON marketplace.sellers FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["commission_plan_id","commission_plan_id_internal_id","marketplace","commission_plans"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` |
-| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON marketplace.sellers FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON marketplace.sellers FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["commission_plan_id","commission_plan_id_internal_id","marketplace","commission_plans"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON marketplace.sellers FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["commission_plan_id","commission_plan_id_internal_id","marketplace","commission_plans"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` | O |
+| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON marketplace.sellers FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON marketplace.sellers FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["commission_plan_id","commission_plan_id_internal_id","marketplace","commission_plans"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.
 
 ## Master-data planning
 
@@ -123,7 +173,7 @@ Application code should catch and translate database errors into safe user messa
 | Scope | Organization-specific via organization_id. |
 | Referencing tables | `commerce.cart_items`, `commerce.order_allocations`, `commerce.order_groups`, `commerce.order_items`, `finance.invoices`, `finance.settlement_runs`, `fulfillment.fulfillment_orders`, `marketplace.seller_commission_assignments`, `marketplace.seller_locations`, `marketplace.seller_product_listings`, `marketplace.seller_ratings`, `marketplace.seller_service_levels`, `pricing.price_books` |
 | Features | `CAT-02`, `CHK-01`, `CHK-02`, `CHK-05`, `CHK-06`, `CHK-07`, `CHK-08`, `FIN-02`, `INV-01`, `INV-03`, `OMS-01`, `OMS-02`, `OMS-03`, `OMS-04`, `OMS-05`, `ORD-02`, `ORD-03`, `ORD-04`, `ORD-05`, `PHM-03`, `PHM-05`, `REP-01`, `REP-02`, `REP-04`, `RID-02`, `RX-04`, `RX-05`, `STO-01`, `STO-02`, `WH-04` |
-| API consumers | [API-012](../../../05-APIs/Product_Catalog.md), [API-018](../../../05-APIs/Cart_Checkout.md), [API-019](../../../05-APIs/Cart_Checkout.md), [API-020](../../../05-APIs/Cart_Checkout.md), [API-021](../../../05-APIs/Cart_Checkout.md), [API-024](../../../05-APIs/Prescription_Upload.md), [API-026](../../../05-APIs/Customer_Orders.md), [API-027](../../../05-APIs/Customer_Orders.md), [API-028](../../../05-APIs/Customer_Orders.md), [API-029](../../../05-APIs/Customer_Orders.md), [API-039](../../../05-APIs/Order_Operations.md), [API-040](../../../05-APIs/Order_Operations.md), [API-041](../../../05-APIs/Order_Operations.md), [API-042](../../../05-APIs/Order_Operations.md), [API-043](../../../05-APIs/Order_Operations.md), [API-044](../../../05-APIs/Store_Operations.md), [API-045](../../../05-APIs/Store_Operations.md), [API-046](../../../05-APIs/Store_Operations.md), [API-047](../../../05-APIs/Store_Operations.md), [API-052](../../../05-APIs/Inventory.md), [API-059](../../../05-APIs/Warehouse.md), [API-062](../../../05-APIs/Pharmacist_Review.md), [API-063](../../../05-APIs/Pharmacist_Review.md), [API-071](../../../05-APIs/Rider_App.md), [API-081](../../../05-APIs/Finance_Payments.md), [API-082](../../../05-APIs/Reporting.md), [API-083](../../../05-APIs/Reporting.md), [API-085](../../../05-APIs/Reporting.md) |
+| API consumers | [API-012](../../../03-Modules/Product-Catalog/APIs.md), [API-018](../../../03-Modules/Cart-Checkout/APIs.md), [API-019](../../../03-Modules/Cart-Checkout/APIs.md), [API-020](../../../03-Modules/Cart-Checkout/APIs.md), [API-021](../../../03-Modules/Cart-Checkout/APIs.md), [API-024](../../../03-Modules/Prescription-Management/APIs.md), [API-026](../../../03-Modules/Customer-Orders/APIs.md), [API-027](../../../03-Modules/Customer-Orders/APIs.md), [API-028](../../../03-Modules/Customer-Orders/APIs.md), [API-029](../../../03-Modules/Customer-Orders/APIs.md), [API-039](../../../03-Modules/Order-Management/APIs.md), [API-040](../../../03-Modules/Order-Management/APIs.md), [API-041](../../../03-Modules/Order-Management/APIs.md), [API-042](../../../03-Modules/Order-Management/APIs.md), [API-043](../../../03-Modules/Order-Management/APIs.md), [API-044](../../../03-Modules/Store-Operations/APIs.md), [API-045](../../../03-Modules/Store-Operations/APIs.md), [API-046](../../../03-Modules/Store-Operations/APIs.md), [API-047](../../../03-Modules/Store-Operations/APIs.md), [API-052](../../../03-Modules/Inventory/APIs.md), [API-059](../../../03-Modules/Warehouse/APIs.md), [API-062](../../../03-Modules/Pharmacist-Review/APIs.md), [API-063](../../../03-Modules/Pharmacist-Review/APIs.md), [API-071](../../../03-Modules/Rider-Operations/APIs.md), [API-081](../../../03-Modules/Payments/APIs.md), [API-082](../../../03-Modules/Reporting/APIs.md), [API-083](../../../03-Modules/Reporting/APIs.md), [API-085](../../../03-Modules/Reporting/APIs.md) |
 
 ### Expected initial records
 

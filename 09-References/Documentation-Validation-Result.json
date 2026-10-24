@@ -1,0 +1,17 @@
+{
+  "markdownFiles": 679,
+  "links": 24526,
+  "tables": 3768,
+  "diagrams": 97,
+  "parsed": 97,
+  "rendered": 0,
+  "features": 110,
+  "modules": 18,
+  "workflows": 14,
+  "apiOperations": 107,
+  "apiReferenceGaps": [],
+  "missingMappings": [],
+  "errors": [],
+  "render_validation_evidence": "Documentation-Render-Validation-Result.json",
+  "rendering_note": "Separate executed render check passed for all 97 unchanged diagram sources; this final run rechecked links and parsed all diagrams."
+}

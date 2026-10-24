@@ -6,7 +6,7 @@
 
 **Proposed technology direction (D-001/D-014):** multi-repository, modular-monolith NestJS API, Next.js/React/TypeScript web clients, PostgreSQL, Redis/BullMQ, S3, AWS Mumbai, Docker, Nginx and GitHub Actions. These are proposed design choices, not evidence a production app exists.
 
-The Python/SQLAlchemy repository is a parallel schema verification/deployment companion; its Alembic migrations must not run.
+The final database deliverable is SQL only: [pharmville_schema.sql](../pharmville-database/pharmville_schema.sql). Historical Python/models/migrations are privately archived, not deployment dependencies. Effective catalog parity was validated in isolated PostgreSQL 18.6; runtime grants and application behavior remain separate acceptance gates.
 
 ```mermaid
 flowchart TB
@@ -39,7 +39,7 @@ Riders use an Android workflow in later Phase 1 decisions, but the mobile framew
 
 All clients call REST v1 through a controlled API ingress. Session refresh and OTP login are centralized. A client supplies public UUIDs as resource locators, but backend services derive current user, location and patient scope independently. Business rules are server-side; a hidden UI control is not authorization.
 
-Database deploys independently from NestJS and Next.js using versioned SQL runners in the database repository. Python/SQLAlchemy model tooling validates database parity and is not permission to introduce a second migration authority. Staff operational and financial actions require auditable immutable business events and separate capability grants.
+The standalone schema can be installed independently into a fresh empty database without Python or migrations. Application releases must use the exact reviewed SQL/catalog contract. Existing populated-database upgrade design is a separately approved deployment concern, not provided by this empty-schema deliverable.
 
 **Delivery units:** independent repositories are a proposed preference; agree API version, shared schema migration ownership and coordinated release contracts to avoid drift. See Environments, API and Source conflicts.
 
@@ -99,7 +99,7 @@ See Threat Model, Auth flows and Audit.
 
 ## PostgreSQL architecture and identity strategy
 
-**Supplied database source:** the user-selected `healthcare_db/postgresql/migrations/` history is the documentation baseline; historical Alembic execution is frozen. Its recorded local PostgreSQL 18 evidence describes 24 schemas, 266 tables, 4,438 columns, 1,461 FKs, 1,204 indexes, 56 functions, 879 triggers and 3 RLS policies. PostgreSQL 15 hosted validation and production authorization remain unproven.
+**Canonical database source:** [standalone SQL](../pharmville-database/pharmville_schema.sql), reconstructed through V0030 and verified with zero structural differences in isolated PostgreSQL. The private legacy archive preserves source/history. See [installation](../04-Database/Installation.md) and [module boundaries](Module-Boundaries.md).
 
 **Primary keys:** `identity.users.id` is UUID; 257 older entity tables use BIGINT `internal_id` as their primary key with original immutable UNIQUE public UUID `id`; eight newer tables use BIGINT `id` identity PK. Key crosswalks and paired numeric FKs preserve existing public contracts.
 

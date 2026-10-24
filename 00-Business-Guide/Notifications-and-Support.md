@@ -59,7 +59,7 @@ D-013 (privacy/preferences), D-014/D-016 (providers), D-020 (support ownership a
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Notifications | [HLD](../03-Modules/Notifications/HLD.md) | [LLD](../03-Modules/Notifications/LLD.md) | [API](../05-APIs/Notifications.md) | [Mapping](../04-Database/Module-Mapping.md#notifications) | [Cases](../03-Modules/Notifications/Edge-Cases.md) |
+| Notifications | [HLD](../03-Modules/Notifications/HLD.md) | [LLD](../03-Modules/Notifications/LLD.md) | [API](../03-Modules/Notifications/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#notifications) | [Cases](../03-Modules/Notifications/Edge-Cases.md) |
 
 Technical workflows: [WF-001](../06-Workflows/WF-001-Identity-and-Session.md) · [WF-005](../06-Workflows/WF-005-Payment-and-Confirmation.md) · [WF-008](../06-Workflows/WF-008-Rider-Assignment-and-POD.md) · [WF-013](../06-Workflows/WF-013-Customer-Support-Triage.md).
 

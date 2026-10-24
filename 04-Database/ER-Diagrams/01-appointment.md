@@ -164,28 +164,28 @@ erDiagram
     }
     identity__users ||--o{ appointment__appointments : "FK-0008"
     identity__users o|--o{ appointment__appointments : "FK-0009 FK-0018"
+    clinical__patient_profiles ||--o{ appointment__appointments : "FK-0010 FK-0011"
     clinical__practitioner_profiles ||--o{ appointment__appointments : "FK-0012 FK-0013"
     appointment__practitioner_services ||--o{ appointment__appointments : "FK-0014 FK-0015"
     appointment__appointment_slots o|--o{ appointment__appointments : "FK-0016 FK-0017"
-    clinical__patient_profiles ||--o{ appointment__appointments : "FK-0011 FK-0010"
     identity__users o|--o{ appointment__appointment_slots : "FK-0001 FK-0004"
-    appointment__practitioner_services ||--o{ appointment__appointment_slots : "FK-0003 FK-0002"
+    appointment__practitioner_services ||--o{ appointment__appointment_slots : "FK-0002 FK-0003"
     identity__users o|--o{ appointment__availability_rules : "FK-0023 FK-0024 FK-0027"
-    appointment__practitioner_services ||--o{ appointment__availability_rules : "FK-0026 FK-0025"
+    appointment__practitioner_services ||--o{ appointment__availability_rules : "FK-0025 FK-0026"
     identity__users o|--o{ appointment__availability_exceptions : "FK-0019 FK-0022"
     appointment__practitioner_services ||--o{ appointment__availability_exceptions : "FK-0020 FK-0021"
     identity__users o|--o{ appointment__appointment_status_history : "FK-0005"
     appointment__appointments ||--o{ appointment__appointment_status_history : "FK-0006 FK-0007"
     identity__users o|--o{ appointment__practitioner_services : "FK-0028 FK-0029 FK-0038"
-    appointment__service_types ||--o{ appointment__practitioner_services : "FK-0037 FK-0036"
-    clinical__practitioner_profiles ||--o{ appointment__practitioner_services : "FK-0035 FK-0034"
-    organization__locations o|--o{ appointment__practitioner_services : "FK-0031 FK-0030"
+    organization__locations o|--o{ appointment__practitioner_services : "FK-0030 FK-0031"
     organization__organizations o|--o{ appointment__practitioner_services : "FK-0032 FK-0033"
+    clinical__practitioner_profiles ||--o{ appointment__practitioner_services : "FK-0034 FK-0035"
+    appointment__service_types ||--o{ appointment__practitioner_services : "FK-0036 FK-0037"
     identity__users o|--o{ appointment__service_types : "FK-0039 FK-0040 FK-0041"
-    identity__users o|--o{ appointment__teleconsultation_sessions : "FK-0044 FK-0047"
-    appointment__appointments ||--o| appointment__teleconsultation_sessions : "FK-0043"
-    platform__file_objects o|--o{ appointment__teleconsultation_sessions : "FK-0045 FK-0046"
     appointment__appointments ||--o{ appointment__teleconsultation_sessions : "FK-0042"
+    appointment__appointments ||--o| appointment__teleconsultation_sessions : "FK-0043"
+    identity__users o|--o{ appointment__teleconsultation_sessions : "FK-0044 FK-0047"
+    platform__file_objects o|--o{ appointment__teleconsultation_sessions : "FK-0045 FK-0046"
 ```
 
 **Entity name mapping**
@@ -239,7 +239,7 @@ erDiagram
         uuid id UK
         bigint internal_id PK, UK
     }
-    appointment__appointments ||--o{ appointment__waiting_room_events : "FK-0049 FK-0048"
+    appointment__appointments ||--o{ appointment__waiting_room_events : "FK-0048 FK-0049"
 ```
 
 **Entity name mapping**

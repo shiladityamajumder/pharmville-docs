@@ -56,8 +56,8 @@ D-003 (login), D-013 (consent and retention), D-023 (contact changes). The [deci
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Customer Accounts | [HLD](../03-Modules/Customer_Accounts/HLD.md) | [LLD](../03-Modules/Customer_Accounts/LLD.md) | [API](../05-APIs/Customer_Accounts.md) | [Mapping](../04-Database/Module-Mapping.md#customer-accounts) | [Cases](../03-Modules/Customer_Accounts/Edge-Cases.md) |
-| Authentication Access | [HLD](../03-Modules/Authentication_Access/HLD.md) | [LLD](../03-Modules/Authentication_Access/LLD.md) | [API](../05-APIs/Authentication_Access.md) | [Mapping](../04-Database/Module-Mapping.md#authentication-access) | [Cases](../03-Modules/Authentication_Access/Edge-Cases.md) |
+| Customer Accounts | [HLD](../03-Modules/Customer-Accounts/HLD.md) | [LLD](../03-Modules/Customer-Accounts/LLD.md) | [API](../03-Modules/Customer-Accounts/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#customer-accounts) | [Cases](../03-Modules/Customer-Accounts/Edge-Cases.md) |
+| Authentication Access | [HLD](../03-Modules/Authentication/HLD.md) | [LLD](../03-Modules/Authentication/LLD.md) | [API](../03-Modules/Authentication/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#authentication-access) | [Cases](../03-Modules/Authentication/Edge-Cases.md) |
 
 Technical workflows: [WF-001](../06-Workflows/WF-001-Identity-and-Session.md).
 

@@ -56,8 +56,8 @@ D-004 (payment/cancellation), D-009 (site eligibility), D-010 (partial supply/re
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Customer Orders | [HLD](../03-Modules/Customer_Orders/HLD.md) | [LLD](../03-Modules/Customer_Orders/LLD.md) | [API](../05-APIs/Customer_Orders.md) | [Mapping](../04-Database/Module-Mapping.md#customer-orders) | [Cases](../03-Modules/Customer_Orders/Edge-Cases.md) |
-| Order Operations | [HLD](../03-Modules/Order_Operations/HLD.md) | [LLD](../03-Modules/Order_Operations/LLD.md) | [API](../05-APIs/Order_Operations.md) | [Mapping](../04-Database/Module-Mapping.md#order-operations) | [Cases](../03-Modules/Order_Operations/Edge-Cases.md) |
+| Customer Orders | [HLD](../03-Modules/Customer-Orders/HLD.md) | [LLD](../03-Modules/Customer-Orders/LLD.md) | [API](../03-Modules/Customer-Orders/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#customer-orders) | [Cases](../03-Modules/Customer-Orders/Edge-Cases.md) |
+| Order Operations | [HLD](../03-Modules/Order-Management/HLD.md) | [LLD](../03-Modules/Order-Management/LLD.md) | [API](../03-Modules/Order-Management/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#order-operations) | [Cases](../03-Modules/Order-Management/Edge-Cases.md) |
 
 Technical workflows: [WF-005](../06-Workflows/WF-005-Payment-and-Confirmation.md) · [WF-006](../06-Workflows/WF-006-Licensed-Site-Allocation.md) · [WF-007](../06-Workflows/WF-007-Picking-Packing-and-Handoff.md) · [WF-008](../06-Workflows/WF-008-Rider-Assignment-and-POD.md) · [WF-010](../06-Workflows/WF-010-Cancellation-Return-and-Refund.md).
 

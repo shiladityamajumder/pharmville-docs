@@ -130,21 +130,21 @@ erDiagram
         uuid updated_by FK
         uuid uploaded_by_user_id FK
     }
-    identity__users o|--o{ notification__messages : "FK-0922 FK-0916 FK-0921"
+    identity__users o|--o{ notification__messages : "FK-0916 FK-0921 FK-0922"
     notification__provider_configurations o|--o{ notification__messages : "FK-0917 FK-0918"
     notification__templates o|--o{ notification__messages : "FK-0919 FK-0920"
     identity__users o|--o{ notification__provider_configurations : "FK-0923 FK-0924 FK-0925"
     identity__users o|--o{ notification__templates : "FK-0931 FK-0932 FK-0933"
     identity__users o|--o{ notification__message_attachments : "FK-0908 FK-0913"
+    platform__file_objects ||--o{ notification__message_attachments : "FK-0909 FK-0910"
     notification__messages ||--o{ notification__message_attachments : "FK-0911 FK-0912"
-    platform__file_objects ||--o{ notification__message_attachments : "FK-0910 FK-0909"
-    identity__users ||--o{ notification__in_app_notifications : "FK-0907"
     identity__users o|--o{ notification__in_app_notifications : "FK-0902 FK-0903 FK-0906"
-    platform__file_objects o|--o{ notification__in_app_notifications : "FK-0905 FK-0904"
-    identity__users ||--o{ notification__device_endpoints : "FK-0901"
+    platform__file_objects o|--o{ notification__in_app_notifications : "FK-0904 FK-0905"
+    identity__users ||--o{ notification__in_app_notifications : "FK-0907"
     identity__users o|--o{ notification__device_endpoints : "FK-0898 FK-0899 FK-0900"
-    identity__users ||--o{ notification__user_channel_preferences : "FK-0937"
+    identity__users ||--o{ notification__device_endpoints : "FK-0901"
     identity__users o|--o{ notification__user_channel_preferences : "FK-0934 FK-0935 FK-0936"
+    identity__users ||--o{ notification__user_channel_preferences : "FK-0937"
     identity__users o|--o{ notification__suppressions : "FK-0928 FK-0929 FK-0930"
 ```
 
@@ -247,4 +247,4 @@ No dedicated workflow from the 14 documented workflows is mapped to this schema.
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/notification/README.md) · [Notifications HLD](../../03-Modules/Notifications/HLD.md) · [Notifications LLD](../../03-Modules/Notifications/LLD.md) · [Rider_App HLD](../../03-Modules/Rider_App/HLD.md) · [Rider_App LLD](../../03-Modules/Rider_App/LLD.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/notification/README.md) · [Notifications HLD](../../03-Modules/Notifications/HLD.md) · [Notifications LLD](../../03-Modules/Notifications/LLD.md) · [Rider_App HLD](../../03-Modules/Rider-Operations/HLD.md) · [Rider_App LLD](../../03-Modules/Rider-Operations/LLD.md)

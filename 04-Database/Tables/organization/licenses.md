@@ -1,37 +1,45 @@
 # `organization.licenses`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds licenses records within the organization domain (operating companies, sites and licenses). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 22 columns, 19 constraints, 6 indexes, 4 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | organization.licenses |
+| Classification | Transactional |
+| Proposed business write owner | Admin_CMS |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 22 columns; 19 PK/FK/UQ/CHECK/exclusion constraints; 11 named PostgreSQL 18 NOT NULL constraints; 6 indexes; 4 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_organization_licenses_created_by_users) |
-| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | See exact constraints |
-| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_organization_licenses_deleted_by_users) |
-| `document_file_id` | `uuid` | Yes | — | Reference linking this record to file objects | Ensures related business data can be joined and validated | FK → `platform.file_objects` (fk_organization_licenses_document_file_id_file_objects) |
-| `document_file_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `platform.file_objects` (fk_organization_licenses_document_file_id_file_objects_numeric); Numeric/public-key pair verification required |
-| `expires_at` | `date` | Yes | — | Expiration time | Determine validity windows | See exact constraints |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | See exact constraints |
-| `issued_at` | `date` | Yes | — | Time of issued | Support chronology, deadlines or audit evidence | See exact constraints |
-| `issued_by` | `character varying(255)` | Yes | — | Actor associated with issued | Record responsibility for the change | See exact constraints |
-| `license_number` | `character varying(128)` | No | — | Inferred: stores license number for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `license_type` | `character varying(64)` | No | — | Inferred: stores license type for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `location_id` | `uuid` | Yes | — | Reference linking this record to locations | Ensures related business data can be joined and validated | FK → `organization.locations` (fk_organization_licenses_location_id_locations) |
-| `location_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.locations` (fk_organization_licenses_location_id_locations_numeric); Numeric/public-key pair verification required |
-| `organization_id` | `uuid` | No | — | Reference linking this record to organizations | Ensures related business data can be joined and validated | FK → `organization.organizations` (fk_organization_licenses_organization_id_organizations) |
-| `organization_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.organizations` (fk_organization_licenses_organization_id_organizations_numeric); Numeric/public-key pair verification required |
-| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | optimistic concurrency |
-| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | See exact constraints |
-| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_organization_licenses_updated_by_users) |
-| `verification_status` | `character varying(16)` | No | `'pending'::character varying` | Inferred: stores verification status for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_organization_licenses_created_by_users` |
+| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | Exact constraints below |
+| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_organization_licenses_deleted_by_users` |
+| `document_file_id` | `uuid` | Yes | — | Reference linking this record to file objects | Ensures related business data can be joined and validated | FK → `platform.file_objects` via `fk_organization_licenses_document_file_id_file_objects` |
+| `document_file_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `platform.file_objects` via `fk_organization_licenses_document_file_id_file_objects_numeric` |
+| `expires_at` | `date` | Yes | — | Expiration time | Determine validity windows | Exact constraints below |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | Exact constraints below |
+| `issued_at` | `date` | Yes | — | Time of issued | Support chronology, deadlines or audit evidence | Exact constraints below |
+| `issued_by` | `character varying(255)` | Yes | — | Actor associated with issued | Record responsibility for the change | Collation: default |
+| `license_number` | `character varying(128)` | No | — | Inferred: stores license number for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `license_type` | `character varying(64)` | No | — | Inferred: stores license type for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `location_id` | `uuid` | Yes | — | Reference linking this record to locations | Ensures related business data can be joined and validated | FK → `organization.locations` via `fk_organization_licenses_location_id_locations` |
+| `location_id_internal_id` | `bigint` | Yes | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.locations` via `fk_organization_licenses_location_id_locations_numeric` |
+| `organization_id` | `uuid` | No | — | Reference linking this record to organizations | Ensures related business data can be joined and validated | FK → `organization.organizations` via `fk_organization_licenses_organization_id_organizations` |
+| `organization_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.organizations` via `fk_organization_licenses_organization_id_organizations_numeric` |
+| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | Checked positive; optimistic precondition and maintenance trigger |
+| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | Exact constraints below |
+| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_organization_licenses_updated_by_users` |
+| `verification_status` | `character varying(16)` | No | `'pending'::character varying` | Inferred: stores verification status for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
 
 ## Record lifecycle and users
 
@@ -40,25 +48,30 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Admin_CMS, Order_Operations, Delivery_Operations, Authentication_Access. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `organization.licenses` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_organization_licenses_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `deleted_by` → `identity.users(id)` via `fk_organization_licenses_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `updated_by` → `identity.users(id)` via `fk_organization_licenses_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `organization_id` → `organization.organizations(id)` via `fk_organization_licenses_organization_id_organizations`; `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE`
-- `document_file_id` → `platform.file_objects(id)` via `fk_organization_licenses_document_file_id_file_objects`; `FOREIGN KEY (document_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL`
-- `location_id` → `organization.locations(id)` via `fk_organization_licenses_location_id_locations`; `FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE SET NULL`
-- `document_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_organization_licenses_document_file_id_file_objects_numeric`; `FOREIGN KEY (document_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL`
-- `location_id_internal_id` → `organization.locations(internal_id)` via `fk_organization_licenses_location_id_locations_numeric`; `FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE SET NULL`
-- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_organization_licenses_organization_id_organizations_numeric`; `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_organization_licenses_created_by_users | `created_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_organization_licenses_deleted_by_users | `deleted_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_organization_licenses_document_file_id_file_objects | `document_file_id` | [`platform.file_objects`](../../Tables/platform/file_objects.md) | `FOREIGN KEY (document_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL` |
+| fk_organization_licenses_document_file_id_file_objects_numeric | `document_file_id_internal_id` | [`platform.file_objects`](../../Tables/platform/file_objects.md) | `FOREIGN KEY (document_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL` |
+| fk_organization_licenses_location_id_locations | `location_id` | [`organization.locations`](../../Tables/organization/locations.md) | `FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE SET NULL` |
+| fk_organization_licenses_location_id_locations_numeric | `location_id_internal_id` | [`organization.locations`](../../Tables/organization/locations.md) | `FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE SET NULL` |
+| fk_organization_licenses_organization_id_organizations | `organization_id` | [`organization.organizations`](../../Tables/organization/organizations.md) | `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE` |
+| fk_organization_licenses_organization_id_organizations_numeric | `organization_id_internal_id` | [`organization.organizations`](../../Tables/organization/organizations.md) | `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE` |
+| fk_organization_licenses_updated_by_users | `updated_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 
-**Referenced by 2 FK constraints** (sample): `marketplace.seller_locations`, `marketplace.seller_locations`.
+### Dependent tables
+
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`marketplace.seller_locations`](../../Tables/marketplace/seller_locations.md) | fk_marketplace_seller_locations_license_id_licenses | `license_id` | `id` |
+| [`marketplace.seller_locations`](../../Tables/marketplace/seller_locations.md) | fk_marketplace_seller_locations_license_id_licenses_numeric | `license_id_internal_id` | `internal_id` |
 
 ## `organization.licenses` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 22 columns, 19 constraints, 6 indexes, 4 triggers.
 
 ### Existing foreign-key dependencies
 
@@ -66,13 +79,13 @@ Schema contract and field explanations from the documentation catalog. The datab
 | --- | --- | --- |
 | `created_by` | `identity.users` | `fk_organization_licenses_created_by_users` |
 | `deleted_by` | `identity.users` | `fk_organization_licenses_deleted_by_users` |
-| `updated_by` | `identity.users` | `fk_organization_licenses_updated_by_users` |
-| `organization_id` | `organization.organizations` | `fk_organization_licenses_organization_id_organizations` |
 | `document_file_id` | `platform.file_objects` | `fk_organization_licenses_document_file_id_file_objects` |
-| `location_id` | `organization.locations` | `fk_organization_licenses_location_id_locations` |
 | `document_file_id_internal_id` | `platform.file_objects` | `fk_organization_licenses_document_file_id_file_objects_numeric` |
+| `location_id` | `organization.locations` | `fk_organization_licenses_location_id_locations` |
 | `location_id_internal_id` | `organization.locations` | `fk_organization_licenses_location_id_locations_numeric` |
+| `organization_id` | `organization.organizations` | `fk_organization_licenses_organization_id_organizations` |
 | `organization_id_internal_id` | `organization.organizations` | `fk_organization_licenses_organization_id_organizations_numeric` |
+| `updated_by` | `identity.users` | `fk_organization_licenses_updated_by_users` |
 
 ### Existing constraints
 
@@ -97,29 +110,38 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `license_type_number` | UNIQUE | `UNIQUE (license_type, license_number)` |
 | `pk_organization_licenses` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_organization_licenses_id` | UNIQUE | `UNIQUE (id)` |
+| `licenses_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `licenses_id_not_null` | NOT NULL | `NOT NULL id` |
+| `licenses_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `licenses_is_deleted_not_null` | NOT NULL | `NOT NULL is_deleted` |
+| `licenses_license_number_not_null` | NOT NULL | `NOT NULL license_number` |
+| `licenses_license_type_not_null` | NOT NULL | `NOT NULL license_type` |
+| `licenses_organization_id_internal_id_not_null` | NOT NULL | `NOT NULL organization_id_internal_id` |
+| `licenses_organization_id_not_null` | NOT NULL | `NOT NULL organization_id` |
+| `licenses_row_version_not_null` | NOT NULL | `NOT NULL row_version` |
+| `licenses_updated_at_not_null` | NOT NULL | `NOT NULL updated_at` |
+| `licenses_verification_status_not_null` | NOT NULL | `NOT NULL verification_status` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `ix_organization_licenses_expires_at` | `CREATE INDEX ix_organization_licenses_expires_at ON organization.licenses USING btree (expires_at)` |
-| `ix_organization_licenses_location_id` | `CREATE INDEX ix_organization_licenses_location_id ON organization.licenses USING btree (location_id)` |
-| `ix_organization_licenses_organization_id` | `CREATE INDEX ix_organization_licenses_organization_id ON organization.licenses USING btree (organization_id)` |
-| `license_type_number` | `CREATE UNIQUE INDEX license_type_number ON organization.licenses USING btree (license_type, license_number)` |
-| `pk_organization_licenses` | `CREATE UNIQUE INDEX pk_organization_licenses ON organization.licenses USING btree (internal_id)` |
-| `uq_organization_licenses_id` | `CREATE UNIQUE INDEX uq_organization_licenses_id ON organization.licenses USING btree (id)` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `ix_organization_licenses_expires_at` | btree | `(expires_at)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_organization_licenses_expires_at ON organization.licenses USING btree (expires_at)` |
+| `ix_organization_licenses_location_id` | btree | `(location_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_organization_licenses_location_id ON organization.licenses USING btree (location_id)` |
+| `ix_organization_licenses_organization_id` | btree | `(organization_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_organization_licenses_organization_id ON organization.licenses USING btree (organization_id)` |
+| `license_type_number` | btree | `(license_type, license_number)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX license_type_number ON organization.licenses USING btree (license_type, license_number)` |
+| `pk_organization_licenses` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_organization_licenses ON organization.licenses USING btree (internal_id)` |
+| `uq_organization_licenses_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_organization_licenses_id ON organization.licenses USING btree (id)` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON organization.licenses FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["document_file_id","document_file_id_internal_id","platform","file_objects"],["location_id","location_id_internal_id","organization","locations"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` |
-| `stable_code_guard` | `CREATE TRIGGER stable_code_guard BEFORE INSERT OR DELETE OR UPDATE ON organization.licenses FOR EACH ROW EXECUTE FUNCTION platform.guard_stable_code('license_number', '["license_type"]')` |
-| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON organization.licenses FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON organization.licenses FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["document_file_id","document_file_id_internal_id","platform","file_objects"],["location_id","location_id_internal_id","organization","locations"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON organization.licenses FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["document_file_id","document_file_id_internal_id","platform","file_objects"],["location_id","location_id_internal_id","organization","locations"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` | O |
+| `stable_code_guard` | `CREATE TRIGGER stable_code_guard BEFORE INSERT OR DELETE OR UPDATE ON organization.licenses FOR EACH ROW EXECUTE FUNCTION platform.guard_stable_code('license_number', '["license_type"]')` | O |
+| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON organization.licenses FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON organization.licenses FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["document_file_id","document_file_id_internal_id","platform","file_objects"],["location_id","location_id_internal_id","organization","locations"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.

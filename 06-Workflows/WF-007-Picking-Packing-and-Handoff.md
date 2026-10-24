@@ -21,7 +21,7 @@ Scoped Fulfillment/Store commands tasks and packages; Inventory owns reservation
 
 Candidate existing tables: `fulfillment.pick_tasks`, `fulfillment.pick_task_items`, `fulfillment.pack_tasks`, `fulfillment.packages`, `fulfillment.package_items`, `warehouse.stock_reservations`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-045/API-046/API-047; API-071 records permitted rider pickup. [Store Operations](../05-APIs/Store_Operations.md) · [Inventory](../05-APIs/Inventory.md) · [Rider App](../05-APIs/Rider_App.md).
+Related proposed operations: API-045/API-046/API-047; API-071 records permitted rider pickup. [Store Operations](../03-Modules/Store-Operations/APIs.md) · [Inventory](../03-Modules/Inventory/APIs.md) · [Rider App](../03-Modules/Rider-Operations/APIs.md).
 
 ## Sequence
 

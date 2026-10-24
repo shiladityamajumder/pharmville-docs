@@ -59,7 +59,7 @@ D-001/D-002 (scope), D-003/D-022 (permissions), D-006/D-012 (clinical/tax data),
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Admin CMS | [HLD](../03-Modules/Admin_CMS/HLD.md) | [LLD](../03-Modules/Admin_CMS/LLD.md) | [API](../05-APIs/Admin_CMS.md) | [Mapping](../04-Database/Module-Mapping.md#admin-cms) | [Cases](../03-Modules/Admin_CMS/Edge-Cases.md) |
+| Admin CMS | [HLD](../03-Modules/Admin/HLD.md) | [LLD](../03-Modules/Admin/LLD.md) | [API](../03-Modules/Admin/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#admin-cms) | [Cases](../03-Modules/Admin/Edge-Cases.md) |
 
 Technical workflows: [WF-006](../06-Workflows/WF-006-Licensed-Site-Allocation.md) · [WF-012](../06-Workflows/WF-012-Report-Export-and-Audit.md) · [WF-013](../06-Workflows/WF-013-Customer-Support-Triage.md).
 

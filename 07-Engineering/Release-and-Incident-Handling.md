@@ -30,7 +30,7 @@ Every approved change updates traceability IDs and affected documentation in the
 
 1. Lock approved Phase 1 scope and hard safety rules.
 2. Produce immutable artifact builds and migration checksum review.
-3. Deploy compatible API code and run external migration authority once via controlled job.
+3. Deploy compatible API code and apply only an independently approved schema release procedure via a controlled job.
 4. Execute database-backed concurrency, role-isolation, webhook replay, approved license/clinical and UAT scenarios in staging.
 5. Enable noncritical customer-facing features gradually with feature flags where supported; never flag off pharmacy/legal/authorization guards.
 6. Observe canary conversion **and** money/stock mismatch, clinical denials, request errors and privacy alerts.
@@ -42,7 +42,7 @@ Every approved change updates traceability IDs and affected documentation in the
 
 Freeze writes only under an approved incident action. For a bad application build, restore compatible code behind a feature flag; verify database ledger and provider state before replay. For already committed payments, refunds, stock movements or clinical decisions, prefer forward correction and compensating events with auditable reason codes rather than deleting records.
 
-SQL history the checked-in SQL migration history is immutable in shared environments. A broken migration requires a reviewed forward-fix and restored snapshot only under DBA control. Record the decision owner, incident timestamp, business exposure, communication plan and evidence.
+The canonical standalone SQL and approved deployed schema identity are immutable release inputs; the empty-schema file is not an existing-database upgrade. A broken migration requires a reviewed forward-fix and restored snapshot only under DBA control. Record the decision owner, incident timestamp, business exposure, communication plan and evidence.
 
 ## Runbook — suspected production incident
 

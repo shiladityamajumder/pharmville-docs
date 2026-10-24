@@ -20,7 +20,7 @@ Reporting owns runs/private outputs; Audit owns append-only evidence. Domain sou
 
 Candidate existing tables: `platform.report_definitions`, `platform.report_runs`, `platform.file_access_grants`, `platform.audit_logs`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-082–API-088; report datasets still require exact approved field/filter schemas. [Reporting](../05-APIs/Reporting.md) · [Audit](../05-APIs/Audit.md).
+Related proposed operations: API-082–API-088; report datasets still require exact approved field/filter schemas. [Reporting](../03-Modules/Reporting/APIs.md) · [Audit](../03-Modules/Audit/APIs.md).
 
 ## Sequence
 

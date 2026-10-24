@@ -60,8 +60,8 @@ D-004 (payment), D-006 (clinical rules), D-010 (partial approval), D-013 (privac
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Prescription Upload | [HLD](../03-Modules/Prescription_Upload/HLD.md) | [LLD](../03-Modules/Prescription_Upload/LLD.md) | [API](../05-APIs/Prescription_Upload.md) | [Mapping](../04-Database/Module-Mapping.md#prescription-upload) | [Cases](../03-Modules/Prescription_Upload/Edge-Cases.md) |
-| Pharmacist Review | [HLD](../03-Modules/Pharmacist_Review/HLD.md) | [LLD](../03-Modules/Pharmacist_Review/LLD.md) | [API](../05-APIs/Pharmacist_Review.md) | [Mapping](../04-Database/Module-Mapping.md#pharmacist-review) | [Cases](../03-Modules/Pharmacist_Review/Edge-Cases.md) |
+| Prescription Upload | [HLD](../03-Modules/Prescription-Management/HLD.md) | [LLD](../03-Modules/Prescription-Management/LLD.md) | [API](../03-Modules/Prescription-Management/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#prescription-upload) | [Cases](../03-Modules/Prescription-Management/Edge-Cases.md) |
+| Pharmacist Review | [HLD](../03-Modules/Pharmacist-Review/HLD.md) | [LLD](../03-Modules/Pharmacist-Review/LLD.md) | [API](../03-Modules/Pharmacist-Review/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#pharmacist-review) | [Cases](../03-Modules/Pharmacist-Review/Edge-Cases.md) |
 
 Technical workflows: [WF-004](../06-Workflows/WF-004-Prescription-Intake-and-Review.md).
 

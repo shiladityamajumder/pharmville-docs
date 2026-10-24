@@ -1,0 +1,637 @@
+[
+  {
+    "id": "Authentication_Access",
+    "directory": "Authentication",
+    "display_name": "Authentication",
+    "proposed_accountable_role": "Security / Identity",
+    "feature_ids": [
+      "AUTH-01",
+      "AUTH-02",
+      "AUTH-03",
+      "AUTH-04"
+    ],
+    "contract_api_ids": [
+      "API-089",
+      "API-090",
+      "API-091",
+      "API-092",
+      "API-093"
+    ],
+    "command_api_ids": [
+      "API-001",
+      "API-002",
+      "API-089",
+      "API-090",
+      "API-091",
+      "API-092",
+      "API-093"
+    ],
+    "workflow_ids": [
+      "WF-001"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Customer_Accounts",
+    "directory": "Customer-Accounts",
+    "display_name": "Customer Accounts",
+    "proposed_accountable_role": "Customer platform",
+    "feature_ids": [
+      "ACC-01",
+      "ACC-02",
+      "ACC-03",
+      "ACC-04",
+      "ACC-05",
+      "ACC-06",
+      "ACC-07"
+    ],
+    "contract_api_ids": [
+      "API-001",
+      "API-002",
+      "API-003",
+      "API-004",
+      "API-005",
+      "API-006",
+      "API-007",
+      "API-008",
+      "API-009",
+      "ACC-ROUTE-005",
+      "ACC-ROUTE-001",
+      "ACC-ROUTE-002",
+      "ACC-ROUTE-007",
+      "ACC-ROUTE-006",
+      "ACC-ROUTE-003",
+      "ACC-ROUTE-004",
+      "ACC-ROUTE-008",
+      "ACC-ROUTE-009",
+      "ACC-ROUTE-010"
+    ],
+    "command_api_ids": [
+      "API-003",
+      "API-004",
+      "API-005",
+      "API-006",
+      "API-007",
+      "API-008",
+      "API-009",
+      "ACC-ROUTE-005",
+      "ACC-ROUTE-001",
+      "ACC-ROUTE-002",
+      "ACC-ROUTE-003",
+      "ACC-ROUTE-004",
+      "ACC-ROUTE-008",
+      "ACC-ROUTE-009",
+      "ACC-ROUTE-010"
+    ],
+    "workflow_ids": [
+      "WF-001",
+      "WF-003"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Product_Catalog",
+    "directory": "Product-Catalog",
+    "display_name": "Product Catalog",
+    "proposed_accountable_role": "Catalog / Merchandising",
+    "feature_ids": [
+      "CAT-01",
+      "CAT-02",
+      "CAT-03",
+      "CAT-04",
+      "CAT-05",
+      "CAT-06"
+    ],
+    "contract_api_ids": [
+      "API-010",
+      "API-011",
+      "API-012",
+      "API-013",
+      "API-014",
+      "API-015",
+      "API-016",
+      "API-017"
+    ],
+    "command_api_ids": [
+      "API-010",
+      "API-011",
+      "API-012",
+      "API-013",
+      "API-014",
+      "API-015",
+      "API-016",
+      "API-017"
+    ],
+    "workflow_ids": [
+      "WF-002",
+      "WF-003"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Cart_Checkout",
+    "directory": "Cart-Checkout",
+    "display_name": "Cart Checkout",
+    "proposed_accountable_role": "Commerce / Checkout",
+    "feature_ids": [
+      "CHK-01",
+      "CHK-02",
+      "CHK-03",
+      "CHK-04",
+      "CHK-05",
+      "CHK-06",
+      "CHK-07",
+      "CHK-08"
+    ],
+    "contract_api_ids": [
+      "API-018",
+      "API-019",
+      "API-020",
+      "API-021"
+    ],
+    "command_api_ids": [
+      "API-018",
+      "API-019",
+      "API-020",
+      "API-021"
+    ],
+    "workflow_ids": [
+      "WF-003",
+      "WF-004",
+      "WF-005",
+      "WF-006"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Prescription_Upload",
+    "directory": "Prescription-Management",
+    "display_name": "Prescription Management",
+    "proposed_accountable_role": "Prescription intake",
+    "feature_ids": [
+      "RX-01",
+      "RX-02",
+      "RX-03",
+      "RX-04",
+      "RX-05"
+    ],
+    "contract_api_ids": [
+      "API-022",
+      "API-023",
+      "API-024"
+    ],
+    "command_api_ids": [
+      "API-023",
+      "API-024"
+    ],
+    "workflow_ids": [
+      "WF-004"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Pharmacist_Review",
+    "directory": "Pharmacist-Review",
+    "display_name": "Pharmacist Review",
+    "proposed_accountable_role": "Pharmacy clinical lead",
+    "feature_ids": [
+      "PHM-01",
+      "PHM-02",
+      "PHM-03",
+      "PHM-04",
+      "PHM-05"
+    ],
+    "contract_api_ids": [
+      "API-060",
+      "API-061",
+      "API-062",
+      "API-063"
+    ],
+    "command_api_ids": [
+      "API-060",
+      "API-061",
+      "API-062"
+    ],
+    "workflow_ids": [
+      "WF-004",
+      "WF-007"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Customer_Orders",
+    "directory": "Customer-Orders",
+    "display_name": "Customer Orders",
+    "proposed_accountable_role": "Customer commerce surface",
+    "feature_ids": [
+      "ORD-01",
+      "ORD-02",
+      "ORD-03",
+      "ORD-04",
+      "ORD-05",
+      "ORD-06",
+      "ORD-07",
+      "ORD-08",
+      "ORD-09"
+    ],
+    "contract_api_ids": [
+      "API-025",
+      "API-026",
+      "API-027",
+      "API-028",
+      "API-029",
+      "API-030",
+      "API-031"
+    ],
+    "command_api_ids": [
+      "API-025",
+      "API-026"
+    ],
+    "workflow_ids": [
+      "WF-005",
+      "WF-008",
+      "WF-009",
+      "WF-010"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Order_Operations",
+    "directory": "Order-Management",
+    "display_name": "Order Management",
+    "proposed_accountable_role": "Order operations",
+    "feature_ids": [
+      "OMS-01",
+      "OMS-02",
+      "OMS-03",
+      "OMS-04",
+      "OMS-05",
+      "OMS-06",
+      "OMS-07"
+    ],
+    "contract_api_ids": [
+      "API-039",
+      "API-040",
+      "API-041",
+      "API-042",
+      "API-043"
+    ],
+    "command_api_ids": [
+      "API-027",
+      "API-028",
+      "API-039",
+      "API-040",
+      "API-041",
+      "API-042",
+      "API-043",
+      "API-063"
+    ],
+    "workflow_ids": [
+      "WF-003",
+      "WF-004",
+      "WF-005",
+      "WF-006",
+      "WF-007",
+      "WF-010"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Inventory",
+    "directory": "Inventory",
+    "display_name": "Inventory",
+    "proposed_accountable_role": "Inventory control",
+    "feature_ids": [
+      "INV-01",
+      "INV-02",
+      "INV-03",
+      "INV-04",
+      "INV-05",
+      "INV-06",
+      "INV-07"
+    ],
+    "contract_api_ids": [
+      "API-050",
+      "API-051",
+      "API-052",
+      "API-053",
+      "API-054",
+      "API-055"
+    ],
+    "command_api_ids": [
+      "API-050",
+      "API-051",
+      "API-052",
+      "API-053",
+      "API-054",
+      "API-055"
+    ],
+    "workflow_ids": [
+      "WF-003",
+      "WF-006",
+      "WF-011",
+      "WF-014"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Store_Operations",
+    "directory": "Store-Operations",
+    "display_name": "Store Operations",
+    "proposed_accountable_role": "Store fulfillment",
+    "feature_ids": [
+      "STO-01",
+      "STO-02",
+      "STO-03",
+      "STO-04",
+      "STO-05"
+    ],
+    "contract_api_ids": [
+      "API-044",
+      "API-045",
+      "API-046",
+      "API-047",
+      "API-048",
+      "API-049"
+    ],
+    "command_api_ids": [
+      "API-044",
+      "API-045",
+      "API-046",
+      "API-047"
+    ],
+    "workflow_ids": [
+      "WF-006",
+      "WF-007",
+      "WF-008"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Warehouse",
+    "directory": "Warehouse",
+    "display_name": "Warehouse",
+    "proposed_accountable_role": "Warehouse / Procurement",
+    "feature_ids": [
+      "WH-01",
+      "WH-02",
+      "WH-03",
+      "WH-04",
+      "WH-05"
+    ],
+    "contract_api_ids": [
+      "API-056",
+      "API-057",
+      "API-058",
+      "API-059"
+    ],
+    "command_api_ids": [
+      "API-049",
+      "API-057",
+      "API-058",
+      "API-059"
+    ],
+    "workflow_ids": [
+      "WF-011",
+      "WF-014"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Finance_Payments",
+    "directory": "Payments",
+    "display_name": "Payments",
+    "proposed_accountable_role": "Finance / Payments",
+    "feature_ids": [
+      "FIN-01",
+      "FIN-02",
+      "FIN-03",
+      "FIN-04",
+      "FIN-05",
+      "FIN-06",
+      "FIN-07"
+    ],
+    "contract_api_ids": [
+      "API-075",
+      "API-076",
+      "API-077",
+      "API-078",
+      "API-079",
+      "API-080",
+      "API-081"
+    ],
+    "command_api_ids": [
+      "API-029",
+      "API-030",
+      "API-075",
+      "API-076",
+      "API-077",
+      "API-078",
+      "API-079",
+      "API-080",
+      "API-081"
+    ],
+    "workflow_ids": [
+      "WF-005",
+      "WF-009",
+      "WF-010",
+      "WF-012"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Delivery_Operations",
+    "directory": "Delivery",
+    "display_name": "Delivery",
+    "proposed_accountable_role": "Delivery operations",
+    "feature_ids": [
+      "DLV-01",
+      "DLV-02",
+      "DLV-03",
+      "DLV-04",
+      "DLV-05"
+    ],
+    "contract_api_ids": [
+      "API-064",
+      "API-065",
+      "API-066",
+      "API-067",
+      "API-068"
+    ],
+    "command_api_ids": [
+      "API-031",
+      "API-064",
+      "API-065",
+      "API-066",
+      "API-069",
+      "API-070",
+      "API-072",
+      "API-074"
+    ],
+    "workflow_ids": [
+      "WF-007",
+      "WF-008",
+      "WF-009",
+      "WF-010"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Rider_App",
+    "directory": "Rider-Operations",
+    "display_name": "Rider Operations",
+    "proposed_accountable_role": "Rider operations / mobile client",
+    "feature_ids": [
+      "RID-01",
+      "RID-02",
+      "RID-03",
+      "RID-04",
+      "RID-05",
+      "RID-06",
+      "RID-07"
+    ],
+    "contract_api_ids": [
+      "API-069",
+      "API-070",
+      "API-071",
+      "API-072",
+      "API-073",
+      "API-074"
+    ],
+    "command_api_ids": [],
+    "workflow_ids": [
+      "WF-001",
+      "WF-008",
+      "WF-009"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Notifications",
+    "directory": "Notifications",
+    "display_name": "Notifications",
+    "proposed_accountable_role": "Communications / Platform",
+    "feature_ids": [
+      "NOT-01",
+      "NOT-02",
+      "NOT-03",
+      "NOT-04",
+      "NOT-05"
+    ],
+    "contract_api_ids": [
+      "API-094",
+      "API-095",
+      "API-096",
+      "API-097"
+    ],
+    "command_api_ids": [
+      "API-094",
+      "API-095",
+      "API-096",
+      "API-097"
+    ],
+    "workflow_ids": [
+      "WF-001",
+      "WF-005",
+      "WF-008",
+      "WF-013"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Admin_CMS",
+    "directory": "Admin",
+    "display_name": "Admin",
+    "proposed_accountable_role": "Administration / Operations",
+    "feature_ids": [
+      "ADM-01",
+      "ADM-02",
+      "ADM-03",
+      "ADM-04",
+      "ADM-05",
+      "ADM-06",
+      "ADM-07",
+      "ADM-08",
+      "ADM-09"
+    ],
+    "contract_api_ids": [
+      "API-032",
+      "API-033",
+      "API-034",
+      "API-035",
+      "API-036",
+      "API-037",
+      "API-038"
+    ],
+    "command_api_ids": [
+      "API-032",
+      "API-035",
+      "API-036",
+      "API-037",
+      "API-038"
+    ],
+    "workflow_ids": [
+      "WF-001",
+      "WF-002",
+      "WF-006",
+      "WF-012"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Reporting",
+    "directory": "Reporting",
+    "display_name": "Reporting",
+    "proposed_accountable_role": "Reporting / Finance analytics",
+    "feature_ids": [
+      "REP-01",
+      "REP-02",
+      "REP-03",
+      "REP-04",
+      "REP-05",
+      "REP-06",
+      "REP-07"
+    ],
+    "contract_api_ids": [
+      "API-082",
+      "API-083",
+      "API-084",
+      "API-085",
+      "API-086"
+    ],
+    "command_api_ids": [
+      "API-082",
+      "API-083",
+      "API-084",
+      "API-085",
+      "API-086"
+    ],
+    "workflow_ids": [
+      "WF-012"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  },
+  {
+    "id": "Audit",
+    "directory": "Audit",
+    "display_name": "Audit",
+    "proposed_accountable_role": "Security / Audit platform",
+    "feature_ids": [
+      "AUD-01",
+      "AUD-02"
+    ],
+    "contract_api_ids": [
+      "API-087",
+      "API-088"
+    ],
+    "command_api_ids": [
+      "API-087",
+      "API-088"
+    ],
+    "workflow_ids": [
+      "WF-001",
+      "WF-012"
+    ],
+    "ownership_status": "Proposed / D-024; future domains D-027"
+  }
+]

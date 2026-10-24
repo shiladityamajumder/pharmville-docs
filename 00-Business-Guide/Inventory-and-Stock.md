@@ -59,7 +59,7 @@ D-005 (Techsmith authority/freshness), D-009 (lot/hold rules), D-010 (fallback).
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Inventory | [HLD](../03-Modules/Inventory/HLD.md) | [LLD](../03-Modules/Inventory/LLD.md) | [API](../05-APIs/Inventory.md) | [Mapping](../04-Database/Module-Mapping.md#inventory) | [Cases](../03-Modules/Inventory/Edge-Cases.md) |
+| Inventory | [HLD](../03-Modules/Inventory/HLD.md) | [LLD](../03-Modules/Inventory/LLD.md) | [API](../03-Modules/Inventory/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#inventory) | [Cases](../03-Modules/Inventory/Edge-Cases.md) |
 
 Technical workflows: [WF-003](../06-Workflows/WF-003-Cart-Quote-and-Reservation.md) · [WF-006](../06-Workflows/WF-006-Licensed-Site-Allocation.md) · [WF-011](../06-Workflows/WF-011-Inventory-Reconciliation.md) · [WF-014](../06-Workflows/WF-014-Supplier-Receiving.md).
 

@@ -1,0 +1,19 @@
+{
+  "result": "PASS",
+  "counts": {
+    "openapi_meta_schema_errors": 0,
+    "operations": 107,
+    "complete-proposed": 97,
+    "validated_operation_column_uses": 3606,
+    "schema_validated_examples": 1828,
+    "incomplete": 10,
+    "schema_column_mappings": 300,
+    "tables_classified": 266
+  },
+  "errors": [],
+  "limitations": [
+    "No application/provider/production tests executed.",
+    "SQL parity independently validated; runtime/business approvals remain open.",
+    "Ten conceptual contract gaps remain excluded despite structurally valid schemas."
+  ]
+}

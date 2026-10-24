@@ -1,0 +1,72 @@
+# Engineering and documentation audit
+
+Review date: **23 October 2026**. Scope: all documentation, 110 draft features, 18 module groups, 14 technical workflows and supplied database evidence. The source-alignment follow-up uses the user-supplied `healthcare_db/` folder. This is a documentation/source review, not a running-service, provider or live-database acceptance test.
+
+## Current result
+
+The Business Guide adds an everyday explanation of the complete business and each existing domain. Technical workflows now distinguish actual pharmacy, money, stock, fulfillment and delivery interactions. Feature IDs and original TASK-001 through TASK-110 are preserved; tests are specific designs with explicit NOT RUN status.
+
+## Rechecked earlier findings
+
+| Finding | Current evidence and disposition | Remaining action |
+| --- | --- | --- |
+| H-01: login/MFA/refresh trust | Existing corrected [authentication](../03-Modules/Authentication/APIs.md) and [identity workflow](../06-Workflows/WF-001-Identity-and-Session.md) preserve public pre-login, challenge and refresh trust paths. No prior session is required to log in. | D-003 security policy and execution evidence remain. |
+| H-02: provider callback trust | [Finance](../03-Modules/Payments/APIs.md) and the rewritten [payment workflow](../06-Workflows/WF-005-Payment-and-Confirmation.md) distinguish signed provider evidence, durable deduplication and reconciliation from customer sessions/redirects. | Exact Cashfree signature/acknowledgment contract remains D-016; no provider-specific values invented. |
+| H-03: generic API contracts | [Critical operation refinements](../05-APIs/Critical-Operation-Contracts.md) add typed proposed inputs/results, validation, ownership, local transaction effects and failure outcomes for the safety-sensitive commands. The [detailed planning ledger](../05-APIs/API-Contract-Coverage.md) now records 97 documentation-complete proposed contracts and 10 explicit exclusions across all 107 operations. | D-024: finish/review field-level mappings, bounds, enum transitions, runtime grants and OpenAPI before implementation. |
+| H-04: traceability and generic tests | [Master register](Coverage-and-Traceability.md) connects all 110 features to Business Flow, HLD, LLD, API/data, edge cases, tests and original task. There are 234 named test designs; repeated generic TEST prompts were superseded. | The former 23 exact-ID mention gaps are now explicitly accounted for in feature tables; actual missing commands remain in the [journey/API gap register](../05-APIs/Journey-API-Gaps.md). No mention count certifies contract readiness. |
+| H-05: account/profile consistency | Existing ACC-01/ACC-02 design retains mandatory first_name before profile creation, verified contact preservation and separate identity/profile versions. ACC-03–ACC-07 now have named normal/adverse tests. | D-023 replacement-contact proof/storage remains open. |
+| H-06: migration provenance | User-supplied healthcare_db folder selected; [evidence snapshot](Database-Evidence.json) verifies all 103 SQL files, including 30 versioned migrations, catalog and supporting source hashes. The supplied copy has no standalone Git metadata. | Documentation source selection resolved. D-015 retains actual target-ledger and runtime-parity verification; source presence is not deployment proof. |
+| H-07: stack and write ownership | HLD retains proposed stack status. [Ownership/recovery contracts](../07-Engineering/State-and-Recovery-Contracts.md) distinguish feature, command, data owner and consumer and record inspected V0030 fulfillment transitions. | Proposed writers are not deployed grants. Module owners/Security/DBA must approve exact capabilities; stack/release choices need D-001/D-014. |
+| M-01: tables | Current tables pass separator/width checks. The original checkout already had valid separators; the historical 2,628-fragment finding is not a current defect count. Traceability, API navigation and test views were reworked for readability. | Keep checks in CI; avoid paragraphs growing inside cells. |
+| M-02: stale provenance | No detected archive filenames or old upload-path artifacts. Database evidence uses portable paths to the user-supplied source and explicit checksum identity. | Keep release evidence current without copying temporary paths. |
+| M-03: navigation/headings | Six original broken external-checkout targets replaced with central portable evidence. Business/technical links and module table navigation added; redundant adjacent heading wrappers reduced and required module anchors preserved. | Interactive editor/host rendering remains separately unverified below. |
+| M-04: repeated workflows | 13 repeated workflow templates and 34 module diagrams rewritten for their domains; existing identity semantics preserved. Important flows name concrete gates and recovery tests. | Actual orchestration and provider integration tests remain application work. |
+| L-01/L-02: wording | Duplicate source phrases removed; underscore pseudo-references now link to real documents. Business explanations avoid technical payloads and use clear responsible roles. | Specialist review of clinical/legal terms remains D-006/D-013. |
+
+## Executed documentation validation
+
+| Check | Measured result |
+| --- | --- |
+| Markdown files reviewed/validated | 449; original checkout 429 |
+| Business Guide | 17 pages covering all 18 module groups |
+| Mermaid in original checkout | 51 found; 33 parsed, 18 failed using the actual installed parser |
+| Current Mermaid | 52 found, 52 parsed, 52 rendered; zero parser/render failures |
+| Relative link/anchor checks | 3,835 checked; zero failures. Six original missing file targets corrected |
+| Markdown table checks | 1,594 tables; zero separator/width errors |
+| Heading/fence/empty/artifact checks | Zero detected errors |
+| Feature definitions | 110 unique original IDs and owning modules preserved |
+| Feature navigation | Zero missing Business Flow/HLD/LLD/API/data/edge/test/task links |
+| Owning-API textual references | 87/110; 23 explicit historical gaps, separately reviewed for supporting commands |
+| Numbered API catalog | API-001 through API-097 preserved; additional unnumbered customer routes remain proposals |
+| Named application test designs | 234; no duplicate definitions; all NOT RUN |
+| Validator regression fixture | Passed: malformed link, table, heading, fence and Mermaid source were rejected |
+| Database static comparison | 266 table pages and 4,438 column names match available catalog; 30 versioned SQL hashes match evidence |
+| Database preservation | All 103 SQL files under the migration directory, including fragments, retain their pre-edit hashes |
+| Git review | Whitespace check passed; original feature/module/task identities preserved; no push |
+
+Executed: `node scripts/test-validator.mjs`, `node scripts/validate-docs.mjs --render`, `node scripts/validate-database.mjs`, source/feature/task preservation checks and `git diff --check`. Local outputs are under ignored `artifacts/`; [documentation CI](../.github/workflows/documentation.yml) repeats regression, parse and rendering checks. Hosted CI has not run in this pass.
+
+Seven representative PNGs were visually inspected: system HLD, Inventory command gate, pharmacy, payment, pick/pack, delivery and fulfillment states. Rendered labels/arrows were readable; the review led to explicit committed-review and Order Operations handoffs. No full visual inspection of all 52 images is claimed.
+
+## Rendering and execution limits
+
+Actual Mermaid browser parsing/rendering used the lockfile dependency and local headless Chrome. The installed VS Code Markdown Preview Enhanced extension was observed, but its interactive preview was not exercised. GitHub’s hosted renderer was not independently exercised; conservative Mermaid/GitHub Markdown and local anchor checks are evidence, not a hosted-rendering pass. Review those two surfaces before declaring full visual acceptance.
+
+Application HTTP/browser/rider tests, provider sandbox signatures, live SQL migration/parity, PostgreSQL 15 and production restore/security/UAT were not run. Historical PostgreSQL 18 results describe the database snapshot supplied by the user. Source selection is resolved for documentation; live target verification remains separate.
+
+## Meaningful blockers and approvals
+
+| Issue | Why it matters | Recommended next action | Approver |
+| --- | --- | --- | --- |
+| D-015: deployed ledger and runtime parity | The supplied source is verified, but the running target has not been inspected | Compare the target ledger/checksums and runtime ORM/data-access behavior with the supplied source | DBA and Tech lead |
+| D-004/D-006: review/payment/deferred upload | RX-02 conflicts with the detailed review-before-payment journey; wrong sequencing can create unsafe or paid-but-blocked orders | Approve distinct supported order paths, deadlines and compensation with worked cases | Product, Finance, Pharmacist and Legal |
+| D-005/D-009/D-010: stock/site/partial supply | Unknown feed freshness, lot policy or fallback can permit unsafe promises or overselling | Name stock authority and approve hold, shelf-life, site, substitution and revision rules | Operations, Pharmacist and Product |
+| D-007/D-008/D-012/D-016: money/provider evidence | COD, refunds, accounting/tax and provider uncertainty cannot be finalized from generic contracts | Supply approved policy examples and exact provider sandbox contracts; execute replay/reconciliation tests | Finance/CA, Security and provider owner |
+| D-003/D-011/D-013/D-023: access/privacy/proof | Contact changes, rider evidence and medical files need approved proof, scope and retention | Approve security/privacy/doorstep policies and test against real restricted roles | Security, Privacy/Legal and Operations |
+| D-024 and launch scope | Remaining typed schemas/write fields and optional/warehouse/rider scope affect delivery planning | Review each vertical slice and resolve D-001/D-002/D-021 before committing rollout | Tech lead, module owners, QA and Product |
+
+Documentation is ready for that review; these unresolved decisions and execution gaps prevent certifying the entire product ready for implementation or release.
+
+## Current planning refinement
+
+For the 2026-10-24 API/master-data revision, use [planning coverage](../05-APIs/API-Contract-Coverage.md), [owner decisions](../05-APIs/Planning-Decisions.md) and [executed validation evidence](../05-APIs/Planning-Validation.md). Earlier measured counts under their original headings remain historical audit evidence; they are not current API approval or runtime-test results.

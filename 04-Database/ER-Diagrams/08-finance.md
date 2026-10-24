@@ -203,26 +203,26 @@ erDiagram
     }
     identity__users o|--o{ finance__credit_notes : "FK-0548 FK-0555"
     platform__file_objects o|--o{ finance__credit_notes : "FK-0549 FK-0550"
-    payment__refunds o|--o{ finance__credit_notes : "FK-0553 FK-0554"
     finance__invoices ||--o{ finance__credit_notes : "FK-0551 FK-0552"
+    payment__refunds o|--o{ finance__credit_notes : "FK-0553 FK-0554"
     identity__users o|--o{ finance__invoices : "FK-0562 FK-0569"
-    marketplace__sellers o|--o{ finance__invoices : "FK-0567 FK-0568"
-    commerce__orders ||--o{ finance__invoices : "FK-0565 FK-0566"
     platform__file_objects o|--o{ finance__invoices : "FK-0563 FK-0564"
+    commerce__orders ||--o{ finance__invoices : "FK-0565 FK-0566"
+    marketplace__sellers o|--o{ finance__invoices : "FK-0567 FK-0568"
     identity__users o|--o{ finance__settlement_runs : "FK-0584 FK-0587"
     marketplace__sellers ||--o{ finance__settlement_runs : "FK-0585 FK-0586"
     identity__users o|--o{ finance__invoice_items : "FK-0556 FK-0561"
     finance__invoices ||--o{ finance__invoice_items : "FK-0557 FK-0558"
     commerce__order_items o|--o{ finance__invoice_items : "FK-0559 FK-0560"
-    finance__settlement_runs ||--o{ finance__settlement_items : "FK-0583 FK-0582"
     commerce__order_groups o|--o{ finance__settlement_items : "FK-0578 FK-0579"
     commerce__orders ||--o{ finance__settlement_items : "FK-0580 FK-0581"
+    finance__settlement_runs ||--o{ finance__settlement_items : "FK-0582 FK-0583"
     identity__users o|--o{ finance__accounts : "FK-0543 FK-0544 FK-0547"
     finance__accounts o|--o{ finance__accounts : "FK-0545 FK-0546"
     identity__users o|--o{ finance__journal_entries : "FK-0570 FK-0573"
-    finance__journal_entries o|--o{ finance__journal_entries : "FK-0572 FK-0571"
+    finance__journal_entries o|--o{ finance__journal_entries : "FK-0571 FK-0572"
     finance__accounts ||--o{ finance__journal_lines : "FK-0574 FK-0575"
-    finance__journal_entries ||--o{ finance__journal_lines : "FK-0577 FK-0576"
+    finance__journal_entries ||--o{ finance__journal_lines : "FK-0576 FK-0577"
 ```
 
 **Entity name mapping**
@@ -272,4 +272,4 @@ See [WF-005](../../06-Workflows/WF-005-Payment-and-Confirmation.md), [WF-009](..
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/finance/README.md) · [Finance_Payments HLD](../../03-Modules/Finance_Payments/HLD.md) · [Finance_Payments LLD](../../03-Modules/Finance_Payments/LLD.md) · [Reporting HLD](../../03-Modules/Reporting/HLD.md) · [Reporting LLD](../../03-Modules/Reporting/LLD.md) · [WF-005](../../06-Workflows/WF-005-Payment-and-Confirmation.md) · [WF-009](../../06-Workflows/WF-009-COD-Collection.md) · [WF-010](../../06-Workflows/WF-010-Cancellation-Return-and-Refund.md) · [WF-012](../../06-Workflows/WF-012-Report-Export-and-Audit.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/finance/README.md) · [Finance_Payments HLD](../../03-Modules/Payments/HLD.md) · [Finance_Payments LLD](../../03-Modules/Payments/LLD.md) · [Reporting HLD](../../03-Modules/Reporting/HLD.md) · [Reporting LLD](../../03-Modules/Reporting/LLD.md) · [WF-005](../../06-Workflows/WF-005-Payment-and-Confirmation.md) · [WF-009](../../06-Workflows/WF-009-COD-Collection.md) · [WF-010](../../06-Workflows/WF-010-Cancellation-Return-and-Refund.md) · [WF-012](../../06-Workflows/WF-012-Report-Export-and-Audit.md)

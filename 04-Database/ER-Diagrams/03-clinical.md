@@ -195,31 +195,31 @@ erDiagram
     }
     identity__users o|--o{ clinical__order_reviews : "FK-0188 FK-0202"
     clinical__review_reason_codes o|--o{ clinical__order_reviews : "FK-0189"
-    commerce__orders ||--o{ clinical__order_reviews : "FK-0192 FK-0194 FK-0193 FK-0195"
-    clinical__prescription_documents ||--o{ clinical__order_reviews : "FK-0190 FK-0198 FK-0191 FK-0199"
-    clinical__patient_profiles ||--o{ clinical__order_reviews : "FK-0197 FK-0196"
-    clinical__prescriptions ||--o{ clinical__order_reviews : "FK-0203 FK-0200 FK-0201 FK-0204"
-    identity__users o|--o{ clinical__prescriptions : "FK-0260 FK-0261 FK-0257 FK-0262"
-    identity__users ||--o{ clinical__prescriptions : "FK-0263"
-    clinical__patient_profiles ||--o{ clinical__prescriptions : "FK-0259 FK-0258"
+    clinical__prescription_documents ||--o{ clinical__order_reviews : "FK-0190 FK-0191 FK-0198 FK-0199"
+    commerce__orders ||--o{ clinical__order_reviews : "FK-0192 FK-0193 FK-0194 FK-0195"
+    clinical__patient_profiles ||--o{ clinical__order_reviews : "FK-0196 FK-0197"
+    clinical__prescriptions ||--o{ clinical__order_reviews : "FK-0200 FK-0201 FK-0203 FK-0204"
     clinical__consultations o|--o{ clinical__prescriptions : "FK-0255 FK-0256"
-    identity__users o|--o{ clinical__observations : "FK-0177 FK-0180"
+    identity__users o|--o{ clinical__prescriptions : "FK-0257 FK-0260 FK-0261 FK-0262"
+    clinical__patient_profiles ||--o{ clinical__prescriptions : "FK-0258 FK-0259"
+    identity__users ||--o{ clinical__prescriptions : "FK-0263"
     clinical__consultations o|--o{ clinical__observations : "FK-0175 FK-0176"
-    clinical__patient_profiles ||--o{ clinical__observations : "FK-0179 FK-0178"
+    identity__users o|--o{ clinical__observations : "FK-0177 FK-0180"
+    clinical__patient_profiles ||--o{ clinical__observations : "FK-0178 FK-0179"
     identity__users o|--o{ clinical__prescription_documents : "FK-0243 FK-0248"
-    clinical__prescriptions ||--o{ clinical__prescription_documents : "FK-0246 FK-0247"
-    platform__file_objects ||--o| clinical__prescription_documents : "FK-0245"
     platform__file_objects ||--o{ clinical__prescription_documents : "FK-0244"
+    platform__file_objects ||--o| clinical__prescription_documents : "FK-0245"
+    clinical__prescriptions ||--o{ clinical__prescription_documents : "FK-0246 FK-0247"
     identity__users o|--o{ clinical__review_reason_codes : "FK-0264 FK-0265"
-    identity__users o|--o{ clinical__patient_profiles : "FK-0227 FK-0222 FK-0223 FK-0226"
-    customer__family_members o|--o{ clinical__patient_profiles : "FK-0225 FK-0224"
+    identity__users o|--o{ clinical__patient_profiles : "FK-0222 FK-0223 FK-0226 FK-0227"
+    customer__family_members o|--o{ clinical__patient_profiles : "FK-0224 FK-0225"
     identity__users o|--o{ clinical__care_episodes : "FK-0155 FK-0156 FK-0159"
-    clinical__patient_profiles ||--o{ clinical__care_episodes : "FK-0158 FK-0157"
-    identity__users ||--o{ clinical__consultations : "FK-0165"
-    identity__users o|--o{ clinical__consultations : "FK-0164 FK-0170"
+    clinical__patient_profiles ||--o{ clinical__care_episodes : "FK-0157 FK-0158"
     appointment__appointments o|--o{ clinical__consultations : "FK-0160 FK-0161"
-    clinical__patient_profiles ||--o{ clinical__consultations : "FK-0167 FK-0166"
     clinical__care_episodes o|--o{ clinical__consultations : "FK-0162 FK-0163"
+    identity__users o|--o{ clinical__consultations : "FK-0164 FK-0170"
+    identity__users ||--o{ clinical__consultations : "FK-0165"
+    clinical__patient_profiles ||--o{ clinical__consultations : "FK-0166 FK-0167"
     clinical__practitioner_profiles o|--o{ clinical__consultations : "FK-0168 FK-0169"
 ```
 
@@ -405,25 +405,25 @@ erDiagram
         uuid updated_by FK
     }
     identity__users o|--o{ clinical__practitioner_organizations : "FK-0228 FK-0235"
-    organization__locations o|--o{ clinical__practitioner_organizations : "FK-0230 FK-0229"
-    organization__organizations ||--o{ clinical__practitioner_organizations : "FK-0232 FK-0231"
+    organization__locations o|--o{ clinical__practitioner_organizations : "FK-0229 FK-0230"
+    organization__organizations ||--o{ clinical__practitioner_organizations : "FK-0231 FK-0232"
     clinical__practitioner_profiles ||--o{ clinical__practitioner_organizations : "FK-0233 FK-0234"
-    identity__users ||--o{ clinical__practitioner_profiles : "FK-0239"
     identity__users o|--o{ clinical__practitioner_profiles : "FK-0236 FK-0237 FK-0238"
+    identity__users ||--o{ clinical__practitioner_profiles : "FK-0239"
     identity__users o|--o{ clinical__patient_allergies : "FK-0205 FK-0206 FK-0209"
     clinical__patient_profiles ||--o{ clinical__patient_allergies : "FK-0207 FK-0208"
     identity__users o|--o{ clinical__patient_conditions : "FK-0210 FK-0211 FK-0214"
     clinical__patient_profiles ||--o{ clinical__patient_conditions : "FK-0212 FK-0213"
     identity__users o|--o{ clinical__patient_medications : "FK-0215 FK-0216 FK-0221"
-    catalog__products o|--o{ clinical__patient_medications : "FK-0219 FK-0220"
     clinical__patient_profiles ||--o{ clinical__patient_medications : "FK-0217 FK-0218"
+    catalog__products o|--o{ clinical__patient_medications : "FK-0219 FK-0220"
     identity__users o|--o{ clinical__prescription_items : "FK-0249 FK-0254"
-    clinical__prescriptions ||--o{ clinical__prescription_items : "FK-0251 FK-0250"
+    clinical__prescriptions ||--o{ clinical__prescription_items : "FK-0250 FK-0251"
     catalog__products o|--o{ clinical__prescription_items : "FK-0252 FK-0253"
     identity__users o|--o{ clinical__prescription_access_logs : "FK-0240"
-    clinical__prescriptions ||--o{ clinical__prescription_access_logs : "FK-0242 FK-0241"
-    identity__users o|--o{ clinical__diagnoses : "FK-0173 FK-0174"
+    clinical__prescriptions ||--o{ clinical__prescription_access_logs : "FK-0241 FK-0242"
     clinical__consultations ||--o{ clinical__diagnoses : "FK-0171 FK-0172"
+    identity__users o|--o{ clinical__diagnoses : "FK-0173 FK-0174"
 ```
 
 **Entity name mapping**
@@ -525,9 +525,9 @@ erDiagram
         bigint variant_id_internal_id FK
     }
     clinical__review_reason_codes o|--o{ clinical__order_review_items : "FK-0181"
-    clinical__prescription_items o|--o{ clinical__order_review_items : "FK-0186 FK-0187"
-    clinical__order_reviews ||--o{ clinical__order_review_items : "FK-0184 FK-0185"
     commerce__order_items ||--o{ clinical__order_review_items : "FK-0182 FK-0183"
+    clinical__order_reviews ||--o{ clinical__order_review_items : "FK-0184 FK-0185"
+    clinical__prescription_items o|--o{ clinical__order_review_items : "FK-0186 FK-0187"
 ```
 
 **Entity name mapping**
@@ -567,4 +567,4 @@ See [WF-004](../../06-Workflows/WF-004-Prescription-Intake-and-Review.md) for th
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/clinical/README.md) · [Customer_Accounts HLD](../../03-Modules/Customer_Accounts/HLD.md) · [Customer_Accounts LLD](../../03-Modules/Customer_Accounts/LLD.md) · [Pharmacist_Review HLD](../../03-Modules/Pharmacist_Review/HLD.md) · [Pharmacist_Review LLD](../../03-Modules/Pharmacist_Review/LLD.md) · [Prescription_Upload HLD](../../03-Modules/Prescription_Upload/HLD.md) · [Prescription_Upload LLD](../../03-Modules/Prescription_Upload/LLD.md) · [WF-004](../../06-Workflows/WF-004-Prescription-Intake-and-Review.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/clinical/README.md) · [Customer_Accounts HLD](../../03-Modules/Customer-Accounts/HLD.md) · [Customer_Accounts LLD](../../03-Modules/Customer-Accounts/LLD.md) · [Pharmacist_Review HLD](../../03-Modules/Pharmacist-Review/HLD.md) · [Pharmacist_Review LLD](../../03-Modules/Pharmacist-Review/LLD.md) · [Prescription_Upload HLD](../../03-Modules/Prescription-Management/HLD.md) · [Prescription_Upload LLD](../../03-Modules/Prescription-Management/LLD.md) · [WF-004](../../06-Workflows/WF-004-Prescription-Intake-and-Review.md)

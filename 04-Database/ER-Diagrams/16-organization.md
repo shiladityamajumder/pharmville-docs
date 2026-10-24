@@ -110,23 +110,23 @@ erDiagram
         uuid updated_by FK
         uuid uploaded_by_user_id FK
     }
-    identity__users ||--o{ organization__memberships : "FK-0973"
-    identity__users o|--o{ organization__memberships : "FK-0969 FK-0964 FK-0972"
-    organization__organizations ||--o{ organization__memberships : "FK-0971 FK-0970"
+    identity__users o|--o{ organization__memberships : "FK-0964 FK-0969 FK-0972"
     organization__departments o|--o{ organization__memberships : "FK-0965 FK-0966"
     organization__locations o|--o{ organization__memberships : "FK-0967 FK-0968"
+    organization__organizations ||--o{ organization__memberships : "FK-0970 FK-0971"
+    identity__users ||--o{ organization__memberships : "FK-0973"
     identity__users o|--o{ organization__departments : "FK-0943 FK-0944 FK-0949"
+    organization__organizations ||--o{ organization__departments : "FK-0945 FK-0946"
     organization__departments o|--o{ organization__departments : "FK-0947 FK-0948"
-    organization__organizations ||--o{ organization__departments : "FK-0946 FK-0945"
     identity__users o|--o{ organization__locations : "FK-0959 FK-0960 FK-0963"
     organization__organizations ||--o{ organization__locations : "FK-0961 FK-0962"
     identity__users o|--o{ organization__organizations : "FK-0974 FK-0975 FK-0976"
     identity__users o|--o{ organization__licenses : "FK-0950 FK-0951 FK-0958"
-    organization__organizations ||--o{ organization__licenses : "FK-0956 FK-0957"
     platform__file_objects o|--o{ organization__licenses : "FK-0952 FK-0953"
     organization__locations o|--o{ organization__licenses : "FK-0954 FK-0955"
+    organization__organizations ||--o{ organization__licenses : "FK-0956 FK-0957"
     identity__users o|--o{ organization__bank_accounts : "FK-0938 FK-0939 FK-0942"
-    organization__organizations ||--o{ organization__bank_accounts : "FK-0941 FK-0940"
+    organization__organizations ||--o{ organization__bank_accounts : "FK-0940 FK-0941"
 ```
 
 **Entity name mapping**
@@ -169,4 +169,4 @@ See [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md), [WF-006](../../
 
 ## Related documents
 
-[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/organization/README.md) · [Admin_CMS HLD](../../03-Modules/Admin_CMS/HLD.md) · [Admin_CMS LLD](../../03-Modules/Admin_CMS/LLD.md) · [Authentication_Access HLD](../../03-Modules/Authentication_Access/HLD.md) · [Authentication_Access LLD](../../03-Modules/Authentication_Access/LLD.md) · [Delivery_Operations HLD](../../03-Modules/Delivery_Operations/HLD.md) · [Delivery_Operations LLD](../../03-Modules/Delivery_Operations/LLD.md) · [Order_Operations HLD](../../03-Modules/Order_Operations/HLD.md) · [Order_Operations LLD](../../03-Modules/Order_Operations/LLD.md) · [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) · [WF-006](../../06-Workflows/WF-006-Licensed-Site-Allocation.md)
+[Schema overview](../Schema-Overview.md) · [Database rules](../Database-Rules.md) · [Model and parity notes](../Models-and-Parity.md) · [Migration evidence](../Migrations.md) · [Full relationship catalog](Relationship-Catalog.md) · [Non-FK reference review](Logical-References.md) · [Table index](../Tables/organization/README.md) · [Admin_CMS HLD](../../03-Modules/Admin/HLD.md) · [Admin_CMS LLD](../../03-Modules/Admin/LLD.md) · [Authentication_Access HLD](../../03-Modules/Authentication/HLD.md) · [Authentication_Access LLD](../../03-Modules/Authentication/LLD.md) · [Delivery_Operations HLD](../../03-Modules/Delivery/HLD.md) · [Delivery_Operations LLD](../../03-Modules/Delivery/LLD.md) · [Order_Operations HLD](../../03-Modules/Order-Management/HLD.md) · [Order_Operations LLD](../../03-Modules/Order-Management/LLD.md) · [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) · [WF-006](../../06-Workflows/WF-006-Licensed-Site-Allocation.md)

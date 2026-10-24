@@ -55,8 +55,8 @@ D-004 (capture/late success), D-007 (COD), D-008/D-012 (accounting/tax), D-016 (
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Finance Payments | [HLD](../03-Modules/Finance_Payments/HLD.md) | [LLD](../03-Modules/Finance_Payments/LLD.md) | [API](../05-APIs/Finance_Payments.md) | [Mapping](../04-Database/Module-Mapping.md#finance-payments) | [Cases](../03-Modules/Finance_Payments/Edge-Cases.md) |
-| Cart Checkout | [HLD](../03-Modules/Cart_Checkout/HLD.md) | [LLD](../03-Modules/Cart_Checkout/LLD.md) | [API](../05-APIs/Cart_Checkout.md) | [Mapping](../04-Database/Module-Mapping.md#cart-checkout) | [Cases](../03-Modules/Cart_Checkout/Edge-Cases.md) |
+| Finance Payments | [HLD](../03-Modules/Payments/HLD.md) | [LLD](../03-Modules/Payments/LLD.md) | [API](../03-Modules/Payments/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#finance-payments) | [Cases](../03-Modules/Payments/Edge-Cases.md) |
+| Cart Checkout | [HLD](../03-Modules/Cart-Checkout/HLD.md) | [LLD](../03-Modules/Cart-Checkout/LLD.md) | [API](../03-Modules/Cart-Checkout/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#cart-checkout) | [Cases](../03-Modules/Cart-Checkout/Edge-Cases.md) |
 
 Technical workflows: [WF-005](../06-Workflows/WF-005-Payment-and-Confirmation.md) · [WF-009](../06-Workflows/WF-009-COD-Collection.md) · [WF-010](../06-Workflows/WF-010-Cancellation-Return-and-Refund.md).
 

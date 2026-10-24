@@ -1,26 +1,34 @@
 # `logistics.delivery_failure_reasons`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds delivery failure reasons records within the logistics domain (riders, shipments, tracking and delivery). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 11 columns, 9 constraints, 3 indexes, 4 triggers; PK: `id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | logistics.delivery_failure_reasons |
+| Classification | Master / Reference |
+| Proposed business write owner | Delivery_Operations |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | id |
+| Structural counts | 11 columns; 9 PK/FK/UQ/CHECK/exclusion constraints; 8 named PostgreSQL 18 NOT NULL constraints; 3 indexes; 4 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `code` | `character varying(64)` | No | — | Inferred: stores code for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `created_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_logistics_delivery_failure_reasons_created_by_user_id_users) |
-| `description` | `text` | Yes | — | Inferred: stores description for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `display_name` | `character varying(150)` | No | — | Inferred: stores display name for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `id` | `bigint` | No | — | Internal numeric primary key | Uniquely identifies a master or newer table row | key: review PK and unique rules below |
-| `is_active` | `boolean` | No | `true` | Yes/no flag for is active | Control conditional business behavior | See exact constraints |
-| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | optimistic concurrency |
-| `sort_order` | `integer` | No | `0` | Inferred: stores sort order for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | See exact constraints |
-| `updated_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_logistics_delivery_failure_reasons_updated_by_user_id_users) |
-
-**Primary key columns (Confirmed):** `id`. See the structural contract for the exact primary-key constraint name.
+| `code` | `character varying(64)` | No | — | Inferred: stores code for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `created_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_logistics_delivery_failure_reasons_created_by_user_id_users` |
+| `description` | `text` | Yes | — | Inferred: stores description for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `display_name` | `character varying(150)` | No | — | Inferred: stores display name for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `id` | `bigint` | No | — | Internal numeric primary key | Uniquely identifies a master or newer table row | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `is_active` | `boolean` | No | `true` | Yes/no flag for is active | Control conditional business behavior | Exact constraints below |
+| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | Checked positive; optimistic precondition and maintenance trigger |
+| `sort_order` | `integer` | No | `0` | Inferred: stores sort order for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
+| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | Exact constraints below |
+| `updated_by_user_id` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_logistics_delivery_failure_reasons_updated_by_user_id_users` |
 
 ## Record lifecycle and users
 
@@ -29,18 +37,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `logistics.delivery_failure_reasons` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `created_by_user_id` → `identity.users(id)` via `fk_logistics_delivery_failure_reasons_created_by_user_id_users`; `FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `updated_by_user_id` → `identity.users(id)` via `fk_logistics_delivery_failure_reasons_updated_by_user_id_users`; `FOREIGN KEY (updated_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_logistics_delivery_failure_reasons_created_by_user_id_users | `created_by_user_id` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_logistics_delivery_failure_reasons_updated_by_user_id_users | `updated_by_user_id` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (updated_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 
-**Referenced by 2 FK constraints** (sample): `logistics.delivery_attempts`, `logistics.ndr_cases`.
+### Dependent tables
+
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`logistics.delivery_attempts`](../../Tables/logistics/delivery_attempts.md) | fk_logistics_delivery_attempts_controlled_reason | `reason_code_id, reason_code` | `id, code` |
+| [`logistics.ndr_cases`](../../Tables/logistics/ndr_cases.md) | fk_logistics_ndr_cases_controlled_reason | `reason_code_id, reason_code` | `id, code` |
 
 ## `logistics.delivery_failure_reasons` — exact structural contracts
-
-**Identity:** `id` BIGINT.
-
-**Counts:** 11 columns, 9 constraints, 3 indexes, 4 triggers.
 
 ### Existing foreign-key dependencies
 
@@ -62,29 +75,35 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_logistics_delivery_failure_reasons` | PRIMARY KEY | `PRIMARY KEY (id)` |
 | `uq_logistics_delivery_failure_reasons_code` | UNIQUE | `UNIQUE (code)` |
 | `uq_logistics_delivery_failure_reasons_id_code` | UNIQUE | `UNIQUE (id, code)` |
+| `delivery_failure_reasons_code_not_null` | NOT NULL | `NOT NULL code` |
+| `delivery_failure_reasons_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `delivery_failure_reasons_display_name_not_null` | NOT NULL | `NOT NULL display_name` |
+| `delivery_failure_reasons_id_not_null` | NOT NULL | `NOT NULL id` |
+| `delivery_failure_reasons_is_active_not_null` | NOT NULL | `NOT NULL is_active` |
+| `delivery_failure_reasons_row_version_not_null` | NOT NULL | `NOT NULL row_version` |
+| `delivery_failure_reasons_sort_order_not_null` | NOT NULL | `NOT NULL sort_order` |
+| `delivery_failure_reasons_updated_at_not_null` | NOT NULL | `NOT NULL updated_at` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `pk_logistics_delivery_failure_reasons` | `CREATE UNIQUE INDEX pk_logistics_delivery_failure_reasons ON logistics.delivery_failure_reasons USING btree (id)` |
-| `uq_logistics_delivery_failure_reasons_code` | `CREATE UNIQUE INDEX uq_logistics_delivery_failure_reasons_code ON logistics.delivery_failure_reasons USING btree (code)` |
-| `uq_logistics_delivery_failure_reasons_id_code` | `CREATE UNIQUE INDEX uq_logistics_delivery_failure_reasons_id_code ON logistics.delivery_failure_reasons USING btree (id, code)` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `pk_logistics_delivery_failure_reasons` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_logistics_delivery_failure_reasons ON logistics.delivery_failure_reasons USING btree (id)` |
+| `uq_logistics_delivery_failure_reasons_code` | btree | `(code)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_logistics_delivery_failure_reasons_code ON logistics.delivery_failure_reasons USING btree (code)` |
+| `uq_logistics_delivery_failure_reasons_id_code` | btree | `(id, code)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_logistics_delivery_failure_reasons_id_code ON logistics.delivery_failure_reasons USING btree (id, code)` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON logistics.delivery_failure_reasons FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'id', '')` |
-| `master_guard` | `CREATE TRIGGER master_guard BEFORE INSERT OR DELETE OR UPDATE ON logistics.delivery_failure_reasons FOR EACH ROW EXECUTE FUNCTION platform.guard_master()` |
-| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON logistics.delivery_failure_reasons FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON logistics.delivery_failure_reasons FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'id', '')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON logistics.delivery_failure_reasons FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'id', '')` | O |
+| `master_guard` | `CREATE TRIGGER master_guard BEFORE INSERT OR DELETE OR UPDATE ON logistics.delivery_failure_reasons FOR EACH ROW EXECUTE FUNCTION platform.guard_master()` | O |
+| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON logistics.delivery_failure_reasons FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON logistics.delivery_failure_reasons FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'id', '')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.
 
 ## Master-data planning
 
@@ -98,7 +117,7 @@ Application code should catch and translate database errors into safe user messa
 | Scope | Global catalog/reference; scope still limits administrative maintenance. |
 | Referencing tables | `logistics.delivery_attempts`, `logistics.ndr_cases` |
 | Features | `DLV-03`, `RID-04`, `RID-06` |
-| API consumers | [API-066](../../../05-APIs/Delivery_Operations.md), [API-073](../../../05-APIs/Rider_App.md), [API-074](../../../05-APIs/Rider_App.md) |
+| API consumers | [API-066](../../../03-Modules/Delivery/APIs.md), [API-073](../../../03-Modules/Rider-Operations/APIs.md), [API-074](../../../03-Modules/Rider-Operations/APIs.md) |
 
 ### Expected initial records
 

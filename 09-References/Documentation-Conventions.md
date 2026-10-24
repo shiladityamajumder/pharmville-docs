@@ -2,7 +2,7 @@
 
 ## Files and navigation
 
-Keep the numbered top-level folders. Use descriptive `Title-Case-Words.md` filenames and existing underscore module directories. Add working relative links; do not link outside the checkout. Record supplied-source paths and immutable verification evidence centrally in [migration evidence](../04-Database/Migrations.md).
+Keep the numbered top-level folders. Use descriptive `Title-Case-Words.md` filenames and descriptive module directories in Module-Registry.json; stable underscore IDs remain unchanged. Add working relative links; do not link outside the checkout. Record supplied-source paths and immutable verification evidence centrally in [migration evidence](../04-Database/Migrations.md).
 
 Use one H1 per page, H2 sections and H3 subsections without skipping levels. Prefer paragraphs for explanations, numbered steps for chronology and short tables for comparison. Tables need an adjacent separator and the same number of cells in every row; escape literal pipes as `\|`. Keep blank lines around blocks.
 
@@ -37,12 +37,18 @@ npm run test:validator
 npm run validate
 npm run validate:render
 npm run validate:database
+npm run validate:api -- --strict
+npm run validate:blueprint
 ```
 
 Default validation checks all Markdown, portable links/anchors, table widths, headings, fences, empty files, archive artifacts, exact feature references and actual Mermaid parsing. Render validation writes local SVG/PNG files and JSON results under ignored `artifacts/`.
 
-The database check uses healthcare_db/ inside this repository or an explicitly selected PHARMVILLE_DATABASE_SOURCE and fails if unavailable or mismatched. Supplied copies without standalone Git metadata use recorded file hashes; the parent documentation Git revision is never treated as the database revision. Documentation CI does not claim live database parity.
+The database check verifies canonical SQL/catalog/register hashes and all table structural documentation. `python3 scripts/validate-database.py --fresh` creates its own private disposable PostgreSQL cluster, installs SQL, compares 23 catalog dimensions and stops the cluster. No environment credentials, legacy source checkout or production database are used.
 
 To add a feature: obtain its scope/decision source, assign one unused ID in the inventory, define owner/command/data boundaries, update the master register, add domain BFD coverage and technical/API/data contracts, specify normal and meaningful failure tests, add its development task, and run checks.
 
 A new module also needs README, HLD, LLD, Edge-Cases and API entry points. Do not promote a draft threshold or provider detail to an approved requirement.
+
+## Independent schema/example audit
+
+`python3 scripts/validate-openapi.py` performs OpenAPI 3.1 validation, JSON Schema 2020-12 example checks and exact Markdown/OpenAPI example synchronization. Run it in a validation environment with PyYAML, openapi-spec-validator and jsonschema available; it is not a database deployment or application dependency. The executed tool versions and report are recorded in [planning validation](../05-APIs/Planning-Validation.md). The stricter structural API validator does not erase the ten documented conceptual gaps.

@@ -1,68 +1,35 @@
-# Authentication Access
+# Compatibility navigation
 
-[Business flow](../../00-Business-Guide/Accounts-and-Login.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
+This document moved to the module-first source of truth. [Open the canonical document](../Authentication/README.md). Existing paths and section anchors remain available for wireframe and historical references.
 
-## MOD-017 — Login, sessions, roles and access control
+<a id="authentication-access"></a>
 
-**Source classification:** 4 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
+[Open section](../Authentication/README.md#authentication-access)
 
-**Purpose:** Client-supplied actor, role and location are never trusted as authorisation context.
+<a id="mod-017--login-sessions-roles-and-access-control"></a>
 
-**Feature coverage**
+[Open section](../Authentication/README.md#mod-017--login-sessions-roles-and-access-control)
 
-- **AUTH-01 / REQ-102:** Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager (Must (draft)).
-- **AUTH-02 / REQ-103:** Lockout rules, session limits, one session per staff account (Must (draft)).
-- **AUTH-03 / REQ-104:** OTP rate limits per number and IP (Must (draft)).
-- **AUTH-04 / REQ-105:** Permissions checked on the server for every request (Must (draft)).
+<a id="developer-navigation"></a>
 
-### Developer navigation
+[Open section](../Authentication/README.md#developer-navigation)
 
-- 🏗️ [Module HLD](HLD.md)
-- ⚙️ [Module LLD](LLD.md)
-- Internal architecture
-- 🔗 [API contracts](../../05-APIs/Authentication_Access.md)
-- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
-- 🧪 [Testing](../../07-Engineering/Testing.md)
-- 🗓️ [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
+<a id="mod-017-login-sessions-roles-and-access-control--hld"></a>
 
-**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
+[Open section](../Authentication/README.md#mod-017-login-sessions-roles-and-access-control--hld)
 
-## MOD-017: Login, sessions, roles and access control — HLD
+<a id="major-operations"></a>
 
-> [!NOTE]
-> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+[Open section](../Authentication/README.md#major-operations)
 
-**Business responsibility:** Login, sessions, roles and access control. Client-supplied actor, role and location are never trusted as authorisation context.
+<a id="dependencies-and-trust-boundaries"></a>
 
-**System responsibility:** The `Authentication_Access` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
+[Open section](../Authentication/README.md#dependencies-and-trust-boundaries)
 
-### Major operations
+<a id="risk"></a>
 
-- Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager (`AUTH-01`)
-- Lockout rules, session limits, one session per staff account (`AUTH-02`)
-- OTP rate limits per number and IP (`AUTH-03`)
-- Permissions checked on the server for every request (`AUTH-04`)
+[Open section](../Authentication/README.md#risk)
 
-### Dependencies and trust boundaries
+<a id="related-design-and-delivery-references"></a>
 
-- Database candidates: `identity.users`, `identity.sessions`, `identity.roles`, `identity.user_roles`, `identity.permissions`.
-- Role, patient, store and order scope resolved from trusted access context, not JSON body.
-- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
-- Use local transactions for authoritative state; publish external side effects only after commit.
-
-**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
-
-### Risk
-
-Client-supplied actor, role and location are never trusted as authorisation context. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
-
-## Related design and delivery references
-
-- 🏗️ [HLD](HLD.md)
-- ⚙️ [LLD](LLD.md)
-- 🧪 [Edge cases](Edge-Cases.md)
-- 🔗 [API contracts](../../05-APIs/Authentication_Access.md)
-- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
-- 🧪 [QA scenarios](../../07-Engineering/Testing.md)
-- 🗓️ [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
-- End-to-end flows: [workflows](../../06-Workflows/README.md)
+[Open section](../Authentication/README.md#related-design-and-delivery-references)

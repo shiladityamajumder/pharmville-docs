@@ -1,0 +1,2008 @@
+{
+  "appointment.appointment_slots": {
+    "owner": "Future appointment owner \u2014 Requires Decision D-027",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "appointment.appointment_status_history": {
+    "owner": "Future appointment owner \u2014 Requires Decision D-027",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "appointment.appointments": {
+    "owner": "Future appointment owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "appointment.availability_exceptions": {
+    "owner": "Future appointment owner \u2014 Requires Decision D-027",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "appointment.availability_rules": {
+    "owner": "Future appointment owner \u2014 Requires Decision D-027",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "appointment.practitioner_services": {
+    "owner": "Future appointment owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "appointment.service_types": {
+    "owner": "Future appointment owner \u2014 Requires Decision D-027",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "appointment.teleconsultation_sessions": {
+    "owner": "Future appointment owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "appointment.waiting_room_events": {
+    "owner": "Future appointment owner \u2014 Requires Decision D-027",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "catalog.brands": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "catalog.categories": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "catalog.commerce_classes": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Product_Catalog"
+    ]
+  },
+  "catalog.dosage_forms": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "catalog.manufacturers": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "catalog.product_attributes": {
+    "owner": "Product_Catalog",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "catalog.product_classification_history": {
+    "owner": "Product_Catalog",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "catalog.product_content": {
+    "owner": "Product_Catalog",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "catalog.product_identifiers": {
+    "owner": "Product_Catalog",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations"
+    ]
+  },
+  "catalog.product_media": {
+    "owner": "Product_Catalog",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "catalog.product_regulatory": {
+    "owner": "Product_Catalog",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "catalog.product_relationships": {
+    "owner": "Product_Catalog",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "catalog.product_salts": {
+    "owner": "Product_Catalog",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "catalog.product_variants": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "catalog.products": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Customer_Accounts",
+      "Inventory",
+      "Order_Operations",
+      "Product_Catalog",
+      "Store_Operations"
+    ]
+  },
+  "catalog.salts": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "catalog.substitution_group_products": {
+    "owner": "Product_Catalog",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "catalog.substitution_groups": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "catalog.units_of_measure": {
+    "owner": "Product_Catalog",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.care_episodes": {
+    "owner": "Future clinical-care owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.consultations": {
+    "owner": "Future clinical-care owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.diagnoses": {
+    "owner": "Future clinical-care owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.observations": {
+    "owner": "Future clinical-care owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.order_review_items": {
+    "owner": "Pharmacist_Review",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments",
+      "Inventory",
+      "Order_Operations",
+      "Pharmacist_Review",
+      "Prescription_Upload",
+      "Rider_App",
+      "Store_Operations"
+    ]
+  },
+  "clinical.order_reviews": {
+    "owner": "Pharmacist_Review",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Finance_Payments",
+      "Inventory",
+      "Order_Operations",
+      "Pharmacist_Review",
+      "Prescription_Upload",
+      "Rider_App",
+      "Store_Operations"
+    ]
+  },
+  "clinical.patient_allergies": {
+    "owner": "Future clinical-care owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.patient_conditions": {
+    "owner": "Future clinical-care owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.patient_medications": {
+    "owner": "Future clinical-care owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.patient_profiles": {
+    "owner": "Prescription_Upload",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Customer_Accounts",
+      "Prescription_Upload"
+    ]
+  },
+  "clinical.practitioner_organizations": {
+    "owner": "Future clinical-care owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.practitioner_profiles": {
+    "owner": "Pharmacist_Review",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Pharmacist_Review"
+    ]
+  },
+  "clinical.prescription_access_logs": {
+    "owner": "Prescription_Upload",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "clinical.prescription_documents": {
+    "owner": "Prescription_Upload",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Pharmacist_Review",
+      "Prescription_Upload"
+    ]
+  },
+  "clinical.prescription_items": {
+    "owner": "Prescription_Upload",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Pharmacist_Review"
+    ]
+  },
+  "clinical.prescriptions": {
+    "owner": "Prescription_Upload",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Pharmacist_Review",
+      "Prescription_Upload"
+    ]
+  },
+  "clinical.review_reason_codes": {
+    "owner": "Pharmacist_Review",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Pharmacist_Review"
+    ]
+  },
+  "commerce.cancellation_items": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders"
+    ]
+  },
+  "commerce.cancellation_reason_codes": {
+    "owner": "Order_Operations",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders"
+    ]
+  },
+  "commerce.cancellations": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders"
+    ]
+  },
+  "commerce.cart_items": {
+    "owner": "Cart_Checkout",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout"
+    ]
+  },
+  "commerce.carts": {
+    "owner": "Cart_Checkout",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout"
+    ]
+  },
+  "commerce.checkouts": {
+    "owner": "Cart_Checkout",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Customer_Accounts"
+    ]
+  },
+  "commerce.order_allocations": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Order_Operations",
+      "Warehouse"
+    ]
+  },
+  "commerce.order_charges": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "commerce.order_discounts": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "commerce.order_groups": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "commerce.order_items": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Customer_Orders",
+      "Inventory",
+      "Order_Operations",
+      "Pharmacist_Review",
+      "Prescription_Upload",
+      "Store_Operations"
+    ]
+  },
+  "commerce.order_revisions": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Customer_Orders",
+      "Finance_Payments",
+      "Inventory",
+      "Order_Operations",
+      "Pharmacist_Review",
+      "Rider_App",
+      "Store_Operations",
+      "Warehouse"
+    ]
+  },
+  "commerce.order_status_history": {
+    "owner": "Order_Operations",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Customer_Orders",
+      "Order_Operations",
+      "Pharmacist_Review"
+    ]
+  },
+  "commerce.orders": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Cart_Checkout",
+      "Customer_Accounts",
+      "Customer_Orders",
+      "Finance_Payments",
+      "Inventory",
+      "Notifications",
+      "Order_Operations",
+      "Pharmacist_Review",
+      "Prescription_Upload",
+      "Reporting",
+      "Rider_App",
+      "Store_Operations",
+      "Warehouse"
+    ]
+  },
+  "commerce.return_items": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders"
+    ]
+  },
+  "commerce.return_reason_codes": {
+    "owner": "Order_Operations",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders"
+    ]
+  },
+  "commerce.returns": {
+    "owner": "Order_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders"
+    ]
+  },
+  "compliance.adverse_event_reports": {
+    "owner": "Pharmacist_Review via Compliance owner",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "compliance.evidence": {
+    "owner": "Customer_Accounts via Privacy/Legal owner",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "compliance.legal_holds": {
+    "owner": "Customer_Accounts via Privacy/Legal owner",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Accounts"
+    ]
+  },
+  "compliance.privacy_requests": {
+    "owner": "Customer_Accounts via Privacy/Legal owner",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Accounts"
+    ]
+  },
+  "compliance.product_recalls": {
+    "owner": "Pharmacist_Review via Compliance owner",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "compliance.recall_lots": {
+    "owner": "Pharmacist_Review via Compliance owner",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "compliance.regulatory_authorities": {
+    "owner": "Pharmacist_Review via Compliance owner",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "compliance.regulatory_registrations": {
+    "owner": "Pharmacist_Review via Compliance owner",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "customer.addresses": {
+    "owner": "Customer_Accounts",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Customer_Accounts"
+    ]
+  },
+  "customer.consent_events": {
+    "owner": "Customer_Accounts",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Accounts"
+    ]
+  },
+  "customer.consents": {
+    "owner": "Customer_Accounts",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Accounts"
+    ]
+  },
+  "customer.family_members": {
+    "owner": "Customer_Accounts",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Customer_Accounts",
+      "Prescription_Upload"
+    ]
+  },
+  "customer.preferences": {
+    "owner": "Customer_Accounts",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "customer.profiles": {
+    "owner": "Customer_Accounts",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Accounts"
+    ]
+  },
+  "customer.wishlist_items": {
+    "owner": "Customer_Accounts",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Accounts"
+    ]
+  },
+  "customer.wishlists": {
+    "owner": "Customer_Accounts",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Accounts"
+    ]
+  },
+  "diagnostics.diagnostic_order_items": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.diagnostic_orders": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.diagnostic_reports": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.diagnostic_result_values": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.lab_locations": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.lab_offerings": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.lab_providers": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.sample_collections": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.sample_events": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.samples": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.test_definitions": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.test_package_items": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "diagnostics.test_packages": {
+    "owner": "Future diagnostics owner \u2014 Requires Decision D-027",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "finance.accounts": {
+    "owner": "Finance_Payments",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "finance.credit_notes": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "finance.invoice_items": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders",
+      "Finance_Payments",
+      "Reporting"
+    ]
+  },
+  "finance.invoices": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders",
+      "Finance_Payments",
+      "Reporting"
+    ]
+  },
+  "finance.journal_entries": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "finance.journal_lines": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "finance.settlement_items": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "finance.settlement_runs": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "fulfillment.fulfillment_events": {
+    "owner": "Store_Operations",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations"
+    ]
+  },
+  "fulfillment.fulfillment_order_items": {
+    "owner": "Store_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "fulfillment.fulfillment_orders": {
+    "owner": "Store_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders",
+      "Order_Operations",
+      "Reporting",
+      "Rider_App",
+      "Store_Operations"
+    ]
+  },
+  "fulfillment.pack_tasks": {
+    "owner": "Store_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations"
+    ]
+  },
+  "fulfillment.package_items": {
+    "owner": "Store_Operations",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations"
+    ]
+  },
+  "fulfillment.packages": {
+    "owner": "Store_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Delivery_Operations",
+      "Reporting",
+      "Rider_App",
+      "Store_Operations"
+    ]
+  },
+  "fulfillment.pick_task_items": {
+    "owner": "Store_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations"
+    ]
+  },
+  "fulfillment.pick_tasks": {
+    "owner": "Store_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations"
+    ]
+  },
+  "fulfillment.picking_wave_orders": {
+    "owner": "Store_Operations",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "fulfillment.picking_waves": {
+    "owner": "Store_Operations",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "identity.api_client_secrets": {
+    "owner": "Authentication_Access",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "identity.api_clients": {
+    "owner": "Authentication_Access",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "identity.login_attempts": {
+    "owner": "Authentication_Access",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Authentication_Access"
+    ]
+  },
+  "identity.mfa_factors": {
+    "owner": "Authentication_Access",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Authentication_Access"
+    ]
+  },
+  "identity.otp_challenges": {
+    "owner": "Authentication_Access",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Accounts"
+    ]
+  },
+  "identity.password_history": {
+    "owner": "Authentication_Access",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "identity.permissions": {
+    "owner": "Authentication_Access",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Authentication_Access"
+    ]
+  },
+  "identity.role_permissions": {
+    "owner": "Authentication_Access",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Authentication_Access"
+    ]
+  },
+  "identity.roles": {
+    "owner": "Authentication_Access",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Authentication_Access",
+      "Delivery_Operations"
+    ]
+  },
+  "identity.sessions": {
+    "owner": "Authentication_Access",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Authentication_Access",
+      "Customer_Accounts"
+    ]
+  },
+  "identity.trusted_devices": {
+    "owner": "Authentication_Access",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "identity.user_profiles": {
+    "owner": "Authentication_Access",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "identity.user_roles": {
+    "owner": "Authentication_Access",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Authentication_Access",
+      "Delivery_Operations"
+    ]
+  },
+  "identity.users": {
+    "owner": "Authentication_Access",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Authentication_Access",
+      "Customer_Accounts",
+      "Delivery_Operations"
+    ]
+  },
+  "insurance.claim_documents": {
+    "owner": "Future insurance owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "insurance.claim_status_history": {
+    "owner": "Future insurance owner \u2014 Requires Decision D-027",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "insurance.claims": {
+    "owner": "Future insurance owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "insurance.eligibility_checks": {
+    "owner": "Future insurance owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "insurance.insurers": {
+    "owner": "Future insurance owner \u2014 Requires Decision D-027",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "insurance.policies": {
+    "owner": "Future insurance owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "insurance.policy_members": {
+    "owner": "Future insurance owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "insurance.tpas": {
+    "owner": "Future insurance owner \u2014 Requires Decision D-027",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "logistics.carrier_accounts": {
+    "owner": "Delivery_Operations",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "logistics.carriers": {
+    "owner": "Delivery_Operations",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "logistics.delivery_assignments": {
+    "owner": "Delivery_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Delivery_Operations",
+      "Rider_App"
+    ]
+  },
+  "logistics.delivery_attempts": {
+    "owner": "Delivery_Operations",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Delivery_Operations",
+      "Rider_App"
+    ]
+  },
+  "logistics.delivery_failure_reasons": {
+    "owner": "Delivery_Operations",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Delivery_Operations",
+      "Rider_App"
+    ]
+  },
+  "logistics.delivery_location_updates": {
+    "owner": "Delivery_Operations",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Rider_App"
+    ]
+  },
+  "logistics.delivery_otp_challenges": {
+    "owner": "Delivery_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Rider_App"
+    ]
+  },
+  "logistics.delivery_routes": {
+    "owner": "Delivery_Operations",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "logistics.delivery_slots": {
+    "owner": "Delivery_Operations",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "logistics.ndr_cases": {
+    "owner": "Delivery_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Delivery_Operations",
+      "Rider_App"
+    ]
+  },
+  "logistics.reverse_shipments": {
+    "owner": "Delivery_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "logistics.rider_shifts": {
+    "owner": "Delivery_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Delivery_Operations",
+      "Rider_App"
+    ]
+  },
+  "logistics.serviceability_rules": {
+    "owner": "Delivery_Operations",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Order_Operations",
+      "Product_Catalog"
+    ]
+  },
+  "logistics.shipment_events": {
+    "owner": "Delivery_Operations",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Rider_App"
+    ]
+  },
+  "logistics.shipments": {
+    "owner": "Delivery_Operations",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Customer_Orders",
+      "Delivery_Operations",
+      "Reporting",
+      "Rider_App"
+    ]
+  },
+  "marketplace.commission_plans": {
+    "owner": "Future marketplace owner \u2014 Requires Decision D-027",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "marketplace.seller_commission_assignments": {
+    "owner": "Future marketplace owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "marketplace.seller_locations": {
+    "owner": "Future marketplace owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "marketplace.seller_product_listings": {
+    "owner": "Future marketplace owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "marketplace.seller_ratings": {
+    "owner": "Future marketplace owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "marketplace.seller_service_levels": {
+    "owner": "Future marketplace owner \u2014 Requires Decision D-027",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "marketplace.sellers": {
+    "owner": "Future marketplace owner \u2014 Requires Decision D-027",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "membership.benefit_usage": {
+    "owner": "Future membership owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "membership.loyalty_accounts": {
+    "owner": "Future membership owner \u2014 Requires Decision D-027",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "membership.loyalty_ledger": {
+    "owner": "Future membership owner \u2014 Requires Decision D-027",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "membership.plan_benefits": {
+    "owner": "Future membership owner \u2014 Requires Decision D-027",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "membership.plans": {
+    "owner": "Future membership owner \u2014 Requires Decision D-027",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "membership.subscriptions": {
+    "owner": "Future membership owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "notification.device_endpoints": {
+    "owner": "Notifications",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Notifications"
+    ]
+  },
+  "notification.in_app_notifications": {
+    "owner": "Notifications",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "notification.message_attachments": {
+    "owner": "Notifications",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "notification.message_attempts": {
+    "owner": "Notifications",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Notifications"
+    ]
+  },
+  "notification.messages": {
+    "owner": "Notifications",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Notifications"
+    ]
+  },
+  "notification.provider_configurations": {
+    "owner": "Notifications",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Notifications"
+    ]
+  },
+  "notification.provider_webhooks": {
+    "owner": "Notifications",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "notification.suppressions": {
+    "owner": "Notifications",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Notifications"
+    ]
+  },
+  "notification.templates": {
+    "owner": "Notifications",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Notifications"
+    ]
+  },
+  "notification.user_channel_preferences": {
+    "owner": "Notifications",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Notifications"
+    ]
+  },
+  "organization.bank_accounts": {
+    "owner": "Admin_CMS",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "organization.departments": {
+    "owner": "Admin_CMS",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "organization.licenses": {
+    "owner": "Admin_CMS",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Inventory",
+      "Order_Operations",
+      "Product_Catalog",
+      "Rider_App",
+      "Store_Operations",
+      "Warehouse"
+    ]
+  },
+  "organization.locations": {
+    "owner": "Admin_CMS",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Delivery_Operations",
+      "Inventory",
+      "Order_Operations",
+      "Product_Catalog",
+      "Warehouse"
+    ]
+  },
+  "organization.memberships": {
+    "owner": "Admin_CMS",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Delivery_Operations",
+      "Order_Operations",
+      "Pharmacist_Review",
+      "Reporting",
+      "Store_Operations"
+    ]
+  },
+  "organization.organizations": {
+    "owner": "Admin_CMS",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS"
+    ]
+  },
+  "payment.chargebacks": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "payment.cod_collections": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Delivery_Operations",
+      "Finance_Payments",
+      "Rider_App"
+    ]
+  },
+  "payment.customer_payment_methods": {
+    "owner": "Finance_Payments",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "payment.payment_attempts": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments"
+    ]
+  },
+  "payment.payment_intents": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments",
+      "Rider_App"
+    ]
+  },
+  "payment.payment_transactions": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments"
+    ]
+  },
+  "payment.payment_webhooks": {
+    "owner": "Finance_Payments",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments"
+    ]
+  },
+  "payment.provider_accounts": {
+    "owner": "Finance_Payments",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments"
+    ]
+  },
+  "payment.reconciliation_items": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments"
+    ]
+  },
+  "payment.reconciliation_runs": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments"
+    ]
+  },
+  "payment.refund_allocations": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments"
+    ]
+  },
+  "payment.refund_reason_codes": {
+    "owner": "Finance_Payments",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments"
+    ]
+  },
+  "payment.refunds": {
+    "owner": "Finance_Payments",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders",
+      "Finance_Payments"
+    ]
+  },
+  "platform.application_settings": {
+    "owner": "Admin_CMS",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Cart_Checkout"
+    ]
+  },
+  "platform.audit_logs": {
+    "owner": "Audit",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Audit"
+    ]
+  },
+  "platform.cms_banners": {
+    "owner": "Admin_CMS",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "platform.cms_page_versions": {
+    "owner": "Admin_CMS",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS"
+    ]
+  },
+  "platform.cms_pages": {
+    "owner": "Admin_CMS",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS"
+    ]
+  },
+  "platform.data_retention_policies": {
+    "owner": "Admin_CMS",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "platform.feature_flags": {
+    "owner": "Admin_CMS",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "platform.file_access_events": {
+    "owner": "Shared platform file service \u2014 engineering owner; no clinical write grant",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "platform.file_access_grants": {
+    "owner": "Shared platform file service \u2014 engineering owner; no clinical write grant",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders",
+      "Finance_Payments",
+      "Rider_App"
+    ]
+  },
+  "platform.file_objects": {
+    "owner": "Shared platform file service \u2014 engineering owner; no clinical write grant",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Customer_Orders",
+      "Finance_Payments",
+      "Prescription_Upload",
+      "Product_Catalog",
+      "Rider_App"
+    ]
+  },
+  "platform.file_scan_events": {
+    "owner": "Shared platform file service \u2014 engineering owner; no clinical write grant",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "platform.file_upload_sessions": {
+    "owner": "Shared platform file service \u2014 engineering owner; no clinical write grant",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Prescription_Upload"
+    ]
+  },
+  "platform.file_variants": {
+    "owner": "Shared platform file service \u2014 engineering owner; no clinical write grant",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "platform.idempotency_keys": {
+    "owner": "Shared platform runtime \u2014 engineering owner",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "platform.inbox_messages": {
+    "owner": "Shared platform runtime \u2014 engineering owner",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "platform.outbox_events": {
+    "owner": "Shared platform runtime \u2014 engineering owner",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Notifications"
+    ]
+  },
+  "platform.report_definitions": {
+    "owner": "Reporting",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Audit",
+      "Reporting"
+    ]
+  },
+  "platform.report_runs": {
+    "owner": "Reporting",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Audit",
+      "Reporting"
+    ]
+  },
+  "platform.scheduled_jobs": {
+    "owner": "Shared platform runtime \u2014 engineering owner",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "platform.webhook_deliveries": {
+    "owner": "Shared platform runtime \u2014 engineering owner",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "platform.webhook_endpoints": {
+    "owner": "Shared platform runtime \u2014 engineering owner",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "pricing.coupon_codes": {
+    "owner": "Product_Catalog",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout"
+    ]
+  },
+  "pricing.price_books": {
+    "owner": "Product_Catalog",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Product_Catalog"
+    ]
+  },
+  "pricing.pricing_evaluations": {
+    "owner": "Product_Catalog",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "pricing.product_prices": {
+    "owner": "Product_Catalog",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Order_Operations",
+      "Product_Catalog"
+    ]
+  },
+  "pricing.promotion_redemptions": {
+    "owner": "Product_Catalog",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout"
+    ]
+  },
+  "pricing.promotion_versions": {
+    "owner": "Product_Catalog",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout"
+    ]
+  },
+  "pricing.promotions": {
+    "owner": "Product_Catalog",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout"
+    ]
+  },
+  "pricing.tax_rules": {
+    "owner": "Finance_Payments",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Cart_Checkout",
+      "Order_Operations",
+      "Product_Catalog"
+    ]
+  },
+  "procurement.goods_receipt_items": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Warehouse"
+    ]
+  },
+  "procurement.goods_receipt_quality_checks": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Warehouse"
+    ]
+  },
+  "procurement.goods_receipts": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Warehouse"
+    ]
+  },
+  "procurement.purchase_order_items": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Warehouse"
+    ]
+  },
+  "procurement.purchase_orders": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Warehouse"
+    ]
+  },
+  "procurement.purchase_requisition_items": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations",
+      "Warehouse"
+    ]
+  },
+  "procurement.purchase_requisitions": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations",
+      "Warehouse"
+    ]
+  },
+  "procurement.purchase_return_items": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "procurement.purchase_returns": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "procurement.supplier_invoices": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Warehouse"
+    ]
+  },
+  "procurement.supplier_licenses": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "procurement.supplier_products": {
+    "owner": "Warehouse",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "procurement.suppliers": {
+    "owner": "Warehouse",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Warehouse"
+    ]
+  },
+  "risk.assessments": {
+    "owner": "Future risk owner \u2014 Requires Decision D-027",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "risk.blocklists": {
+    "owner": "Future risk owner \u2014 Requires Decision D-027",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "risk.cases": {
+    "owner": "Future risk owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "risk.rules": {
+    "owner": "Future risk owner \u2014 Requires Decision D-027",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "risk.signals": {
+    "owner": "Future risk owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "search.documents": {
+    "owner": "Product_Catalog",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "search.indexing_jobs": {
+    "owner": "Product_Catalog",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "search.query_events": {
+    "owner": "Product_Catalog",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "search.redirects": {
+    "owner": "Product_Catalog",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "search.synonyms": {
+    "owner": "Product_Catalog",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Product_Catalog"
+    ]
+  },
+  "support.sla_policies": {
+    "owner": "Future support owner \u2014 Requires Decision D-027",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "support.ticket_actions": {
+    "owner": "Future support owner \u2014 Requires Decision D-027",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "support.ticket_attachments": {
+    "owner": "Future support owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "support.ticket_messages": {
+    "owner": "Future support owner \u2014 Requires Decision D-027",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "support.ticket_status_history": {
+    "owner": "Future support owner \u2014 Requires Decision D-027",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "support.ticket_tag_assignments": {
+    "owner": "Future support owner \u2014 Requires Decision D-027",
+    "classification": "Mapping / Junction",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "support.ticket_tags": {
+    "owner": "Future support owner \u2014 Requires Decision D-027",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "support.tickets": {
+    "owner": "Future support owner \u2014 Requires Decision D-027",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "warehouse.aisles": {
+    "owner": "Warehouse",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "warehouse.bins": {
+    "owner": "Warehouse",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "warehouse.cycle_count_items": {
+    "owner": "Inventory",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "warehouse.cycle_counts": {
+    "owner": "Inventory",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "warehouse.inventory_adjustment_items": {
+    "owner": "Inventory",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Inventory"
+    ]
+  },
+  "warehouse.inventory_adjustments": {
+    "owner": "Inventory",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Inventory"
+    ]
+  },
+  "warehouse.inventory_lots": {
+    "owner": "Inventory",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Inventory",
+      "Order_Operations",
+      "Product_Catalog",
+      "Reporting",
+      "Store_Operations",
+      "Warehouse"
+    ]
+  },
+  "warehouse.racks": {
+    "owner": "Warehouse",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "warehouse.replenishment_rules": {
+    "owner": "Warehouse",
+    "classification": "Configuration",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Inventory",
+      "Store_Operations"
+    ]
+  },
+  "warehouse.stock_balances": {
+    "owner": "Inventory",
+    "classification": "Derived / Operational",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Admin_CMS",
+      "Inventory",
+      "Order_Operations",
+      "Product_Catalog",
+      "Reporting",
+      "Warehouse"
+    ]
+  },
+  "warehouse.stock_holds": {
+    "owner": "Inventory",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Inventory"
+    ]
+  },
+  "warehouse.stock_ledger": {
+    "owner": "Inventory",
+    "classification": "Audit / History",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  },
+  "warehouse.stock_movement_reason_codes": {
+    "owner": "Inventory",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Inventory"
+    ]
+  },
+  "warehouse.stock_reservations": {
+    "owner": "Inventory",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Finance_Payments",
+      "Inventory",
+      "Rider_App",
+      "Store_Operations"
+    ]
+  },
+  "warehouse.stock_transfer_items": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations",
+      "Warehouse"
+    ]
+  },
+  "warehouse.stock_transfers": {
+    "owner": "Warehouse",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Store_Operations",
+      "Warehouse"
+    ]
+  },
+  "warehouse.warehouses": {
+    "owner": "Warehouse",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Inventory",
+      "Order_Operations",
+      "Reporting",
+      "Store_Operations",
+      "Warehouse"
+    ]
+  },
+  "warehouse.zones": {
+    "owner": "Warehouse",
+    "classification": "Master / Reference",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": []
+  }
+}

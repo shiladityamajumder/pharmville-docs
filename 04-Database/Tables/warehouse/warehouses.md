@@ -1,36 +1,44 @@
 # `warehouse.warehouses`
 
-Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
+**Canonical structure:** [standalone SQL](../../../pharmville-database/pharmville_schema.sql) and [validated catalog](../../Schema-Catalog.json). Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.
 
 **Business purpose (Inferred):** Holds warehouses records within the warehouse domain (stock balances, lots and transfers). Its precise write owner and lifecycle must be accepted during module implementation.
 
-**Technical purpose:** 21 columns, 13 constraints, 6 indexes, 4 triggers; PK: `internal_id`.
+| Attribute | Contract |
+| --- | --- |
+| Identity | warehouse.warehouses |
+| Classification | Master / Reference |
+| Proposed business write owner | Warehouse |
+| SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
+| Primary key | internal_id |
+| Structural counts | 21 columns; 13 PK/FK/UQ/CHECK/exclusion constraints; 17 named PostgreSQL 18 NOT NULL constraints; 6 indexes; 4 user triggers |
+| Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
+
+## Fields
 
 | Column | Type | Nullable | Default | Meaning | Why needed | Relationship / rule |
 | --- | --- | --- | --- | --- | --- | --- |
-| `code` | `character varying(64)` | No | — | Inferred: stores code for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | See exact constraints |
-| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_warehouse_warehouses_created_by_users) |
-| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | See exact constraints |
-| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_warehouse_warehouses_deleted_by_users) |
-| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | key: review PK and unique rules below |
-| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | key: review PK and unique rules below |
-| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | See exact constraints |
-| `location_id` | `uuid` | No | — | Reference linking this record to locations | Ensures related business data can be joined and validated | FK → `organization.locations` (fk_warehouse_warehouses_location_id_locations) |
-| `location_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.locations` (fk_warehouse_warehouses_location_id_locations_numeric); Numeric/public-key pair verification required |
-| `name` | `character varying(150)` | No | — | Inferred: stores name for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `operating_hours` | `jsonb` | No | `'{}'::jsonb` | Structured operating hours information | Retain a versioned payload or relevant details | See exact constraints |
-| `organization_id` | `uuid` | No | — | Reference linking this record to organizations | Ensures related business data can be joined and validated | FK → `organization.organizations` (fk_warehouse_warehouses_organization_id_organizations) |
-| `organization_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.organizations` (fk_warehouse_warehouses_organization_id_organizations_numeric); Numeric/public-key pair verification required |
-| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | optimistic concurrency |
-| `status` | `character varying(32)` | No | `'active'::character varying` | Current business or processing state | Restricts and records allowed actions | See exact constraints |
-| `supports_cold_chain` | `boolean` | No | `false` | Inferred: stores supports cold chain for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `supports_controlled_drugs` | `boolean` | No | `false` | Inferred: stores supports controlled drugs for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | See exact constraints |
-| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` (fk_warehouse_warehouses_updated_by_users) |
-| `warehouse_type` | `character varying(32)` | No | — | Inferred: stores warehouse type for this table | Inferred: carries this domain attribute; meaning needs owner review | See exact constraints |
-
-**Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
+| `code` | `character varying(64)` | No | — | Inferred: stores code for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `created_at` | `timestamp with time zone` | No | `now()` | Row creation time | Audit timeline and lifecycle | Exact constraints below |
+| `created_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_warehouse_warehouses_created_by_users` |
+| `deleted_at` | `timestamp with time zone` | Yes | — | Soft-deletion time when used | Avoid treating hidden records as active | Exact constraints below |
+| `deleted_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_warehouse_warehouses_deleted_by_users` |
+| `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
+| `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
+| `is_deleted` | `boolean` | No | `false` | Yes/no flag for is deleted | Control conditional business behavior | Exact constraints below |
+| `location_id` | `uuid` | No | — | Reference linking this record to locations | Ensures related business data can be joined and validated | FK → `organization.locations` via `fk_warehouse_warehouses_location_id_locations` |
+| `location_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.locations` via `fk_warehouse_warehouses_location_id_locations_numeric` |
+| `name` | `character varying(150)` | No | — | Inferred: stores name for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `operating_hours` | `jsonb` | No | `'{}'::jsonb` | Structured operating hours information | Retain a versioned payload or relevant details | Exact constraints below |
+| `organization_id` | `uuid` | No | — | Reference linking this record to organizations | Ensures related business data can be joined and validated | FK → `organization.organizations` via `fk_warehouse_warehouses_organization_id_organizations` |
+| `organization_id_internal_id` | `bigint` | No | — | Internal numeric reference to related row | Maintains typed FK correspondence with public UUID reference | FK → `organization.organizations` via `fk_warehouse_warehouses_organization_id_organizations_numeric` |
+| `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | Checked positive; optimistic precondition and maintenance trigger |
+| `status` | `character varying(32)` | No | `'active'::character varying` | Current business or processing state | Restricts and records allowed actions | Collation: default |
+| `supports_cold_chain` | `boolean` | No | `false` | Inferred: stores supports cold chain for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
+| `supports_controlled_drugs` | `boolean` | No | `false` | Inferred: stores supports controlled drugs for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
+| `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | Exact constraints below |
+| `updated_by` | `uuid` | Yes | — | Reference linking this record to users | Ensures related business data can be joined and validated | FK → `identity.users` via `fk_warehouse_warehouses_updated_by_users` |
+| `warehouse_type` | `character varying(32)` | No | — | Inferred: stores warehouse type for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
 
 ## Record lifecycle and users
 
@@ -39,23 +47,78 @@ Schema contract and field explanations from the documentation catalog. The datab
 - **Candidate consuming modules:** Cart_Checkout, Order_Operations, Store_Operations, Inventory, Warehouse. This is schema-level discovery, **not confirmed table-level write ownership**.
 - **Without it:** any feature that reads or writes `warehouse.warehouses` fails its required persistence checks; do not fall back to invented customer or payment state.
 
+The declared business owner above supersedes generic schema-membership guesses. [Module/database map](../../Module-Mapping.md) distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.
+
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_warehouse_warehouses_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `deleted_by` → `identity.users(id)` via `fk_warehouse_warehouses_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `updated_by` → `identity.users(id)` via `fk_warehouse_warehouses_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
-- `location_id` → `organization.locations(id)` via `fk_warehouse_warehouses_location_id_locations`; `FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE RESTRICT`
-- `organization_id` → `organization.organizations(id)` via `fk_warehouse_warehouses_organization_id_organizations`; `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE RESTRICT`
-- `location_id_internal_id` → `organization.locations(internal_id)` via `fk_warehouse_warehouses_location_id_locations_numeric`; `FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE RESTRICT`
-- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_warehouse_warehouses_organization_id_organizations_numeric`; `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE RESTRICT`
+| Constraint | Local columns | References | Exact rule |
+| --- | --- | --- | --- |
+| fk_warehouse_warehouses_created_by_users | `created_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_warehouse_warehouses_deleted_by_users | `deleted_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
+| fk_warehouse_warehouses_location_id_locations | `location_id` | [`organization.locations`](../../Tables/organization/locations.md) | `FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE RESTRICT` |
+| fk_warehouse_warehouses_location_id_locations_numeric | `location_id_internal_id` | [`organization.locations`](../../Tables/organization/locations.md) | `FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE RESTRICT` |
+| fk_warehouse_warehouses_organization_id_organizations | `organization_id` | [`organization.organizations`](../../Tables/organization/organizations.md) | `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE RESTRICT` |
+| fk_warehouse_warehouses_organization_id_organizations_numeric | `organization_id_internal_id` | [`organization.organizations`](../../Tables/organization/organizations.md) | `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE RESTRICT` |
+| fk_warehouse_warehouses_updated_by_users | `updated_by` | [`identity.users`](../../Tables/identity/users.md) | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 
-**Referenced by 52 FK constraints** (sample): `commerce.order_groups`, `commerce.order_allocations`, `fulfillment.fulfillment_orders`, `fulfillment.picking_waves`, `logistics.delivery_slots`, `logistics.delivery_routes`, `marketplace.seller_locations`, `pricing.price_books`, `procurement.purchase_requisitions`, `procurement.purchase_orders`, `procurement.goods_receipts`, `procurement.purchase_returns`.
+### Dependent tables
+
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`commerce.order_allocations`](../../Tables/commerce/order_allocations.md) | fk_commerce_order_allocations_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`commerce.order_allocations`](../../Tables/commerce/order_allocations.md) | fk_commerce_order_allocations_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`commerce.order_groups`](../../Tables/commerce/order_groups.md) | fk_commerce_order_groups_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`commerce.order_groups`](../../Tables/commerce/order_groups.md) | fk_commerce_order_groups_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`fulfillment.fulfillment_orders`](../../Tables/fulfillment/fulfillment_orders.md) | fk_fulfillment_fulfillment_orders_warehouse_id_warehous_f861 | `warehouse_id_internal_id` | `internal_id` |
+| [`fulfillment.fulfillment_orders`](../../Tables/fulfillment/fulfillment_orders.md) | fk_fulfillment_fulfillment_orders_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`fulfillment.picking_waves`](../../Tables/fulfillment/picking_waves.md) | fk_fulfillment_picking_waves_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`fulfillment.picking_waves`](../../Tables/fulfillment/picking_waves.md) | fk_fulfillment_picking_waves_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`logistics.delivery_routes`](../../Tables/logistics/delivery_routes.md) | fk_logistics_delivery_routes_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`logistics.delivery_routes`](../../Tables/logistics/delivery_routes.md) | fk_logistics_delivery_routes_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`logistics.delivery_slots`](../../Tables/logistics/delivery_slots.md) | fk_logistics_delivery_slots_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`logistics.delivery_slots`](../../Tables/logistics/delivery_slots.md) | fk_logistics_delivery_slots_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`marketplace.seller_locations`](../../Tables/marketplace/seller_locations.md) | fk_marketplace_seller_locations_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`marketplace.seller_locations`](../../Tables/marketplace/seller_locations.md) | fk_marketplace_seller_locations_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`pricing.price_books`](../../Tables/pricing/price_books.md) | fk_pricing_price_books_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`pricing.price_books`](../../Tables/pricing/price_books.md) | fk_pricing_price_books_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`procurement.goods_receipts`](../../Tables/procurement/goods_receipts.md) | fk_procurement_goods_receipts_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`procurement.goods_receipts`](../../Tables/procurement/goods_receipts.md) | fk_procurement_goods_receipts_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`procurement.purchase_orders`](../../Tables/procurement/purchase_orders.md) | fk_procurement_purchase_orders_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`procurement.purchase_orders`](../../Tables/procurement/purchase_orders.md) | fk_procurement_purchase_orders_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`procurement.purchase_requisitions`](../../Tables/procurement/purchase_requisitions.md) | fk_procurement_purchase_requisitions_warehouse_id_wareh_cf7d | `warehouse_id_internal_id` | `internal_id` |
+| [`procurement.purchase_requisitions`](../../Tables/procurement/purchase_requisitions.md) | fk_procurement_purchase_requisitions_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`procurement.purchase_returns`](../../Tables/procurement/purchase_returns.md) | fk_procurement_purchase_returns_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`procurement.purchase_returns`](../../Tables/procurement/purchase_returns.md) | fk_procurement_purchase_returns_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.aisles`](../../Tables/warehouse/aisles.md) | fk_warehouse_aisles_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.aisles`](../../Tables/warehouse/aisles.md) | fk_warehouse_aisles_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.bins`](../../Tables/warehouse/bins.md) | fk_warehouse_bins_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.bins`](../../Tables/warehouse/bins.md) | fk_warehouse_bins_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.cycle_counts`](../../Tables/warehouse/cycle_counts.md) | fk_warehouse_cycle_counts_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.cycle_counts`](../../Tables/warehouse/cycle_counts.md) | fk_warehouse_cycle_counts_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.inventory_adjustments`](../../Tables/warehouse/inventory_adjustments.md) | fk_warehouse_inventory_adjustments_warehouse_id_warehou_bdcd | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.inventory_adjustments`](../../Tables/warehouse/inventory_adjustments.md) | fk_warehouse_inventory_adjustments_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.inventory_lots`](../../Tables/warehouse/inventory_lots.md) | fk_warehouse_inventory_lots_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.inventory_lots`](../../Tables/warehouse/inventory_lots.md) | fk_warehouse_inventory_lots_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.racks`](../../Tables/warehouse/racks.md) | fk_warehouse_racks_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.racks`](../../Tables/warehouse/racks.md) | fk_warehouse_racks_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.replenishment_rules`](../../Tables/warehouse/replenishment_rules.md) | fk_warehouse_replenishment_rules_warehouse_id_warehouse_f9b5 | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.replenishment_rules`](../../Tables/warehouse/replenishment_rules.md) | fk_warehouse_replenishment_rules_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.stock_balances`](../../Tables/warehouse/stock_balances.md) | fk_warehouse_stock_balances_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.stock_balances`](../../Tables/warehouse/stock_balances.md) | fk_warehouse_stock_balances_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.stock_holds`](../../Tables/warehouse/stock_holds.md) | fk_warehouse_stock_holds_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.stock_holds`](../../Tables/warehouse/stock_holds.md) | fk_warehouse_stock_holds_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.stock_ledger`](../../Tables/warehouse/stock_ledger.md) | fk_warehouse_stock_ledger_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.stock_ledger`](../../Tables/warehouse/stock_ledger.md) | fk_warehouse_stock_ledger_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.stock_reservations`](../../Tables/warehouse/stock_reservations.md) | fk_warehouse_stock_reservations_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.stock_reservations`](../../Tables/warehouse/stock_reservations.md) | fk_warehouse_stock_reservations_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.stock_transfers`](../../Tables/warehouse/stock_transfers.md) | fk_warehouse_stock_transfers_destination_warehouse_id_w_01ac | `destination_warehouse_id` | `id` |
+| [`warehouse.stock_transfers`](../../Tables/warehouse/stock_transfers.md) | fk_warehouse_stock_transfers_destination_warehouse_id_w_8b92 | `destination_warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.stock_transfers`](../../Tables/warehouse/stock_transfers.md) | fk_warehouse_stock_transfers_source_warehouse_id_wareho_d0e1 | `source_warehouse_id_internal_id` | `internal_id` |
+| [`warehouse.stock_transfers`](../../Tables/warehouse/stock_transfers.md) | fk_warehouse_stock_transfers_source_warehouse_id_warehouses | `source_warehouse_id` | `id` |
+| [`warehouse.zones`](../../Tables/warehouse/zones.md) | fk_warehouse_zones_warehouse_id_warehouses | `warehouse_id` | `id` |
+| [`warehouse.zones`](../../Tables/warehouse/zones.md) | fk_warehouse_zones_warehouse_id_warehouses_numeric | `warehouse_id_internal_id` | `internal_id` |
 
 ## `warehouse.warehouses` — exact structural contracts
-
-**Identity:** `internal_id` BIGINT.
-
-**Counts:** 21 columns, 13 constraints, 6 indexes, 4 triggers.
 
 ### Existing foreign-key dependencies
 
@@ -63,11 +126,11 @@ Schema contract and field explanations from the documentation catalog. The datab
 | --- | --- | --- |
 | `created_by` | `identity.users` | `fk_warehouse_warehouses_created_by_users` |
 | `deleted_by` | `identity.users` | `fk_warehouse_warehouses_deleted_by_users` |
-| `updated_by` | `identity.users` | `fk_warehouse_warehouses_updated_by_users` |
 | `location_id` | `organization.locations` | `fk_warehouse_warehouses_location_id_locations` |
-| `organization_id` | `organization.organizations` | `fk_warehouse_warehouses_organization_id_organizations` |
 | `location_id_internal_id` | `organization.locations` | `fk_warehouse_warehouses_location_id_locations_numeric` |
+| `organization_id` | `organization.organizations` | `fk_warehouse_warehouses_organization_id_organizations` |
 | `organization_id_internal_id` | `organization.organizations` | `fk_warehouse_warehouses_organization_id_organizations_numeric` |
+| `updated_by` | `identity.users` | `fk_warehouse_warehouses_updated_by_users` |
 
 ### Existing constraints
 
@@ -86,32 +149,47 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `fk_warehouse_warehouses_updated_by_users` | FOREIGN KEY | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 | `pk_warehouse_warehouses` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_warehouse_warehouses_id` | UNIQUE | `UNIQUE (id)` |
+| `warehouses_code_not_null` | NOT NULL | `NOT NULL code` |
+| `warehouses_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
+| `warehouses_id_not_null` | NOT NULL | `NOT NULL id` |
+| `warehouses_internal_id_not_null` | NOT NULL | `NOT NULL internal_id` |
+| `warehouses_is_deleted_not_null` | NOT NULL | `NOT NULL is_deleted` |
+| `warehouses_location_id_internal_id_not_null` | NOT NULL | `NOT NULL location_id_internal_id` |
+| `warehouses_location_id_not_null` | NOT NULL | `NOT NULL location_id` |
+| `warehouses_name_not_null` | NOT NULL | `NOT NULL name` |
+| `warehouses_operating_hours_not_null` | NOT NULL | `NOT NULL operating_hours` |
+| `warehouses_organization_id_internal_id_not_null` | NOT NULL | `NOT NULL organization_id_internal_id` |
+| `warehouses_organization_id_not_null` | NOT NULL | `NOT NULL organization_id` |
+| `warehouses_row_version_not_null` | NOT NULL | `NOT NULL row_version` |
+| `warehouses_status_not_null` | NOT NULL | `NOT NULL status` |
+| `warehouses_supports_cold_chain_not_null` | NOT NULL | `NOT NULL supports_cold_chain` |
+| `warehouses_supports_controlled_drugs_not_null` | NOT NULL | `NOT NULL supports_controlled_drugs` |
+| `warehouses_updated_at_not_null` | NOT NULL | `NOT NULL updated_at` |
+| `warehouses_warehouse_type_not_null` | NOT NULL | `NOT NULL warehouse_type` |
 
 ### Existing indexes
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `ix_warehouse_warehouses_location` | `CREATE INDEX ix_warehouse_warehouses_location ON warehouse.warehouses USING btree (location_id)` |
-| `ix_warehouse_warehouses_organization` | `CREATE INDEX ix_warehouse_warehouses_organization ON warehouse.warehouses USING btree (organization_id)` |
-| `ix_warehouse_warehouses_status` | `CREATE INDEX ix_warehouse_warehouses_status ON warehouse.warehouses USING btree (status)` |
-| `pk_warehouse_warehouses` | `CREATE UNIQUE INDEX pk_warehouse_warehouses ON warehouse.warehouses USING btree (internal_id)` |
-| `uq_warehouse_code_active` | `CREATE UNIQUE INDEX uq_warehouse_code_active ON warehouse.warehouses USING btree (code) WHERE is_deleted = false` |
-| `uq_warehouse_warehouses_id` | `CREATE UNIQUE INDEX uq_warehouse_warehouses_id ON warehouse.warehouses USING btree (id)` |
+| Exact name | Method | Columns / expression | Predicate | Purpose | Recorded definition |
+| --- | --- | --- | --- | --- | --- |
+| `ix_warehouse_warehouses_location` | btree | `(location_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_warehouse_warehouses_location ON warehouse.warehouses USING btree (location_id)` |
+| `ix_warehouse_warehouses_organization` | btree | `(organization_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_warehouse_warehouses_organization ON warehouse.warehouses USING btree (organization_id)` |
+| `ix_warehouse_warehouses_status` | btree | `(status)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_warehouse_warehouses_status ON warehouse.warehouses USING btree (status)` |
+| `pk_warehouse_warehouses` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_warehouse_warehouses ON warehouse.warehouses USING btree (internal_id)` |
+| `uq_warehouse_code_active` | btree | `(code)` | is_deleted = false | Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_warehouse_code_active ON warehouse.warehouses USING btree (code) WHERE is_deleted = false` |
+| `uq_warehouse_warehouses_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_warehouse_warehouses_id ON warehouse.warehouses USING btree (id)` |
 
 ### Existing triggers
 
-| Exact name | Recorded definition |
-| --- | --- |
-| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON warehouse.warehouses FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["location_id","location_id_internal_id","organization","locations"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` |
-| `stable_code_guard` | `CREATE TRIGGER stable_code_guard BEFORE INSERT OR DELETE OR UPDATE ON warehouse.warehouses FOR EACH ROW EXECUTE FUNCTION platform.guard_stable_code('code', '[]')` |
-| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON warehouse.warehouses FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` |
-| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON warehouse.warehouses FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["location_id","location_id_internal_id","organization","locations"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` |
+| Exact name | Recorded definition | Enabled |
+| --- | --- | --- |
+| `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON warehouse.warehouses FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["location_id","location_id_internal_id","organization","locations"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` | O |
+| `stable_code_guard` | `CREATE TRIGGER stable_code_guard BEFORE INSERT OR DELETE OR UPDATE ON warehouse.warehouses FOR EACH ROW EXECUTE FUNCTION platform.guard_stable_code('code', '[]')` | O |
+| `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON warehouse.warehouses FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` | O |
+| `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON warehouse.warehouses FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[["location_id","location_id_internal_id","organization","locations"],["organization_id","organization_id_internal_id","organization","organizations"]]', 'internal_id', 'id')` | O |
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
-
-Application code should catch and translate database errors into safe user messages without bypassing these protections.
+Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.
 
 ## Master-data planning
 
@@ -125,7 +203,7 @@ Application code should catch and translate database errors into safe user messa
 | Scope | Organization-specific via organization_id. |
 | Referencing tables | `commerce.order_allocations`, `commerce.order_groups`, `fulfillment.fulfillment_orders`, `fulfillment.picking_waves`, `logistics.delivery_routes`, `logistics.delivery_slots`, `marketplace.seller_locations`, `pricing.price_books`, `procurement.goods_receipts`, `procurement.purchase_orders`, `procurement.purchase_requisitions`, `procurement.purchase_returns`, `warehouse.aisles`, `warehouse.bins`, `warehouse.cycle_counts`, `warehouse.inventory_adjustments`, `warehouse.inventory_lots`, `warehouse.racks`, `warehouse.replenishment_rules`, `warehouse.stock_balances`, `warehouse.stock_holds`, `warehouse.stock_ledger`, `warehouse.stock_reservations`, `warehouse.stock_transfers`, `warehouse.zones` |
 | Features | `ADM-01`, `CAT-02`, `CAT-04`, `CHK-02`, `CHK-03`, `CHK-05`, `CHK-06`, `CHK-08`, `FIN-01`, `INV-01`, `INV-03`, `INV-04`, `INV-05`, `INV-07`, `OMS-01`, `OMS-02`, `OMS-03`, `OMS-04`, `ORD-04`, `REP-03`, `REP-04`, `RID-02`, `STO-01`, `STO-02`, `STO-03`, `STO-04`, `WH-01`, `WH-02`, `WH-04` |
-| API consumers | [API-012](../../../05-APIs/Product_Catalog.md), [API-014](../../../05-APIs/Product_Catalog.md), [API-020](../../../05-APIs/Cart_Checkout.md), [API-027](../../../05-APIs/Customer_Orders.md), [API-032](../../../05-APIs/Admin_CMS.md), [API-039](../../../05-APIs/Order_Operations.md), [API-040](../../../05-APIs/Order_Operations.md), [API-041](../../../05-APIs/Order_Operations.md), [API-042](../../../05-APIs/Order_Operations.md), [API-044](../../../05-APIs/Store_Operations.md), [API-045](../../../05-APIs/Store_Operations.md), [API-046](../../../05-APIs/Store_Operations.md), [API-047](../../../05-APIs/Store_Operations.md), [API-048](../../../05-APIs/Store_Operations.md), [API-049](../../../05-APIs/Store_Operations.md), [API-050](../../../05-APIs/Inventory.md), [API-051](../../../05-APIs/Inventory.md), [API-052](../../../05-APIs/Inventory.md), [API-053](../../../05-APIs/Inventory.md), [API-054](../../../05-APIs/Inventory.md), [API-055](../../../05-APIs/Inventory.md), [API-056](../../../05-APIs/Warehouse.md), [API-057](../../../05-APIs/Warehouse.md), [API-058](../../../05-APIs/Warehouse.md), [API-059](../../../05-APIs/Warehouse.md), [API-071](../../../05-APIs/Rider_App.md), [API-075](../../../05-APIs/Finance_Payments.md), [API-084](../../../05-APIs/Reporting.md), [API-085](../../../05-APIs/Reporting.md) |
+| API consumers | [API-012](../../../03-Modules/Product-Catalog/APIs.md), [API-014](../../../03-Modules/Product-Catalog/APIs.md), [API-020](../../../03-Modules/Cart-Checkout/APIs.md), [API-027](../../../03-Modules/Customer-Orders/APIs.md), [API-032](../../../03-Modules/Admin/APIs.md), [API-039](../../../03-Modules/Order-Management/APIs.md), [API-040](../../../03-Modules/Order-Management/APIs.md), [API-041](../../../03-Modules/Order-Management/APIs.md), [API-042](../../../03-Modules/Order-Management/APIs.md), [API-044](../../../03-Modules/Store-Operations/APIs.md), [API-045](../../../03-Modules/Store-Operations/APIs.md), [API-046](../../../03-Modules/Store-Operations/APIs.md), [API-047](../../../03-Modules/Store-Operations/APIs.md), [API-048](../../../03-Modules/Store-Operations/APIs.md), [API-049](../../../03-Modules/Store-Operations/APIs.md), [API-050](../../../03-Modules/Inventory/APIs.md), [API-051](../../../03-Modules/Inventory/APIs.md), [API-052](../../../03-Modules/Inventory/APIs.md), [API-053](../../../03-Modules/Inventory/APIs.md), [API-054](../../../03-Modules/Inventory/APIs.md), [API-055](../../../03-Modules/Inventory/APIs.md), [API-056](../../../03-Modules/Warehouse/APIs.md), [API-057](../../../03-Modules/Warehouse/APIs.md), [API-058](../../../03-Modules/Warehouse/APIs.md), [API-059](../../../03-Modules/Warehouse/APIs.md), [API-071](../../../03-Modules/Rider-Operations/APIs.md), [API-075](../../../03-Modules/Payments/APIs.md), [API-084](../../../03-Modules/Reporting/APIs.md), [API-085](../../../03-Modules/Reporting/APIs.md) |
 
 ### Expected initial records
 
