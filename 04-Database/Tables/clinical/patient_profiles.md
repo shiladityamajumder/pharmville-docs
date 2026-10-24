@@ -104,3 +104,39 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `clinical.patient_profiles` |
+| Category | Master / Reference — Stable protected patient identity, not clinical event history |
+| Proposed owner / maintenance role | Prescription_Upload / Intake and Privacy owner |
+| Scope | User/patient-specific protected party master. |
+| Referencing tables | `appointment.appointments`, `clinical.care_episodes`, `clinical.consultations`, `clinical.observations`, `clinical.order_reviews`, `clinical.patient_allergies`, `clinical.patient_conditions`, `clinical.patient_medications`, `clinical.prescriptions`, `commerce.orders`, `compliance.adverse_event_reports`, `diagnostics.diagnostic_orders`, `insurance.claims`, `insurance.policies`, `insurance.policy_members` |
+| Features | `ACC-04`, `ADM-01`, `CHK-02`, `CHK-03`, `CHK-05`, `CHK-06`, `CHK-07`, `CHK-08`, `FIN-01`, `FIN-02`, `FIN-03`, `INV-01`, `INV-03`, `NOT-01`, `NOT-02`, `OMS-01`, `OMS-02`, `OMS-03`, `OMS-04`, `OMS-05`, `ORD-02`, `ORD-03`, `ORD-04`, `ORD-05`, `ORD-06`, `ORD-07`, `PHM-01`, `PHM-02`, `PHM-03`, `PHM-05`, `REP-01`, `REP-02`, `RID-02`, `RID-04`, `RX-04`, `RX-05`, `STO-02`, `WH-04` |
+| API consumers | [API-007](../../../05-APIs/Customer_Accounts.md), [API-008](../../../05-APIs/Customer_Accounts.md), [API-020](../../../05-APIs/Cart_Checkout.md), [API-021](../../../05-APIs/Cart_Checkout.md), [API-024](../../../05-APIs/Prescription_Upload.md), [API-025](../../../05-APIs/Customer_Orders.md), [API-026](../../../05-APIs/Customer_Orders.md), [API-027](../../../05-APIs/Customer_Orders.md), [API-028](../../../05-APIs/Customer_Orders.md), [API-029](../../../05-APIs/Customer_Orders.md), [API-030](../../../05-APIs/Customer_Orders.md), [API-031](../../../05-APIs/Customer_Orders.md), [API-032](../../../05-APIs/Admin_CMS.md), [API-039](../../../05-APIs/Order_Operations.md), [API-040](../../../05-APIs/Order_Operations.md), [API-041](../../../05-APIs/Order_Operations.md), [API-042](../../../05-APIs/Order_Operations.md), [API-043](../../../05-APIs/Order_Operations.md), [API-045](../../../05-APIs/Store_Operations.md), [API-046](../../../05-APIs/Store_Operations.md), [API-047](../../../05-APIs/Store_Operations.md), [API-052](../../../05-APIs/Inventory.md), [API-059](../../../05-APIs/Warehouse.md), [API-060](../../../05-APIs/Pharmacist_Review.md), [API-061](../../../05-APIs/Pharmacist_Review.md), [API-062](../../../05-APIs/Pharmacist_Review.md), [API-063](../../../05-APIs/Pharmacist_Review.md), [API-071](../../../05-APIs/Rider_App.md), [API-073](../../../05-APIs/Rider_App.md), [API-075](../../../05-APIs/Finance_Payments.md), [API-076](../../../05-APIs/Finance_Payments.md), [API-077](../../../05-APIs/Finance_Payments.md), [API-078](../../../05-APIs/Finance_Payments.md), [API-081](../../../05-APIs/Finance_Payments.md), [API-082](../../../05-APIs/Reporting.md), [API-083](../../../05-APIs/Reporting.md), [API-094](../../../05-APIs/Notifications.md), [API-095](../../../05-APIs/Notifications.md), [ACC-ROUTE-003](../../../05-APIs/Customer_Accounts.md), [ACC-ROUTE-004](../../../05-APIs/Customer_Accounts.md) |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| Not allocated | No approved initial record | Verified real records and identifiers must come from the responsible business owner; the schema/page contains no seed-row evidence. Never create synthetic live parties/products or claim rows exist. | Open | Checked-in table schema only; owner evidence required. |
+
+Required nondefault business attributes to obtain: .
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Operationally curated/imported after verification; no production seed identities or fabricated product rows. |
+| Create/update permissions | Intake and Privacy owner through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | No is_active/status column. Soft-delete through is_deleted only after privacy/reference review; retain historical FK targets. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (id); CREATE UNIQUE INDEX uq_clinical_patient_family_active ON clinical.patient_profiles USING btree (family_member_id) WHERE family_member_id IS NOT NULL AND is_deleted = false; CREATE UNIQUE INDEX uq_clinical_patient_profiles_id ON clinical.patient_profiles USING btree (id); CREATE UNIQUE INDEX uq_clinical_patient_user_active ON clinical.patient_profiles USING btree (user_id) WHERE user_id IS NOT NULL AND is_deleted = false |
+| Foreign-key dependencies | `customer.family_members` |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Open; an empty migration/schema is not a usable approved business seed. Obtain the named owner dataset before enabling dependent journeys. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-006/D-019 clinical/catalog source validation. |

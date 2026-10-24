@@ -99,3 +99,39 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `finance.accounts` |
+| Category | Master / Reference — Chart-of-accounts identities used by journal lines |
+| Proposed owner / maintenance role | Finance_Payments / Finance accounting owner |
+| Scope | Global catalog/reference; scope still limits administrative maintenance. |
+| Referencing tables | `finance.accounts`, `finance.journal_lines` |
+| Features | Outside the 110-feature launch API scope; table existence does not approve a new feature. |
+| API consumers | No inventoried API. Future-scope onboarding/maintenance requires separate approved requirements. |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| Not allocated | No approved initial record | Finance/CA must provide the chart of accounts, account_code/account_type/currency and hierarchy. No accounting codes or financial classifications are fabricated. | Open | Checked-in table schema only; owner evidence required. |
+
+Required nondefault business attributes to obtain: `account_code`, `account_type`, `name`.
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Operationally curated/imported after verification; no production seed identities or fabricated product rows. |
+| Create/update permissions | Finance accounting owner through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | Use approved inactive/closed status from the table CHECK/owner policy; do not invent unsupported status values. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (id); CREATE UNIQUE INDEX uq_finance_accounts_code_active ON finance.accounts USING btree (account_code) WHERE is_deleted = false; CREATE UNIQUE INDEX uq_finance_accounts_id ON finance.accounts USING btree (id) |
+| Foreign-key dependencies | `finance.accounts` |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Open; an empty migration/schema is not a usable approved business seed. Obtain the named owner dataset before enabling dependent journeys. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-008/D-012 financial/legal evidence. |

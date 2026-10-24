@@ -85,3 +85,39 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `clinical.review_reason_codes` |
+| Category | Master / Reference — Controlled clinical review outcome reasons |
+| Proposed owner / maintenance role | Pharmacist_Review / Pharmacy clinical policy owner |
+| Scope | Global catalog/reference; scope still limits administrative maintenance. |
+| Referencing tables | `clinical.order_review_items`, `clinical.order_reviews` |
+| Features | `ADM-01`, `CHK-03`, `CHK-08`, `FIN-01`, `INV-01`, `INV-03`, `OMS-03`, `OMS-04`, `PHM-01`, `PHM-02`, `PHM-03`, `PHM-05`, `RID-02`, `RX-05`, `STO-02` |
+| API consumers | [API-032](../../../05-APIs/Admin_CMS.md), [API-041](../../../05-APIs/Order_Operations.md), [API-042](../../../05-APIs/Order_Operations.md), [API-045](../../../05-APIs/Store_Operations.md), [API-046](../../../05-APIs/Store_Operations.md), [API-047](../../../05-APIs/Store_Operations.md), [API-052](../../../05-APIs/Inventory.md), [API-060](../../../05-APIs/Pharmacist_Review.md), [API-061](../../../05-APIs/Pharmacist_Review.md), [API-062](../../../05-APIs/Pharmacist_Review.md), [API-063](../../../05-APIs/Pharmacist_Review.md), [API-071](../../../05-APIs/Rider_App.md), [API-075](../../../05-APIs/Finance_Payments.md) |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| Not allocated | No approved initial record | Pharmacy must supply approved clinical decision codes/display names and rejection/correction meanings. No clinical reason values are invented. | Open | Checked-in table schema only; owner evidence required. |
+
+Required nondefault business attributes to obtain: `code`, `display_name`.
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Operationally curated/imported after verification; no production seed identities or fabricated product rows. |
+| Create/update permissions | Pharmacy clinical policy owner through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | Use is_active=false to retire from new selection; keep referenced history. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (code); UNIQUE: UNIQUE (id, code); CREATE UNIQUE INDEX uq_clinical_review_reason_codes_code ON clinical.review_reason_codes USING btree (code); CREATE UNIQUE INDEX uq_clinical_review_reason_codes_id_code ON clinical.review_reason_codes USING btree (id, code) |
+| Foreign-key dependencies | No non-actor FK dependencies recorded. |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Open; an empty migration/schema is not a usable approved business seed. Obtain the named owner dataset before enabling dependent journeys. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-006/D-019 clinical/catalog source validation. |

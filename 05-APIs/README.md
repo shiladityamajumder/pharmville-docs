@@ -52,4 +52,19 @@ Browser payment redirects are not authoritative. Signed provider callbacks requi
 
 Each module document preserves its feature IDs, candidate data ownership, failure handling and designed test cases. These test scenarios are **Designed / NOT RUN** unless execution evidence is explicitly cited. The documented authoritative database source folder is absent here, and the adjacent similarly named folder does not match the evidence manifest; only checked-in database documentation is available for this turn.
 
-Review [API contract coverage](API-Contract-Coverage.md) before implementation; all unresolved fields, owners and decision impacts must be approved under D-024.
+Review [API contract coverage](API-Contract-Coverage.md) before implementation; remaining incomplete fields and all proposed owner decisions must be approved under D-024.
+
+## Detailed planning blueprint
+
+The preserved 107-operation inventory now has **97 documentation-complete proposed contracts (90.65%)**, **10 incomplete**, **0 approved**, and **0 verified implementations**. Every operation has its own section in its module document, with request/auth/header/response/error/database/operational/test detail. Ten explicitly excluded contracts retain concrete unresolved gaps; complete proposals still require domain approval.
+
+- [Coverage and per-operation status](API-Contract-Coverage.md)
+- [API/database/feature matrix](API-Database-Feature-Matrix.md)
+- [Master inventory and initial records](../04-Database/Master-Data-Inventory.md) — 266 tables classified, 44 masters, 11 explicit initial-value lists, 33 Open datasets.
+- [Planning decisions](Planning-Decisions.md)
+- [Journey gaps and 16 candidate commands](Journey-API-Gaps.md) — not added to the existing inventory.
+- [Validation evidence](Planning-Validation.md)
+
+## Standard problem response behavior
+
+Use the existing four-field response envelope and the [error catalog](Error-Catalog.md). Each endpoint supplies its applicable error triggers and recovery; protected failures redact patient, credential, provider and hidden-resource information. HTTP 204 has no body. Shared envelope reuse does not replace an operation DTO.

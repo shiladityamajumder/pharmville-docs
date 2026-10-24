@@ -47,7 +47,7 @@ The table links below lead to the complete checked-in field/type/nullability/con
 | API-024 | Associate clean private documents with the order patient and prescription-required order items | [commerce.orders](../04-Database/Tables/commerce/orders.md): public `id`, `row_version`; [commerce.order_items](../04-Database/Tables/commerce/order_items.md): public `id`, `order_id`, nullable `prescription_id`, product/class snapshots and status; [clinical.patient_profiles](../04-Database/Tables/clinical/patient_profiles.md): public `id` and ownership relationship; [clinical.prescriptions](../04-Database/Tables/clinical/prescriptions.md): public `id`, patient-profile reference, status and `row_version`; [clinical.prescription_documents](../04-Database/Tables/clinical/prescription_documents.md): public `id`, `prescription_id`, `file_object_id`, version; [platform.file_objects](../04-Database/Tables/platform/file_objects.md): public `id`, ownership/status/scan gate. Verify actual patient ownership and order-item association server-side. |
 | API-025–026 | Customer-owned order list/detail | [commerce.orders](../04-Database/Tables/commerce/orders.md), [commerce.order_items](../04-Database/Tables/commerce/order_items.md), [commerce.order_status_history](../04-Database/Tables/commerce/order_status_history.md), [commerce.order_revisions](../04-Database/Tables/commerce/order_revisions.md) |
 | API-027–028 | Cancellation and return request | [commerce.cancellations](../04-Database/Tables/commerce/cancellations.md), [commerce.cancellation_items](../04-Database/Tables/commerce/cancellation_items.md), [commerce.returns](../04-Database/Tables/commerce/returns.md), [commerce.return_items](../04-Database/Tables/commerce/return_items.md), [commerce.orders](../04-Database/Tables/commerce/orders.md) |
-| API-029 | Private invoice delivery | [finance.invoices](../04-Database/Tables/finance/invoices.md), [finance.invoice_items](../04-Database/Tables/finance/invoice_items.md), [commerce.orders](../04-Database/Tables/commerce/orders.md); delivery is a file/stream or signed link decision, not a DB row dump |
+| API-029 | Private invoice delivery | [finance.invoices](../04-Database/Tables/finance/invoices.md), [finance.invoice_items](../04-Database/Tables/finance/invoice_items.md), [commerce.orders](../04-Database/Tables/commerce/orders.md); the current proposed route returns a typed JSON invoice; optional PDF grants are tracked in Journey-API-Gaps.md, not an implicit public link |
 | API-030 | Customer refund outcome | [payment.refunds](../04-Database/Tables/payment/refunds.md), [payment.payment_transactions](../04-Database/Tables/payment/payment_transactions.md), [payment.payment_intents](../04-Database/Tables/payment/payment_intents.md) |
 | API-031 | Privacy-limited delivery tracking | [logistics.shipments](../04-Database/Tables/logistics/shipments.md), [logistics.delivery_assignments](../04-Database/Tables/logistics/delivery_assignments.md), [logistics.shipment_events](../04-Database/Tables/logistics/shipment_events.md); do not return rider coordinates outside current authorized scope |
 | API-032 | Scoped admin dashboard | [platform.report_definitions](../04-Database/Tables/platform/report_definitions.md), [platform.report_runs](../04-Database/Tables/platform/report_runs.md), and only the approved aggregate domain sources |
@@ -118,3 +118,143 @@ The table links below lead to the complete checked-in field/type/nullability/con
 The exact field/type/nullability/constraint inventory remains in the linked table pages. Before implementation, each operation owner must replace candidate read/write mappings with approved table/column write sets, verify module grants/RLS, and bind those writes to failure/replay tests.
 
 The database docs are stronger evidence than the earlier API placeholder text; they still do not prove a Pharmville endpoint exists or that a proposed DTO is approved.
+
+## Operation-level planning refinement
+
+The historical groups above are discovery evidence, not table grants. The complete proposed operation mapping now lives in the [107-operation matrix](API-Database-Feature-Matrix.md), and every owning API section lists exact columns, field derivation, write owner, transaction, audit/outbox and master dependencies. This refinement supersedes earlier statements that these mappings are all absent; approval and target runtime verification remain open. No new table/column is implied.
+
+| Documented dependency | Evidence / access meaning |
+| --- | --- |
+| `catalog.brands` | [Exact schema](../04-Database/Tables/catalog/brands.md); read/write determined per operation, not schema membership. |
+| `catalog.categories` | [Exact schema](../04-Database/Tables/catalog/categories.md); read/write determined per operation, not schema membership. |
+| `catalog.commerce_classes` | [Exact schema](../04-Database/Tables/catalog/commerce_classes.md); read/write determined per operation, not schema membership. |
+| `catalog.dosage_forms` | [Exact schema](../04-Database/Tables/catalog/dosage_forms.md); read/write determined per operation, not schema membership. |
+| `catalog.manufacturers` | [Exact schema](../04-Database/Tables/catalog/manufacturers.md); read/write determined per operation, not schema membership. |
+| `catalog.product_classification_history` | [Exact schema](../04-Database/Tables/catalog/product_classification_history.md); read/write determined per operation, not schema membership. |
+| `catalog.product_content` | [Exact schema](../04-Database/Tables/catalog/product_content.md); read/write determined per operation, not schema membership. |
+| `catalog.product_identifiers` | [Exact schema](../04-Database/Tables/catalog/product_identifiers.md); read/write determined per operation, not schema membership. |
+| `catalog.product_salts` | [Exact schema](../04-Database/Tables/catalog/product_salts.md); read/write determined per operation, not schema membership. |
+| `catalog.products` | [Exact schema](../04-Database/Tables/catalog/products.md); read/write determined per operation, not schema membership. |
+| `catalog.salts` | [Exact schema](../04-Database/Tables/catalog/salts.md); read/write determined per operation, not schema membership. |
+| `clinical.order_review_items` | [Exact schema](../04-Database/Tables/clinical/order_review_items.md); read/write determined per operation, not schema membership. |
+| `clinical.order_reviews` | [Exact schema](../04-Database/Tables/clinical/order_reviews.md); read/write determined per operation, not schema membership. |
+| `clinical.patient_profiles` | [Exact schema](../04-Database/Tables/clinical/patient_profiles.md); read/write determined per operation, not schema membership. |
+| `clinical.practitioner_profiles` | [Exact schema](../04-Database/Tables/clinical/practitioner_profiles.md); read/write determined per operation, not schema membership. |
+| `clinical.prescription_documents` | [Exact schema](../04-Database/Tables/clinical/prescription_documents.md); read/write determined per operation, not schema membership. |
+| `clinical.prescription_items` | [Exact schema](../04-Database/Tables/clinical/prescription_items.md); read/write determined per operation, not schema membership. |
+| `clinical.prescriptions` | [Exact schema](../04-Database/Tables/clinical/prescriptions.md); read/write determined per operation, not schema membership. |
+| `clinical.review_reason_codes` | [Exact schema](../04-Database/Tables/clinical/review_reason_codes.md); read/write determined per operation, not schema membership. |
+| `commerce.cancellation_items` | [Exact schema](../04-Database/Tables/commerce/cancellation_items.md); read/write determined per operation, not schema membership. |
+| `commerce.cancellation_reason_codes` | [Exact schema](../04-Database/Tables/commerce/cancellation_reason_codes.md); read/write determined per operation, not schema membership. |
+| `commerce.cancellations` | [Exact schema](../04-Database/Tables/commerce/cancellations.md); read/write determined per operation, not schema membership. |
+| `commerce.cart_items` | [Exact schema](../04-Database/Tables/commerce/cart_items.md); read/write determined per operation, not schema membership. |
+| `commerce.carts` | [Exact schema](../04-Database/Tables/commerce/carts.md); read/write determined per operation, not schema membership. |
+| `commerce.checkouts` | [Exact schema](../04-Database/Tables/commerce/checkouts.md); read/write determined per operation, not schema membership. |
+| `commerce.order_allocations` | [Exact schema](../04-Database/Tables/commerce/order_allocations.md); read/write determined per operation, not schema membership. |
+| `commerce.order_items` | [Exact schema](../04-Database/Tables/commerce/order_items.md); read/write determined per operation, not schema membership. |
+| `commerce.order_revisions` | [Exact schema](../04-Database/Tables/commerce/order_revisions.md); read/write determined per operation, not schema membership. |
+| `commerce.order_status_history` | [Exact schema](../04-Database/Tables/commerce/order_status_history.md); read/write determined per operation, not schema membership. |
+| `commerce.orders` | [Exact schema](../04-Database/Tables/commerce/orders.md); read/write determined per operation, not schema membership. |
+| `commerce.return_items` | [Exact schema](../04-Database/Tables/commerce/return_items.md); read/write determined per operation, not schema membership. |
+| `commerce.return_reason_codes` | [Exact schema](../04-Database/Tables/commerce/return_reason_codes.md); read/write determined per operation, not schema membership. |
+| `commerce.returns` | [Exact schema](../04-Database/Tables/commerce/returns.md); read/write determined per operation, not schema membership. |
+| `compliance.legal_holds` | [Exact schema](../04-Database/Tables/compliance/legal_holds.md); read/write determined per operation, not schema membership. |
+| `compliance.privacy_requests` | [Exact schema](../04-Database/Tables/compliance/privacy_requests.md); read/write determined per operation, not schema membership. |
+| `customer.addresses` | [Exact schema](../04-Database/Tables/customer/addresses.md); read/write determined per operation, not schema membership. |
+| `customer.consent_events` | [Exact schema](../04-Database/Tables/customer/consent_events.md); read/write determined per operation, not schema membership. |
+| `customer.consents` | [Exact schema](../04-Database/Tables/customer/consents.md); read/write determined per operation, not schema membership. |
+| `customer.family_members` | [Exact schema](../04-Database/Tables/customer/family_members.md); read/write determined per operation, not schema membership. |
+| `customer.profiles` | [Exact schema](../04-Database/Tables/customer/profiles.md); read/write determined per operation, not schema membership. |
+| `customer.wishlist_items` | [Exact schema](../04-Database/Tables/customer/wishlist_items.md); read/write determined per operation, not schema membership. |
+| `customer.wishlists` | [Exact schema](../04-Database/Tables/customer/wishlists.md); read/write determined per operation, not schema membership. |
+| `finance.invoice_items` | [Exact schema](../04-Database/Tables/finance/invoice_items.md); read/write determined per operation, not schema membership. |
+| `finance.invoices` | [Exact schema](../04-Database/Tables/finance/invoices.md); read/write determined per operation, not schema membership. |
+| `fulfillment.fulfillment_events` | [Exact schema](../04-Database/Tables/fulfillment/fulfillment_events.md); read/write determined per operation, not schema membership. |
+| `fulfillment.fulfillment_orders` | [Exact schema](../04-Database/Tables/fulfillment/fulfillment_orders.md); read/write determined per operation, not schema membership. |
+| `fulfillment.pack_tasks` | [Exact schema](../04-Database/Tables/fulfillment/pack_tasks.md); read/write determined per operation, not schema membership. |
+| `fulfillment.package_items` | [Exact schema](../04-Database/Tables/fulfillment/package_items.md); read/write determined per operation, not schema membership. |
+| `fulfillment.packages` | [Exact schema](../04-Database/Tables/fulfillment/packages.md); read/write determined per operation, not schema membership. |
+| `fulfillment.pick_task_items` | [Exact schema](../04-Database/Tables/fulfillment/pick_task_items.md); read/write determined per operation, not schema membership. |
+| `fulfillment.pick_tasks` | [Exact schema](../04-Database/Tables/fulfillment/pick_tasks.md); read/write determined per operation, not schema membership. |
+| `identity.login_attempts` | [Exact schema](../04-Database/Tables/identity/login_attempts.md); read/write determined per operation, not schema membership. |
+| `identity.mfa_factors` | [Exact schema](../04-Database/Tables/identity/mfa_factors.md); read/write determined per operation, not schema membership. |
+| `identity.otp_challenges` | [Exact schema](../04-Database/Tables/identity/otp_challenges.md); read/write determined per operation, not schema membership. |
+| `identity.permissions` | [Exact schema](../04-Database/Tables/identity/permissions.md); read/write determined per operation, not schema membership. |
+| `identity.role_permissions` | [Exact schema](../04-Database/Tables/identity/role_permissions.md); read/write determined per operation, not schema membership. |
+| `identity.roles` | [Exact schema](../04-Database/Tables/identity/roles.md); read/write determined per operation, not schema membership. |
+| `identity.sessions` | [Exact schema](../04-Database/Tables/identity/sessions.md); read/write determined per operation, not schema membership. |
+| `identity.user_roles` | [Exact schema](../04-Database/Tables/identity/user_roles.md); read/write determined per operation, not schema membership. |
+| `identity.users` | [Exact schema](../04-Database/Tables/identity/users.md); read/write determined per operation, not schema membership. |
+| `logistics.delivery_assignments` | [Exact schema](../04-Database/Tables/logistics/delivery_assignments.md); read/write determined per operation, not schema membership. |
+| `logistics.delivery_attempts` | [Exact schema](../04-Database/Tables/logistics/delivery_attempts.md); read/write determined per operation, not schema membership. |
+| `logistics.delivery_failure_reasons` | [Exact schema](../04-Database/Tables/logistics/delivery_failure_reasons.md); read/write determined per operation, not schema membership. |
+| `logistics.delivery_location_updates` | [Exact schema](../04-Database/Tables/logistics/delivery_location_updates.md); read/write determined per operation, not schema membership. |
+| `logistics.delivery_otp_challenges` | [Exact schema](../04-Database/Tables/logistics/delivery_otp_challenges.md); read/write determined per operation, not schema membership. |
+| `logistics.ndr_cases` | [Exact schema](../04-Database/Tables/logistics/ndr_cases.md); read/write determined per operation, not schema membership. |
+| `logistics.rider_shifts` | [Exact schema](../04-Database/Tables/logistics/rider_shifts.md); read/write determined per operation, not schema membership. |
+| `logistics.serviceability_rules` | [Exact schema](../04-Database/Tables/logistics/serviceability_rules.md); read/write determined per operation, not schema membership. |
+| `logistics.shipment_events` | [Exact schema](../04-Database/Tables/logistics/shipment_events.md); read/write determined per operation, not schema membership. |
+| `logistics.shipments` | [Exact schema](../04-Database/Tables/logistics/shipments.md); read/write determined per operation, not schema membership. |
+| `notification.device_endpoints` | [Exact schema](../04-Database/Tables/notification/device_endpoints.md); read/write determined per operation, not schema membership. |
+| `notification.message_attempts` | [Exact schema](../04-Database/Tables/notification/message_attempts.md); read/write determined per operation, not schema membership. |
+| `notification.messages` | [Exact schema](../04-Database/Tables/notification/messages.md); read/write determined per operation, not schema membership. |
+| `notification.provider_configurations` | [Exact schema](../04-Database/Tables/notification/provider_configurations.md); read/write determined per operation, not schema membership. |
+| `notification.suppressions` | [Exact schema](../04-Database/Tables/notification/suppressions.md); read/write determined per operation, not schema membership. |
+| `notification.templates` | [Exact schema](../04-Database/Tables/notification/templates.md); read/write determined per operation, not schema membership. |
+| `notification.user_channel_preferences` | [Exact schema](../04-Database/Tables/notification/user_channel_preferences.md); read/write determined per operation, not schema membership. |
+| `organization.licenses` | [Exact schema](../04-Database/Tables/organization/licenses.md); read/write determined per operation, not schema membership. |
+| `organization.locations` | [Exact schema](../04-Database/Tables/organization/locations.md); read/write determined per operation, not schema membership. |
+| `organization.memberships` | [Exact schema](../04-Database/Tables/organization/memberships.md); read/write determined per operation, not schema membership. |
+| `organization.organizations` | [Exact schema](../04-Database/Tables/organization/organizations.md); read/write determined per operation, not schema membership. |
+| `payment.cod_collections` | [Exact schema](../04-Database/Tables/payment/cod_collections.md); read/write determined per operation, not schema membership. |
+| `payment.payment_attempts` | [Exact schema](../04-Database/Tables/payment/payment_attempts.md); read/write determined per operation, not schema membership. |
+| `payment.payment_intents` | [Exact schema](../04-Database/Tables/payment/payment_intents.md); read/write determined per operation, not schema membership. |
+| `payment.payment_transactions` | [Exact schema](../04-Database/Tables/payment/payment_transactions.md); read/write determined per operation, not schema membership. |
+| `payment.payment_webhooks` | [Exact schema](../04-Database/Tables/payment/payment_webhooks.md); read/write determined per operation, not schema membership. |
+| `payment.provider_accounts` | [Exact schema](../04-Database/Tables/payment/provider_accounts.md); read/write determined per operation, not schema membership. |
+| `payment.reconciliation_items` | [Exact schema](../04-Database/Tables/payment/reconciliation_items.md); read/write determined per operation, not schema membership. |
+| `payment.reconciliation_runs` | [Exact schema](../04-Database/Tables/payment/reconciliation_runs.md); read/write determined per operation, not schema membership. |
+| `payment.refund_allocations` | [Exact schema](../04-Database/Tables/payment/refund_allocations.md); read/write determined per operation, not schema membership. |
+| `payment.refund_reason_codes` | [Exact schema](../04-Database/Tables/payment/refund_reason_codes.md); read/write determined per operation, not schema membership. |
+| `payment.refunds` | [Exact schema](../04-Database/Tables/payment/refunds.md); read/write determined per operation, not schema membership. |
+| `platform.application_settings` | [Exact schema](../04-Database/Tables/platform/application_settings.md); read/write determined per operation, not schema membership. |
+| `platform.audit_logs` | [Exact schema](../04-Database/Tables/platform/audit_logs.md); read/write determined per operation, not schema membership. |
+| `platform.cms_page_versions` | [Exact schema](../04-Database/Tables/platform/cms_page_versions.md); read/write determined per operation, not schema membership. |
+| `platform.cms_pages` | [Exact schema](../04-Database/Tables/platform/cms_pages.md); read/write determined per operation, not schema membership. |
+| `platform.file_access_grants` | [Exact schema](../04-Database/Tables/platform/file_access_grants.md); read/write determined per operation, not schema membership. |
+| `platform.file_objects` | [Exact schema](../04-Database/Tables/platform/file_objects.md); read/write determined per operation, not schema membership. |
+| `platform.file_upload_sessions` | [Exact schema](../04-Database/Tables/platform/file_upload_sessions.md); read/write determined per operation, not schema membership. |
+| `platform.idempotency_keys` | [Exact schema](../04-Database/Tables/platform/idempotency_keys.md); read/write determined per operation, not schema membership. |
+| `platform.outbox_events` | [Exact schema](../04-Database/Tables/platform/outbox_events.md); read/write determined per operation, not schema membership. |
+| `platform.report_definitions` | [Exact schema](../04-Database/Tables/platform/report_definitions.md); read/write determined per operation, not schema membership. |
+| `platform.report_runs` | [Exact schema](../04-Database/Tables/platform/report_runs.md); read/write determined per operation, not schema membership. |
+| `platform.scheduled_jobs` | [Exact schema](../04-Database/Tables/platform/scheduled_jobs.md); read/write determined per operation, not schema membership. |
+| `pricing.coupon_codes` | [Exact schema](../04-Database/Tables/pricing/coupon_codes.md); read/write determined per operation, not schema membership. |
+| `pricing.price_books` | [Exact schema](../04-Database/Tables/pricing/price_books.md); read/write determined per operation, not schema membership. |
+| `pricing.product_prices` | [Exact schema](../04-Database/Tables/pricing/product_prices.md); read/write determined per operation, not schema membership. |
+| `pricing.promotion_redemptions` | [Exact schema](../04-Database/Tables/pricing/promotion_redemptions.md); read/write determined per operation, not schema membership. |
+| `pricing.promotion_versions` | [Exact schema](../04-Database/Tables/pricing/promotion_versions.md); read/write determined per operation, not schema membership. |
+| `pricing.promotions` | [Exact schema](../04-Database/Tables/pricing/promotions.md); read/write determined per operation, not schema membership. |
+| `pricing.tax_rules` | [Exact schema](../04-Database/Tables/pricing/tax_rules.md); read/write determined per operation, not schema membership. |
+| `procurement.goods_receipt_items` | [Exact schema](../04-Database/Tables/procurement/goods_receipt_items.md); read/write determined per operation, not schema membership. |
+| `procurement.goods_receipt_quality_checks` | [Exact schema](../04-Database/Tables/procurement/goods_receipt_quality_checks.md); read/write determined per operation, not schema membership. |
+| `procurement.goods_receipts` | [Exact schema](../04-Database/Tables/procurement/goods_receipts.md); read/write determined per operation, not schema membership. |
+| `procurement.purchase_order_items` | [Exact schema](../04-Database/Tables/procurement/purchase_order_items.md); read/write determined per operation, not schema membership. |
+| `procurement.purchase_orders` | [Exact schema](../04-Database/Tables/procurement/purchase_orders.md); read/write determined per operation, not schema membership. |
+| `procurement.purchase_requisition_items` | [Exact schema](../04-Database/Tables/procurement/purchase_requisition_items.md); read/write determined per operation, not schema membership. |
+| `procurement.purchase_requisitions` | [Exact schema](../04-Database/Tables/procurement/purchase_requisitions.md); read/write determined per operation, not schema membership. |
+| `procurement.supplier_invoices` | [Exact schema](../04-Database/Tables/procurement/supplier_invoices.md); read/write determined per operation, not schema membership. |
+| `procurement.suppliers` | [Exact schema](../04-Database/Tables/procurement/suppliers.md); read/write determined per operation, not schema membership. |
+| `search.documents` | [Exact schema](../04-Database/Tables/search/documents.md); read/write determined per operation, not schema membership. |
+| `search.synonyms` | [Exact schema](../04-Database/Tables/search/synonyms.md); read/write determined per operation, not schema membership. |
+| `warehouse.inventory_adjustment_items` | [Exact schema](../04-Database/Tables/warehouse/inventory_adjustment_items.md); read/write determined per operation, not schema membership. |
+| `warehouse.inventory_adjustments` | [Exact schema](../04-Database/Tables/warehouse/inventory_adjustments.md); read/write determined per operation, not schema membership. |
+| `warehouse.inventory_lots` | [Exact schema](../04-Database/Tables/warehouse/inventory_lots.md); read/write determined per operation, not schema membership. |
+| `warehouse.replenishment_rules` | [Exact schema](../04-Database/Tables/warehouse/replenishment_rules.md); read/write determined per operation, not schema membership. |
+| `warehouse.stock_balances` | [Exact schema](../04-Database/Tables/warehouse/stock_balances.md); read/write determined per operation, not schema membership. |
+| `warehouse.stock_holds` | [Exact schema](../04-Database/Tables/warehouse/stock_holds.md); read/write determined per operation, not schema membership. |
+| `warehouse.stock_movement_reason_codes` | [Exact schema](../04-Database/Tables/warehouse/stock_movement_reason_codes.md); read/write determined per operation, not schema membership. |
+| `warehouse.stock_reservations` | [Exact schema](../04-Database/Tables/warehouse/stock_reservations.md); read/write determined per operation, not schema membership. |
+| `warehouse.stock_transfer_items` | [Exact schema](../04-Database/Tables/warehouse/stock_transfer_items.md); read/write determined per operation, not schema membership. |
+| `warehouse.stock_transfers` | [Exact schema](../04-Database/Tables/warehouse/stock_transfers.md); read/write determined per operation, not schema membership. |
+| `warehouse.warehouses` | [Exact schema](../04-Database/Tables/warehouse/warehouses.md); read/write determined per operation, not schema membership. |

@@ -94,3 +94,39 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `catalog.substitution_groups` |
+| Category | Master / Reference — Approved equivalence group reference; no automatic substitution permission |
+| Proposed owner / maintenance role | Product_Catalog / Pharmacist |
+| Scope | Global catalog/reference; scope still limits administrative maintenance. |
+| Referencing tables | `catalog.substitution_group_products` |
+| Features | Outside the 110-feature launch API scope; table existence does not approve a new feature. |
+| API consumers | No inventoried API. Future-scope onboarding/maintenance requires separate approved requirements. |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| Not allocated | No approved initial record | No substitution groups before Pharmacy approves dosage_form_id, salt_signature, strength_signature and applicable substitution policy. Presence does not authorize substitution. | Open | Checked-in table schema only; owner evidence required. |
+
+Required nondefault business attributes to obtain: `salt_signature`.
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Operationally curated/imported after verification; no production seed identities or fabricated product rows. |
+| Create/update permissions | Pharmacist through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | Use is_active=false to retire from new selection; keep referenced history. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (id); CREATE UNIQUE INDEX uq_catalog_substitution_groups_id ON catalog.substitution_groups USING btree (id) |
+| Foreign-key dependencies | `catalog.dosage_forms` |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Open; an empty migration/schema is not a usable approved business seed. Obtain the named owner dataset before enabling dependent journeys. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-006/D-019 clinical/catalog source validation. |

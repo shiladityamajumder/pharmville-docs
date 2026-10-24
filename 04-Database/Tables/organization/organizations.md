@@ -92,3 +92,39 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `organization.organizations` |
+| Category | Master / Reference — Verified operating legal organizations |
+| Proposed owner / maintenance role | Admin_CMS / Organization administrator |
+| Scope | Global catalog/reference; scope still limits administrative maintenance. |
+| Referencing tables | `appointment.practitioner_services`, `catalog.brands`, `catalog.manufacturers`, `clinical.practitioner_organizations`, `compliance.regulatory_registrations`, `diagnostics.lab_providers`, `insurance.insurers`, `insurance.tpas`, `marketplace.sellers`, `organization.bank_accounts`, `organization.departments`, `organization.licenses`, `organization.locations`, `organization.memberships`, `procurement.suppliers`, `warehouse.warehouses` |
+| Features | `ADM-02`, `ADM-06`, `ADM-08`, `CAT-01`, `CAT-02`, `CAT-03`, `CAT-04`, `CHK-08`, `DLV-01`, `DLV-02`, `DLV-04`, `DLV-05`, `INV-01`, `INV-03`, `INV-07`, `OMS-01`, `OMS-02`, `OMS-03`, `OMS-04`, `PHM-01`, `REP-03`, `REP-07`, `RID-02`, `STO-01`, `STO-02`, `STO-03`, `WH-01`, `WH-02`, `WH-04` |
+| API consumers | [API-011](../../../05-APIs/Product_Catalog.md), [API-012](../../../05-APIs/Product_Catalog.md), [API-013](../../../05-APIs/Product_Catalog.md), [API-014](../../../05-APIs/Product_Catalog.md), [API-016](../../../05-APIs/Product_Catalog.md), [API-017](../../../05-APIs/Product_Catalog.md), [API-033](../../../05-APIs/Admin_CMS.md), [API-034](../../../05-APIs/Admin_CMS.md), [API-038](../../../05-APIs/Admin_CMS.md), [API-039](../../../05-APIs/Order_Operations.md), [API-040](../../../05-APIs/Order_Operations.md), [API-041](../../../05-APIs/Order_Operations.md), [API-042](../../../05-APIs/Order_Operations.md), [API-044](../../../05-APIs/Store_Operations.md), [API-045](../../../05-APIs/Store_Operations.md), [API-046](../../../05-APIs/Store_Operations.md), [API-047](../../../05-APIs/Store_Operations.md), [API-048](../../../05-APIs/Store_Operations.md), [API-050](../../../05-APIs/Inventory.md), [API-051](../../../05-APIs/Inventory.md), [API-052](../../../05-APIs/Inventory.md), [API-056](../../../05-APIs/Warehouse.md), [API-057](../../../05-APIs/Warehouse.md), [API-058](../../../05-APIs/Warehouse.md), [API-059](../../../05-APIs/Warehouse.md), [API-060](../../../05-APIs/Pharmacist_Review.md), [API-064](../../../05-APIs/Delivery_Operations.md), [API-065](../../../05-APIs/Delivery_Operations.md), [API-067](../../../05-APIs/Delivery_Operations.md), [API-068](../../../05-APIs/Delivery_Operations.md), [API-071](../../../05-APIs/Rider_App.md), [API-084](../../../05-APIs/Reporting.md), [API-086](../../../05-APIs/Reporting.md) |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| Not allocated | No approved initial record | Verified real records and identifiers must come from the responsible business owner; the schema/page contains no seed-row evidence. Never create synthetic live parties/products or claim rows exist. | Open | Checked-in table schema only; owner evidence required. |
+
+Required nondefault business attributes to obtain: `legal_name`, `organization_type`.
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Operationally curated/imported after verification; no production seed identities or fabricated product rows. |
+| Create/update permissions | Organization administrator through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | Use approved inactive/closed status from the table CHECK/owner policy; do not invent unsupported status values. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (id); CREATE UNIQUE INDEX uq_organization_organizations_id ON organization.organizations USING btree (id); CREATE UNIQUE INDEX uq_organization_registration_active ON organization.organizations USING btree (registration_number) WHERE registration_number IS NOT NULL AND is_deleted = false |
+| Foreign-key dependencies | No non-actor FK dependencies recorded. |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Open; an empty migration/schema is not a usable approved business seed. Obtain the named owner dataset before enabling dependent journeys. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-001 phase scope and responsible steward evidence. |

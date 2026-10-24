@@ -105,3 +105,39 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `catalog.categories` |
+| Category | Master / Reference — Customer browse taxonomy and hierarchy |
+| Proposed owner / maintenance role | Product_Catalog / Catalog Manager |
+| Scope | Global catalog/reference; scope still limits administrative maintenance. |
+| Referencing tables | `catalog.categories`, `catalog.products` |
+| Features | `ACC-07`, `ADM-06`, `ADM-07`, `CAT-01`, `CAT-02`, `CAT-03`, `CAT-04`, `CHK-01`, `CHK-02`, `CHK-05`, `CHK-06`, `CHK-07`, `CHK-08`, `INV-01`, `INV-03`, `OMS-05`, `STO-03` |
+| API consumers | [API-010](../../../05-APIs/Product_Catalog.md), [API-011](../../../05-APIs/Product_Catalog.md), [API-012](../../../05-APIs/Product_Catalog.md), [API-013](../../../05-APIs/Product_Catalog.md), [API-014](../../../05-APIs/Product_Catalog.md), [API-015](../../../05-APIs/Product_Catalog.md), [API-016](../../../05-APIs/Product_Catalog.md), [API-017](../../../05-APIs/Product_Catalog.md), [API-018](../../../05-APIs/Cart_Checkout.md), [API-019](../../../05-APIs/Cart_Checkout.md), [API-020](../../../05-APIs/Cart_Checkout.md), [API-021](../../../05-APIs/Cart_Checkout.md), [API-043](../../../05-APIs/Order_Operations.md), [API-048](../../../05-APIs/Store_Operations.md), [API-052](../../../05-APIs/Inventory.md), [ACC-ROUTE-008](../../../05-APIs/Customer_Accounts.md), [ACC-ROUTE-009](../../../05-APIs/Customer_Accounts.md) |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source | Additional schema attributes |
+| --- | --- | --- | --- | --- | --- |
+| personal-care | Personal care | Initial nonclinical browse category proposal; does not imply product eligibility. | Proposed | CAT-01 / ADM-06; taxonomy needs Catalog approval | slug=personal-care; level=0; parent_id=null; path=/personal-care; display_order=0; is_active=true; metadata_json={} |
+| wellness | Wellness | Initial nonclinical browse category proposal; does not imply product eligibility. | Proposed | CAT-01 / ADM-06; taxonomy needs Catalog approval | slug=wellness; level=0; parent_id=null; path=/wellness; display_order=1; is_active=true; metadata_json={} |
+| health-devices | Health devices | Initial nonclinical browse category proposal; does not imply product eligibility. | Proposed | CAT-01 / ADM-06; taxonomy needs Catalog approval | slug=health-devices; level=0; parent_id=null; path=/health-devices; display_order=2; is_active=true; metadata_json={} |
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Operationally curated/imported after verification; no production seed identities or fabricated product rows. |
+| Create/update permissions | Catalog Manager through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | Use is_active=false to retire from new selection; keep referenced history. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (id); CREATE UNIQUE INDEX uq_catalog_categories_id ON catalog.categories USING btree (id); CREATE UNIQUE INDEX uq_catalog_categories_slug_active ON catalog.categories USING btree (slug) WHERE is_deleted = false |
+| Foreign-key dependencies | `catalog.categories` |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Explicit rows above are Confirmed domain values or Proposed initial records, never observed production/seed data. No live row existence or seed execution was verified. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-006/D-019 clinical/catalog source validation. |

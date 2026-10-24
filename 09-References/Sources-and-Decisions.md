@@ -78,3 +78,7 @@ D-023 and D-024 record gaps found in the independent engineering audit. The user
 RX-02 retains a draft 24-hour post-order upload/auto-cancel requirement. Detailed journey S07–S14 instead supplies prescription evidence and completes P-line review before payment. Product, Pharmacy and Finance must approve whether a deferred route exists, its request/payment timing, deadline, stock treatment and compensation.
 
 Until then the Business Guide explains the detailed path and labels the deferred route blocked; it does not invent a universal sequence or approved deadline.
+
+## Detailed API and master-data planning refinement
+
+The [planning decision register](../05-APIs/Planning-Decisions.md) refines existing D-001–D-024 with operation-specific blockers and compatible database proposals. [API coverage](../05-APIs/API-Contract-Coverage.md) now separates documentation-complete proposed contracts (97/107) from evidenced approval (0/107). [Master inventory](../04-Database/Master-Data-Inventory.md) records classifications and initial records without changing source SQL, product requirements or approval status.

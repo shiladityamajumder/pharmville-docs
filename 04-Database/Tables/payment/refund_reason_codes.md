@@ -85,3 +85,38 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `payment.refund_reason_codes` |
+| Category | Master / Reference — Controlled refund instruction reasons |
+| Proposed owner / maintenance role | Finance_Payments / Finance policy owner |
+| Scope | Global catalog/reference; scope still limits administrative maintenance. |
+| Referencing tables | `payment.refund_allocations`, `payment.refunds` |
+| Features | `FIN-03`, `ORD-06` |
+| API consumers | [API-030](../../../05-APIs/Customer_Orders.md), [API-078](../../../05-APIs/Finance_Payments.md) |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source | Additional schema attributes |
+| --- | --- | --- | --- | --- | --- |
+| ORDER_CANCELLED | Order cancellation | Operational reason/tag only; not a clinical, financial entitlement or automatic disposition rule. | Proposed | Existing reason-linked schema and relevant documented workflow | display_name=Order cancellation; is_active=true; sort_order=0 |
+| RETURN_ACCEPTED | Accepted return | Operational reason/tag only; not a clinical, financial entitlement or automatic disposition rule. | Proposed | Existing reason-linked schema and relevant documented workflow | display_name=Accepted return; is_active=true; sort_order=1 |
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Deployment reference seed after approval, followed by controlled administration. |
+| Create/update permissions | Finance policy owner through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | Use is_active=false to retire from new selection; keep referenced history. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (code); UNIQUE: UNIQUE (id, code); CREATE UNIQUE INDEX uq_payment_refund_reason_codes_code ON payment.refund_reason_codes USING btree (code); CREATE UNIQUE INDEX uq_payment_refund_reason_codes_id_code ON payment.refund_reason_codes USING btree (id, code) |
+| Foreign-key dependencies | No non-actor FK dependencies recorded. |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Explicit rows above are Confirmed domain values or Proposed initial records, never observed production/seed data. No live row existence or seed execution was verified. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-008/D-012 financial/legal evidence. |

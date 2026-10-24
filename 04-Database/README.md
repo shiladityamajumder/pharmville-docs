@@ -17,3 +17,7 @@ The target deployment ledger and live runtime parity remain separate checks. See
 - [ORM models and parity](Models-and-Parity.md)
 - [Module mapping](Module-Mapping.md)
 - [Table contracts by schema](Tables/)
+
+## Master-data planning
+
+[Master-data inventory](Master-Data-Inventory.md) classifies all 266 tables and links 44 master lifecycle/record plans. Eleven have explicit Confirmed/Proposed initial-value lists; 33 require owner-supplied datasets. No seeds or migrations changed.

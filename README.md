@@ -38,6 +38,10 @@ The repository retains **110 draft feature IDs, 18 module groups and 14 technica
 
 The user-supplied `healthcare_db` folder is the database reference for this repository. [Migration evidence](04-Database/Migrations.md) records its verified source checksums and schema counts. Live deployment and runtime parity remain separate checks. Review [open decisions](09-References/Sources-and-Decisions.md) and the [engineering audit](09-References/Engineering-Audit.md) for remaining readiness work.
 
+## Detailed API and master-data blueprint
+
+[API planning coverage](05-APIs/API-Contract-Coverage.md) records 97/107 documentation-complete proposals (90.65%), 10 incomplete and 0 approved. The [API/database/feature matrix](05-APIs/API-Database-Feature-Matrix.md), [master inventory](04-Database/Master-Data-Inventory.md), [owner decisions](05-APIs/Planning-Decisions.md) and [validation evidence](05-APIs/Planning-Validation.md) explain the build contract and remaining gaps across all modules.
+
 ## Start development and maintain documentation
 
 1. Select a feature in the [master register](09-References/Coverage-and-Traceability.md), then read its Business Flow, HLD, LLD and edge cases.

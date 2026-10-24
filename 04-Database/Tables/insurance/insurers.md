@@ -98,3 +98,39 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `insurance.insurers` |
+| Category | Master / Reference — Verified insurer parties |
+| Proposed owner / maintenance role | Future insurance / Insurance integration owner |
+| Scope | Organization-specific via organization_id. |
+| Referencing tables | `insurance.policies` |
+| Features | Outside the 110-feature launch API scope; table existence does not approve a new feature. |
+| API consumers | No inventoried API. Future-scope onboarding/maintenance requires separate approved requirements. |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| Not allocated | No approved initial record | Verified real records and identifiers must come from the responsible business owner; the schema/page contains no seed-row evidence. Never create synthetic live parties/products or claim rows exist. | Open | Checked-in table schema only; owner evidence required. |
+
+Required nondefault business attributes to obtain: `code`, `insurer_type`, `name`.
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Deferred future module: no launch seed or API scope is implied. |
+| Create/update permissions | Insurance integration owner through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | Use is_active=false to retire from new selection; keep referenced history. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (id); CREATE UNIQUE INDEX uq_insurance_insurer_code_active ON insurance.insurers USING btree (code) WHERE is_deleted = false; CREATE UNIQUE INDEX uq_insurance_insurers_id ON insurance.insurers USING btree (id) |
+| Foreign-key dependencies | `organization.organizations` |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Open; an empty migration/schema is not a usable approved business seed. Obtain the named owner dataset before enabling dependent journeys. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-001 phase scope and responsible steward evidence. |

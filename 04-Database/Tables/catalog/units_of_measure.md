@@ -89,3 +89,37 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `catalog.units_of_measure` |
+| Category | Master / Reference — Reusable measurement dimensions and base conversion |
+| Proposed owner / maintenance role | Product_Catalog / Catalog steward |
+| Scope | Global catalog/reference; scope still limits administrative maintenance. |
+| Referencing tables | `catalog.product_variants` |
+| Features | Outside the 110-feature launch API scope; table existence does not approve a new feature. |
+| API consumers | No inventoried API. Future-scope onboarding/maintenance requires separate approved requirements. |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source | Additional schema attributes |
+| --- | --- | --- | --- | --- | --- |
+| EA | Each | Base count dimension only; no medicine strength or pack conversion inferred. | Proposed | Catalog variant pack_uom_id dependency | dimension=count; conversion_to_base=1.00000000 |
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Deployment reference seed after approval, followed by controlled administration. |
+| Create/update permissions | Catalog steward through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | No is_active/status column. Soft-delete through is_deleted only after privacy/reference review; retain historical FK targets. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (id); CREATE UNIQUE INDEX uq_catalog_units_of_measure_id ON catalog.units_of_measure USING btree (id); CREATE UNIQUE INDEX uq_catalog_uom_code_active ON catalog.units_of_measure USING btree (code) WHERE is_deleted = false |
+| Foreign-key dependencies | No non-actor FK dependencies recorded. |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Explicit rows above are Confirmed domain values or Proposed initial records, never observed production/seed data. No live row existence or seed execution was verified. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-006/D-019 clinical/catalog source validation. |

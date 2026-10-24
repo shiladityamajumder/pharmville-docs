@@ -61,3 +61,14 @@ These codes describe distinct business failures and remain proposed pending each
 | `UPSTREAM_TIMEOUT` | `EXTERNAL_SERVICE_TIMEOUT` for new shared service errors; domain-specific alias only when a consumer needs separate action | Do not claim a provider request was rejected when the outcome is unknown |
 
 `details` is always nullable and operation-specific. Do not expose tokens, OTPs, patient or prescription content, SQL/stack traces, authorization internals, or raw provider secrets. All errors use the canonical envelope except documented protocol exceptions. See [standard responses](Standard-Responses.md).
+
+## Detailed planning transport and precondition proposals
+
+These codes refine the current operation proposals; they are Unapproved and not evidence of sibling-service or Pharmville implementation. `STATE_CONFLICT` in older illustrative LLD examples is a legacy proposed alias; the detailed contracts consistently use `INVALID_STATE_TRANSITION`. No deployed-consumer compatibility is asserted or changed.
+
+| HTTP | Proposed code | Trigger | Recovery |
+| --- | --- | --- | --- |
+| 406 | `NOT_ACCEPTABLE` | Accept requests an unsupported representation | Use the operation’s declared JSON/PDF media type |
+| 415 | `UNSUPPORTED_MEDIA_TYPE` | Body media type is unsupported | Send the declared Content-Type; no mutation before parsing |
+| 428 | `PRECONDITION_REQUIRED` | A conditional DELETE omits If-Match | Obtain the owned row version and supply its quoted validator |
+| 412 | `PRECONDITION_FAILED` | A conditional DELETE supplies a stale If-Match | Reload the resource and compare before retrying a new intent |

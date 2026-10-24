@@ -85,3 +85,38 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `commerce.return_reason_codes` |
+| Category | Master / Reference — Controlled return request reasons |
+| Proposed owner / maintenance role | Order_Operations / Operations policy steward with Pharmacy validation |
+| Scope | Global catalog/reference; scope still limits administrative maintenance. |
+| Referencing tables | `commerce.returns` |
+| Features | `ORD-05` |
+| API consumers | [API-028](../../../05-APIs/Customer_Orders.md) |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source | Additional schema attributes |
+| --- | --- | --- | --- | --- | --- |
+| WRONG_ITEM | Wrong item received | Operational reason/tag only; not a clinical, financial entitlement or automatic disposition rule. | Proposed | Existing reason-linked schema and relevant documented workflow | display_name=Wrong item received; is_active=true; sort_order=0 |
+| DAMAGED_PACKAGE | Damaged package | Operational reason/tag only; not a clinical, financial entitlement or automatic disposition rule. | Proposed | Existing reason-linked schema and relevant documented workflow | display_name=Damaged package; is_active=true; sort_order=1 |
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Deployment reference seed after approval, followed by controlled administration. |
+| Create/update permissions | Operations policy steward with Pharmacy validation through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | Use is_active=false to retire from new selection; keep referenced history. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (code); UNIQUE: UNIQUE (id, code); CREATE UNIQUE INDEX uq_commerce_return_reason_codes_code ON commerce.return_reason_codes USING btree (code); CREATE UNIQUE INDEX uq_commerce_return_reason_codes_id_code ON commerce.return_reason_codes USING btree (id, code) |
+| Foreign-key dependencies | No non-actor FK dependencies recorded. |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Explicit rows above are Confirmed domain values or Proposed initial records, never observed production/seed data. No live row existence or seed execution was verified. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-001 phase scope and responsible steward evidence. |

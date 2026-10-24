@@ -85,3 +85,38 @@ Schema contract and field explanations from the documentation catalog. The datab
 The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
 
 Application code should catch and translate database errors into safe user messages without bypassing these protections.
+
+## Master-data planning
+
+**Status: Proposed maintenance design; Unapproved; no seed or migration modified.** [Central inventory](../../Master-Data-Inventory.md) · [planning decisions](../../../05-APIs/Planning-Decisions.md).
+
+| Definition | Contract |
+| --- | --- |
+| Schema/table | `commerce.cancellation_reason_codes` |
+| Category | Master / Reference — Controlled customer/operations cancellation reasons |
+| Proposed owner / maintenance role | Order_Operations / Operations policy steward |
+| Scope | Global catalog/reference; scope still limits administrative maintenance. |
+| Referencing tables | `commerce.cancellations` |
+| Features | `ORD-04` |
+| API consumers | [API-027](../../../05-APIs/Customer_Orders.md) |
+
+### Expected initial records
+
+| Code | Name | Description | Status | Source | Additional schema attributes |
+| --- | --- | --- | --- | --- | --- |
+| CUSTOMER_REQUEST | Customer requested cancellation | Operational reason/tag only; not a clinical, financial entitlement or automatic disposition rule. | Proposed | Existing reason-linked schema and relevant documented workflow | display_name=Customer requested cancellation; is_active=true; sort_order=0 |
+| ORDERED_IN_ERROR | Ordered in error | Operational reason/tag only; not a clinical, financial entitlement or automatic disposition rule. | Proposed | Existing reason-linked schema and relevant documented workflow | display_name=Ordered in error; is_active=true; sort_order=1 |
+
+### Lifecycle and seed requirements
+
+| Concern | Proposed lifecycle |
+| --- | --- |
+| Deployment or operational creation | Deployment reference seed after approval, followed by controlled administration. |
+| Create/update permissions | Operations policy steward through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority. |
+| Activation/deactivation | Use is_active=false to retire from new selection; keep referenced history. |
+| Deletion | Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission. |
+| Uniqueness / stable codes | UNIQUE: UNIQUE (code); UNIQUE: UNIQUE (id, code); CREATE UNIQUE INDEX uq_commerce_cancellation_reason_codes_code ON commerce.cancellation_reason_codes USING btree (code); CREATE UNIQUE INDEX uq_commerce_cancellation_reason_codes_id_code ON commerce.cancellation_reason_codes USING btree (id, code) |
+| Foreign-key dependencies | No non-actor FK dependencies recorded. |
+| Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
+| Seed status | Explicit rows above are Confirmed domain values or Proposed initial records, never observed production/seed data. No live row existence or seed execution was verified. |
+| Pending decisions | D-024 ownership/lifecycle approval; D-001 phase scope and responsible steward evidence. |

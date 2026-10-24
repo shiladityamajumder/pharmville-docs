@@ -65,7 +65,7 @@ Proposed `201` result: `reservations[]`, where each entry maps to one `warehouse
 
 Do not return internal IDs or copy raw database rows. No fixed TTL is defined. Lock eligible balance/reservation rows in deterministic order; verify approved license, fresh inventory evidence, lot quality/recall/expiry and shelf-life rules; persist every eligible row or no new reservation. `warehouse.stock_holds` is a distinct table with its own reason/status semantics and is not assumed to be a duplicate reservation record. The exact ledger/inventory effects and transaction boundary remain D-024 review.
 
-`POST /v1/internal/inventory/reservations/{reservation_id}/release` requires the trusted owning workflow/expiry worker and `reservationVersion` matching `warehouse.stock_reservations.row_version`. A proposed `reasonCode` is not a column on `stock_reservations`; if approved, it belongs to the corresponding controlled `warehouse.stock_ledger` movement evidence, whose idempotency key/reference must prevent duplicate release quantity.
+`POST /v1/internal/inventory/reservations/{reservation_id}/release` requires the trusted owning workflow/expiry worker and `reservationVersion` matching `warehouse.stock_reservations.row_version`. A proposed `reasonCode` is not a column on `stock_reservations`; the proposed unused-release reason is retained in safe audit metadata. Release decrements reserved quantity without increasing on-hand stock or inventing a physical ledger movement; replay must not decrement twice.
 
 Proposed `200` returns the current reservation row state (`released`) and its new row version. Active unused reservation may transition to released under approved policy; replay does not release twice; committed or changed state conflicts rather than restoring stock twice.
 
@@ -87,9 +87,9 @@ Do not return prescription bytes, private clinical notes, or reviewer credential
 
 ## Money initiation and provider evidence: API-075 / API-076
 
-`POST /v1/payments/intents` — **feature FIN-01, supporting CHK-03**. Customer session and owned accepted revision with required current clinical approval/hold. Proposed required fields: `order_id`, `order_revision_id`, expected order version and a permitted payment-method choice.
+`POST /v1/payments/intents` — **feature FIN-01, supporting CHK-03**. Customer session and owned accepted revision with required current clinical approval/hold. Proposed required fields: `orderId`, `orderRevisionId`, `expectedOrderVersion` and `method` as defined in PaymentIntentRequest.
 
-The server derives amount/currency. Proposed `201/202` distinguishes a persisted intent from pending adapter work and returns `payment_intent_id`, current status and only the approved provider continuation token/link. Exact provider token fields are blocked by D-016.
+The server derives amount/currency. Proposed `201/202` distinguishes a persisted intent from pending adapter work and returns the proposed `paymentIntent` projection with its current status; the continuation token/link is exposed only after provider approval. Exact provider token fields are blocked by D-016.
 
 Persist one `payment.payment_intents`/`payment.payment_attempts` operation with local audit/outbox; network creation runs outside the transaction under the provider’s evidenced idempotency support. Timeout leaves an identifiable pending/unknown result. No client `paid=true`, screenshot or redirect can complete it.
 
@@ -103,11 +103,11 @@ COD eligibility belongs to the reviewed checkout/order command and Finance’s a
 
 ## Cancellation and return: API-027 / API-028
 
-`POST /v1/me/orders/{order_id}/cancel` — **ORD-04**. Customer session and owned order; proposed body `order_version` plus approved `reason_code`. Serialize against current packing state and apply the approved before-packed rule. Proposed `200/202` returns cancellation reference, accepted/current state and separate refund status.
+`POST /v1/me/orders/{order_id}/cancel` — **ORD-04**. Customer session and owned order; proposed body `expectedOrderVersion` plus approved `reasonCode`. Serialize against current packing state and apply the approved before-packed rule. Proposed `200/202` returns cancellation reference, accepted/current state and separate refund status.
 
 Delegate order change to Operations, unused hold release to Inventory and refund eligibility to Finance. Tables include `commerce.cancellations`, `commerce.cancellation_items`, order/history and owner-managed hold/refund evidence; exact atomic orchestration remains D-024. No refund is complete merely because cancellation is accepted.
 
-`POST /v1/me/orders/{order_id}/returns` — **ORD-05**. Proposed required fields: current `order_version`, item references/positive requested quantities and approved return reason. Check actual eligible delivered quantities and prior accepted returns under approved policy; return reference/status rather than stock credit or payout. `commerce.returns`/`commerce.return_items` record the request through Operations; receiving and disposition are later authorized work.
+`POST /v1/me/orders/{order_id}/returns` — **ORD-05**. Proposed required fields: current `expectedOrderVersion`, item references/positive requested quantities and approved return reason. Check actual eligible delivered quantities and prior accepted returns under approved policy; return reference/status rather than stock credit or payout. `commerce.returns`/`commerce.return_items` record the request through Operations; receiving and disposition are later authorized work.
 
 D-004/D-006 must supply item/window rules. TC-ORD-04-DENY serializes packing/cancellation; TC-ORD-05-DENY confirms no automatic money/stock effect.
 
@@ -129,7 +129,7 @@ TC-FIN-03-DENY verifies duplicate and concurrent cumulative refund limits; TC-FI
 
 `POST /v1/rider/tasks/{task_id}/complete` — **RID-04**, with Delivery Operations as command/data owner and Rider App as client. Current authenticated assigned rider only. `{task_id}` is an API alias for public `logistics.delivery_assignments.id`; verify it is current and owned by the caller.
 
-Proposed required body: `assignmentVersion` (maps to assignment `row_version`), `otpChallengeId` (public `logistics.delivery_otp_challenges.id`), `otp` (write-only secret, checked against `otp_digest` and never stored/logged in cleartext), optional conditional `proofFileId` (single public `platform.file_objects.id`, matching `logistics.delivery_attempts.proof_file_id`), and actual COD amount only when COD applies.
+Proposed required body: `assignmentVersion` (maps to assignment `row_version`), `otpChallengeId` (public `logistics.delivery_otp_challenges.id`), `otp` (write-only secret, checked against `otp_digest` and never stored/logged in cleartext), mandatory `proofFileId` (RID-04 photo requirement; single public `platform.file_objects.id`, matching `logistics.delivery_attempts.proof_file_id`), and actual COD amount only when COD applies.
 
 Proof is singular because `delivery_attempts` has one `proof_file_id`; multiple files require a separate evidence mapping decision. `payment.cod_collections` stores amount but no currency, so currency is derived from the order/payment evidence. Approved proof requirements, file grant policy and task-to-shipment mapping remain D-011/D-024.
 
@@ -141,6 +141,10 @@ Incorrect OTP leaves completion unaccepted. Lost successful response replays the
 
 ## Remaining operation review
 
-For all other proposed routes, the [owning API document](API-Contract-Coverage.md) remains the source of current readiness. Missing request/response fields, input bounds, transition mappings or write-field lists are blocked under D-024, not implicitly filled by this document.
+For every route, the [owning API document and current coverage ledger](API-Contract-Coverage.md) give detailed proposed contracts and explicit exclusions. Ten operations retain concrete contract gaps; complete proposals still require D-024 approval before implementation.
 
 The [feature register](../09-References/Coverage-and-Traceability.md) distinguishes direct references, cross-module support and unresolved feature operations. Full OpenAPI and provider contracts remain development prerequisites, not documentation validation results.
+
+## Detailed operation refinement
+
+The owning module API sections and [107-operation matrix](API-Database-Feature-Matrix.md) now refine the earlier abbreviated proposals above. In particular API-027/028 use camelCase expectedOrderVersion/reasonCode; API-075 uses the proposed camelCase PaymentIntentRequest but remains incomplete for provider continuation; API-053 records unused release reason in audit metadata and decrements reserved quantity without a physical ledger movement. These refinements preserve the business invariants above and do not constitute D-024 approval. Review [coverage](API-Contract-Coverage.md) for the current per-operation status rather than interpreting historical missing-field notes as current inventory totals.
