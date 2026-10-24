@@ -1,4 +1,4 @@
-# payment.refunds
+# `payment.refunds`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -35,6 +35,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the refunds business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Finance_Payments. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -42,25 +43,27 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `reason_code_id, reason_code` → `payment.refund_reason_codes(id, code)` via `fk_payment_refunds_controlled_reason`; FOREIGN KEY (reason_code_id, reason_code) REFERENCES payment.refund_reason_codes(id, code) ON DELETE RESTRICT
-- `created_by` → `identity.users(id)` via `fk_payment_refunds_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_payment_refunds_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `return_id` → `commerce.returns(id)` via `fk_payment_refunds_return_id_returns`; FOREIGN KEY (return_id) REFERENCES commerce.returns(id) ON DELETE SET NULL
-- `payment_transaction_id` → `payment.payment_transactions(id)` via `fk_payment_refunds_payment_transaction_id_payment_transactions`; FOREIGN KEY (payment_transaction_id) REFERENCES payment.payment_transactions(id) ON DELETE RESTRICT
-- `order_revision_id, order_id` → `commerce.order_revisions(id, order_id)` via `fk_payment_refunds_revision_scope`; FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT
-- `order_id` → `commerce.orders(id)` via `fk_payment_refunds_order_id_orders`; FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT
-- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_payment_refunds_order_id_orders_numeric`; FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT
-- `payment_transaction_id_internal_id` → `payment.payment_transactions(internal_id)` via `fk_payment_refunds_payment_transaction_id_payment_trans_11c4`; FOREIGN KEY (payment_transaction_id_internal_id) REFERENCES payment.payment_transactions(internal_id) ON DELETE RESTRICT
-- `return_id_internal_id` → `commerce.returns(internal_id)` via `fk_payment_refunds_return_id_returns_numeric`; FOREIGN KEY (return_id_internal_id) REFERENCES commerce.returns(internal_id) ON DELETE SET NULL
-- `order_revision_id_internal_id, order_id_internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_payment_refunds_revision_scope_numeric`; FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT
+- `reason_code_id, reason_code` → `payment.refund_reason_codes(id, code)` via `fk_payment_refunds_controlled_reason`; `FOREIGN KEY (reason_code_id, reason_code) REFERENCES payment.refund_reason_codes(id, code) ON DELETE RESTRICT`
+- `created_by` → `identity.users(id)` via `fk_payment_refunds_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_payment_refunds_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `return_id` → `commerce.returns(id)` via `fk_payment_refunds_return_id_returns`; `FOREIGN KEY (return_id) REFERENCES commerce.returns(id) ON DELETE SET NULL`
+- `payment_transaction_id` → `payment.payment_transactions(id)` via `fk_payment_refunds_payment_transaction_id_payment_transactions`; `FOREIGN KEY (payment_transaction_id) REFERENCES payment.payment_transactions(id) ON DELETE RESTRICT`
+- `order_revision_id, order_id` → `commerce.order_revisions(id, order_id)` via `fk_payment_refunds_revision_scope`; `FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT`
+- `order_id` → `commerce.orders(id)` via `fk_payment_refunds_order_id_orders`; `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT`
+- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_payment_refunds_order_id_orders_numeric`; `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT`
+- `payment_transaction_id_internal_id` → `payment.payment_transactions(internal_id)` via `fk_payment_refunds_payment_transaction_id_payment_trans_11c4`; `FOREIGN KEY (payment_transaction_id_internal_id) REFERENCES payment.payment_transactions(internal_id) ON DELETE RESTRICT`
+- `return_id_internal_id` → `commerce.returns(internal_id)` via `fk_payment_refunds_return_id_returns_numeric`; `FOREIGN KEY (return_id_internal_id) REFERENCES commerce.returns(internal_id) ON DELETE SET NULL`
+- `order_revision_id_internal_id, order_id_internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_payment_refunds_revision_scope_numeric`; `FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT`
 
 **Referenced by 6 FK constraints** (sample): `finance.credit_notes`, `payment.refund_allocations`, `payment.refund_allocations`, `finance.credit_notes`, `payment.refund_allocations`, `payment.refund_allocations`.
 
-## payment.refunds — exact structural contracts
+## `payment.refunds` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 23 columns, 26 constraints, 9 indexes, 5 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 23 columns, 26 constraints, 9 indexes, 5 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -76,7 +79,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `return_id_internal_id` | `commerce.returns` | `fk_payment_refunds_return_id_returns_numeric` |
 | `order_revision_id_internal_id`, `order_id_internal_id` | `commerce.order_revisions` | `fk_payment_refunds_revision_scope_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -107,7 +110,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_payment_refunds_id` | UNIQUE | `UNIQUE (id)` |
 | `uq_payment_refunds_id_revision` | UNIQUE | `UNIQUE (id, order_revision_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -121,7 +124,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_payment_refunds_id` | `CREATE UNIQUE INDEX uq_payment_refunds_id ON payment.refunds USING btree (id)` |
 | `uq_payment_refunds_id_revision` | `CREATE UNIQUE INDEX uq_payment_refunds_id_revision ON payment.refunds USING btree (id, order_revision_id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -133,4 +136,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

@@ -1,4 +1,4 @@
-# platform.file_access_events
+# `platform.file_access_events`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -26,6 +26,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the file access events business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Prescription_Upload, Admin_CMS, Reporting, Audit, Authentication_Access, Notifications. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -33,15 +34,17 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `actor_user_id` → `identity.users(id)` via `fk_platform_file_access_events_actor_user_id_users`; FOREIGN KEY (actor_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `file_object_id` → `platform.file_objects(id)` via `fk_platform_file_access_events_file_object_id_file_objects`; FOREIGN KEY (file_object_id) REFERENCES platform.file_objects(id) ON DELETE RESTRICT
-- `file_object_id_internal_id` → `platform.file_objects(internal_id)` via `fk_platform_file_access_events_file_object_id_file_obje_47c7`; FOREIGN KEY (file_object_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE RESTRICT
+- `actor_user_id` → `identity.users(id)` via `fk_platform_file_access_events_actor_user_id_users`; `FOREIGN KEY (actor_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `file_object_id` → `platform.file_objects(id)` via `fk_platform_file_access_events_file_object_id_file_objects`; `FOREIGN KEY (file_object_id) REFERENCES platform.file_objects(id) ON DELETE RESTRICT`
+- `file_object_id_internal_id` → `platform.file_objects(internal_id)` via `fk_platform_file_access_events_file_object_id_file_obje_47c7`; `FOREIGN KEY (file_object_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE RESTRICT`
 
-## platform.file_access_events — exact structural contracts
+## `platform.file_access_events` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 14 columns, 6 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 14 columns, 6 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -49,7 +52,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `file_object_id` | `platform.file_objects` | `fk_platform_file_access_events_file_object_id_file_objects` |
 | `file_object_id_internal_id` | `platform.file_objects` | `fk_platform_file_access_events_file_object_id_file_obje_47c7` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -60,7 +63,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_platform_file_access_events` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_platform_file_access_events_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -70,7 +73,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_platform_file_access_events` | `CREATE UNIQUE INDEX pk_platform_file_access_events ON platform.file_access_events USING btree (internal_id)` |
 | `uq_platform_file_access_events_id` | `CREATE UNIQUE INDEX uq_platform_file_access_events_id ON platform.file_access_events USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -80,4 +83,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

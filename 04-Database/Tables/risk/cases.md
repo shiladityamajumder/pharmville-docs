@@ -1,4 +1,4 @@
-# risk.cases
+# `risk.cases`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -30,6 +30,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the cases business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Audit. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -37,19 +38,21 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_risk_cases_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_risk_cases_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `assigned_to_user_id` → `identity.users(id)` via `fk_risk_cases_assigned_to_user_id_users`; FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `assessment_id` → `risk.assessments(id)` via `fk_risk_cases_assessment_id_assessments`; FOREIGN KEY (assessment_id) REFERENCES risk.assessments(id) ON DELETE SET NULL
-- `assessment_id_internal_id` → `risk.assessments(internal_id)` via `fk_risk_cases_assessment_id_assessments_numeric`; FOREIGN KEY (assessment_id_internal_id) REFERENCES risk.assessments(internal_id) ON DELETE SET NULL
+- `created_by` → `identity.users(id)` via `fk_risk_cases_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_risk_cases_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `assigned_to_user_id` → `identity.users(id)` via `fk_risk_cases_assigned_to_user_id_users`; `FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `assessment_id` → `risk.assessments(id)` via `fk_risk_cases_assessment_id_assessments`; `FOREIGN KEY (assessment_id) REFERENCES risk.assessments(id) ON DELETE SET NULL`
+- `assessment_id_internal_id` → `risk.assessments(internal_id)` via `fk_risk_cases_assessment_id_assessments_numeric`; `FOREIGN KEY (assessment_id_internal_id) REFERENCES risk.assessments(internal_id) ON DELETE SET NULL`
 
 **Referenced by 2 FK constraints** (sample): `risk.blocklists`, `risk.blocklists`.
 
-## risk.cases — exact structural contracts
+## `risk.cases` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 18 columns, 10 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 18 columns, 10 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -59,7 +62,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `assessment_id` | `risk.assessments` | `fk_risk_cases_assessment_id_assessments` |
 | `assessment_id_internal_id` | `risk.assessments` | `fk_risk_cases_assessment_id_assessments_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -74,7 +77,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `risk_case_number` | UNIQUE | `UNIQUE (case_number)` |
 | `uq_risk_cases_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -84,7 +87,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `risk_case_number` | `CREATE UNIQUE INDEX risk_case_number ON risk.cases USING btree (case_number)` |
 | `uq_risk_cases_id` | `CREATE UNIQUE INDEX uq_risk_cases_id ON risk.cases USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -94,4 +97,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

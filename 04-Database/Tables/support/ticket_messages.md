@@ -1,4 +1,4 @@
-# support.ticket_messages
+# `support.ticket_messages`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -27,6 +27,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the ticket messages business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -34,19 +35,21 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `author_user_id` → `identity.users(id)` via `fk_support_ticket_messages_author_user_id_users`; FOREIGN KEY (author_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `created_by` → `identity.users(id)` via `fk_support_ticket_messages_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_support_ticket_messages_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `ticket_id` → `support.tickets(id)` via `fk_support_ticket_messages_ticket_id_tickets`; FOREIGN KEY (ticket_id) REFERENCES support.tickets(id) ON DELETE CASCADE
-- `ticket_id_internal_id` → `support.tickets(internal_id)` via `fk_support_ticket_messages_ticket_id_tickets_numeric`; FOREIGN KEY (ticket_id_internal_id) REFERENCES support.tickets(internal_id) ON DELETE CASCADE
+- `author_user_id` → `identity.users(id)` via `fk_support_ticket_messages_author_user_id_users`; `FOREIGN KEY (author_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `created_by` → `identity.users(id)` via `fk_support_ticket_messages_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_support_ticket_messages_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `ticket_id` → `support.tickets(id)` via `fk_support_ticket_messages_ticket_id_tickets`; `FOREIGN KEY (ticket_id) REFERENCES support.tickets(id) ON DELETE CASCADE`
+- `ticket_id_internal_id` → `support.tickets(internal_id)` via `fk_support_ticket_messages_ticket_id_tickets_numeric`; `FOREIGN KEY (ticket_id_internal_id) REFERENCES support.tickets(internal_id) ON DELETE CASCADE`
 
 **Referenced by 2 FK constraints** (sample): `support.ticket_attachments`, `support.ticket_attachments`.
 
-## support.ticket_messages — exact structural contracts
+## `support.ticket_messages` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 15 columns, 9 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 15 columns, 9 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -56,7 +59,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `ticket_id` | `support.tickets` | `fk_support_ticket_messages_ticket_id_tickets` |
 | `ticket_id_internal_id` | `support.tickets` | `fk_support_ticket_messages_ticket_id_tickets_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -70,7 +73,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_support_ticket_messages` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_support_ticket_messages_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -79,7 +82,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_support_ticket_messages` | `CREATE UNIQUE INDEX pk_support_ticket_messages ON support.ticket_messages USING btree (internal_id)` |
 | `uq_support_ticket_messages_id` | `CREATE UNIQUE INDEX uq_support_ticket_messages_id ON support.ticket_messages USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -89,4 +92,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

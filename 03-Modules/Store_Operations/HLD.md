@@ -14,13 +14,14 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## MOD-008: Picking, packing and store replenishment — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Picking, packing and store replenishment. Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute.
 
 **System responsibility:** The `Store_Operations` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - Incoming order queue for my store, with sound alert (`STO-01`)
 - Accept order, pick list, mark packed, hand over to rider (`STO-02`)
@@ -28,15 +29,17 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Confirm receipt of a transfer; record shortages (`STO-04`)
 - My store's stock, with low-stock and near-expiry alerts (`STO-05`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `fulfillment.pick_tasks`, `fulfillment.pack_tasks`, `fulfillment.packages`, `warehouse.stock_balances`, `procurement.purchase_requisitions`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## MOD-008 — Picking, packing and store replenishment
@@ -46,13 +49,15 @@ Store actors can mutate only scoped tasks and must report actual shortages, neve
 **Purpose:** Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute.
 
 **Feature coverage**
+
 - **STO-01 / REQ-052:** Incoming order queue for my store, with sound alert (Must (draft)).
 - **STO-02 / REQ-053:** Accept order, pick list, mark packed, hand over to rider (Must (draft)).
 - **STO-03 / REQ-054:** Raise replenishment request (normal or urgent) (Must (draft)).
 - **STO-04 / REQ-055:** Confirm receipt of a transfer; record shortages (Must (draft)).
 - **STO-05 / REQ-056:** My store's stock, with low-stock and near-expiry alerts (Must (draft)).
 
-## Developer navigation
+### Developer navigation
+
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture

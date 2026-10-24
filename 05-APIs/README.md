@@ -6,12 +6,14 @@
 
 All routes in this package are **proposed Pharmville contracts**. No Pharmville HTTP application or route-level contract tests were available for verification. A sibling healthcare authentication service does provide an implemented and unit-tested camelCase response envelope; that is evidence only for the envelope, not for Pharmville routes, authentication policy, domain DTOs, or runtime behavior. See [Standard responses](Standard-Responses.md).
 
-The historical API identifier range API-001–API-097 is preserved. The five historical account references API-005–API-009 are now listed as individual routes in [Customer Accounts](Customer_Accounts.md). Ten additional account operations use stable `ACC-ROUTE-*` documentation references and do not consume historical IDs. The complete mapping contains 107 HTTP operations and is recorded in the [API contract coverage ledger](API-Contract-Coverage.md).
+The historical API identifier range API-001–API-097 is preserved. The five historical account references API-005–API-009 are now listed as individual routes in [Customer Accounts](Customer_Accounts.md). Ten additional account operations use stable `ACC-ROUTE-*` documentation references and do not consume historical IDs.
+
+The complete mapping contains 107 HTTP operations and is recorded in the [API contract coverage ledger](API-Contract-Coverage.md).
 
 ## Domain contracts
 
 | Domain | Contract |
-|---|---|
+| --- | --- |
 | Authentication and access | [Authentication_Access.md](Authentication_Access.md) |
 | Customer accounts | [Customer_Accounts.md](Customer_Accounts.md) |
 | Product catalog | [Product_Catalog.md](Product_Catalog.md) |
@@ -44,6 +46,10 @@ The historical API identifier range API-001–API-097 is preserved. The five his
 
 ## Cross-domain invariants
 
-Public catalog reads expose only published safe fields. Catalog availability is advisory; inventory rechecks eligible stock at reservation and picking. Prescription access is private and bound to the correct customer, patient, order revision and evidence. Clinical approval, order acceptance, payment success, stock commitment and delivery completion are distinct business facts. Browser payment redirects are not authoritative. Signed provider callbacks require D-016 wire evidence, durable deduplication and reconciliation. Staff, warehouse, pharmacist, finance, rider, export and audit access always checks server-side permissions and object scope.
+Public catalog reads expose only published safe fields. Catalog availability is advisory; inventory rechecks eligible stock at reservation and picking. Prescription access is private and bound to the correct customer, patient, order revision and evidence. Clinical approval, order acceptance, payment success, stock commitment and delivery completion are distinct business facts.
 
-Each module document preserves its feature IDs, candidate data ownership, failure handling and designed test cases. These test scenarios are **Designed / NOT RUN** unless execution evidence is explicitly cited. The documented authoritative database source folder is absent here, and the adjacent similarly named folder does not match the evidence manifest; only checked-in database documentation is available for this turn. Review [API contract coverage](API-Contract-Coverage.md) before implementation; all unresolved fields, owners and decision impacts must be approved under D-024.
+Browser payment redirects are not authoritative. Signed provider callbacks require D-016 wire evidence, durable deduplication and reconciliation. Staff, warehouse, pharmacist, finance, rider, export and audit access always checks server-side permissions and object scope.
+
+Each module document preserves its feature IDs, candidate data ownership, failure handling and designed test cases. These test scenarios are **Designed / NOT RUN** unless execution evidence is explicitly cited. The documented authoritative database source folder is absent here, and the adjacent similarly named folder does not match the evidence manifest; only checked-in database documentation is available for this turn.
+
+Review [API contract coverage](API-Contract-Coverage.md) before implementation; all unresolved fields, owners and decision impacts must be approved under D-024.

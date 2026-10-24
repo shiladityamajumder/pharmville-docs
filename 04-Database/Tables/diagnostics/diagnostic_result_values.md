@@ -1,4 +1,4 @@
-# diagnostics.diagnostic_result_values
+# `diagnostics.diagnostic_result_values`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -30,6 +30,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the diagnostic result values business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -37,18 +38,20 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_result_values_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_result_values_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `report_id` → `diagnostics.diagnostic_reports(id)` via `fk_diagnostics_diagnostic_result_values_report_id_diagn_c377`; FOREIGN KEY (report_id) REFERENCES diagnostics.diagnostic_reports(id) ON DELETE CASCADE
-- `test_definition_id` → `diagnostics.test_definitions(id)` via `fk_diagnostics_diagnostic_result_values_test_definition_ed77`; FOREIGN KEY (test_definition_id) REFERENCES diagnostics.test_definitions(id) ON DELETE SET NULL
-- `report_id_internal_id` → `diagnostics.diagnostic_reports(internal_id)` via `fk_diagnostics_diagnostic_result_values_report_id_diagn_dc45`; FOREIGN KEY (report_id_internal_id) REFERENCES diagnostics.diagnostic_reports(internal_id) ON DELETE CASCADE
-- `test_definition_id_internal_id` → `diagnostics.test_definitions(internal_id)` via `fk_diagnostics_diagnostic_result_values_test_definition_9bb2`; FOREIGN KEY (test_definition_id_internal_id) REFERENCES diagnostics.test_definitions(internal_id) ON DELETE SET NULL
+- `created_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_result_values_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_result_values_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `report_id` → `diagnostics.diagnostic_reports(id)` via `fk_diagnostics_diagnostic_result_values_report_id_diagn_c377`; `FOREIGN KEY (report_id) REFERENCES diagnostics.diagnostic_reports(id) ON DELETE CASCADE`
+- `test_definition_id` → `diagnostics.test_definitions(id)` via `fk_diagnostics_diagnostic_result_values_test_definition_ed77`; `FOREIGN KEY (test_definition_id) REFERENCES diagnostics.test_definitions(id) ON DELETE SET NULL`
+- `report_id_internal_id` → `diagnostics.diagnostic_reports(internal_id)` via `fk_diagnostics_diagnostic_result_values_report_id_diagn_dc45`; `FOREIGN KEY (report_id_internal_id) REFERENCES diagnostics.diagnostic_reports(internal_id) ON DELETE CASCADE`
+- `test_definition_id_internal_id` → `diagnostics.test_definitions(internal_id)` via `fk_diagnostics_diagnostic_result_values_test_definition_9bb2`; `FOREIGN KEY (test_definition_id_internal_id) REFERENCES diagnostics.test_definitions(internal_id) ON DELETE SET NULL`
 
-## diagnostics.diagnostic_result_values — exact structural contracts
+## `diagnostics.diagnostic_result_values` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 18 columns, 12 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 18 columns, 12 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -59,7 +62,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `report_id_internal_id` | `diagnostics.diagnostic_reports` | `fk_diagnostics_diagnostic_result_values_report_id_diagn_dc45` |
 | `test_definition_id_internal_id` | `diagnostics.test_definitions` | `fk_diagnostics_diagnostic_result_values_test_definition_9bb2` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -76,7 +79,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_diagnostics_diagnostic_result_values` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_diagnostics_diagnostic_result_values_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -85,7 +88,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_diagnostics_diagnostic_result_values` | `CREATE UNIQUE INDEX pk_diagnostics_diagnostic_result_values ON diagnostics.diagnostic_result_values USING btree (internal_id)` |
 | `uq_diagnostics_diagnostic_result_values_id` | `CREATE UNIQUE INDEX uq_diagnostics_diagnostic_result_values_id ON diagnostics.diagnostic_result_values USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -95,4 +98,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

@@ -1,4 +1,4 @@
-# fulfillment.fulfillment_orders
+# `fulfillment.fulfillment_orders`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -35,6 +35,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the fulfillment orders business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Order_Operations, Store_Operations, Warehouse, Delivery_Operations. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -42,28 +43,30 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_fulfillment_fulfillment_orders_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_fulfillment_fulfillment_orders_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `warehouse_id` → `warehouse.warehouses(id)` via `fk_fulfillment_fulfillment_orders_warehouse_id_warehouses`; FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE RESTRICT
-- `order_group_id` → `commerce.order_groups(id)` via `fk_fulfillment_fulfillment_orders_order_group_id_order_groups`; FOREIGN KEY (order_group_id) REFERENCES commerce.order_groups(id) ON DELETE SET NULL
-- `order_revision_id, order_id` → `commerce.order_revisions(id, order_id)` via `fk_fulfillment_fulfillment_orders_revision_scope`; FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT
-- `order_id` → `commerce.orders(id)` via `fk_fulfillment_fulfillment_orders_order_id_orders`; FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT
-- `seller_id` → `marketplace.sellers(id)` via `fk_fulfillment_fulfillment_orders_seller_id_sellers`; FOREIGN KEY (seller_id) REFERENCES marketplace.sellers(id) ON DELETE SET NULL
-- `wave_id, warehouse_id` → `fulfillment.picking_waves(id, warehouse_id)` via `fk_domain_fulfillment_fulfillment_orders_wave_id`; FOREIGN KEY (wave_id, warehouse_id) REFERENCES fulfillment.picking_waves(id, warehouse_id) ON DELETE RESTRICT
-- `wave_id_internal_id, warehouse_id_internal_id` → `fulfillment.picking_waves(internal_id, warehouse_id_internal_id)` via `fk_domain_fulfillment_fulfillment_orders_wave_id_numeric`; FOREIGN KEY (wave_id_internal_id, warehouse_id_internal_id) REFERENCES fulfillment.picking_waves(internal_id, warehouse_id_internal_id) ON DELETE RESTRICT
-- `order_group_id_internal_id` → `commerce.order_groups(internal_id)` via `fk_fulfillment_fulfillment_orders_order_group_id_order__b1eb`; FOREIGN KEY (order_group_id_internal_id) REFERENCES commerce.order_groups(internal_id) ON DELETE SET NULL
-- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_fulfillment_fulfillment_orders_order_id_orders_numeric`; FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT
-- `order_revision_id_internal_id, order_id_internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_fulfillment_fulfillment_orders_revision_scope_numeric`; FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT
-- `seller_id_internal_id` → `marketplace.sellers(internal_id)` via `fk_fulfillment_fulfillment_orders_seller_id_sellers_numeric`; FOREIGN KEY (seller_id_internal_id) REFERENCES marketplace.sellers(internal_id) ON DELETE SET NULL
-- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_fulfillment_fulfillment_orders_warehouse_id_warehous_f861`; FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_fulfillment_fulfillment_orders_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_fulfillment_fulfillment_orders_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `warehouse_id` → `warehouse.warehouses(id)` via `fk_fulfillment_fulfillment_orders_warehouse_id_warehouses`; `FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE RESTRICT`
+- `order_group_id` → `commerce.order_groups(id)` via `fk_fulfillment_fulfillment_orders_order_group_id_order_groups`; `FOREIGN KEY (order_group_id) REFERENCES commerce.order_groups(id) ON DELETE SET NULL`
+- `order_revision_id, order_id` → `commerce.order_revisions(id, order_id)` via `fk_fulfillment_fulfillment_orders_revision_scope`; `FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT`
+- `order_id` → `commerce.orders(id)` via `fk_fulfillment_fulfillment_orders_order_id_orders`; `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT`
+- `seller_id` → `marketplace.sellers(id)` via `fk_fulfillment_fulfillment_orders_seller_id_sellers`; `FOREIGN KEY (seller_id) REFERENCES marketplace.sellers(id) ON DELETE SET NULL`
+- `wave_id, warehouse_id` → `fulfillment.picking_waves(id, warehouse_id)` via `fk_domain_fulfillment_fulfillment_orders_wave_id`; `FOREIGN KEY (wave_id, warehouse_id) REFERENCES fulfillment.picking_waves(id, warehouse_id) ON DELETE RESTRICT`
+- `wave_id_internal_id, warehouse_id_internal_id` → `fulfillment.picking_waves(internal_id, warehouse_id_internal_id)` via `fk_domain_fulfillment_fulfillment_orders_wave_id_numeric`; `FOREIGN KEY (wave_id_internal_id, warehouse_id_internal_id) REFERENCES fulfillment.picking_waves(internal_id, warehouse_id_internal_id) ON DELETE RESTRICT`
+- `order_group_id_internal_id` → `commerce.order_groups(internal_id)` via `fk_fulfillment_fulfillment_orders_order_group_id_order__b1eb`; `FOREIGN KEY (order_group_id_internal_id) REFERENCES commerce.order_groups(internal_id) ON DELETE SET NULL`
+- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_fulfillment_fulfillment_orders_order_id_orders_numeric`; `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT`
+- `order_revision_id_internal_id, order_id_internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_fulfillment_fulfillment_orders_revision_scope_numeric`; `FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT`
+- `seller_id_internal_id` → `marketplace.sellers(internal_id)` via `fk_fulfillment_fulfillment_orders_seller_id_sellers_numeric`; `FOREIGN KEY (seller_id_internal_id) REFERENCES marketplace.sellers(internal_id) ON DELETE SET NULL`
+- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_fulfillment_fulfillment_orders_warehouse_id_warehous_f861`; `FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 12 FK constraints** (sample): `fulfillment.fulfillment_order_items`, `fulfillment.picking_wave_orders`, `fulfillment.pick_tasks`, `fulfillment.pack_tasks`, `fulfillment.packages`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.pack_tasks`, `fulfillment.packages`, `fulfillment.pick_tasks`, `fulfillment.picking_wave_orders`.
 
-## fulfillment.fulfillment_orders — exact structural contracts
+## `fulfillment.fulfillment_orders` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 23 columns, 25 constraints, 7 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 23 columns, 25 constraints, 7 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -82,7 +85,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `seller_id_internal_id` | `marketplace.sellers` | `fk_fulfillment_fulfillment_orders_seller_id_sellers_numeric` |
 | `warehouse_id_internal_id` | `warehouse.warehouses` | `fk_fulfillment_fulfillment_orders_warehouse_id_warehous_f861` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -112,7 +115,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_fulfillment_fulfillment_orders` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_fulfillment_fulfillment_orders_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -124,7 +127,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_fulfillment_fulfillment_orders` | `CREATE UNIQUE INDEX pk_fulfillment_fulfillment_orders ON fulfillment.fulfillment_orders USING btree (internal_id)` |
 | `uq_fulfillment_fulfillment_orders_id` | `CREATE UNIQUE INDEX uq_fulfillment_fulfillment_orders_id ON fulfillment.fulfillment_orders USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -135,4 +138,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

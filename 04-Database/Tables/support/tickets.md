@@ -1,4 +1,4 @@
-# support.tickets
+# `support.tickets`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -42,6 +42,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the tickets business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -49,26 +50,28 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_support_tickets_user_id_users`; FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `assigned_to_user_id` → `identity.users(id)` via `fk_support_tickets_assigned_to_user_id_users`; FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `created_by` → `identity.users(id)` via `fk_support_tickets_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_support_tickets_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `sla_policy_id` → `support.sla_policies(id)` via `fk_support_tickets_sla_policy_id_sla_policies`; FOREIGN KEY (sla_policy_id) REFERENCES support.sla_policies(id) ON DELETE SET NULL
-- `appointment_id` → `appointment.appointments(id)` via `fk_support_tickets_appointment_id_appointments`; FOREIGN KEY (appointment_id) REFERENCES appointment.appointments(id) ON DELETE SET NULL
-- `diagnostic_order_id` → `diagnostics.diagnostic_orders(id)` via `fk_support_tickets_diagnostic_order_id_diagnostic_orders`; FOREIGN KEY (diagnostic_order_id) REFERENCES diagnostics.diagnostic_orders(id) ON DELETE SET NULL
-- `order_id` → `commerce.orders(id)` via `fk_support_tickets_order_id_orders`; FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE SET NULL
-- `appointment_id_internal_id` → `appointment.appointments(internal_id)` via `fk_support_tickets_appointment_id_appointments_numeric`; FOREIGN KEY (appointment_id_internal_id) REFERENCES appointment.appointments(internal_id) ON DELETE SET NULL
-- `diagnostic_order_id_internal_id` → `diagnostics.diagnostic_orders(internal_id)` via `fk_support_tickets_diagnostic_order_id_diagnostic_order_e812`; FOREIGN KEY (diagnostic_order_id_internal_id) REFERENCES diagnostics.diagnostic_orders(internal_id) ON DELETE SET NULL
-- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_support_tickets_order_id_orders_numeric`; FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE SET NULL
-- `sla_policy_id_internal_id` → `support.sla_policies(internal_id)` via `fk_support_tickets_sla_policy_id_sla_policies_numeric`; FOREIGN KEY (sla_policy_id_internal_id) REFERENCES support.sla_policies(internal_id) ON DELETE SET NULL
+- `user_id` → `identity.users(id)` via `fk_support_tickets_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `assigned_to_user_id` → `identity.users(id)` via `fk_support_tickets_assigned_to_user_id_users`; `FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `created_by` → `identity.users(id)` via `fk_support_tickets_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_support_tickets_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `sla_policy_id` → `support.sla_policies(id)` via `fk_support_tickets_sla_policy_id_sla_policies`; `FOREIGN KEY (sla_policy_id) REFERENCES support.sla_policies(id) ON DELETE SET NULL`
+- `appointment_id` → `appointment.appointments(id)` via `fk_support_tickets_appointment_id_appointments`; `FOREIGN KEY (appointment_id) REFERENCES appointment.appointments(id) ON DELETE SET NULL`
+- `diagnostic_order_id` → `diagnostics.diagnostic_orders(id)` via `fk_support_tickets_diagnostic_order_id_diagnostic_orders`; `FOREIGN KEY (diagnostic_order_id) REFERENCES diagnostics.diagnostic_orders(id) ON DELETE SET NULL`
+- `order_id` → `commerce.orders(id)` via `fk_support_tickets_order_id_orders`; `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE SET NULL`
+- `appointment_id_internal_id` → `appointment.appointments(internal_id)` via `fk_support_tickets_appointment_id_appointments_numeric`; `FOREIGN KEY (appointment_id_internal_id) REFERENCES appointment.appointments(internal_id) ON DELETE SET NULL`
+- `diagnostic_order_id_internal_id` → `diagnostics.diagnostic_orders(internal_id)` via `fk_support_tickets_diagnostic_order_id_diagnostic_order_e812`; `FOREIGN KEY (diagnostic_order_id_internal_id) REFERENCES diagnostics.diagnostic_orders(internal_id) ON DELETE SET NULL`
+- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_support_tickets_order_id_orders_numeric`; `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE SET NULL`
+- `sla_policy_id_internal_id` → `support.sla_policies(internal_id)` via `fk_support_tickets_sla_policy_id_sla_policies_numeric`; `FOREIGN KEY (sla_policy_id_internal_id) REFERENCES support.sla_policies(internal_id) ON DELETE SET NULL`
 
 **Referenced by 10 FK constraints** (sample): `support.ticket_messages`, `support.ticket_attachments`, `support.ticket_actions`, `support.ticket_status_history`, `support.ticket_tag_assignments`, `support.ticket_actions`, `support.ticket_attachments`, `support.ticket_messages`, `support.ticket_status_history`, `support.ticket_tag_assignments`.
 
-## support.tickets — exact structural contracts
+## `support.tickets` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 30 columns, 21 constraints, 7 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 30 columns, 21 constraints, 7 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -85,7 +88,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `order_id_internal_id` | `commerce.orders` | `fk_support_tickets_order_id_orders_numeric` |
 | `sla_policy_id_internal_id` | `support.sla_policies` | `fk_support_tickets_sla_policy_id_sla_policies_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -111,7 +114,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `ticket_number` | UNIQUE | `UNIQUE (ticket_number)` |
 | `uq_support_tickets_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -123,7 +126,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `ticket_number` | `CREATE UNIQUE INDEX ticket_number ON support.tickets USING btree (ticket_number)` |
 | `uq_support_tickets_id` | `CREATE UNIQUE INDEX uq_support_tickets_id ON support.tickets USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -133,4 +136,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

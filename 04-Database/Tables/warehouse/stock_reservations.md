@@ -1,4 +1,4 @@
-# warehouse.stock_reservations
+# `warehouse.stock_reservations`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -37,6 +37,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the stock reservations business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Cart_Checkout, Order_Operations, Store_Operations, Inventory, Warehouse. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -44,26 +45,28 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_warehouse_stock_reservations_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_warehouse_stock_reservations_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `bin_id` → `warehouse.bins(id)` via `fk_warehouse_stock_reservations_bin_id_bins`; FOREIGN KEY (bin_id) REFERENCES warehouse.bins(id) ON DELETE RESTRICT
-- `warehouse_id` → `warehouse.warehouses(id)` via `fk_warehouse_stock_reservations_warehouse_id_warehouses`; FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE RESTRICT
-- `order_item_id, order_id` → `commerce.order_items(id, order_id)` via `fk_warehouse_stock_reservations_item_order`; FOREIGN KEY (order_item_id, order_id) REFERENCES commerce.order_items(id, order_id) ON DELETE RESTRICT
-- `order_revision_id, order_id` → `commerce.order_revisions(id, order_id)` via `fk_warehouse_stock_reservations_revision_scope`; FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT
-- `lot_id` → `warehouse.inventory_lots(id)` via `fk_warehouse_stock_reservations_lot_id_inventory_lots`; FOREIGN KEY (lot_id) REFERENCES warehouse.inventory_lots(id) ON DELETE RESTRICT
-- `bin_id_internal_id` → `warehouse.bins(internal_id)` via `fk_warehouse_stock_reservations_bin_id_bins_numeric`; FOREIGN KEY (bin_id_internal_id) REFERENCES warehouse.bins(internal_id) ON DELETE RESTRICT
-- `order_item_id_internal_id, order_id_internal_id` → `commerce.order_items(internal_id, order_id_internal_id)` via `fk_warehouse_stock_reservations_item_order_numeric`; FOREIGN KEY (order_item_id_internal_id, order_id_internal_id) REFERENCES commerce.order_items(internal_id, order_id_internal_id) ON DELETE RESTRICT
-- `lot_id_internal_id` → `warehouse.inventory_lots(internal_id)` via `fk_warehouse_stock_reservations_lot_id_inventory_lots_numeric`; FOREIGN KEY (lot_id_internal_id) REFERENCES warehouse.inventory_lots(internal_id) ON DELETE RESTRICT
-- `order_revision_id_internal_id, order_id_internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_warehouse_stock_reservations_revision_scope_numeric`; FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT
-- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_warehouse_stock_reservations_warehouse_id_warehouses_numeric`; FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_warehouse_stock_reservations_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_warehouse_stock_reservations_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `bin_id` → `warehouse.bins(id)` via `fk_warehouse_stock_reservations_bin_id_bins`; `FOREIGN KEY (bin_id) REFERENCES warehouse.bins(id) ON DELETE RESTRICT`
+- `warehouse_id` → `warehouse.warehouses(id)` via `fk_warehouse_stock_reservations_warehouse_id_warehouses`; `FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE RESTRICT`
+- `order_item_id, order_id` → `commerce.order_items(id, order_id)` via `fk_warehouse_stock_reservations_item_order`; `FOREIGN KEY (order_item_id, order_id) REFERENCES commerce.order_items(id, order_id) ON DELETE RESTRICT`
+- `order_revision_id, order_id` → `commerce.order_revisions(id, order_id)` via `fk_warehouse_stock_reservations_revision_scope`; `FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT`
+- `lot_id` → `warehouse.inventory_lots(id)` via `fk_warehouse_stock_reservations_lot_id_inventory_lots`; `FOREIGN KEY (lot_id) REFERENCES warehouse.inventory_lots(id) ON DELETE RESTRICT`
+- `bin_id_internal_id` → `warehouse.bins(internal_id)` via `fk_warehouse_stock_reservations_bin_id_bins_numeric`; `FOREIGN KEY (bin_id_internal_id) REFERENCES warehouse.bins(internal_id) ON DELETE RESTRICT`
+- `order_item_id_internal_id, order_id_internal_id` → `commerce.order_items(internal_id, order_id_internal_id)` via `fk_warehouse_stock_reservations_item_order_numeric`; `FOREIGN KEY (order_item_id_internal_id, order_id_internal_id) REFERENCES commerce.order_items(internal_id, order_id_internal_id) ON DELETE RESTRICT`
+- `lot_id_internal_id` → `warehouse.inventory_lots(internal_id)` via `fk_warehouse_stock_reservations_lot_id_inventory_lots_numeric`; `FOREIGN KEY (lot_id_internal_id) REFERENCES warehouse.inventory_lots(internal_id) ON DELETE RESTRICT`
+- `order_revision_id_internal_id, order_id_internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_warehouse_stock_reservations_revision_scope_numeric`; `FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT`
+- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_warehouse_stock_reservations_warehouse_id_warehouses_numeric`; `FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 4 FK constraints** (sample): `commerce.order_allocations`, `commerce.order_allocations`, `commerce.order_allocations`, `commerce.order_allocations`.
 
-## warehouse.stock_reservations — exact structural contracts
+## `warehouse.stock_reservations` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 25 columns, 28 constraints, 9 indexes, 5 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 25 columns, 28 constraints, 9 indexes, 5 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -80,7 +83,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `order_revision_id_internal_id`, `order_id_internal_id` | `commerce.order_revisions` | `fk_warehouse_stock_reservations_revision_scope_numeric` |
 | `warehouse_id_internal_id` | `warehouse.warehouses` | `fk_warehouse_stock_reservations_warehouse_id_warehouses_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -113,7 +116,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_warehouse_stock_reservations_id` | UNIQUE | `UNIQUE (id)` |
 | `uq_warehouse_stock_reservations_id_item` | UNIQUE | `UNIQUE (id, order_item_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -127,7 +130,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_warehouse_stock_reservations_id` | `CREATE UNIQUE INDEX uq_warehouse_stock_reservations_id ON warehouse.stock_reservations USING btree (id)` |
 | `uq_warehouse_stock_reservations_id_item` | `CREATE UNIQUE INDEX uq_warehouse_stock_reservations_id_item ON warehouse.stock_reservations USING btree (id, order_item_id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -139,4 +142,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

@@ -1,4 +1,4 @@
-# appointment.practitioner_services
+# `appointment.practitioner_services`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -35,6 +35,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the practitioner services business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -42,25 +43,27 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_appointment_practitioner_services_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_appointment_practitioner_services_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_appointment_practitioner_services_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `service_type_id` → `appointment.service_types(id)` via `fk_appointment_practitioner_services_service_type_id_se_8789`; FOREIGN KEY (service_type_id) REFERENCES appointment.service_types(id) ON DELETE RESTRICT
-- `practitioner_profile_id` → `clinical.practitioner_profiles(id)` via `fk_appointment_practitioner_services_practitioner_profi_de52`; FOREIGN KEY (practitioner_profile_id) REFERENCES clinical.practitioner_profiles(id) ON DELETE CASCADE
-- `location_id` → `organization.locations(id)` via `fk_appointment_practitioner_services_location_id_locations`; FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE CASCADE
-- `organization_id` → `organization.organizations(id)` via `fk_appointment_practitioner_services_organization_id_or_328c`; FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE
-- `location_id_internal_id` → `organization.locations(internal_id)` via `fk_appointment_practitioner_services_location_id_locati_e2b2`; FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE CASCADE
-- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_appointment_practitioner_services_organization_id_or_7c6f`; FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE
-- `practitioner_profile_id_internal_id` → `clinical.practitioner_profiles(internal_id)` via `fk_appointment_practitioner_services_practitioner_profi_c30c`; FOREIGN KEY (practitioner_profile_id_internal_id) REFERENCES clinical.practitioner_profiles(internal_id) ON DELETE CASCADE
-- `service_type_id_internal_id` → `appointment.service_types(internal_id)` via `fk_appointment_practitioner_services_service_type_id_se_6043`; FOREIGN KEY (service_type_id_internal_id) REFERENCES appointment.service_types(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_appointment_practitioner_services_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_appointment_practitioner_services_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_appointment_practitioner_services_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `service_type_id` → `appointment.service_types(id)` via `fk_appointment_practitioner_services_service_type_id_se_8789`; `FOREIGN KEY (service_type_id) REFERENCES appointment.service_types(id) ON DELETE RESTRICT`
+- `practitioner_profile_id` → `clinical.practitioner_profiles(id)` via `fk_appointment_practitioner_services_practitioner_profi_de52`; `FOREIGN KEY (practitioner_profile_id) REFERENCES clinical.practitioner_profiles(id) ON DELETE CASCADE`
+- `location_id` → `organization.locations(id)` via `fk_appointment_practitioner_services_location_id_locations`; `FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE CASCADE`
+- `organization_id` → `organization.organizations(id)` via `fk_appointment_practitioner_services_organization_id_or_328c`; `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE`
+- `location_id_internal_id` → `organization.locations(internal_id)` via `fk_appointment_practitioner_services_location_id_locati_e2b2`; `FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE CASCADE`
+- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_appointment_practitioner_services_organization_id_or_7c6f`; `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE`
+- `practitioner_profile_id_internal_id` → `clinical.practitioner_profiles(internal_id)` via `fk_appointment_practitioner_services_practitioner_profi_c30c`; `FOREIGN KEY (practitioner_profile_id_internal_id) REFERENCES clinical.practitioner_profiles(internal_id) ON DELETE CASCADE`
+- `service_type_id_internal_id` → `appointment.service_types(internal_id)` via `fk_appointment_practitioner_services_service_type_id_se_6043`; `FOREIGN KEY (service_type_id_internal_id) REFERENCES appointment.service_types(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 8 FK constraints** (sample): `appointment.availability_rules`, `appointment.availability_exceptions`, `appointment.appointment_slots`, `appointment.appointments`, `appointment.appointment_slots`, `appointment.appointments`, `appointment.availability_exceptions`, `appointment.availability_rules`.
 
-## appointment.practitioner_services — exact structural contracts
+## `appointment.practitioner_services` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 23 columns, 22 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 23 columns, 22 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -76,7 +79,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `practitioner_profile_id_internal_id` | `clinical.practitioner_profiles` | `fk_appointment_practitioner_services_practitioner_profi_c30c` |
 | `service_type_id_internal_id` | `appointment.service_types` | `fk_appointment_practitioner_services_service_type_id_se_6043` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -103,7 +106,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `practitioner_service_location` | UNIQUE | `UNIQUE NULLS NOT DISTINCT (practitioner_profile_id, service_type_id, organization_id, location_id)` |
 | `uq_appointment_practitioner_services_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -112,7 +115,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `practitioner_service_location` | `CREATE UNIQUE INDEX practitioner_service_location ON appointment.practitioner_services USING btree (practitioner_profile_id, service_type_id, organization_id, location_id) NULLS NOT DISTINCT` |
 | `uq_appointment_practitioner_services_id` | `CREATE UNIQUE INDEX uq_appointment_practitioner_services_id ON appointment.practitioner_services USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -122,4 +125,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

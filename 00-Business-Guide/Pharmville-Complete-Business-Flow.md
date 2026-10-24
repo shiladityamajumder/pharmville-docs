@@ -8,7 +8,9 @@ This is the intended flow in the current draft documentation. It is not a claim 
 
 ## Who is involved?
 
-The customer buys for themselves or an authorized dependent. Catalog staff maintain approved product information. Pharmacists review prescription medicines. Operations chooses the fulfillment site and resolves exceptions. Inventory staff protect batch stock; store and warehouse workers receive, pick and pack goods. Dispatchers and riders deliver parcels. Finance checks payments, refunds, invoices and cash; administrators manage permitted access/settings, and support coordinates help.
+The customer buys for themselves or an authorized dependent. Catalog staff maintain approved product information. Pharmacists review prescription medicines. Operations chooses the fulfillment site and resolves exceptions. Inventory staff protect batch stock; store and warehouse workers receive, pick and pack goods.
+
+Dispatchers and riders deliver parcels. Finance checks payments, refunds, invoices and cash; administrators manage permitted access/settings, and support coordinates help.
 
 ## How does it normally work?
 
@@ -63,11 +65,15 @@ Each order either advances through its satisfied gates, waits with a named team,
 
 ## What does the user see?
 
-Customers see their current basket, outstanding prescription/payment step, confirmed order progress, delivery proof action and any eligible after-purchase options. Staff see scoped queues, reasons and recovery work. Notifications explain committed changes; reopening them loads the current record. Exact copy and waiting estimates need UX/Operations approval and must not promise unapproved deadlines.
+Customers see their current basket, outstanding prescription/payment step, confirmed order progress, delivery proof action and any eligible after-purchase options. Staff see scoped queues, reasons and recovery work. Notifications explain committed changes; reopening them loads the current record.
+
+Exact copy and waiting estimates need UX/Operations approval and must not promise unapproved deadlines.
 
 ## What still needs approval?
 
-The [decision register](../09-References/Sources-and-Decisions.md) covers launch boundaries (D-001/D-002/D-021), login/privacy (D-003/D-013/D-023), payment/COD/tax (D-004/D-007/D-008/D-012), stock and clinical rules (D-005/D-006/D-009/D-010), rider proof (D-011), providers (D-014/D-016), operations readiness (D-017/D-022) and feature contracts (D-024). The available database baseline also needs reconciliation under D-015. These are not substituted by the business examples above.
+The [decision register](../09-References/Sources-and-Decisions.md) covers launch boundaries (D-001/D-002/D-021), login/privacy (D-003/D-013/D-023), payment/COD/tax (D-004/D-007/D-008/D-012), stock and clinical rules (D-005/D-006/D-009/D-010), rider proof (D-011), providers (D-014/D-016), operations readiness (D-017/D-022) and feature contracts (D-024).
+
+The available database baseline also needs reconciliation under D-015. These are not substituted by the business examples above.
 
 ## Related technical documentation
 

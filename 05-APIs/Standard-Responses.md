@@ -1,6 +1,8 @@
 # Standard API responses
 
-**Verified reference behavior:** the sibling `healthcare-auth-service` response implementation is defined by `app/common/response.py`, `app/common/schemas.py`, `app/api/exception_handlers.py`, `app/core/middleware.py`, and covered by `tests/unit/test_core_and_common.py`. Its `docs/API.md` is the consumer-facing reference. **Pharmville adoption remains proposed pending D-024; this evidence does not establish a Pharmville route implementation.**
+**Verified reference behavior:** the sibling `healthcare-auth-service` response implementation is defined by `app/common/response.py`, `app/common/schemas.py`, `app/api/exception_handlers.py`, `app/core/middleware.py`, and covered by `tests/unit/test_core_and_common.py`.
+
+Its `docs/API.md` is the consumer-facing reference. **Pharmville adoption remains proposed pending D-024; this evidence does not establish a Pharmville route implementation.**
 
 ## Canonical JSON envelope
 
@@ -9,7 +11,9 @@ The reference service serializes exactly four required top-level properties. Its
 ```json
 {
   "success": true,
-  "data": {"resourceId": "018f47b2-7ed0-7a12-8ab2-48df9d439e61"},
+  "data": {
+    "resourceId": "018f47b2-7ed0-7a12-8ab2-48df9d439e61"
+  },
   "error": null,
   "meta": {
     "requestId": "0c50f15a-373f-42d3-b1ae-3d90a415cd91",
@@ -56,13 +60,21 @@ For proposed Pharmville JSON operations, keep this envelope and define a concret
 The reference authentication service implements only offset pagination. Its `meta.pagination` shape is:
 
 ```json
-{"totalCount": 42, "limit": 20, "offset": 0, "hasNext": true}
+{
+  "totalCount": 42,
+  "limit": 20,
+  "offset": 0,
+  "hasNext": true
+}
 ```
 
 Cursor pagination is a separate Pharmville proposal, not implemented behavior from the reference service:
 
 ```json
-{"nextCursor": "opaque-cursor-value", "hasNext": true}
+{
+  "nextCursor": "opaque-cursor-value",
+  "hasNext": true
+}
 ```
 
 Use exactly one variant per operation. The OpenAPI `ResponseMeta.pagination` union represents offset metadata, cursor metadata, or null. See [pagination and filtering](Pagination-and-Filtering.md) for operation selection and proposed request limits.
@@ -70,7 +82,7 @@ Use exactly one variant per operation. The OpenAPI `ResponseMeta.pagination` uni
 ## HTTP response variants
 
 | Variant | Contract |
-|---|---|
+| --- | --- |
 | JSON success | Canonical envelope with operation-specific `data`; choose the semantic status such as 200, 201, or 202. |
 | Idempotent replay | Return the same status and stable result as the original accepted command; a replay header is only used if adopted by the implementation. |
 | 204 No Content | No body and no JSON content type. The reference `APIResponse.success` rejects 204; a bodyless response must be returned directly by the route. |
@@ -85,7 +97,11 @@ Never document a JSON body for 204 or 304.
 The reference FastAPI request-validation handler returns `422 REQUEST_VALIDATION_ERROR`; `details` is an array of `{field, message, type}` strings. Example:
 
 ```json
-{"field":"body.email","message":"value is not a valid email address","type":"value_error"}
+{
+  "field": "body.email",
+  "message": "value is not a valid email address",
+  "type": "value_error"
+}
 ```
 
 Framework-independent application `ValidationError` instead uses `422 VALIDATION_ERROR`. Preserve this distinction in compatibility mappings. Do not return raw Pydantic input, rejected secret values, SQL/provider errors, patient data, or stack traces. See [error catalog](Error-Catalog.md) for the exact shared-code policy and Pharmville-specific proposals.

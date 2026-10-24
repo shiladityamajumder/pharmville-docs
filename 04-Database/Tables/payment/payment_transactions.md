@@ -1,4 +1,4 @@
-# payment.payment_transactions
+# `payment.payment_transactions`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -26,6 +26,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the payment transactions business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Finance_Payments. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -33,18 +34,20 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `payment_attempt_id` → `payment.payment_attempts(id)` via `fk_payment_payment_transactions_payment_attempt_id_paym_6565`; FOREIGN KEY (payment_attempt_id) REFERENCES payment.payment_attempts(id) ON DELETE SET NULL
-- `payment_intent_id` → `payment.payment_intents(id)` via `fk_payment_payment_transactions_payment_intent_id_payme_3fef`; FOREIGN KEY (payment_intent_id) REFERENCES payment.payment_intents(id) ON DELETE RESTRICT
-- `payment_attempt_id_internal_id` → `payment.payment_attempts(internal_id)` via `fk_payment_payment_transactions_payment_attempt_id_paym_969d`; FOREIGN KEY (payment_attempt_id_internal_id) REFERENCES payment.payment_attempts(internal_id) ON DELETE SET NULL
-- `payment_intent_id_internal_id` → `payment.payment_intents(internal_id)` via `fk_payment_payment_transactions_payment_intent_id_payme_02b1`; FOREIGN KEY (payment_intent_id_internal_id) REFERENCES payment.payment_intents(internal_id) ON DELETE RESTRICT
+- `payment_attempt_id` → `payment.payment_attempts(id)` via `fk_payment_payment_transactions_payment_attempt_id_paym_6565`; `FOREIGN KEY (payment_attempt_id) REFERENCES payment.payment_attempts(id) ON DELETE SET NULL`
+- `payment_intent_id` → `payment.payment_intents(id)` via `fk_payment_payment_transactions_payment_intent_id_payme_3fef`; `FOREIGN KEY (payment_intent_id) REFERENCES payment.payment_intents(id) ON DELETE RESTRICT`
+- `payment_attempt_id_internal_id` → `payment.payment_attempts(internal_id)` via `fk_payment_payment_transactions_payment_attempt_id_paym_969d`; `FOREIGN KEY (payment_attempt_id_internal_id) REFERENCES payment.payment_attempts(internal_id) ON DELETE SET NULL`
+- `payment_intent_id_internal_id` → `payment.payment_intents(internal_id)` via `fk_payment_payment_transactions_payment_intent_id_payme_02b1`; `FOREIGN KEY (payment_intent_id_internal_id) REFERENCES payment.payment_intents(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 4 FK constraints** (sample): `payment.refunds`, `payment.chargebacks`, `payment.chargebacks`, `payment.refunds`.
 
-## payment.payment_transactions — exact structural contracts
+## `payment.payment_transactions` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 14 columns, 10 constraints, 5 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 14 columns, 10 constraints, 5 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -53,7 +56,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `payment_attempt_id_internal_id` | `payment.payment_attempts` | `fk_payment_payment_transactions_payment_attempt_id_paym_969d` |
 | `payment_intent_id_internal_id` | `payment.payment_intents` | `fk_payment_payment_transactions_payment_intent_id_payme_02b1` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -68,7 +71,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_payment_payment_transactions` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_payment_payment_transactions_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -78,7 +81,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_payment_payment_transactions_id` | `CREATE UNIQUE INDEX uq_payment_payment_transactions_id ON payment.payment_transactions USING btree (id)` |
 | `uq_payment_transactions_provider_present` | `CREATE UNIQUE INDEX uq_payment_transactions_provider_present ON payment.payment_transactions USING btree (provider, provider_transaction_id) WHERE provider_transaction_id IS NOT NULL` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -89,4 +92,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

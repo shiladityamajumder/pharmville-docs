@@ -1,4 +1,4 @@
-# customer.family_members
+# `customer.family_members`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -30,6 +30,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the family members business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Cart_Checkout, Prescription_Upload. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -37,20 +38,22 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `customer_user_id` → `identity.users(id)` via `fk_customer_family_members_customer_user_id_users`; FOREIGN KEY (customer_user_id) REFERENCES identity.users(id) ON DELETE CASCADE
-- `linked_user_id` → `identity.users(id)` via `fk_customer_family_members_linked_user_id_users`; FOREIGN KEY (linked_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `guardian_user_id` → `identity.users(id)` via `fk_customer_family_members_guardian_user_id_users`; FOREIGN KEY (guardian_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `created_by` → `identity.users(id)` via `fk_customer_family_members_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_customer_family_members_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_customer_family_members_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
+- `customer_user_id` → `identity.users(id)` via `fk_customer_family_members_customer_user_id_users`; `FOREIGN KEY (customer_user_id) REFERENCES identity.users(id) ON DELETE CASCADE`
+- `linked_user_id` → `identity.users(id)` via `fk_customer_family_members_linked_user_id_users`; `FOREIGN KEY (linked_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `guardian_user_id` → `identity.users(id)` via `fk_customer_family_members_guardian_user_id_users`; `FOREIGN KEY (guardian_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `created_by` → `identity.users(id)` via `fk_customer_family_members_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_customer_family_members_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_customer_family_members_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
 
 **Referenced by 2 FK constraints** (sample): `clinical.patient_profiles`, `clinical.patient_profiles`.
 
-## customer.family_members — exact structural contracts
+## `customer.family_members` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 18 columns, 10 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 18 columns, 10 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -61,7 +64,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `deleted_by` | `identity.users` | `fk_customer_family_members_deleted_by_users` |
 | `updated_by` | `identity.users` | `fk_customer_family_members_updated_by_users` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -76,7 +79,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_customer_family_members` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_customer_family_members_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -85,7 +88,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_customer_family_members` | `CREATE UNIQUE INDEX pk_customer_family_members ON customer.family_members USING btree (internal_id)` |
 | `uq_customer_family_members_id` | `CREATE UNIQUE INDEX uq_customer_family_members_id ON customer.family_members USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -95,4 +98,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

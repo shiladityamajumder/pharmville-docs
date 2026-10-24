@@ -1,4 +1,4 @@
-# membership.benefit_usage
+# `membership.benefit_usage`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -23,6 +23,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the benefit usage business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -30,16 +31,18 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `benefit_id` → `membership.plan_benefits(id)` via `fk_membership_benefit_usage_benefit_id_plan_benefits`; FOREIGN KEY (benefit_id) REFERENCES membership.plan_benefits(id) ON DELETE RESTRICT
-- `subscription_id` → `membership.subscriptions(id)` via `fk_membership_benefit_usage_subscription_id_subscriptions`; FOREIGN KEY (subscription_id) REFERENCES membership.subscriptions(id) ON DELETE RESTRICT
-- `benefit_id_internal_id` → `membership.plan_benefits(internal_id)` via `fk_membership_benefit_usage_benefit_id_plan_benefits_numeric`; FOREIGN KEY (benefit_id_internal_id) REFERENCES membership.plan_benefits(internal_id) ON DELETE RESTRICT
-- `subscription_id_internal_id` → `membership.subscriptions(internal_id)` via `fk_membership_benefit_usage_subscription_id_subscriptio_1c27`; FOREIGN KEY (subscription_id_internal_id) REFERENCES membership.subscriptions(internal_id) ON DELETE RESTRICT
+- `benefit_id` → `membership.plan_benefits(id)` via `fk_membership_benefit_usage_benefit_id_plan_benefits`; `FOREIGN KEY (benefit_id) REFERENCES membership.plan_benefits(id) ON DELETE RESTRICT`
+- `subscription_id` → `membership.subscriptions(id)` via `fk_membership_benefit_usage_subscription_id_subscriptions`; `FOREIGN KEY (subscription_id) REFERENCES membership.subscriptions(id) ON DELETE RESTRICT`
+- `benefit_id_internal_id` → `membership.plan_benefits(internal_id)` via `fk_membership_benefit_usage_benefit_id_plan_benefits_numeric`; `FOREIGN KEY (benefit_id_internal_id) REFERENCES membership.plan_benefits(internal_id) ON DELETE RESTRICT`
+- `subscription_id_internal_id` → `membership.subscriptions(internal_id)` via `fk_membership_benefit_usage_subscription_id_subscriptio_1c27`; `FOREIGN KEY (subscription_id_internal_id) REFERENCES membership.subscriptions(internal_id) ON DELETE RESTRICT`
 
-## membership.benefit_usage — exact structural contracts
+## `membership.benefit_usage` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 11 columns, 11 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 11 columns, 11 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -48,7 +51,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `benefit_id_internal_id` | `membership.plan_benefits` | `fk_membership_benefit_usage_benefit_id_plan_benefits_numeric` |
 | `subscription_id_internal_id` | `membership.subscriptions` | `fk_membership_benefit_usage_subscription_id_subscriptio_1c27` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -64,7 +67,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_membership_benefit_usage` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_membership_benefit_usage_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -73,7 +76,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_membership_benefit_usage` | `CREATE UNIQUE INDEX pk_membership_benefit_usage ON membership.benefit_usage USING btree (internal_id)` |
 | `uq_membership_benefit_usage_id` | `CREATE UNIQUE INDEX uq_membership_benefit_usage_id ON membership.benefit_usage USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -83,4 +86,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

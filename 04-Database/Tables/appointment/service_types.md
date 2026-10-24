@@ -1,4 +1,4 @@
-# appointment.service_types
+# `appointment.service_types`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -29,6 +29,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the service types business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -36,17 +37,19 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_appointment_service_types_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_appointment_service_types_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_appointment_service_types_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_appointment_service_types_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_appointment_service_types_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_appointment_service_types_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
 
 **Referenced by 2 FK constraints** (sample): `appointment.practitioner_services`, `appointment.practitioner_services`.
 
-## appointment.service_types — exact structural contracts
+## `appointment.service_types` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 17 columns, 7 constraints, 3 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 17 columns, 7 constraints, 3 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -54,7 +57,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `deleted_by` | `identity.users` | `fk_appointment_service_types_deleted_by_users` |
 | `updated_by` | `identity.users` | `fk_appointment_service_types_updated_by_users` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -66,7 +69,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_appointment_service_types` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_appointment_service_types_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -74,7 +77,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_appointment_service_types_code_active` | `CREATE UNIQUE INDEX uq_appointment_service_types_code_active ON appointment.service_types USING btree (code) WHERE is_deleted = false` |
 | `uq_appointment_service_types_id` | `CREATE UNIQUE INDEX uq_appointment_service_types_id ON appointment.service_types USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -84,4 +87,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

@@ -1,4 +1,4 @@
-# platform.webhook_deliveries
+# `platform.webhook_deliveries`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -29,6 +29,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the webhook deliveries business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Prescription_Upload, Admin_CMS, Reporting, Audit, Authentication_Access, Notifications. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -36,16 +37,18 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_platform_webhook_deliveries_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_platform_webhook_deliveries_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `endpoint_id` → `platform.webhook_endpoints(id)` via `fk_platform_webhook_deliveries_endpoint_id_webhook_endpoints`; FOREIGN KEY (endpoint_id) REFERENCES platform.webhook_endpoints(id) ON DELETE CASCADE
-- `endpoint_id_internal_id` → `platform.webhook_endpoints(internal_id)` via `fk_platform_webhook_deliveries_endpoint_id_webhook_endp_fc9c`; FOREIGN KEY (endpoint_id_internal_id) REFERENCES platform.webhook_endpoints(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_platform_webhook_deliveries_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_platform_webhook_deliveries_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `endpoint_id` → `platform.webhook_endpoints(id)` via `fk_platform_webhook_deliveries_endpoint_id_webhook_endpoints`; `FOREIGN KEY (endpoint_id) REFERENCES platform.webhook_endpoints(id) ON DELETE CASCADE`
+- `endpoint_id_internal_id` → `platform.webhook_endpoints(internal_id)` via `fk_platform_webhook_deliveries_endpoint_id_webhook_endp_fc9c`; `FOREIGN KEY (endpoint_id_internal_id) REFERENCES platform.webhook_endpoints(internal_id) ON DELETE CASCADE`
 
-## platform.webhook_deliveries — exact structural contracts
+## `platform.webhook_deliveries` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 17 columns, 9 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 17 columns, 9 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -54,7 +57,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `endpoint_id` | `platform.webhook_endpoints` | `fk_platform_webhook_deliveries_endpoint_id_webhook_endpoints` |
 | `endpoint_id_internal_id` | `platform.webhook_endpoints` | `fk_platform_webhook_deliveries_endpoint_id_webhook_endp_fc9c` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -68,7 +71,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_platform_webhook_deliveries` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_platform_webhook_deliveries_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -77,7 +80,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_platform_webhook_deliveries` | `CREATE UNIQUE INDEX pk_platform_webhook_deliveries ON platform.webhook_deliveries USING btree (internal_id)` |
 | `uq_platform_webhook_deliveries_id` | `CREATE UNIQUE INDEX uq_platform_webhook_deliveries_id ON platform.webhook_deliveries USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -87,4 +90,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

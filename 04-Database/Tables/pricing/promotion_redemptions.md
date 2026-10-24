@@ -1,4 +1,4 @@
-# pricing.promotion_redemptions
+# `pricing.promotion_redemptions`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -27,6 +27,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the promotion redemptions business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog, Cart_Checkout. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -34,21 +35,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_pricing_promotion_redemptions_user_id_users`; FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `coupon_code_id` → `pricing.coupon_codes(id)` via `fk_pricing_promotion_redemptions_coupon_code_id_coupon_codes`; FOREIGN KEY (coupon_code_id) REFERENCES pricing.coupon_codes(id) ON DELETE SET NULL
-- `promotion_version_id` → `pricing.promotion_versions(id)` via `fk_pricing_promotion_redemptions_promotion_version_id_p_00d1`; FOREIGN KEY (promotion_version_id) REFERENCES pricing.promotion_versions(id) ON DELETE SET NULL
-- `promotion_id` → `pricing.promotions(id)` via `fk_pricing_promotion_redemptions_promotion_id_promotions`; FOREIGN KEY (promotion_id) REFERENCES pricing.promotions(id) ON DELETE RESTRICT
-- `order_id, user_id` → `commerce.orders(id, user_id)` via `fk_domain_pricing_promotion_redemptions_order_id`; FOREIGN KEY (order_id, user_id) REFERENCES commerce.orders(id, user_id) ON DELETE RESTRICT
-- `order_id_internal_id, user_id` → `commerce.orders(internal_id, user_id)` via `fk_domain_pricing_promotion_redemptions_order_id_numeric`; FOREIGN KEY (order_id_internal_id, user_id) REFERENCES commerce.orders(internal_id, user_id) ON DELETE RESTRICT
-- `coupon_code_id_internal_id` → `pricing.coupon_codes(internal_id)` via `fk_pricing_promotion_redemptions_coupon_code_id_coupon__6f82`; FOREIGN KEY (coupon_code_id_internal_id) REFERENCES pricing.coupon_codes(internal_id) ON DELETE SET NULL
-- `promotion_id_internal_id` → `pricing.promotions(internal_id)` via `fk_pricing_promotion_redemptions_promotion_id_promotion_069a`; FOREIGN KEY (promotion_id_internal_id) REFERENCES pricing.promotions(internal_id) ON DELETE RESTRICT
-- `promotion_version_id_internal_id` → `pricing.promotion_versions(internal_id)` via `fk_pricing_promotion_redemptions_promotion_version_id_p_0bd8`; FOREIGN KEY (promotion_version_id_internal_id) REFERENCES pricing.promotion_versions(internal_id) ON DELETE SET NULL
+- `user_id` → `identity.users(id)` via `fk_pricing_promotion_redemptions_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `coupon_code_id` → `pricing.coupon_codes(id)` via `fk_pricing_promotion_redemptions_coupon_code_id_coupon_codes`; `FOREIGN KEY (coupon_code_id) REFERENCES pricing.coupon_codes(id) ON DELETE SET NULL`
+- `promotion_version_id` → `pricing.promotion_versions(id)` via `fk_pricing_promotion_redemptions_promotion_version_id_p_00d1`; `FOREIGN KEY (promotion_version_id) REFERENCES pricing.promotion_versions(id) ON DELETE SET NULL`
+- `promotion_id` → `pricing.promotions(id)` via `fk_pricing_promotion_redemptions_promotion_id_promotions`; `FOREIGN KEY (promotion_id) REFERENCES pricing.promotions(id) ON DELETE RESTRICT`
+- `order_id, user_id` → `commerce.orders(id, user_id)` via `fk_domain_pricing_promotion_redemptions_order_id`; `FOREIGN KEY (order_id, user_id) REFERENCES commerce.orders(id, user_id) ON DELETE RESTRICT`
+- `order_id_internal_id, user_id` → `commerce.orders(internal_id, user_id)` via `fk_domain_pricing_promotion_redemptions_order_id_numeric`; `FOREIGN KEY (order_id_internal_id, user_id) REFERENCES commerce.orders(internal_id, user_id) ON DELETE RESTRICT`
+- `coupon_code_id_internal_id` → `pricing.coupon_codes(internal_id)` via `fk_pricing_promotion_redemptions_coupon_code_id_coupon__6f82`; `FOREIGN KEY (coupon_code_id_internal_id) REFERENCES pricing.coupon_codes(internal_id) ON DELETE SET NULL`
+- `promotion_id_internal_id` → `pricing.promotions(internal_id)` via `fk_pricing_promotion_redemptions_promotion_id_promotion_069a`; `FOREIGN KEY (promotion_id_internal_id) REFERENCES pricing.promotions(internal_id) ON DELETE RESTRICT`
+- `promotion_version_id_internal_id` → `pricing.promotion_versions(internal_id)` via `fk_pricing_promotion_redemptions_promotion_version_id_p_0bd8`; `FOREIGN KEY (promotion_version_id_internal_id) REFERENCES pricing.promotion_versions(internal_id) ON DELETE SET NULL`
 
-## pricing.promotion_redemptions — exact structural contracts
+## `pricing.promotion_redemptions` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 15 columns, 18 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 15 columns, 18 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -62,7 +65,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `promotion_id_internal_id` | `pricing.promotions` | `fk_pricing_promotion_redemptions_promotion_id_promotion_069a` |
 | `promotion_version_id_internal_id` | `pricing.promotion_versions` | `fk_pricing_promotion_redemptions_promotion_version_id_p_0bd8` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -85,7 +88,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_pricing_promotion_redemptions_id` | UNIQUE | `UNIQUE (id)` |
 | `uq_pricing_promotion_redemptions_idempotency_key` | UNIQUE | `UNIQUE (idempotency_key)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -95,7 +98,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_pricing_promotion_redemptions_id` | `CREATE UNIQUE INDEX uq_pricing_promotion_redemptions_id ON pricing.promotion_redemptions USING btree (id)` |
 | `uq_pricing_promotion_redemptions_idempotency_key` | `CREATE UNIQUE INDEX uq_pricing_promotion_redemptions_idempotency_key ON pricing.promotion_redemptions USING btree (idempotency_key)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -105,4 +108,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

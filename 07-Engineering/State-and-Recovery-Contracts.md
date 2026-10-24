@@ -64,7 +64,9 @@ Deferred prescription upload RX-02 conflicts with the detailed review-before-pay
 | Refund | Eligible request → required approval → provider submission → trusted completion/failure or pending reconciliation | No duplicate instruction or payout beyond remaining refundable paid value. Unknown result stays pending; failed retry requires provider evidence/idempotency. TC-FIN-03-DENY, TC-ORD-06-DENY |
 | Reconciliation item/run | Evidence imported → matched or exception → investigated → approved resolution | Missing provider report or cash difference cannot be force-closed. Replayed evidence cannot duplicate posting. TC-FIN-05-DENY, TC-FIN-06-DENY |
 
-The [reservation](../04-Database/Tables/warehouse/stock_reservations.md), [payment](../04-Database/Tables/payment/payment_intents.md), [refund](../04-Database/Tables/payment/refunds.md) and [reconciliation](../04-Database/Tables/payment/reconciliation_items.md) catalogs contain the available field/status constraints. Vocabulary above describes intent; exact enum mapping, refund approvals and transition implementations remain D-024. No unsupported payment status names are prescribed as database values.
+The [reservation](../04-Database/Tables/warehouse/stock_reservations.md), [payment](../04-Database/Tables/payment/payment_intents.md), [refund](../04-Database/Tables/payment/refunds.md) and [reconciliation](../04-Database/Tables/payment/reconciliation_items.md) catalogs contain the available field/status constraints.
+
+Vocabulary above describes intent; exact enum mapping, refund approvals and transition implementations remain D-024. No unsupported payment status names are prescribed as database values.
 
 ## Confirmed local fulfillment transitions
 
@@ -88,15 +90,21 @@ stateDiagram-v2
 
 There is no `packed → cancelled` or `created → packed` edge in that local guard. Business cancellation eligibility and fulfillment enum names are different concepts; Operations must coordinate related records through the approved command. Verify the same guard on the target database before deployment.
 
-V0028/V0030 task guards permit `created → assigned/in_progress/cancelled`, `assigned → in_progress/cancelled`, and `in_progress → completed/cancelled`. V0030 additionally rejects empty/incomplete pick completion and pack completion without completed package evidence. Packages may start `created` or `packed`; an existing `created` package can become `packed` or `cancelled`. Packed evidence is immutable in the inspected guard.
+V0028/V0030 task guards permit `created → assigned/in_progress/cancelled`, `assigned → in_progress/cancelled`, and `in_progress → completed/cancelled`. V0030 additionally rejects empty/incomplete pick completion and pack completion without completed package evidence.
+
+Packages may start `created` or `packed`; an existing `created` package can become `packed` or `cancelled`. Packed evidence is immutable in the inspected guard.
 
 The V0030 dispatch guard checks the order-scoped completed package, authoritative captured payment for the full accepted revision or approved shipment-scoped COD, exact committed package lots and eligible licensed location. This is local-source evidence, not a fresh SQL execution or production approval. See [baseline/checksums](../04-Database/Migrations.md).
 
 ## Delivery and offline recovery
 
-Assignment → accepted pickup → in transit/out for delivery → evidenced delivery or recorded failed attempt is an application design. The [shipment catalog](../04-Database/Tables/logistics/shipments.md) lists valid stored values; listing an enum is not proof every pairwise transition is legal. Failed delivery follows approved reattempt/reschedule/return-to-origin policy and keeps parcel custody and COD facts separately accountable.
+Assignment → accepted pickup → in transit/out for delivery → evidenced delivery or recorded failed attempt is an application design. The [shipment catalog](../04-Database/Tables/logistics/shipments.md) lists valid stored values; listing an enum is not proof every pairwise transition is legal.
 
-An offline device must label queued work unconfirmed. On reconnect, the delivery command rechecks actor, current assignment, record version, server-side OTP validity and required evidence before accepting an effect. Same command replay returns the saved result; stale reassigned work is denied and routed to dispatch. Queue encryption, persistence, ordering, credential expiry and exact offline UX remain D-011/D-024 design tasks, not an asserted implemented capability. See TC-RID-04-DENY, TC-DLV-03-DENY and TC-RID-03-DENY.
+Failed delivery follows approved reattempt/reschedule/return-to-origin policy and keeps parcel custody and COD facts separately accountable.
+
+An offline device must label queued work unconfirmed. On reconnect, the delivery command rechecks actor, current assignment, record version, server-side OTP validity and required evidence before accepting an effect. Same command replay returns the saved result; stale reassigned work is denied and routed to dispatch.
+
+Queue encryption, persistence, ordering, credential expiry and exact offline UX remain D-011/D-024 design tasks, not an asserted implemented capability. See TC-RID-04-DENY, TC-DLV-03-DENY and TC-RID-03-DENY.
 
 ## Outage and recovery checks
 

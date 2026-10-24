@@ -1,4 +1,4 @@
-# platform.inbox_messages
+# `platform.inbox_messages`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -27,6 +27,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the inbox messages business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Prescription_Upload, Admin_CMS, Reporting, Audit, Authentication_Access, Notifications. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -34,21 +35,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_platform_inbox_messages_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_platform_inbox_messages_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_platform_inbox_messages_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_platform_inbox_messages_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
 
-## platform.inbox_messages — exact structural contracts
+## `platform.inbox_messages` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 15 columns, 6 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 15 columns, 6 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
 | `created_by` | `identity.users` | `fk_platform_inbox_messages_created_by_users` |
 | `updated_by` | `identity.users` | `fk_platform_inbox_messages_updated_by_users` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -59,7 +62,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_platform_inbox_messages` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_platform_inbox_messages_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -69,7 +72,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_platform_inbox_messages` | `CREATE UNIQUE INDEX pk_platform_inbox_messages ON platform.inbox_messages USING btree (internal_id)` |
 | `uq_platform_inbox_messages_id` | `CREATE UNIQUE INDEX uq_platform_inbox_messages_id ON platform.inbox_messages USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -79,4 +82,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

@@ -1,4 +1,4 @@
-# platform.data_retention_policies
+# `platform.data_retention_policies`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -27,6 +27,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the data retention policies business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Prescription_Upload, Admin_CMS, Reporting, Audit, Authentication_Access, Notifications. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -34,15 +35,17 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_platform_data_retention_policies_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_platform_data_retention_policies_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_platform_data_retention_policies_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_platform_data_retention_policies_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_platform_data_retention_policies_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_platform_data_retention_policies_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
 
-## platform.data_retention_policies — exact structural contracts
+## `platform.data_retention_policies` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 15 columns, 7 constraints, 3 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 15 columns, 7 constraints, 3 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -50,7 +53,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `deleted_by` | `identity.users` | `fk_platform_data_retention_policies_deleted_by_users` |
 | `updated_by` | `identity.users` | `fk_platform_data_retention_policies_updated_by_users` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -62,7 +65,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_platform_data_retention_policies` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_platform_data_retention_policies_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -70,7 +73,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_platform_data_retention_policies_id` | `CREATE UNIQUE INDEX uq_platform_data_retention_policies_id ON platform.data_retention_policies USING btree (id)` |
 | `uq_platform_retention_category_active` | `CREATE UNIQUE INDEX uq_platform_retention_category_active ON platform.data_retention_policies USING btree (data_category) WHERE is_deleted = false` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -80,4 +83,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

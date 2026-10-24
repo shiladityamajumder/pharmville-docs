@@ -10,7 +10,9 @@ New public JSON DTOs use camelCase. Existing snake_case drafts are not silently 
 
 ## Request handling order
 
-Authenticate the caller or verify the provider/service trust proof, authorize the action against the concrete resource and server-derived scope, validate the request DTO and approved master values, check the aggregate-specific version, execute the owning module's local transaction, persist required audit/outbox evidence with that transaction, and return a filtered read model. Do not claim a cross-module atomic transaction unless its implementation is explicitly designed and evidenced.
+Authenticate the caller or verify the provider/service trust proof, authorize the action against the concrete resource and server-derived scope, validate the request DTO and approved master values, check the aggregate-specific version, execute the owning module's local transaction, persist required audit/outbox evidence with that transaction, and return a filtered read model.
+
+Do not claim a cross-module atomic transaction unless its implementation is explicitly designed and evidenced.
 
 ## Headers
 
@@ -18,6 +20,8 @@ Use [Authentication and authorization](Authentication-and-Authorization.md) for 
 
 ## Request and response schema policy
 
-Each operation declares its content type, path/query/body contract, response status/headers and errors in its owning module page and in [OpenAPI](openapi.yaml). Proposed fields stay proposed until reviewed under D-024 and mapped to approved persistence. Unknown fields are rejected for command DTOs unless an operation documents an extension point. Server-generated identity, actor, role, prices, approval state, stock availability and provider outcomes are not writable client fields.
+Each operation declares its content type, path/query/body contract, response status/headers and errors in its owning module page and in [OpenAPI](openapi.yaml). Proposed fields stay proposed until reviewed under D-024 and mapped to approved persistence. Unknown fields are rejected for command DTOs unless an operation documents an extension point.
+
+Server-generated identity, actor, role, prices, approval state, stock availability and provider outcomes are not writable client fields.
 
 Read [Standard responses](Standard-Responses.md), [Error catalog](Error-Catalog.md), [Pagination and filtering](Pagination-and-Filtering.md), [Idempotency and concurrency](Idempotency-and-Concurrency.md), and the [coverage ledger](API-Contract-Coverage.md) together. A contract can be complete for review while still blocked from implementation.

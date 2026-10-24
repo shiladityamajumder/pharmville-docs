@@ -2,13 +2,15 @@
 
 ## S17 — Find a store with the full order
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Order_Operations. **Actor:** Stock / operations team.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Order_Operations.
+- **Actor:** Stock / operations team.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S17`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 Pharmville chooses a permitted store able to fulfil the accepted order. Under the proposed first-release rule, one order uses one selling/fulfilment location.
 
@@ -18,11 +20,13 @@ Pharmville chooses a permitted store able to fulfil the accepted order. Under th
 
 **Completion condition:** All accepted items have valid stock at an eligible location.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `organization`. Representative existing tables: `commerce.order_allocations`, `commerce.orders`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `GET /v1/admin/orders`, `GET /v1/admin/orders/{order_id}`, `POST /v1/admin/orders/{order_id}/allocate`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `organization`. Representative existing tables: `commerce.order_allocations`, `commerce.orders`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `GET /v1/admin/orders`, `GET /v1/admin/orders/{order_id}`, `POST /v1/admin/orders/{order_id}/allocate`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -31,7 +35,7 @@ Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `or
 
 **Safety invariant:** One approved location, authoritative inventory, and exact lot/line evidence are required before dispatch.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.
@@ -41,13 +45,15 @@ See module test plan and end-to-end sequence.
 
 ## S18 — Resolve a stock or delivery problem
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Order_Operations. **Actor:** Customer / operations.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Order_Operations.
+- **Actor:** Customer / operations.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S18`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 If anything is unavailable or the promise changes, show which exact items are affected. Offer safe choices rather than silently changing medicines or charging a different amount.
 
@@ -57,11 +63,13 @@ If anything is unavailable or the promise changes, show which exact items are af
 
 **Completion condition:** A workable, customer-approved order exists, or cancellation/refund is started.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `organization`. Representative existing tables: `commerce.order_allocations`, `commerce.orders`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `GET /v1/admin/orders`, `GET /v1/admin/orders/{order_id}`, `POST /v1/admin/orders/{order_id}/allocate`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `organization`. Representative existing tables: `commerce.order_allocations`, `commerce.orders`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `GET /v1/admin/orders`, `GET /v1/admin/orders/{order_id}`, `POST /v1/admin/orders/{order_id}/allocate`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -70,7 +78,7 @@ Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `or
 
 **Safety invariant:** One approved location, authoritative inventory, and exact lot/line evidence are required before dispatch.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.
@@ -80,13 +88,15 @@ See module test plan and end-to-end sequence.
 
 ## S19 — Assign the order to a store
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Order_Operations. **Actor:** Store / warehouse.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Order_Operations.
+- **Actor:** Store / warehouse.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S19`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 Once all items are safely reserved, the selected store receives the confirmed order and its pick list.
 
@@ -96,11 +106,13 @@ Once all items are safely reserved, the selected store receives the confirmed or
 
 **Completion condition:** Store accepts the work and begins picking.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `organization`. Representative existing tables: `commerce.order_allocations`, `commerce.orders`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `GET /v1/admin/orders`, `GET /v1/admin/orders/{order_id}`, `POST /v1/admin/orders/{order_id}/allocate`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `organization`. Representative existing tables: `commerce.order_allocations`, `commerce.orders`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `GET /v1/admin/orders`, `GET /v1/admin/orders/{order_id}`, `POST /v1/admin/orders/{order_id}/allocate`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -109,7 +121,7 @@ Primary affected database domain(s): `commerce`, `fulfillment`, `warehouse`, `or
 
 **Safety invariant:** One approved location, authoritative inventory, and exact lot/line evidence are required before dispatch.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.
@@ -119,13 +131,15 @@ See module test plan and end-to-end sequence.
 
 ## S20 — Pick the exact ordered items
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Store_Operations. **Actor:** Store team.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Store_Operations.
+- **Actor:** Store team.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S20`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 A store worker picks the items by product, pack size and eligible batch. The worker checks strength and expiry, especially for P medicines.
 
@@ -135,11 +149,13 @@ A store worker picks the items by product, pack size and eligible batch. The wor
 
 **Completion condition:** Every accepted item is checked and ready to pack.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. Representative existing tables: `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `GET /v1/staff/store/orders`, `POST /v1/staff/store/orders/{order_id}/accept`, `POST /v1/staff/store/picks/{pick_id}/scan`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. Representative existing tables: `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `GET /v1/staff/store/orders`, `POST /v1/staff/store/orders/{order_id}/accept`, `POST /v1/staff/store/picks/{pick_id}/scan`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -148,7 +164,7 @@ Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. 
 
 **Safety invariant:** One approved location, authoritative inventory, and exact lot/line evidence are required before dispatch.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.
@@ -158,13 +174,15 @@ See module test plan and end-to-end sequence.
 
 ## S21 — Fix a picking mistake or shortage
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Store_Operations. **Actor:** Store / operations.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Store_Operations.
+- **Actor:** Store / operations.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S21`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 The shelf may not match the computer stock. The order pauses so the team can locate the correct item, request an approved change or cancel affected lines.
 
@@ -174,11 +192,13 @@ The shelf may not match the computer stock. The order pauses so the team can loc
 
 **Completion condition:** Correct items are found or the customer accepts a revised order.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. Representative existing tables: `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `GET /v1/staff/store/orders`, `POST /v1/staff/store/orders/{order_id}/accept`, `POST /v1/staff/store/picks/{pick_id}/scan`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. Representative existing tables: `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `GET /v1/staff/store/orders`, `POST /v1/staff/store/orders/{order_id}/accept`, `POST /v1/staff/store/picks/{pick_id}/scan`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -187,7 +207,7 @@ Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. 
 
 **Safety invariant:** One approved location, authoritative inventory, and exact lot/line evidence are required before dispatch.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.
@@ -197,13 +217,15 @@ See module test plan and end-to-end sequence.
 
 ## S22 — Check, invoice and seal the package
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Store_Operations. **Actor:** Store quality / billing.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Store_Operations.
+- **Actor:** Store quality / billing.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S22`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 Before packing, staff compare the picked items with the agreed order. The package is sealed and the proper invoice is prepared at the approved business point.
 
@@ -213,11 +235,13 @@ Before packing, staff compare the picked items with the agreed order. The packag
 
 **Completion condition:** The parcel passes final checks.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. Representative existing tables: `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `GET /v1/staff/store/orders`, `POST /v1/staff/store/orders/{order_id}/accept`, `POST /v1/staff/store/picks/{pick_id}/scan`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. Representative existing tables: `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `GET /v1/staff/store/orders`, `POST /v1/staff/store/orders/{order_id}/accept`, `POST /v1/staff/store/picks/{pick_id}/scan`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -226,7 +250,7 @@ Primary affected database domain(s): `warehouse`, `fulfillment`, `procurement`. 
 
 **Safety invariant:** One approved location, authoritative inventory, and exact lot/line evidence are required before dispatch.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.
@@ -236,13 +260,15 @@ See module test plan and end-to-end sequence.
 
 ## S23 — Assign the rider and hand over the parcel
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Delivery_Operations. **Actor:** Dispatch / rider.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Delivery_Operations.
+- **Actor:** Dispatch / rider.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S23`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 A delivery person is assigned. The store gives the correct sealed parcel to that person using a verified handover.
 
@@ -252,11 +278,13 @@ A delivery person is assigned. The store gives the correct sealed parcel to that
 
 **Completion condition:** The rider has accepted the correct package.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `logistics`, `fulfillment`, `organization`. Representative existing tables: `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `GET /v1/staff/delivery/tasks`, `POST /v1/staff/delivery/tasks/{task_id}/assign`, `POST /v1/staff/delivery/tasks/{task_id}/resolution`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `logistics`, `fulfillment`, `organization`. Representative existing tables: `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `GET /v1/staff/delivery/tasks`, `POST /v1/staff/delivery/tasks/{task_id}/assign`, `POST /v1/staff/delivery/tasks/{task_id}/resolution`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -265,7 +293,7 @@ Primary affected database domain(s): `logistics`, `fulfillment`, `organization`.
 
 **Safety invariant:** One approved location, authoritative inventory, and exact lot/line evidence are required before dispatch.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.
@@ -275,13 +303,15 @@ See module test plan and end-to-end sequence.
 
 ## S24 — Travel to the delivery address
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Rider_App. **Actor:** Rider.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Rider_App.
+- **Actor:** Rider.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S24`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 The rider follows the delivery instructions. Tracking should show only reliable information rather than an invented live location.
 
@@ -291,11 +321,13 @@ The rider follows the delivery instructions. Tracking should show only reliable 
 
 **Completion condition:** Rider arrives at the address or flags an unsuccessful attempt.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `logistics`, `identity`, `notification`. Representative existing tables: `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `POST /v1/rider/shifts`, `GET /v1/rider/tasks`, `POST /v1/rider/tasks/{task_id}/pickup`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `logistics`, `identity`, `notification`. Representative existing tables: `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `POST /v1/rider/shifts`, `GET /v1/rider/tasks`, `POST /v1/rider/tasks/{task_id}/pickup`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -304,7 +336,7 @@ Primary affected database domain(s): `logistics`, `identity`, `notification`. Re
 
 **Safety invariant:** Never silently bypass a policy or retry a non-idempotent state change.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.
@@ -314,13 +346,15 @@ See module test plan and end-to-end sequence.
 
 ## S25 — Verify the recipient and hand over the order
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Rider_App. **Actor:** Rider / customer.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Rider_App.
+- **Actor:** Rider / customer.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S25`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 The rider checks the required delivery proof, collects COD money if due, and hands over the correct sealed package.
 
@@ -330,11 +364,13 @@ The rider checks the required delivery proof, collects COD money if due, and han
 
 **Completion condition:** Successful delivery proof and any due COD collection are recorded.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `logistics`, `identity`, `notification`. Representative existing tables: `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `POST /v1/rider/shifts`, `GET /v1/rider/tasks`, `POST /v1/rider/tasks/{task_id}/pickup`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `logistics`, `identity`, `notification`. Representative existing tables: `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `POST /v1/rider/shifts`, `GET /v1/rider/tasks`, `POST /v1/rider/tasks/{task_id}/pickup`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -343,7 +379,7 @@ Primary affected database domain(s): `logistics`, `identity`, `notification`. Re
 
 **Safety invariant:** Never silently bypass a policy or retry a non-idempotent state change.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.
@@ -353,13 +389,15 @@ See module test plan and end-to-end sequence.
 
 ## S26 — Finish delivery and provide documents
 
-**Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval. **Owning module:** Delivery_Operations. **Actor:** Customer / order support.
+- **Source classification:** the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.
+- **Owning module:** Delivery_Operations.
+- **Actor:** Customer / order support.
 
-## Trigger and preconditions
+### Trigger and preconditions
 
 A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to `S26`. Preconditions are rechecked server-side; UI status is not authority.
 
-## Normal path and on-screen behavior
+### Normal path and on-screen behavior
 
 After successful handover, the order shows Delivered and the customer can access the invoice, order history and help.
 
@@ -369,11 +407,13 @@ After successful handover, the order shows Delivered and the customer can access
 
 **Completion condition:** Financial checks are completed or the customer opens an after-sales case.
 
-## Data and cross-module handoff
+### Data and cross-module handoff
 
-Primary affected database domain(s): `logistics`, `fulfillment`, `organization`. Representative existing tables: `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable. Related APIs: `GET /v1/staff/delivery/tasks`, `POST /v1/staff/delivery/tasks/{task_id}/assign`, `POST /v1/staff/delivery/tasks/{task_id}/resolution`. All endpoints are **Proposed**, not implemented.
+Primary affected database domain(s): `logistics`, `fulfillment`, `organization`. Representative existing tables: `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_failure_reasons`, `logistics.delivery_location_updates`. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.
 
-## Alternative paths and recovery
+Related APIs: `GET /v1/staff/delivery/tasks`, `POST /v1/staff/delivery/tasks/{task_id}/assign`, `POST /v1/staff/delivery/tasks/{task_id}/resolution`. All endpoints are **Proposed**, not implemented.
+
+### Alternative paths and recovery
 
 - **Missing/invalid evidence:** return a specific validation reason; preserve already committed business facts.
 - **Duplicate or concurrent command:** use an idempotency key and row/version guard so exactly one transition wins.
@@ -382,7 +422,7 @@ Primary affected database domain(s): `logistics`, `fulfillment`, `organization`.
 
 **Safety invariant:** Never silently bypass a policy or retry a non-idempotent state change.
 
-## Acceptance checks
+### Acceptance checks
 
 1. Authorized actor completes the step with one stored transition and audit actor.
 2. A stale, unauthorized or duplicate command has no unintended side effects.

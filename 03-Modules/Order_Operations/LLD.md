@@ -14,9 +14,11 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## Order orchestration and routing — implementation acceptance
 
-**Proposed conditions for engineering handoff; never imply QA passed.**
+> [!NOTE]
+> **Proposed conditions for engineering handoff; never imply QA passed.**
 
-## Draft features
+### Draft features
+
 - **OMS-01 / REQ-045:** Order list with filters (status, location, date, payment, Rx) and search by order number or phone (Must (draft)).
 - **OMS-02 / REQ-046:** Order detail: items, batches, prescription, payment, delivery, full history (Must (draft)).
 - **OMS-03 / REQ-047:** Automatic routing to the nearest open store with every item; warehouse as fallback (Must (draft)).
@@ -25,7 +27,8 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - **OMS-06 / REQ-050:** Attention queue: payment pending, stuck orders, failed deliveries (Must (draft)).
 - **OMS-07 / REQ-051:** Assisted order entry for phone orders (Could (draft)).
 
-## Required release checks
+### Required release checks
+
 - Authorised happy path persists exactly the intended state.
 - Invalid, cross-account and cross-location requests leave authoritative rows unchanged.
 - Concurrent duplicate requests do not create duplicate money, stock or order effects.
@@ -33,19 +36,19 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Recoverable provider failure exposes a pending/retryable state; never claims success.
 - Audit/trace data contains public references, not credentials or sensitive document contents.
 
-Module test scenarios
+**Module test scenarios**
 
 ## Order Management & Routing — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
 
-- API-039 GET /v1/admin/orders — Filter scoped order queue
-- API-040 GET /v1/admin/orders/{order_id} — Review order timeline
-- API-041 POST /v1/admin/orders/{order_id}/allocate — Allocate one qualified site
-- API-042 POST /v1/admin/orders/{order_id}/reassign — Reassign with reason
-- API-043 POST /v1/admin/orders/{order_id}/revisions — Propose order revision
+- `API-039` `GET /v1/admin/orders` — Filter scoped order queue
+- `API-040` `GET /v1/admin/orders/{order_id}` — Review order timeline
+- `API-041` `POST /v1/admin/orders/{order_id}/allocate` — Allocate one qualified site
+- `API-042` `POST /v1/admin/orders/{order_id}/reassign` — Reassign with reason
+- `API-043` `POST /v1/admin/orders/{order_id}/revisions` — Propose order revision
 
-## Cross-cutting request contract
+### Cross-cutting request contract
 
 Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
@@ -55,7 +58,7 @@ Writes require validated body, stable intent key, expected current version when 
 
 **Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
-## Core procedure
+### Core procedure
 
 1. Authenticate the actor and resolve server-owned tenant/location/patient permission.
 2. Re-read the relevant product, order, document, stock or ledger state from the owning tables.
@@ -64,11 +67,11 @@ Writes require validated body, stable intent key, expected current version when 
 5. In a transaction, persist the minimal authoritative rows, version and audit outcome; publish notifications after commit.
 6. Return a scoped read model; expose only approved information to the caller.
 
-## Features implemented by this rule set
+### Features implemented by this rule set
 
 `OMS-01`, `OMS-02`, `OMS-03`, `OMS-04`, `OMS-05`, `OMS-06`, `OMS-07` (see full requirement descriptions).
 
-## Pseudocode — command boundary
+### Pseudocode — command boundary
 
 ```text
 context := verify_session_and_resource_scope(request)
@@ -96,7 +99,9 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Route each order to only one licensed, permitted, open and adequately stocked location, or hold for intervention. A manual reassign must serialize with inventory holds and preserve audit reasons. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
+Route each order to only one licensed, permitted, open and adequately stocked location, or hold for intervention. A manual reassign must serialize with inventory holds and preserve audit reasons. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`.
+
+Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Order Management & Routing — existing database usage
 
@@ -115,7 +120,7 @@ Route each order to only one licensed, permitted, open and adequately stocked lo
 - `fulfillment.picking_wave_orders` — columns · contracts
 - `fulfillment.picking_waves` — columns · contracts
 
-## Ownership, transactions and change control
+### Ownership, transactions and change control
 
 Proposed owning service: `Order_Operations`. Main read concerns: review queues, assign one eligible site, handle stuck and amended orders. Writes must be restricted by the actual foreign keys, CHECKs, unique contracts, crosswalks, policy and trigger guards. Use one transaction per domain state transition, use an outbox for reliable cross-module publication, and make any external retry idempotent.
 
@@ -136,9 +141,11 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 - Inventory
 - Pharmacist_Review
 
-## Communication rules
+### Communication rules
 
-Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
+Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth.
+
+Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
 **Data-access contract:** Route each order to only one licensed, permitted, open and adequately stocked location, or hold for intervention. A manual reassign must serialize with inventory holds and preserve audit reasons.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
@@ -154,7 +161,9 @@ Use the owning service interface for business changes rather than making uncontr
 | `Order_OperationsReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Order_OperationsEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `commerce.order_allocations`, `commerce.orders`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`, `fulfillment.package_items`, `fulfillment.packages`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
+**Existing representative tables:** `commerce.order_allocations`, `commerce.orders`, `fulfillment.fulfillment_events`, `fulfillment.fulfillment_order_items`, `fulfillment.fulfillment_orders`, `fulfillment.pack_tasks`, `fulfillment.package_items`, `fulfillment.packages`.
+
+Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Order Management & Routing — failure handling
 
@@ -179,7 +188,19 @@ Use structured problem codes, request ID, retryability category and operator run
 
 **Repository interface:** require a database transaction handle, parameterised SQL/ORM queries, and a stored accepted transition. Return public UUIDs or approved opaque references only.
 
-**Error DTO proposal:** `{"error":{"code":"STATE_CONFLICT","message":"Refresh the record and try again","request_id":"..."}}`. Do not expose SQL errors, provider secrets or prescription contents.
+**Error DTO proposal:**
+
+```json
+{
+  "error": {
+    "code": "STATE_CONFLICT",
+    "message": "Refresh the record and try again",
+    "request_id": "..."
+  }
+}
+```
+
+Do not expose SQL errors, provider secrets or prescription contents.
 
 **Existing table candidates:** `commerce.orders`, `commerce.order_revisions`, `commerce.order_allocations`, `fulfillment.fulfillment_orders`, `organization.licenses`.
 
@@ -189,18 +210,20 @@ Use structured problem codes, request ID, retryability category and operator run
 
 **Status: Proposed application design.** The database repo does not contain a NestJS HTTP implementation.
 
-## Business behavior
+### Business behavior
+
 One order must have one accepted revision and an auditable licensed location/fulfillment decision.
 
-## Components
+### Components
+
 | Component | Responsibility | Data affected | Failure outcome |
 | --- | --- | --- | --- |
 | `Order_OperationsController` (proposed) | Validate DTO and request context | Public API request only | 400/401/403 without partial mutation |
-| `Order_OperationsUseCase` (proposed) | Enforce module business invariant | commerce.orders, commerce.order_revisions, commerce.order_allocations | Domain status, do not guess provider truth |
+| `Order_OperationsUseCase` (proposed) | Enforce module business invariant | `commerce.orders`, `commerce.order_revisions`, `commerce.order_allocations` | Domain status, do not guess provider truth |
 | `Order_OperationsRepository` (proposed) | Scoped SQL transaction and concurrency guard | Exact migrated tables | Roll back on conflict or constraint error |
 | `Order_OperationsIntegrationAdapter` (only when needed) | Map external IO and reconcile delivery | Outbox/inbox or verified provider record | Retries outside DB lock |
 
-## Transaction and retry sequence
+### Transaction and retry sequence
 
 1. load accepted checkout/order revision.
 2. evaluate license and eligible fulfillment location.
@@ -208,14 +231,16 @@ One order must have one accepted revision and an auditable licensed location/ful
 4. persist order allocation and fulfillment intent.
 5. enqueue post-commit work and reconciliation.
 
-## Existing tables (candidate responsibilities)
-- commerce.orders — candidate entity; verify the exact operation and field set in the implementation review.
-- commerce.order_revisions — candidate entity; verify the exact operation and field set in the implementation review.
-- commerce.order_allocations — candidate entity; verify the exact operation and field set in the implementation review.
-- fulfillment.fulfillment_orders — candidate entity; verify the exact operation and field set in the implementation review.
-- organization.licenses — candidate entity; verify the exact operation and field set in the implementation review.
+### Existing tables (candidate responsibilities)
 
-## Related
+- `commerce.orders` — candidate entity; verify the exact operation and field set in the implementation review.
+- `commerce.order_revisions` — candidate entity; verify the exact operation and field set in the implementation review.
+- `commerce.order_allocations` — candidate entity; verify the exact operation and field set in the implementation review.
+- `fulfillment.fulfillment_orders` — candidate entity; verify the exact operation and field set in the implementation review.
+- `organization.licenses` — candidate entity; verify the exact operation and field set in the implementation review.
+
+### Related
+
 HLD · States · Permissions
 
 ## Order orchestration and routing — observability
@@ -226,11 +251,13 @@ HLD · States · Permissions
 
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
-Monitoring design
+**Monitoring design**
 
 ## Order Management & Routing — permission model
 
-**Actors:** Ops Manager, Store Manager. **Proposed service scope:** `staff_ops`. Roles are application concepts; existing PostgreSQL NOLOGIN capability roles form a separate lower-level authorization layer.
+**Actors:** Ops Manager, Store Manager.
+
+**Proposed service scope:** `staff_ops`. Roles are application concepts; existing PostgreSQL NOLOGIN capability roles form a separate lower-level authorization layer.
 
 | Operation class | Required entitlement | Enforcement |
 | --- | --- | --- |
@@ -239,11 +266,15 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Route each order to only one licensed, permitted, open and adequately stocked location, or hold for intervention. A manual reassign must serialize with inventory holds and preserve audit reasons. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
+**Core constraint:** Route each order to only one licensed, permitted, open and adequately stocked location, or hold for intervention. A manual reassign must serialize with inventory holds and preserve audit reasons. A customer cannot infer another customer's resource existence.
+
+Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Order Management & Routing — functional requirements
 
-**Source:** the documented draft requirements. **Status:** Draft requirements, not proof of final business acceptance. 🔴/🟡/🟢 priorities have been normalized as Must/Should/Could without changing their meaning.
+**Source:** the documented draft requirements.
+
+**Status:** Draft requirements, not proof of final business acceptance. 🔴/🟡/🟢 priorities have been normalized as Must/Should/Could without changing their meaning.
 
 | Feature | Priority in v0.1 | Statement | Dependency |
 | --- | --- | --- | --- |
@@ -255,7 +286,7 @@ Monitoring design
 | `OMS-06` | Must (draft) | Attention queue: payment pending, stuck orders, failed deliveries | Not stated |
 | `OMS-07` | Could (draft) | Assisted order entry for phone orders | Q28 — becomes 🔴 if phone orders continue |
 
-## Interactions and acceptance basis
+### Interactions and acceptance basis
 
 The user performs: Route accepted order; reassign with reason; resolve exceptions. Server-side enforcement must preserve this invariant: **Route each order to only one licensed, permitted, open and adequately stocked location, or hold for intervention. A manual reassign must serialize with inventory holds and preserve audit reasons.**
 
@@ -287,7 +318,7 @@ sequenceDiagram
 
 **Proposed NestJS module:** `Order_OperationsModule` with a controller, application service, authorization policy, repository and adapters. The supplied database code is a schema/validation library; no running HTTP controller was found in Archive 2.
 
-## Candidate service methods
+### Candidate service methods
 
 - `API-039: filter_scoped_order_queue(actor_context, validated_command, expected_version) -> Result`
 - `API-040: review_order_timeline(actor_context, validated_command, expected_version) -> Result`
@@ -295,13 +326,15 @@ sequenceDiagram
 - `API-042: reassign_with_reason(actor_context, validated_command, expected_version) -> Result`
 - `API-043: propose_order_revision(actor_context, validated_command, expected_version) -> Result`
 
-## Transaction and integration contract
+### Transaction and integration contract
 
 For each mutation: authenticate actor, validate inputs, read affected rows with a lock/version check, verify policy, update the minimum relevant rows and immutable audit/outbox in one transaction. A remote gateway, storage or GPS call should be performed outside the locked transaction and reconciled on callback/timeout. Use PostgreSQL to reject invalid writes even if application validation is bypassed.
 
 **Module invariant:** Route each order to only one licensed, permitted, open and adequately stocked location, or hold for intervention. A manual reassign must serialize with inventory holds and preserve audit reasons.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff.
+
+**Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Order Management & Routing — state and transition policy
 
@@ -317,7 +350,9 @@ flowchart TD
 
 **Module-specific invariant:** Route each order to only one licensed, permitted, open and adequately stocked location, or hold for intervention. A manual reassign must serialize with inventory holds and preserve audit reasons.
 
-Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
+Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence.
+
+When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
 This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
@@ -342,7 +377,7 @@ This flow shows command gates, not an entity enum. Legal entity transitions and 
 | `TC-OMS-07-OK` | Assisted order entry for phone orders | Assisted ordering remains a scoped draft with customer/patient/consent checks |
 | `TC-OMS-07-DENY` | Staff guesses patient or payment approval for phone order | No fabricated consent, clinical approval or paid state; Product/Security approves assisted-order contract |
 
-## Cross-module contract tests
+### Cross-module contract tests
 
 - Verify authenticated customer/staff/location ownership using actual restricted runtime roles.
 - Verify concurrency and duplicate idempotency behavior against an isolated PostgreSQL database with authoritative migrations.
@@ -367,14 +402,16 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 
 ## Order Management & Routing — operational workflows
 
-**Entry points:** Route accepted order; reassign with reason; resolve exceptions. **User group:** Ops Manager, Store Manager. The following source-defined order journey stages identify primary ownership; supporting modules also participate without necessarily owning the stage.
+**Entry points:** Route accepted order; reassign with reason; resolve exceptions.
+
+**User group:** Ops Manager, Store Manager. The following source-defined order journey stages identify primary ownership; supporting modules also participate without necessarily owning the stage.
 
 - S17 — Find a store with the full order
 - S18 — Resolve a stock or delivery problem
 - S19 — Assign the order to a store
 - S32 — Close the order records
 
-## Shared processing rules
+### Shared processing rules
 
 The requested action is first validated against user scope, current state and approved business master data. Read required evidence from real migrated tables; change only data this module owns; publish a safe event or notify the next module after commit.
 

@@ -1,4 +1,4 @@
-# appointment.appointments
+# `appointment.appointments`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -36,6 +36,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the appointments business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -43,25 +44,27 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `booked_by_user_id` → `identity.users(id)` via `fk_appointment_appointments_booked_by_user_id_users`; FOREIGN KEY (booked_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `created_by` → `identity.users(id)` via `fk_appointment_appointments_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_appointment_appointments_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `practitioner_profile_id` → `clinical.practitioner_profiles(id)` via `fk_appointment_appointments_practitioner_profile_id_pra_450f`; FOREIGN KEY (practitioner_profile_id) REFERENCES clinical.practitioner_profiles(id) ON DELETE RESTRICT
-- `practitioner_service_id` → `appointment.practitioner_services(id)` via `fk_appointment_appointments_practitioner_service_id_pra_39cd`; FOREIGN KEY (practitioner_service_id) REFERENCES appointment.practitioner_services(id) ON DELETE RESTRICT
-- `slot_id` → `appointment.appointment_slots(id)` via `fk_appointment_appointments_slot_id_appointment_slots`; FOREIGN KEY (slot_id) REFERENCES appointment.appointment_slots(id) ON DELETE SET NULL
-- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_appointment_appointments_patient_profile_id_patient_profiles`; FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT
-- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_appointment_appointments_patient_profile_id_patient__c088`; FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT
-- `practitioner_profile_id_internal_id` → `clinical.practitioner_profiles(internal_id)` via `fk_appointment_appointments_practitioner_profile_id_pra_e47a`; FOREIGN KEY (practitioner_profile_id_internal_id) REFERENCES clinical.practitioner_profiles(internal_id) ON DELETE RESTRICT
-- `practitioner_service_id_internal_id` → `appointment.practitioner_services(internal_id)` via `fk_appointment_appointments_practitioner_service_id_pra_6424`; FOREIGN KEY (practitioner_service_id_internal_id) REFERENCES appointment.practitioner_services(internal_id) ON DELETE RESTRICT
-- `slot_id_internal_id` → `appointment.appointment_slots(internal_id)` via `fk_appointment_appointments_slot_id_appointment_slots_numeric`; FOREIGN KEY (slot_id_internal_id) REFERENCES appointment.appointment_slots(internal_id) ON DELETE SET NULL
+- `booked_by_user_id` → `identity.users(id)` via `fk_appointment_appointments_booked_by_user_id_users`; `FOREIGN KEY (booked_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `created_by` → `identity.users(id)` via `fk_appointment_appointments_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_appointment_appointments_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `practitioner_profile_id` → `clinical.practitioner_profiles(id)` via `fk_appointment_appointments_practitioner_profile_id_pra_450f`; `FOREIGN KEY (practitioner_profile_id) REFERENCES clinical.practitioner_profiles(id) ON DELETE RESTRICT`
+- `practitioner_service_id` → `appointment.practitioner_services(id)` via `fk_appointment_appointments_practitioner_service_id_pra_39cd`; `FOREIGN KEY (practitioner_service_id) REFERENCES appointment.practitioner_services(id) ON DELETE RESTRICT`
+- `slot_id` → `appointment.appointment_slots(id)` via `fk_appointment_appointments_slot_id_appointment_slots`; `FOREIGN KEY (slot_id) REFERENCES appointment.appointment_slots(id) ON DELETE SET NULL`
+- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_appointment_appointments_patient_profile_id_patient_profiles`; `FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT`
+- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_appointment_appointments_patient_profile_id_patient__c088`; `FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT`
+- `practitioner_profile_id_internal_id` → `clinical.practitioner_profiles(internal_id)` via `fk_appointment_appointments_practitioner_profile_id_pra_e47a`; `FOREIGN KEY (practitioner_profile_id_internal_id) REFERENCES clinical.practitioner_profiles(internal_id) ON DELETE RESTRICT`
+- `practitioner_service_id_internal_id` → `appointment.practitioner_services(internal_id)` via `fk_appointment_appointments_practitioner_service_id_pra_6424`; `FOREIGN KEY (practitioner_service_id_internal_id) REFERENCES appointment.practitioner_services(internal_id) ON DELETE RESTRICT`
+- `slot_id_internal_id` → `appointment.appointment_slots(internal_id)` via `fk_appointment_appointments_slot_id_appointment_slots_numeric`; `FOREIGN KEY (slot_id_internal_id) REFERENCES appointment.appointment_slots(internal_id) ON DELETE SET NULL`
 
 **Referenced by 10 FK constraints** (sample): `appointment.appointment_status_history`, `appointment.teleconsultation_sessions`, `appointment.waiting_room_events`, `clinical.consultations`, `support.tickets`, `appointment.appointment_status_history`, `appointment.teleconsultation_sessions`, `appointment.waiting_room_events`, `clinical.consultations`, `support.tickets`.
 
-## appointment.appointments — exact structural contracts
+## `appointment.appointments` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 24 columns, 21 constraints, 7 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 24 columns, 21 constraints, 7 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -77,7 +80,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `practitioner_service_id_internal_id` | `appointment.practitioner_services` | `fk_appointment_appointments_practitioner_service_id_pra_6424` |
 | `slot_id_internal_id` | `appointment.appointment_slots` | `fk_appointment_appointments_slot_id_appointment_slots_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -103,7 +106,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_appointment_appointments_appointment_number` | UNIQUE | `UNIQUE (appointment_number)` |
 | `uq_appointment_appointments_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -115,7 +118,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_appointment_appointments_appointment_number` | `CREATE UNIQUE INDEX uq_appointment_appointments_appointment_number ON appointment.appointments USING btree (appointment_number)` |
 | `uq_appointment_appointments_id` | `CREATE UNIQUE INDEX uq_appointment_appointments_id ON appointment.appointments USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -125,4 +128,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

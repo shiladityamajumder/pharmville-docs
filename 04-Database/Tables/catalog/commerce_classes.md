@@ -1,4 +1,4 @@
-# catalog.commerce_classes
+# `catalog.commerce_classes`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -25,6 +25,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the commerce classes business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog, Admin_CMS, Inventory. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -32,23 +33,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by_user_id` → `identity.users(id)` via `fk_catalog_commerce_classes_created_by_user_id_users`; FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by_user_id` → `identity.users(id)` via `fk_catalog_commerce_classes_updated_by_user_id_users`; FOREIGN KEY (updated_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
+- `created_by_user_id` → `identity.users(id)` via `fk_catalog_commerce_classes_created_by_user_id_users`; `FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by_user_id` → `identity.users(id)` via `fk_catalog_commerce_classes_updated_by_user_id_users`; `FOREIGN KEY (updated_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
 
 **Referenced by 4 FK constraints** (sample): `catalog.products`, `commerce.order_items`, `catalog.product_classification_history`, `catalog.product_classification_history`.
 
-## catalog.commerce_classes — exact structural contracts
+## `catalog.commerce_classes` — exact structural contracts
 
-**Identity:** `id` BIGINT. **Counts:** 13 columns, 11 constraints, 3 indexes, 4 triggers.
+**Identity:** `id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 13 columns, 11 constraints, 3 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
 | `created_by_user_id` | `identity.users` | `fk_catalog_commerce_classes_created_by_user_id_users` |
 | `updated_by_user_id` | `identity.users` | `fk_catalog_commerce_classes_updated_by_user_id_users` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -64,7 +67,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_catalog_commerce_classes_code` | UNIQUE | `UNIQUE (code)` |
 | `uq_catalog_commerce_classes_id_code` | UNIQUE | `UNIQUE (id, code)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -72,7 +75,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_catalog_commerce_classes_code` | `CREATE UNIQUE INDEX uq_catalog_commerce_classes_code ON catalog.commerce_classes USING btree (code)` |
 | `uq_catalog_commerce_classes_id_code` | `CREATE UNIQUE INDEX uq_catalog_commerce_classes_id_code ON catalog.commerce_classes USING btree (id, code)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -83,4 +86,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

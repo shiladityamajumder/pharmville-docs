@@ -1,4 +1,4 @@
-# platform.cms_page_versions
+# `platform.cms_page_versions`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -23,6 +23,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the cms page versions business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Prescription_Upload, Admin_CMS, Reporting, Audit, Authentication_Access, Notifications. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -30,16 +31,18 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `approved_by_user_id` → `identity.users(id)` via `fk_platform_cms_page_versions_approved_by_user_id_users`; FOREIGN KEY (approved_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `created_by_user_id` → `identity.users(id)` via `fk_platform_cms_page_versions_created_by_user_id_users`; FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `page_id` → `platform.cms_pages(id)` via `fk_platform_cms_page_versions_page_id_cms_pages`; FOREIGN KEY (page_id) REFERENCES platform.cms_pages(id) ON DELETE RESTRICT
-- `page_id_internal_id` → `platform.cms_pages(internal_id)` via `fk_platform_cms_page_versions_page_id_cms_pages_numeric`; FOREIGN KEY (page_id_internal_id) REFERENCES platform.cms_pages(internal_id) ON DELETE RESTRICT
+- `approved_by_user_id` → `identity.users(id)` via `fk_platform_cms_page_versions_approved_by_user_id_users`; `FOREIGN KEY (approved_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `created_by_user_id` → `identity.users(id)` via `fk_platform_cms_page_versions_created_by_user_id_users`; `FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `page_id` → `platform.cms_pages(id)` via `fk_platform_cms_page_versions_page_id_cms_pages`; `FOREIGN KEY (page_id) REFERENCES platform.cms_pages(id) ON DELETE RESTRICT`
+- `page_id_internal_id` → `platform.cms_pages(internal_id)` via `fk_platform_cms_page_versions_page_id_cms_pages_numeric`; `FOREIGN KEY (page_id_internal_id) REFERENCES platform.cms_pages(internal_id) ON DELETE RESTRICT`
 
-## platform.cms_page_versions — exact structural contracts
+## `platform.cms_page_versions` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 11 columns, 10 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 11 columns, 10 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -48,7 +51,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `page_id` | `platform.cms_pages` | `fk_platform_cms_page_versions_page_id_cms_pages` |
 | `page_id_internal_id` | `platform.cms_pages` | `fk_platform_cms_page_versions_page_id_cms_pages_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -63,7 +66,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_platform_cms_page_versions_id` | UNIQUE | `UNIQUE (id)` |
 | `uq_platform_cms_page_versions_number` | UNIQUE | `UNIQUE (page_id, version)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -72,7 +75,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_platform_cms_page_versions_id` | `CREATE UNIQUE INDEX uq_platform_cms_page_versions_id ON platform.cms_page_versions USING btree (id)` |
 | `uq_platform_cms_page_versions_number` | `CREATE UNIQUE INDEX uq_platform_cms_page_versions_number ON platform.cms_page_versions USING btree (page_id, version)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -82,4 +85,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

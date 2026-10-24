@@ -1,4 +1,4 @@
-# warehouse.aisles
+# `warehouse.aisles`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -28,6 +28,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the aisles business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Cart_Checkout, Order_Operations, Store_Operations, Inventory, Warehouse. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -35,21 +36,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_warehouse_aisles_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_warehouse_aisles_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_warehouse_aisles_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `zone_id` → `warehouse.zones(id)` via `fk_warehouse_aisles_zone_id_zones`; FOREIGN KEY (zone_id) REFERENCES warehouse.zones(id) ON DELETE CASCADE
-- `warehouse_id` → `warehouse.warehouses(id)` via `fk_warehouse_aisles_warehouse_id_warehouses`; FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE CASCADE
-- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_warehouse_aisles_warehouse_id_warehouses_numeric`; FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE CASCADE
-- `zone_id_internal_id` → `warehouse.zones(internal_id)` via `fk_warehouse_aisles_zone_id_zones_numeric`; FOREIGN KEY (zone_id_internal_id) REFERENCES warehouse.zones(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_warehouse_aisles_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_warehouse_aisles_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_warehouse_aisles_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `zone_id` → `warehouse.zones(id)` via `fk_warehouse_aisles_zone_id_zones`; `FOREIGN KEY (zone_id) REFERENCES warehouse.zones(id) ON DELETE CASCADE`
+- `warehouse_id` → `warehouse.warehouses(id)` via `fk_warehouse_aisles_warehouse_id_warehouses`; `FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE CASCADE`
+- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_warehouse_aisles_warehouse_id_warehouses_numeric`; `FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE CASCADE`
+- `zone_id_internal_id` → `warehouse.zones(internal_id)` via `fk_warehouse_aisles_zone_id_zones_numeric`; `FOREIGN KEY (zone_id_internal_id) REFERENCES warehouse.zones(internal_id) ON DELETE CASCADE`
 
 **Referenced by 2 FK constraints** (sample): `warehouse.racks`, `warehouse.racks`.
 
-## warehouse.aisles — exact structural contracts
+## `warehouse.aisles` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 16 columns, 14 constraints, 4 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 16 columns, 14 constraints, 4 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -61,7 +64,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `warehouse_id_internal_id` | `warehouse.warehouses` | `fk_warehouse_aisles_warehouse_id_warehouses_numeric` |
 | `zone_id_internal_id` | `warehouse.zones` | `fk_warehouse_aisles_zone_id_zones_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -80,7 +83,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_warehouse_aisles_id` | UNIQUE | `UNIQUE (id)` |
 | `warehouse_aisle` | UNIQUE | `UNIQUE (warehouse_id, code)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -89,7 +92,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_warehouse_aisles_id` | `CREATE UNIQUE INDEX uq_warehouse_aisles_id ON warehouse.aisles USING btree (id)` |
 | `warehouse_aisle` | `CREATE UNIQUE INDEX warehouse_aisle ON warehouse.aisles USING btree (warehouse_id, code)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -100,4 +103,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

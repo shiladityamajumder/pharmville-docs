@@ -1,4 +1,4 @@
-# diagnostics.diagnostic_order_items
+# `diagnostics.diagnostic_order_items`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -33,6 +33,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the diagnostic order items business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -40,22 +41,24 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_order_items_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_order_items_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `test_definition_id` → `diagnostics.test_definitions(id)` via `fk_diagnostics_diagnostic_order_items_test_definition_i_2bac`; FOREIGN KEY (test_definition_id) REFERENCES diagnostics.test_definitions(id) ON DELETE RESTRICT
-- `test_package_id` → `diagnostics.test_packages(id)` via `fk_diagnostics_diagnostic_order_items_test_package_id_t_979e`; FOREIGN KEY (test_package_id) REFERENCES diagnostics.test_packages(id) ON DELETE RESTRICT
-- `offering_id` → `diagnostics.lab_offerings(id)` via `fk_diagnostics_diagnostic_order_items_offering_id_lab_offerings`; FOREIGN KEY (offering_id) REFERENCES diagnostics.lab_offerings(id) ON DELETE SET NULL
-- `diagnostic_order_id` → `diagnostics.diagnostic_orders(id)` via `fk_diagnostics_diagnostic_order_items_diagnostic_order__0be4`; FOREIGN KEY (diagnostic_order_id) REFERENCES diagnostics.diagnostic_orders(id) ON DELETE CASCADE
-- `diagnostic_order_id_internal_id` → `diagnostics.diagnostic_orders(internal_id)` via `fk_diagnostics_diagnostic_order_items_diagnostic_order__67ff`; FOREIGN KEY (diagnostic_order_id_internal_id) REFERENCES diagnostics.diagnostic_orders(internal_id) ON DELETE CASCADE
-- `offering_id_internal_id` → `diagnostics.lab_offerings(internal_id)` via `fk_diagnostics_diagnostic_order_items_offering_id_lab_o_52c0`; FOREIGN KEY (offering_id_internal_id) REFERENCES diagnostics.lab_offerings(internal_id) ON DELETE SET NULL
-- `test_definition_id_internal_id` → `diagnostics.test_definitions(internal_id)` via `fk_diagnostics_diagnostic_order_items_test_definition_i_f14c`; FOREIGN KEY (test_definition_id_internal_id) REFERENCES diagnostics.test_definitions(internal_id) ON DELETE RESTRICT
-- `test_package_id_internal_id` → `diagnostics.test_packages(internal_id)` via `fk_diagnostics_diagnostic_order_items_test_package_id_t_5554`; FOREIGN KEY (test_package_id_internal_id) REFERENCES diagnostics.test_packages(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_order_items_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_order_items_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `test_definition_id` → `diagnostics.test_definitions(id)` via `fk_diagnostics_diagnostic_order_items_test_definition_i_2bac`; `FOREIGN KEY (test_definition_id) REFERENCES diagnostics.test_definitions(id) ON DELETE RESTRICT`
+- `test_package_id` → `diagnostics.test_packages(id)` via `fk_diagnostics_diagnostic_order_items_test_package_id_t_979e`; `FOREIGN KEY (test_package_id) REFERENCES diagnostics.test_packages(id) ON DELETE RESTRICT`
+- `offering_id` → `diagnostics.lab_offerings(id)` via `fk_diagnostics_diagnostic_order_items_offering_id_lab_offerings`; `FOREIGN KEY (offering_id) REFERENCES diagnostics.lab_offerings(id) ON DELETE SET NULL`
+- `diagnostic_order_id` → `diagnostics.diagnostic_orders(id)` via `fk_diagnostics_diagnostic_order_items_diagnostic_order__0be4`; `FOREIGN KEY (diagnostic_order_id) REFERENCES diagnostics.diagnostic_orders(id) ON DELETE CASCADE`
+- `diagnostic_order_id_internal_id` → `diagnostics.diagnostic_orders(internal_id)` via `fk_diagnostics_diagnostic_order_items_diagnostic_order__67ff`; `FOREIGN KEY (diagnostic_order_id_internal_id) REFERENCES diagnostics.diagnostic_orders(internal_id) ON DELETE CASCADE`
+- `offering_id_internal_id` → `diagnostics.lab_offerings(internal_id)` via `fk_diagnostics_diagnostic_order_items_offering_id_lab_o_52c0`; `FOREIGN KEY (offering_id_internal_id) REFERENCES diagnostics.lab_offerings(internal_id) ON DELETE SET NULL`
+- `test_definition_id_internal_id` → `diagnostics.test_definitions(internal_id)` via `fk_diagnostics_diagnostic_order_items_test_definition_i_f14c`; `FOREIGN KEY (test_definition_id_internal_id) REFERENCES diagnostics.test_definitions(internal_id) ON DELETE RESTRICT`
+- `test_package_id_internal_id` → `diagnostics.test_packages(internal_id)` via `fk_diagnostics_diagnostic_order_items_test_package_id_t_5554`; `FOREIGN KEY (test_package_id_internal_id) REFERENCES diagnostics.test_packages(internal_id) ON DELETE RESTRICT`
 
-## diagnostics.diagnostic_order_items — exact structural contracts
+## `diagnostics.diagnostic_order_items` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 21 columns, 20 constraints, 3 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 21 columns, 20 constraints, 3 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -70,7 +73,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `test_definition_id_internal_id` | `diagnostics.test_definitions` | `fk_diagnostics_diagnostic_order_items_test_definition_i_f14c` |
 | `test_package_id_internal_id` | `diagnostics.test_packages` | `fk_diagnostics_diagnostic_order_items_test_package_id_t_5554` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -95,7 +98,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_diagnostics_diagnostic_order_items` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_diagnostics_diagnostic_order_items_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -103,7 +106,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_diagnostics_diagnostic_order_items` | `CREATE UNIQUE INDEX pk_diagnostics_diagnostic_order_items ON diagnostics.diagnostic_order_items USING btree (internal_id)` |
 | `uq_diagnostics_diagnostic_order_items_id` | `CREATE UNIQUE INDEX uq_diagnostics_diagnostic_order_items_id ON diagnostics.diagnostic_order_items USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -113,4 +116,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

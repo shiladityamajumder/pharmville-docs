@@ -1,4 +1,4 @@
-# platform.cms_banners
+# `platform.cms_banners`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -27,6 +27,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the cms banners business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Prescription_Upload, Admin_CMS, Reporting, Audit, Authentication_Access, Notifications. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -34,21 +35,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `image_file_id` → `platform.file_objects(id)` via `fk_platform_cms_banners_image_file_id_file_objects`; FOREIGN KEY (image_file_id) REFERENCES platform.file_objects(id) ON DELETE RESTRICT
-- `image_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_platform_cms_banners_image_file_id_file_objects_numeric`; FOREIGN KEY (image_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE RESTRICT
+- `image_file_id` → `platform.file_objects(id)` via `fk_platform_cms_banners_image_file_id_file_objects`; `FOREIGN KEY (image_file_id) REFERENCES platform.file_objects(id) ON DELETE RESTRICT`
+- `image_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_platform_cms_banners_image_file_id_file_objects_numeric`; `FOREIGN KEY (image_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE RESTRICT`
 
-## platform.cms_banners — exact structural contracts
+## `platform.cms_banners` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 15 columns, 9 constraints, 3 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 15 columns, 9 constraints, 3 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
 | `image_file_id` | `platform.file_objects` | `fk_platform_cms_banners_image_file_id_file_objects` |
 | `image_file_id_internal_id` | `platform.file_objects` | `fk_platform_cms_banners_image_file_id_file_objects_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -62,7 +65,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_platform_cms_banners_code_locale` | UNIQUE | `UNIQUE (code, locale)` |
 | `uq_platform_cms_banners_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -70,7 +73,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_platform_cms_banners_code_locale` | `CREATE UNIQUE INDEX uq_platform_cms_banners_code_locale ON platform.cms_banners USING btree (code, locale)` |
 | `uq_platform_cms_banners_id` | `CREATE UNIQUE INDEX uq_platform_cms_banners_id ON platform.cms_banners USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -80,4 +83,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

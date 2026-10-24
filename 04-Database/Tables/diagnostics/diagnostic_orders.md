@@ -1,4 +1,4 @@
-# diagnostics.diagnostic_orders
+# `diagnostics.diagnostic_orders`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -39,6 +39,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the diagnostic orders business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -46,23 +47,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_diagnostics_diagnostic_orders_user_id_users`; FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `created_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_orders_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_orders_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `lab_location_id` → `diagnostics.lab_locations(id)` via `fk_diagnostics_diagnostic_orders_lab_location_id_lab_locations`; FOREIGN KEY (lab_location_id) REFERENCES diagnostics.lab_locations(id) ON DELETE RESTRICT
-- `address_id` → `customer.addresses(id)` via `fk_diagnostics_diagnostic_orders_address_id_addresses`; FOREIGN KEY (address_id) REFERENCES customer.addresses(id) ON DELETE SET NULL
-- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_diagnostics_diagnostic_orders_patient_profile_id_pat_4a11`; FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT
-- `address_id_internal_id` → `customer.addresses(internal_id)` via `fk_diagnostics_diagnostic_orders_address_id_addresses_numeric`; FOREIGN KEY (address_id_internal_id) REFERENCES customer.addresses(internal_id) ON DELETE SET NULL
-- `lab_location_id_internal_id` → `diagnostics.lab_locations(internal_id)` via `fk_diagnostics_diagnostic_orders_lab_location_id_lab_lo_e7ed`; FOREIGN KEY (lab_location_id_internal_id) REFERENCES diagnostics.lab_locations(internal_id) ON DELETE RESTRICT
-- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_diagnostics_diagnostic_orders_patient_profile_id_pat_0689`; FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT
+- `user_id` → `identity.users(id)` via `fk_diagnostics_diagnostic_orders_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `created_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_orders_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_diagnostics_diagnostic_orders_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `lab_location_id` → `diagnostics.lab_locations(id)` via `fk_diagnostics_diagnostic_orders_lab_location_id_lab_locations`; `FOREIGN KEY (lab_location_id) REFERENCES diagnostics.lab_locations(id) ON DELETE RESTRICT`
+- `address_id` → `customer.addresses(id)` via `fk_diagnostics_diagnostic_orders_address_id_addresses`; `FOREIGN KEY (address_id) REFERENCES customer.addresses(id) ON DELETE SET NULL`
+- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_diagnostics_diagnostic_orders_patient_profile_id_pat_4a11`; `FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT`
+- `address_id_internal_id` → `customer.addresses(internal_id)` via `fk_diagnostics_diagnostic_orders_address_id_addresses_numeric`; `FOREIGN KEY (address_id_internal_id) REFERENCES customer.addresses(internal_id) ON DELETE SET NULL`
+- `lab_location_id_internal_id` → `diagnostics.lab_locations(internal_id)` via `fk_diagnostics_diagnostic_orders_lab_location_id_lab_lo_e7ed`; `FOREIGN KEY (lab_location_id_internal_id) REFERENCES diagnostics.lab_locations(internal_id) ON DELETE RESTRICT`
+- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_diagnostics_diagnostic_orders_patient_profile_id_pat_0689`; `FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 10 FK constraints** (sample): `diagnostics.diagnostic_order_items`, `diagnostics.sample_collections`, `diagnostics.samples`, `diagnostics.diagnostic_reports`, `support.tickets`, `diagnostics.diagnostic_order_items`, `diagnostics.diagnostic_reports`, `diagnostics.sample_collections`, `diagnostics.samples`, `support.tickets`.
 
-## diagnostics.diagnostic_orders — exact structural contracts
+## `diagnostics.diagnostic_orders` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 27 columns, 18 constraints, 7 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 27 columns, 18 constraints, 7 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -76,7 +79,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `lab_location_id_internal_id` | `diagnostics.lab_locations` | `fk_diagnostics_diagnostic_orders_lab_location_id_lab_lo_e7ed` |
 | `patient_profile_id_internal_id` | `clinical.patient_profiles` | `fk_diagnostics_diagnostic_orders_patient_profile_id_pat_0689` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -99,7 +102,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_diagnostics_diagnostic_orders_id` | UNIQUE | `UNIQUE (id)` |
 | `uq_diagnostics_diagnostic_orders_order_number` | UNIQUE | `UNIQUE (order_number)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -111,7 +114,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_diagnostics_diagnostic_orders_id` | `CREATE UNIQUE INDEX uq_diagnostics_diagnostic_orders_id ON diagnostics.diagnostic_orders USING btree (id)` |
 | `uq_diagnostics_diagnostic_orders_order_number` | `CREATE UNIQUE INDEX uq_diagnostics_diagnostic_orders_order_number ON diagnostics.diagnostic_orders USING btree (order_number)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -121,4 +124,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

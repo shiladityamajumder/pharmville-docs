@@ -1,4 +1,4 @@
-# catalog.product_variants
+# `catalog.product_variants`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -32,6 +32,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the product variants business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog, Admin_CMS, Inventory. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -39,21 +40,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_catalog_product_variants_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_catalog_product_variants_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_catalog_product_variants_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `pack_uom_id` → `catalog.units_of_measure(id)` via `fk_catalog_product_variants_pack_uom_id_units_of_measure`; FOREIGN KEY (pack_uom_id) REFERENCES catalog.units_of_measure(id) ON DELETE SET NULL
-- `product_id` → `catalog.products(id)` via `fk_catalog_product_variants_product_id_products`; FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE CASCADE
-- `pack_uom_id_internal_id` → `catalog.units_of_measure(internal_id)` via `fk_catalog_product_variants_pack_uom_id_units_of_measur_5b35`; FOREIGN KEY (pack_uom_id_internal_id) REFERENCES catalog.units_of_measure(internal_id) ON DELETE SET NULL
-- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_catalog_product_variants_product_id_products_numeric`; FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_catalog_product_variants_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_catalog_product_variants_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_catalog_product_variants_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `pack_uom_id` → `catalog.units_of_measure(id)` via `fk_catalog_product_variants_pack_uom_id_units_of_measure`; `FOREIGN KEY (pack_uom_id) REFERENCES catalog.units_of_measure(id) ON DELETE SET NULL`
+- `product_id` → `catalog.products(id)` via `fk_catalog_product_variants_product_id_products`; `FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE CASCADE`
+- `pack_uom_id_internal_id` → `catalog.units_of_measure(internal_id)` via `fk_catalog_product_variants_pack_uom_id_units_of_measur_5b35`; `FOREIGN KEY (pack_uom_id_internal_id) REFERENCES catalog.units_of_measure(internal_id) ON DELETE SET NULL`
+- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_catalog_product_variants_product_id_products_numeric`; `FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE CASCADE`
 
 **Referenced by 22 FK constraints** (sample): `catalog.product_identifiers`, `catalog.product_media`, `commerce.cart_items`, `commerce.order_items`, `marketplace.seller_product_listings`, `pricing.product_prices`, `procurement.supplier_products`, `procurement.purchase_requisition_items`, `procurement.purchase_order_items`, `warehouse.inventory_lots`, `warehouse.replenishment_rules`, `catalog.product_identifiers`.
 
-## catalog.product_variants — exact structural contracts
+## `catalog.product_variants` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 20 columns, 15 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 20 columns, 15 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -65,7 +68,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pack_uom_id_internal_id` | `catalog.units_of_measure` | `fk_catalog_product_variants_pack_uom_id_units_of_measur_5b35` |
 | `product_id_internal_id` | `catalog.products` | `fk_catalog_product_variants_product_id_products_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -85,7 +88,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_catalog_product_variants` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_catalog_product_variants_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -94,7 +97,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_catalog_product_variants_id` | `CREATE UNIQUE INDEX uq_catalog_product_variants_id ON catalog.product_variants USING btree (id)` |
 | `uq_catalog_variant_sku_active` | `CREATE UNIQUE INDEX uq_catalog_variant_sku_active ON catalog.product_variants USING btree (variant_sku) WHERE is_deleted = false` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -104,4 +107,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

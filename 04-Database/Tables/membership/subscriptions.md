@@ -1,4 +1,4 @@
-# membership.subscriptions
+# `membership.subscriptions`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -31,6 +31,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the subscriptions business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -38,21 +39,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_membership_subscriptions_user_id_users`; FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE
-- `created_by` → `identity.users(id)` via `fk_membership_subscriptions_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_membership_subscriptions_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `payment_method_id` → `payment.customer_payment_methods(id)` via `fk_membership_subscriptions_payment_method_id_customer__142d`; FOREIGN KEY (payment_method_id) REFERENCES payment.customer_payment_methods(id) ON DELETE SET NULL
-- `plan_id` → `membership.plans(id)` via `fk_membership_subscriptions_plan_id_plans`; FOREIGN KEY (plan_id) REFERENCES membership.plans(id) ON DELETE RESTRICT
-- `payment_method_id_internal_id` → `payment.customer_payment_methods(internal_id)` via `fk_membership_subscriptions_payment_method_id_customer__d281`; FOREIGN KEY (payment_method_id_internal_id) REFERENCES payment.customer_payment_methods(internal_id) ON DELETE SET NULL
-- `plan_id_internal_id` → `membership.plans(internal_id)` via `fk_membership_subscriptions_plan_id_plans_numeric`; FOREIGN KEY (plan_id_internal_id) REFERENCES membership.plans(internal_id) ON DELETE RESTRICT
+- `user_id` → `identity.users(id)` via `fk_membership_subscriptions_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE`
+- `created_by` → `identity.users(id)` via `fk_membership_subscriptions_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_membership_subscriptions_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `payment_method_id` → `payment.customer_payment_methods(id)` via `fk_membership_subscriptions_payment_method_id_customer__142d`; `FOREIGN KEY (payment_method_id) REFERENCES payment.customer_payment_methods(id) ON DELETE SET NULL`
+- `plan_id` → `membership.plans(id)` via `fk_membership_subscriptions_plan_id_plans`; `FOREIGN KEY (plan_id) REFERENCES membership.plans(id) ON DELETE RESTRICT`
+- `payment_method_id_internal_id` → `payment.customer_payment_methods(internal_id)` via `fk_membership_subscriptions_payment_method_id_customer__d281`; `FOREIGN KEY (payment_method_id_internal_id) REFERENCES payment.customer_payment_methods(internal_id) ON DELETE SET NULL`
+- `plan_id_internal_id` → `membership.plans(internal_id)` via `fk_membership_subscriptions_plan_id_plans_numeric`; `FOREIGN KEY (plan_id_internal_id) REFERENCES membership.plans(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 2 FK constraints** (sample): `membership.benefit_usage`, `membership.benefit_usage`.
 
-## membership.subscriptions — exact structural contracts
+## `membership.subscriptions` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 19 columns, 15 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 19 columns, 15 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -64,7 +67,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `payment_method_id_internal_id` | `payment.customer_payment_methods` | `fk_membership_subscriptions_payment_method_id_customer__d281` |
 | `plan_id_internal_id` | `membership.plans` | `fk_membership_subscriptions_plan_id_plans_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -84,7 +87,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_membership_subscriptions_id` | UNIQUE | `UNIQUE (id)` |
 | `uq_membership_subscriptions_subscription_number` | UNIQUE | `UNIQUE (subscription_number)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -94,7 +97,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_membership_subscriptions_id` | `CREATE UNIQUE INDEX uq_membership_subscriptions_id ON membership.subscriptions USING btree (id)` |
 | `uq_membership_subscriptions_subscription_number` | `CREATE UNIQUE INDEX uq_membership_subscriptions_subscription_number ON membership.subscriptions USING btree (subscription_number)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -104,4 +107,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

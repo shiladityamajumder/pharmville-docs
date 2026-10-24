@@ -14,13 +14,14 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## MOD-018: Transactional customer/staff messaging — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Transactional customer/staff messaging. Notification delivery is best effort after commit; it must never determine success of a stock or money action.
 
 **System responsibility:** The `Notifications` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - One notification service: templates, WhatsApp first, SMS fallback, email (`NOT-01`)
 - Delivery log with retries (`NOT-02`)
@@ -28,15 +29,17 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Staff alerts in the admin panel (`NOT-04`)
 - Customer browser push notifications (`NOT-05`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `notification.messages`, `notification.message_attempts`, `notification.templates`, `notification.user_channel_preferences`, `platform.outbox_events`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 Notification delivery is best effort after commit; it must never determine success of a stock or money action. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## MOD-018 — Transactional customer/staff messaging
@@ -46,13 +49,15 @@ Notification delivery is best effort after commit; it must never determine succe
 **Purpose:** Notification delivery is best effort after commit; it must never determine success of a stock or money action.
 
 **Feature coverage**
+
 - **NOT-01 / REQ-106:** One notification service: templates, WhatsApp first, SMS fallback, email (Must (draft)).
 - **NOT-02 / REQ-107:** Delivery log with retries (Must (draft)).
 - **NOT-03 / REQ-108:** Rider push notifications (FCM) (Must (draft)).
 - **NOT-04 / REQ-109:** Staff alerts in the admin panel (Must (draft)).
 - **NOT-05 / REQ-110:** Customer browser push notifications (Could (draft)).
 
-## Developer navigation
+### Developer navigation
+
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture

@@ -14,13 +14,14 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## MOD-006: Admin masters and editorial pages — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Admin masters and editorial pages. Master data publication is an approved versioned action; staff scope is checked server-side.
 
 **System responsibility:** The `Admin_CMS` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - Dashboard per role: orders by status, pending prescriptions, alerts, deliveries in progress (`ADM-01`)
 - Staff users: invite, assign role and location, deactivate, log out sessions (`ADM-02`)
@@ -32,15 +33,17 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Store and warehouse master: address, hours, GSTIN, service areas (`ADM-08`)
 - Offer settings: start and end dates, maximum discount, first-order offer (`ADM-09`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `platform.cms_pages`, `platform.cms_page_versions`, `platform.cms_banners`, `platform.application_settings`, `organization.locations`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 Master data publication is an approved versioned action; staff scope is checked server-side. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## MOD-006 — Admin masters and editorial pages
@@ -50,6 +53,7 @@ Master data publication is an approved versioned action; staff scope is checked 
 **Purpose:** Master data publication is an approved versioned action; staff scope is checked server-side.
 
 **Feature coverage**
+
 - **ADM-01 / REQ-036:** Dashboard per role: orders by status, pending prescriptions, alerts, deliveries in progress (Must (draft)).
 - **ADM-02 / REQ-037:** Staff users: invite, assign role and location, deactivate, log out sessions (Must (draft)).
 - **ADM-03 / REQ-038:** Roles and permissions for 16 roles, limited to own store or warehouse (Must (draft)).
@@ -60,7 +64,8 @@ Master data publication is an approved versioned action; staff scope is checked 
 - **ADM-08 / REQ-043:** Store and warehouse master: address, hours, GSTIN, service areas (Must (draft)).
 - **ADM-09 / REQ-044:** Offer settings: start and end dates, maximum discount, first-order offer (Should (draft)).
 
-## Developer navigation
+### Developer navigation
+
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture

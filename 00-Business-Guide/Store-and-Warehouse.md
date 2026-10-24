@@ -1,6 +1,7 @@
 # Store and warehouse work
 
-**Status:** Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.
+> [!NOTE]
+> **Status:** Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.
 
 ## What is this process?
 

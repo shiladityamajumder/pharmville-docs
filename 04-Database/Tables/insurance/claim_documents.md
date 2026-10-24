@@ -1,4 +1,4 @@
-# insurance.claim_documents
+# `insurance.claim_documents`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -24,6 +24,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the claim documents business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -31,18 +32,20 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_insurance_claim_documents_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_insurance_claim_documents_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `file_object_id` → `platform.file_objects(id)` via `fk_insurance_claim_documents_file_object_id_file_objects`; FOREIGN KEY (file_object_id) REFERENCES platform.file_objects(id) ON DELETE RESTRICT
-- `claim_id` → `insurance.claims(id)` via `fk_insurance_claim_documents_claim_id_claims`; FOREIGN KEY (claim_id) REFERENCES insurance.claims(id) ON DELETE CASCADE
-- `claim_id_internal_id` → `insurance.claims(internal_id)` via `fk_insurance_claim_documents_claim_id_claims_numeric`; FOREIGN KEY (claim_id_internal_id) REFERENCES insurance.claims(internal_id) ON DELETE CASCADE
-- `file_object_id_internal_id` → `platform.file_objects(internal_id)` via `fk_insurance_claim_documents_file_object_id_file_object_2e7f`; FOREIGN KEY (file_object_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_insurance_claim_documents_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_insurance_claim_documents_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `file_object_id` → `platform.file_objects(id)` via `fk_insurance_claim_documents_file_object_id_file_objects`; `FOREIGN KEY (file_object_id) REFERENCES platform.file_objects(id) ON DELETE RESTRICT`
+- `claim_id` → `insurance.claims(id)` via `fk_insurance_claim_documents_claim_id_claims`; `FOREIGN KEY (claim_id) REFERENCES insurance.claims(id) ON DELETE CASCADE`
+- `claim_id_internal_id` → `insurance.claims(internal_id)` via `fk_insurance_claim_documents_claim_id_claims_numeric`; `FOREIGN KEY (claim_id_internal_id) REFERENCES insurance.claims(internal_id) ON DELETE CASCADE`
+- `file_object_id_internal_id` → `platform.file_objects(internal_id)` via `fk_insurance_claim_documents_file_object_id_file_object_2e7f`; `FOREIGN KEY (file_object_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE RESTRICT`
 
-## insurance.claim_documents — exact structural contracts
+## `insurance.claim_documents` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 12 columns, 12 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 12 columns, 12 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -53,7 +56,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `claim_id_internal_id` | `insurance.claims` | `fk_insurance_claim_documents_claim_id_claims_numeric` |
 | `file_object_id_internal_id` | `platform.file_objects` | `fk_insurance_claim_documents_file_object_id_file_object_2e7f` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -70,7 +73,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_insurance_claim_documents` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_insurance_claim_documents_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -80,7 +83,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_insurance_claim_documents` | `CREATE UNIQUE INDEX pk_insurance_claim_documents ON insurance.claim_documents USING btree (internal_id)` |
 | `uq_insurance_claim_documents_id` | `CREATE UNIQUE INDEX uq_insurance_claim_documents_id ON insurance.claim_documents USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -90,4 +93,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

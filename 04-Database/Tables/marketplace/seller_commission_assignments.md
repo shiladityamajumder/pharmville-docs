@@ -1,4 +1,4 @@
-# marketplace.seller_commission_assignments
+# `marketplace.seller_commission_assignments`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -25,6 +25,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the seller commission assignments business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -32,18 +33,20 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_marketplace_seller_commission_assignments_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_marketplace_seller_commission_assignments_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `commission_plan_id` → `marketplace.commission_plans(id)` via `fk_marketplace_seller_commission_assignments_commission_b453`; FOREIGN KEY (commission_plan_id) REFERENCES marketplace.commission_plans(id) ON DELETE RESTRICT
-- `seller_id` → `marketplace.sellers(id)` via `fk_marketplace_seller_commission_assignments_seller_id_sellers`; FOREIGN KEY (seller_id) REFERENCES marketplace.sellers(id) ON DELETE CASCADE
-- `commission_plan_id_internal_id` → `marketplace.commission_plans(internal_id)` via `fk_marketplace_seller_commission_assignments_commission_de18`; FOREIGN KEY (commission_plan_id_internal_id) REFERENCES marketplace.commission_plans(internal_id) ON DELETE RESTRICT
-- `seller_id_internal_id` → `marketplace.sellers(internal_id)` via `fk_marketplace_seller_commission_assignments_seller_id__c576`; FOREIGN KEY (seller_id_internal_id) REFERENCES marketplace.sellers(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_marketplace_seller_commission_assignments_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_marketplace_seller_commission_assignments_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `commission_plan_id` → `marketplace.commission_plans(id)` via `fk_marketplace_seller_commission_assignments_commission_b453`; `FOREIGN KEY (commission_plan_id) REFERENCES marketplace.commission_plans(id) ON DELETE RESTRICT`
+- `seller_id` → `marketplace.sellers(id)` via `fk_marketplace_seller_commission_assignments_seller_id_sellers`; `FOREIGN KEY (seller_id) REFERENCES marketplace.sellers(id) ON DELETE CASCADE`
+- `commission_plan_id_internal_id` → `marketplace.commission_plans(internal_id)` via `fk_marketplace_seller_commission_assignments_commission_de18`; `FOREIGN KEY (commission_plan_id_internal_id) REFERENCES marketplace.commission_plans(internal_id) ON DELETE RESTRICT`
+- `seller_id_internal_id` → `marketplace.sellers(internal_id)` via `fk_marketplace_seller_commission_assignments_seller_id__c576`; `FOREIGN KEY (seller_id_internal_id) REFERENCES marketplace.sellers(internal_id) ON DELETE CASCADE`
 
-## marketplace.seller_commission_assignments — exact structural contracts
+## `marketplace.seller_commission_assignments` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 13 columns, 12 constraints, 3 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 13 columns, 12 constraints, 3 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -54,7 +57,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `commission_plan_id_internal_id` | `marketplace.commission_plans` | `fk_marketplace_seller_commission_assignments_commission_de18` |
 | `seller_id_internal_id` | `marketplace.sellers` | `fk_marketplace_seller_commission_assignments_seller_id__c576` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -71,7 +74,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_marketplace_seller_commission_assignments` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_marketplace_seller_commission_assignments_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -79,7 +82,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_marketplace_seller_commission_assignments` | `CREATE UNIQUE INDEX pk_marketplace_seller_commission_assignments ON marketplace.seller_commission_assignments USING btree (internal_id)` |
 | `uq_marketplace_seller_commission_assignments_id` | `CREATE UNIQUE INDEX uq_marketplace_seller_commission_assignments_id ON marketplace.seller_commission_assignments USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -89,4 +92,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

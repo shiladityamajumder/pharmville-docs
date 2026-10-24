@@ -14,13 +14,14 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## MOD-015: Scoped operations and financial reports — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Scoped operations and financial reports. Reports must be authorised by entity scope and must not export unapproved patient data.
 
 **System responsibility:** The `Reporting` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - Sales and orders, by date, store and product (`REP-01`)
 - GST report for filing (`REP-02`)
@@ -30,15 +31,17 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Replenishment transfers (`REP-06`)
 - Excel export for every report (`REP-07`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `platform.report_definitions`, `platform.report_runs`, `finance.settlement_runs`, `commerce.orders`, `platform.file_access_grants`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 Reports must be authorised by entity scope and must not export unapproved patient data. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## MOD-015 — Scoped operations and financial reports
@@ -48,6 +51,7 @@ Reports must be authorised by entity scope and must not export unapproved patien
 **Purpose:** Reports must be authorised by entity scope and must not export unapproved patient data.
 
 **Feature coverage**
+
 - **REP-01 / REQ-093:** Sales and orders, by date, store and product (Must (draft)).
 - **REP-02 / REQ-094:** GST report for filing (Must (draft)).
 - **REP-03 / REQ-095:** Stock, low stock and near-expiry (Must (draft)).
@@ -56,7 +60,8 @@ Reports must be authorised by entity scope and must not export unapproved patien
 - **REP-06 / REQ-098:** Replenishment transfers (Should (draft)).
 - **REP-07 / REQ-099:** Excel export for every report (Must (draft)).
 
-## Developer navigation
+### Developer navigation
+
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture

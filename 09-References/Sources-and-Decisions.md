@@ -28,7 +28,7 @@ No signed client PRD is checked into this documentation repository. Sibling appl
 ## Open decisions
 
 | ID | Decision needed | Owner |
-|---|---|---|
+| --- | --- | --- |
 | D-001 | Approve Phase 1 module boundaries | Product owner |
 | D-002 | Set receiving, replenishment, and warehouse fallback scope | Product owner and Operations |
 | D-003 | Approve login, role, and lockout rules | Security and Product owner |
@@ -75,4 +75,6 @@ D-023 and D-024 record gaps found in the independent engineering audit. The user
 
 ## Conflicting order paths requiring explicit resolution
 
-RX-02 retains a draft 24-hour post-order upload/auto-cancel requirement. Detailed journey S07–S14 instead supplies prescription evidence and completes P-line review before payment. Product, Pharmacy and Finance must approve whether a deferred route exists, its request/payment timing, deadline, stock treatment and compensation. Until then the Business Guide explains the detailed path and labels the deferred route blocked; it does not invent a universal sequence or approved deadline.
+RX-02 retains a draft 24-hour post-order upload/auto-cancel requirement. Detailed journey S07–S14 instead supplies prescription evidence and completes P-line review before payment. Product, Pharmacy and Finance must approve whether a deferred route exists, its request/payment timing, deadline, stock treatment and compensation.
+
+Until then the Business Guide explains the detailed path and labels the deferred route blocked; it does not invent a universal sequence or approved deadline.

@@ -1,4 +1,4 @@
-# logistics.delivery_assignments
+# `logistics.delivery_assignments`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -31,6 +31,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the delivery assignments business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -38,21 +39,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `delivery_user_id` → `identity.users(id)` via `fk_logistics_delivery_assignments_delivery_user_id_users`; FOREIGN KEY (delivery_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `created_by` → `identity.users(id)` via `fk_logistics_delivery_assignments_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_logistics_delivery_assignments_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `shipment_id` → `logistics.shipments(id)` via `fk_logistics_delivery_assignments_shipment_id_shipments`; FOREIGN KEY (shipment_id) REFERENCES logistics.shipments(id) ON DELETE CASCADE
-- `route_id` → `logistics.delivery_routes(id)` via `fk_logistics_delivery_assignments_route_id_delivery_routes`; FOREIGN KEY (route_id) REFERENCES logistics.delivery_routes(id) ON DELETE SET NULL
-- `route_id_internal_id` → `logistics.delivery_routes(internal_id)` via `fk_logistics_delivery_assignments_route_id_delivery_rou_bb4c`; FOREIGN KEY (route_id_internal_id) REFERENCES logistics.delivery_routes(internal_id) ON DELETE SET NULL
-- `shipment_id_internal_id` → `logistics.shipments(internal_id)` via `fk_logistics_delivery_assignments_shipment_id_shipments_numeric`; FOREIGN KEY (shipment_id_internal_id) REFERENCES logistics.shipments(internal_id) ON DELETE CASCADE
+- `delivery_user_id` → `identity.users(id)` via `fk_logistics_delivery_assignments_delivery_user_id_users`; `FOREIGN KEY (delivery_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `created_by` → `identity.users(id)` via `fk_logistics_delivery_assignments_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_logistics_delivery_assignments_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `shipment_id` → `logistics.shipments(id)` via `fk_logistics_delivery_assignments_shipment_id_shipments`; `FOREIGN KEY (shipment_id) REFERENCES logistics.shipments(id) ON DELETE CASCADE`
+- `route_id` → `logistics.delivery_routes(id)` via `fk_logistics_delivery_assignments_route_id_delivery_routes`; `FOREIGN KEY (route_id) REFERENCES logistics.delivery_routes(id) ON DELETE SET NULL`
+- `route_id_internal_id` → `logistics.delivery_routes(internal_id)` via `fk_logistics_delivery_assignments_route_id_delivery_rou_bb4c`; `FOREIGN KEY (route_id_internal_id) REFERENCES logistics.delivery_routes(internal_id) ON DELETE SET NULL`
+- `shipment_id_internal_id` → `logistics.shipments(internal_id)` via `fk_logistics_delivery_assignments_shipment_id_shipments_numeric`; `FOREIGN KEY (shipment_id_internal_id) REFERENCES logistics.shipments(internal_id) ON DELETE CASCADE`
 
 **Referenced by 4 FK constraints** (sample): `logistics.delivery_location_updates`, `logistics.delivery_otp_challenges`, `logistics.delivery_location_updates`, `logistics.delivery_otp_challenges`.
 
-## logistics.delivery_assignments — exact structural contracts
+## `logistics.delivery_assignments` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 19 columns, 16 constraints, 8 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 19 columns, 16 constraints, 8 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -64,7 +67,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `route_id_internal_id` | `logistics.delivery_routes` | `fk_logistics_delivery_assignments_route_id_delivery_rou_bb4c` |
 | `shipment_id_internal_id` | `logistics.shipments` | `fk_logistics_delivery_assignments_shipment_id_shipments_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -85,7 +88,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_logistics_delivery_assignments_id_shipment` | UNIQUE | `UNIQUE (id, shipment_id)` |
 | `uq_numeric_logistics_delivery_assignments_internal_id_s_7b2c` | UNIQUE | `UNIQUE (internal_id, shipment_id_internal_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -98,7 +101,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_logistics_delivery_assignments_id_shipment` | `CREATE UNIQUE INDEX uq_logistics_delivery_assignments_id_shipment ON logistics.delivery_assignments USING btree (id, shipment_id)` |
 | `uq_numeric_logistics_delivery_assignments_internal_id_s_7b2c` | `CREATE UNIQUE INDEX uq_numeric_logistics_delivery_assignments_internal_id_s_7b2c ON logistics.delivery_assignments USING btree (internal_id, shipment_id_internal_id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -109,4 +112,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

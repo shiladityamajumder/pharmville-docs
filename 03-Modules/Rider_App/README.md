@@ -9,6 +9,7 @@
 **Purpose:** Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated.
 
 **Feature coverage**
+
 - **RID-01 / REQ-079:** OTP login; on duty, off duty and break (Must (draft)).
 - **RID-02 / REQ-080:** Task list; accept; open Google Maps to navigate; mark picked up (Must (draft)).
 - **RID-03 / REQ-081:** Background location: every 5–10 s on delivery, 15–30 s idle (Must (draft)).
@@ -17,26 +18,28 @@
 - **RID-06 / REQ-084:** Failed attempt with a reason from a fixed list (Must (draft)).
 - **RID-07 / REQ-085:** Daily deliveries and incentive earned (Should (draft)).
 
-## Developer navigation
-- [Module HLD](HLD.md)
-- [Module LLD](LLD.md)
+### Developer navigation
+
+- 🏗️ [Module HLD](HLD.md)
+- ⚙️ [Module LLD](LLD.md)
 - Internal architecture
-- [API contracts](../../05-APIs/Rider_App.md)
-- [Database mapping](../../04-Database/Module-Mapping.md)
-- [Testing](../../07-Engineering/Testing.md)
-- [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
+- 🔗 [API contracts](../../05-APIs/Rider_App.md)
+- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
+- 🧪 [Testing](../../07-Engineering/Testing.md)
+- 🗓️ [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
 
 **Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
 
 ## MOD-013: Rider shifts and delivery actions — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Rider shifts and delivery actions. Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated.
 
 **System responsibility:** The `Rider_App` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - OTP login; on duty, off duty and break (`RID-01`)
 - Task list; accept; open Google Maps to navigate; mark picked up (`RID-02`)
@@ -46,24 +49,26 @@
 - Failed attempt with a reason from a fixed list (`RID-06`)
 - Daily deliveries and incentive earned (`RID-07`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `logistics.rider_shifts`, `logistics.delivery_assignments`, `logistics.delivery_otp_challenges`, `logistics.delivery_location_updates`, `payment.cod_collections`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## Related design and delivery references
 
-- [HLD](HLD.md)
-- [LLD](LLD.md)
-- [Edge cases](Edge-Cases.md)
-- [API contracts](../../05-APIs/Rider_App.md)
-- [Database mapping](../../04-Database/Module-Mapping.md)
-- [QA scenarios](../../07-Engineering/Testing.md)
-- [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
+- 🏗️ [HLD](HLD.md)
+- ⚙️ [LLD](LLD.md)
+- 🧪 [Edge cases](Edge-Cases.md)
+- 🔗 [API contracts](../../05-APIs/Rider_App.md)
+- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
+- 🧪 [QA scenarios](../../07-Engineering/Testing.md)
+- 🗓️ [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
 - End-to-end flows: [workflows](../../06-Workflows/README.md)

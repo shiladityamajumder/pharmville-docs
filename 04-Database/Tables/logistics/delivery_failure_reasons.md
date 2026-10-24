@@ -1,4 +1,4 @@
-# logistics.delivery_failure_reasons
+# `logistics.delivery_failure_reasons`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -23,6 +23,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the delivery failure reasons business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -30,23 +31,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by_user_id` → `identity.users(id)` via `fk_logistics_delivery_failure_reasons_created_by_user_id_users`; FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by_user_id` → `identity.users(id)` via `fk_logistics_delivery_failure_reasons_updated_by_user_id_users`; FOREIGN KEY (updated_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
+- `created_by_user_id` → `identity.users(id)` via `fk_logistics_delivery_failure_reasons_created_by_user_id_users`; `FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by_user_id` → `identity.users(id)` via `fk_logistics_delivery_failure_reasons_updated_by_user_id_users`; `FOREIGN KEY (updated_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
 
 **Referenced by 2 FK constraints** (sample): `logistics.delivery_attempts`, `logistics.ndr_cases`.
 
-## logistics.delivery_failure_reasons — exact structural contracts
+## `logistics.delivery_failure_reasons` — exact structural contracts
 
-**Identity:** `id` BIGINT. **Counts:** 11 columns, 9 constraints, 3 indexes, 4 triggers.
+**Identity:** `id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 11 columns, 9 constraints, 3 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
 | `created_by_user_id` | `identity.users` | `fk_logistics_delivery_failure_reasons_created_by_user_id_users` |
 | `updated_by_user_id` | `identity.users` | `fk_logistics_delivery_failure_reasons_updated_by_user_id_users` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -60,7 +63,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_logistics_delivery_failure_reasons_code` | UNIQUE | `UNIQUE (code)` |
 | `uq_logistics_delivery_failure_reasons_id_code` | UNIQUE | `UNIQUE (id, code)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -68,7 +71,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_logistics_delivery_failure_reasons_code` | `CREATE UNIQUE INDEX uq_logistics_delivery_failure_reasons_code ON logistics.delivery_failure_reasons USING btree (code)` |
 | `uq_logistics_delivery_failure_reasons_id_code` | `CREATE UNIQUE INDEX uq_logistics_delivery_failure_reasons_id_code ON logistics.delivery_failure_reasons USING btree (id, code)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -79,4 +82,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

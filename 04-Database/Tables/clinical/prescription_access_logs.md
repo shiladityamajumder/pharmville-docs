@@ -1,4 +1,4 @@
-# clinical.prescription_access_logs
+# `clinical.prescription_access_logs`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -23,6 +23,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the prescription access logs business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -30,15 +31,17 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `actor_user_id` → `identity.users(id)` via `fk_clinical_prescription_access_logs_actor_user_id_users`; FOREIGN KEY (actor_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `prescription_id` → `clinical.prescriptions(id)` via `fk_clinical_prescription_access_logs_prescription_id_pr_fb69`; FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE CASCADE
-- `prescription_id_internal_id` → `clinical.prescriptions(internal_id)` via `fk_clinical_prescription_access_logs_prescription_id_pr_2810`; FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE CASCADE
+- `actor_user_id` → `identity.users(id)` via `fk_clinical_prescription_access_logs_actor_user_id_users`; `FOREIGN KEY (actor_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `prescription_id` → `clinical.prescriptions(id)` via `fk_clinical_prescription_access_logs_prescription_id_pr_fb69`; `FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE CASCADE`
+- `prescription_id_internal_id` → `clinical.prescriptions(internal_id)` via `fk_clinical_prescription_access_logs_prescription_id_pr_2810`; `FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE CASCADE`
 
-## clinical.prescription_access_logs — exact structural contracts
+## `clinical.prescription_access_logs` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 11 columns, 6 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 11 columns, 6 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -46,7 +49,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `prescription_id` | `clinical.prescriptions` | `fk_clinical_prescription_access_logs_prescription_id_pr_fb69` |
 | `prescription_id_internal_id` | `clinical.prescriptions` | `fk_clinical_prescription_access_logs_prescription_id_pr_2810` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -57,7 +60,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_clinical_prescription_access_logs` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_clinical_prescription_access_logs_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -67,7 +70,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_clinical_prescription_access_logs` | `CREATE UNIQUE INDEX pk_clinical_prescription_access_logs ON clinical.prescription_access_logs USING btree (internal_id)` |
 | `uq_clinical_prescription_access_logs_id` | `CREATE UNIQUE INDEX uq_clinical_prescription_access_logs_id ON clinical.prescription_access_logs USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -77,4 +80,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

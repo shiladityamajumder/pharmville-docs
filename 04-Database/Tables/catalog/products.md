@@ -1,4 +1,4 @@
-# catalog.products
+# `catalog.products`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -51,6 +51,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the products business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog, Admin_CMS, Inventory. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -58,27 +59,29 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `commerce_class_approved_by_user_id` → `identity.users(id)` via `fk_catalog_products_commerce_class_approved_by_user_id_users`; FOREIGN KEY (commerce_class_approved_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `commerce_class` → `catalog.commerce_classes(code)` via `fk_catalog_products_commerce_class_commerce_classes`; FOREIGN KEY (commerce_class) REFERENCES catalog.commerce_classes(code) ON DELETE RESTRICT
-- `created_by` → `identity.users(id)` via `fk_catalog_products_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_catalog_products_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_catalog_products_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `dosage_form_id` → `catalog.dosage_forms(id)` via `fk_catalog_products_dosage_form_id_dosage_forms`; FOREIGN KEY (dosage_form_id) REFERENCES catalog.dosage_forms(id) ON DELETE SET NULL
-- `category_id` → `catalog.categories(id)` via `fk_catalog_products_category_id_categories`; FOREIGN KEY (category_id) REFERENCES catalog.categories(id) ON DELETE SET NULL
-- `brand_id` → `catalog.brands(id)` via `fk_catalog_products_brand_id_brands`; FOREIGN KEY (brand_id) REFERENCES catalog.brands(id) ON DELETE SET NULL
-- `manufacturer_id` → `catalog.manufacturers(id)` via `fk_catalog_products_manufacturer_id_manufacturers`; FOREIGN KEY (manufacturer_id) REFERENCES catalog.manufacturers(id) ON DELETE SET NULL
-- `brand_id_internal_id` → `catalog.brands(internal_id)` via `fk_catalog_products_brand_id_brands_numeric`; FOREIGN KEY (brand_id_internal_id) REFERENCES catalog.brands(internal_id) ON DELETE SET NULL
-- `category_id_internal_id` → `catalog.categories(internal_id)` via `fk_catalog_products_category_id_categories_numeric`; FOREIGN KEY (category_id_internal_id) REFERENCES catalog.categories(internal_id) ON DELETE SET NULL
-- `dosage_form_id_internal_id` → `catalog.dosage_forms(internal_id)` via `fk_catalog_products_dosage_form_id_dosage_forms_numeric`; FOREIGN KEY (dosage_form_id_internal_id) REFERENCES catalog.dosage_forms(internal_id) ON DELETE SET NULL
-- `manufacturer_id_internal_id` → `catalog.manufacturers(internal_id)` via `fk_catalog_products_manufacturer_id_manufacturers_numeric`; FOREIGN KEY (manufacturer_id_internal_id) REFERENCES catalog.manufacturers(internal_id) ON DELETE SET NULL
+- `commerce_class_approved_by_user_id` → `identity.users(id)` via `fk_catalog_products_commerce_class_approved_by_user_id_users`; `FOREIGN KEY (commerce_class_approved_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `commerce_class` → `catalog.commerce_classes(code)` via `fk_catalog_products_commerce_class_commerce_classes`; `FOREIGN KEY (commerce_class) REFERENCES catalog.commerce_classes(code) ON DELETE RESTRICT`
+- `created_by` → `identity.users(id)` via `fk_catalog_products_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_catalog_products_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_catalog_products_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `dosage_form_id` → `catalog.dosage_forms(id)` via `fk_catalog_products_dosage_form_id_dosage_forms`; `FOREIGN KEY (dosage_form_id) REFERENCES catalog.dosage_forms(id) ON DELETE SET NULL`
+- `category_id` → `catalog.categories(id)` via `fk_catalog_products_category_id_categories`; `FOREIGN KEY (category_id) REFERENCES catalog.categories(id) ON DELETE SET NULL`
+- `brand_id` → `catalog.brands(id)` via `fk_catalog_products_brand_id_brands`; `FOREIGN KEY (brand_id) REFERENCES catalog.brands(id) ON DELETE SET NULL`
+- `manufacturer_id` → `catalog.manufacturers(id)` via `fk_catalog_products_manufacturer_id_manufacturers`; `FOREIGN KEY (manufacturer_id) REFERENCES catalog.manufacturers(id) ON DELETE SET NULL`
+- `brand_id_internal_id` → `catalog.brands(internal_id)` via `fk_catalog_products_brand_id_brands_numeric`; `FOREIGN KEY (brand_id_internal_id) REFERENCES catalog.brands(internal_id) ON DELETE SET NULL`
+- `category_id_internal_id` → `catalog.categories(internal_id)` via `fk_catalog_products_category_id_categories_numeric`; `FOREIGN KEY (category_id_internal_id) REFERENCES catalog.categories(internal_id) ON DELETE SET NULL`
+- `dosage_form_id_internal_id` → `catalog.dosage_forms(internal_id)` via `fk_catalog_products_dosage_form_id_dosage_forms_numeric`; `FOREIGN KEY (dosage_form_id_internal_id) REFERENCES catalog.dosage_forms(internal_id) ON DELETE SET NULL`
+- `manufacturer_id_internal_id` → `catalog.manufacturers(internal_id)` via `fk_catalog_products_manufacturer_id_manufacturers_numeric`; `FOREIGN KEY (manufacturer_id_internal_id) REFERENCES catalog.manufacturers(internal_id) ON DELETE SET NULL`
 
 **Referenced by 50 FK constraints** (sample): `catalog.product_variants`, `catalog.product_identifiers`, `catalog.product_salts`, `catalog.product_attributes`, `catalog.product_media`, `catalog.product_relationships`, `catalog.product_relationships`, `catalog.product_regulatory`, `catalog.product_content`, `catalog.substitution_group_products`, `clinical.patient_medications`, `clinical.prescription_items`.
 
-## catalog.products — exact structural contracts
+## `catalog.products` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 39 columns, 26 constraints, 9 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 39 columns, 26 constraints, 9 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -96,7 +99,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `dosage_form_id_internal_id` | `catalog.dosage_forms` | `fk_catalog_products_dosage_form_id_dosage_forms_numeric` |
 | `manufacturer_id_internal_id` | `catalog.manufacturers` | `fk_catalog_products_manufacturer_id_manufacturers_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -127,7 +130,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_catalog_products` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_catalog_products_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -141,7 +144,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_catalog_products_sku_active` | `CREATE UNIQUE INDEX uq_catalog_products_sku_active ON catalog.products USING btree (sku) WHERE is_deleted = false` |
 | `uq_catalog_products_slug_active` | `CREATE UNIQUE INDEX uq_catalog_products_slug_active ON catalog.products USING btree (slug) WHERE is_deleted = false` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -152,4 +155,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

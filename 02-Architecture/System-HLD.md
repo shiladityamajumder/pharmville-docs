@@ -4,7 +4,9 @@
 
 ## Master High-Level Design (HLD)
 
-**Proposed technology direction (D-001/D-014):** multi-repository, modular-monolith NestJS API, Next.js/React/TypeScript web clients, PostgreSQL, Redis/BullMQ, S3, AWS Mumbai, Docker, Nginx and GitHub Actions. These are proposed design choices, not evidence a production app exists. The Python/SQLAlchemy repository is a parallel schema verification/deployment companion; its Alembic migrations must not run.
+**Proposed technology direction (D-001/D-014):** multi-repository, modular-monolith NestJS API, Next.js/React/TypeScript web clients, PostgreSQL, Redis/BullMQ, S3, AWS Mumbai, Docker, Nginx and GitHub Actions. These are proposed design choices, not evidence a production app exists.
+
+The Python/SQLAlchemy repository is a parallel schema verification/deployment companion; its Alembic migrations must not run.
 
 ```mermaid
 flowchart TB
@@ -31,7 +33,9 @@ The database remains source of truth for money, stock, clinical decisions and st
 
 ## Customer, staff, rider and database platform boundaries
 
-Customer Web is mobile-first Next.js and displays browse/search, dependent patient selection, Rx upload and a safe order timeline. Staff Web is a separate protected role- and location-scoped surface for product admin, pharmacist workbench, stock, store/warehouse, rider assignment, finance, reports and audit. Riders use an Android workflow in later Phase 1 decisions, but the mobile framework/distribution rules remain open. Native customer apps are future-phase scope.
+Customer Web is mobile-first Next.js and displays browse/search, dependent patient selection, Rx upload and a safe order timeline. Staff Web is a separate protected role- and location-scoped surface for product admin, pharmacist workbench, stock, store/warehouse, rider assignment, finance, reports and audit.
+
+Riders use an Android workflow in later Phase 1 decisions, but the mobile framework/distribution rules remain open. Native customer apps are future-phase scope.
 
 All clients call REST v1 through a controlled API ingress. Session refresh and OTP login are centralized. A client supplies public UUIDs as resource locators, but backend services derive current user, location and patient scope independently. Business rules are server-side; a hidden UI control is not authorization.
 
@@ -85,7 +89,9 @@ Use synchronous in-process service APIs for transactional reads and validated co
 
 Trust boundaries exist between public customer browser, protected staff web, rider Android app, backend API, DB capability roles, private S3, payment/OTP services and workers. Each request is untrusted until session, per-object scope, version and business policy are checked by a backend service.
 
-The database final report records four NOLOGIN capability roles and RLS on selected order and stock tables, plus a `PUBLIC EXECUTE` default-denial change in V0029. These tests are **not** authorization coverage for every table; unsupported polymorphic access stays denied. Never use migration-owner DB credentials in an API runtime and never accept browser-supplied SQL or `actor_user_id` as trusted context.
+The database final report records four NOLOGIN capability roles and RLS on selected order and stock tables, plus a `PUBLIC EXECUTE` default-denial change in V0029. These tests are **not** authorization coverage for every table; unsupported polymorphic access stays denied.
+
+Never use migration-owner DB credentials in an API runtime and never accept browser-supplied SQL or `actor_user_id` as trusted context.
 
 Encryption of RDS/S3/ElastiCache with KMS, Secrets Manager, TLS, staff MFA, access limits, scan/authorization of Rx uploads and report download re-checks are part of the selected/recommended design but require deployed evidence. Healthcare permissions and retention rules need specialist review before launch.
 
@@ -95,9 +101,13 @@ See Threat Model, Auth flows and Audit.
 
 **Supplied database source:** the user-selected `healthcare_db/postgresql/migrations/` history is the documentation baseline; historical Alembic execution is frozen. Its recorded local PostgreSQL 18 evidence describes 24 schemas, 266 tables, 4,438 columns, 1,461 FKs, 1,204 indexes, 56 functions, 879 triggers and 3 RLS policies. PostgreSQL 15 hosted validation and production authorization remain unproven.
 
-**Primary keys:** `identity.users.id` is UUID; 257 older entity tables use BIGINT `internal_id` as their primary key with original immutable UNIQUE public UUID `id`; eight newer tables use BIGINT `id` identity PK. Key crosswalks and paired numeric FKs preserve existing public contracts. Internal numeric IDs are join keys, not access tokens; service authorization always checks actor, owner, scope and state.
+**Primary keys:** `identity.users.id` is UUID; 257 older entity tables use BIGINT `internal_id` as their primary key with original immutable UNIQUE public UUID `id`; eight newer tables use BIGINT `id` identity PK. Key crosswalks and paired numeric FKs preserve existing public contracts.
 
-**Deployment rule:** write new forward-only SQL versions, rehearse on an isolated copy, run the repo's verified `status/migrate/verify` runner with explicitly approved database URL, compare schema/ORM/catalog and release only after approvals. Never stamp, reset or run Alembic side by side. Schema migration and application rollout must use compatibility-aware expand/backfill/contract transitions.
+Internal numeric IDs are join keys, not access tokens; service authorization always checks actor, owner, scope and state.
+
+**Deployment rule:** write new forward-only SQL versions, rehearse on an isolated copy, run the repo's verified `status/migrate/verify` runner with explicitly approved database URL, compare schema/ORM/catalog and release only after approvals. Never stamp, reset or run Alembic side by side.
+
+Schema migration and application rollout must use compatibility-aware expand/backfill/contract transitions.
 
 Full existing table/field/constraint inventories are generated under Database design from the supplied catalog. [Migration evidence](../04-Database/Migrations.md) records the source verification and historical acceptance report. The source reference is resolved for documentation; target deployment and production approval remain separate checks.
 
@@ -105,9 +115,13 @@ Full existing table/field/constraint inventories are generated under Database de
 
 The proposed architecture is a modular monolith, so maintain cohesive domain ownership before deciding to split services. Scale stateless NestJS/Next.js containers, isolate queue workers from interactive traffic, and use PostgreSQL query plans and resource limits before adding caches. Do not add a distributed bus or Kubernetes simply because many domains exist.
 
-Primary scaling risks: hot inventory lot rows during last-unit holds, checkout peak concurrency, large order/history/report scans, POS reconciliation lag, rider GPS write volume, and Rx/private-file access throughput. Use measured scoped indexes and representative workloads. The database repo records a synthetic 19-query benchmark and 50,000-row key experiment, but neither proves production capacity or a business SLA.
+Primary scaling risks: hot inventory lot rows during last-unit holds, checkout peak concurrency, large order/history/report scans, POS reconciliation lag, rider GPS write volume, and Rx/private-file access throughput. Use measured scoped indexes and representative workloads.
 
-Redis may cache published catalogue summaries or rate limits, never authoritative payment/stock/Rx approval. Add asynchronous jobs for provider callbacks, notifications and large reports with durability/replay controls. Keep partitioning, pooling, replicas and service extraction as evidence-based future choices. Track latency, connection pool saturation, inventory conflicts, webhook delay and queue backlog. See Performance testing.
+The database repo records a synthetic 19-query benchmark and 50,000-row key experiment, but neither proves production capacity or a business SLA.
+
+Redis may cache published catalogue summaries or rate limits, never authoritative payment/stock/Rx approval. Add asynchronous jobs for provider callbacks, notifications and large reports with durability/replay controls. Keep partitioning, pooling, replicas and service extraction as evidence-based future choices.
+
+Track latency, connection pool saturation, inventory conflicts, webhook delay and queue backlog. See Performance testing.
 
 ## Reliability and disaster recovery design
 

@@ -1,4 +1,4 @@
-# warehouse.bins
+# `warehouse.bins`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -33,6 +33,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the bins business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Cart_Checkout, Order_Operations, Store_Operations, Inventory, Warehouse. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -40,23 +41,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_warehouse_bins_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_warehouse_bins_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_warehouse_bins_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `zone_id` → `warehouse.zones(id)` via `fk_warehouse_bins_zone_id_zones`; FOREIGN KEY (zone_id) REFERENCES warehouse.zones(id) ON DELETE CASCADE
-- `rack_id` → `warehouse.racks(id)` via `fk_warehouse_bins_rack_id_racks`; FOREIGN KEY (rack_id) REFERENCES warehouse.racks(id) ON DELETE SET NULL
-- `warehouse_id` → `warehouse.warehouses(id)` via `fk_warehouse_bins_warehouse_id_warehouses`; FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE CASCADE
-- `rack_id_internal_id` → `warehouse.racks(internal_id)` via `fk_warehouse_bins_rack_id_racks_numeric`; FOREIGN KEY (rack_id_internal_id) REFERENCES warehouse.racks(internal_id) ON DELETE SET NULL
-- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_warehouse_bins_warehouse_id_warehouses_numeric`; FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE CASCADE
-- `zone_id_internal_id` → `warehouse.zones(internal_id)` via `fk_warehouse_bins_zone_id_zones_numeric`; FOREIGN KEY (zone_id_internal_id) REFERENCES warehouse.zones(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_warehouse_bins_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_warehouse_bins_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_warehouse_bins_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `zone_id` → `warehouse.zones(id)` via `fk_warehouse_bins_zone_id_zones`; `FOREIGN KEY (zone_id) REFERENCES warehouse.zones(id) ON DELETE CASCADE`
+- `rack_id` → `warehouse.racks(id)` via `fk_warehouse_bins_rack_id_racks`; `FOREIGN KEY (rack_id) REFERENCES warehouse.racks(id) ON DELETE SET NULL`
+- `warehouse_id` → `warehouse.warehouses(id)` via `fk_warehouse_bins_warehouse_id_warehouses`; `FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE CASCADE`
+- `rack_id_internal_id` → `warehouse.racks(internal_id)` via `fk_warehouse_bins_rack_id_racks_numeric`; `FOREIGN KEY (rack_id_internal_id) REFERENCES warehouse.racks(internal_id) ON DELETE SET NULL`
+- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_warehouse_bins_warehouse_id_warehouses_numeric`; `FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE CASCADE`
+- `zone_id_internal_id` → `warehouse.zones(internal_id)` via `fk_warehouse_bins_zone_id_zones_numeric`; `FOREIGN KEY (zone_id_internal_id) REFERENCES warehouse.zones(internal_id) ON DELETE CASCADE`
 
 **Referenced by 16 FK constraints** (sample): `fulfillment.pick_task_items`, `warehouse.stock_balances`, `warehouse.stock_ledger`, `warehouse.stock_reservations`, `warehouse.stock_holds`, `warehouse.inventory_adjustment_items`, `warehouse.cycle_counts`, `warehouse.cycle_count_items`, `fulfillment.pick_task_items`, `warehouse.cycle_count_items`, `warehouse.cycle_counts`, `warehouse.inventory_adjustment_items`.
 
-## warehouse.bins — exact structural contracts
+## `warehouse.bins` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 21 columns, 17 constraints, 7 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 21 columns, 17 constraints, 7 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -70,7 +73,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `warehouse_id_internal_id` | `warehouse.warehouses` | `fk_warehouse_bins_warehouse_id_warehouses_numeric` |
 | `zone_id_internal_id` | `warehouse.zones` | `fk_warehouse_bins_zone_id_zones_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -92,7 +95,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_warehouse_bins_id` | UNIQUE | `UNIQUE (id)` |
 | `warehouse_bin` | UNIQUE | `UNIQUE (warehouse_id, code)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -104,7 +107,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_warehouse_bins_id` | `CREATE UNIQUE INDEX uq_warehouse_bins_id ON warehouse.bins USING btree (id)` |
 | `warehouse_bin` | `CREATE UNIQUE INDEX warehouse_bin ON warehouse.bins USING btree (warehouse_id, code)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -115,4 +118,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

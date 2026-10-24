@@ -2,9 +2,13 @@
 
 ## Evidence and precedence
 
-The `04-Database/Tables/` catalog is the **primary available database reference** for this API design. It documents all 266 tables, including field types, nullability, defaults, primary keys, checks, unique constraints, foreign keys, indexes, and triggers. The deployment migration folder named by the database evidence manifest is absent from this workspace; the adjacent `heathcare_db/` folder did not match that manifest. Therefore this document uses the checked-in table pages and module map, while deployment-source and runtime verification remain outstanding.
+The `04-Database/Tables/` catalog is the **primary available database reference** for this API design. It documents all 266 tables, including field types, nullability, defaults, primary keys, checks, unique constraints, foreign keys, indexes, and triggers. The deployment migration folder named by the database evidence manifest is absent from this workspace; the adjacent `heathcare_db/` folder did not match that manifest.
 
-`04-Database/Module-Mapping.md` identifies candidate schema/module relationships and explicitly does not grant write ownership. `03-Modules/*/LLD.md` and `07-Engineering/State-and-Recovery-Contracts.md` define proposed command ownership and boundaries. Relevant `06-Workflows/` pages establish cross-module ordering. API DTO fields remain **proposed** until the owning module approves the mapping and runtime grants.
+Therefore this document uses the checked-in table pages and module map, while deployment-source and runtime verification remain outstanding.
+
+`04-Database/Module-Mapping.md` identifies candidate schema/module relationships and explicitly does not grant write ownership. `03-Modules/*/LLD.md` and `07-Engineering/State-and-Recovery-Contracts.md` define proposed command ownership and boundaries. Relevant `06-Workflows/` pages establish cross-module ordering.
+
+API DTO fields remain **proposed** until the owning module approves the mapping and runtime grants.
 
 ## DTO mapping rules
 
@@ -20,7 +24,7 @@ The `04-Database/Tables/` catalog is the **primary available database reference*
 The table links below lead to the complete checked-in field/type/nullability/constraint definitions. “Candidate” means the operation may read or write through the owning module; it does not claim an implemented query or grant.
 
 | API references | Proposed responsibility | Relevant documented tables |
-|---|---|---|
+| --- | --- | --- |
 | API-001–002 | Customer OTP challenge and session issuance | [identity.otp_challenges](../04-Database/Tables/identity/otp_challenges.md), [identity.users](../04-Database/Tables/identity/users.md), [identity.sessions](../04-Database/Tables/identity/sessions.md), [identity.login_attempts](../04-Database/Tables/identity/login_attempts.md) |
 | API-003–004 | Customer profile read/update | [customer.profiles](../04-Database/Tables/customer/profiles.md), [identity.users](../04-Database/Tables/identity/users.md) |
 | API-005–006, ACC-ROUTE-001–002 | Customer address list/create/update/delete | [customer.addresses](../04-Database/Tables/customer/addresses.md), [customer.profiles](../04-Database/Tables/customer/profiles.md), [commerce.checkouts](../04-Database/Tables/commerce/checkouts.md) |
@@ -67,7 +71,7 @@ The table links below lead to the complete checked-in field/type/nullability/con
 ## Field-level mappings for catalog read proposals
 
 | API | Public DTO field | Documented database mapping | Type/nullability and constraint | Boundary / unresolved behavior |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | API-010 | `categoryId`, `name`, `slug`, `parentCategoryId`, `level`, `displayOrder` | `catalog.categories.id`, `name`, `slug`, `parent_id`, `level`, `display_order` | UUID; varchar(255); nullable parent UUID; nonnegative smallint/integer | Public projection omits internal_id, metadata and actor fields; root/active publication filter needs owner confirmation |
 | API-011/013 | `productId`, `name`, `displayName`, `categoryId`, `commerceClass`, `prescriptionRequired`, `packSizeDisplay`, `strengthDisplay` | `catalog.products.id`, `name`, `display_name`, `category_id`, `commerce_class`, `prescription_required`, `pack_size_display`, `strength_display` | UUID; name/display name varchar(255); nullable class in P/M/O; nullable display strings varchar(128) | Only published safe fields; class approval and brand join/filter rules remain D-024 review |
 | API-011/012 | `brandName` | `catalog.products.brand_id` → `catalog.brands.id/name` | Nullable public UUID relationship; brand name varchar(255) non-null | Derived join projection; logo_file_id and organization ownership are not returned |
@@ -80,7 +84,7 @@ The table links below lead to the complete checked-in field/type/nullability/con
 ## Field-level mappings for critical operation schemas
 
 | API | Public DTO field | Documented database mapping | Type/nullability and constraint | Public-boundary decision |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | API-015 | `fileId` | `platform.file_objects.id` and `platform.file_upload_sessions.file_object_id` | Public UUID; upload-session ownership, expiry, status and scan evidence constrain use | Client submits only the public completed upload object ID; no import-job persistence table/status route is present |
 | API-015 | `importId`, `status` | No documented import table; proposed API-only UUID and `queued` state | API-only accepted-command projection | Cannot promise polling/completion or durable retry until D-024 selects a persisted import job/status resource |
 | API-016 | `commerceClass`, `expectedRowVersion` | `catalog.products.commerce_class`, `row_version` | Class nullable column with P/M/O check; positive bigint version | Server derives `prescription_required`; actor/time are server-generated; class update and history write require owner transaction approval |
@@ -111,4 +115,6 @@ The table links below lead to the complete checked-in field/type/nullability/con
 
 ## Readiness and review
 
-The exact field/type/nullability/constraint inventory remains in the linked table pages. Before implementation, each operation owner must replace candidate read/write mappings with approved table/column write sets, verify module grants/RLS, and bind those writes to failure/replay tests. The database docs are stronger evidence than the earlier API placeholder text; they still do not prove a Pharmville endpoint exists or that a proposed DTO is approved.
+The exact field/type/nullability/constraint inventory remains in the linked table pages. Before implementation, each operation owner must replace candidate read/write mappings with approved table/column write sets, verify module grants/RLS, and bind those writes to failure/replay tests.
+
+The database docs are stronger evidence than the earlier API placeholder text; they still do not prove a Pharmville endpoint exists or that a proposed DTO is approved.

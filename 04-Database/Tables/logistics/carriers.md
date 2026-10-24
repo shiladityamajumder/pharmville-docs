@@ -1,4 +1,4 @@
-# logistics.carriers
+# `logistics.carriers`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -30,6 +30,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the carriers business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -37,17 +38,19 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_logistics_carriers_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_logistics_carriers_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_logistics_carriers_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_logistics_carriers_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_logistics_carriers_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_logistics_carriers_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
 
 **Referenced by 10 FK constraints** (sample): `logistics.carrier_accounts`, `logistics.serviceability_rules`, `logistics.shipments`, `logistics.shipment_events`, `logistics.reverse_shipments`, `logistics.carrier_accounts`, `logistics.reverse_shipments`, `logistics.serviceability_rules`, `logistics.shipment_events`, `logistics.shipments`.
 
-## logistics.carriers — exact structural contracts
+## `logistics.carriers` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 18 columns, 7 constraints, 3 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 18 columns, 7 constraints, 3 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -55,7 +58,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `deleted_by` | `identity.users` | `fk_logistics_carriers_deleted_by_users` |
 | `updated_by` | `identity.users` | `fk_logistics_carriers_updated_by_users` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -67,7 +70,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_logistics_carriers` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_logistics_carriers_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -75,7 +78,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_logistics_carrier_code_active` | `CREATE UNIQUE INDEX uq_logistics_carrier_code_active ON logistics.carriers USING btree (code) WHERE is_deleted = false` |
 | `uq_logistics_carriers_id` | `CREATE UNIQUE INDEX uq_logistics_carriers_id ON logistics.carriers USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -86,4 +89,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

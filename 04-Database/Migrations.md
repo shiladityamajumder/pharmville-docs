@@ -2,11 +2,13 @@
 
 ## Supplied database reference
 
-The user supplied [healthcare_db/](../healthcare_db/README.md) inside this documentation repository as the exact database reference. Its README identifies `postgresql/migrations/` as the deployment source of truth and freezes historical Alembic execution.
+The user supplied `healthcare_db/` inside this documentation repository as the exact database reference. Its README identifies `postgresql/migrations/` as the deployment source of truth and freezes historical Alembic execution.
 
 The supplied folder contains **30 versioned SQL migrations, V0001 through V0030**, plus included fragments: **103 SQL files in total**. These files are retained as the database’s history. The documentation now follows this supplied source; the previous claim that V0030 had been removed is retired.
 
-The supplied folder has no standalone Git metadata. Its identity is recorded using SHA-256 checksums in [Database-Evidence.json](../09-References/Database-Evidence.json), covering every migration/fragment, the final table register, supporting model/schema sources and the recorded acceptance report. The earlier sibling checkout revision is retained only as historical provenance; the documentation repository’s Git HEAD must not be mistaken for a database revision.
+The supplied folder has no standalone Git metadata. Its identity is recorded using SHA-256 checksums in [Database-Evidence.json](../09-References/Database-Evidence.json), covering every migration/fragment, the final table register, supporting model/schema sources and the recorded acceptance report.
+
+The earlier sibling checkout revision is retained only as historical provenance; the documentation repository’s Git HEAD must not be mistaken for a database revision.
 
 ## Verification performed
 
@@ -19,7 +21,7 @@ Source selection is resolved for this documentation. D-015 retains the separate 
 The supplied `FINAL_DATABASE_ACCEPTANCE_REPORT.md` records isolated PostgreSQL 18 validation on **22 October 2026** for this migration history:
 
 | Recorded object | Count |
-|---|---:|
+| --- | ---: |
 | Schemas | 24 |
 | Tables | 266 |
 | Columns | 4,438 |

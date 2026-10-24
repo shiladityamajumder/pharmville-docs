@@ -59,8 +59,12 @@ Related Runbook: Unknown Payment/Stock and Backup and Recovery.
 
 ## Runbook — payment or stock truth is unknown
 
-**Payment:** A timeout, browser success screen or duplicated callback is not money truth. Query/verify Cashfree using the provider's approved signed/authorized adapter, correlate `payment_intents`, `payment_attempts`, `payment_webhooks` and `payment_transactions`, dedupe provider IDs and reconcile settlements. Do not initiate another charge automatically; leave order pending while operations resolve. Refund only after approved accounting policy and idempotency guard.
+**Payment:** A timeout, browser success screen or duplicated callback is not money truth. Query/verify Cashfree using the provider's approved signed/authorized adapter, correlate `payment_intents`, `payment_attempts`, `payment_webhooks` and `payment_transactions`, dedupe provider IDs and reconcile settlements.
 
-**Stock:** When Techsmith observation is stale or a lot/site/license is ineligible, block new holds and picks. Reconcile exact SKU/location/lot, stock ledger, shelf-life and accepted order revision with authorized store staff. Never fulfill from cached product page availability. On conflict, release or compensate old hold atomically and present customer consent path if the quote changes.
+Do not initiate another charge automatically; leave order pending while operations resolve. Refund only after approved accounting policy and idempotency guard.
+
+**Stock:** When Techsmith observation is stale or a lot/site/license is ineligible, block new holds and picks. Reconcile exact SKU/location/lot, stock ledger, shelf-life and accepted order revision with authorized store staff. Never fulfill from cached product page availability.
+
+On conflict, release or compensate old hold atomically and present customer consent path if the quote changes.
 
 Record who approved the resolution and customer communication. A safe system may be temporarily unavailable; it must not silently dispense, charge or deliver based on guessed facts.

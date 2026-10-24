@@ -1,4 +1,4 @@
-# procurement.supplier_invoices
+# `procurement.supplier_invoices`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -31,6 +31,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the supplier invoices business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Store_Operations, Warehouse. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -38,22 +39,24 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_procurement_supplier_invoices_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_procurement_supplier_invoices_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `document_file_id` → `platform.file_objects(id)` via `fk_procurement_supplier_invoices_document_file_id_file_objects`; FOREIGN KEY (document_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL
-- `purchase_order_id` → `procurement.purchase_orders(id)` via `fk_procurement_supplier_invoices_purchase_order_id_purc_9c6d`; FOREIGN KEY (purchase_order_id) REFERENCES procurement.purchase_orders(id) ON DELETE SET NULL
-- `supplier_id` → `procurement.suppliers(id)` via `fk_procurement_supplier_invoices_supplier_id_suppliers`; FOREIGN KEY (supplier_id) REFERENCES procurement.suppliers(id) ON DELETE RESTRICT
-- `document_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_procurement_supplier_invoices_document_file_id_file__3eb3`; FOREIGN KEY (document_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL
-- `purchase_order_id_internal_id` → `procurement.purchase_orders(internal_id)` via `fk_procurement_supplier_invoices_purchase_order_id_purc_1999`; FOREIGN KEY (purchase_order_id_internal_id) REFERENCES procurement.purchase_orders(internal_id) ON DELETE SET NULL
-- `supplier_id_internal_id` → `procurement.suppliers(internal_id)` via `fk_procurement_supplier_invoices_supplier_id_suppliers_numeric`; FOREIGN KEY (supplier_id_internal_id) REFERENCES procurement.suppliers(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_procurement_supplier_invoices_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_procurement_supplier_invoices_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `document_file_id` → `platform.file_objects(id)` via `fk_procurement_supplier_invoices_document_file_id_file_objects`; `FOREIGN KEY (document_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL`
+- `purchase_order_id` → `procurement.purchase_orders(id)` via `fk_procurement_supplier_invoices_purchase_order_id_purc_9c6d`; `FOREIGN KEY (purchase_order_id) REFERENCES procurement.purchase_orders(id) ON DELETE SET NULL`
+- `supplier_id` → `procurement.suppliers(id)` via `fk_procurement_supplier_invoices_supplier_id_suppliers`; `FOREIGN KEY (supplier_id) REFERENCES procurement.suppliers(id) ON DELETE RESTRICT`
+- `document_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_procurement_supplier_invoices_document_file_id_file__3eb3`; `FOREIGN KEY (document_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL`
+- `purchase_order_id_internal_id` → `procurement.purchase_orders(internal_id)` via `fk_procurement_supplier_invoices_purchase_order_id_purc_1999`; `FOREIGN KEY (purchase_order_id_internal_id) REFERENCES procurement.purchase_orders(internal_id) ON DELETE SET NULL`
+- `supplier_id_internal_id` → `procurement.suppliers(internal_id)` via `fk_procurement_supplier_invoices_supplier_id_suppliers_numeric`; `FOREIGN KEY (supplier_id_internal_id) REFERENCES procurement.suppliers(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 2 FK constraints** (sample): `procurement.goods_receipts`, `procurement.goods_receipts`.
 
-## procurement.supplier_invoices — exact structural contracts
+## `procurement.supplier_invoices` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 19 columns, 17 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 19 columns, 17 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -66,7 +69,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `purchase_order_id_internal_id` | `procurement.purchase_orders` | `fk_procurement_supplier_invoices_purchase_order_id_purc_1999` |
 | `supplier_id_internal_id` | `procurement.suppliers` | `fk_procurement_supplier_invoices_supplier_id_suppliers_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -88,7 +91,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `supplier_invoice_number` | UNIQUE | `UNIQUE (supplier_id, invoice_number)` |
 | `uq_procurement_supplier_invoices_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -98,7 +101,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `supplier_invoice_number` | `CREATE UNIQUE INDEX supplier_invoice_number ON procurement.supplier_invoices USING btree (supplier_id, invoice_number)` |
 | `uq_procurement_supplier_invoices_id` | `CREATE UNIQUE INDEX uq_procurement_supplier_invoices_id ON procurement.supplier_invoices USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -108,4 +111,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

@@ -1,4 +1,4 @@
-# diagnostics.lab_offerings
+# `diagnostics.lab_offerings`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -33,6 +33,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the lab offerings business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -40,23 +41,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_diagnostics_lab_offerings_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_diagnostics_lab_offerings_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_diagnostics_lab_offerings_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `lab_location_id` → `diagnostics.lab_locations(id)` via `fk_diagnostics_lab_offerings_lab_location_id_lab_locations`; FOREIGN KEY (lab_location_id) REFERENCES diagnostics.lab_locations(id) ON DELETE CASCADE
-- `test_package_id` → `diagnostics.test_packages(id)` via `fk_diagnostics_lab_offerings_test_package_id_test_packages`; FOREIGN KEY (test_package_id) REFERENCES diagnostics.test_packages(id) ON DELETE RESTRICT
-- `test_definition_id` → `diagnostics.test_definitions(id)` via `fk_diagnostics_lab_offerings_test_definition_id_test_de_1d4e`; FOREIGN KEY (test_definition_id) REFERENCES diagnostics.test_definitions(id) ON DELETE RESTRICT
-- `lab_location_id_internal_id` → `diagnostics.lab_locations(internal_id)` via `fk_diagnostics_lab_offerings_lab_location_id_lab_locati_de16`; FOREIGN KEY (lab_location_id_internal_id) REFERENCES diagnostics.lab_locations(internal_id) ON DELETE CASCADE
-- `test_definition_id_internal_id` → `diagnostics.test_definitions(internal_id)` via `fk_diagnostics_lab_offerings_test_definition_id_test_de_dfde`; FOREIGN KEY (test_definition_id_internal_id) REFERENCES diagnostics.test_definitions(internal_id) ON DELETE RESTRICT
-- `test_package_id_internal_id` → `diagnostics.test_packages(internal_id)` via `fk_diagnostics_lab_offerings_test_package_id_test_packa_6522`; FOREIGN KEY (test_package_id_internal_id) REFERENCES diagnostics.test_packages(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_diagnostics_lab_offerings_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_diagnostics_lab_offerings_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_diagnostics_lab_offerings_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `lab_location_id` → `diagnostics.lab_locations(id)` via `fk_diagnostics_lab_offerings_lab_location_id_lab_locations`; `FOREIGN KEY (lab_location_id) REFERENCES diagnostics.lab_locations(id) ON DELETE CASCADE`
+- `test_package_id` → `diagnostics.test_packages(id)` via `fk_diagnostics_lab_offerings_test_package_id_test_packages`; `FOREIGN KEY (test_package_id) REFERENCES diagnostics.test_packages(id) ON DELETE RESTRICT`
+- `test_definition_id` → `diagnostics.test_definitions(id)` via `fk_diagnostics_lab_offerings_test_definition_id_test_de_1d4e`; `FOREIGN KEY (test_definition_id) REFERENCES diagnostics.test_definitions(id) ON DELETE RESTRICT`
+- `lab_location_id_internal_id` → `diagnostics.lab_locations(internal_id)` via `fk_diagnostics_lab_offerings_lab_location_id_lab_locati_de16`; `FOREIGN KEY (lab_location_id_internal_id) REFERENCES diagnostics.lab_locations(internal_id) ON DELETE CASCADE`
+- `test_definition_id_internal_id` → `diagnostics.test_definitions(internal_id)` via `fk_diagnostics_lab_offerings_test_definition_id_test_de_dfde`; `FOREIGN KEY (test_definition_id_internal_id) REFERENCES diagnostics.test_definitions(internal_id) ON DELETE RESTRICT`
+- `test_package_id_internal_id` → `diagnostics.test_packages(internal_id)` via `fk_diagnostics_lab_offerings_test_package_id_test_packa_6522`; `FOREIGN KEY (test_package_id_internal_id) REFERENCES diagnostics.test_packages(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 2 FK constraints** (sample): `diagnostics.diagnostic_order_items`, `diagnostics.diagnostic_order_items`.
 
-## diagnostics.lab_offerings — exact structural contracts
+## `diagnostics.lab_offerings` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 21 columns, 19 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 21 columns, 19 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -70,7 +73,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `test_definition_id_internal_id` | `diagnostics.test_definitions` | `fk_diagnostics_lab_offerings_test_definition_id_test_de_dfde` |
 | `test_package_id_internal_id` | `diagnostics.test_packages` | `fk_diagnostics_lab_offerings_test_package_id_test_packa_6522` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -94,7 +97,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_diagnostics_lab_offerings` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_diagnostics_lab_offerings_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -103,7 +106,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_diagnostics_lab_offerings` | `CREATE UNIQUE INDEX pk_diagnostics_lab_offerings ON diagnostics.lab_offerings USING btree (internal_id)` |
 | `uq_diagnostics_lab_offerings_id` | `CREATE UNIQUE INDEX uq_diagnostics_lab_offerings_id ON diagnostics.lab_offerings USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -113,4 +116,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

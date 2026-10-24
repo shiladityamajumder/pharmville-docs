@@ -1,11 +1,13 @@
 # API error catalog
 
-The existing `healthcare-auth-service` codes are verified only for that service. For new Pharmville contracts, this catalog proposes those verified shared names where they fit the same HTTP/error semantics. D-024 must approve adoption before Pharmville implementation. Do not rename or translate a code already exposed by a deployed consumer without a versioned compatibility plan. Pharmville-specific codes below are proposals, not implemented behavior.
+The existing `healthcare-auth-service` codes are verified only for that service. For new Pharmville contracts, this catalog proposes those verified shared names where they fit the same HTTP/error semantics. D-024 must approve adoption before Pharmville implementation.
+
+Do not rename or translate a code already exposed by a deployed consumer without a versioned compatibility plan. Pharmville-specific codes below are proposals, not implemented behavior.
 
 ## Shared transport and infrastructure errors
 
 | HTTP | Canonical/reference code | Category and trigger | `details` shape | Retry and client action |
-|---:|---|---|---|---|
+| ---: | --- | --- | --- | --- |
 | 400 | `BAD_REQUEST` | Malformed transport input or HTTP request rejected by framework | null or safe object | Correct the request; unchanged retry is not useful |
 | 400 | `INVALID_REQUEST_ID`, `INVALID_CORRELATION_ID` | Reference middleware received a malformed UUID header | null | Send valid UUID or omit and let the service generate it |
 | 401 | `AUTHENTICATION_REQUIRED` | Credential missing, invalid, expired, or revoked | null | Reauthenticate; clear unusable credential |
@@ -33,7 +35,7 @@ The reference handler also maps common HTTP exceptions to `BAD_REQUEST`, `AUTHEN
 These codes describe distinct business failures and remain proposed pending each owning module’s approval. Prefer the canonical shared code when the semantics match; add a domain code only when clients need a distinct recovery action.
 
 | HTTP | Proposed code | Category / triggering condition | `details` | Retry and client recovery |
-|---:|---|---|---|---|
+| ---: | --- | --- | --- | --- |
 | 404 | `RESOURCE_NOT_FOUND` | Resource absent or hidden by object-level authorization | null | Refresh authorized list |
 | 409 | `STALE_VERSION` | Aggregate or row version precondition is stale | `{currentVersion}` only if safe and approved | Reload, reconcile changes, resubmit as a new intent |
 | 409 | `IDEMPOTENCY_KEY_CONFLICT` | Same key reused with a different canonical request fingerprint | null | Do not reuse key for different command |
@@ -49,7 +51,7 @@ These codes describe distinct business failures and remain proposed pending each
 ## Compatibility mappings to the authentication service
 
 | Earlier Pharmville draft name | Verified shared name / policy | Compatibility note |
-|---|---|---|
+| --- | --- | --- |
 | `ACCESS_DENIED` | `PERMISSION_DENIED` | Proposed alias removal for new Pharmville v1 contract only; retain/map old code if any client consumed it |
 | `MALFORMED_REQUEST` | `BAD_REQUEST` | Use `REQUEST_VALIDATION_ERROR` for schema-validation details |
 | `INVALID_CREDENTIALS` | `AUTH_INVALID_CREDENTIALS` where the auth module uses that verified auth exception | Do not reveal which identifier or proof failed |

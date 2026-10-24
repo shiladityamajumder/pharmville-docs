@@ -4,7 +4,9 @@
 
 **Verified source:** the user-supplied database folder (`healthcare_db/README.md` inside this repository) contains PostgreSQL SQL migrations plus Python/SQLAlchemy verification tools. It does not run a NestJS HTTP application. Build the web/API repos only after team approval of their structure.
 
-**Database safe setup (repository-described, not run here):** use a dedicated empty PostgreSQL 15+ local database and direct `DATABASE_URL`, install `requirements.txt` for Python tooling, inspect `postgresql/docs/RELEASE_RUNBOOK.md`, then `postgresql/db status`, `postgresql/db migrate`, and `postgresql/db verify` (or the Windows `.ps1` equivalents). Do not run these against an existing Alembic-managed production database without a separately approved ledger adoption plan. The DB repository does not provision PostgreSQL.
+**Database safe setup (repository-described, not run here):** use a dedicated empty PostgreSQL 15+ local database and direct `DATABASE_URL`, install `requirements.txt` for Python tooling, inspect `postgresql/docs/RELEASE_RUNBOOK.md`, then `postgresql/db status`, `postgresql/db migrate`, and `postgresql/db verify` (or the Windows `.ps1` equivalents).
+
+Do not run these against an existing Alembic-managed production database without a separately approved ledger adoption plan. The DB repository does not provision PostgreSQL.
 
 **Application build (proposed):** separate Next.js customer and admin web apps, NestJS modular API, optional worker, and rider Android technology awaiting decision. Add typed env validation, isolated sandbox provider credentials, no secrets in Git, migration owner separate from runtime users.
 
@@ -22,7 +24,9 @@ Make unknown clinical/stock/payment policy fail closed, not default to a conveni
 
 Use separately controlled dev, staging and production deployments. The master checklist selects AWS ap-south-1, a scaled-down staging topology and PostgreSQL RDS for production. The supplied repository's latest checks ran on isolated local PostgreSQL 18, not a shared production DB; hosted PG15/18 CI and production promotion are not confirmed by the evidence.
 
-Development uses fake/synthetic patients, product/stock/licensing and provider credentials; never copy real Rx or legal identification. Staging reproduces runtime role/ACL/RLS, object-storage privacy, versioned SQL migrations and Cashfree/MSG91 provider sandbox behavior. Production needs owner-managed credentials, signed policies, backout/forward-fix and an approved restore plan.
+Development uses fake/synthetic patients, product/stock/licensing and provider credentials; never copy real Rx or legal identification. Staging reproduces runtime role/ACL/RLS, object-storage privacy, versioned SQL migrations and Cashfree/MSG91 provider sandbox behavior.
+
+Production needs owner-managed credentials, signed policies, backout/forward-fix and an approved restore plan.
 
 Separate network/data permissions for API, worker, migration owner, reporting capability and encrypted file storage. Document DNS/certificate choice, environment secrets and actual service resource sizes after load validation. See Infrastructure and Config.
 
@@ -30,7 +34,9 @@ Separate network/data permissions for API, worker, migration owner, reporting ca
 
 Chosen direction: AWS Mumbai with containerized Next.js/NestJS services behind controlled ingress (Nginx selected), RDS PostgreSQL, private S3, Redis/ElastiCache where practical, GitHub Actions deployment and CloudWatch observability. The checklist gives initial instance families, but traffic/load evidence has not validated sizing or redundancy.
 
-Run API and background BullMQ workers with separate IAM and connection pools. The SQL migration owner runs only an explicit release job; runtime uses restricted DB capability credentials. Protect Rx uploads, signed downloads, logs, SES/MSG91/Cashfree keys and stored location samples. Apply secure service ingress, HTTPS/TLS, health probes, rate limits, controlled network egress and cost budgets.
+Run API and background BullMQ workers with separate IAM and connection pools. The SQL migration owner runs only an explicit release job; runtime uses restricted DB capability credentials. Protect Rx uploads, signed downloads, logs, SES/MSG91/Cashfree keys and stored location samples.
+
+Apply secure service ingress, HTTPS/TLS, health probes, rate limits, controlled network egress and cost budgets.
 
 Availability zones, backups/PITR, WAF, TLS certificate supplier, scaling rules, actual RDS/PgBouncer need deployment review. See Master HLD.
 
@@ -63,7 +69,9 @@ Record timestamp, RPO/RTO observed, loss window, approved business compensation 
 
 ## Structured logs and data minimization
 
-Include request ID, service/module, safe actor category, transaction ID, stage transition, state revision, provider correlation ID, duration and error classification. For Cashfree webhooks log signature-check result and opaque event ID but not payment details or raw request. For pharmacist and private file access log object reference and purpose but never Rx image, diagnosis or link token.
+Include request ID, service/module, safe actor category, transaction ID, stage transition, state revision, provider correlation ID, duration and error classification. For Cashfree webhooks log signature-check result and opaque event ID but not payment details or raw request.
+
+For pharmacist and private file access log object reference and purpose but never Rx image, diagnosis or link token.
 
 CloudWatch is selected in the checklist, with Sentry and OpenTelemetry/New Relic options. Export and warehouse activity can become sensitive at large volume; apply per-role dashboards and retention approved by security/legal. The checklist describes operational logging retention 14–30 days as a decision note; confirm exact policies per log class.
 

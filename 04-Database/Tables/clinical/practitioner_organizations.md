@@ -1,4 +1,4 @@
-# clinical.practitioner_organizations
+# `clinical.practitioner_organizations`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -27,6 +27,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the practitioner organizations business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -34,20 +35,22 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_clinical_practitioner_organizations_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_clinical_practitioner_organizations_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `location_id` → `organization.locations(id)` via `fk_clinical_practitioner_organizations_location_id_locations`; FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE SET NULL
-- `organization_id` → `organization.organizations(id)` via `fk_clinical_practitioner_organizations_organization_id__a525`; FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE
-- `practitioner_profile_id` → `clinical.practitioner_profiles(id)` via `fk_clinical_practitioner_organizations_practitioner_pro_46c4`; FOREIGN KEY (practitioner_profile_id) REFERENCES clinical.practitioner_profiles(id) ON DELETE CASCADE
-- `location_id_internal_id` → `organization.locations(internal_id)` via `fk_clinical_practitioner_organizations_location_id_loca_a76c`; FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE SET NULL
-- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_clinical_practitioner_organizations_organization_id__4223`; FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE
-- `practitioner_profile_id_internal_id` → `clinical.practitioner_profiles(internal_id)` via `fk_clinical_practitioner_organizations_practitioner_pro_6ec9`; FOREIGN KEY (practitioner_profile_id_internal_id) REFERENCES clinical.practitioner_profiles(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_clinical_practitioner_organizations_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_clinical_practitioner_organizations_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `location_id` → `organization.locations(id)` via `fk_clinical_practitioner_organizations_location_id_locations`; `FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE SET NULL`
+- `organization_id` → `organization.organizations(id)` via `fk_clinical_practitioner_organizations_organization_id__a525`; `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE`
+- `practitioner_profile_id` → `clinical.practitioner_profiles(id)` via `fk_clinical_practitioner_organizations_practitioner_pro_46c4`; `FOREIGN KEY (practitioner_profile_id) REFERENCES clinical.practitioner_profiles(id) ON DELETE CASCADE`
+- `location_id_internal_id` → `organization.locations(internal_id)` via `fk_clinical_practitioner_organizations_location_id_loca_a76c`; `FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE SET NULL`
+- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_clinical_practitioner_organizations_organization_id__4223`; `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE`
+- `practitioner_profile_id_internal_id` → `clinical.practitioner_profiles(internal_id)` via `fk_clinical_practitioner_organizations_practitioner_pro_6ec9`; `FOREIGN KEY (practitioner_profile_id_internal_id) REFERENCES clinical.practitioner_profiles(internal_id) ON DELETE CASCADE`
 
-## clinical.practitioner_organizations — exact structural contracts
+## `clinical.practitioner_organizations` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 15 columns, 15 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 15 columns, 15 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -60,7 +63,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `organization_id_internal_id` | `organization.organizations` | `fk_clinical_practitioner_organizations_organization_id__4223` |
 | `practitioner_profile_id_internal_id` | `clinical.practitioner_profiles` | `fk_clinical_practitioner_organizations_practitioner_pro_6ec9` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -80,7 +83,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `practitioner_org_location` | UNIQUE | `UNIQUE (practitioner_profile_id, organization_id, location_id)` |
 | `uq_clinical_practitioner_organizations_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -89,7 +92,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `practitioner_org_location` | `CREATE UNIQUE INDEX practitioner_org_location ON clinical.practitioner_organizations USING btree (practitioner_profile_id, organization_id, location_id)` |
 | `uq_clinical_practitioner_organizations_id` | `CREATE UNIQUE INDEX uq_clinical_practitioner_organizations_id ON clinical.practitioner_organizations USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -99,4 +102,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

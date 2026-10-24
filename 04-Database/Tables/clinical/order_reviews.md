@@ -1,4 +1,4 @@
-# clinical.order_reviews
+# `clinical.order_reviews`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -34,6 +34,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the order reviews business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -41,31 +42,33 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `assigned_to_user_id` → `identity.users(id)` via `fk_clinical_order_reviews_assigned_to_user_id_users`; FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `reviewed_by_user_id` → `identity.users(id)` via `fk_clinical_order_reviews_reviewed_by_user_id_users`; FOREIGN KEY (reviewed_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `reason_code_id, reason_code` → `clinical.review_reason_codes(id, code)` via `fk_clinical_order_reviews_controlled_reason`; FOREIGN KEY (reason_code_id, reason_code) REFERENCES clinical.review_reason_codes(id, code) ON DELETE RESTRICT
-- `order_id` → `commerce.orders(id)` via `fk_clinical_order_reviews_order_id_orders`; FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT
-- `prescription_document_id, prescription_id` → `clinical.prescription_documents(id, prescription_id)` via `fk_clinical_order_reviews_document_rx`; FOREIGN KEY (prescription_document_id, prescription_id) REFERENCES clinical.prescription_documents(id, prescription_id) ON DELETE RESTRICT
-- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_clinical_order_reviews_patient_profile_id_patient_profiles`; FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT
-- `prescription_id, patient_profile_id` → `clinical.prescriptions(id, patient_profile_id)` via `fk_clinical_order_reviews_rx_patient`; FOREIGN KEY (prescription_id, patient_profile_id) REFERENCES clinical.prescriptions(id, patient_profile_id) ON DELETE RESTRICT
-- `prescription_id` → `clinical.prescriptions(id)` via `fk_clinical_order_reviews_prescription_id_prescriptions`; FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE RESTRICT
-- `order_id, patient_profile_id` → `commerce.orders(id, patient_profile_id)` via `fk_clinical_order_reviews_order_patient`; FOREIGN KEY (order_id, patient_profile_id) REFERENCES commerce.orders(id, patient_profile_id) ON DELETE RESTRICT
-- `prescription_document_id` → `clinical.prescription_documents(id)` via `fk_clinical_order_reviews_prescription_document_id_pres_1fab`; FOREIGN KEY (prescription_document_id) REFERENCES clinical.prescription_documents(id) ON DELETE RESTRICT
-- `prescription_document_id_internal_id, prescription_id_internal_id` → `clinical.prescription_documents(internal_id, prescription_id_internal_id)` via `fk_clinical_order_reviews_document_rx_numeric`; FOREIGN KEY (prescription_document_id_internal_id, prescription_id_internal_id) REFERENCES clinical.prescription_documents(internal_id, prescription_id_internal_id) ON DELETE RESTRICT
-- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_clinical_order_reviews_order_id_orders_numeric`; FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT
-- `order_id_internal_id, patient_profile_id_internal_id` → `commerce.orders(internal_id, patient_profile_id_internal_id)` via `fk_clinical_order_reviews_order_patient_numeric`; FOREIGN KEY (order_id_internal_id, patient_profile_id_internal_id) REFERENCES commerce.orders(internal_id, patient_profile_id_internal_id) ON DELETE RESTRICT
-- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_clinical_order_reviews_patient_profile_id_patient_pr_b642`; FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT
-- `prescription_document_id_internal_id` → `clinical.prescription_documents(internal_id)` via `fk_clinical_order_reviews_prescription_document_id_pres_f5a7`; FOREIGN KEY (prescription_document_id_internal_id) REFERENCES clinical.prescription_documents(internal_id) ON DELETE RESTRICT
-- `prescription_id_internal_id` → `clinical.prescriptions(internal_id)` via `fk_clinical_order_reviews_prescription_id_prescriptions_numeric`; FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE RESTRICT
-- `prescription_id_internal_id, patient_profile_id_internal_id` → `clinical.prescriptions(internal_id, patient_profile_id_internal_id)` via `fk_clinical_order_reviews_rx_patient_numeric`; FOREIGN KEY (prescription_id_internal_id, patient_profile_id_internal_id) REFERENCES clinical.prescriptions(internal_id, patient_profile_id_internal_id) ON DELETE RESTRICT
+- `assigned_to_user_id` → `identity.users(id)` via `fk_clinical_order_reviews_assigned_to_user_id_users`; `FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `reviewed_by_user_id` → `identity.users(id)` via `fk_clinical_order_reviews_reviewed_by_user_id_users`; `FOREIGN KEY (reviewed_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `reason_code_id, reason_code` → `clinical.review_reason_codes(id, code)` via `fk_clinical_order_reviews_controlled_reason`; `FOREIGN KEY (reason_code_id, reason_code) REFERENCES clinical.review_reason_codes(id, code) ON DELETE RESTRICT`
+- `order_id` → `commerce.orders(id)` via `fk_clinical_order_reviews_order_id_orders`; `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT`
+- `prescription_document_id, prescription_id` → `clinical.prescription_documents(id, prescription_id)` via `fk_clinical_order_reviews_document_rx`; `FOREIGN KEY (prescription_document_id, prescription_id) REFERENCES clinical.prescription_documents(id, prescription_id) ON DELETE RESTRICT`
+- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_clinical_order_reviews_patient_profile_id_patient_profiles`; `FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT`
+- `prescription_id, patient_profile_id` → `clinical.prescriptions(id, patient_profile_id)` via `fk_clinical_order_reviews_rx_patient`; `FOREIGN KEY (prescription_id, patient_profile_id) REFERENCES clinical.prescriptions(id, patient_profile_id) ON DELETE RESTRICT`
+- `prescription_id` → `clinical.prescriptions(id)` via `fk_clinical_order_reviews_prescription_id_prescriptions`; `FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE RESTRICT`
+- `order_id, patient_profile_id` → `commerce.orders(id, patient_profile_id)` via `fk_clinical_order_reviews_order_patient`; `FOREIGN KEY (order_id, patient_profile_id) REFERENCES commerce.orders(id, patient_profile_id) ON DELETE RESTRICT`
+- `prescription_document_id` → `clinical.prescription_documents(id)` via `fk_clinical_order_reviews_prescription_document_id_pres_1fab`; `FOREIGN KEY (prescription_document_id) REFERENCES clinical.prescription_documents(id) ON DELETE RESTRICT`
+- `prescription_document_id_internal_id, prescription_id_internal_id` → `clinical.prescription_documents(internal_id, prescription_id_internal_id)` via `fk_clinical_order_reviews_document_rx_numeric`; `FOREIGN KEY (prescription_document_id_internal_id, prescription_id_internal_id) REFERENCES clinical.prescription_documents(internal_id, prescription_id_internal_id) ON DELETE RESTRICT`
+- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_clinical_order_reviews_order_id_orders_numeric`; `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT`
+- `order_id_internal_id, patient_profile_id_internal_id` → `commerce.orders(internal_id, patient_profile_id_internal_id)` via `fk_clinical_order_reviews_order_patient_numeric`; `FOREIGN KEY (order_id_internal_id, patient_profile_id_internal_id) REFERENCES commerce.orders(internal_id, patient_profile_id_internal_id) ON DELETE RESTRICT`
+- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_clinical_order_reviews_patient_profile_id_patient_pr_b642`; `FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT`
+- `prescription_document_id_internal_id` → `clinical.prescription_documents(internal_id)` via `fk_clinical_order_reviews_prescription_document_id_pres_f5a7`; `FOREIGN KEY (prescription_document_id_internal_id) REFERENCES clinical.prescription_documents(internal_id) ON DELETE RESTRICT`
+- `prescription_id_internal_id` → `clinical.prescriptions(internal_id)` via `fk_clinical_order_reviews_prescription_id_prescriptions_numeric`; `FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE RESTRICT`
+- `prescription_id_internal_id, patient_profile_id_internal_id` → `clinical.prescriptions(internal_id, patient_profile_id_internal_id)` via `fk_clinical_order_reviews_rx_patient_numeric`; `FOREIGN KEY (prescription_id_internal_id, patient_profile_id_internal_id) REFERENCES clinical.prescriptions(internal_id, patient_profile_id_internal_id) ON DELETE RESTRICT`
 
 **Referenced by 2 FK constraints** (sample): `clinical.order_review_items`, `clinical.order_review_items`.
 
-## clinical.order_reviews — exact structural contracts
+## `clinical.order_reviews` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 22 columns, 30 constraints, 9 indexes, 5 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 22 columns, 30 constraints, 9 indexes, 5 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -87,7 +90,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `prescription_id_internal_id` | `clinical.prescriptions` | `fk_clinical_order_reviews_prescription_id_prescriptions_numeric` |
 | `prescription_id_internal_id`, `patient_profile_id_internal_id` | `clinical.prescriptions` | `fk_clinical_order_reviews_rx_patient_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -122,7 +125,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_clinical_order_reviews_version` | UNIQUE | `UNIQUE (order_id, review_version)` |
 | `uq_numeric_clinical_order_reviews_internal_id_order_id__d676` | UNIQUE | `UNIQUE (internal_id, order_id_internal_id, prescription_id_internal_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -136,7 +139,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_clinical_order_reviews_version` | `CREATE UNIQUE INDEX uq_clinical_order_reviews_version ON clinical.order_reviews USING btree (order_id, review_version)` |
 | `uq_numeric_clinical_order_reviews_internal_id_order_id__d676` | `CREATE UNIQUE INDEX uq_numeric_clinical_order_reviews_internal_id_order_id__d676 ON clinical.order_reviews USING btree (internal_id, order_id_internal_id, prescription_id_internal_id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -148,4 +151,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

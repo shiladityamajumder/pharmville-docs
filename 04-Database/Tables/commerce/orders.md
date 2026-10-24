@@ -1,4 +1,4 @@
-# commerce.orders
+# `commerce.orders`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -44,6 +44,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the orders business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review, Finance_Payments, Reporting. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -51,23 +52,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_commerce_orders_user_id_users`; FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `created_by` → `identity.users(id)` via `fk_commerce_orders_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_commerce_orders_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_commerce_orders_patient_profile_id_patient_profiles`; FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT
-- `checkout_id` → `commerce.checkouts(id)` via `fk_commerce_orders_checkout_id_checkouts`; FOREIGN KEY (checkout_id) REFERENCES commerce.checkouts(id) ON DELETE RESTRICT
-- `current_revision_id, id` → `commerce.order_revisions(id, order_id)` via `fk_commerce_orders_revision_scope`; FOREIGN KEY (current_revision_id, id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT
-- `checkout_id_internal_id` → `commerce.checkouts(internal_id)` via `fk_commerce_orders_checkout_id_checkouts_numeric`; FOREIGN KEY (checkout_id_internal_id) REFERENCES commerce.checkouts(internal_id) ON DELETE RESTRICT
-- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_commerce_orders_patient_profile_id_patient_profiles_numeric`; FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT
-- `current_revision_id_internal_id, internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_commerce_orders_revision_scope_numeric`; FOREIGN KEY (current_revision_id_internal_id, internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT
+- `user_id` → `identity.users(id)` via `fk_commerce_orders_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `created_by` → `identity.users(id)` via `fk_commerce_orders_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_commerce_orders_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_commerce_orders_patient_profile_id_patient_profiles`; `FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT`
+- `checkout_id` → `commerce.checkouts(id)` via `fk_commerce_orders_checkout_id_checkouts`; `FOREIGN KEY (checkout_id) REFERENCES commerce.checkouts(id) ON DELETE RESTRICT`
+- `current_revision_id, id` → `commerce.order_revisions(id, order_id)` via `fk_commerce_orders_revision_scope`; `FOREIGN KEY (current_revision_id, id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT`
+- `checkout_id_internal_id` → `commerce.checkouts(internal_id)` via `fk_commerce_orders_checkout_id_checkouts_numeric`; `FOREIGN KEY (checkout_id_internal_id) REFERENCES commerce.checkouts(internal_id) ON DELETE RESTRICT`
+- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_commerce_orders_patient_profile_id_patient_profiles_numeric`; `FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT`
+- `current_revision_id_internal_id, internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_commerce_orders_revision_scope_numeric`; `FOREIGN KEY (current_revision_id_internal_id, internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT`
 
 **Referenced by 42 FK constraints** (sample): `commerce.order_groups`, `commerce.order_items`, `commerce.order_charges`, `commerce.order_discounts`, `commerce.order_status_history`, `commerce.cancellations`, `commerce.returns`, `finance.invoices`, `finance.settlement_items`, `fulfillment.fulfillment_orders`, `logistics.shipments`, `payment.payment_intents`.
 
-## commerce.orders — exact structural contracts
+## `commerce.orders` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 32 columns, 28 constraints, 11 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 32 columns, 28 constraints, 11 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -81,7 +84,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `patient_profile_id_internal_id` | `clinical.patient_profiles` | `fk_commerce_orders_patient_profile_id_patient_profiles_numeric` |
 | `current_revision_id_internal_id`, `internal_id` | `commerce.order_revisions` | `fk_commerce_orders_revision_scope_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -114,7 +117,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_numeric_commerce_orders_internal_id_user_id` | UNIQUE | `UNIQUE (internal_id, user_id)` |
 | `uq_scope_commerce_orders_user_id` | UNIQUE | `UNIQUE (id, user_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -130,7 +133,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_numeric_commerce_orders_internal_id_user_id` | `CREATE UNIQUE INDEX uq_numeric_commerce_orders_internal_id_user_id ON commerce.orders USING btree (internal_id, user_id)` |
 | `uq_scope_commerce_orders_user_id` | `CREATE UNIQUE INDEX uq_scope_commerce_orders_user_id ON commerce.orders USING btree (id, user_id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -141,4 +144,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

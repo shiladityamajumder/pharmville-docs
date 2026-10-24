@@ -1,16 +1,26 @@
 # Connected user flows
 
-The prototype opens at [Choose Experience](../index.html#/choose). [Mobile App](../index.html#/mobile), [Website](../index.html#/website) and [Complete Journeys](../index.html#/journeys) are distinct pages. Each platform has its own searchable screen selector. Journey progress follows the current route and shared mock data; required business actions remain explicit.
+The prototype opens at [Choose Experience](../index.html#/choose). [Mobile App](../index.html#/mobile), [Website](../index.html#/website) and [Complete Journeys](../index.html#/journeys) are distinct pages. Each platform has its own searchable screen selector.
 
-The Journeys page offers these guided tasks: **Create an account**, **Find and order a product**, **Order a prescription medicine**, **Pay for an order**, **Prepare an order at a store**, **Deliver an order**, **Request a return**, **Process a refund**, and **Receive stock at a warehouse**. At each journey start, keep the current data or load that journey’s prepared demo fixture. Replacing existing progress requires confirmation. Cross-role handoffs offer **Continue as [role]** in the journey itself, preserve the same record, and retain permission and business gates. Staff handoffs open Website; Rider handoffs open Mobile. Entering the destination URL does not grant its role.
+Journey progress follows the current route and shared mock data; required business actions remain explicit.
+
+The Journeys page offers these guided tasks: **Create an account**, **Find and order a product**, **Order a prescription medicine**, **Pay for an order**, **Prepare an order at a store**, **Deliver an order**, **Request a return**, **Process a refund**, and **Receive stock at a warehouse**.
+
+At each journey start, keep the current data or load that journey’s prepared demo fixture. Replacing existing progress requires confirmation. Cross-role handoffs offer **Continue as [role]** in the journey itself, preserve the same record, and retain permission and business gates.
+
+Staff handoffs open Website; Rider handoffs open Mobile. Entering the destination URL does not grant its role.
 
 All links below open the same local application and persistent fictional records. The first visit is a fresh shopping state with an empty cart and no order or payment. Prepared fixtures are visibly labelled as demo data; any prior completed action they contain is historical. Reset between independent demonstrations.
 
 ## Mobile and Website shopping demonstrations
 
-Choose the experience, select Search medicines, search for “wellness”, open the exact product and add it. Open Cart, continue through delivery address, patient confirmation and summary, then choose payment. Mobile has bottom navigation and stacked summaries; Website has header navigation and a side summary. Both experiences retain the same item, quantity, price and order reference when switching. Sign in and complete the profile if the next action requests them.
+Choose the experience, select Search medicines, search for “wellness”, open the exact product and add it. Open Cart, continue through delivery address, patient confirmation and summary, then choose payment. Mobile has bottom navigation and stacked summaries; Website has header navigation and a side summary.
 
-On Payment, expand **What if something goes wrong?** and choose **Payment completed but confirmation was lost**. The result shows the original pending payment. **Check payment status** reconciles the captured fictional result without another charge. **Payment is still pending** demonstrates an unknown result that stays pending after a check. To compare outcomes on fresh records, explicitly load a new checkout example and confirm replacement. Returning to normal retains actual operations. See [How to Run](How-to-Run.md) for exact URLs and a quick manual check.
+Both experiences retain the same item, quantity, price and order reference when switching. Sign in and complete the profile if the next action requests them.
+
+On Payment, expand **What if something goes wrong?** and choose **Payment completed but confirmation was lost**. The result shows the original pending payment. **Check payment status** reconciles the captured fictional result without another charge. **Payment is still pending** demonstrates an unknown result that stays pending after a check.
+
+To compare outcomes on fresh records, explicitly load a new checkout example and confirm replacement. Returning to normal retains actual operations. See [How to Run](How-to-Run.md) for exact URLs and a quick manual check.
 
 The task links in the detailed reference below retain legacy compatibility. Within an explicit experience, screen navigation preserves its URL prefix.
 
@@ -50,7 +60,9 @@ The task links in the detailed reference below retain legacy compatibility. With
 
 The rider records a fixed illustrative [failure reason](../index.html#/rider/failure). Dispatch chooses [reattempt, reschedule or return-to-store](../index.html#/delivery/failures), retaining custody, stock and actual cash separately. No automatic refund, stock credit or cash clearance is implied.
 
-Before packed, a paid customer can [request cancellation](../index.html#/customer/cancellation) and confirm the dialog. Finance separately [creates/approves/checks a refund intent](../index.html#/staff/refunds); the customer sees that state in [refund tracking](../index.html#/customer/refund). A delivered item can have an item/quantity-specific [return request](../index.html#/customer/return), which waits for policy/inspection rather than issuing money or saleable stock automatically.
+Before packed, a paid customer can [request cancellation](../index.html#/customer/cancellation) and confirm the dialog. Finance separately [creates/approves/checks a refund intent](../index.html#/staff/refunds); the customer sees that state in [refund tracking](../index.html#/customer/refund).
+
+A delivered item can have an item/quantity-specific [return request](../index.html#/customer/return), which waits for policy/inspection rather than issuing money or saleable stock automatically.
 
 ## Warehouse receipt and replenishment
 
@@ -67,4 +79,6 @@ For a completed COD demo order, [record actual cash handover](../index.html#/del
 
 [Invite fictional staff](../index.html#/staff/staff), inspect the [draft permission matrix](../index.html#/staff/permissions) and try the Permission denied scenario. A role proposal cannot grant its own privileges. [Password plus authenticator](../index.html#/access/login) demonstrates staff access; [revocation](../index.html#/access/sessions) blocks protected forms until another demo sign-in.
 
-Select a [report](../index.html#/staff/reports), filters and dates, generate results, sort them, prepare an export and download the local TSV. Access-revoked and failed-generation states block output. [Audit](../index.html#/staff/audit) filters/exports read-only events; historical mutation has no control. Notifications retry only their event, while [support](../index.html#/staff/support) routes exceptions to the responsible domain without setting paid or clinically approved.
+Select a [report](../index.html#/staff/reports), filters and dates, generate results, sort them, prepare an export and download the local TSV. Access-revoked and failed-generation states block output. [Audit](../index.html#/staff/audit) filters/exports read-only events; historical mutation has no control.
+
+Notifications retry only their event, while [support](../index.html#/staff/support) routes exceptions to the responsible domain without setting paid or clinically approved.

@@ -12,7 +12,7 @@ This ledger tracks documentation quality separately from implementation status. 
 - Verified Pharmville implementations: **0/107**. Test scenarios are design coverage unless an execution record is linked.
 
 | API ID | Module | Method | Endpoint | Request DTO / example | Success data / example | Query | Authorization | Errors | Database mapping | Effects / boundaries | Concurrency / idempotency | Contract tests | OpenAPI synchronization | Readiness |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | API-001 | Customer Accounts | `POST` | `/v1/auth/customer/otp/request` | Typed proposal: CustomerOtpRequest; example present | INCOMPLETE generic envelope/bodyless response; example missing | Not applicable / decision pending | Public | Shared envelope/catalog only | Candidate tables mapped | Operation-level write set/transaction approval pending | Declared | Designed only; not executed | Route present; data-shape gaps remain | Incomplete — D-003 |
 | API-002 | Customer Accounts | `POST` | `/v1/auth/customer/otp/verify` | Typed proposal: CustomerOtpVerification; example present | INCOMPLETE generic envelope/bodyless response; example missing | Not applicable / decision pending | Public | Shared envelope/catalog only | Candidate tables mapped | Operation-level write set/transaction approval pending | Missing/proposed requirement | Designed only; not executed | Route present; data-shape gaps remain | Incomplete — D-003 |
 | API-003 | Customer Accounts | `GET` | `/v1/me` | No body (document applicability) | INCOMPLETE generic envelope/bodyless response; example missing | Not applicable / decision pending | Declared; scope/permission review required | Shared envelope/catalog only | Candidate tables mapped | Operation-level write set/transaction approval pending | Declared | Designed only; not executed | Route present; data-shape gaps remain | Incomplete — D-024 |
@@ -124,7 +124,7 @@ This ledger tracks documentation quality separately from implementation status. 
 ## Decision register and implementation blockers
 
 | Decision | Affected contracts | Exact decision required | Owner / effect |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | D-003 | API-001–002, API-089–091 | Approve credential paths, OTP/MFA policy, effective attempt/lockout limits, refresh rotation/revocation, and public-vs-protected behavior | Security and Product owners; blocks auth implementation |
 | D-016 | API-076 | Obtain provider-owned Cashfree signature/header/canonicalization/payload/acknowledgement specification and replay policy | Product and Security/provider owners; webhook remains wire-contract blocked |
 | D-023 | API-004 and contact replacement flows | Define proof flow/storage, when verified contact changes, and preservation/rollback semantics | Security and Product owners; blocks contact mutation |

@@ -1,4 +1,4 @@
-# pricing.product_prices
+# `pricing.product_prices`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -31,6 +31,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the product prices business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog, Cart_Checkout. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -38,20 +39,22 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_pricing_product_prices_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_pricing_product_prices_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `price_book_id` → `pricing.price_books(id)` via `fk_pricing_product_prices_price_book_id_price_books`; FOREIGN KEY (price_book_id) REFERENCES pricing.price_books(id) ON DELETE CASCADE
-- `variant_id` → `catalog.product_variants(id)` via `fk_pricing_product_prices_variant_id_product_variants`; FOREIGN KEY (variant_id) REFERENCES catalog.product_variants(id) ON DELETE CASCADE
-- `product_id` → `catalog.products(id)` via `fk_pricing_product_prices_product_id_products`; FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE CASCADE
-- `price_book_id_internal_id` → `pricing.price_books(internal_id)` via `fk_pricing_product_prices_price_book_id_price_books_numeric`; FOREIGN KEY (price_book_id_internal_id) REFERENCES pricing.price_books(internal_id) ON DELETE CASCADE
-- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_pricing_product_prices_product_id_products_numeric`; FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE CASCADE
-- `variant_id_internal_id` → `catalog.product_variants(internal_id)` via `fk_pricing_product_prices_variant_id_product_variants_numeric`; FOREIGN KEY (variant_id_internal_id) REFERENCES catalog.product_variants(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_pricing_product_prices_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_pricing_product_prices_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `price_book_id` → `pricing.price_books(id)` via `fk_pricing_product_prices_price_book_id_price_books`; `FOREIGN KEY (price_book_id) REFERENCES pricing.price_books(id) ON DELETE CASCADE`
+- `variant_id` → `catalog.product_variants(id)` via `fk_pricing_product_prices_variant_id_product_variants`; `FOREIGN KEY (variant_id) REFERENCES catalog.product_variants(id) ON DELETE CASCADE`
+- `product_id` → `catalog.products(id)` via `fk_pricing_product_prices_product_id_products`; `FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE CASCADE`
+- `price_book_id_internal_id` → `pricing.price_books(internal_id)` via `fk_pricing_product_prices_price_book_id_price_books_numeric`; `FOREIGN KEY (price_book_id_internal_id) REFERENCES pricing.price_books(internal_id) ON DELETE CASCADE`
+- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_pricing_product_prices_product_id_products_numeric`; `FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE CASCADE`
+- `variant_id_internal_id` → `catalog.product_variants(internal_id)` via `fk_pricing_product_prices_variant_id_product_variants_numeric`; `FOREIGN KEY (variant_id_internal_id) REFERENCES catalog.product_variants(internal_id) ON DELETE CASCADE`
 
-## pricing.product_prices — exact structural contracts
+## `pricing.product_prices` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 19 columns, 21 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 19 columns, 21 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -64,7 +67,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `product_id_internal_id` | `catalog.products` | `fk_pricing_product_prices_product_id_products_numeric` |
 | `variant_id_internal_id` | `catalog.product_variants` | `fk_pricing_product_prices_variant_id_product_variants_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -90,7 +93,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `price_window` | UNIQUE | `UNIQUE NULLS NOT DISTINCT (price_book_id, product_id, variant_id, valid_from)` |
 | `uq_pricing_product_prices_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -100,7 +103,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `price_window` | `CREATE UNIQUE INDEX price_window ON pricing.product_prices USING btree (price_book_id, product_id, variant_id, valid_from) NULLS NOT DISTINCT` |
 | `uq_pricing_product_prices_id` | `CREATE UNIQUE INDEX uq_pricing_product_prices_id ON pricing.product_prices USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -110,4 +113,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

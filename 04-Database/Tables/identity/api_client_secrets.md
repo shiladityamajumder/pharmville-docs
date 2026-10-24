@@ -1,4 +1,4 @@
-# identity.api_client_secrets
+# `identity.api_client_secrets`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -25,6 +25,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the api client secrets business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Admin_CMS, Rider_App, Authentication_Access. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -32,16 +33,18 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_identity_api_client_secrets_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_identity_api_client_secrets_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `api_client_id` → `identity.api_clients(id)` via `fk_identity_api_client_secrets_api_client_id_api_clients`; FOREIGN KEY (api_client_id) REFERENCES identity.api_clients(id) ON DELETE CASCADE
-- `api_client_id_internal_id` → `identity.api_clients(internal_id)` via `fk_identity_api_client_secrets_api_client_id_api_client_3b2b`; FOREIGN KEY (api_client_id_internal_id) REFERENCES identity.api_clients(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_identity_api_client_secrets_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_identity_api_client_secrets_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `api_client_id` → `identity.api_clients(id)` via `fk_identity_api_client_secrets_api_client_id_api_clients`; `FOREIGN KEY (api_client_id) REFERENCES identity.api_clients(id) ON DELETE CASCADE`
+- `api_client_id_internal_id` → `identity.api_clients(internal_id)` via `fk_identity_api_client_secrets_api_client_id_api_client_3b2b`; `FOREIGN KEY (api_client_id_internal_id) REFERENCES identity.api_clients(internal_id) ON DELETE CASCADE`
 
-## identity.api_client_secrets — exact structural contracts
+## `identity.api_client_secrets` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 13 columns, 9 constraints, 3 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 13 columns, 9 constraints, 3 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -50,7 +53,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `api_client_id` | `identity.api_clients` | `fk_identity_api_client_secrets_api_client_id_api_clients` |
 | `api_client_id_internal_id` | `identity.api_clients` | `fk_identity_api_client_secrets_api_client_id_api_client_3b2b` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -64,7 +67,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_identity_api_client_secrets` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_identity_api_client_secrets_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -72,7 +75,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_identity_api_client_secrets` | `CREATE UNIQUE INDEX pk_identity_api_client_secrets ON identity.api_client_secrets USING btree (internal_id)` |
 | `uq_identity_api_client_secrets_id` | `CREATE UNIQUE INDEX uq_identity_api_client_secrets_id ON identity.api_client_secrets USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -82,4 +85,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

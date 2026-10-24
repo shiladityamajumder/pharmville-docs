@@ -1,4 +1,4 @@
-# pricing.coupon_codes
+# `pricing.coupon_codes`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -30,6 +30,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the coupon codes business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog, Cart_Checkout. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -37,20 +38,22 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `assigned_user_id` → `identity.users(id)` via `fk_pricing_coupon_codes_assigned_user_id_users`; FOREIGN KEY (assigned_user_id) REFERENCES identity.users(id) ON DELETE CASCADE
-- `created_by` → `identity.users(id)` via `fk_pricing_coupon_codes_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_pricing_coupon_codes_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_pricing_coupon_codes_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `promotion_id` → `pricing.promotions(id)` via `fk_pricing_coupon_codes_promotion_id_promotions`; FOREIGN KEY (promotion_id) REFERENCES pricing.promotions(id) ON DELETE CASCADE
-- `promotion_id_internal_id` → `pricing.promotions(internal_id)` via `fk_pricing_coupon_codes_promotion_id_promotions_numeric`; FOREIGN KEY (promotion_id_internal_id) REFERENCES pricing.promotions(internal_id) ON DELETE CASCADE
+- `assigned_user_id` → `identity.users(id)` via `fk_pricing_coupon_codes_assigned_user_id_users`; `FOREIGN KEY (assigned_user_id) REFERENCES identity.users(id) ON DELETE CASCADE`
+- `created_by` → `identity.users(id)` via `fk_pricing_coupon_codes_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_pricing_coupon_codes_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_pricing_coupon_codes_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `promotion_id` → `pricing.promotions(id)` via `fk_pricing_coupon_codes_promotion_id_promotions`; `FOREIGN KEY (promotion_id) REFERENCES pricing.promotions(id) ON DELETE CASCADE`
+- `promotion_id_internal_id` → `pricing.promotions(internal_id)` via `fk_pricing_coupon_codes_promotion_id_promotions_numeric`; `FOREIGN KEY (promotion_id_internal_id) REFERENCES pricing.promotions(internal_id) ON DELETE CASCADE`
 
 **Referenced by 2 FK constraints** (sample): `pricing.promotion_redemptions`, `pricing.promotion_redemptions`.
 
-## pricing.coupon_codes — exact structural contracts
+## `pricing.coupon_codes` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 18 columns, 11 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 18 columns, 11 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -61,7 +64,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `promotion_id` | `pricing.promotions` | `fk_pricing_coupon_codes_promotion_id_promotions` |
 | `promotion_id_internal_id` | `pricing.promotions` | `fk_pricing_coupon_codes_promotion_id_promotions_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -77,7 +80,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_pricing_coupon_codes` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_pricing_coupon_codes_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -86,7 +89,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_pricing_coupon_code_active` | `CREATE UNIQUE INDEX uq_pricing_coupon_code_active ON pricing.coupon_codes USING btree (code) WHERE is_deleted = false` |
 | `uq_pricing_coupon_codes_id` | `CREATE UNIQUE INDEX uq_pricing_coupon_codes_id ON pricing.coupon_codes USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -96,4 +99,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

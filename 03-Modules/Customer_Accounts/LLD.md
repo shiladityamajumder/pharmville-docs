@@ -38,11 +38,15 @@ Customer_Accounts owns customer-facing profile and household data. It does not d
 4. A verified number resolves an existing eligible user or creates an identity under the account-registration policy. Create `customer.profiles` only after the customer supplies its required `first_name`; OTP input alone cannot populate it. Never insert a fabricated name. Until profile completion and required consent, restrict the onboarding session to permitted onboarding actions (D-003/D-013). Suspended, closed, or locked identities do not receive a session.
 5. The server creates a session and returns it only after the account and session transaction commits.
 
-The OTP request is public and unauthenticated. It does not accept an OTP code. Verification is a separate public pre-login operation. Do not copy staff-session requirements onto either pre-login operation. Expiry, resend and rate-limit thresholds remain configurable policy values until Security and Product approve them. The challenge table has a recorded `max_attempts` default of 5; this observed database default is not approval of the effective security policy. Explicitly supply approved challenge policy values instead of silently assuming defaults.
+The OTP request is public and unauthenticated. It does not accept an OTP code. Verification is a separate public pre-login operation. Do not copy staff-session requirements onto either pre-login operation. Expiry, resend and rate-limit thresholds remain configurable policy values until Security and Product approve them.
+
+The challenge table has a recorded `max_attempts` default of 5; this observed database default is not approval of the effective security policy. Explicitly supply approved challenge policy values instead of silently assuming defaults.
 
 ### Failure and retry behavior
 
-Invalid or expired challenges are rejected without creating a session. A used challenge cannot be replayed. Resending invalidates or supersedes the previous challenge according to the configured challenge policy. Provider timeouts leave delivery pending/failed and can be retried with a provider idempotency key where supported. If delivery outcome is unknown, do not claim the OTP was delivered. Duplicate requests are rate limited and deduplicated within the configured intent window. Logs contain challenge IDs and masked phone numbers, never OTP values.
+Invalid or expired challenges are rejected without creating a session. A used challenge cannot be replayed. Resending invalidates or supersedes the previous challenge according to the configured challenge policy. Provider timeouts leave delivery pending/failed and can be retried with a provider idempotency key where supported.
+
+If delivery outcome is unknown, do not claim the OTP was delivered. Duplicate requests are rate limited and deduplicated within the configured intent window. Logs contain challenge IDs and masked phone numbers, never OTP values.
 
 ### Acceptance criteria
 
@@ -56,11 +60,19 @@ Invalid or expired challenges are rejected without creating a session. A used ch
 
 ### Behavior and validation
 
-An authenticated customer can read and partially update their own profile. The API derives the user ID from the session; a caller cannot select another account. `first_name` is required by the current table; `last_name`, `preferred_name`, `date_of_birth`, and `gender` are nullable schema fields. The feature requirement names name, email, and phone, but email and phone live on `identity.users`, not `customer.profiles`. Treat those identity fields as contact data and route sensitive updates through verification. No profile operation copies OTP expiry errors unless it initiates contact verification.
+An authenticated customer can read and partially update their own profile. The API derives the user ID from the session; a caller cannot select another account. `first_name` is required by the current table; `last_name`, `preferred_name`, `date_of_birth`, and `gender` are nullable schema fields.
 
-Validate name lengths against the database limits (100 characters for first/last/preferred name), trim surrounding whitespace, reject empty required names, and validate email syntax and normalized uniqueness. Database evidence shows `identity.users.email_normalized` is unique and phone country-code/number is unique when present. Phone changes require a verified challenge before replacing the current verified number. Do not expose full phone values in logs or unrelated read models. Email verification and contact-change delivery policy remain D-023. Preserve the currently verified contact while verifying a proposed replacement. The schema has no dedicated pending-contact columns; do not invent them or overwrite the verified destination. D-023 must select a purpose-bound challenge/proof design before contact-change implementation.
+The feature requirement names name, email, and phone, but email and phone live on `identity.users`, not `customer.profiles`. Treat those identity fields as contact data and route sensitive updates through verification. No profile operation copies OTP expiry errors unless it initiates contact verification.
 
-PATCH applies only supplied fields. Omitted fields remain unchanged; explicit `null` is accepted only for nullable fields. Return separate identity and profile `row_version` values. For profile-only writes require `expected_profile_version`; for identity changes require `expected_user_version`; a combined write must check both versions in the same transaction. A stale version returns `409` with the current safe version; it does not overwrite the concurrent edit. Persist identity and profile changes atomically when both tables change. Audit the actor, changed field names, timestamp, and outcome without recording old/new contact values in general logs.
+Validate name lengths against the database limits (100 characters for first/last/preferred name), trim surrounding whitespace, reject empty required names, and validate email syntax and normalized uniqueness. Database evidence shows `identity.users.email_normalized` is unique and phone country-code/number is unique when present.
+
+Phone changes require a verified challenge before replacing the current verified number. Do not expose full phone values in logs or unrelated read models. Email verification and contact-change delivery policy remain D-023. Preserve the currently verified contact while verifying a proposed replacement.
+
+The schema has no dedicated pending-contact columns; do not invent them or overwrite the verified destination. D-023 must select a purpose-bound challenge/proof design before contact-change implementation.
+
+PATCH applies only supplied fields. Omitted fields remain unchanged; explicit `null` is accepted only for nullable fields. Return separate identity and profile `row_version` values. For profile-only writes require `expected_profile_version`; for identity changes require `expected_user_version`; a combined write must check both versions in the same transaction.
+
+A stale version returns `409` with the current safe version; it does not overwrite the concurrent edit. Persist identity and profile changes atomically when both tables change. Audit the actor, changed field names, timestamp, and outcome without recording old/new contact values in general logs.
 
 ### Acceptance criteria
 
@@ -87,7 +99,9 @@ See [customer profile schema](../../04-Database/Tables/customer/profiles.md), [i
 
 ## APIs and integration
 
-Proposed contracts are indexed in [Customer Accounts API](../../05-APIs/Customer_Accounts.md) and [Authentication and Access API](../../05-APIs/Authentication_Access.md). Customer_Accounts calls Authentication_Access for challenge verification and session creation; Notifications handles channel delivery. Provider callbacks must be authenticated, deduplicated, and stored before processing. User/profile writes and their audit/outbox records commit together; outbound notifications occur after commit.
+Proposed contracts are indexed in [Customer Accounts API](../../05-APIs/Customer_Accounts.md) and [Authentication and Access API](../../05-APIs/Authentication_Access.md). Customer_Accounts calls Authentication_Access for challenge verification and session creation; Notifications handles channel delivery.
+
+Provider callbacks must be authenticated, deduplicated, and stored before processing. User/profile writes and their audit/outbox records commit together; outbound notifications occur after commit.
 
 ## Feature tests
 
@@ -107,7 +121,8 @@ All tests above are proposed and not run. Full module edge cases are in [Custome
 
 ## Additional account feature tests
 
-**Status: Designed; NOT RUN.** Existing detailed ACC-01/ACC-02 IDs above remain authoritative.
+> [!NOTE]
+> **Status: Designed; NOT RUN.** Existing detailed ACC-01/ACC-02 IDs above remain authoritative.
 
 | Test | Feature/input | Expected result |
 | --- | --- | --- |

@@ -1,4 +1,4 @@
-# procurement.purchase_orders
+# `procurement.purchase_orders`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -35,6 +35,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the purchase orders business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Store_Operations, Warehouse. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -42,23 +43,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `approved_by_user_id` → `identity.users(id)` via `fk_procurement_purchase_orders_approved_by_user_id_users`; FOREIGN KEY (approved_by_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `created_by` → `identity.users(id)` via `fk_procurement_purchase_orders_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_procurement_purchase_orders_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `warehouse_id` → `warehouse.warehouses(id)` via `fk_procurement_purchase_orders_warehouse_id_warehouses`; FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE RESTRICT
-- `supplier_id` → `procurement.suppliers(id)` via `fk_procurement_purchase_orders_supplier_id_suppliers`; FOREIGN KEY (supplier_id) REFERENCES procurement.suppliers(id) ON DELETE RESTRICT
-- `requisition_id` → `procurement.purchase_requisitions(id)` via `fk_procurement_purchase_orders_requisition_id_purchase__59c2`; FOREIGN KEY (requisition_id) REFERENCES procurement.purchase_requisitions(id) ON DELETE SET NULL
-- `requisition_id_internal_id` → `procurement.purchase_requisitions(internal_id)` via `fk_procurement_purchase_orders_requisition_id_purchase__ce28`; FOREIGN KEY (requisition_id_internal_id) REFERENCES procurement.purchase_requisitions(internal_id) ON DELETE SET NULL
-- `supplier_id_internal_id` → `procurement.suppliers(internal_id)` via `fk_procurement_purchase_orders_supplier_id_suppliers_numeric`; FOREIGN KEY (supplier_id_internal_id) REFERENCES procurement.suppliers(internal_id) ON DELETE RESTRICT
-- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_procurement_purchase_orders_warehouse_id_warehouses_numeric`; FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE RESTRICT
+- `approved_by_user_id` → `identity.users(id)` via `fk_procurement_purchase_orders_approved_by_user_id_users`; `FOREIGN KEY (approved_by_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `created_by` → `identity.users(id)` via `fk_procurement_purchase_orders_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_procurement_purchase_orders_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `warehouse_id` → `warehouse.warehouses(id)` via `fk_procurement_purchase_orders_warehouse_id_warehouses`; `FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE RESTRICT`
+- `supplier_id` → `procurement.suppliers(id)` via `fk_procurement_purchase_orders_supplier_id_suppliers`; `FOREIGN KEY (supplier_id) REFERENCES procurement.suppliers(id) ON DELETE RESTRICT`
+- `requisition_id` → `procurement.purchase_requisitions(id)` via `fk_procurement_purchase_orders_requisition_id_purchase__59c2`; `FOREIGN KEY (requisition_id) REFERENCES procurement.purchase_requisitions(id) ON DELETE SET NULL`
+- `requisition_id_internal_id` → `procurement.purchase_requisitions(internal_id)` via `fk_procurement_purchase_orders_requisition_id_purchase__ce28`; `FOREIGN KEY (requisition_id_internal_id) REFERENCES procurement.purchase_requisitions(internal_id) ON DELETE SET NULL`
+- `supplier_id_internal_id` → `procurement.suppliers(internal_id)` via `fk_procurement_purchase_orders_supplier_id_suppliers_numeric`; `FOREIGN KEY (supplier_id_internal_id) REFERENCES procurement.suppliers(internal_id) ON DELETE RESTRICT`
+- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_procurement_purchase_orders_warehouse_id_warehouses_numeric`; `FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 6 FK constraints** (sample): `procurement.purchase_order_items`, `procurement.supplier_invoices`, `procurement.goods_receipts`, `procurement.goods_receipts`, `procurement.purchase_order_items`, `procurement.supplier_invoices`.
 
-## procurement.purchase_orders — exact structural contracts
+## `procurement.purchase_orders` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 23 columns, 19 constraints, 6 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 23 columns, 19 constraints, 6 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -72,7 +75,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `supplier_id_internal_id` | `procurement.suppliers` | `fk_procurement_purchase_orders_supplier_id_suppliers_numeric` |
 | `warehouse_id_internal_id` | `warehouse.warehouses` | `fk_procurement_purchase_orders_warehouse_id_warehouses_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -96,7 +99,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `po_number` | UNIQUE | `UNIQUE (po_number)` |
 | `uq_procurement_purchase_orders_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -107,7 +110,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `po_number` | `CREATE UNIQUE INDEX po_number ON procurement.purchase_orders USING btree (po_number)` |
 | `uq_procurement_purchase_orders_id` | `CREATE UNIQUE INDEX uq_procurement_purchase_orders_id ON procurement.purchase_orders USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -117,4 +120,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

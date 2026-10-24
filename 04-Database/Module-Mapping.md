@@ -46,6 +46,7 @@ This table links a feature module to the actual database schemas it may read or 
 | `organization.locations` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Master data publication is an approved versioned action; staff scope is checked server-side. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -65,6 +66,7 @@ Enforce: Master data publication is an approved versioned action; staff scope is
 | `identity.login_attempts` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: All privileged and denied actions generate minimum necessary audit evidence without raw secrets. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -84,6 +86,7 @@ Enforce: All privileged and denied actions generate minimum necessary audit evid
 | `identity.permissions` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Client-supplied actor, role and location are never trusted as authorisation context. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -103,6 +106,7 @@ Enforce: Client-supplied actor, role and location are never trusted as authorisa
 | `platform.idempotency_keys` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: A changed fee, classification or inventory observation invalidates a quote until reaccepted; replay cannot create two orders. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -122,6 +126,7 @@ Enforce: A changed fee, classification or inventory observation invalidates a qu
 | `clinical.patient_profiles` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Customer submits OTP, selects patient/address; sensitive information is never returned to other accounts. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -141,6 +146,7 @@ Enforce: Customer submits OTP, selects patient/address; sensitive information is
 | `commerce.order_status_history` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Customer cancellation or return requests must respect current order/fulfillment/payment states. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -160,6 +166,7 @@ Enforce: Customer cancellation or return requests must respect current order/ful
 | `logistics.ndr_cases` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -179,6 +186,7 @@ Enforce: Order handoff to courier requires authorised assignment; failed attempt
 | `finance.invoices` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Unknown provider outcomes stay pending; external callbacks cannot double-apply money. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -198,6 +206,7 @@ Enforce: Unknown provider outcomes stay pending; external callbacks cannot doubl
 | `warehouse.stock_holds` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: A reservation must not create negative eligible stock and must not use expired/blocked lots. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -217,6 +226,7 @@ Enforce: A reservation must not create negative eligible stock and must not use 
 | `platform.outbox_events` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Notification delivery is best effort after commit; it must never determine success of a stock or money action. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -236,6 +246,7 @@ Enforce: Notification delivery is best effort after commit; it must never determ
 | `organization.licenses` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: One order must have one accepted revision and an auditable licensed location/fulfillment decision. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -255,6 +266,7 @@ Enforce: One order must have one accepted revision and an auditable licensed loc
 | `commerce.order_items` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Only P-classified products trigger mandatory pharmacist review; M and O do not on classification alone. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -274,6 +286,7 @@ Enforce: Only P-classified products trigger mandatory pharmacist review; M and O
 | `platform.file_upload_sessions` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -293,6 +306,7 @@ Enforce: An uploaded file is quarantined until inspected and can only be accesse
 | `search.documents` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Only approved and classified items can enter a legally permitted checkout path. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -312,6 +326,7 @@ Enforce: Only approved and classified items can enter a legally permitted checko
 | `platform.file_access_grants` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Reports must be authorised by entity scope and must not export unapproved patient data. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -331,6 +346,7 @@ Enforce: Reports must be authorised by entity scope and must not export unapprov
 | `payment.cod_collections` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -350,6 +366,7 @@ Enforce: Rider sees only assigned delivery and masked necessary information; OTP
 | `procurement.purchase_requisitions` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.
@@ -369,6 +386,7 @@ Enforce: Store actors can mutate only scoped tasks and must report actual shorta
 | `warehouse.stock_ledger` | Candidate read/integrate with domain owner | all fields |
 
 ### Transaction boundary
+
 Enforce: Receiving and transfers create a traceable stock ledger and require location/lot scope. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.
 
 **Related:** LLD database operations · API index.

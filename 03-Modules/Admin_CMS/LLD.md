@@ -14,9 +14,11 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## Admin masters and editorial pages — implementation acceptance
 
-**Proposed conditions for engineering handoff; never imply QA passed.**
+> [!NOTE]
+> **Proposed conditions for engineering handoff; never imply QA passed.**
 
-## Draft features
+### Draft features
+
 - **ADM-01 / REQ-036:** Dashboard per role: orders by status, pending prescriptions, alerts, deliveries in progress (Must (draft)).
 - **ADM-02 / REQ-037:** Staff users: invite, assign role and location, deactivate, log out sessions (Must (draft)).
 - **ADM-03 / REQ-038:** Roles and permissions for 16 roles, limited to own store or warehouse (Must (draft)).
@@ -27,7 +29,8 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - **ADM-08 / REQ-043:** Store and warehouse master: address, hours, GSTIN, service areas (Must (draft)).
 - **ADM-09 / REQ-044:** Offer settings: start and end dates, maximum discount, first-order offer (Should (draft)).
 
-## Required release checks
+### Required release checks
+
 - Authorised happy path persists exactly the intended state.
 - Invalid, cross-account and cross-location requests leave authoritative rows unchanged.
 - Concurrent duplicate requests do not create duplicate money, stock or order effects.
@@ -35,21 +38,21 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Recoverable provider failure exposes a pending/retryable state; never claims success.
 - Audit/trace data contains public references, not credentials or sensitive document contents.
 
-Module test scenarios
+**Module test scenarios**
 
 ## Admin Portal, CMS & Masters — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
 
-- API-032 GET /v1/admin/dashboard — Scoped dashboard
-- API-033 POST /v1/admin/staff — Invite scoped staff
-- API-034 PATCH /v1/admin/staff/{staff_id} — Modify location/role/status
-- API-035 GET /v1/admin/settings — Read approved settings
-- API-036 PATCH /v1/admin/settings — Change approved settings
-- API-037 POST /v1/admin/cms/pages/{page_id}/publish — Publish checked content
-- API-038 POST /v1/admin/locations — Add verified location master
+- `API-032` `GET /v1/admin/dashboard` — Scoped dashboard
+- `API-033` `POST /v1/admin/staff` — Invite scoped staff
+- `API-034` `PATCH /v1/admin/staff/{staff_id}` — Modify location/role/status
+- `API-035` `GET /v1/admin/settings` — Read approved settings
+- `API-036` `PATCH /v1/admin/settings` — Change approved settings
+- `API-037` `POST /v1/admin/cms/pages/{page_id}/publish` — Publish checked content
+- `API-038` `POST /v1/admin/locations` — Add verified location master
 
-## Cross-cutting request contract
+### Cross-cutting request contract
 
 Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
@@ -59,7 +62,7 @@ Writes require validated body, stable intent key, expected current version when 
 
 **Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
-## Core procedure
+### Core procedure
 
 1. Authenticate the actor and resolve server-owned tenant/location/patient permission.
 2. Re-read the relevant product, order, document, stock or ledger state from the owning tables.
@@ -68,11 +71,11 @@ Writes require validated body, stable intent key, expected current version when 
 5. In a transaction, persist the minimal authoritative rows, version and audit outcome; publish notifications after commit.
 6. Return a scoped read model; expose only approved information to the caller.
 
-## Features implemented by this rule set
+### Features implemented by this rule set
 
 `ADM-01`, `ADM-02`, `ADM-03`, `ADM-04`, `ADM-05`, `ADM-06`, `ADM-07`, `ADM-08`, `ADM-09` (see full requirement descriptions).
 
-## Pseudocode — command boundary
+### Pseudocode — command boundary
 
 ```text
 context := verify_session_and_resource_scope(request)
@@ -100,7 +103,9 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-A role editor cannot give itself new powers; owner/team signoff precedes policy changes. Draft and published content versions must remain distinguishable and published pages sanitized. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
+A role editor cannot give itself new powers; owner/team signoff precedes policy changes. Draft and published content versions must remain distinguishable and published pages sanitized. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`.
+
+Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Admin Portal, CMS & Masters — existing database usage
 
@@ -119,7 +124,7 @@ A role editor cannot give itself new powers; owner/team signoff precedes policy 
 - `platform.cms_page_versions` — columns · contracts
 - `platform.cms_pages` — columns · contracts
 
-## Ownership, transactions and change control
+### Ownership, transactions and change control
 
 Proposed owning service: `Admin_CMS`. Main read concerns: role-limited operations console, content publishing, settings and staff masters. Writes must be restricted by the actual foreign keys, CHECKs, unique contracts, crosswalks, policy and trigger guards. Use one transaction per domain state transition, use an outbox for reliable cross-module publication, and make any external retry idempotent.
 
@@ -140,9 +145,11 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 - Prescription_Upload
 - Reporting
 
-## Communication rules
+### Communication rules
 
-Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
+Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth.
+
+Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
 **Data-access contract:** A role editor cannot give itself new powers; owner/team signoff precedes policy changes. Draft and published content versions must remain distinguishable and published pages sanitized.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
@@ -158,7 +165,9 @@ Use the owning service interface for business changes rather than making uncontr
 | `Admin_CMSReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Admin_CMSEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `identity.roles`, `organization.bank_accounts`, `organization.departments`, `organization.licenses`, `organization.locations`, `organization.memberships`, `organization.organizations`, `platform.application_settings`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
+**Existing representative tables:** `identity.roles`, `organization.bank_accounts`, `organization.departments`, `organization.licenses`, `organization.locations`, `organization.memberships`, `organization.organizations`, `platform.application_settings`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable.
+
+Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Admin Portal, CMS & Masters — failure handling
 
@@ -183,7 +192,19 @@ Use structured problem codes, request ID, retryability category and operator run
 
 **Repository interface:** require a database transaction handle, parameterised SQL/ORM queries, and a stored accepted transition. Return public UUIDs or approved opaque references only.
 
-**Error DTO proposal:** `{"error":{"code":"STATE_CONFLICT","message":"Refresh the record and try again","request_id":"..."}}`. Do not expose SQL errors, provider secrets or prescription contents.
+**Error DTO proposal:**
+
+```json
+{
+  "error": {
+    "code": "STATE_CONFLICT",
+    "message": "Refresh the record and try again",
+    "request_id": "..."
+  }
+}
+```
+
+Do not expose SQL errors, provider secrets or prescription contents.
 
 **Existing table candidates:** `platform.cms_pages`, `platform.cms_page_versions`, `platform.cms_banners`, `platform.application_settings`, `organization.locations`.
 
@@ -193,18 +214,20 @@ Use structured problem codes, request ID, retryability category and operator run
 
 **Status: Proposed application design.** The database repo does not contain a NestJS HTTP implementation.
 
-## Business behavior
+### Business behavior
+
 Master data publication is an approved versioned action; staff scope is checked server-side.
 
-## Components
+### Components
+
 | Component | Responsibility | Data affected | Failure outcome |
 | --- | --- | --- | --- |
 | `Admin_CMSController` (proposed) | Validate DTO and request context | Public API request only | 400/401/403 without partial mutation |
-| `Admin_CMSUseCase` (proposed) | Enforce module business invariant | platform.cms_pages, platform.cms_page_versions, platform.cms_banners | Domain status, do not guess provider truth |
+| `Admin_CMSUseCase` (proposed) | Enforce module business invariant | `platform.cms_pages`, `platform.cms_page_versions`, `platform.cms_banners` | Domain status, do not guess provider truth |
 | `Admin_CMSRepository` (proposed) | Scoped SQL transaction and concurrency guard | Exact migrated tables | Roll back on conflict or constraint error |
 | `Admin_CMSIntegrationAdapter` (only when needed) | Map external IO and reconcile delivery | Outbox/inbox or verified provider record | Retries outside DB lock |
 
-## Transaction and retry sequence
+### Transaction and retry sequence
 
 1. verify staff privilege and location scope.
 2. validate master data and publish prerequisites.
@@ -212,14 +235,16 @@ Master data publication is an approved versioned action; staff scope is checked 
 4. invalidate affected catalog/search projections.
 5. audit the privileged change.
 
-## Existing tables (candidate responsibilities)
-- platform.cms_pages — candidate entity; verify the exact operation and field set in the implementation review.
-- platform.cms_page_versions — candidate entity; verify the exact operation and field set in the implementation review.
-- platform.cms_banners — candidate entity; verify the exact operation and field set in the implementation review.
-- platform.application_settings — candidate entity; verify the exact operation and field set in the implementation review.
-- organization.locations — candidate entity; verify the exact operation and field set in the implementation review.
+### Existing tables (candidate responsibilities)
 
-## Related
+- `platform.cms_pages` — candidate entity; verify the exact operation and field set in the implementation review.
+- `platform.cms_page_versions` — candidate entity; verify the exact operation and field set in the implementation review.
+- `platform.cms_banners` — candidate entity; verify the exact operation and field set in the implementation review.
+- `platform.application_settings` — candidate entity; verify the exact operation and field set in the implementation review.
+- `organization.locations` — candidate entity; verify the exact operation and field set in the implementation review.
+
+### Related
+
 HLD · States · Permissions
 
 ## Admin masters and editorial pages — observability
@@ -230,11 +255,13 @@ HLD · States · Permissions
 
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
-Monitoring design
+**Monitoring design**
 
 ## Admin Portal, CMS & Masters — permission model
 
-**Actors:** Super Admin, Central Admin, CMS Manager. **Proposed service scope:** `staff_admin`. Roles are application concepts; existing PostgreSQL NOLOGIN capability roles form a separate lower-level authorization layer.
+**Actors:** Super Admin, Central Admin, CMS Manager.
+
+**Proposed service scope:** `staff_admin`. Roles are application concepts; existing PostgreSQL NOLOGIN capability roles form a separate lower-level authorization layer.
 
 | Operation class | Required entitlement | Enforcement |
 | --- | --- | --- |
@@ -243,11 +270,15 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** A role editor cannot give itself new powers; owner/team signoff precedes policy changes. Draft and published content versions must remain distinguishable and published pages sanitized. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
+**Core constraint:** A role editor cannot give itself new powers; owner/team signoff precedes policy changes. Draft and published content versions must remain distinguishable and published pages sanitized. A customer cannot infer another customer's resource existence.
+
+Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Admin Portal, CMS & Masters — functional requirements
 
-**Source:** the documented draft requirements. **Status:** Draft requirements, not proof of final business acceptance. 🔴/🟡/🟢 priorities have been normalized as Must/Should/Could without changing their meaning.
+**Source:** the documented draft requirements.
+
+**Status:** Draft requirements, not proof of final business acceptance. 🔴/🟡/🟢 priorities have been normalized as Must/Should/Could without changing their meaning.
 
 | Feature | Priority in v0.1 | Statement | Dependency |
 | --- | --- | --- | --- |
@@ -261,7 +292,7 @@ Monitoring design
 | `ADM-08` | Must (draft) | Store and warehouse master: address, hours, GSTIN, service areas | Master data |
 | `ADM-09` | Should (draft) | Offer settings: start and end dates, maximum discount, first-order offer | Discount policy, Q10 |
 
-## Interactions and acceptance basis
+### Interactions and acceptance basis
 
 The user performs: Manage scoped staff; publish CMS; configure stores and reference choices. Server-side enforcement must preserve this invariant: **A role editor cannot give itself new powers; owner/team signoff precedes policy changes. Draft and published content versions must remain distinguishable and published pages sanitized.**
 
@@ -293,7 +324,7 @@ sequenceDiagram
 
 **Proposed NestJS module:** `Admin_CMSModule` with a controller, application service, authorization policy, repository and adapters. The supplied database code is a schema/validation library; no running HTTP controller was found in Archive 2.
 
-## Candidate service methods
+### Candidate service methods
 
 - `API-032: scoped_dashboard(actor_context, validated_command, expected_version) -> Result`
 - `API-033: invite_scoped_staff(actor_context, validated_command, expected_version) -> Result`
@@ -303,13 +334,15 @@ sequenceDiagram
 - `API-037: publish_checked_content(actor_context, validated_command, expected_version) -> Result`
 - `API-038: add_verified_location_master(actor_context, validated_command, expected_version) -> Result`
 
-## Transaction and integration contract
+### Transaction and integration contract
 
 For each mutation: authenticate actor, validate inputs, read affected rows with a lock/version check, verify policy, update the minimum relevant rows and immutable audit/outbox in one transaction. A remote gateway, storage or GPS call should be performed outside the locked transaction and reconciled on callback/timeout. Use PostgreSQL to reject invalid writes even if application validation is bypassed.
 
 **Module invariant:** A role editor cannot give itself new powers; owner/team signoff precedes policy changes. Draft and published content versions must remain distinguishable and published pages sanitized.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff.
+
+**Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Admin Portal, CMS & Masters — state and transition policy
 
@@ -325,7 +358,9 @@ flowchart TD
 
 **Module-specific invariant:** A role editor cannot give itself new powers; owner/team signoff precedes policy changes. Draft and published content versions must remain distinguishable and published pages sanitized.
 
-Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
+Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence.
+
+When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
 This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
@@ -354,7 +389,7 @@ This flow shows command gates, not an entity enum. Legal entity transitions and 
 | `TC-ADM-09-OK` | Offer settings: start and end dates, maximum discount, first-order offer | Approved offer version obeys configured dates and discount limit |
 | `TC-ADM-09-DENY` | Expired offer is submitted from an old basket | Reprice/reaccept; no stale unapproved discount; Product approves offer; customer reviews total |
 
-## Cross-module contract tests
+### Cross-module contract tests
 
 - Verify authenticated customer/staff/location ownership using actual restricted runtime roles.
 - Verify concurrency and duplicate idempotency behavior against an isolated PostgreSQL database with authoritative migrations.
@@ -379,11 +414,13 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 
 ## Admin Portal, CMS & Masters — operational workflows
 
-**Entry points:** Manage scoped staff; publish CMS; configure stores and reference choices. **User group:** Super Admin, Central Admin, CMS Manager. The following source-defined order journey stages identify primary ownership; supporting modules also participate without necessarily owning the stage.
+**Entry points:** Manage scoped staff; publish CMS; configure stores and reference choices.
+
+**User group:** Super Admin, Central Admin, CMS Manager. The following source-defined order journey stages identify primary ownership; supporting modules also participate without necessarily owning the stage.
 
 This module supports shared controls across multiple stages; no single stage is exclusively owned.
 
-## Shared processing rules
+### Shared processing rules
 
 The requested action is first validated against user scope, current state and approved business master data. Read required evidence from real migrated tables; change only data this module owns; publish a safe event or notify the next module after commit.
 

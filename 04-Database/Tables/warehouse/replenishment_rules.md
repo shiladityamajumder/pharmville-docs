@@ -1,4 +1,4 @@
-# warehouse.replenishment_rules
+# `warehouse.replenishment_rules`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -34,6 +34,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the replenishment rules business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Cart_Checkout, Order_Operations, Store_Operations, Inventory, Warehouse. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -41,23 +42,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_warehouse_replenishment_rules_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_warehouse_replenishment_rules_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_warehouse_replenishment_rules_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `warehouse_id` → `warehouse.warehouses(id)` via `fk_warehouse_replenishment_rules_warehouse_id_warehouses`; FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE CASCADE
-- `preferred_supplier_id` → `procurement.suppliers(id)` via `fk_warehouse_replenishment_rules_preferred_supplier_id__5314`; FOREIGN KEY (preferred_supplier_id) REFERENCES procurement.suppliers(id) ON DELETE SET NULL
-- `variant_id` → `catalog.product_variants(id)` via `fk_warehouse_replenishment_rules_variant_id_product_variants`; FOREIGN KEY (variant_id) REFERENCES catalog.product_variants(id) ON DELETE CASCADE
-- `product_id` → `catalog.products(id)` via `fk_warehouse_replenishment_rules_product_id_products`; FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE CASCADE
-- `preferred_supplier_id_internal_id` → `procurement.suppliers(internal_id)` via `fk_warehouse_replenishment_rules_preferred_supplier_id__4425`; FOREIGN KEY (preferred_supplier_id_internal_id) REFERENCES procurement.suppliers(internal_id) ON DELETE SET NULL
-- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_warehouse_replenishment_rules_product_id_products_numeric`; FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE CASCADE
-- `variant_id_internal_id` → `catalog.product_variants(internal_id)` via `fk_warehouse_replenishment_rules_variant_id_product_var_2345`; FOREIGN KEY (variant_id_internal_id) REFERENCES catalog.product_variants(internal_id) ON DELETE CASCADE
-- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_warehouse_replenishment_rules_warehouse_id_warehouse_f9b5`; FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_warehouse_replenishment_rules_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_warehouse_replenishment_rules_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_warehouse_replenishment_rules_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `warehouse_id` → `warehouse.warehouses(id)` via `fk_warehouse_replenishment_rules_warehouse_id_warehouses`; `FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE CASCADE`
+- `preferred_supplier_id` → `procurement.suppliers(id)` via `fk_warehouse_replenishment_rules_preferred_supplier_id__5314`; `FOREIGN KEY (preferred_supplier_id) REFERENCES procurement.suppliers(id) ON DELETE SET NULL`
+- `variant_id` → `catalog.product_variants(id)` via `fk_warehouse_replenishment_rules_variant_id_product_variants`; `FOREIGN KEY (variant_id) REFERENCES catalog.product_variants(id) ON DELETE CASCADE`
+- `product_id` → `catalog.products(id)` via `fk_warehouse_replenishment_rules_product_id_products`; `FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE CASCADE`
+- `preferred_supplier_id_internal_id` → `procurement.suppliers(internal_id)` via `fk_warehouse_replenishment_rules_preferred_supplier_id__4425`; `FOREIGN KEY (preferred_supplier_id_internal_id) REFERENCES procurement.suppliers(internal_id) ON DELETE SET NULL`
+- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_warehouse_replenishment_rules_product_id_products_numeric`; `FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE CASCADE`
+- `variant_id_internal_id` → `catalog.product_variants(internal_id)` via `fk_warehouse_replenishment_rules_variant_id_product_var_2345`; `FOREIGN KEY (variant_id_internal_id) REFERENCES catalog.product_variants(internal_id) ON DELETE CASCADE`
+- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_warehouse_replenishment_rules_warehouse_id_warehouse_f9b5`; `FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE CASCADE`
 
-## warehouse.replenishment_rules — exact structural contracts
+## `warehouse.replenishment_rules` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 22 columns, 23 constraints, 3 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 22 columns, 23 constraints, 3 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -73,7 +76,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `variant_id_internal_id` | `catalog.product_variants` | `fk_warehouse_replenishment_rules_variant_id_product_var_2345` |
 | `warehouse_id_internal_id` | `warehouse.warehouses` | `fk_warehouse_replenishment_rules_warehouse_id_warehouse_f9b5` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -101,7 +104,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_warehouse_replenishment_rules_id` | UNIQUE | `UNIQUE (id)` |
 | `warehouse_product_replenishment` | UNIQUE | `UNIQUE NULLS NOT DISTINCT (warehouse_id, product_id, variant_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -109,7 +112,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_warehouse_replenishment_rules_id` | `CREATE UNIQUE INDEX uq_warehouse_replenishment_rules_id ON warehouse.replenishment_rules USING btree (id)` |
 | `warehouse_product_replenishment` | `CREATE UNIQUE INDEX warehouse_product_replenishment ON warehouse.replenishment_rules USING btree (warehouse_id, product_id, variant_id) NULLS NOT DISTINCT` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -119,4 +122,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

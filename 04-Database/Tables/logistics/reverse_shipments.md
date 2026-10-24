@@ -1,4 +1,4 @@
-# logistics.reverse_shipments
+# `logistics.reverse_shipments`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -28,6 +28,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the reverse shipments business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -35,18 +36,20 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_logistics_reverse_shipments_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_logistics_reverse_shipments_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `carrier_id` → `logistics.carriers(id)` via `fk_logistics_reverse_shipments_carrier_id_carriers`; FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE SET NULL
-- `return_id` → `commerce.returns(id)` via `fk_logistics_reverse_shipments_return_id_returns`; FOREIGN KEY (return_id) REFERENCES commerce.returns(id) ON DELETE RESTRICT
-- `carrier_id_internal_id` → `logistics.carriers(internal_id)` via `fk_logistics_reverse_shipments_carrier_id_carriers_numeric`; FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE SET NULL
-- `return_id_internal_id` → `commerce.returns(internal_id)` via `fk_logistics_reverse_shipments_return_id_returns_numeric`; FOREIGN KEY (return_id_internal_id) REFERENCES commerce.returns(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_logistics_reverse_shipments_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_logistics_reverse_shipments_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `carrier_id` → `logistics.carriers(id)` via `fk_logistics_reverse_shipments_carrier_id_carriers`; `FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE SET NULL`
+- `return_id` → `commerce.returns(id)` via `fk_logistics_reverse_shipments_return_id_returns`; `FOREIGN KEY (return_id) REFERENCES commerce.returns(id) ON DELETE RESTRICT`
+- `carrier_id_internal_id` → `logistics.carriers(internal_id)` via `fk_logistics_reverse_shipments_carrier_id_carriers_numeric`; `FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE SET NULL`
+- `return_id_internal_id` → `commerce.returns(internal_id)` via `fk_logistics_reverse_shipments_return_id_returns_numeric`; `FOREIGN KEY (return_id_internal_id) REFERENCES commerce.returns(internal_id) ON DELETE RESTRICT`
 
-## logistics.reverse_shipments — exact structural contracts
+## `logistics.reverse_shipments` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 16 columns, 12 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 16 columns, 12 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -57,7 +60,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `carrier_id_internal_id` | `logistics.carriers` | `fk_logistics_reverse_shipments_carrier_id_carriers_numeric` |
 | `return_id_internal_id` | `commerce.returns` | `fk_logistics_reverse_shipments_return_id_returns_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -74,7 +77,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `reverse_shipment_number` | UNIQUE | `UNIQUE (reverse_shipment_number)` |
 | `uq_logistics_reverse_shipments_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -84,7 +87,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `reverse_shipment_number` | `CREATE UNIQUE INDEX reverse_shipment_number ON logistics.reverse_shipments USING btree (reverse_shipment_number)` |
 | `uq_logistics_reverse_shipments_id` | `CREATE UNIQUE INDEX uq_logistics_reverse_shipments_id ON logistics.reverse_shipments USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -94,4 +97,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

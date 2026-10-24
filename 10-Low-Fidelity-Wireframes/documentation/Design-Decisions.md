@@ -22,7 +22,9 @@ Customer and rider are mobile-first experiences. Administration, pharmacy, fulfi
 
 P lines require current patient/evidence and pharmacist choices before payment. M/O-only baskets skip that branch. Partial decisions preserve eligible lines and require explicit customer acceptance. The detailed journey takes priority for this demonstration; RX-02 deferred upload remains blocked because its deadline/capture/compensation rules conflict with that path.
 
-The accepted quote and exact eligible site stock gate payment. “Paid, confirmation lost” stores one pending attempt and permits reconciliation of its trusted synthetic record. Packing/delivery cannot interpret a redirect, map point or message as clinical/financial truth. COD begins as amount due and becomes actual collection only with accepted doorstep proof. Refund intent, approval, trusted completion and reconciliation stay separate.
+The accepted quote and exact eligible site stock gate payment. “Paid, confirmation lost” stores one pending attempt and permits reconciliation of its trusted synthetic record. Packing/delivery cannot interpret a redirect, map point or message as clinical/financial truth.
+
+COD begins as amount due and becomes actual collection only with accepted doorstep proof. Refund intent, approval, trusted completion and reconciliation stay separate.
 
 ## Deliberate limits and blocked work
 
@@ -47,6 +49,8 @@ Fixture provenance is available in Review tools. Prepared examples carry a short
 
 Experience-prefixed hash routes determine Mobile or Website presentation. A preview override can temporarily inspect tablet/responsive layouts; refresh restores the URL’s experience. Internal legacy screen links are qualified at render time. Supported old links keep working without silently changing roles. Switching experience retains the shared browser records.
 
-“What if something goes wrong?” uses ordinary language separate from the stable technical scenario definitions. Payment conditions invoke the existing payment handler and preserve its reference, quote, stock and clinical gates. Pending operations must be checked before exploring a different outcome; confirmed orders cannot be relabelled pending. Other scenario selections are condition previews with existing command guards, not automatic business decisions. Returning to normal never rolls back a recorded action. A checkout example requires explicit replacement confirmation and creates no payment or clinical approval.
+“What if something goes wrong?” uses ordinary language separate from the stable technical scenario definitions. Payment conditions invoke the existing payment handler and preserve its reference, quote, stock and clinical gates. Pending operations must be checked before exploring a different outcome; confirmed orders cannot be relabelled pending.
+
+Other scenario selections are condition previews with existing command guards, not automatic business decisions. Returning to normal never rolls back a recorded action. A checkout example requires explicit replacement confirmation and creates no payment or clinical approval.
 
 Actual rejection reasons and delivery-failure reasons project to Customer and operational views. An unsuccessful delivery retains custody and actual cash separately. [Platform coverage](Platform-and-Screen-Coverage.md) and [scenario coverage](UX-State-Coverage.md) distinguish normal-layout verification from interaction evidence. Unverified behavior is deliberately left unverified.

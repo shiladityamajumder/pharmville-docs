@@ -1,4 +1,4 @@
-# fulfillment.pick_task_items
+# `fulfillment.pick_task_items`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -30,6 +30,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the pick task items business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Order_Operations, Store_Operations, Warehouse, Delivery_Operations. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -37,22 +38,24 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_fulfillment_pick_task_items_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_fulfillment_pick_task_items_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `lot_id` → `warehouse.inventory_lots(id)` via `fk_fulfillment_pick_task_items_lot_id_inventory_lots`; FOREIGN KEY (lot_id) REFERENCES warehouse.inventory_lots(id) ON DELETE RESTRICT
-- `order_item_id` → `commerce.order_items(id)` via `fk_fulfillment_pick_task_items_order_item_id_order_items`; FOREIGN KEY (order_item_id) REFERENCES commerce.order_items(id) ON DELETE RESTRICT
-- `bin_id` → `warehouse.bins(id)` via `fk_fulfillment_pick_task_items_bin_id_bins`; FOREIGN KEY (bin_id) REFERENCES warehouse.bins(id) ON DELETE RESTRICT
-- `pick_task_id` → `fulfillment.pick_tasks(id)` via `fk_fulfillment_pick_task_items_pick_task_id_pick_tasks`; FOREIGN KEY (pick_task_id) REFERENCES fulfillment.pick_tasks(id) ON DELETE CASCADE
-- `bin_id_internal_id` → `warehouse.bins(internal_id)` via `fk_fulfillment_pick_task_items_bin_id_bins_numeric`; FOREIGN KEY (bin_id_internal_id) REFERENCES warehouse.bins(internal_id) ON DELETE RESTRICT
-- `lot_id_internal_id` → `warehouse.inventory_lots(internal_id)` via `fk_fulfillment_pick_task_items_lot_id_inventory_lots_numeric`; FOREIGN KEY (lot_id_internal_id) REFERENCES warehouse.inventory_lots(internal_id) ON DELETE RESTRICT
-- `order_item_id_internal_id` → `commerce.order_items(internal_id)` via `fk_fulfillment_pick_task_items_order_item_id_order_item_e4d0`; FOREIGN KEY (order_item_id_internal_id) REFERENCES commerce.order_items(internal_id) ON DELETE RESTRICT
-- `pick_task_id_internal_id` → `fulfillment.pick_tasks(internal_id)` via `fk_fulfillment_pick_task_items_pick_task_id_pick_tasks_numeric`; FOREIGN KEY (pick_task_id_internal_id) REFERENCES fulfillment.pick_tasks(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_fulfillment_pick_task_items_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_fulfillment_pick_task_items_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `lot_id` → `warehouse.inventory_lots(id)` via `fk_fulfillment_pick_task_items_lot_id_inventory_lots`; `FOREIGN KEY (lot_id) REFERENCES warehouse.inventory_lots(id) ON DELETE RESTRICT`
+- `order_item_id` → `commerce.order_items(id)` via `fk_fulfillment_pick_task_items_order_item_id_order_items`; `FOREIGN KEY (order_item_id) REFERENCES commerce.order_items(id) ON DELETE RESTRICT`
+- `bin_id` → `warehouse.bins(id)` via `fk_fulfillment_pick_task_items_bin_id_bins`; `FOREIGN KEY (bin_id) REFERENCES warehouse.bins(id) ON DELETE RESTRICT`
+- `pick_task_id` → `fulfillment.pick_tasks(id)` via `fk_fulfillment_pick_task_items_pick_task_id_pick_tasks`; `FOREIGN KEY (pick_task_id) REFERENCES fulfillment.pick_tasks(id) ON DELETE CASCADE`
+- `bin_id_internal_id` → `warehouse.bins(internal_id)` via `fk_fulfillment_pick_task_items_bin_id_bins_numeric`; `FOREIGN KEY (bin_id_internal_id) REFERENCES warehouse.bins(internal_id) ON DELETE RESTRICT`
+- `lot_id_internal_id` → `warehouse.inventory_lots(internal_id)` via `fk_fulfillment_pick_task_items_lot_id_inventory_lots_numeric`; `FOREIGN KEY (lot_id_internal_id) REFERENCES warehouse.inventory_lots(internal_id) ON DELETE RESTRICT`
+- `order_item_id_internal_id` → `commerce.order_items(internal_id)` via `fk_fulfillment_pick_task_items_order_item_id_order_item_e4d0`; `FOREIGN KEY (order_item_id_internal_id) REFERENCES commerce.order_items(internal_id) ON DELETE RESTRICT`
+- `pick_task_id_internal_id` → `fulfillment.pick_tasks(internal_id)` via `fk_fulfillment_pick_task_items_pick_task_id_pick_tasks_numeric`; `FOREIGN KEY (pick_task_id_internal_id) REFERENCES fulfillment.pick_tasks(internal_id) ON DELETE CASCADE`
 
-## fulfillment.pick_task_items — exact structural contracts
+## `fulfillment.pick_task_items` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 18 columns, 20 constraints, 5 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 18 columns, 20 constraints, 5 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -67,7 +70,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `order_item_id_internal_id` | `commerce.order_items` | `fk_fulfillment_pick_task_items_order_item_id_order_item_e4d0` |
 | `pick_task_id_internal_id` | `fulfillment.pick_tasks` | `fk_fulfillment_pick_task_items_pick_task_id_pick_tasks_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -92,7 +95,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_fulfillment_pick_task_items` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_fulfillment_pick_task_items_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -102,7 +105,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_fulfillment_pick_task_items` | `CREATE UNIQUE INDEX pk_fulfillment_pick_task_items ON fulfillment.pick_task_items USING btree (internal_id)` |
 | `uq_fulfillment_pick_task_items_id` | `CREATE UNIQUE INDEX uq_fulfillment_pick_task_items_id ON fulfillment.pick_task_items USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -113,4 +116,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

@@ -1,4 +1,4 @@
-# fulfillment.pick_tasks
+# `fulfillment.pick_tasks`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -27,6 +27,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the pick tasks business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Order_Operations, Store_Operations, Warehouse, Delivery_Operations. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -34,21 +35,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `assigned_to_user_id` → `identity.users(id)` via `fk_fulfillment_pick_tasks_assigned_to_user_id_users`; FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `created_by` → `identity.users(id)` via `fk_fulfillment_pick_tasks_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_fulfillment_pick_tasks_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `wave_id` → `fulfillment.picking_waves(id)` via `fk_fulfillment_pick_tasks_wave_id_picking_waves`; FOREIGN KEY (wave_id) REFERENCES fulfillment.picking_waves(id) ON DELETE SET NULL
-- `fulfillment_order_id` → `fulfillment.fulfillment_orders(id)` via `fk_fulfillment_pick_tasks_fulfillment_order_id_fulfillm_101f`; FOREIGN KEY (fulfillment_order_id) REFERENCES fulfillment.fulfillment_orders(id) ON DELETE CASCADE
-- `fulfillment_order_id_internal_id` → `fulfillment.fulfillment_orders(internal_id)` via `fk_fulfillment_pick_tasks_fulfillment_order_id_fulfillm_095b`; FOREIGN KEY (fulfillment_order_id_internal_id) REFERENCES fulfillment.fulfillment_orders(internal_id) ON DELETE CASCADE
-- `wave_id_internal_id` → `fulfillment.picking_waves(internal_id)` via `fk_fulfillment_pick_tasks_wave_id_picking_waves_numeric`; FOREIGN KEY (wave_id_internal_id) REFERENCES fulfillment.picking_waves(internal_id) ON DELETE SET NULL
+- `assigned_to_user_id` → `identity.users(id)` via `fk_fulfillment_pick_tasks_assigned_to_user_id_users`; `FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `created_by` → `identity.users(id)` via `fk_fulfillment_pick_tasks_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_fulfillment_pick_tasks_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `wave_id` → `fulfillment.picking_waves(id)` via `fk_fulfillment_pick_tasks_wave_id_picking_waves`; `FOREIGN KEY (wave_id) REFERENCES fulfillment.picking_waves(id) ON DELETE SET NULL`
+- `fulfillment_order_id` → `fulfillment.fulfillment_orders(id)` via `fk_fulfillment_pick_tasks_fulfillment_order_id_fulfillm_101f`; `FOREIGN KEY (fulfillment_order_id) REFERENCES fulfillment.fulfillment_orders(id) ON DELETE CASCADE`
+- `fulfillment_order_id_internal_id` → `fulfillment.fulfillment_orders(internal_id)` via `fk_fulfillment_pick_tasks_fulfillment_order_id_fulfillm_095b`; `FOREIGN KEY (fulfillment_order_id_internal_id) REFERENCES fulfillment.fulfillment_orders(internal_id) ON DELETE CASCADE`
+- `wave_id_internal_id` → `fulfillment.picking_waves(internal_id)` via `fk_fulfillment_pick_tasks_wave_id_picking_waves_numeric`; `FOREIGN KEY (wave_id_internal_id) REFERENCES fulfillment.picking_waves(internal_id) ON DELETE SET NULL`
 
 **Referenced by 2 FK constraints** (sample): `fulfillment.pick_task_items`, `fulfillment.pick_task_items`.
 
-## fulfillment.pick_tasks — exact structural contracts
+## `fulfillment.pick_tasks` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 15 columns, 12 constraints, 4 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 15 columns, 12 constraints, 4 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -60,7 +63,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `fulfillment_order_id_internal_id` | `fulfillment.fulfillment_orders` | `fk_fulfillment_pick_tasks_fulfillment_order_id_fulfillm_095b` |
 | `wave_id_internal_id` | `fulfillment.picking_waves` | `fk_fulfillment_pick_tasks_wave_id_picking_waves_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -77,7 +80,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_fulfillment_pick_tasks` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_fulfillment_pick_tasks_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -86,7 +89,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_fulfillment_pick_tasks` | `CREATE UNIQUE INDEX pk_fulfillment_pick_tasks ON fulfillment.pick_tasks USING btree (internal_id)` |
 | `uq_fulfillment_pick_tasks_id` | `CREATE UNIQUE INDEX uq_fulfillment_pick_tasks_id ON fulfillment.pick_tasks USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -97,4 +100,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

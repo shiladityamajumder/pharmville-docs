@@ -14,28 +14,31 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## MOD-017: Login, sessions, roles and access control — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Login, sessions, roles and access control. Client-supplied actor, role and location are never trusted as authorisation context.
 
 **System responsibility:** The `Authentication_Access` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager (`AUTH-01`)
 - Lockout rules, session limits, one session per staff account (`AUTH-02`)
 - OTP rate limits per number and IP (`AUTH-03`)
 - Permissions checked on the server for every request (`AUTH-04`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `identity.users`, `identity.sessions`, `identity.roles`, `identity.user_roles`, `identity.permissions`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 Client-supplied actor, role and location are never trusted as authorisation context. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## MOD-017 — Login, sessions, roles and access control
@@ -45,12 +48,14 @@ Client-supplied actor, role and location are never trusted as authorisation cont
 **Purpose:** Client-supplied actor, role and location are never trusted as authorisation context.
 
 **Feature coverage**
+
 - **AUTH-01 / REQ-102:** Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager (Must (draft)).
 - **AUTH-02 / REQ-103:** Lockout rules, session limits, one session per staff account (Must (draft)).
 - **AUTH-03 / REQ-104:** OTP rate limits per number and IP (Must (draft)).
 - **AUTH-04 / REQ-105:** Permissions checked on the server for every request (Must (draft)).
 
-## Developer navigation
+### Developer navigation
+
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture

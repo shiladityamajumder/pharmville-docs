@@ -1,4 +1,4 @@
-# clinical.diagnoses
+# `clinical.diagnoses`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -26,6 +26,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the diagnoses business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -33,16 +34,18 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_clinical_diagnoses_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_clinical_diagnoses_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `consultation_id` → `clinical.consultations(id)` via `fk_clinical_diagnoses_consultation_id_consultations`; FOREIGN KEY (consultation_id) REFERENCES clinical.consultations(id) ON DELETE CASCADE
-- `consultation_id_internal_id` → `clinical.consultations(internal_id)` via `fk_clinical_diagnoses_consultation_id_consultations_numeric`; FOREIGN KEY (consultation_id_internal_id) REFERENCES clinical.consultations(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_clinical_diagnoses_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_clinical_diagnoses_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `consultation_id` → `clinical.consultations(id)` via `fk_clinical_diagnoses_consultation_id_consultations`; `FOREIGN KEY (consultation_id) REFERENCES clinical.consultations(id) ON DELETE CASCADE`
+- `consultation_id_internal_id` → `clinical.consultations(internal_id)` via `fk_clinical_diagnoses_consultation_id_consultations_numeric`; `FOREIGN KEY (consultation_id_internal_id) REFERENCES clinical.consultations(internal_id) ON DELETE CASCADE`
 
-## clinical.diagnoses — exact structural contracts
+## `clinical.diagnoses` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 14 columns, 8 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 14 columns, 8 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -51,7 +54,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `consultation_id` | `clinical.consultations` | `fk_clinical_diagnoses_consultation_id_consultations` |
 | `consultation_id_internal_id` | `clinical.consultations` | `fk_clinical_diagnoses_consultation_id_consultations_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -64,7 +67,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_clinical_diagnoses` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_clinical_diagnoses_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -73,7 +76,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_clinical_diagnoses` | `CREATE UNIQUE INDEX pk_clinical_diagnoses ON clinical.diagnoses USING btree (internal_id)` |
 | `uq_clinical_diagnoses_id` | `CREATE UNIQUE INDEX uq_clinical_diagnoses_id ON clinical.diagnoses USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -83,4 +86,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

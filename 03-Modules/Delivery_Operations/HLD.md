@@ -14,13 +14,14 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## MOD-012: Delivery planning, route and proof — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Delivery planning, route and proof. Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence.
 
 **System responsibility:** The `Delivery_Operations` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - Live map of riders (available, on delivery, offline) and orders ready for pickup (`DLV-01`)
 - Suggest the nearest available rider; staff confirm or choose another (`DLV-02`)
@@ -28,15 +29,17 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - COD handover: cash collected vs deposited per rider per day (`DLV-04`)
 - Rider management: onboard, assign location, shifts (`DLV-05`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `logistics.shipments`, `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_slots`, `logistics.ndr_cases`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## MOD-012 — Delivery planning, route and proof
@@ -46,13 +49,15 @@ Order handoff to courier requires authorised assignment; failed attempts retain 
 **Purpose:** Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence.
 
 **Feature coverage**
+
 - **DLV-01 / REQ-074:** Live map of riders (available, on delivery, offline) and orders ready for pickup (Must (draft)).
 - **DLV-02 / REQ-075:** Suggest the nearest available rider; staff confirm or choose another (Must (draft)).
 - **DLV-03 / REQ-076:** Failed-delivery queue: reattempt, reschedule or return to store (Must (draft)).
 - **DLV-04 / REQ-077:** COD handover: cash collected vs deposited per rider per day (Must (draft)).
 - **DLV-05 / REQ-078:** Rider management: onboard, assign location, shifts (Must (draft)).
 
-## Developer navigation
+### Developer navigation
+
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture

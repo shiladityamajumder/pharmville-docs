@@ -6,7 +6,7 @@ Browser tests execute the local HTML, CSS and JavaScript through actual forms, b
 
 Start the [local preview](How-to-Run.md), then run from repository root:
 
-```text
+```bash
 node 10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs
 node 10-Low-Fidelity-Wireframes/tests/browser.mjs
 node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs
@@ -30,9 +30,15 @@ The [Complete Screen Matrix](Complete-Screen-Matrix.md) maps each route to the t
 
 ## Manual review checklist
 
-The `experience-flows.mjs` suite assigns stable `EXP-nnn` assertion IDs in its results file. It operates Choose Experience → Mobile/Website → Checkout, checks experience URLs and refresh, Back/Forward, actual shared cart quantity/price, unsupported platform/role combinations, and both shopping flows through captured-payment recovery and tracking. Account/address fixtures supply setup; shopping actions, payment, prescription upload, pharmacist rejection, store preparation, rider assignment/pickup and delivery failure use the existing UI handlers. Incorrect OTP checks include the contextual error, denied session and corrected retry. The suite separately checks every supported experience-prefixed route at its intended normal width. Normal route rendering is not treated as full interaction verification.
+The `experience-flows.mjs` suite assigns stable `EXP-nnn` assertion IDs in its results file. It operates Choose Experience → Mobile/Website → Checkout, checks experience URLs and refresh, Back/Forward, actual shared cart quantity/price, unsupported platform/role combinations, and both shopping flows through captured-payment recovery and tracking.
 
-Fresh screenshots cover all 18 requested categories plus journey selection, stock shortage and refund pending. They are generated from the current run, with actual phone-width customer captures and desktop customer/staff captures. `generate-experience-coverage.mjs` requires a successful results file before recording verified platform/scenario rows. Its legacy `generate-ux-state-coverage.mjs` entry point delegates to the same generator, so it cannot restore the old generic verification claims.
+Account/address fixtures supply setup; shopping actions, payment, prescription upload, pharmacist rejection, store preparation, rider assignment/pickup and delivery failure use the existing UI handlers. Incorrect OTP checks include the contextual error, denied session and corrected retry.
+
+The suite separately checks every supported experience-prefixed route at its intended normal width. Normal route rendering is not treated as full interaction verification.
+
+Fresh screenshots cover all 18 requested categories plus journey selection, stock shortage and refund pending. They are generated from the current run, with actual phone-width customer captures and desktop customer/staff captures. `generate-experience-coverage.mjs` requires a successful results file before recording verified platform/scenario rows.
+
+Its legacy `generate-ux-state-coverage.mjs` entry point delegates to the same generator, so it cannot restore the old generic verification claims.
 
 - Use only the keyboard to select workspace/role/scenario, submit forms, open/cancel confirmation and follow cross-role links. Confirm labels, focus visibility and announced errors.
 - Check that each failure explains what happened, who acts next and which record remains pending. Do not treat a scenario panel label as a completed business action.
@@ -46,4 +52,6 @@ Actual results are recorded after execution in the local browser-results JSON an
 
 ## Product UX behavioral checks
 
-Run `node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs` after starting the server. It tests direct-URL role denial, explicit reviewer changes, removal of duplicate customer navigation, inline required-input errors, actual product filtering, preserved order state during preview changes, expired OTP rejection, duplicate checkout and concurrent pharmacy review. It captures 15 representative routes at 390 and 1440 px using a labelled prepared fixture. The original full suite now explicitly selects reviewer personas before each cross-workspace smoke visit; direct URL denial is tested independently.
+Run `node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs` after starting the server. It tests direct-URL role denial, explicit reviewer changes, removal of duplicate customer navigation, inline required-input errors, actual product filtering, preserved order state during preview changes, expired OTP rejection, duplicate checkout and concurrent pharmacy review.
+
+It captures 15 representative routes at 390 and 1440 px using a labelled prepared fixture. The original full suite now explicitly selects reviewer personas before each cross-workspace smoke visit; direct URL denial is tested independently.

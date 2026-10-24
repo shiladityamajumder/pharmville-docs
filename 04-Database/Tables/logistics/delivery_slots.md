@@ -1,4 +1,4 @@
-# logistics.delivery_slots
+# `logistics.delivery_slots`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -33,6 +33,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the delivery slots business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -40,19 +41,21 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_logistics_delivery_slots_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_logistics_delivery_slots_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_logistics_delivery_slots_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `warehouse_id` → `warehouse.warehouses(id)` via `fk_logistics_delivery_slots_warehouse_id_warehouses`; FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE SET NULL
-- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_logistics_delivery_slots_warehouse_id_warehouses_numeric`; FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE SET NULL
+- `created_by` → `identity.users(id)` via `fk_logistics_delivery_slots_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_logistics_delivery_slots_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_logistics_delivery_slots_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `warehouse_id` → `warehouse.warehouses(id)` via `fk_logistics_delivery_slots_warehouse_id_warehouses`; `FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE SET NULL`
+- `warehouse_id_internal_id` → `warehouse.warehouses(internal_id)` via `fk_logistics_delivery_slots_warehouse_id_warehouses_numeric`; `FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE SET NULL`
 
 **Referenced by 2 FK constraints** (sample): `logistics.shipments`, `logistics.shipments`.
 
-## logistics.delivery_slots — exact structural contracts
+## `logistics.delivery_slots` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 21 columns, 13 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 21 columns, 13 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -62,7 +65,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `warehouse_id` | `warehouse.warehouses` | `fk_logistics_delivery_slots_warehouse_id_warehouses` |
 | `warehouse_id_internal_id` | `warehouse.warehouses` | `fk_logistics_delivery_slots_warehouse_id_warehouses_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -80,7 +83,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_logistics_delivery_slots` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_logistics_delivery_slots_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -89,7 +92,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_logistics_delivery_slots` | `CREATE UNIQUE INDEX pk_logistics_delivery_slots ON logistics.delivery_slots USING btree (internal_id)` |
 | `uq_logistics_delivery_slots_id` | `CREATE UNIQUE INDEX uq_logistics_delivery_slots_id ON logistics.delivery_slots USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -99,4 +102,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

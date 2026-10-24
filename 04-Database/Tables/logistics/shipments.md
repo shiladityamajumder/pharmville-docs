@@ -1,4 +1,4 @@
-# logistics.shipments
+# `logistics.shipments`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -43,6 +43,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the shipments business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -50,34 +51,36 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_logistics_shipments_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_logistics_shipments_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `order_group_id` → `commerce.order_groups(id)` via `fk_logistics_shipments_order_group_id_order_groups`; FOREIGN KEY (order_group_id) REFERENCES commerce.order_groups(id) ON DELETE SET NULL
-- `carrier_id` → `logistics.carriers(id)` via `fk_logistics_shipments_carrier_id_carriers`; FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE RESTRICT
-- `order_group_id, order_id` → `commerce.order_groups(id, order_id)` via `fk_logistics_shipments_group_order`; FOREIGN KEY (order_group_id, order_id) REFERENCES commerce.order_groups(id, order_id) ON DELETE RESTRICT
-- `order_id` → `commerce.orders(id)` via `fk_logistics_shipments_order_id_orders`; FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT
-- `carrier_account_id` → `logistics.carrier_accounts(id)` via `fk_logistics_shipments_carrier_account_id_carrier_accounts`; FOREIGN KEY (carrier_account_id) REFERENCES logistics.carrier_accounts(id) ON DELETE SET NULL
-- `order_revision_id, order_id` → `commerce.order_revisions(id, order_id)` via `fk_logistics_shipments_revision_scope`; FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT
-- `delivery_slot_id` → `logistics.delivery_slots(id)` via `fk_logistics_shipments_delivery_slot_id_delivery_slots`; FOREIGN KEY (delivery_slot_id) REFERENCES logistics.delivery_slots(id) ON DELETE SET NULL
-- `package_id` → `fulfillment.packages(id)` via `fk_logistics_shipments_package_id_packages`; FOREIGN KEY (package_id) REFERENCES fulfillment.packages(id) ON DELETE RESTRICT
-- `shipping_label_file_id` → `platform.file_objects(id)` via `fk_logistics_shipments_shipping_label_file_id_file_objects`; FOREIGN KEY (shipping_label_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL
-- `carrier_account_id_internal_id` → `logistics.carrier_accounts(internal_id)` via `fk_logistics_shipments_carrier_account_id_carrier_accou_456d`; FOREIGN KEY (carrier_account_id_internal_id) REFERENCES logistics.carrier_accounts(internal_id) ON DELETE SET NULL
-- `carrier_id_internal_id` → `logistics.carriers(internal_id)` via `fk_logistics_shipments_carrier_id_carriers_numeric`; FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE RESTRICT
-- `delivery_slot_id_internal_id` → `logistics.delivery_slots(internal_id)` via `fk_logistics_shipments_delivery_slot_id_delivery_slots_numeric`; FOREIGN KEY (delivery_slot_id_internal_id) REFERENCES logistics.delivery_slots(internal_id) ON DELETE SET NULL
-- `order_group_id_internal_id, order_id_internal_id` → `commerce.order_groups(internal_id, order_id_internal_id)` via `fk_logistics_shipments_group_order_numeric`; FOREIGN KEY (order_group_id_internal_id, order_id_internal_id) REFERENCES commerce.order_groups(internal_id, order_id_internal_id) ON DELETE RESTRICT
-- `order_group_id_internal_id` → `commerce.order_groups(internal_id)` via `fk_logistics_shipments_order_group_id_order_groups_numeric`; FOREIGN KEY (order_group_id_internal_id) REFERENCES commerce.order_groups(internal_id) ON DELETE SET NULL
-- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_logistics_shipments_order_id_orders_numeric`; FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT
-- `package_id_internal_id` → `fulfillment.packages(internal_id)` via `fk_logistics_shipments_package_id_packages_numeric`; FOREIGN KEY (package_id_internal_id) REFERENCES fulfillment.packages(internal_id) ON DELETE RESTRICT
-- `order_revision_id_internal_id, order_id_internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_logistics_shipments_revision_scope_numeric`; FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT
-- `shipping_label_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_logistics_shipments_shipping_label_file_id_file_obje_c402`; FOREIGN KEY (shipping_label_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL
+- `created_by` → `identity.users(id)` via `fk_logistics_shipments_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_logistics_shipments_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `order_group_id` → `commerce.order_groups(id)` via `fk_logistics_shipments_order_group_id_order_groups`; `FOREIGN KEY (order_group_id) REFERENCES commerce.order_groups(id) ON DELETE SET NULL`
+- `carrier_id` → `logistics.carriers(id)` via `fk_logistics_shipments_carrier_id_carriers`; `FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE RESTRICT`
+- `order_group_id, order_id` → `commerce.order_groups(id, order_id)` via `fk_logistics_shipments_group_order`; `FOREIGN KEY (order_group_id, order_id) REFERENCES commerce.order_groups(id, order_id) ON DELETE RESTRICT`
+- `order_id` → `commerce.orders(id)` via `fk_logistics_shipments_order_id_orders`; `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT`
+- `carrier_account_id` → `logistics.carrier_accounts(id)` via `fk_logistics_shipments_carrier_account_id_carrier_accounts`; `FOREIGN KEY (carrier_account_id) REFERENCES logistics.carrier_accounts(id) ON DELETE SET NULL`
+- `order_revision_id, order_id` → `commerce.order_revisions(id, order_id)` via `fk_logistics_shipments_revision_scope`; `FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT`
+- `delivery_slot_id` → `logistics.delivery_slots(id)` via `fk_logistics_shipments_delivery_slot_id_delivery_slots`; `FOREIGN KEY (delivery_slot_id) REFERENCES logistics.delivery_slots(id) ON DELETE SET NULL`
+- `package_id` → `fulfillment.packages(id)` via `fk_logistics_shipments_package_id_packages`; `FOREIGN KEY (package_id) REFERENCES fulfillment.packages(id) ON DELETE RESTRICT`
+- `shipping_label_file_id` → `platform.file_objects(id)` via `fk_logistics_shipments_shipping_label_file_id_file_objects`; `FOREIGN KEY (shipping_label_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL`
+- `carrier_account_id_internal_id` → `logistics.carrier_accounts(internal_id)` via `fk_logistics_shipments_carrier_account_id_carrier_accou_456d`; `FOREIGN KEY (carrier_account_id_internal_id) REFERENCES logistics.carrier_accounts(internal_id) ON DELETE SET NULL`
+- `carrier_id_internal_id` → `logistics.carriers(internal_id)` via `fk_logistics_shipments_carrier_id_carriers_numeric`; `FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE RESTRICT`
+- `delivery_slot_id_internal_id` → `logistics.delivery_slots(internal_id)` via `fk_logistics_shipments_delivery_slot_id_delivery_slots_numeric`; `FOREIGN KEY (delivery_slot_id_internal_id) REFERENCES logistics.delivery_slots(internal_id) ON DELETE SET NULL`
+- `order_group_id_internal_id, order_id_internal_id` → `commerce.order_groups(internal_id, order_id_internal_id)` via `fk_logistics_shipments_group_order_numeric`; `FOREIGN KEY (order_group_id_internal_id, order_id_internal_id) REFERENCES commerce.order_groups(internal_id, order_id_internal_id) ON DELETE RESTRICT`
+- `order_group_id_internal_id` → `commerce.order_groups(internal_id)` via `fk_logistics_shipments_order_group_id_order_groups_numeric`; `FOREIGN KEY (order_group_id_internal_id) REFERENCES commerce.order_groups(internal_id) ON DELETE SET NULL`
+- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_logistics_shipments_order_id_orders_numeric`; `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT`
+- `package_id_internal_id` → `fulfillment.packages(internal_id)` via `fk_logistics_shipments_package_id_packages_numeric`; `FOREIGN KEY (package_id_internal_id) REFERENCES fulfillment.packages(internal_id) ON DELETE RESTRICT`
+- `order_revision_id_internal_id, order_id_internal_id` → `commerce.order_revisions(internal_id, order_id_internal_id)` via `fk_logistics_shipments_revision_scope_numeric`; `FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT`
+- `shipping_label_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_logistics_shipments_shipping_label_file_id_file_obje_c402`; `FOREIGN KEY (shipping_label_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL`
 
 **Referenced by 12 FK constraints** (sample): `logistics.shipment_events`, `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.ndr_cases`, `payment.cod_collections`, `logistics.delivery_otp_challenges`, `logistics.delivery_assignments`, `logistics.delivery_attempts`, `logistics.delivery_otp_challenges`, `logistics.ndr_cases`, `logistics.shipment_events`, `payment.cod_collections`.
 
-## logistics.shipments — exact structural contracts
+## `logistics.shipments` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 31 columns, 33 constraints, 8 indexes, 5 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 31 columns, 33 constraints, 8 indexes, 5 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -102,7 +105,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `order_revision_id_internal_id`, `order_id_internal_id` | `commerce.order_revisions` | `fk_logistics_shipments_revision_scope_numeric` |
 | `shipping_label_file_id_internal_id` | `platform.file_objects` | `fk_logistics_shipments_shipping_label_file_id_file_obje_c402` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -140,7 +143,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `shipment_number` | UNIQUE | `UNIQUE (shipment_number)` |
 | `uq_logistics_shipments_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -153,7 +156,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_logistics_shipments_id` | `CREATE UNIQUE INDEX uq_logistics_shipments_id ON logistics.shipments USING btree (id)` |
 | `uq_logistics_shipments_tracking_present` | `CREATE UNIQUE INDEX uq_logistics_shipments_tracking_present ON logistics.shipments USING btree (carrier_id, tracking_number) WHERE tracking_number IS NOT NULL` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -165,4 +168,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

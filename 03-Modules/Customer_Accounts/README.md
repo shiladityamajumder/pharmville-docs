@@ -9,6 +9,7 @@
 **Purpose:** Customer submits OTP, selects patient/address; sensitive information is never returned to other accounts.
 
 **Feature coverage**
+
 - **ACC-01 / REQ-001:** Sign up and log in with mobile OTP (WhatsApp first, SMS fallback) (Must (draft)).
 - **ACC-02 / REQ-002:** Profile: name, email, phone (Must (draft)).
 - **ACC-03 / REQ-003:** Saved addresses with map pin; serviceability checked when the address is entered (Must (draft)).
@@ -17,26 +18,28 @@
 - **ACC-06 / REQ-006:** Account deletion request (Should (draft)).
 - **ACC-07 / REQ-007:** Wishlist (Should (draft)).
 
-## Developer navigation
-- [Module HLD](HLD.md)
-- [Module LLD](LLD.md)
+### Developer navigation
+
+- 🏗️ [Module HLD](HLD.md)
+- ⚙️ [Module LLD](LLD.md)
 - Internal architecture
-- [API contracts](../../05-APIs/Customer_Accounts.md)
-- [Database mapping](../../04-Database/Module-Mapping.md)
-- [Testing](../../07-Engineering/Testing.md)
-- [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
+- 🔗 [API contracts](../../05-APIs/Customer_Accounts.md)
+- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
+- 🧪 [Testing](../../07-Engineering/Testing.md)
+- 🗓️ [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
 
 **Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
 
 ## MOD-001: Customer profiles and family access — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Customer profiles and family access. Customer submits OTP, selects patient/address; sensitive information is never returned to other accounts.
 
 **System responsibility:** The `Customer_Accounts` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - Sign up and log in with mobile OTP (WhatsApp first, SMS fallback) (`ACC-01`)
 - Profile: name, email, phone (`ACC-02`)
@@ -46,24 +49,26 @@
 - Account deletion request (`ACC-06`)
 - Wishlist (`ACC-07`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `identity.users`, `customer.profiles`, `customer.family_members`, `customer.addresses`, `clinical.patient_profiles`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 Customer submits OTP, selects patient/address; sensitive information is never returned to other accounts. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## Related design and delivery references
 
-- [HLD](HLD.md)
-- [LLD](LLD.md)
-- [Edge cases](Edge-Cases.md)
-- [API contracts](../../05-APIs/Customer_Accounts.md)
-- [Database mapping](../../04-Database/Module-Mapping.md)
-- [QA scenarios](../../07-Engineering/Testing.md)
-- [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
+- 🏗️ [HLD](HLD.md)
+- ⚙️ [LLD](LLD.md)
+- 🧪 [Edge cases](Edge-Cases.md)
+- 🔗 [API contracts](../../05-APIs/Customer_Accounts.md)
+- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
+- 🧪 [QA scenarios](../../07-Engineering/Testing.md)
+- 🗓️ [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
 - End-to-end flows: [workflows](../../06-Workflows/README.md)

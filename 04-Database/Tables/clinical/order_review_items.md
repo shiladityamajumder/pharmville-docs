@@ -1,4 +1,4 @@
-# clinical.order_review_items
+# `clinical.order_review_items`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -33,6 +33,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the order review items business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -40,19 +41,21 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `reason_code_id, reason_code` → `clinical.review_reason_codes(id, code)` via `fk_clinical_order_review_items_controlled_reason`; FOREIGN KEY (reason_code_id, reason_code) REFERENCES clinical.review_reason_codes(id, code) ON DELETE RESTRICT
-- `prescription_item_id, prescription_id` → `clinical.prescription_items(id, prescription_id)` via `fk_clinical_review_items_rx_item`; FOREIGN KEY (prescription_item_id, prescription_id) REFERENCES clinical.prescription_items(id, prescription_id) ON DELETE RESTRICT
-- `review_id, order_id, prescription_id` → `clinical.order_reviews(id, order_id, prescription_id)` via `fk_clinical_review_items_review_order_rx`; FOREIGN KEY (review_id, order_id, prescription_id) REFERENCES clinical.order_reviews(id, order_id, prescription_id) ON DELETE RESTRICT
-- `order_item_id, order_id` → `commerce.order_items(id, order_id)` via `fk_clinical_review_items_item_order`; FOREIGN KEY (order_item_id, order_id) REFERENCES commerce.order_items(id, order_id) ON DELETE RESTRICT
-- `order_item_id_internal_id, order_id_internal_id` → `commerce.order_items(internal_id, order_id_internal_id)` via `fk_clinical_review_items_item_order_numeric`; FOREIGN KEY (order_item_id_internal_id, order_id_internal_id) REFERENCES commerce.order_items(internal_id, order_id_internal_id) ON DELETE RESTRICT
-- `review_id_internal_id, order_id_internal_id, prescription_id_internal_id` → `clinical.order_reviews(internal_id, order_id_internal_id, prescription_id_internal_id)` via `fk_clinical_review_items_review_order_rx_numeric`; FOREIGN KEY (review_id_internal_id, order_id_internal_id, prescription_id_internal_id) REFERENCES clinical.order_reviews(internal_id, order_id_internal_id, prescription_id_internal_id) ON DELETE RESTRICT
-- `prescription_item_id_internal_id, prescription_id_internal_id` → `clinical.prescription_items(internal_id, prescription_id_internal_id)` via `fk_clinical_review_items_rx_item_numeric`; FOREIGN KEY (prescription_item_id_internal_id, prescription_id_internal_id) REFERENCES clinical.prescription_items(internal_id, prescription_id_internal_id) ON DELETE RESTRICT
+- `reason_code_id, reason_code` → `clinical.review_reason_codes(id, code)` via `fk_clinical_order_review_items_controlled_reason`; `FOREIGN KEY (reason_code_id, reason_code) REFERENCES clinical.review_reason_codes(id, code) ON DELETE RESTRICT`
+- `prescription_item_id, prescription_id` → `clinical.prescription_items(id, prescription_id)` via `fk_clinical_review_items_rx_item`; `FOREIGN KEY (prescription_item_id, prescription_id) REFERENCES clinical.prescription_items(id, prescription_id) ON DELETE RESTRICT`
+- `review_id, order_id, prescription_id` → `clinical.order_reviews(id, order_id, prescription_id)` via `fk_clinical_review_items_review_order_rx`; `FOREIGN KEY (review_id, order_id, prescription_id) REFERENCES clinical.order_reviews(id, order_id, prescription_id) ON DELETE RESTRICT`
+- `order_item_id, order_id` → `commerce.order_items(id, order_id)` via `fk_clinical_review_items_item_order`; `FOREIGN KEY (order_item_id, order_id) REFERENCES commerce.order_items(id, order_id) ON DELETE RESTRICT`
+- `order_item_id_internal_id, order_id_internal_id` → `commerce.order_items(internal_id, order_id_internal_id)` via `fk_clinical_review_items_item_order_numeric`; `FOREIGN KEY (order_item_id_internal_id, order_id_internal_id) REFERENCES commerce.order_items(internal_id, order_id_internal_id) ON DELETE RESTRICT`
+- `review_id_internal_id, order_id_internal_id, prescription_id_internal_id` → `clinical.order_reviews(internal_id, order_id_internal_id, prescription_id_internal_id)` via `fk_clinical_review_items_review_order_rx_numeric`; `FOREIGN KEY (review_id_internal_id, order_id_internal_id, prescription_id_internal_id) REFERENCES clinical.order_reviews(internal_id, order_id_internal_id, prescription_id_internal_id) ON DELETE RESTRICT`
+- `prescription_item_id_internal_id, prescription_id_internal_id` → `clinical.prescription_items(internal_id, prescription_id_internal_id)` via `fk_clinical_review_items_rx_item_numeric`; `FOREIGN KEY (prescription_item_id_internal_id, prescription_id_internal_id) REFERENCES clinical.prescription_items(internal_id, prescription_id_internal_id) ON DELETE RESTRICT`
 
-## clinical.order_review_items — exact structural contracts
+## `clinical.order_review_items` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 21 columns, 22 constraints, 5 indexes, 5 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 21 columns, 22 constraints, 5 indexes, 5 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -64,7 +67,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `review_id_internal_id`, `order_id_internal_id`, `prescription_id_internal_id` | `clinical.order_reviews` | `fk_clinical_review_items_review_order_rx_numeric` |
 | `prescription_item_id_internal_id`, `prescription_id_internal_id` | `clinical.prescription_items` | `fk_clinical_review_items_rx_item_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -91,7 +94,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_clinical_order_review_items_id` | UNIQUE | `UNIQUE (id)` |
 | `uq_clinical_review_items_review_item` | UNIQUE | `UNIQUE (review_id, order_item_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -101,7 +104,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_clinical_order_review_items_id` | `CREATE UNIQUE INDEX uq_clinical_order_review_items_id ON clinical.order_review_items USING btree (id)` |
 | `uq_clinical_review_items_review_item` | `CREATE UNIQUE INDEX uq_clinical_review_items_review_item ON clinical.order_review_items USING btree (review_id, order_item_id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -113,4 +116,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

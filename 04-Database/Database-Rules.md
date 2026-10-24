@@ -47,7 +47,9 @@ See Security Overview, Database Tests and Runtime Roles.
 
 ## Database reference — exact checked-in catalog snapshot
 
-**Authoritative deployment:** SQL migrations the checked-in SQL migration history. **Snapshot evidence:** local PG18 final inventory; not a production deployment.
+**Authoritative deployment:** SQL migrations the checked-in SQL migration history.
+
+**Snapshot evidence:** local PG18 final inventory; not a production deployment.
 
 - All 266 tables
 - Stable DB IDs

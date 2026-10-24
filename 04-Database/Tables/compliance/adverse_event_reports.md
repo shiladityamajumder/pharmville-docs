@@ -1,4 +1,4 @@
-# compliance.adverse_event_reports
+# `compliance.adverse_event_reports`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -33,6 +33,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the adverse event reports business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Pharmacist_Review, Audit. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -40,21 +41,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_compliance_adverse_event_reports_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_compliance_adverse_event_reports_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `reported_by_user_id` → `identity.users(id)` via `fk_compliance_adverse_event_reports_reported_by_user_id_users`; FOREIGN KEY (reported_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `prescription_id` → `clinical.prescriptions(id)` via `fk_compliance_adverse_event_reports_prescription_id_pre_e002`; FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE SET NULL
-- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_compliance_adverse_event_reports_patient_profile_id__4b0b`; FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE SET NULL
-- `product_id` → `catalog.products(id)` via `fk_compliance_adverse_event_reports_product_id_products`; FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE SET NULL
-- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_compliance_adverse_event_reports_patient_profile_id__6d1c`; FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE SET NULL
-- `prescription_id_internal_id` → `clinical.prescriptions(internal_id)` via `fk_compliance_adverse_event_reports_prescription_id_pre_401a`; FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE SET NULL
-- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_compliance_adverse_event_reports_product_id_products_numeric`; FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE SET NULL
+- `created_by` → `identity.users(id)` via `fk_compliance_adverse_event_reports_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_compliance_adverse_event_reports_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `reported_by_user_id` → `identity.users(id)` via `fk_compliance_adverse_event_reports_reported_by_user_id_users`; `FOREIGN KEY (reported_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `prescription_id` → `clinical.prescriptions(id)` via `fk_compliance_adverse_event_reports_prescription_id_pre_e002`; `FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE SET NULL`
+- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_compliance_adverse_event_reports_patient_profile_id__4b0b`; `FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE SET NULL`
+- `product_id` → `catalog.products(id)` via `fk_compliance_adverse_event_reports_product_id_products`; `FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE SET NULL`
+- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_compliance_adverse_event_reports_patient_profile_id__6d1c`; `FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE SET NULL`
+- `prescription_id_internal_id` → `clinical.prescriptions(internal_id)` via `fk_compliance_adverse_event_reports_prescription_id_pre_401a`; `FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE SET NULL`
+- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_compliance_adverse_event_reports_product_id_products_numeric`; `FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE SET NULL`
 
-## compliance.adverse_event_reports — exact structural contracts
+## `compliance.adverse_event_reports` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 21 columns, 16 constraints, 6 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 21 columns, 16 constraints, 6 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -68,7 +71,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `prescription_id_internal_id` | `clinical.prescriptions` | `fk_compliance_adverse_event_reports_prescription_id_pre_401a` |
 | `product_id_internal_id` | `catalog.products` | `fk_compliance_adverse_event_reports_product_id_products_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -89,7 +92,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_compliance_adverse_event_reports` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_compliance_adverse_event_reports_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -100,7 +103,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_compliance_adverse_event_reports` | `CREATE UNIQUE INDEX pk_compliance_adverse_event_reports ON compliance.adverse_event_reports USING btree (internal_id)` |
 | `uq_compliance_adverse_event_reports_id` | `CREATE UNIQUE INDEX uq_compliance_adverse_event_reports_id ON compliance.adverse_event_reports USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -110,4 +113,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

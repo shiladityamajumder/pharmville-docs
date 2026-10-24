@@ -1,4 +1,4 @@
-# commerce.order_revisions
+# `commerce.order_revisions`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -32,6 +32,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the order revisions business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review, Finance_Payments, Reporting. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -39,17 +40,19 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `accepted_by_user_id` → `identity.users(id)` via `fk_commerce_order_revisions_accepted_by_user_id_users`; FOREIGN KEY (accepted_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `order_id` → `commerce.orders(id)` via `fk_commerce_order_revisions_order_id_orders`; FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT
-- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_commerce_order_revisions_order_id_orders_numeric`; FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT
+- `accepted_by_user_id` → `identity.users(id)` via `fk_commerce_order_revisions_accepted_by_user_id_users`; `FOREIGN KEY (accepted_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `order_id` → `commerce.orders(id)` via `fk_commerce_order_revisions_order_id_orders`; `FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT`
+- `order_id_internal_id` → `commerce.orders(internal_id)` via `fk_commerce_order_revisions_order_id_orders_numeric`; `FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 14 FK constraints** (sample): `commerce.orders`, `fulfillment.fulfillment_orders`, `logistics.shipments`, `payment.payment_intents`, `payment.refunds`, `payment.cod_collections`, `warehouse.stock_reservations`, `commerce.orders`, `fulfillment.fulfillment_orders`, `logistics.shipments`, `payment.cod_collections`, `payment.payment_intents`.
 
-## commerce.order_revisions — exact structural contracts
+## `commerce.order_revisions` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 20 columns, 15 constraints, 8 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 20 columns, 15 constraints, 8 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -57,7 +60,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `order_id` | `commerce.orders` | `fk_commerce_order_revisions_order_id_orders` |
 | `order_id_internal_id` | `commerce.orders` | `fk_commerce_order_revisions_order_id_orders_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -77,7 +80,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_commerce_order_revisions_number` | UNIQUE | `UNIQUE (order_id, revision_number)` |
 | `uq_numeric_commerce_order_revisions_internal_id_order_i_468b` | UNIQUE | `UNIQUE (internal_id, order_id_internal_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -90,7 +93,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_commerce_order_revisions_number` | `CREATE UNIQUE INDEX uq_commerce_order_revisions_number ON commerce.order_revisions USING btree (order_id, revision_number)` |
 | `uq_numeric_commerce_order_revisions_internal_id_order_i_468b` | `CREATE UNIQUE INDEX uq_numeric_commerce_order_revisions_internal_id_order_i_468b ON commerce.order_revisions USING btree (internal_id, order_id_internal_id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -101,4 +104,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

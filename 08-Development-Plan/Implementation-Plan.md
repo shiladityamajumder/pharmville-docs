@@ -4,7 +4,9 @@
 
 A feature is done only when its source ID and phase priority are recorded, business decision dependencies are approved, module owner and stage map exist, typed API contract is reviewed, matching existing SQL tables and transactional invariants are verified, and the implementation includes server-side permissions, validation, idempotency/concurrency and useful error/status states.
 
-Tests must cover happy/denied/concurrent/timeout/provider-retry paths, protect P/M/O and financial correctness, verify audit trace and demonstrate no protected data leakage. Frontend acceptance covers loading, empty, blocked, retry and accessible mobile states, not just screenshots. Provider integrations require actual sandbox signature/reconciliation proof before any production authorization.
+Tests must cover happy/denied/concurrent/timeout/provider-retry paths, protect P/M/O and financial correctness, verify audit trace and demonstrate no protected data leakage. Frontend acceptance covers loading, empty, blocked, retry and accessible mobile states, not just screenshots.
+
+Provider integrations require actual sandbox signature/reconciliation proof before any production authorization.
 
 Review includes code quality, runbooks, deployment compatibility, rollback/forward-fix, monitoring, DB checksum integrity and approved pharmacy/finance/ops handoff. The source reports local database readiness only; the new application has no tested completion proof in this documentation checkout.
 
@@ -16,7 +18,11 @@ See Acceptance Gates, First Sprint and Open Decisions.
 
 **Foundation:** repository contracts, isolated the checked-in SQL migrations, restricted runtime roles, NestJS modular infrastructure, OTP/MFA, public DTO conventions, private files, outbox and instrumentation.
 
-**Core commerce:** customer/location accounts, catalog and controlled P/M/O classification, search, pricing, cart/checkout and durable one-order intent. **Medical gate:** private document upload, pharmacist P-line review, revised basket acceptance. **Ops:** site/license/POS stock, reservation, store/warehouse picking and packing, rider tasks. **Finance:** Cashfree signed reconciliation, COD, invoice/refunds. **Cross-cutting:** notifications, reporting, audit, security, load, restore and UAT.
+- **Core commerce:** customer/location accounts, catalog and controlled P/M/O classification, search, pricing, cart/checkout and durable one-order intent.
+- **Medical gate:** private document upload, pharmacist P-line review, revised basket acceptance.
+- **Ops:** site/license/POS stock, reservation, store/warehouse picking and packing, rider tasks.
+- **Finance:** Cashfree signed reconciliation, COD, invoice/refunds.
+- **Cross-cutting:** notifications, reporting, audit, security, load, restore and UAT.
 
 Phase 2/3/4 candidates are tracked separately, not treated as Phase 1 acceptance. Each handoff has module LLD, actual DB table contract, proposed API and test evidence. See Implementation Order and Open Decisions.
 
@@ -33,9 +39,11 @@ Phase 2/3/4 candidates are tracked separately, not treated as Phase 1 acceptance
 | `OPS-005` | Finance/Pharmacy | Approve payment, COD and licensed P-review rules | Approved documented workflows and reasons |
 | `OPS-006` | QA | Prepare DB-backed concurrency and provider replay harness | Reproducible test results |
 
-**Parallelizable:** platform conventions, API contract mocks, SQL verification, role matrix reviews and QA fixtures. **Sequential gates:** verified migrations → trusted authorization → eligible catalog/lot → checkout/clinical/payments → dispatch/reconciliation.
+**Parallelizable:** platform conventions, API contract mocks, SQL verification, role matrix reviews and QA fixtures.
 
-Entry criteria
+**Sequential gates:** verified migrations → trusted authorization → eligible catalog/lot → checkout/clinical/payments → dispatch/reconciliation.
+
+**Entry criteria**
 
 ## Suggested implementation order and parallel work
 
@@ -83,7 +91,9 @@ Basic warehouse transfers are needed in the current operational flow but Phase 1
 
 ## Module delivery tasks
 
-Existing TASK-001 through TASK-110 IDs are preserved. The [master register](../09-References/Coverage-and-Traceability.md) owns requirement descriptions. Each task delivers that feature’s approved command/read model, typed API, scoped database access, visible outcomes and named tests; common D-024 review applies before implementation. Tasks are proposed and unassigned. Original generic TEST-<feature>-01/02/03 prompts are superseded by specific LLD/edge cases, not extra execution evidence.
+Existing TASK-001 through TASK-110 IDs are preserved. The [master register](../09-References/Coverage-and-Traceability.md) owns requirement descriptions. Each task delivers that feature’s approved command/read model, typed API, scoped database access, visible outcomes and named tests; common D-024 review applies before implementation.
+
+Tasks are proposed and unassigned. Original generic TEST-<feature>-01/02/03 prompts are superseded by specific LLD/edge cases, not extra execution evidence.
 
 ### Admin CMS
 

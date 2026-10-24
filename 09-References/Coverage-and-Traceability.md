@@ -117,9 +117,13 @@ This is the authoritative navigation register for the 110 draft feature IDs in [
 
 ## Mapping status and gaps
 
-The table links each feature to its owning module. API and database links are module-level indexes; they are not proof of a feature-specific operation or approved table ownership. The historical exact-ID metric identifies 23 features without a mention in their owning API document. The review below distinguishes supporting owner commands from genuinely absent operations; neither count proves complete contracts. Do not fill those gaps by inventing endpoints or inserting ID mentions without a real mapping. The database module map is schema discovery only.
+The table links each feature to its owning module. API and database links are module-level indexes; they are not proof of a feature-specific operation or approved table ownership. The historical exact-ID metric identifies 23 features without a mention in their owning API document.
 
-For `ACC-01` and `ACC-02`, the [Customer Accounts LLD](../03-Modules/Customer_Accounts/LLD.md), [API contracts](../05-APIs/Customer_Accounts.md), and [edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md) now define distinct flows, table mapping, and feature-specific tests. Every feature now has distinct normal/adverse assertions in module LLD/edge pages. Operation schemas and exact write fields still require the review identified in [Coverage report](Coverage-Report.md).
+The review below distinguishes supporting owner commands from genuinely absent operations; neither count proves complete contracts. Do not fill those gaps by inventing endpoints or inserting ID mentions without a real mapping. The database module map is schema discovery only.
+
+For `ACC-01` and `ACC-02`, the [Customer Accounts LLD](../03-Modules/Customer_Accounts/LLD.md), [API contracts](../05-APIs/Customer_Accounts.md), and [edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md) now define distinct flows, table mapping, and feature-specific tests.
+
+Every feature now has distinct normal/adverse assertions in module LLD/edge pages. Operation schemas and exact write fields still require the review identified in [Coverage report](Coverage-Report.md).
 
 All development tasks are proposed and not tracked in an issue system. Proposed tests are not executed tests.
 
@@ -157,4 +161,6 @@ Known cross-module candidates: CHK-03 uses Finance_Payments API-075/API-076; ADM
 
 ## Operation review status
 
-[Critical operation refinements](../05-APIs/Critical-Operation-Contracts.md) now specify proposed typed inputs/results, trust, persistence, concurrency and recovery for checkout, reservation, review, money, cancellation/return, refund and delivery proof. D-024 remains open for exact write fields, DTO bounds, runtime grants, enum mappings and evidence. The 23 historical textual gaps remain visible; cross-module support is not miscounted as a new same-owner endpoint.
+[Critical operation refinements](../05-APIs/Critical-Operation-Contracts.md) now specify proposed typed inputs/results, trust, persistence, concurrency and recovery for checkout, reservation, review, money, cancellation/return, refund and delivery proof. D-024 remains open for exact write fields, DTO bounds, runtime grants, enum mappings and evidence.
+
+The 23 historical textual gaps remain visible; cross-module support is not miscounted as a new same-owner endpoint.

@@ -1,4 +1,4 @@
-# clinical.prescription_documents
+# `clinical.prescription_documents`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -25,6 +25,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the prescription documents business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -32,20 +33,22 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_clinical_prescription_documents_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_clinical_prescription_documents_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `prescription_id` → `clinical.prescriptions(id)` via `fk_clinical_prescription_documents_prescription_id_pres_4ec8`; FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE CASCADE
-- `file_object_id` → `platform.file_objects(id)` via `fk_clinical_prescription_documents_file_object_id_file_objects`; FOREIGN KEY (file_object_id) REFERENCES platform.file_objects(id) ON DELETE RESTRICT
-- `file_object_id_internal_id` → `platform.file_objects(internal_id)` via `fk_clinical_prescription_documents_file_object_id_file__7c34`; FOREIGN KEY (file_object_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE RESTRICT
-- `prescription_id_internal_id` → `clinical.prescriptions(internal_id)` via `fk_clinical_prescription_documents_prescription_id_pres_6c80`; FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_clinical_prescription_documents_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_clinical_prescription_documents_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `prescription_id` → `clinical.prescriptions(id)` via `fk_clinical_prescription_documents_prescription_id_pres_4ec8`; `FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE CASCADE`
+- `file_object_id` → `platform.file_objects(id)` via `fk_clinical_prescription_documents_file_object_id_file_objects`; `FOREIGN KEY (file_object_id) REFERENCES platform.file_objects(id) ON DELETE RESTRICT`
+- `file_object_id_internal_id` → `platform.file_objects(internal_id)` via `fk_clinical_prescription_documents_file_object_id_file__7c34`; `FOREIGN KEY (file_object_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE RESTRICT`
+- `prescription_id_internal_id` → `clinical.prescriptions(internal_id)` via `fk_clinical_prescription_documents_prescription_id_pres_6c80`; `FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE CASCADE`
 
 **Referenced by 4 FK constraints** (sample): `clinical.order_reviews`, `clinical.order_reviews`, `clinical.order_reviews`, `clinical.order_reviews`.
 
-## clinical.prescription_documents — exact structural contracts
+## `clinical.prescription_documents` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 13 columns, 16 constraints, 8 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 13 columns, 16 constraints, 8 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -56,7 +59,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `file_object_id_internal_id` | `platform.file_objects` | `fk_clinical_prescription_documents_file_object_id_file__7c34` |
 | `prescription_id_internal_id` | `clinical.prescriptions` | `fk_clinical_prescription_documents_prescription_id_pres_6c80` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -77,7 +80,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_clinical_prescription_documents_version` | UNIQUE | `UNIQUE (prescription_id, version_number)` |
 | `uq_numeric_clinical_prescription_documents_internal_id__d990` | UNIQUE | `UNIQUE (internal_id, prescription_id_internal_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -90,7 +93,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_clinical_prescription_documents_version` | `CREATE UNIQUE INDEX uq_clinical_prescription_documents_version ON clinical.prescription_documents USING btree (prescription_id, version_number)` |
 | `uq_numeric_clinical_prescription_documents_internal_id__d990` | `CREATE UNIQUE INDEX uq_numeric_clinical_prescription_documents_internal_id__d990 ON clinical.prescription_documents USING btree (internal_id, prescription_id_internal_id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -101,4 +104,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

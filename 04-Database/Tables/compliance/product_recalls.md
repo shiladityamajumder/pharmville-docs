@@ -1,4 +1,4 @@
-# compliance.product_recalls
+# `compliance.product_recalls`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -29,6 +29,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the product recalls business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Pharmacist_Review, Audit. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -36,20 +37,22 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_compliance_product_recalls_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_compliance_product_recalls_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `product_id` → `catalog.products(id)` via `fk_compliance_product_recalls_product_id_products`; FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE RESTRICT
-- `authority_id` → `compliance.regulatory_authorities(id)` via `fk_compliance_product_recalls_authority_id_regulatory_a_6e3a`; FOREIGN KEY (authority_id) REFERENCES compliance.regulatory_authorities(id) ON DELETE SET NULL
-- `authority_id_internal_id` → `compliance.regulatory_authorities(internal_id)` via `fk_compliance_product_recalls_authority_id_regulatory_a_02b2`; FOREIGN KEY (authority_id_internal_id) REFERENCES compliance.regulatory_authorities(internal_id) ON DELETE SET NULL
-- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_compliance_product_recalls_product_id_products_numeric`; FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_compliance_product_recalls_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_compliance_product_recalls_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `product_id` → `catalog.products(id)` via `fk_compliance_product_recalls_product_id_products`; `FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE RESTRICT`
+- `authority_id` → `compliance.regulatory_authorities(id)` via `fk_compliance_product_recalls_authority_id_regulatory_a_6e3a`; `FOREIGN KEY (authority_id) REFERENCES compliance.regulatory_authorities(id) ON DELETE SET NULL`
+- `authority_id_internal_id` → `compliance.regulatory_authorities(internal_id)` via `fk_compliance_product_recalls_authority_id_regulatory_a_02b2`; `FOREIGN KEY (authority_id_internal_id) REFERENCES compliance.regulatory_authorities(internal_id) ON DELETE SET NULL`
+- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_compliance_product_recalls_product_id_products_numeric`; `FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 2 FK constraints** (sample): `compliance.recall_lots`, `compliance.recall_lots`.
 
-## compliance.product_recalls — exact structural contracts
+## `compliance.product_recalls` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 17 columns, 12 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 17 columns, 12 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -60,7 +63,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `authority_id_internal_id` | `compliance.regulatory_authorities` | `fk_compliance_product_recalls_authority_id_regulatory_a_02b2` |
 | `product_id_internal_id` | `catalog.products` | `fk_compliance_product_recalls_product_id_products_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -77,7 +80,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `recall_number` | UNIQUE | `UNIQUE (recall_number)` |
 | `uq_compliance_product_recalls_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -87,7 +90,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `recall_number` | `CREATE UNIQUE INDEX recall_number ON compliance.product_recalls USING btree (recall_number)` |
 | `uq_compliance_product_recalls_id` | `CREATE UNIQUE INDEX uq_compliance_product_recalls_id ON compliance.product_recalls USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -97,4 +100,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

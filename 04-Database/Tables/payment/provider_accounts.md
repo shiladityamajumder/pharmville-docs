@@ -1,4 +1,4 @@
-# payment.provider_accounts
+# `payment.provider_accounts`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -27,6 +27,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the provider accounts business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Finance_Payments. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -34,17 +35,19 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_payment_provider_accounts_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_payment_provider_accounts_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_payment_provider_accounts_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_payment_provider_accounts_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_payment_provider_accounts_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_payment_provider_accounts_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
 
 **Referenced by 4 FK constraints** (sample): `payment.payment_intents`, `payment.reconciliation_runs`, `payment.payment_intents`, `payment.reconciliation_runs`.
 
-## payment.provider_accounts — exact structural contracts
+## `payment.provider_accounts` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 15 columns, 8 constraints, 4 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 15 columns, 8 constraints, 4 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -52,7 +55,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `deleted_by` | `identity.users` | `fk_payment_provider_accounts_deleted_by_users` |
 | `updated_by` | `identity.users` | `fk_payment_provider_accounts_updated_by_users` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -65,7 +68,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `provider_merchant_account` | UNIQUE | `UNIQUE (provider, merchant_account_ref)` |
 | `uq_payment_provider_accounts_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -74,7 +77,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `provider_merchant_account` | `CREATE UNIQUE INDEX provider_merchant_account ON payment.provider_accounts USING btree (provider, merchant_account_ref)` |
 | `uq_payment_provider_accounts_id` | `CREATE UNIQUE INDEX uq_payment_provider_accounts_id ON payment.provider_accounts USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -85,4 +88,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

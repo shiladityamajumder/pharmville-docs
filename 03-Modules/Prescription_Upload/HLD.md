@@ -14,13 +14,14 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## MOD-004: Private prescription intake — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Private prescription intake. An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers.
 
 **System responsibility:** The `Prescription_Upload` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - Upload one or more prescriptions (JPG, PNG, PDF) at checkout (`RX-01`)
 - Upload within 24 hours after ordering; auto-cancel after that (`RX-02`)
@@ -28,15 +29,17 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Link each prescription to the patient (self or family member) (`RX-04`)
 - See the pharmacist's decision and reason; re-upload after rejection (`RX-05`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `clinical.prescriptions`, `clinical.prescription_documents`, `platform.file_objects`, `platform.file_access_events`, `platform.file_upload_sessions`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## MOD-004 — Private prescription intake
@@ -46,13 +49,15 @@ An uploaded file is quarantined until inspected and can only be accessed by perm
 **Purpose:** An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers.
 
 **Feature coverage**
+
 - **RX-01 / REQ-022:** Upload one or more prescriptions (JPG, PNG, PDF) at checkout (Must (draft)).
 - **RX-02 / REQ-023:** Upload within 24 hours after ordering; auto-cancel after that (Should (draft)).
 - **RX-03 / REQ-024:** Reuse a saved, still-valid prescription (Should (draft)).
 - **RX-04 / REQ-025:** Link each prescription to the patient (self or family member) (Must (draft)).
 - **RX-05 / REQ-026:** See the pharmacist's decision and reason; re-upload after rejection (Must (draft)).
 
-## Developer navigation
+### Developer navigation
+
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture

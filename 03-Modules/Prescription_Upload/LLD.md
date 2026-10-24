@@ -14,16 +14,19 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## Private prescription intake — implementation acceptance
 
-**Proposed conditions for engineering handoff; never imply QA passed.**
+> [!NOTE]
+> **Proposed conditions for engineering handoff; never imply QA passed.**
 
-## Draft features
+### Draft features
+
 - **RX-01 / REQ-022:** Upload one or more prescriptions (JPG, PNG, PDF) at checkout (Must (draft)).
 - **RX-02 / REQ-023:** Upload within 24 hours after ordering; auto-cancel after that (Should (draft)).
 - **RX-03 / REQ-024:** Reuse a saved, still-valid prescription (Should (draft)).
 - **RX-04 / REQ-025:** Link each prescription to the patient (self or family member) (Must (draft)).
 - **RX-05 / REQ-026:** See the pharmacist's decision and reason; re-upload after rejection (Must (draft)).
 
-## Required release checks
+### Required release checks
+
 - Authorised happy path persists exactly the intended state.
 - Invalid, cross-account and cross-location requests leave authoritative rows unchanged.
 - Concurrent duplicate requests do not create duplicate money, stock or order effects.
@@ -31,17 +34,17 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Recoverable provider failure exposes a pending/retryable state; never claims success.
 - Audit/trace data contains public references, not credentials or sensitive document contents.
 
-Module test scenarios
+**Module test scenarios**
 
 ## Prescription Upload & Private Files — HTTP API responsibilities
 
 All routes below are **Proposed REST v1 contracts**. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.
 
-- API-022 POST /v1/prescriptions/upload-intents — Prepare private upload
-- API-023 POST /v1/prescriptions/documents/confirm — Confirm scanned object metadata
-- API-024 POST /v1/orders/{order_id}/prescriptions — Attach prescription to order patient
+- `API-022` `POST /v1/prescriptions/upload-intents` — Prepare private upload
+- `API-023` `POST /v1/prescriptions/documents/confirm` — Confirm scanned object metadata
+- `API-024` `POST /v1/orders/{order_id}/prescriptions` — Attach prescription to order patient
 
-## Cross-cutting request contract
+### Cross-cutting request contract
 
 Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
@@ -51,7 +54,7 @@ Writes require validated body, stable intent key, expected current version when 
 
 **Rule origin:** the documented draft requirements and database migration guards. Distinguish a **confirmed database guard** from a **proposed API orchestration** and **open numeric policy**.
 
-## Core procedure
+### Core procedure
 
 1. Authenticate the actor and resolve server-owned tenant/location/patient permission.
 2. Re-read the relevant product, order, document, stock or ledger state from the owning tables.
@@ -60,11 +63,11 @@ Writes require validated body, stable intent key, expected current version when 
 5. In a transaction, persist the minimal authoritative rows, version and audit outcome; publish notifications after commit.
 6. Return a scoped read model; expose only approved information to the caller.
 
-## Features implemented by this rule set
+### Features implemented by this rule set
 
 `RX-01`, `RX-02`, `RX-03`, `RX-04`, `RX-05` (see full requirement descriptions).
 
-## Pseudocode — command boundary
+### Pseudocode — command boundary
 
 ```text
 context := verify_session_and_resource_scope(request)
@@ -92,7 +95,9 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`. Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
+Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`.
+
+Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
 ## Prescription Upload & Private Files — existing database usage
 
@@ -107,7 +112,7 @@ Issue short-lived private upload permissions, virus-scan and validate file metad
 - `platform.file_upload_sessions` — columns · contracts
 - `platform.file_variants` — columns · contracts
 
-## Ownership, transactions and change control
+### Ownership, transactions and change control
 
 Proposed owning service: `Prescription_Upload`. Main read concerns: private upload, document association and correction requests. Writes must be restricted by the actual foreign keys, CHECKs, unique contracts, crosswalks, policy and trigger guards. Use one transaction per domain state transition, use an outbox for reliable cross-module publication, and make any external retry idempotent.
 
@@ -128,9 +133,11 @@ Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT
 - Pharmacist_Review
 - Reporting
 
-## Communication rules
+### Communication rules
 
-Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth. Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
+Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth.
+
+Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
 **Data-access contract:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
@@ -146,7 +153,9 @@ Use the owning service interface for business changes rather than making uncontr
 | `Prescription_UploadReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Prescription_UploadEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
-**Existing representative tables:** `clinical.prescription_documents`, `clinical.prescriptions`, `platform.file_access_events`, `platform.file_access_grants`, `platform.file_objects`, `platform.file_scan_events`, `platform.file_upload_sessions`, `platform.file_variants`. Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
+**Existing representative tables:** `clinical.prescription_documents`, `clinical.prescriptions`, `platform.file_access_events`, `platform.file_access_grants`, `platform.file_objects`, `platform.file_scan_events`, `platform.file_upload_sessions`, `platform.file_variants`.
+
+Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See [database usage](../../04-Database/Module-Mapping.md).
 
 ## Prescription Upload & Private Files — failure handling
 
@@ -171,7 +180,19 @@ Use structured problem codes, request ID, retryability category and operator run
 
 **Repository interface:** require a database transaction handle, parameterised SQL/ORM queries, and a stored accepted transition. Return public UUIDs or approved opaque references only.
 
-**Error DTO proposal:** `{"error":{"code":"STATE_CONFLICT","message":"Refresh the record and try again","request_id":"..."}}`. Do not expose SQL errors, provider secrets or prescription contents.
+**Error DTO proposal:**
+
+```json
+{
+  "error": {
+    "code": "STATE_CONFLICT",
+    "message": "Refresh the record and try again",
+    "request_id": "..."
+  }
+}
+```
+
+Do not expose SQL errors, provider secrets or prescription contents.
 
 **Existing table candidates:** `clinical.prescriptions`, `clinical.prescription_documents`, `platform.file_objects`, `platform.file_access_events`, `platform.file_upload_sessions`.
 
@@ -181,18 +202,20 @@ Use structured problem codes, request ID, retryability category and operator run
 
 **Status: Proposed application design.** The database repo does not contain a NestJS HTTP implementation.
 
-## Business behavior
+### Business behavior
+
 An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers.
 
-## Components
+### Components
+
 | Component | Responsibility | Data affected | Failure outcome |
 | --- | --- | --- | --- |
 | `Prescription_UploadController` (proposed) | Validate DTO and request context | Public API request only | 400/401/403 without partial mutation |
-| `Prescription_UploadUseCase` (proposed) | Enforce module business invariant | clinical.prescriptions, clinical.prescription_documents, platform.file_objects | Domain status, do not guess provider truth |
+| `Prescription_UploadUseCase` (proposed) | Enforce module business invariant | `clinical.prescriptions`, `clinical.prescription_documents`, `platform.file_objects` | Domain status, do not guess provider truth |
 | `Prescription_UploadRepository` (proposed) | Scoped SQL transaction and concurrency guard | Exact migrated tables | Roll back on conflict or constraint error |
 | `Prescription_UploadIntegrationAdapter` (only when needed) | Map external IO and reconcile delivery | Outbox/inbox or verified provider record | Retries outside DB lock |
 
-## Transaction and retry sequence
+### Transaction and retry sequence
 
 1. authorise patient/document upload scope.
 2. create private short-lived upload session.
@@ -200,14 +223,16 @@ An uploaded file is quarantined until inspected and can only be accessed by perm
 4. link document to prescription version.
 5. release file for permitted pharmacist review.
 
-## Existing tables (candidate responsibilities)
-- clinical.prescriptions — candidate entity; verify the exact operation and field set in the implementation review.
-- clinical.prescription_documents — candidate entity; verify the exact operation and field set in the implementation review.
-- platform.file_objects — candidate entity; verify the exact operation and field set in the implementation review.
-- platform.file_access_events — candidate entity; verify the exact operation and field set in the implementation review.
-- platform.file_upload_sessions — candidate entity; verify the exact operation and field set in the implementation review.
+### Existing tables (candidate responsibilities)
 
-## Related
+- `clinical.prescriptions` — candidate entity; verify the exact operation and field set in the implementation review.
+- `clinical.prescription_documents` — candidate entity; verify the exact operation and field set in the implementation review.
+- `platform.file_objects` — candidate entity; verify the exact operation and field set in the implementation review.
+- `platform.file_access_events` — candidate entity; verify the exact operation and field set in the implementation review.
+- `platform.file_upload_sessions` — candidate entity; verify the exact operation and field set in the implementation review.
+
+### Related
+
 HLD · States · Permissions
 
 ## Private prescription intake — observability
@@ -218,11 +243,13 @@ HLD · States · Permissions
 
 **Actionable alerts:** persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.
 
-Monitoring design
+**Monitoring design**
 
 ## Prescription Upload & Private Files — permission model
 
-**Actors:** Customer. **Proposed service scope:** `customer`. Roles are application concepts; existing PostgreSQL NOLOGIN capability roles form a separate lower-level authorization layer.
+**Actors:** Customer.
+
+**Proposed service scope:** `customer`. Roles are application concepts; existing PostgreSQL NOLOGIN capability roles form a separate lower-level authorization layer.
 
 | Operation class | Required entitlement | Enforcement |
 | --- | --- | --- |
@@ -231,11 +258,15 @@ Monitoring design
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity. A customer cannot infer another customer's resource existence. Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
+**Core constraint:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity. A customer cannot infer another customer's resource existence.
+
+Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
 ## Prescription Upload & Private Files — functional requirements
 
-**Source:** the documented draft requirements. **Status:** Draft requirements, not proof of final business acceptance. 🔴/🟡/🟢 priorities have been normalized as Must/Should/Could without changing their meaning.
+**Source:** the documented draft requirements.
+
+**Status:** Draft requirements, not proof of final business acceptance. 🔴/🟡/🟢 priorities have been normalized as Must/Should/Could without changing their meaning.
 
 | Feature | Priority in v0.1 | Statement | Dependency |
 | --- | --- | --- | --- |
@@ -245,7 +276,7 @@ Monitoring design
 | `RX-04` | Must (draft) | Link each prescription to the patient (self or family member) | Not stated |
 | `RX-05` | Must (draft) | See the pharmacist's decision and reason; re-upload after rejection | Not stated |
 
-## Interactions and acceptance basis
+### Interactions and acceptance basis
 
 The user performs: Upload Rx; associate with correct patient/version; request corrected file. Server-side enforcement must preserve this invariant: **Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.**
 
@@ -277,19 +308,21 @@ sequenceDiagram
 
 **Proposed NestJS module:** `Prescription_UploadModule` with a controller, application service, authorization policy, repository and adapters. The supplied database code is a schema/validation library; no running HTTP controller was found in Archive 2.
 
-## Candidate service methods
+### Candidate service methods
 
 - `API-022: prepare_private_upload(actor_context, validated_command, expected_version) -> Result`
 - `API-023: confirm_scanned_object_metadata(actor_context, validated_command, expected_version) -> Result`
 - `API-024: attach_prescription_to_order_patient(actor_context, validated_command, expected_version) -> Result`
 
-## Transaction and integration contract
+### Transaction and integration contract
 
 For each mutation: authenticate actor, validate inputs, read affected rows with a lock/version check, verify policy, update the minimum relevant rows and immutable audit/outbox in one transaction. A remote gateway, storage or GPS call should be performed outside the locked transaction and reconciled on callback/timeout. Use PostgreSQL to reject invalid writes even if application validation is bypassed.
 
 **Module invariant:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.
 
-**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff. **Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
+**Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff.
+
+**Telemetry:** actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See [database usage](../../04-Database/Module-Mapping.md) and Monitoring.
 
 ## Prescription Upload & Private Files — state and transition policy
 
@@ -305,7 +338,9 @@ flowchart TD
 
 **Module-specific invariant:** Issue short-lived private upload permissions, virus-scan and validate file metadata, then authorize Rx-to-patient and Rx-to-order association. The presence of a PDF does not establish medical validity.
 
-Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence. When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
+Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence.
+
+When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.
 
 This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in [state contracts](../../07-Engineering/State-and-Recovery-Contracts.md); the table catalog supplies actual stored values.
 
@@ -326,7 +361,7 @@ This flow shows command gates, not an entity enum. Legal entity transitions and 
 | `TC-RX-05-OK` | See the pharmacist's decision and reason; re-upload after rejection | Decision reason is shown and a corrected file returns to review |
 | `TC-RX-05-DENY` | Rejected file is resubmitted as if still approved | Earlier decision retained; new evidence requires current decision; Customer corrects file; authorized pharmacist reviews again |
 
-## Cross-module contract tests
+### Cross-module contract tests
 
 - Verify authenticated customer/staff/location ownership using actual restricted runtime roles.
 - Verify concurrency and duplicate idempotency behavior against an isolated PostgreSQL database with authoritative migrations.
@@ -351,12 +386,14 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 
 ## Prescription Upload & Private Files — operational workflows
 
-**Entry points:** Upload Rx; associate with correct patient/version; request corrected file. **User group:** Customer. The following source-defined order journey stages identify primary ownership; supporting modules also participate without necessarily owning the stage.
+**Entry points:** Upload Rx; associate with correct patient/version; request corrected file.
+
+**User group:** Customer. The following source-defined order journey stages identify primary ownership; supporting modules also participate without necessarily owning the stage.
 
 - S07 — Upload prescription only for P
 - S10 — Fix a prescription problem
 
-## Shared processing rules
+### Shared processing rules
 
 The requested action is first validated against user scope, current state and approved business master data. Read required evidence from real migrated tables; change only data this module owns; publish a safe event or notify the next module after commit.
 

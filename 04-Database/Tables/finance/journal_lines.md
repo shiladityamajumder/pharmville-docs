@@ -1,4 +1,4 @@
-# finance.journal_lines
+# `finance.journal_lines`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -22,6 +22,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the journal lines business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Orders, Finance_Payments, Reporting. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -29,16 +30,18 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `account_id` → `finance.accounts(id)` via `fk_finance_journal_lines_account_id_accounts`; FOREIGN KEY (account_id) REFERENCES finance.accounts(id) ON DELETE RESTRICT
-- `journal_entry_id` → `finance.journal_entries(id)` via `fk_finance_journal_lines_journal_entry_id_journal_entries`; FOREIGN KEY (journal_entry_id) REFERENCES finance.journal_entries(id) ON DELETE CASCADE
-- `account_id_internal_id` → `finance.accounts(internal_id)` via `fk_finance_journal_lines_account_id_accounts_numeric`; FOREIGN KEY (account_id_internal_id) REFERENCES finance.accounts(internal_id) ON DELETE RESTRICT
-- `journal_entry_id_internal_id` → `finance.journal_entries(internal_id)` via `fk_finance_journal_lines_journal_entry_id_journal_entri_eae6`; FOREIGN KEY (journal_entry_id_internal_id) REFERENCES finance.journal_entries(internal_id) ON DELETE CASCADE
+- `account_id` → `finance.accounts(id)` via `fk_finance_journal_lines_account_id_accounts`; `FOREIGN KEY (account_id) REFERENCES finance.accounts(id) ON DELETE RESTRICT`
+- `journal_entry_id` → `finance.journal_entries(id)` via `fk_finance_journal_lines_journal_entry_id_journal_entries`; `FOREIGN KEY (journal_entry_id) REFERENCES finance.journal_entries(id) ON DELETE CASCADE`
+- `account_id_internal_id` → `finance.accounts(internal_id)` via `fk_finance_journal_lines_account_id_accounts_numeric`; `FOREIGN KEY (account_id_internal_id) REFERENCES finance.accounts(internal_id) ON DELETE RESTRICT`
+- `journal_entry_id_internal_id` → `finance.journal_entries(internal_id)` via `fk_finance_journal_lines_journal_entry_id_journal_entri_eae6`; `FOREIGN KEY (journal_entry_id_internal_id) REFERENCES finance.journal_entries(internal_id) ON DELETE CASCADE`
 
-## finance.journal_lines — exact structural contracts
+## `finance.journal_lines` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 10 columns, 11 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 10 columns, 11 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -47,7 +50,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `account_id_internal_id` | `finance.accounts` | `fk_finance_journal_lines_account_id_accounts_numeric` |
 | `journal_entry_id_internal_id` | `finance.journal_entries` | `fk_finance_journal_lines_journal_entry_id_journal_entri_eae6` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -63,7 +66,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_finance_journal_lines` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_finance_journal_lines_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -72,7 +75,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_finance_journal_lines` | `CREATE UNIQUE INDEX pk_finance_journal_lines ON finance.journal_lines USING btree (internal_id)` |
 | `uq_finance_journal_lines_id` | `CREATE UNIQUE INDEX uq_finance_journal_lines_id ON finance.journal_lines USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -82,4 +85,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

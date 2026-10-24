@@ -1,4 +1,4 @@
-# insurance.claims
+# `insurance.claims`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -33,6 +33,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the claims business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -40,20 +41,22 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_insurance_claims_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_insurance_claims_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `policy_id` → `insurance.policies(id)` via `fk_insurance_claims_policy_id_policies`; FOREIGN KEY (policy_id) REFERENCES insurance.policies(id) ON DELETE RESTRICT
-- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_insurance_claims_patient_profile_id_patient_profiles`; FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT
-- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_insurance_claims_patient_profile_id_patient_profiles_numeric`; FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT
-- `policy_id_internal_id` → `insurance.policies(internal_id)` via `fk_insurance_claims_policy_id_policies_numeric`; FOREIGN KEY (policy_id_internal_id) REFERENCES insurance.policies(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_insurance_claims_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_insurance_claims_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `policy_id` → `insurance.policies(id)` via `fk_insurance_claims_policy_id_policies`; `FOREIGN KEY (policy_id) REFERENCES insurance.policies(id) ON DELETE RESTRICT`
+- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_insurance_claims_patient_profile_id_patient_profiles`; `FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT`
+- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_insurance_claims_patient_profile_id_patient_profiles_numeric`; `FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT`
+- `policy_id_internal_id` → `insurance.policies(internal_id)` via `fk_insurance_claims_policy_id_policies_numeric`; `FOREIGN KEY (policy_id_internal_id) REFERENCES insurance.policies(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 4 FK constraints** (sample): `insurance.claim_documents`, `insurance.claim_status_history`, `insurance.claim_documents`, `insurance.claim_status_history`.
 
-## insurance.claims — exact structural contracts
+## `insurance.claims` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 21 columns, 16 constraints, 6 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 21 columns, 16 constraints, 6 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -64,7 +67,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `patient_profile_id_internal_id` | `clinical.patient_profiles` | `fk_insurance_claims_patient_profile_id_patient_profiles_numeric` |
 | `policy_id_internal_id` | `insurance.policies` | `fk_insurance_claims_policy_id_policies_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -85,7 +88,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_insurance_claims` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_insurance_claims_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -96,7 +99,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_insurance_claims` | `CREATE UNIQUE INDEX pk_insurance_claims ON insurance.claims USING btree (internal_id)` |
 | `uq_insurance_claims_id` | `CREATE UNIQUE INDEX uq_insurance_claims_id ON insurance.claims USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -106,4 +109,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

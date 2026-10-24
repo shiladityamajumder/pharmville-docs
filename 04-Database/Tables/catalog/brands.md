@@ -1,4 +1,4 @@
-# catalog.brands
+# `catalog.brands`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -30,6 +30,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the brands business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog, Admin_CMS, Inventory. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -37,21 +38,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `deleted_by` → `identity.users(id)` via `fk_catalog_brands_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_catalog_brands_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `created_by` → `identity.users(id)` via `fk_catalog_brands_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `logo_file_id` → `platform.file_objects(id)` via `fk_catalog_brands_logo_file_id_file_objects`; FOREIGN KEY (logo_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL
-- `owner_organization_id` → `organization.organizations(id)` via `fk_catalog_brands_owner_organization_id_organizations`; FOREIGN KEY (owner_organization_id) REFERENCES organization.organizations(id) ON DELETE SET NULL
-- `logo_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_catalog_brands_logo_file_id_file_objects_numeric`; FOREIGN KEY (logo_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL
-- `owner_organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_catalog_brands_owner_organization_id_organizations_numeric`; FOREIGN KEY (owner_organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE SET NULL
+- `deleted_by` → `identity.users(id)` via `fk_catalog_brands_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_catalog_brands_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `created_by` → `identity.users(id)` via `fk_catalog_brands_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `logo_file_id` → `platform.file_objects(id)` via `fk_catalog_brands_logo_file_id_file_objects`; `FOREIGN KEY (logo_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL`
+- `owner_organization_id` → `organization.organizations(id)` via `fk_catalog_brands_owner_organization_id_organizations`; `FOREIGN KEY (owner_organization_id) REFERENCES organization.organizations(id) ON DELETE SET NULL`
+- `logo_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_catalog_brands_logo_file_id_file_objects_numeric`; `FOREIGN KEY (logo_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL`
+- `owner_organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_catalog_brands_owner_organization_id_organizations_numeric`; `FOREIGN KEY (owner_organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE SET NULL`
 
 **Referenced by 2 FK constraints** (sample): `catalog.products`, `catalog.products`.
 
-## catalog.brands — exact structural contracts
+## `catalog.brands` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 18 columns, 13 constraints, 4 indexes, 4 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 18 columns, 13 constraints, 4 indexes, 4 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -63,7 +66,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `logo_file_id_internal_id` | `platform.file_objects` | `fk_catalog_brands_logo_file_id_file_objects_numeric` |
 | `owner_organization_id_internal_id` | `organization.organizations` | `fk_catalog_brands_owner_organization_id_organizations_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -81,7 +84,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_catalog_brands` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_catalog_brands_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -90,7 +93,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_catalog_brands_name_active` | `CREATE UNIQUE INDEX uq_catalog_brands_name_active ON catalog.brands USING btree (name) WHERE is_deleted = false` |
 | `uq_catalog_brands_slug_active` | `CREATE UNIQUE INDEX uq_catalog_brands_slug_active ON catalog.brands USING btree (slug) WHERE is_deleted = false` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -101,4 +104,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

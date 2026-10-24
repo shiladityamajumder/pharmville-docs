@@ -1,4 +1,4 @@
-# catalog.product_classification_history
+# `catalog.product_classification_history`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -24,6 +24,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the product classification history business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog, Admin_CMS, Inventory. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -31,17 +32,19 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `approved_by_user_id` → `identity.users(id)` via `fk_catalog_product_classification_history_approved_by_u_625c`; FOREIGN KEY (approved_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `new_class` → `catalog.commerce_classes(code)` via `fk_catalog_product_classification_history_new_class_com_d42d`; FOREIGN KEY (new_class) REFERENCES catalog.commerce_classes(code) ON DELETE RESTRICT
-- `old_class` → `catalog.commerce_classes(code)` via `fk_catalog_product_classification_history_old_class_com_9876`; FOREIGN KEY (old_class) REFERENCES catalog.commerce_classes(code) ON DELETE RESTRICT
-- `product_id` → `catalog.products(id)` via `fk_catalog_product_classification_history_product_id_products`; FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE RESTRICT
-- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_catalog_product_classification_history_product_id_pr_6e05`; FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE RESTRICT
+- `approved_by_user_id` → `identity.users(id)` via `fk_catalog_product_classification_history_approved_by_u_625c`; `FOREIGN KEY (approved_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `new_class` → `catalog.commerce_classes(code)` via `fk_catalog_product_classification_history_new_class_com_d42d`; `FOREIGN KEY (new_class) REFERENCES catalog.commerce_classes(code) ON DELETE RESTRICT`
+- `old_class` → `catalog.commerce_classes(code)` via `fk_catalog_product_classification_history_old_class_com_9876`; `FOREIGN KEY (old_class) REFERENCES catalog.commerce_classes(code) ON DELETE RESTRICT`
+- `product_id` → `catalog.products(id)` via `fk_catalog_product_classification_history_product_id_products`; `FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE RESTRICT`
+- `product_id_internal_id` → `catalog.products(internal_id)` via `fk_catalog_product_classification_history_product_id_pr_6e05`; `FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE RESTRICT`
 
-## catalog.product_classification_history — exact structural contracts
+## `catalog.product_classification_history` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 12 columns, 12 constraints, 5 indexes, 5 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 12 columns, 12 constraints, 5 indexes, 5 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -51,7 +54,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `product_id` | `catalog.products` | `fk_catalog_product_classification_history_product_id_products` |
 | `product_id_internal_id` | `catalog.products` | `fk_catalog_product_classification_history_product_id_pr_6e05` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -68,7 +71,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_catalog_classification_product_version` | UNIQUE | `UNIQUE (product_id, version)` |
 | `uq_catalog_product_classification_history_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -78,7 +81,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_catalog_classification_product_version` | `CREATE UNIQUE INDEX uq_catalog_classification_product_version ON catalog.product_classification_history USING btree (product_id, version)` |
 | `uq_catalog_product_classification_history_id` | `CREATE UNIQUE INDEX uq_catalog_product_classification_history_id ON catalog.product_classification_history USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -90,4 +93,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

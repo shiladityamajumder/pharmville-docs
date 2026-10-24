@@ -57,7 +57,9 @@ No precision claims or production availability are supported by the source. Trac
 
 ## Business/product metrics requiring target approval
 
-Track product search success and zero-results, add-to-cart, checkout started/completed, patient/P basket proportion, clinical review turnaround/rework, mixed-basket revision acceptance, safe order fulfillment rate, failed delivery, refund completion, COD eligibility refusal and repeat customer retention. Always distinguish numerator/denominator and filtered segments; separate stock/legal block from infrastructure failure.
+Track product search success and zero-results, add-to-cart, checkout started/completed, patient/P basket proportion, clinical review turnaround/rework, mixed-basket revision acceptance, safe order fulfillment rate, failed delivery, refund completion, COD eligibility refusal and repeat customer retention.
+
+Always distinguish numerator/denominator and filtered segments; separate stock/legal block from infrastructure failure.
 
 No baseline conversion, target revenue, SLA or real-user traffic was supplied. The proposed HLD targets are not confirmed performance promises. Define owner-approved targets after staging and launch instrumentation, with privacy filters so clinical reasons cannot appear in broad marketing reports.
 
@@ -80,8 +82,12 @@ Analytics retention, sampling and marketing permissions require privacy approval
 
 ## Product analytics tracking plan
 
-Measure customer discovery/search, product view and P/M/O classification mix, checkout started/quote changed, Rx requested/submitted/correction, accepted revision, payment verified/pending, eligible stock hold, exact pick/dispatch, delivery/failed attempt, return/refund and support contact. Record business-safe event names, public correlation IDs, accepted version and anonymized category/status only.
+Measure customer discovery/search, product view and P/M/O classification mix, checkout started/quote changed, Rx requested/submitted/correction, accepted revision, payment verified/pending, eligible stock hold, exact pick/dispatch, delivery/failed attempt, return/refund and support contact.
 
-Do not send patient names, prescription images, OTPs, medical diagnosis, detailed bank references or rider precise GPS to general analytics. Event generation must follow committed domain state; a click or client callback is not successful payment, approval or delivery. Marketing analytics/consent policy requires owner privacy review. Source feature and workflow IDs provide the reference taxonomy; actual tag SDK and BI provider are unselected.
+Record business-safe event names, public correlation IDs, accepted version and anonymized category/status only.
+
+Do not send patient names, prescription images, OTPs, medical diagnosis, detailed bank references or rider precise GPS to general analytics. Event generation must follow committed domain state; a click or client callback is not successful payment, approval or delivery.
+
+Marketing analytics/consent policy requires owner privacy review. Source feature and workflow IDs provide the reference taxonomy; actual tag SDK and BI provider are unselected.
 
 See Analytics Events and Audit.

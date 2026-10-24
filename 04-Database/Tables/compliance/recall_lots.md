@@ -1,4 +1,4 @@
-# compliance.recall_lots
+# `compliance.recall_lots`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -25,6 +25,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the recall lots business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Pharmacist_Review, Audit. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -32,18 +33,20 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_compliance_recall_lots_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_compliance_recall_lots_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `lot_id` → `warehouse.inventory_lots(id)` via `fk_compliance_recall_lots_lot_id_inventory_lots`; FOREIGN KEY (lot_id) REFERENCES warehouse.inventory_lots(id) ON DELETE RESTRICT
-- `recall_id` → `compliance.product_recalls(id)` via `fk_compliance_recall_lots_recall_id_product_recalls`; FOREIGN KEY (recall_id) REFERENCES compliance.product_recalls(id) ON DELETE CASCADE
-- `lot_id_internal_id` → `warehouse.inventory_lots(internal_id)` via `fk_compliance_recall_lots_lot_id_inventory_lots_numeric`; FOREIGN KEY (lot_id_internal_id) REFERENCES warehouse.inventory_lots(internal_id) ON DELETE RESTRICT
-- `recall_id_internal_id` → `compliance.product_recalls(internal_id)` via `fk_compliance_recall_lots_recall_id_product_recalls_numeric`; FOREIGN KEY (recall_id_internal_id) REFERENCES compliance.product_recalls(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_compliance_recall_lots_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_compliance_recall_lots_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `lot_id` → `warehouse.inventory_lots(id)` via `fk_compliance_recall_lots_lot_id_inventory_lots`; `FOREIGN KEY (lot_id) REFERENCES warehouse.inventory_lots(id) ON DELETE RESTRICT`
+- `recall_id` → `compliance.product_recalls(id)` via `fk_compliance_recall_lots_recall_id_product_recalls`; `FOREIGN KEY (recall_id) REFERENCES compliance.product_recalls(id) ON DELETE CASCADE`
+- `lot_id_internal_id` → `warehouse.inventory_lots(internal_id)` via `fk_compliance_recall_lots_lot_id_inventory_lots_numeric`; `FOREIGN KEY (lot_id_internal_id) REFERENCES warehouse.inventory_lots(internal_id) ON DELETE RESTRICT`
+- `recall_id_internal_id` → `compliance.product_recalls(internal_id)` via `fk_compliance_recall_lots_recall_id_product_recalls_numeric`; `FOREIGN KEY (recall_id_internal_id) REFERENCES compliance.product_recalls(internal_id) ON DELETE CASCADE`
 
-## compliance.recall_lots — exact structural contracts
+## `compliance.recall_lots` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 13 columns, 12 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 13 columns, 12 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -54,7 +57,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `lot_id_internal_id` | `warehouse.inventory_lots` | `fk_compliance_recall_lots_lot_id_inventory_lots_numeric` |
 | `recall_id_internal_id` | `compliance.product_recalls` | `fk_compliance_recall_lots_recall_id_product_recalls_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -71,7 +74,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `recall_lot` | UNIQUE | `UNIQUE (recall_id, lot_id)` |
 | `uq_compliance_recall_lots_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -80,7 +83,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `recall_lot` | `CREATE UNIQUE INDEX recall_lot ON compliance.recall_lots USING btree (recall_id, lot_id)` |
 | `uq_compliance_recall_lots_id` | `CREATE UNIQUE INDEX uq_compliance_recall_lots_id ON compliance.recall_lots USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -90,4 +93,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

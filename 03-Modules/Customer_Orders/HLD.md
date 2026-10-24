@@ -14,13 +14,14 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## MOD-005: Order tracking and aftercare — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Order tracking and aftercare. Customer cancellation or return requests must respect current order/fulfillment/payment states.
 
 **System responsibility:** The `Customer_Orders` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - Order confirmation on screen, WhatsApp and email (`ORD-01`)
 - Status timeline (placed → packed → out for delivery → delivered) (`ORD-02`)
@@ -32,15 +33,17 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Delivery OTP shown to the customer (`ORD-08`)
 - Change items or address after placing an order (`ORD-09`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `commerce.orders`, `commerce.order_items`, `commerce.cancellations`, `commerce.returns`, `commerce.order_status_history`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 Customer cancellation or return requests must respect current order/fulfillment/payment states. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## MOD-005 — Order tracking and aftercare
@@ -50,6 +53,7 @@ Customer cancellation or return requests must respect current order/fulfillment/
 **Purpose:** Customer cancellation or return requests must respect current order/fulfillment/payment states.
 
 **Feature coverage**
+
 - **ORD-01 / REQ-027:** Order confirmation on screen, WhatsApp and email (Must (draft)).
 - **ORD-02 / REQ-028:** Status timeline (placed → packed → out for delivery → delivered) (Must (draft)).
 - **ORD-03 / REQ-029:** Order history with GST invoice download (Must (draft)).
@@ -60,7 +64,8 @@ Customer cancellation or return requests must respect current order/fulfillment/
 - **ORD-08 / REQ-034:** Delivery OTP shown to the customer (Must (draft)).
 - **ORD-09 / REQ-035:** Change items or address after placing an order (Could (draft)).
 
-## Developer navigation
+### Developer navigation
+
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture

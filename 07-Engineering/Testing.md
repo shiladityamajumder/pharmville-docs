@@ -12,7 +12,9 @@ Module test cases · DB migration policy
 
 ## Migration and SQL validation plan
 
-Reuse repo's SQL runner and validation scripts, not Alembic. Validate checksum/ledger, V0001 on empty DB, the documented forward upgrade nonempty upgrade, model/catalog parity and numeric crosswalk integrity on isolated PG18 and a clean PG15 environment when available. Exercise all existing PK/FK/UNIQUE/CHECK/index/trigger/RLS semantics through their canonical service operations.
+Reuse repo's SQL runner and validation scripts, not Alembic. Validate checksum/ledger, V0001 on empty DB, the documented forward upgrade nonempty upgrade, model/catalog parity and numeric crosswalk integrity on isolated PG18 and a clean PG15 environment when available.
+
+Exercise all existing PK/FK/UNIQUE/CHECK/index/trigger/RLS semantics through their canonical service operations.
 
 Priority races: ten parallel last-unit checkouts yield one allocation; concurrent revised consent vs pharmacist approval; conflicting inventory site holds; simultaneous refunds and webhook replay; stale staff pack commands after license expiry. For each, check exact state and immutable money/clinical/audit effects, not just HTTP status.
 
@@ -30,7 +32,9 @@ Do not assume UI screenshot screens demonstrate backend readiness. Require trace
 
 Boot the proposed NestJS API against a disposable DB migrated through authoritative the checked-in SQL migration history. Validate request schema, object-level authorization, transaction behavior, provider adapter signatures, late callbacks, outbox/inbox event ordering and application ↔ SQL contract parity. Ensure API-created UUID identifiers align with BIGINT internal crosswalks.
 
-Cashfree sandbox tests must cover pending/failed/success, signature and raw-body validation, replay and reconciliation. Techsmith must demonstrate authoritative location-lot observation and loss/reconnect handling; simulate stale stock before allowing reservations. MSG91/SES should receive only approved redacted notification templates; Rx file adapter should scan, store privately and reauthorize access. Rider/GPS app must handle offline and duplicate OTP evidence.
+Cashfree sandbox tests must cover pending/failed/success, signature and raw-body validation, replay and reconciliation. Techsmith must demonstrate authoritative location-lot observation and loss/reconnect handling; simulate stale stock before allowing reservations.
+
+MSG91/SES should receive only approved redacted notification templates; Rx file adapter should scan, store privately and reauthorize access. Rider/GPS app must handle offline and duplicate OTP evidence.
 
 A sandbox success does not guarantee a production provider account or pharmacy policy; approvals and real operating SOP remain separate gates. See Provider Dependencies.
 
@@ -44,7 +48,9 @@ Target failure tests include Cashfree slow status callback, Techsmith feed gap, 
 
 ## Proposed QA and test case register
 
-**110 feature specifications** across 18 modules plus 14 cross-module workflow plans. Generic TEST-<feature>-01/-02/-03 prompts are superseded by the corresponding TC-<feature>-OK/-DENY cases and the detailed numbered ACC-01/ACC-02 cases; they are not an additional executed suite. No application tests were run. The supplied DB repo separately records 108/108 PG18 database tests.
+**110 feature specifications** across 18 modules plus 14 cross-module workflow plans. Generic TEST-<feature>-01/-02/-03 prompts are superseded by the corresponding TC-<feature>-OK/-DENY cases and the detailed numbered ACC-01/ACC-02 cases; they are not an additional executed suite.
+
+No application tests were run. The supplied DB repo separately records 108/108 PG18 database tests.
 
 - Customer_Accounts
 - Product_Catalog
@@ -128,4 +134,6 @@ The [master register](../09-References/Coverage-and-Traceability.md) owns featur
 
 ## Interrupted-workflow checks
 
-Use [state and recovery contracts](State-and-Recovery-Contracts.md) for commit/rollback, replay, stale-version and compensation expectations. Kill a worker before commit and after commit/before acknowledgment; verify one effect, recoverable queued work and honest customer status. Last-unit, review-versus-revision, cancellation-versus-packing, duplicate-refund and COD-shortage tests need real restricted-role database fixtures.
+Use [state and recovery contracts](State-and-Recovery-Contracts.md) for commit/rollback, replay, stale-version and compensation expectations. Kill a worker before commit and after commit/before acknowledgment; verify one effect, recoverable queued work and honest customer status.
+
+Last-unit, review-versus-revision, cancellation-versus-packing, duplicate-refund and COD-shortage tests need real restricted-role database fixtures.

@@ -5,7 +5,7 @@ The checked-in schema report counts 56 functions and 879 triggers. The table con
 ## Where to find definitions
 
 | Object | Source in `healthcare_db` | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Deployment DDL | `postgresql/migrations/` | Ordered SQL migrations are the deployment authority. |
 | Shared workflow functions and triggers | `app/db/workflow.sql`, `app/db/operations_workflow.sql`, `app/db/eligibility_workflow.sql`, `app/db/domain_workflow.sql`, `app/db/report_workflow.sql`, `app/db/upgrade_workflow.sql` | Companion workflow contract files; use the migrations to establish deployed definitions. |
 | Numeric key maintenance | `app/db/numeric_keys.sql`, `app/db/numeric_keys.py` | Maintains internal numeric keys alongside public UUIDs. |

@@ -1,4 +1,4 @@
-# payment.reconciliation_runs
+# `payment.reconciliation_runs`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -29,6 +29,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the reconciliation runs business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Finance_Payments. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -36,20 +37,22 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_payment_reconciliation_runs_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_payment_reconciliation_runs_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `source_file_id` → `platform.file_objects(id)` via `fk_payment_reconciliation_runs_source_file_id_file_objects`; FOREIGN KEY (source_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL
-- `account_id` → `payment.provider_accounts(id)` via `fk_payment_reconciliation_runs_account_id_provider_accounts`; FOREIGN KEY (account_id) REFERENCES payment.provider_accounts(id) ON DELETE SET NULL
-- `account_id_internal_id` → `payment.provider_accounts(internal_id)` via `fk_payment_reconciliation_runs_account_id_provider_acco_d922`; FOREIGN KEY (account_id_internal_id) REFERENCES payment.provider_accounts(internal_id) ON DELETE SET NULL
-- `source_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_payment_reconciliation_runs_source_file_id_file_obje_5a14`; FOREIGN KEY (source_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL
+- `created_by` → `identity.users(id)` via `fk_payment_reconciliation_runs_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_payment_reconciliation_runs_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `source_file_id` → `platform.file_objects(id)` via `fk_payment_reconciliation_runs_source_file_id_file_objects`; `FOREIGN KEY (source_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL`
+- `account_id` → `payment.provider_accounts(id)` via `fk_payment_reconciliation_runs_account_id_provider_accounts`; `FOREIGN KEY (account_id) REFERENCES payment.provider_accounts(id) ON DELETE SET NULL`
+- `account_id_internal_id` → `payment.provider_accounts(internal_id)` via `fk_payment_reconciliation_runs_account_id_provider_acco_d922`; `FOREIGN KEY (account_id_internal_id) REFERENCES payment.provider_accounts(internal_id) ON DELETE SET NULL`
+- `source_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_payment_reconciliation_runs_source_file_id_file_obje_5a14`; `FOREIGN KEY (source_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL`
 
 **Referenced by 2 FK constraints** (sample): `payment.reconciliation_items`, `payment.reconciliation_items`.
 
-## payment.reconciliation_runs — exact structural contracts
+## `payment.reconciliation_runs` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 17 columns, 12 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 17 columns, 12 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -60,7 +63,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `account_id_internal_id` | `payment.provider_accounts` | `fk_payment_reconciliation_runs_account_id_provider_acco_d922` |
 | `source_file_id_internal_id` | `platform.file_objects` | `fk_payment_reconciliation_runs_source_file_id_file_obje_5a14` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -77,7 +80,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `recon_provider_date_account` | UNIQUE | `UNIQUE NULLS NOT DISTINCT (provider, run_date, account_id)` |
 | `uq_payment_reconciliation_runs_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -86,7 +89,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `recon_provider_date_account` | `CREATE UNIQUE INDEX recon_provider_date_account ON payment.reconciliation_runs USING btree (provider, run_date, account_id) NULLS NOT DISTINCT` |
 | `uq_payment_reconciliation_runs_id` | `CREATE UNIQUE INDEX uq_payment_reconciliation_runs_id ON payment.reconciliation_runs USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -96,4 +99,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

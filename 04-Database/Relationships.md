@@ -21,7 +21,9 @@ For exact FK columns and delete actions, open the per-table contracts; this over
 
 Account/consent → catalogue publication → cart/quote → immutable order revision → clinical/payment/stock/fulfillment/delivery evidence → invoice/returns/refunds/closure. The database implements row timestamps, version fields, audit and selected soft-delete patterns, but a consistent legal retention schedule is not supplied.
 
-Identity/contact, dependent patients, prescriptions, diagnostics, location samples, payment provider references, and audit/export files have different sensitivity and minimum-necessary access. Do not turn a soft-delete flag into a claim that lawful erasure is complete. Hold exceptions, delayed deletion, provider data retention, backup expiry, pseudonymization and export access must be approved by owner/legal/pharmacist before production.
+Identity/contact, dependent patients, prescriptions, diagnostics, location samples, payment provider references, and audit/export files have different sensitivity and minimum-necessary access. Do not turn a soft-delete flag into a claim that lawful erasure is complete.
+
+Hold exceptions, delayed deletion, provider data retention, backup expiry, pseudonymization and export access must be approved by owner/legal/pharmacist before production.
 
 Preserve immutable order/clinical/financial history and make corrections through new accepted revisions or compensating records. A pending deletion must be reconciled against legal holds and business records. Avoid hard-coded number of years, GPS retention days or medical licensing assertions; document approval D-013.
 

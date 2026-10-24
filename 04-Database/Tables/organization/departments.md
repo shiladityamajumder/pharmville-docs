@@ -1,4 +1,4 @@
-# organization.departments
+# `organization.departments`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -29,6 +29,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the departments business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Admin_CMS, Order_Operations, Delivery_Operations, Authentication_Access. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -36,21 +37,23 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_organization_departments_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_organization_departments_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_organization_departments_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `parent_id` → `organization.departments(id)` via `fk_organization_departments_parent_id_departments`; FOREIGN KEY (parent_id) REFERENCES organization.departments(id) ON DELETE SET NULL
-- `organization_id` → `organization.organizations(id)` via `fk_organization_departments_organization_id_organizations`; FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE
-- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_organization_departments_organization_id_organizatio_fb8c`; FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE
-- `parent_id_internal_id` → `organization.departments(internal_id)` via `fk_organization_departments_parent_id_departments_numeric`; FOREIGN KEY (parent_id_internal_id) REFERENCES organization.departments(internal_id) ON DELETE SET NULL
+- `created_by` → `identity.users(id)` via `fk_organization_departments_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_organization_departments_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_organization_departments_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `parent_id` → `organization.departments(id)` via `fk_organization_departments_parent_id_departments`; `FOREIGN KEY (parent_id) REFERENCES organization.departments(id) ON DELETE SET NULL`
+- `organization_id` → `organization.organizations(id)` via `fk_organization_departments_organization_id_organizations`; `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE`
+- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_organization_departments_organization_id_organizatio_fb8c`; `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE`
+- `parent_id_internal_id` → `organization.departments(internal_id)` via `fk_organization_departments_parent_id_departments_numeric`; `FOREIGN KEY (parent_id_internal_id) REFERENCES organization.departments(internal_id) ON DELETE SET NULL`
 
 **Referenced by 4 FK constraints** (sample): `organization.departments`, `organization.memberships`, `organization.departments`, `organization.memberships`.
 
-## organization.departments — exact structural contracts
+## `organization.departments` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 17 columns, 13 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 17 columns, 13 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -62,7 +65,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `organization_id_internal_id` | `organization.organizations` | `fk_organization_departments_organization_id_organizatio_fb8c` |
 | `parent_id_internal_id` | `organization.departments` | `fk_organization_departments_parent_id_departments_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -80,7 +83,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_organization_departments` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_organization_departments_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -89,7 +92,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_organization_departments` | `CREATE UNIQUE INDEX pk_organization_departments ON organization.departments USING btree (internal_id)` |
 | `uq_organization_departments_id` | `CREATE UNIQUE INDEX uq_organization_departments_id ON organization.departments USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -99,4 +102,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

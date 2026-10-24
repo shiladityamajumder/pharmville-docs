@@ -14,13 +14,14 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 
 ## MOD-007: Order orchestration and routing — HLD
 
-**Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
 **Business responsibility:** Order orchestration and routing. One order must have one accepted revision and an auditable licensed location/fulfillment decision.
 
 **System responsibility:** The `Order_Operations` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-## Major operations
+### Major operations
 
 - Order list with filters (status, location, date, payment, Rx) and search by order number or phone (`OMS-01`)
 - Order detail: items, batches, prescription, payment, delivery, full history (`OMS-02`)
@@ -30,15 +31,17 @@ These diagrams show recorded PostgreSQL constraints, not approved module write o
 - Attention queue: payment pending, stuck orders, failed deliveries (`OMS-06`)
 - Assisted order entry for phone orders (`OMS-07`)
 
-## Dependencies and trust boundaries
+### Dependencies and trust boundaries
+
 - Database candidates: `commerce.orders`, `commerce.order_revisions`, `commerce.order_allocations`, `fulfillment.fulfillment_orders`, `organization.licenses`.
 - Role, patient, store and order scope resolved from trusted access context, not JSON body.
 - External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
 - Use local transactions for authoritative state; publish external side effects only after commit.
 
-**Technical design:** Module LLD · API index · Tests
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-## Risk
+### Risk
+
 One order must have one accepted revision and an auditable licensed location/fulfillment decision. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
 
 ## MOD-007 — Order orchestration and routing
@@ -48,6 +51,7 @@ One order must have one accepted revision and an auditable licensed location/ful
 **Purpose:** One order must have one accepted revision and an auditable licensed location/fulfillment decision.
 
 **Feature coverage**
+
 - **OMS-01 / REQ-045:** Order list with filters (status, location, date, payment, Rx) and search by order number or phone (Must (draft)).
 - **OMS-02 / REQ-046:** Order detail: items, batches, prescription, payment, delivery, full history (Must (draft)).
 - **OMS-03 / REQ-047:** Automatic routing to the nearest open store with every item; warehouse as fallback (Must (draft)).
@@ -56,7 +60,8 @@ One order must have one accepted revision and an auditable licensed location/ful
 - **OMS-06 / REQ-050:** Attention queue: payment pending, stuck orders, failed deliveries (Must (draft)).
 - **OMS-07 / REQ-051:** Assisted order entry for phone orders (Could (draft)).
 
-## Developer navigation
+### Developer navigation
+
 - [Module HLD](HLD.md)
 - [Module LLD](LLD.md)
 - Internal architecture

@@ -1,4 +1,4 @@
-# marketplace.seller_ratings
+# `marketplace.seller_ratings`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -22,6 +22,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the seller ratings business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Product_Catalog. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -29,17 +30,19 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_marketplace_seller_ratings_user_id_users`; FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `seller_id` → `marketplace.sellers(id)` via `fk_marketplace_seller_ratings_seller_id_sellers`; FOREIGN KEY (seller_id) REFERENCES marketplace.sellers(id) ON DELETE CASCADE
-- `order_id, user_id` → `commerce.orders(id, user_id)` via `fk_domain_marketplace_seller_ratings_order_id`; FOREIGN KEY (order_id, user_id) REFERENCES commerce.orders(id, user_id) ON DELETE RESTRICT
-- `order_id_internal_id, user_id` → `commerce.orders(internal_id, user_id)` via `fk_domain_marketplace_seller_ratings_order_id_numeric`; FOREIGN KEY (order_id_internal_id, user_id) REFERENCES commerce.orders(internal_id, user_id) ON DELETE RESTRICT
-- `seller_id_internal_id` → `marketplace.sellers(internal_id)` via `fk_marketplace_seller_ratings_seller_id_sellers_numeric`; FOREIGN KEY (seller_id_internal_id) REFERENCES marketplace.sellers(internal_id) ON DELETE CASCADE
+- `user_id` → `identity.users(id)` via `fk_marketplace_seller_ratings_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `seller_id` → `marketplace.sellers(id)` via `fk_marketplace_seller_ratings_seller_id_sellers`; `FOREIGN KEY (seller_id) REFERENCES marketplace.sellers(id) ON DELETE CASCADE`
+- `order_id, user_id` → `commerce.orders(id, user_id)` via `fk_domain_marketplace_seller_ratings_order_id`; `FOREIGN KEY (order_id, user_id) REFERENCES commerce.orders(id, user_id) ON DELETE RESTRICT`
+- `order_id_internal_id, user_id` → `commerce.orders(internal_id, user_id)` via `fk_domain_marketplace_seller_ratings_order_id_numeric`; `FOREIGN KEY (order_id_internal_id, user_id) REFERENCES commerce.orders(internal_id, user_id) ON DELETE RESTRICT`
+- `seller_id_internal_id` → `marketplace.sellers(internal_id)` via `fk_marketplace_seller_ratings_seller_id_sellers_numeric`; `FOREIGN KEY (seller_id_internal_id) REFERENCES marketplace.sellers(internal_id) ON DELETE CASCADE`
 
-## marketplace.seller_ratings — exact structural contracts
+## `marketplace.seller_ratings` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 10 columns, 11 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 10 columns, 11 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -49,7 +52,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `order_id_internal_id`, `user_id` | `commerce.orders` | `fk_domain_marketplace_seller_ratings_order_id_numeric` |
 | `seller_id_internal_id` | `marketplace.sellers` | `fk_marketplace_seller_ratings_seller_id_sellers_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -65,7 +68,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `seller_order_user_rating` | UNIQUE | `UNIQUE (seller_id, order_id, user_id)` |
 | `uq_marketplace_seller_ratings_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -74,7 +77,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `seller_order_user_rating` | `CREATE UNIQUE INDEX seller_order_user_rating ON marketplace.seller_ratings USING btree (seller_id, order_id, user_id)` |
 | `uq_marketplace_seller_ratings_id` | `CREATE UNIQUE INDEX uq_marketplace_seller_ratings_id ON marketplace.seller_ratings USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -84,4 +87,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

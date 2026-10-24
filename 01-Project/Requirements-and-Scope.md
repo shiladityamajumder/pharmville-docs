@@ -36,11 +36,17 @@ Analytics metrics
 
 ## P/M/O medicine eligibility contract
 
-**Confirmed database-backed invariant; business/legal limits pending.** The commerce class is a controlled, approved product fact: P requires exact per-line pharmacist review; M and O do not pass through that review branch. Unknown/unapproved classifications block checkout. A separate descriptive `product_type` field must not be mistaken for the controlled P/M/O commerce class.
+**Confirmed database-backed invariant; business/legal limits pending.** The commerce class is a controlled, approved product fact: P requires exact per-line pharmacist review; M and O do not pass through that review branch. Unknown/unapproved classifications block checkout.
 
-One mixed basket has up to seven nonempty P/M/O combinations. If P is present, a patient and appropriate prescription evidence are required; each P line receives an individual decision. If any P is rejected or corrected, the customer must explicitly choose an accepted revised basket, provide new evidence or cancel. Unaffected eligible M/O lines remain unchanged; no silent substitution or charging takes place.
+A separate descriptive `product_type` field must not be mistaken for the controlled P/M/O commerce class.
 
-Before picking, packing and dispatch, services must recheck current accepted revision, patient, Rx/version, exact SKU/strength/form/quantity, location license and stock evidence. A previously approved line is no longer approved automatically after any change affecting clinical evidence. Clinical or financial events are not deleted to conceal a reversal; use immutable history and compensating records.
+One mixed basket has up to seven nonempty P/M/O combinations. If P is present, a patient and appropriate prescription evidence are required; each P line receives an individual decision. If any P is rejected or corrected, the customer must explicitly choose an accepted revised basket, provide new evidence or cancel.
+
+Unaffected eligible M/O lines remain unchanged; no silent substitution or charging takes place.
+
+Before picking, packing and dispatch, services must recheck current accepted revision, patient, Rx/version, exact SKU/strength/form/quantity, location license and stock evidence. A previously approved line is no longer approved automatically after any change affecting clinical evidence.
+
+Clinical or financial events are not deleted to conceal a reversal; use immutable history and compensating records.
 
 The pharmacist and legal team must validate Schedule classification, prescription eligibility and storage/retention before production. See Pharmacy LLD and Database Quality.
 
@@ -48,7 +54,9 @@ The pharmacist and legal team must validate Schedule classification, prescriptio
 
 **Source:** unified order journey and the database guard evidence. A web callback or return URL alone does not establish money truth. Signed gateway events, provider reconciliation and durable ledger rows determine online payment status. COD is a future receivable, not cash already collected; its permitted amount, products and eligibility are owner policies.
 
-Reservation needs authoritative location-specific stock observation, approved freshness policy, eligible batch and an authorized location. Missing/stale POS updates cause a safe block; a generic current stock number does not prove that a specific lot can be packed. One-site per-order is the proposed launch rule. Competing orders for the last safe unit must serialize, reserving at most one.
+Reservation needs authoritative location-specific stock observation, approved freshness policy, eligible batch and an authorized location. Missing/stale POS updates cause a safe block; a generic current stock number does not prove that a specific lot can be packed.
+
+One-site per-order is the proposed launch rule. Competing orders for the last safe unit must serialize, reserving at most one.
 
 Pick/pack requires active location-specific license and pharmacist evidence for each P line. Dispatch requires exact committed stock, fulfilment completion evidence and full authoritative payment or approved COD. Order state is composed from distinct clinical, finance, inventory and delivery states; no module may set all statuses by itself.
 

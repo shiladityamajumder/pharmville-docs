@@ -1,4 +1,4 @@
-# compliance.regulatory_registrations
+# `compliance.regulatory_registrations`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -35,6 +35,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the regulatory registrations business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Pharmacist_Review, Audit. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -42,23 +43,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_compliance_regulatory_registrations_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_compliance_regulatory_registrations_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_compliance_regulatory_registrations_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `document_file_id` → `platform.file_objects(id)` via `fk_compliance_regulatory_registrations_document_file_id_e38a`; FOREIGN KEY (document_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL
-- `authority_id` → `compliance.regulatory_authorities(id)` via `fk_compliance_regulatory_registrations_authority_id_reg_d5f2`; FOREIGN KEY (authority_id) REFERENCES compliance.regulatory_authorities(id) ON DELETE RESTRICT
-- `organization_id` → `organization.organizations(id)` via `fk_compliance_regulatory_registrations_organization_id__7f52`; FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE
-- `location_id` → `organization.locations(id)` via `fk_compliance_regulatory_registrations_location_id_locations`; FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE CASCADE
-- `authority_id_internal_id` → `compliance.regulatory_authorities(internal_id)` via `fk_compliance_regulatory_registrations_authority_id_reg_698b`; FOREIGN KEY (authority_id_internal_id) REFERENCES compliance.regulatory_authorities(internal_id) ON DELETE RESTRICT
-- `document_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_compliance_regulatory_registrations_document_file_id_1e84`; FOREIGN KEY (document_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL
-- `location_id_internal_id` → `organization.locations(internal_id)` via `fk_compliance_regulatory_registrations_location_id_loca_65e3`; FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE CASCADE
-- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_compliance_regulatory_registrations_organization_id__c7e2`; FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE
+- `created_by` → `identity.users(id)` via `fk_compliance_regulatory_registrations_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_compliance_regulatory_registrations_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_compliance_regulatory_registrations_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `document_file_id` → `platform.file_objects(id)` via `fk_compliance_regulatory_registrations_document_file_id_e38a`; `FOREIGN KEY (document_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL`
+- `authority_id` → `compliance.regulatory_authorities(id)` via `fk_compliance_regulatory_registrations_authority_id_reg_d5f2`; `FOREIGN KEY (authority_id) REFERENCES compliance.regulatory_authorities(id) ON DELETE RESTRICT`
+- `organization_id` → `organization.organizations(id)` via `fk_compliance_regulatory_registrations_organization_id__7f52`; `FOREIGN KEY (organization_id) REFERENCES organization.organizations(id) ON DELETE CASCADE`
+- `location_id` → `organization.locations(id)` via `fk_compliance_regulatory_registrations_location_id_locations`; `FOREIGN KEY (location_id) REFERENCES organization.locations(id) ON DELETE CASCADE`
+- `authority_id_internal_id` → `compliance.regulatory_authorities(internal_id)` via `fk_compliance_regulatory_registrations_authority_id_reg_698b`; `FOREIGN KEY (authority_id_internal_id) REFERENCES compliance.regulatory_authorities(internal_id) ON DELETE RESTRICT`
+- `document_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_compliance_regulatory_registrations_document_file_id_1e84`; `FOREIGN KEY (document_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL`
+- `location_id_internal_id` → `organization.locations(internal_id)` via `fk_compliance_regulatory_registrations_location_id_loca_65e3`; `FOREIGN KEY (location_id_internal_id) REFERENCES organization.locations(internal_id) ON DELETE CASCADE`
+- `organization_id_internal_id` → `organization.organizations(internal_id)` via `fk_compliance_regulatory_registrations_organization_id__c7e2`; `FOREIGN KEY (organization_id_internal_id) REFERENCES organization.organizations(internal_id) ON DELETE CASCADE`
 
-## compliance.regulatory_registrations — exact structural contracts
+## `compliance.regulatory_registrations` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 23 columns, 21 constraints, 5 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 23 columns, 21 constraints, 5 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -74,7 +77,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `location_id_internal_id` | `organization.locations` | `fk_compliance_regulatory_registrations_location_id_loca_65e3` |
 | `organization_id_internal_id` | `organization.organizations` | `fk_compliance_regulatory_registrations_organization_id__c7e2` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -100,7 +103,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `regulatory_registration` | UNIQUE | `UNIQUE (authority_id, registration_type, registration_number)` |
 | `uq_compliance_regulatory_registrations_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -110,7 +113,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `regulatory_registration` | `CREATE UNIQUE INDEX regulatory_registration ON compliance.regulatory_registrations USING btree (authority_id, registration_type, registration_number)` |
 | `uq_compliance_regulatory_registrations_id` | `CREATE UNIQUE INDEX uq_compliance_regulatory_registrations_id ON compliance.regulatory_registrations USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -120,4 +123,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

@@ -6,7 +6,9 @@ Pharmville connects a customer web experience, protected staff/admin workspaces 
 
 ## Choose your starting point
 
-**Business owners:** read [the complete business flow](00-Business-Guide/Pharmville-Complete-Business-Flow.md), then the domain guides for normal work, exceptions and responsible teams. **Product and QA:** use [requirements](01-Project/Requirements-and-Scope.md), the [feature register](09-References/Coverage-and-Traceability.md) and feature-specific failure assertions. **Developers:** start with HLD, ownership/recovery contracts and the relevant module LLD.
+- **Business owners:** read [the complete business flow](00-Business-Guide/Pharmville-Complete-Business-Flow.md), then the domain guides for normal work, exceptions and responsible teams.
+- **Product and QA:** use [requirements](01-Project/Requirements-and-Scope.md), the [feature register](09-References/Coverage-and-Traceability.md) and feature-specific failure assertions.
+- **Developers:** start with HLD, ownership/recovery contracts and the relevant module LLD.
 
 | Area | Purpose | Document |
 | --- | --- | --- |
@@ -16,23 +18,25 @@ Pharmville connects a customer web experience, protected staff/admin workspaces 
 | 🗄️ Database | Inspect available schema and migration evidence | [Database reference](04-Database/README.md) |
 | 🔗 APIs | Review proposed operations and remaining contract gaps | [API contracts](05-APIs/README.md) |
 | 🧪 Testing | Follow normal, adverse and recovery assertions | [Testing strategy](07-Engineering/Testing.md) |
-| Requirements | Find stable feature IDs and scope | [Features and modules](01-Project/Features-and-Modules.md) |
-| Technical workflows | Follow cross-module orchestration | [14 workflows](06-Workflows/README.md) |
-| Security and reliability | Review permissions, transactions and recovery | [Engineering](07-Engineering/README.md) |
-| Development | Turn reviewed requirements into delivery slices | [Implementation plan](08-Development-Plan/Implementation-Plan.md) |
+| 📋 Requirements | Find stable feature IDs and scope | [Features and modules](01-Project/Features-and-Modules.md) |
+| 🔄 Technical workflows | Follow cross-module orchestration | [14 workflows](06-Workflows/README.md) |
+| 🔐 Security and reliability | Review permissions, transactions and recovery | [Engineering](07-Engineering/README.md) |
+| 🗓️ Development | Turn reviewed requirements into delivery slices | [Implementation plan](08-Development-Plan/Implementation-Plan.md) |
 
 <!-- ERD-INDEX-LINK -->
 **Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams use the catalog in the user-supplied `healthcare_db/` folder; see the migration evidence for provenance.
 
 ## Product flow
 
-The current detailed journey records a request, reviews P medicines, obtains customer acceptance of any revision, secures eligible stock and proceeds to payment. M/O-only baskets skip prescription review. Deferred upload and payment capture details remain owner decisions. A request, a confirmed payment and a dispatched parcel are different milestones; the [business flow](00-Business-Guide/Pharmville-Complete-Business-Flow.md) explains the branches and failures.
+The current detailed journey records a request, reviews P medicines, obtains customer acceptance of any revision, secures eligible stock and proceeds to payment. M/O-only baskets skip prescription review. Deferred upload and payment capture details remain owner decisions.
+
+A request, a confirmed payment and a dispatched parcel are different milestones; the [business flow](00-Business-Guide/Pharmville-Complete-Business-Flow.md) explains the branches and failures.
 
 ## Documentation status
 
 The repository retains **110 draft feature IDs, 18 module groups and 14 technical workflows**. Business approval, proposed design, inspected database evidence and executed product tests are separate statuses. Feature-specific tests are **Designed / NOT RUN**; the [coverage report](09-References/Coverage-Report.md) records measured documentation results and remaining gaps.
 
-The user-supplied [healthcare_db](healthcare_db/README.md) folder is the database reference for this repository. [Migration evidence](04-Database/Migrations.md) records its verified source checksums and schema counts. Live deployment and runtime parity remain separate checks. Review [open decisions](09-References/Sources-and-Decisions.md) and the [engineering audit](09-References/Engineering-Audit.md) for remaining readiness work.
+The user-supplied `healthcare_db` folder is the database reference for this repository. [Migration evidence](04-Database/Migrations.md) records its verified source checksums and schema counts. Live deployment and runtime parity remain separate checks. Review [open decisions](09-References/Sources-and-Decisions.md) and the [engineering audit](09-References/Engineering-Audit.md) for remaining readiness work.
 
 ## Start development and maintain documentation
 

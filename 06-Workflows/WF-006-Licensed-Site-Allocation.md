@@ -1,6 +1,7 @@
 # WF-006 — Licensed Site Allocation
 
-**Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
+> [!NOTE]
+> **Status: Proposed orchestration; NOT RUN.** Business rules and thresholds still require the applicable [owner decisions](../09-References/Sources-and-Decisions.md).
 
 ## Actors and preconditions
 

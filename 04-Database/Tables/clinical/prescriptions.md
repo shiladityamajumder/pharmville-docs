@@ -1,4 +1,4 @@
-# clinical.prescriptions
+# `clinical.prescriptions`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -35,6 +35,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the prescriptions business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -42,23 +43,25 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `prescriber_user_id` → `identity.users(id)` via `fk_clinical_prescriptions_prescriber_user_id_users`; FOREIGN KEY (prescriber_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `uploaded_by_user_id` → `identity.users(id)` via `fk_clinical_prescriptions_uploaded_by_user_id_users`; FOREIGN KEY (uploaded_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `reviewed_by_user_id` → `identity.users(id)` via `fk_clinical_prescriptions_reviewed_by_user_id_users`; FOREIGN KEY (reviewed_by_user_id) REFERENCES identity.users(id) ON DELETE SET NULL
-- `created_by` → `identity.users(id)` via `fk_clinical_prescriptions_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_clinical_prescriptions_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_clinical_prescriptions_patient_profile_id_patient_profiles`; FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT
-- `consultation_id` → `clinical.consultations(id)` via `fk_clinical_prescriptions_consultation_id_consultations`; FOREIGN KEY (consultation_id) REFERENCES clinical.consultations(id) ON DELETE SET NULL
-- `consultation_id_internal_id` → `clinical.consultations(internal_id)` via `fk_clinical_prescriptions_consultation_id_consultations_numeric`; FOREIGN KEY (consultation_id_internal_id) REFERENCES clinical.consultations(internal_id) ON DELETE SET NULL
-- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_clinical_prescriptions_patient_profile_id_patient_pr_5a89`; FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT
+- `prescriber_user_id` → `identity.users(id)` via `fk_clinical_prescriptions_prescriber_user_id_users`; `FOREIGN KEY (prescriber_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `uploaded_by_user_id` → `identity.users(id)` via `fk_clinical_prescriptions_uploaded_by_user_id_users`; `FOREIGN KEY (uploaded_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `reviewed_by_user_id` → `identity.users(id)` via `fk_clinical_prescriptions_reviewed_by_user_id_users`; `FOREIGN KEY (reviewed_by_user_id) REFERENCES identity.users(id) ON DELETE SET NULL`
+- `created_by` → `identity.users(id)` via `fk_clinical_prescriptions_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_clinical_prescriptions_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `patient_profile_id` → `clinical.patient_profiles(id)` via `fk_clinical_prescriptions_patient_profile_id_patient_profiles`; `FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT`
+- `consultation_id` → `clinical.consultations(id)` via `fk_clinical_prescriptions_consultation_id_consultations`; `FOREIGN KEY (consultation_id) REFERENCES clinical.consultations(id) ON DELETE SET NULL`
+- `consultation_id_internal_id` → `clinical.consultations(internal_id)` via `fk_clinical_prescriptions_consultation_id_consultations_numeric`; `FOREIGN KEY (consultation_id_internal_id) REFERENCES clinical.consultations(internal_id) ON DELETE SET NULL`
+- `patient_profile_id_internal_id` → `clinical.patient_profiles(internal_id)` via `fk_clinical_prescriptions_patient_profile_id_patient_pr_5a89`; `FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT`
 
 **Referenced by 16 FK constraints** (sample): `clinical.prescription_documents`, `clinical.prescription_items`, `clinical.prescription_access_logs`, `commerce.cart_items`, `commerce.order_items`, `compliance.adverse_event_reports`, `clinical.order_reviews`, `clinical.order_reviews`, `clinical.order_reviews`, `clinical.order_reviews`, `clinical.prescription_access_logs`, `clinical.prescription_documents`.
 
-## clinical.prescriptions — exact structural contracts
+## `clinical.prescriptions` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 23 columns, 18 constraints, 10 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 23 columns, 18 constraints, 10 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -72,7 +75,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `consultation_id_internal_id` | `clinical.consultations` | `fk_clinical_prescriptions_consultation_id_consultations_numeric` |
 | `patient_profile_id_internal_id` | `clinical.patient_profiles` | `fk_clinical_prescriptions_patient_profile_id_patient_pr_5a89` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -95,7 +98,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_clinical_prescriptions_id_patient` | UNIQUE | `UNIQUE (id, patient_profile_id)` |
 | `uq_numeric_clinical_prescriptions_internal_id_patient_p_2997` | UNIQUE | `UNIQUE (internal_id, patient_profile_id_internal_id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -110,7 +113,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_clinical_prescriptions_id_patient` | `CREATE UNIQUE INDEX uq_clinical_prescriptions_id_patient ON clinical.prescriptions USING btree (id, patient_profile_id)` |
 | `uq_numeric_clinical_prescriptions_internal_id_patient_p_2997` | `CREATE UNIQUE INDEX uq_numeric_clinical_prescriptions_internal_id_patient_p_2997 ON clinical.prescriptions USING btree (internal_id, patient_profile_id_internal_id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -120,4 +123,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

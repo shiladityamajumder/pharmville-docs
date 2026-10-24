@@ -1,4 +1,4 @@
-# diagnostics.test_package_items
+# `diagnostics.test_package_items`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -23,6 +23,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the test package items business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** future-domain features. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -30,18 +31,20 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `created_by` → `identity.users(id)` via `fk_diagnostics_test_package_items_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_diagnostics_test_package_items_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `package_id` → `diagnostics.test_packages(id)` via `fk_diagnostics_test_package_items_package_id_test_packages`; FOREIGN KEY (package_id) REFERENCES diagnostics.test_packages(id) ON DELETE CASCADE
-- `test_definition_id` → `diagnostics.test_definitions(id)` via `fk_diagnostics_test_package_items_test_definition_id_te_2de4`; FOREIGN KEY (test_definition_id) REFERENCES diagnostics.test_definitions(id) ON DELETE RESTRICT
-- `package_id_internal_id` → `diagnostics.test_packages(internal_id)` via `fk_diagnostics_test_package_items_package_id_test_packa_0d15`; FOREIGN KEY (package_id_internal_id) REFERENCES diagnostics.test_packages(internal_id) ON DELETE CASCADE
-- `test_definition_id_internal_id` → `diagnostics.test_definitions(internal_id)` via `fk_diagnostics_test_package_items_test_definition_id_te_c996`; FOREIGN KEY (test_definition_id_internal_id) REFERENCES diagnostics.test_definitions(internal_id) ON DELETE RESTRICT
+- `created_by` → `identity.users(id)` via `fk_diagnostics_test_package_items_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_diagnostics_test_package_items_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `package_id` → `diagnostics.test_packages(id)` via `fk_diagnostics_test_package_items_package_id_test_packages`; `FOREIGN KEY (package_id) REFERENCES diagnostics.test_packages(id) ON DELETE CASCADE`
+- `test_definition_id` → `diagnostics.test_definitions(id)` via `fk_diagnostics_test_package_items_test_definition_id_te_2de4`; `FOREIGN KEY (test_definition_id) REFERENCES diagnostics.test_definitions(id) ON DELETE RESTRICT`
+- `package_id_internal_id` → `diagnostics.test_packages(internal_id)` via `fk_diagnostics_test_package_items_package_id_test_packa_0d15`; `FOREIGN KEY (package_id_internal_id) REFERENCES diagnostics.test_packages(internal_id) ON DELETE CASCADE`
+- `test_definition_id_internal_id` → `diagnostics.test_definitions(internal_id)` via `fk_diagnostics_test_package_items_test_definition_id_te_c996`; `FOREIGN KEY (test_definition_id_internal_id) REFERENCES diagnostics.test_definitions(internal_id) ON DELETE RESTRICT`
 
-## diagnostics.test_package_items — exact structural contracts
+## `diagnostics.test_package_items` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 11 columns, 12 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 11 columns, 12 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -52,7 +55,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `package_id_internal_id` | `diagnostics.test_packages` | `fk_diagnostics_test_package_items_package_id_test_packa_0d15` |
 | `test_definition_id_internal_id` | `diagnostics.test_definitions` | `fk_diagnostics_test_package_items_test_definition_id_te_c996` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -69,7 +72,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_diagnostics_test_package_items` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_diagnostics_test_package_items_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -78,7 +81,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_diagnostics_test_package_items` | `CREATE UNIQUE INDEX pk_diagnostics_test_package_items ON diagnostics.test_package_items USING btree (internal_id)` |
 | `uq_diagnostics_test_package_items_id` | `CREATE UNIQUE INDEX uq_diagnostics_test_package_items_id ON diagnostics.test_package_items USING btree (id)` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -88,4 +91,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.

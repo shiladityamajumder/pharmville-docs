@@ -2,7 +2,7 @@
 
 ## Proposed role-to-module access matrix
 
-**Not an approved grant list.** Names are business roles inferred from inherited user journeys and database schemas. The exact identity.roles/user_roles/role_permissions seeded values and live runtime grants must be reviewed separately. Do not grant these based on this table alone.
+**Not an approved grant list.** Names are business roles inferred from inherited user journeys and database schemas. The exact `identity.roles`/user_roles/role_permissions seeded values and live runtime grants must be reviewed separately. Do not grant these based on this table alone.
 
 | Module | Potential actors | Authorization invariant |
 | --- | --- | --- |

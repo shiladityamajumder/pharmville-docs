@@ -4,14 +4,16 @@ Status: proposed orchestration for ACC-01 and AUTH-01–AUTH-04. Customer_Accoun
 
 ## Preconditions
 
-Initial login has no existing-session requirement. It requires a valid normalized destination or approved staff identifier and the proof required by the current role policy. MFA completion uses a purpose-bound pre-session challenge; refresh uses a refresh credential. Only protected post-login operations require an existing application session. See [authentication contracts](../05-APIs/Authentication_Access.md) and [customer contracts](../05-APIs/Customer_Accounts.md).
+Initial login has no existing-session requirement. It requires a valid normalized destination or approved staff identifier and the proof required by the current role policy. MFA completion uses a purpose-bound pre-session challenge; refresh uses a refresh credential.
+
+Only protected post-login operations require an existing application session. See [authentication contracts](../05-APIs/Authentication_Access.md) and [customer contracts](../05-APIs/Customer_Accounts.md).
 
 ## Normal path and transaction boundary
 
 1. Validate phone/identifier and enforce D-003 abuse policy before delivery or credential verification. Do not expose whether an account exists.
 2. Create a purpose-bound challenge and its expiry/attempt state. Queue WhatsApp delivery; SMS fallback follows the configured delivery rule. Never log the OTP.
 3. Verify the supplied proof; atomically consume the challenge and create the eligible session after rechecking account status and role policy. Staff requiring MFA receive no privileged session before completing it.
-4. Resolve/create a customer identity without inventing required profile data. Collect first_name before creating customer.profiles. Required consent and incomplete-onboarding permissions follow D-003/D-013.
+4. Resolve/create a customer identity without inventing required profile data. Collect first_name before creating `customer.profiles`. Required consent and incomplete-onboarding permissions follow D-003/D-013.
 5. Commit account/session and audit facts before returning credentials. Profile changes later use the profile and identity versions separately.
 
 ## Failure, rollback and recovery
@@ -22,7 +24,7 @@ Provider failure leaves delivery pending/failed and follows the approved fallbac
 
 ## Data and sequence
 
-Tables: identity.users, identity.otp_challenges, identity.sessions, identity.mfa_factors, identity.login_attempts; customer.profiles is created only after mandatory data exists. Identity/session writes are owned by Authentication_Access; customer profile writes by Customer_Accounts through the defined transaction boundary.
+Tables: `identity.users`, `identity.otp_challenges`, `identity.sessions`, `identity.mfa_factors`, `identity.login_attempts`; `customer.profiles` is created only after mandatory data exists. Identity/session writes are owned by Authentication_Access; customer profile writes by Customer_Accounts through the defined transaction boundary.
 
 ```mermaid
 sequenceDiagram

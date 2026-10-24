@@ -1,6 +1,7 @@
 # Store Operations edge cases
 
-**Status: Designed; NOT RUN.** These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to [decisions](../../09-References/Sources-and-Decisions.md); provider behavior and application execution are not certified.
+> [!NOTE]
+> **Status: Designed; NOT RUN.** These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to [decisions](../../09-References/Sources-and-Decisions.md); provider behavior and application execution are not certified.
 
 [Business explanation](../../00-Business-Guide/Store-and-Warehouse.md) · [LLD and normal tests](LLD.md) · [API](../../05-APIs/Store_Operations.md) · [recovery contracts](../../07-Engineering/State-and-Recovery-Contracts.md)
 

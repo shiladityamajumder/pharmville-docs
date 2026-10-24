@@ -1,4 +1,4 @@
-# customer.profiles
+# `customer.profiles`
 
 Schema contract and field explanations from the documentation catalog. The database migration files are the deployment authority. See [migration evidence](../../Migrations.md) for the local source baseline and deployment limits.
 
@@ -33,6 +33,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 **Primary key columns (Confirmed):** `internal_id`. See the structural contract for the exact primary-key constraint name.
 
 ## Record lifecycle and users
+
 - **Created:** when the profiles business process first needs a durable record; endpoint and actor require workflow review.
 - **Updated:** on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.
 - **Candidate consuming modules:** Customer_Accounts, Cart_Checkout, Prescription_Upload. This is schema-level discovery, **not confirmed table-level write ownership**.
@@ -40,20 +41,22 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Actual relationships
 
-- `user_id` → `identity.users(id)` via `fk_customer_profiles_user_id_users`; FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE
-- `created_by` → `identity.users(id)` via `fk_customer_profiles_created_by_users`; FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `deleted_by` → `identity.users(id)` via `fk_customer_profiles_deleted_by_users`; FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `updated_by` → `identity.users(id)` via `fk_customer_profiles_updated_by_users`; FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT
-- `default_address_id, user_id` → `customer.addresses(id, user_id)` via `fk_domain_customer_profiles_default_address_id`; FOREIGN KEY (default_address_id, user_id) REFERENCES customer.addresses(id, user_id) ON DELETE RESTRICT
-- `avatar_file_id` → `platform.file_objects(id)` via `fk_customer_profiles_avatar_file_id_file_objects`; FOREIGN KEY (avatar_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL
-- `avatar_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_customer_profiles_avatar_file_id_file_objects_numeric`; FOREIGN KEY (avatar_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL
-- `default_address_id_internal_id, user_id` → `customer.addresses(internal_id, user_id)` via `fk_domain_customer_profiles_default_address_id_numeric`; FOREIGN KEY (default_address_id_internal_id, user_id) REFERENCES customer.addresses(internal_id, user_id) ON DELETE RESTRICT
+- `user_id` → `identity.users(id)` via `fk_customer_profiles_user_id_users`; `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE`
+- `created_by` → `identity.users(id)` via `fk_customer_profiles_created_by_users`; `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `deleted_by` → `identity.users(id)` via `fk_customer_profiles_deleted_by_users`; `FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `updated_by` → `identity.users(id)` via `fk_customer_profiles_updated_by_users`; `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT`
+- `default_address_id, user_id` → `customer.addresses(id, user_id)` via `fk_domain_customer_profiles_default_address_id`; `FOREIGN KEY (default_address_id, user_id) REFERENCES customer.addresses(id, user_id) ON DELETE RESTRICT`
+- `avatar_file_id` → `platform.file_objects(id)` via `fk_customer_profiles_avatar_file_id_file_objects`; `FOREIGN KEY (avatar_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL`
+- `avatar_file_id_internal_id` → `platform.file_objects(internal_id)` via `fk_customer_profiles_avatar_file_id_file_objects_numeric`; `FOREIGN KEY (avatar_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL`
+- `default_address_id_internal_id, user_id` → `customer.addresses(internal_id, user_id)` via `fk_domain_customer_profiles_default_address_id_numeric`; `FOREIGN KEY (default_address_id_internal_id, user_id) REFERENCES customer.addresses(internal_id, user_id) ON DELETE RESTRICT`
 
-## customer.profiles — exact structural contracts
+## `customer.profiles` — exact structural contracts
 
-**Identity:** `internal_id` BIGINT. **Counts:** 21 columns, 13 constraints, 4 indexes, 3 triggers.
+**Identity:** `internal_id` BIGINT.
 
-## Existing foreign-key dependencies
+**Counts:** 21 columns, 13 constraints, 4 indexes, 3 triggers.
+
+### Existing foreign-key dependencies
 
 | Local columns | References | Constraint |
 | --- | --- | --- |
@@ -66,7 +69,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `avatar_file_id_internal_id` | `platform.file_objects` | `fk_customer_profiles_avatar_file_id_file_objects_numeric` |
 | `default_address_id_internal_id`, `user_id` | `customer.addresses` | `fk_domain_customer_profiles_default_address_id_numeric` |
 
-## Existing constraints
+### Existing constraints
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
@@ -84,7 +87,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `pk_customer_profiles` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_customer_profiles_id` | UNIQUE | `UNIQUE (id)` |
 
-## Existing indexes
+### Existing indexes
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -93,7 +96,7 @@ Schema contract and field explanations from the documentation catalog. The datab
 | `uq_customer_profiles_id` | `CREATE UNIQUE INDEX uq_customer_profiles_id ON customer.profiles USING btree (id)` |
 | `uq_customer_profiles_user_active` | `CREATE UNIQUE INDEX uq_customer_profiles_user_active ON customer.profiles USING btree (user_id) WHERE is_deleted = false` |
 
-## Existing triggers
+### Existing triggers
 
 | Exact name | Recorded definition |
 | --- | --- |
@@ -103,4 +106,6 @@ Schema contract and field explanations from the documentation catalog. The datab
 
 ## Engineering interpretation
 
-The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants. Application code should catch and translate database errors into safe user messages without bypassing these protections.
+The foreign keys prevent dangling references; unique constraints reject duplicate business identities; checks reject invalid state or numeric values; indexes support lookup paths but still require plan testing at realistic data sizes. Triggers may enforce row-version, crosswalk, audit or domain invariants.
+
+Application code should catch and translate database errors into safe user messages without bypassing these protections.
