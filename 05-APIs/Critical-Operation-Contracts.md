@@ -97,7 +97,7 @@ Persist one `payment.payment_intents`/`payment.payment_attempts` operation with 
 
 Retain source event identity in `payment.payment_webhooks`, verify amount/currency/order/revision, deduplicate, and commit trusted money effects before the adapter’s agreed acknowledgment. A contradictory or out-of-order event is reconciled, not applied as a blind backward transition.
 
-The [Finance contract](../03-Modules/Payments/APIs.md) gives the trust boundary. TC-FIN-01-DENY and TC-CHK-03-DENY require signed sandbox evidence before provider readiness.
+The [Finance contract](../03-Modules/Finance_Payments/APIs.md) gives the trust boundary. TC-FIN-01-DENY and TC-CHK-03-DENY require signed sandbox evidence before provider readiness.
 
 COD eligibility belongs to the reviewed checkout/order command and Finance’s approved policy, not the Cashfree callback. A complete COD selection/approval command and DTO remain missing; API-080 is reconciliation, not an invented COD approval endpoint. See CHK-04 and D-007.
 

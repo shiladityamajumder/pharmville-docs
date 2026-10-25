@@ -1,35 +1,73 @@
-# Compatibility navigation
+# Order Operations HLD
 
-This document moved to the module-first source of truth. [Open the canonical document](../Order-Management/HLD.md). Existing paths and section anchors remain available for wireframe and historical references.
+<!-- ERD-NAV-START -->
 
-<a id="order-operations-hld"></a>
+## Database relationships
 
-[Open section](../Order-Management/HLD.md#order-operations-hld)
+[`commerce` ERD](../../04-Database/ER-Diagrams/04-commerce.md) · [`fulfillment` ERD](../../04-Database/ER-Diagrams/09-fulfillment.md) · [`organization` ERD](../../04-Database/ER-Diagrams/16-organization.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
 
-<a id="database-relationships"></a>
+These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the supplied source and deployment verification limits.
 
-[Open section](../Order-Management/HLD.md#database-relationships)
+<!-- ERD-NAV-END -->
 
-<a id="mod-007-order-orchestration-and-routing--hld"></a>
+[Business flow](../../00-Business-Guide/Orders-and-Fulfillment.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
-[Open section](../Order-Management/HLD.md#mod-007-order-orchestration-and-routing--hld)
+## MOD-007: Order orchestration and routing — HLD
 
-<a id="major-operations"></a>
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
-[Open section](../Order-Management/HLD.md#major-operations)
+**Business responsibility:** Order orchestration and routing. One order must have one accepted revision and an auditable licensed location/fulfillment decision.
 
-<a id="dependencies-and-trust-boundaries"></a>
+**System responsibility:** The `Order_Operations` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-[Open section](../Order-Management/HLD.md#dependencies-and-trust-boundaries)
+### Major operations
 
-<a id="risk"></a>
+- Order list with filters (status, location, date, payment, Rx) and search by order number or phone (`OMS-01`)
+- Order detail: items, batches, prescription, payment, delivery, full history (`OMS-02`)
+- Automatic routing to the nearest open store with every item; warehouse as fallback (`OMS-03`)
+- Reassign an order to another location, with a reason (`OMS-04`)
+- Cancel, partly fulfil, raise return, add internal note (`OMS-05`)
+- Attention queue: payment pending, stuck orders, failed deliveries (`OMS-06`)
+- Assisted order entry for phone orders (`OMS-07`)
 
-[Open section](../Order-Management/HLD.md#risk)
+### Dependencies and trust boundaries
 
-<a id="mod-007--order-orchestration-and-routing"></a>
+- Database candidates: `commerce.orders`, `commerce.order_revisions`, `commerce.order_allocations`, `fulfillment.fulfillment_orders`, `organization.licenses`.
+- Role, patient, store and order scope resolved from trusted access context, not JSON body.
+- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
+- Use local transactions for authoritative state; publish external side effects only after commit.
 
-[Open section](../Order-Management/HLD.md#mod-007--order-orchestration-and-routing)
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-<a id="developer-navigation"></a>
+### Risk
 
-[Open section](../Order-Management/HLD.md#developer-navigation)
+One order must have one accepted revision and an auditable licensed location/fulfillment decision. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
+
+## MOD-007 — Order orchestration and routing
+
+**Source classification:** 7 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
+
+**Purpose:** One order must have one accepted revision and an auditable licensed location/fulfillment decision.
+
+**Feature coverage**
+
+- **OMS-01 / REQ-045:** Order list with filters (status, location, date, payment, Rx) and search by order number or phone (Must (draft)).
+- **OMS-02 / REQ-046:** Order detail: items, batches, prescription, payment, delivery, full history (Must (draft)).
+- **OMS-03 / REQ-047:** Automatic routing to the nearest open store with every item; warehouse as fallback (Must (draft)).
+- **OMS-04 / REQ-048:** Reassign an order to another location, with a reason (Must (draft)).
+- **OMS-05 / REQ-049:** Cancel, partly fulfil, raise return, add internal note (Must (draft)).
+- **OMS-06 / REQ-050:** Attention queue: payment pending, stuck orders, failed deliveries (Must (draft)).
+- **OMS-07 / REQ-051:** Assisted order entry for phone orders (Could (draft)).
+
+### Developer navigation
+
+- [Module HLD](HLD.md)
+- [Module LLD](LLD.md)
+- Internal architecture
+- [API contracts](APIs.md)
+- [Database mapping](../../04-Database/Module-Mapping.md)
+- [Testing](../../07-Engineering/Testing.md)
+- [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
+
+**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.

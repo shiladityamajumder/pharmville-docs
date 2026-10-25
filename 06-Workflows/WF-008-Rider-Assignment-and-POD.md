@@ -21,7 +21,7 @@ Delivery owns assignment, proof, custody and attempts. Rider is a scoped client;
 
 Candidate existing tables: `logistics.shipments`, `logistics.delivery_assignments`, `logistics.delivery_otp_challenges`, `logistics.delivery_attempts`, `logistics.delivery_location_updates`, `payment.cod_collections`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-064/API-065 and API-070–API-074. [Delivery Operations](../03-Modules/Delivery/APIs.md) · [Rider App](../03-Modules/Rider-Operations/APIs.md).
+Related proposed operations: API-064/API-065 and API-070–API-074. [Delivery Operations](../03-Modules/Delivery_Operations/APIs.md) · [Rider App](../03-Modules/Rider_App/APIs.md).
 
 ## Sequence
 

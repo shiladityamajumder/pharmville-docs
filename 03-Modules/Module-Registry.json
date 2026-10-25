@@ -1,7 +1,7 @@
 [
   {
     "id": "Authentication_Access",
-    "directory": "Authentication",
+    "directory": "Authentication_Access",
     "display_name": "Authentication",
     "proposed_accountable_role": "Security / Identity",
     "feature_ids": [
@@ -60,7 +60,7 @@
   },
   {
     "id": "Customer_Accounts",
-    "directory": "Customer-Accounts",
+    "directory": "Customer_Accounts",
     "display_name": "Customer Accounts",
     "proposed_accountable_role": "Customer platform",
     "feature_ids": [
@@ -118,7 +118,7 @@
   },
   {
     "id": "Product_Catalog",
-    "directory": "Product-Catalog",
+    "directory": "Product_Catalog",
     "display_name": "Product Catalog",
     "proposed_accountable_role": "Catalog / Merchandising",
     "feature_ids": [
@@ -157,7 +157,7 @@
   },
   {
     "id": "Cart_Checkout",
-    "directory": "Cart-Checkout",
+    "directory": "Cart_Checkout",
     "display_name": "Cart Checkout",
     "proposed_accountable_role": "Commerce / Checkout",
     "feature_ids": [
@@ -192,7 +192,7 @@
   },
   {
     "id": "Prescription_Upload",
-    "directory": "Prescription-Management",
+    "directory": "Prescription_Upload",
     "display_name": "Prescription Management",
     "proposed_accountable_role": "Prescription intake",
     "feature_ids": [
@@ -218,7 +218,7 @@
   },
   {
     "id": "Pharmacist_Review",
-    "directory": "Pharmacist-Review",
+    "directory": "Pharmacist_Review",
     "display_name": "Pharmacist Review",
     "proposed_accountable_role": "Pharmacy clinical lead",
     "feature_ids": [
@@ -247,7 +247,7 @@
   },
   {
     "id": "Customer_Orders",
-    "directory": "Customer-Orders",
+    "directory": "Customer_Orders",
     "display_name": "Customer Orders",
     "proposed_accountable_role": "Customer commerce surface",
     "feature_ids": [
@@ -284,7 +284,7 @@
   },
   {
     "id": "Order_Operations",
-    "directory": "Order-Management",
+    "directory": "Order_Operations",
     "display_name": "Order Management",
     "proposed_accountable_role": "Order operations",
     "feature_ids": [
@@ -363,7 +363,7 @@
   },
   {
     "id": "Store_Operations",
-    "directory": "Store-Operations",
+    "directory": "Store_Operations",
     "display_name": "Store Operations",
     "proposed_accountable_role": "Store fulfillment",
     "feature_ids": [
@@ -426,7 +426,7 @@
   },
   {
     "id": "Finance_Payments",
-    "directory": "Payments",
+    "directory": "Finance_Payments",
     "display_name": "Payments",
     "proposed_accountable_role": "Finance / Payments",
     "feature_ids": [
@@ -468,7 +468,7 @@
   },
   {
     "id": "Delivery_Operations",
-    "directory": "Delivery",
+    "directory": "Delivery_Operations",
     "display_name": "Delivery",
     "proposed_accountable_role": "Delivery operations",
     "feature_ids": [
@@ -505,7 +505,7 @@
   },
   {
     "id": "Rider_App",
-    "directory": "Rider-Operations",
+    "directory": "Rider_App",
     "display_name": "Rider Operations",
     "proposed_accountable_role": "Rider operations / mobile client",
     "feature_ids": [
@@ -567,7 +567,7 @@
   },
   {
     "id": "Admin_CMS",
-    "directory": "Admin",
+    "directory": "Admin_CMS",
     "display_name": "Admin",
     "proposed_accountable_role": "Administration / Operations",
     "feature_ids": [

@@ -2,48 +2,112 @@
   "removed": [
     {
       "path": "03-Modules/Authentication_Access/README.md",
-      "replacement": "03-Modules/Authentication/README.md",
-      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+      "replacement": "03-Modules/Authentication_Access/README.md",
+      "reason": "The former navigation wrapper was replaced by the canonical Authentication document at the stable-ID directory path."
     },
     {
       "path": "03-Modules/Authentication_Access/HLD.md",
-      "replacement": "03-Modules/Authentication/HLD.md",
-      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+      "replacement": "03-Modules/Authentication_Access/HLD.md",
+      "reason": "The former navigation wrapper was replaced by the canonical Authentication document at the stable-ID directory path."
     },
     {
       "path": "03-Modules/Authentication_Access/LLD.md",
-      "replacement": "03-Modules/Authentication/LLD.md",
-      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+      "replacement": "03-Modules/Authentication_Access/LLD.md",
+      "reason": "The former navigation wrapper was replaced by the canonical Authentication document at the stable-ID directory path."
     },
     {
       "path": "05-APIs/Authentication_Access.md",
-      "replacement": "03-Modules/Authentication/APIs.md",
-      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+      "replacement": "03-Modules/Authentication_Access/APIs.md",
+      "reason": "Former API navigation wrapper; canonical API contracts live in the Authentication module."
     },
     {
       "path": "03-Modules/Customer_Accounts/README.md",
-      "replacement": "03-Modules/Customer-Accounts/README.md",
-      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+      "replacement": "03-Modules/Customer_Accounts/README.md",
+      "reason": "The former navigation wrapper was replaced by the canonical Customer Accounts document at the stable-ID directory path."
     },
     {
       "path": "03-Modules/Customer_Accounts/HLD.md",
-      "replacement": "03-Modules/Customer-Accounts/HLD.md",
-      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+      "replacement": "03-Modules/Customer_Accounts/HLD.md",
+      "reason": "The former navigation wrapper was replaced by the canonical Customer Accounts document at the stable-ID directory path."
     },
     {
       "path": "03-Modules/Customer_Accounts/LLD.md",
-      "replacement": "03-Modules/Customer-Accounts/LLD.md",
-      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+      "replacement": "03-Modules/Customer_Accounts/LLD.md",
+      "reason": "The former navigation wrapper was replaced by the canonical Customer Accounts document at the stable-ID directory path."
     },
     {
       "path": "05-APIs/Customer_Accounts.md",
-      "replacement": "03-Modules/Customer-Accounts/APIs.md",
-      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+      "replacement": "03-Modules/Customer_Accounts/APIs.md",
+      "reason": "Former API navigation wrapper; canonical API contracts live in the Customer Accounts module."
     }
   ],
-  "retained": [
-    "03-Modules/Authentication_Access/Edge-Cases.md",
-    "03-Modules/Customer_Accounts/Edge-Cases.md"
-  ],
-  "retention_reason": "Protected wireframe references require these compatibility paths and anchors."
+  "retained": [],
+  "retention_reason": "No duplicate module-directory shims remain. Existing wireframe source paths point to the canonical stable-ID directories, which now contain the full module documents.",
+  "canonicalized_directories": [
+    {
+      "former_path": "03-Modules/03-Modules/Authentication",
+      "canonical_path": "03-Modules/Authentication_Access",
+      "module_id": "Authentication_Access"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Customer-Accounts",
+      "canonical_path": "03-Modules/Customer_Accounts",
+      "module_id": "Customer_Accounts"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Product-Catalog",
+      "canonical_path": "03-Modules/Product_Catalog",
+      "module_id": "Product_Catalog"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Cart-Checkout",
+      "canonical_path": "03-Modules/Cart_Checkout",
+      "module_id": "Cart_Checkout"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Prescription-Management",
+      "canonical_path": "03-Modules/Prescription_Upload",
+      "module_id": "Prescription_Upload"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Pharmacist-Review",
+      "canonical_path": "03-Modules/Pharmacist_Review",
+      "module_id": "Pharmacist_Review"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Customer-Orders",
+      "canonical_path": "03-Modules/Customer_Orders",
+      "module_id": "Customer_Orders"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Order-Management",
+      "canonical_path": "03-Modules/Order_Operations",
+      "module_id": "Order_Operations"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Store-Operations",
+      "canonical_path": "03-Modules/Store_Operations",
+      "module_id": "Store_Operations"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Payments",
+      "canonical_path": "03-Modules/Finance_Payments",
+      "module_id": "Finance_Payments"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Delivery",
+      "canonical_path": "03-Modules/Delivery_Operations",
+      "module_id": "Delivery_Operations"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Rider-Operations",
+      "canonical_path": "03-Modules/Rider_App",
+      "module_id": "Rider_App"
+    },
+    {
+      "former_path": "03-Modules/03-Modules/Admin",
+      "canonical_path": "03-Modules/Admin_CMS",
+      "module_id": "Admin_CMS"
+    }
+  ]
 }

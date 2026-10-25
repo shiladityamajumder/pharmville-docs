@@ -20,7 +20,7 @@ Support routes work to the responsible owner and cannot mutate clinical or money
 
 Candidate existing tables: `support.tickets`, `support.ticket_messages`, `support.ticket_actions`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: No confirmed support command endpoint. API-026/API-040/API-077 are role-permitted context reads only; D-020 must approve integration and scope. [Customer Orders](../03-Modules/Customer-Orders/APIs.md) · [Order Operations](../03-Modules/Order-Management/APIs.md) · [Finance Payments](../03-Modules/Payments/APIs.md).
+Related proposed operations: No confirmed support command endpoint. API-026/API-040/API-077 are role-permitted context reads only; D-020 must approve integration and scope. [Customer Orders](../03-Modules/Customer_Orders/APIs.md) · [Order Operations](../03-Modules/Order_Operations/APIs.md) · [Finance Payments](../03-Modules/Finance_Payments/APIs.md).
 
 ## Sequence
 

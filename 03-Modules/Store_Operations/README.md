@@ -1,35 +1,84 @@
-# Compatibility navigation
+# Store Operations
 
-This document moved to the module-first source of truth. [Open the canonical document](../Store-Operations/README.md). Existing paths and section anchors remain available for wireframe and historical references.
+**Stable module ID:** `Store_Operations` · **Proposed accountable role:** Store fulfillment.
 
-<a id="store-operations"></a>
+## Module blueprint navigation
 
-[Open section](../Store-Operations/README.md#store-operations)
+| Planning concern | Canonical reference |
+| --- | --- |
+| Scope, requirements and business flow | [Business flow](Business-Flow.md) |
+| Components, boundaries and design | [HLD](HLD.md) · [LLD](LLD.md) |
+| Operation contracts and DTOs | [APIs](APIs.md) |
+| Owned and consumed database objects | [Database](Database.md) |
+| State, permissions, recovery and tests | [Operating contract](Operations.md) · [edge cases](Edge-Cases.md) |
+| Dependencies and owner decisions | [Dependencies](Dependencies.md) |
 
-<a id="mod-008--picking-packing-and-store-replenishment"></a>
 
-[Open section](../Store-Operations/README.md#mod-008--picking-packing-and-store-replenishment)
+[Business flow](../../00-Business-Guide/Store-and-Warehouse.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
-<a id="developer-navigation"></a>
+## MOD-008 — Picking, packing and store replenishment
 
-[Open section](../Store-Operations/README.md#developer-navigation)
+**Source classification:** 5 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
 
-<a id="mod-008-picking-packing-and-store-replenishment--hld"></a>
+**Purpose:** Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute.
 
-[Open section](../Store-Operations/README.md#mod-008-picking-packing-and-store-replenishment--hld)
+**Feature coverage**
 
-<a id="major-operations"></a>
+- **STO-01 / REQ-052:** Incoming order queue for my store, with sound alert (Must (draft)).
+- **STO-02 / REQ-053:** Accept order, pick list, mark packed, hand over to rider (Must (draft)).
+- **STO-03 / REQ-054:** Raise replenishment request (normal or urgent) (Must (draft)).
+- **STO-04 / REQ-055:** Confirm receipt of a transfer; record shortages (Must (draft)).
+- **STO-05 / REQ-056:** My store's stock, with low-stock and near-expiry alerts (Must (draft)).
 
-[Open section](../Store-Operations/README.md#major-operations)
+### Developer navigation
 
-<a id="dependencies-and-trust-boundaries"></a>
+- 🏗️ [Module HLD](HLD.md)
+- ⚙️ [Module LLD](LLD.md)
+- Internal architecture
+- 🔗 [API contracts](APIs.md)
+- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
+- 🧪 [Testing](../../07-Engineering/Testing.md)
+- 🗓️ [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
 
-[Open section](../Store-Operations/README.md#dependencies-and-trust-boundaries)
+**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
 
-<a id="risk"></a>
+## MOD-008: Picking, packing and store replenishment — HLD
 
-[Open section](../Store-Operations/README.md#risk)
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
-<a id="related-design-and-delivery-references"></a>
+**Business responsibility:** Picking, packing and store replenishment. Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute.
 
-[Open section](../Store-Operations/README.md#related-design-and-delivery-references)
+**System responsibility:** The `Store_Operations` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
+
+### Major operations
+
+- Incoming order queue for my store, with sound alert (`STO-01`)
+- Accept order, pick list, mark packed, hand over to rider (`STO-02`)
+- Raise replenishment request (normal or urgent) (`STO-03`)
+- Confirm receipt of a transfer; record shortages (`STO-04`)
+- My store's stock, with low-stock and near-expiry alerts (`STO-05`)
+
+### Dependencies and trust boundaries
+
+- Database candidates: `fulfillment.pick_tasks`, `fulfillment.pack_tasks`, `fulfillment.packages`, `warehouse.stock_balances`, `procurement.purchase_requisitions`.
+- Role, patient, store and order scope resolved from trusted access context, not JSON body.
+- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
+- Use local transactions for authoritative state; publish external side effects only after commit.
+
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
+
+### Risk
+
+Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
+
+## Related design and delivery references
+
+- 🏗️ [HLD](HLD.md)
+- ⚙️ [LLD](LLD.md)
+- 🧪 [Edge cases](Edge-Cases.md)
+- 🔗 [API contracts](APIs.md)
+- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
+- 🧪 [QA scenarios](../../07-Engineering/Testing.md)
+- 🗓️ [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
+- End-to-end flows: [workflows](../../06-Workflows/README.md)

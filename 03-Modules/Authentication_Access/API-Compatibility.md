@@ -33,7 +33,7 @@
 | API-110 | `PATCH /v1/admin/role-assignments/{assignment_id}` | Change assignment activity or validity with immediate live-policy effect |
 
 
-API-098/099 form the common identifier/proof entry; API-100/101/093 expose identity, choices and effective permissions; API-102/103 activate and strengthen an already granted context. API-104/105/106/107 cover existing credential/MFA/recovery needs; API-108/109/110 close existing ADM-03 grant administration. They reuse Identity commands rather than duplicate databases or credential stacks. [Contracts](APIs.md) and [Admin contracts](../Admin/APIs.md) specify every operation. [Workspace matrix](../../01-Project/User-Roles.md) contains proposed defaults, never automatic grants.
+API-098/099 form the common identifier/proof entry; API-100/101/093 expose identity, choices and effective permissions; API-102/103 activate and strengthen an already granted context. API-104/105/106/107 cover existing credential/MFA/recovery needs; API-108/109/110 close existing ADM-03 grant administration. They reuse Identity commands rather than duplicate databases or credential stacks. [Contracts](APIs.md) and [Admin contracts](../Admin_CMS/APIs.md) specify every operation. [Workspace matrix](../../01-Project/User-Roles.md) contains proposed defaults, never automatic grants.
 
 ## Migration and compatibility impact
 

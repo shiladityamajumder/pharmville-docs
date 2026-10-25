@@ -25,22 +25,22 @@ flowchart LR
 
 | Stable module | Canonical blueprint | Accountable role proposed | Boundary |
 | --- | --- | --- | --- |
-| Authentication_Access | [Authentication](../03-Modules/Authentication/README.md) | Security / Identity | Domain command/policy boundary; exact table rights per operation |
-| Customer_Accounts | [Customer Accounts](../03-Modules/Customer-Accounts/README.md) | Customer platform | Domain command/policy boundary; exact table rights per operation |
-| Product_Catalog | [Product Catalog](../03-Modules/Product-Catalog/README.md) | Catalog / Merchandising | Domain command/policy boundary; exact table rights per operation |
-| Cart_Checkout | [Cart Checkout](../03-Modules/Cart-Checkout/README.md) | Commerce / Checkout | Domain command/policy boundary; exact table rights per operation |
-| Prescription_Upload | [Prescription Management](../03-Modules/Prescription-Management/README.md) | Prescription intake | Domain command/policy boundary; exact table rights per operation |
-| Pharmacist_Review | [Pharmacist Review](../03-Modules/Pharmacist-Review/README.md) | Pharmacy clinical lead | Domain command/policy boundary; exact table rights per operation |
-| Customer_Orders | [Customer Orders](../03-Modules/Customer-Orders/README.md) | Customer commerce surface | Client/projection facade; delegates authoritative writes |
-| Order_Operations | [Order Management](../03-Modules/Order-Management/README.md) | Order operations | Domain command/policy boundary; exact table rights per operation |
+| Authentication_Access | [Authentication](../03-Modules/Authentication_Access/README.md) | Security / Identity | Domain command/policy boundary; exact table rights per operation |
+| Customer_Accounts | [Customer Accounts](../03-Modules/Customer_Accounts/README.md) | Customer platform | Domain command/policy boundary; exact table rights per operation |
+| Product_Catalog | [Product Catalog](../03-Modules/Product_Catalog/README.md) | Catalog / Merchandising | Domain command/policy boundary; exact table rights per operation |
+| Cart_Checkout | [Cart Checkout](../03-Modules/Cart_Checkout/README.md) | Commerce / Checkout | Domain command/policy boundary; exact table rights per operation |
+| Prescription_Upload | [Prescription Management](../03-Modules/Prescription_Upload/README.md) | Prescription intake | Domain command/policy boundary; exact table rights per operation |
+| Pharmacist_Review | [Pharmacist Review](../03-Modules/Pharmacist_Review/README.md) | Pharmacy clinical lead | Domain command/policy boundary; exact table rights per operation |
+| Customer_Orders | [Customer Orders](../03-Modules/Customer_Orders/README.md) | Customer commerce surface | Client/projection facade; delegates authoritative writes |
+| Order_Operations | [Order Management](../03-Modules/Order_Operations/README.md) | Order operations | Domain command/policy boundary; exact table rights per operation |
 | Inventory | [Inventory](../03-Modules/Inventory/README.md) | Inventory control | Domain command/policy boundary; exact table rights per operation |
-| Store_Operations | [Store Operations](../03-Modules/Store-Operations/README.md) | Store fulfillment | Domain command/policy boundary; exact table rights per operation |
+| Store_Operations | [Store Operations](../03-Modules/Store_Operations/README.md) | Store fulfillment | Domain command/policy boundary; exact table rights per operation |
 | Warehouse | [Warehouse](../03-Modules/Warehouse/README.md) | Warehouse / Procurement | Domain command/policy boundary; exact table rights per operation |
-| Finance_Payments | [Payments](../03-Modules/Payments/README.md) | Finance / Payments | Domain command/policy boundary; exact table rights per operation |
-| Delivery_Operations | [Delivery](../03-Modules/Delivery/README.md) | Delivery operations | Domain command/policy boundary; exact table rights per operation |
-| Rider_App | [Rider Operations](../03-Modules/Rider-Operations/README.md) | Rider operations / mobile client | Client/projection facade; delegates authoritative writes |
+| Finance_Payments | [Payments](../03-Modules/Finance_Payments/README.md) | Finance / Payments | Domain command/policy boundary; exact table rights per operation |
+| Delivery_Operations | [Delivery](../03-Modules/Delivery_Operations/README.md) | Delivery operations | Domain command/policy boundary; exact table rights per operation |
+| Rider_App | [Rider Operations](../03-Modules/Rider_App/README.md) | Rider operations / mobile client | Client/projection facade; delegates authoritative writes |
 | Notifications | [Notifications](../03-Modules/Notifications/README.md) | Communications / Platform | Domain command/policy boundary; exact table rights per operation |
-| Admin_CMS | [Admin](../03-Modules/Admin/README.md) | Administration / Operations | Domain command/policy boundary; exact table rights per operation |
+| Admin_CMS | [Admin](../03-Modules/Admin_CMS/README.md) | Administration / Operations | Domain command/policy boundary; exact table rights per operation |
 | Reporting | [Reporting](../03-Modules/Reporting/README.md) | Reporting / Finance analytics | Domain command/policy boundary; exact table rights per operation |
 | Audit | [Audit](../03-Modules/Audit/README.md) | Security / Audit platform | Domain command/policy boundary; exact table rights per operation |
 
@@ -64,4 +64,4 @@ Appointment, diagnostics, insurance, membership, support, risk and marketplace o
 
 ## Shared Identity and scoped workspace boundary
 
-Authentication_Access is the sole proposed credential/session/grant command owner. Customer, Staff/Admin, Pharmacist and Rider panels consume one identity and verified workspace projection; Customer Accounts owns onboarding/profile/consent and Admin delegates Identity administration. [Unified design](../03-Modules/Authentication/Unified-Identity-Architecture.md) defines stronger-workspace proof, assignment scope, live revocation and the distinction between scoped offboarding and globally authorized identity suspension. PostgreSQL runtime capabilities remain separate from business roles.
+Authentication_Access is the sole proposed credential/session/grant command owner. Customer, Staff/Admin, Pharmacist and Rider panels consume one identity and verified workspace projection; Customer Accounts owns onboarding/profile/consent and Admin delegates Identity administration. [Unified design](../03-Modules/Authentication_Access/Unified-Identity-Architecture.md) defines stronger-workspace proof, assignment scope, live revocation and the distinction between scoped offboarding and globally authorized identity suspension. PostgreSQL runtime capabilities remain separate from business roles.

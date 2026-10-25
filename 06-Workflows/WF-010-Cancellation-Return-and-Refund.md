@@ -21,7 +21,7 @@ Order Operations owns cancellation/return orchestration; Inventory owns stock di
 
 Candidate existing tables: `commerce.cancellations`, `commerce.cancellation_items`, `commerce.returns`, `commerce.return_items`, `payment.refunds`, `payment.refund_allocations`, `finance.credit_notes`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-027/API-028/API-030/API-043/API-078. Credit-note issuance remains a missing FIN-07 operation. [Customer Orders](../03-Modules/Customer-Orders/APIs.md) · [Order Operations](../03-Modules/Order-Management/APIs.md) · [Finance Payments](../03-Modules/Payments/APIs.md).
+Related proposed operations: API-027/API-028/API-030/API-043/API-078. Credit-note issuance remains a missing FIN-07 operation. [Customer Orders](../03-Modules/Customer_Orders/APIs.md) · [Order Operations](../03-Modules/Order_Operations/APIs.md) · [Finance Payments](../03-Modules/Finance_Payments/APIs.md).
 
 ## Sequence
 

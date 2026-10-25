@@ -56,7 +56,7 @@ D-004 (payment sequence), D-005/D-009 (holds), D-007 (COD), D-010 (changes). The
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Cart Checkout | [HLD](../03-Modules/Cart-Checkout/HLD.md) | [LLD](../03-Modules/Cart-Checkout/LLD.md) | [API](../03-Modules/Cart-Checkout/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#cart-checkout) | [Cases](../03-Modules/Cart-Checkout/Edge-Cases.md) |
+| Cart Checkout | [HLD](../03-Modules/Cart_Checkout/HLD.md) | [LLD](../03-Modules/Cart_Checkout/LLD.md) | [API](../03-Modules/Cart_Checkout/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#cart-checkout) | [Cases](../03-Modules/Cart_Checkout/Edge-Cases.md) |
 
 Technical workflows: [WF-003](../06-Workflows/WF-003-Cart-Quote-and-Reservation.md) · [WF-004](../06-Workflows/WF-004-Prescription-Intake-and-Review.md) · [WF-005](../06-Workflows/WF-005-Payment-and-Confirmation.md) · [WF-006](../06-Workflows/WF-006-Licensed-Site-Allocation.md).
 

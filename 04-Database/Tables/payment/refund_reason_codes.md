@@ -117,7 +117,7 @@ Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, va
 | Scope | Global catalog/reference; scope still limits administrative maintenance. |
 | Referencing tables | `payment.refund_allocations`, `payment.refunds` |
 | Features | `FIN-03`, `ORD-06` |
-| API consumers | [API-030](../../../03-Modules/Customer-Orders/APIs.md), [API-078](../../../03-Modules/Payments/APIs.md) |
+| API consumers | [API-030](../../../03-Modules/Customer_Orders/APIs.md), [API-078](../../../03-Modules/Finance_Payments/APIs.md) |
 
 ### Expected initial records
 

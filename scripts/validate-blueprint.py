@@ -9,6 +9,8 @@ def main():
  def check(ok,msg):
   if not ok:errors.append(msg)
  registry=json.loads((ROOT/'03-Modules/Module-Registry.json').read_text());check(len(registry)==18,'Canonical module count differs')
+ module_dirs={p.name for p in (ROOT/'03-Modules').iterdir()if p.is_dir()};expected_dirs={m['id']for m in registry};check(module_dirs==expected_dirs,'Module folders must match the stable module IDs exactly; unexpected or duplicate folder found')
+ check(all(m['directory']==m['id']for m in registry),'Canonical module directory must match its stable module ID')
  ids=[m['id']for m in registry];check(len(set(ids))==len(ids),'Duplicate stable module ID')
  features={m[1]:m[2]for m in re.finditer(r'^\| `([A-Z]+-\d{2})` \| (\w+) \|',(ROOT/'01-Project/Features-and-Modules.md').read_text(),re.M)}
  check(len(features)==110,'Feature count differs');listed=[f for m in registry for f in m['feature_ids']];check(collections.Counter(listed)==collections.Counter(list(features)),'Module feature membership differs')
@@ -48,7 +50,8 @@ def main():
   for value in re.findall(r"['\"]((?:00-Business-Guide|01-Project|02-Architecture|03-Modules|04-Database|05-APIs|06-Workflows|07-Engineering|08-Development-Plan|09-References)/[^'\"]+\.md(?:#[^'\"]+)?)['\"]",p.read_text()):refs.add(value)
  for ref in refs:check((ROOT/ref.split('#')[0]).is_file(),'Protected wireframe source link missing: '+ref)
  moves=json.loads((ROOT/'09-References/Module-Relocations.json').read_text())
- for old,new in moves.items():check((ROOT/old).is_file()and(ROOT/new).is_file(),'Move lost compatibility/canonical file: '+old)
- result={'status':'FAIL'if errors else'PASS','modules':len(registry),'features':len(features),'api_operations':len(ops),'complete_proposed':coverage['complete-proposed'],'planning_percent':round(coverage['complete-proposed']/len(ops)*100,2),'approved':0,'tables_with_owner':len(owned),'masters':len(masters),'protected_files':sum(v['kind']=='file'for v in now.values()),'wireframe_source_targets':len(refs),'compatibility_targets':len(moves),'errors':errors}
+ for old,new in moves['consolidated_directories'].items():check(not (ROOT/old).exists()and(ROOT/new).is_dir(),'Consolidated module directory remains duplicated or lost: '+old)
+ for old,new in moves['active_api_compatibility_files'].items():check((ROOT/old).is_file()and(ROOT/new).is_file(),'Move lost compatibility/canonical file: '+old)
+ result={'status':'FAIL'if errors else'PASS','modules':len(registry),'features':len(features),'api_operations':len(ops),'complete_proposed':coverage['complete-proposed'],'planning_percent':round(coverage['complete-proposed']/len(ops)*100,2),'approved':0,'tables_with_owner':len(owned),'masters':len(masters),'protected_files':sum(v['kind']=='file'for v in now.values()),'wireframe_source_targets':len(refs),'compatibility_targets':len(moves['active_api_compatibility_files']),'consolidated_module_directories':len(moves['consolidated_directories']),'errors':errors}
  print(json.dumps(result,indent=2));return bool(errors)
 if __name__=='__main__':sys.exit(main())

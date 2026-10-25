@@ -97,19 +97,19 @@ Tasks are proposed and unassigned. Original generic TEST-<feature>-01/02/03 prom
 
 ### Admin CMS
 
-Resolve [module API readiness](../03-Modules/Admin/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Admin_CMS/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-036` | [`ADM-01`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-01-OK` and `TC-ADM-01-DENY` in [LLD](../03-Modules/Admin/LLD.md) and [edge cases](../03-Modules/Admin/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-037` | [`ADM-02`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-02-OK` and `TC-ADM-02-DENY` in [LLD](../03-Modules/Admin/LLD.md) and [edge cases](../03-Modules/Admin/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-038` | [`ADM-03`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-03-OK` and `TC-ADM-03-DENY` in [LLD](../03-Modules/Admin/LLD.md) and [edge cases](../03-Modules/Admin/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-039` | [`ADM-04`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-04-OK` and `TC-ADM-04-DENY` in [LLD](../03-Modules/Admin/LLD.md) and [edge cases](../03-Modules/Admin/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-040` | [`ADM-05`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-05-OK` and `TC-ADM-05-DENY` in [LLD](../03-Modules/Admin/LLD.md) and [edge cases](../03-Modules/Admin/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-041` | [`ADM-06`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-06-OK` and `TC-ADM-06-DENY` in [LLD](../03-Modules/Admin/LLD.md) and [edge cases](../03-Modules/Admin/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-042` | [`ADM-07`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-07-OK` and `TC-ADM-07-DENY` in [LLD](../03-Modules/Admin/LLD.md) and [edge cases](../03-Modules/Admin/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-043` | [`ADM-08`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-08-OK` and `TC-ADM-08-DENY` in [LLD](../03-Modules/Admin/LLD.md) and [edge cases](../03-Modules/Admin/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-044` | [`ADM-09`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-09-OK` and `TC-ADM-09-DENY` in [LLD](../03-Modules/Admin/LLD.md) and [edge cases](../03-Modules/Admin/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-036` | [`ADM-01`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-01-OK` and `TC-ADM-01-DENY` in [LLD](../03-Modules/Admin_CMS/LLD.md) and [edge cases](../03-Modules/Admin_CMS/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-037` | [`ADM-02`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-02-OK` and `TC-ADM-02-DENY` in [LLD](../03-Modules/Admin_CMS/LLD.md) and [edge cases](../03-Modules/Admin_CMS/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-038` | [`ADM-03`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-03-OK` and `TC-ADM-03-DENY` in [LLD](../03-Modules/Admin_CMS/LLD.md) and [edge cases](../03-Modules/Admin_CMS/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-039` | [`ADM-04`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-04-OK` and `TC-ADM-04-DENY` in [LLD](../03-Modules/Admin_CMS/LLD.md) and [edge cases](../03-Modules/Admin_CMS/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-040` | [`ADM-05`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-05-OK` and `TC-ADM-05-DENY` in [LLD](../03-Modules/Admin_CMS/LLD.md) and [edge cases](../03-Modules/Admin_CMS/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-041` | [`ADM-06`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-06-OK` and `TC-ADM-06-DENY` in [LLD](../03-Modules/Admin_CMS/LLD.md) and [edge cases](../03-Modules/Admin_CMS/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-042` | [`ADM-07`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-07-OK` and `TC-ADM-07-DENY` in [LLD](../03-Modules/Admin_CMS/LLD.md) and [edge cases](../03-Modules/Admin_CMS/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-043` | [`ADM-08`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-08-OK` and `TC-ADM-08-DENY` in [LLD](../03-Modules/Admin_CMS/LLD.md) and [edge cases](../03-Modules/Admin_CMS/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-044` | [`ADM-09`](../09-References/Coverage-and-Traceability.md) | `TC-ADM-09-OK` and `TC-ADM-09-DENY` in [LLD](../03-Modules/Admin_CMS/LLD.md) and [edge cases](../03-Modules/Admin_CMS/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Audit
 
@@ -122,85 +122,85 @@ Resolve [module API readiness](../03-Modules/Audit/APIs.md), [write ownership](.
 
 ### Authentication Access
 
-Resolve [module API readiness](../03-Modules/Authentication/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Authentication_Access/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-102` | [`AUTH-01`](../09-References/Coverage-and-Traceability.md) | `TC-AUTH-01-OK` and `TC-AUTH-01-DENY` in [LLD](../03-Modules/Authentication/LLD.md) and [edge cases](../03-Modules/Authentication/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-103` | [`AUTH-02`](../09-References/Coverage-and-Traceability.md) | `TC-AUTH-02-OK` and `TC-AUTH-02-DENY` in [LLD](../03-Modules/Authentication/LLD.md) and [edge cases](../03-Modules/Authentication/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-104` | [`AUTH-03`](../09-References/Coverage-and-Traceability.md) | `TC-AUTH-03-OK` and `TC-AUTH-03-DENY` in [LLD](../03-Modules/Authentication/LLD.md) and [edge cases](../03-Modules/Authentication/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-105` | [`AUTH-04`](../09-References/Coverage-and-Traceability.md) | `TC-AUTH-04-OK` and `TC-AUTH-04-DENY` in [LLD](../03-Modules/Authentication/LLD.md) and [edge cases](../03-Modules/Authentication/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-102` | [`AUTH-01`](../09-References/Coverage-and-Traceability.md) | `TC-AUTH-01-OK` and `TC-AUTH-01-DENY` in [LLD](../03-Modules/Authentication_Access/LLD.md) and [edge cases](../03-Modules/Authentication_Access/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-103` | [`AUTH-02`](../09-References/Coverage-and-Traceability.md) | `TC-AUTH-02-OK` and `TC-AUTH-02-DENY` in [LLD](../03-Modules/Authentication_Access/LLD.md) and [edge cases](../03-Modules/Authentication_Access/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-104` | [`AUTH-03`](../09-References/Coverage-and-Traceability.md) | `TC-AUTH-03-OK` and `TC-AUTH-03-DENY` in [LLD](../03-Modules/Authentication_Access/LLD.md) and [edge cases](../03-Modules/Authentication_Access/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-105` | [`AUTH-04`](../09-References/Coverage-and-Traceability.md) | `TC-AUTH-04-OK` and `TC-AUTH-04-DENY` in [LLD](../03-Modules/Authentication_Access/LLD.md) and [edge cases](../03-Modules/Authentication_Access/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Cart Checkout
 
-Resolve [module API readiness](../03-Modules/Cart-Checkout/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Cart_Checkout/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-014` | [`CHK-01`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-01-OK` and `TC-CHK-01-DENY` in [LLD](../03-Modules/Cart-Checkout/LLD.md) and [edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-015` | [`CHK-02`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-02-OK` and `TC-CHK-02-DENY` in [LLD](../03-Modules/Cart-Checkout/LLD.md) and [edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-016` | [`CHK-03`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-03-OK` and `TC-CHK-03-DENY` in [LLD](../03-Modules/Cart-Checkout/LLD.md) and [edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-017` | [`CHK-04`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-04-OK` and `TC-CHK-04-DENY` in [LLD](../03-Modules/Cart-Checkout/LLD.md) and [edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-018` | [`CHK-05`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-05-OK` and `TC-CHK-05-DENY` in [LLD](../03-Modules/Cart-Checkout/LLD.md) and [edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-019` | [`CHK-06`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-06-OK` and `TC-CHK-06-DENY` in [LLD](../03-Modules/Cart-Checkout/LLD.md) and [edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-020` | [`CHK-07`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-07-OK` and `TC-CHK-07-DENY` in [LLD](../03-Modules/Cart-Checkout/LLD.md) and [edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-021` | [`CHK-08`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-08-OK` and `TC-CHK-08-DENY` in [LLD](../03-Modules/Cart-Checkout/LLD.md) and [edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-014` | [`CHK-01`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-01-OK` and `TC-CHK-01-DENY` in [LLD](../03-Modules/Cart_Checkout/LLD.md) and [edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-015` | [`CHK-02`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-02-OK` and `TC-CHK-02-DENY` in [LLD](../03-Modules/Cart_Checkout/LLD.md) and [edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-016` | [`CHK-03`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-03-OK` and `TC-CHK-03-DENY` in [LLD](../03-Modules/Cart_Checkout/LLD.md) and [edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-017` | [`CHK-04`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-04-OK` and `TC-CHK-04-DENY` in [LLD](../03-Modules/Cart_Checkout/LLD.md) and [edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-018` | [`CHK-05`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-05-OK` and `TC-CHK-05-DENY` in [LLD](../03-Modules/Cart_Checkout/LLD.md) and [edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-019` | [`CHK-06`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-06-OK` and `TC-CHK-06-DENY` in [LLD](../03-Modules/Cart_Checkout/LLD.md) and [edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-020` | [`CHK-07`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-07-OK` and `TC-CHK-07-DENY` in [LLD](../03-Modules/Cart_Checkout/LLD.md) and [edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-021` | [`CHK-08`](../09-References/Coverage-and-Traceability.md) | `TC-CHK-08-OK` and `TC-CHK-08-DENY` in [LLD](../03-Modules/Cart_Checkout/LLD.md) and [edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Customer Accounts
 
-Resolve [module API readiness](../03-Modules/Customer-Accounts/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Customer_Accounts/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-001` | [`ACC-01`](../09-References/Coverage-and-Traceability.md) | existing numbered cases in [LLD](../03-Modules/Customer-Accounts/LLD.md) and [edge cases](../03-Modules/Customer-Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-002` | [`ACC-02`](../09-References/Coverage-and-Traceability.md) | existing numbered cases in [LLD](../03-Modules/Customer-Accounts/LLD.md) and [edge cases](../03-Modules/Customer-Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-003` | [`ACC-03`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-03-OK` and `TC-ACC-03-DENY` in [LLD](../03-Modules/Customer-Accounts/LLD.md) and [edge cases](../03-Modules/Customer-Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-004` | [`ACC-04`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-04-OK` and `TC-ACC-04-DENY` in [LLD](../03-Modules/Customer-Accounts/LLD.md) and [edge cases](../03-Modules/Customer-Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-005` | [`ACC-05`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-05-OK` and `TC-ACC-05-DENY` in [LLD](../03-Modules/Customer-Accounts/LLD.md) and [edge cases](../03-Modules/Customer-Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-006` | [`ACC-06`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-06-OK` and `TC-ACC-06-DENY` in [LLD](../03-Modules/Customer-Accounts/LLD.md) and [edge cases](../03-Modules/Customer-Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-007` | [`ACC-07`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-07-OK` and `TC-ACC-07-DENY` in [LLD](../03-Modules/Customer-Accounts/LLD.md) and [edge cases](../03-Modules/Customer-Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-001` | [`ACC-01`](../09-References/Coverage-and-Traceability.md) | existing numbered cases in [LLD](../03-Modules/Customer_Accounts/LLD.md) and [edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-002` | [`ACC-02`](../09-References/Coverage-and-Traceability.md) | existing numbered cases in [LLD](../03-Modules/Customer_Accounts/LLD.md) and [edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-003` | [`ACC-03`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-03-OK` and `TC-ACC-03-DENY` in [LLD](../03-Modules/Customer_Accounts/LLD.md) and [edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-004` | [`ACC-04`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-04-OK` and `TC-ACC-04-DENY` in [LLD](../03-Modules/Customer_Accounts/LLD.md) and [edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-005` | [`ACC-05`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-05-OK` and `TC-ACC-05-DENY` in [LLD](../03-Modules/Customer_Accounts/LLD.md) and [edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-006` | [`ACC-06`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-06-OK` and `TC-ACC-06-DENY` in [LLD](../03-Modules/Customer_Accounts/LLD.md) and [edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-007` | [`ACC-07`](../09-References/Coverage-and-Traceability.md) | `TC-ACC-07-OK` and `TC-ACC-07-DENY` in [LLD](../03-Modules/Customer_Accounts/LLD.md) and [edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Customer Orders
 
-Resolve [module API readiness](../03-Modules/Customer-Orders/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Customer_Orders/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-027` | [`ORD-01`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-01-OK` and `TC-ORD-01-DENY` in [LLD](../03-Modules/Customer-Orders/LLD.md) and [edge cases](../03-Modules/Customer-Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-028` | [`ORD-02`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-02-OK` and `TC-ORD-02-DENY` in [LLD](../03-Modules/Customer-Orders/LLD.md) and [edge cases](../03-Modules/Customer-Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-029` | [`ORD-03`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-03-OK` and `TC-ORD-03-DENY` in [LLD](../03-Modules/Customer-Orders/LLD.md) and [edge cases](../03-Modules/Customer-Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-030` | [`ORD-04`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-04-OK` and `TC-ORD-04-DENY` in [LLD](../03-Modules/Customer-Orders/LLD.md) and [edge cases](../03-Modules/Customer-Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-031` | [`ORD-05`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-05-OK` and `TC-ORD-05-DENY` in [LLD](../03-Modules/Customer-Orders/LLD.md) and [edge cases](../03-Modules/Customer-Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-032` | [`ORD-06`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-06-OK` and `TC-ORD-06-DENY` in [LLD](../03-Modules/Customer-Orders/LLD.md) and [edge cases](../03-Modules/Customer-Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-033` | [`ORD-07`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-07-OK` and `TC-ORD-07-DENY` in [LLD](../03-Modules/Customer-Orders/LLD.md) and [edge cases](../03-Modules/Customer-Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-034` | [`ORD-08`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-08-OK` and `TC-ORD-08-DENY` in [LLD](../03-Modules/Customer-Orders/LLD.md) and [edge cases](../03-Modules/Customer-Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-035` | [`ORD-09`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-09-OK` and `TC-ORD-09-DENY` in [LLD](../03-Modules/Customer-Orders/LLD.md) and [edge cases](../03-Modules/Customer-Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-027` | [`ORD-01`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-01-OK` and `TC-ORD-01-DENY` in [LLD](../03-Modules/Customer_Orders/LLD.md) and [edge cases](../03-Modules/Customer_Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-028` | [`ORD-02`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-02-OK` and `TC-ORD-02-DENY` in [LLD](../03-Modules/Customer_Orders/LLD.md) and [edge cases](../03-Modules/Customer_Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-029` | [`ORD-03`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-03-OK` and `TC-ORD-03-DENY` in [LLD](../03-Modules/Customer_Orders/LLD.md) and [edge cases](../03-Modules/Customer_Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-030` | [`ORD-04`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-04-OK` and `TC-ORD-04-DENY` in [LLD](../03-Modules/Customer_Orders/LLD.md) and [edge cases](../03-Modules/Customer_Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-031` | [`ORD-05`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-05-OK` and `TC-ORD-05-DENY` in [LLD](../03-Modules/Customer_Orders/LLD.md) and [edge cases](../03-Modules/Customer_Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-032` | [`ORD-06`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-06-OK` and `TC-ORD-06-DENY` in [LLD](../03-Modules/Customer_Orders/LLD.md) and [edge cases](../03-Modules/Customer_Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-033` | [`ORD-07`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-07-OK` and `TC-ORD-07-DENY` in [LLD](../03-Modules/Customer_Orders/LLD.md) and [edge cases](../03-Modules/Customer_Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-034` | [`ORD-08`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-08-OK` and `TC-ORD-08-DENY` in [LLD](../03-Modules/Customer_Orders/LLD.md) and [edge cases](../03-Modules/Customer_Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-035` | [`ORD-09`](../09-References/Coverage-and-Traceability.md) | `TC-ORD-09-OK` and `TC-ORD-09-DENY` in [LLD](../03-Modules/Customer_Orders/LLD.md) and [edge cases](../03-Modules/Customer_Orders/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Delivery Operations
 
-Resolve [module API readiness](../03-Modules/Delivery/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Delivery_Operations/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-074` | [`DLV-01`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-01-OK` and `TC-DLV-01-DENY` in [LLD](../03-Modules/Delivery/LLD.md) and [edge cases](../03-Modules/Delivery/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-075` | [`DLV-02`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-02-OK` and `TC-DLV-02-DENY` in [LLD](../03-Modules/Delivery/LLD.md) and [edge cases](../03-Modules/Delivery/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-076` | [`DLV-03`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-03-OK` and `TC-DLV-03-DENY` in [LLD](../03-Modules/Delivery/LLD.md) and [edge cases](../03-Modules/Delivery/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-077` | [`DLV-04`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-04-OK` and `TC-DLV-04-DENY` in [LLD](../03-Modules/Delivery/LLD.md) and [edge cases](../03-Modules/Delivery/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-078` | [`DLV-05`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-05-OK` and `TC-DLV-05-DENY` in [LLD](../03-Modules/Delivery/LLD.md) and [edge cases](../03-Modules/Delivery/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-074` | [`DLV-01`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-01-OK` and `TC-DLV-01-DENY` in [LLD](../03-Modules/Delivery_Operations/LLD.md) and [edge cases](../03-Modules/Delivery_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-075` | [`DLV-02`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-02-OK` and `TC-DLV-02-DENY` in [LLD](../03-Modules/Delivery_Operations/LLD.md) and [edge cases](../03-Modules/Delivery_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-076` | [`DLV-03`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-03-OK` and `TC-DLV-03-DENY` in [LLD](../03-Modules/Delivery_Operations/LLD.md) and [edge cases](../03-Modules/Delivery_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-077` | [`DLV-04`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-04-OK` and `TC-DLV-04-DENY` in [LLD](../03-Modules/Delivery_Operations/LLD.md) and [edge cases](../03-Modules/Delivery_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-078` | [`DLV-05`](../09-References/Coverage-and-Traceability.md) | `TC-DLV-05-OK` and `TC-DLV-05-DENY` in [LLD](../03-Modules/Delivery_Operations/LLD.md) and [edge cases](../03-Modules/Delivery_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Finance Payments
 
-Resolve [module API readiness](../03-Modules/Payments/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Finance_Payments/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-086` | [`FIN-01`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-01-OK` and `TC-FIN-01-DENY` in [LLD](../03-Modules/Payments/LLD.md) and [edge cases](../03-Modules/Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-087` | [`FIN-02`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-02-OK` and `TC-FIN-02-DENY` in [LLD](../03-Modules/Payments/LLD.md) and [edge cases](../03-Modules/Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-088` | [`FIN-03`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-03-OK` and `TC-FIN-03-DENY` in [LLD](../03-Modules/Payments/LLD.md) and [edge cases](../03-Modules/Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-089` | [`FIN-04`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-04-OK` and `TC-FIN-04-DENY` in [LLD](../03-Modules/Payments/LLD.md) and [edge cases](../03-Modules/Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-090` | [`FIN-05`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-05-OK` and `TC-FIN-05-DENY` in [LLD](../03-Modules/Payments/LLD.md) and [edge cases](../03-Modules/Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-091` | [`FIN-06`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-06-OK` and `TC-FIN-06-DENY` in [LLD](../03-Modules/Payments/LLD.md) and [edge cases](../03-Modules/Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-092` | [`FIN-07`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-07-OK` and `TC-FIN-07-DENY` in [LLD](../03-Modules/Payments/LLD.md) and [edge cases](../03-Modules/Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-086` | [`FIN-01`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-01-OK` and `TC-FIN-01-DENY` in [LLD](../03-Modules/Finance_Payments/LLD.md) and [edge cases](../03-Modules/Finance_Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-087` | [`FIN-02`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-02-OK` and `TC-FIN-02-DENY` in [LLD](../03-Modules/Finance_Payments/LLD.md) and [edge cases](../03-Modules/Finance_Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-088` | [`FIN-03`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-03-OK` and `TC-FIN-03-DENY` in [LLD](../03-Modules/Finance_Payments/LLD.md) and [edge cases](../03-Modules/Finance_Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-089` | [`FIN-04`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-04-OK` and `TC-FIN-04-DENY` in [LLD](../03-Modules/Finance_Payments/LLD.md) and [edge cases](../03-Modules/Finance_Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-090` | [`FIN-05`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-05-OK` and `TC-FIN-05-DENY` in [LLD](../03-Modules/Finance_Payments/LLD.md) and [edge cases](../03-Modules/Finance_Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-091` | [`FIN-06`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-06-OK` and `TC-FIN-06-DENY` in [LLD](../03-Modules/Finance_Payments/LLD.md) and [edge cases](../03-Modules/Finance_Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-092` | [`FIN-07`](../09-References/Coverage-and-Traceability.md) | `TC-FIN-07-OK` and `TC-FIN-07-DENY` in [LLD](../03-Modules/Finance_Payments/LLD.md) and [edge cases](../03-Modules/Finance_Payments/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Inventory
 
@@ -230,54 +230,54 @@ Resolve [module API readiness](../03-Modules/Notifications/APIs.md), [write owne
 
 ### Order Operations
 
-Resolve [module API readiness](../03-Modules/Order-Management/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Order_Operations/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-045` | [`OMS-01`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-01-OK` and `TC-OMS-01-DENY` in [LLD](../03-Modules/Order-Management/LLD.md) and [edge cases](../03-Modules/Order-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-046` | [`OMS-02`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-02-OK` and `TC-OMS-02-DENY` in [LLD](../03-Modules/Order-Management/LLD.md) and [edge cases](../03-Modules/Order-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-047` | [`OMS-03`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-03-OK` and `TC-OMS-03-DENY` in [LLD](../03-Modules/Order-Management/LLD.md) and [edge cases](../03-Modules/Order-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-048` | [`OMS-04`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-04-OK` and `TC-OMS-04-DENY` in [LLD](../03-Modules/Order-Management/LLD.md) and [edge cases](../03-Modules/Order-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-049` | [`OMS-05`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-05-OK` and `TC-OMS-05-DENY` in [LLD](../03-Modules/Order-Management/LLD.md) and [edge cases](../03-Modules/Order-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-050` | [`OMS-06`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-06-OK` and `TC-OMS-06-DENY` in [LLD](../03-Modules/Order-Management/LLD.md) and [edge cases](../03-Modules/Order-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-051` | [`OMS-07`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-07-OK` and `TC-OMS-07-DENY` in [LLD](../03-Modules/Order-Management/LLD.md) and [edge cases](../03-Modules/Order-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-045` | [`OMS-01`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-01-OK` and `TC-OMS-01-DENY` in [LLD](../03-Modules/Order_Operations/LLD.md) and [edge cases](../03-Modules/Order_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-046` | [`OMS-02`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-02-OK` and `TC-OMS-02-DENY` in [LLD](../03-Modules/Order_Operations/LLD.md) and [edge cases](../03-Modules/Order_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-047` | [`OMS-03`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-03-OK` and `TC-OMS-03-DENY` in [LLD](../03-Modules/Order_Operations/LLD.md) and [edge cases](../03-Modules/Order_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-048` | [`OMS-04`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-04-OK` and `TC-OMS-04-DENY` in [LLD](../03-Modules/Order_Operations/LLD.md) and [edge cases](../03-Modules/Order_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-049` | [`OMS-05`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-05-OK` and `TC-OMS-05-DENY` in [LLD](../03-Modules/Order_Operations/LLD.md) and [edge cases](../03-Modules/Order_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-050` | [`OMS-06`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-06-OK` and `TC-OMS-06-DENY` in [LLD](../03-Modules/Order_Operations/LLD.md) and [edge cases](../03-Modules/Order_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-051` | [`OMS-07`](../09-References/Coverage-and-Traceability.md) | `TC-OMS-07-OK` and `TC-OMS-07-DENY` in [LLD](../03-Modules/Order_Operations/LLD.md) and [edge cases](../03-Modules/Order_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Pharmacist Review
 
-Resolve [module API readiness](../03-Modules/Pharmacist-Review/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Pharmacist_Review/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-069` | [`PHM-01`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-01-OK` and `TC-PHM-01-DENY` in [LLD](../03-Modules/Pharmacist-Review/LLD.md) and [edge cases](../03-Modules/Pharmacist-Review/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-070` | [`PHM-02`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-02-OK` and `TC-PHM-02-DENY` in [LLD](../03-Modules/Pharmacist-Review/LLD.md) and [edge cases](../03-Modules/Pharmacist-Review/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-071` | [`PHM-03`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-03-OK` and `TC-PHM-03-DENY` in [LLD](../03-Modules/Pharmacist-Review/LLD.md) and [edge cases](../03-Modules/Pharmacist-Review/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-072` | [`PHM-04`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-04-OK` and `TC-PHM-04-DENY` in [LLD](../03-Modules/Pharmacist-Review/LLD.md) and [edge cases](../03-Modules/Pharmacist-Review/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-073` | [`PHM-05`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-05-OK` and `TC-PHM-05-DENY` in [LLD](../03-Modules/Pharmacist-Review/LLD.md) and [edge cases](../03-Modules/Pharmacist-Review/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-069` | [`PHM-01`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-01-OK` and `TC-PHM-01-DENY` in [LLD](../03-Modules/Pharmacist_Review/LLD.md) and [edge cases](../03-Modules/Pharmacist_Review/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-070` | [`PHM-02`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-02-OK` and `TC-PHM-02-DENY` in [LLD](../03-Modules/Pharmacist_Review/LLD.md) and [edge cases](../03-Modules/Pharmacist_Review/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-071` | [`PHM-03`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-03-OK` and `TC-PHM-03-DENY` in [LLD](../03-Modules/Pharmacist_Review/LLD.md) and [edge cases](../03-Modules/Pharmacist_Review/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-072` | [`PHM-04`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-04-OK` and `TC-PHM-04-DENY` in [LLD](../03-Modules/Pharmacist_Review/LLD.md) and [edge cases](../03-Modules/Pharmacist_Review/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-073` | [`PHM-05`](../09-References/Coverage-and-Traceability.md) | `TC-PHM-05-OK` and `TC-PHM-05-DENY` in [LLD](../03-Modules/Pharmacist_Review/LLD.md) and [edge cases](../03-Modules/Pharmacist_Review/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Prescription Upload
 
-Resolve [module API readiness](../03-Modules/Prescription-Management/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Prescription_Upload/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-022` | [`RX-01`](../09-References/Coverage-and-Traceability.md) | `TC-RX-01-OK` and `TC-RX-01-DENY` in [LLD](../03-Modules/Prescription-Management/LLD.md) and [edge cases](../03-Modules/Prescription-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-023` | [`RX-02`](../09-References/Coverage-and-Traceability.md) | `TC-RX-02-OK` and `TC-RX-02-DENY` in [LLD](../03-Modules/Prescription-Management/LLD.md) and [edge cases](../03-Modules/Prescription-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-024` | [`RX-03`](../09-References/Coverage-and-Traceability.md) | `TC-RX-03-OK` and `TC-RX-03-DENY` in [LLD](../03-Modules/Prescription-Management/LLD.md) and [edge cases](../03-Modules/Prescription-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-025` | [`RX-04`](../09-References/Coverage-and-Traceability.md) | `TC-RX-04-OK` and `TC-RX-04-DENY` in [LLD](../03-Modules/Prescription-Management/LLD.md) and [edge cases](../03-Modules/Prescription-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-026` | [`RX-05`](../09-References/Coverage-and-Traceability.md) | `TC-RX-05-OK` and `TC-RX-05-DENY` in [LLD](../03-Modules/Prescription-Management/LLD.md) and [edge cases](../03-Modules/Prescription-Management/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-022` | [`RX-01`](../09-References/Coverage-and-Traceability.md) | `TC-RX-01-OK` and `TC-RX-01-DENY` in [LLD](../03-Modules/Prescription_Upload/LLD.md) and [edge cases](../03-Modules/Prescription_Upload/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-023` | [`RX-02`](../09-References/Coverage-and-Traceability.md) | `TC-RX-02-OK` and `TC-RX-02-DENY` in [LLD](../03-Modules/Prescription_Upload/LLD.md) and [edge cases](../03-Modules/Prescription_Upload/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-024` | [`RX-03`](../09-References/Coverage-and-Traceability.md) | `TC-RX-03-OK` and `TC-RX-03-DENY` in [LLD](../03-Modules/Prescription_Upload/LLD.md) and [edge cases](../03-Modules/Prescription_Upload/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-025` | [`RX-04`](../09-References/Coverage-and-Traceability.md) | `TC-RX-04-OK` and `TC-RX-04-DENY` in [LLD](../03-Modules/Prescription_Upload/LLD.md) and [edge cases](../03-Modules/Prescription_Upload/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-026` | [`RX-05`](../09-References/Coverage-and-Traceability.md) | `TC-RX-05-OK` and `TC-RX-05-DENY` in [LLD](../03-Modules/Prescription_Upload/LLD.md) and [edge cases](../03-Modules/Prescription_Upload/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Product Catalog
 
-Resolve [module API readiness](../03-Modules/Product-Catalog/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Product_Catalog/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-008` | [`CAT-01`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-01-OK` and `TC-CAT-01-DENY` in [LLD](../03-Modules/Product-Catalog/LLD.md) and [edge cases](../03-Modules/Product-Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-009` | [`CAT-02`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-02-OK` and `TC-CAT-02-DENY` in [LLD](../03-Modules/Product-Catalog/LLD.md) and [edge cases](../03-Modules/Product-Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-010` | [`CAT-03`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-03-OK` and `TC-CAT-03-DENY` in [LLD](../03-Modules/Product-Catalog/LLD.md) and [edge cases](../03-Modules/Product-Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-011` | [`CAT-04`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-04-OK` and `TC-CAT-04-DENY` in [LLD](../03-Modules/Product-Catalog/LLD.md) and [edge cases](../03-Modules/Product-Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-012` | [`CAT-05`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-05-OK` and `TC-CAT-05-DENY` in [LLD](../03-Modules/Product-Catalog/LLD.md) and [edge cases](../03-Modules/Product-Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-013` | [`CAT-06`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-06-OK` and `TC-CAT-06-DENY` in [LLD](../03-Modules/Product-Catalog/LLD.md) and [edge cases](../03-Modules/Product-Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-008` | [`CAT-01`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-01-OK` and `TC-CAT-01-DENY` in [LLD](../03-Modules/Product_Catalog/LLD.md) and [edge cases](../03-Modules/Product_Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-009` | [`CAT-02`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-02-OK` and `TC-CAT-02-DENY` in [LLD](../03-Modules/Product_Catalog/LLD.md) and [edge cases](../03-Modules/Product_Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-010` | [`CAT-03`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-03-OK` and `TC-CAT-03-DENY` in [LLD](../03-Modules/Product_Catalog/LLD.md) and [edge cases](../03-Modules/Product_Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-011` | [`CAT-04`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-04-OK` and `TC-CAT-04-DENY` in [LLD](../03-Modules/Product_Catalog/LLD.md) and [edge cases](../03-Modules/Product_Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-012` | [`CAT-05`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-05-OK` and `TC-CAT-05-DENY` in [LLD](../03-Modules/Product_Catalog/LLD.md) and [edge cases](../03-Modules/Product_Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-013` | [`CAT-06`](../09-References/Coverage-and-Traceability.md) | `TC-CAT-06-OK` and `TC-CAT-06-DENY` in [LLD](../03-Modules/Product_Catalog/LLD.md) and [edge cases](../03-Modules/Product_Catalog/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Reporting
 
@@ -295,29 +295,29 @@ Resolve [module API readiness](../03-Modules/Reporting/APIs.md), [write ownershi
 
 ### Rider App
 
-Resolve [module API readiness](../03-Modules/Rider-Operations/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Rider_App/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-079` | [`RID-01`](../09-References/Coverage-and-Traceability.md) | `TC-RID-01-OK` and `TC-RID-01-DENY` in [LLD](../03-Modules/Rider-Operations/LLD.md) and [edge cases](../03-Modules/Rider-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-080` | [`RID-02`](../09-References/Coverage-and-Traceability.md) | `TC-RID-02-OK` and `TC-RID-02-DENY` in [LLD](../03-Modules/Rider-Operations/LLD.md) and [edge cases](../03-Modules/Rider-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-081` | [`RID-03`](../09-References/Coverage-and-Traceability.md) | `TC-RID-03-OK` and `TC-RID-03-DENY` in [LLD](../03-Modules/Rider-Operations/LLD.md) and [edge cases](../03-Modules/Rider-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-082` | [`RID-04`](../09-References/Coverage-and-Traceability.md) | `TC-RID-04-OK` and `TC-RID-04-DENY` in [LLD](../03-Modules/Rider-Operations/LLD.md) and [edge cases](../03-Modules/Rider-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-083` | [`RID-05`](../09-References/Coverage-and-Traceability.md) | `TC-RID-05-OK` and `TC-RID-05-DENY` in [LLD](../03-Modules/Rider-Operations/LLD.md) and [edge cases](../03-Modules/Rider-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-084` | [`RID-06`](../09-References/Coverage-and-Traceability.md) | `TC-RID-06-OK` and `TC-RID-06-DENY` in [LLD](../03-Modules/Rider-Operations/LLD.md) and [edge cases](../03-Modules/Rider-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-085` | [`RID-07`](../09-References/Coverage-and-Traceability.md) | `TC-RID-07-OK` and `TC-RID-07-DENY` in [LLD](../03-Modules/Rider-Operations/LLD.md) and [edge cases](../03-Modules/Rider-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-079` | [`RID-01`](../09-References/Coverage-and-Traceability.md) | `TC-RID-01-OK` and `TC-RID-01-DENY` in [LLD](../03-Modules/Rider_App/LLD.md) and [edge cases](../03-Modules/Rider_App/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-080` | [`RID-02`](../09-References/Coverage-and-Traceability.md) | `TC-RID-02-OK` and `TC-RID-02-DENY` in [LLD](../03-Modules/Rider_App/LLD.md) and [edge cases](../03-Modules/Rider_App/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-081` | [`RID-03`](../09-References/Coverage-and-Traceability.md) | `TC-RID-03-OK` and `TC-RID-03-DENY` in [LLD](../03-Modules/Rider_App/LLD.md) and [edge cases](../03-Modules/Rider_App/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-082` | [`RID-04`](../09-References/Coverage-and-Traceability.md) | `TC-RID-04-OK` and `TC-RID-04-DENY` in [LLD](../03-Modules/Rider_App/LLD.md) and [edge cases](../03-Modules/Rider_App/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-083` | [`RID-05`](../09-References/Coverage-and-Traceability.md) | `TC-RID-05-OK` and `TC-RID-05-DENY` in [LLD](../03-Modules/Rider_App/LLD.md) and [edge cases](../03-Modules/Rider_App/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-084` | [`RID-06`](../09-References/Coverage-and-Traceability.md) | `TC-RID-06-OK` and `TC-RID-06-DENY` in [LLD](../03-Modules/Rider_App/LLD.md) and [edge cases](../03-Modules/Rider_App/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-085` | [`RID-07`](../09-References/Coverage-and-Traceability.md) | `TC-RID-07-OK` and `TC-RID-07-DENY` in [LLD](../03-Modules/Rider_App/LLD.md) and [edge cases](../03-Modules/Rider_App/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Store Operations
 
-Resolve [module API readiness](../03-Modules/Store-Operations/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
+Resolve [module API readiness](../03-Modules/Store_Operations/APIs.md), [write ownership](../07-Engineering/State-and-Recovery-Contracts.md) and applicable [business approvals](../09-References/Sources-and-Decisions.md). Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.
 
 | Task | Feature source | Verification gate |
 | --- | --- | --- |
-| `TASK-052` | [`STO-01`](../09-References/Coverage-and-Traceability.md) | `TC-STO-01-OK` and `TC-STO-01-DENY` in [LLD](../03-Modules/Store-Operations/LLD.md) and [edge cases](../03-Modules/Store-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-053` | [`STO-02`](../09-References/Coverage-and-Traceability.md) | `TC-STO-02-OK` and `TC-STO-02-DENY` in [LLD](../03-Modules/Store-Operations/LLD.md) and [edge cases](../03-Modules/Store-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-054` | [`STO-03`](../09-References/Coverage-and-Traceability.md) | `TC-STO-03-OK` and `TC-STO-03-DENY` in [LLD](../03-Modules/Store-Operations/LLD.md) and [edge cases](../03-Modules/Store-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-055` | [`STO-04`](../09-References/Coverage-and-Traceability.md) | `TC-STO-04-OK` and `TC-STO-04-DENY` in [LLD](../03-Modules/Store-Operations/LLD.md) and [edge cases](../03-Modules/Store-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
-| `TASK-056` | [`STO-05`](../09-References/Coverage-and-Traceability.md) | `TC-STO-05-OK` and `TC-STO-05-DENY` in [LLD](../03-Modules/Store-Operations/LLD.md) and [edge cases](../03-Modules/Store-Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-052` | [`STO-01`](../09-References/Coverage-and-Traceability.md) | `TC-STO-01-OK` and `TC-STO-01-DENY` in [LLD](../03-Modules/Store_Operations/LLD.md) and [edge cases](../03-Modules/Store_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-053` | [`STO-02`](../09-References/Coverage-and-Traceability.md) | `TC-STO-02-OK` and `TC-STO-02-DENY` in [LLD](../03-Modules/Store_Operations/LLD.md) and [edge cases](../03-Modules/Store_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-054` | [`STO-03`](../09-References/Coverage-and-Traceability.md) | `TC-STO-03-OK` and `TC-STO-03-DENY` in [LLD](../03-Modules/Store_Operations/LLD.md) and [edge cases](../03-Modules/Store_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-055` | [`STO-04`](../09-References/Coverage-and-Traceability.md) | `TC-STO-04-OK` and `TC-STO-04-DENY` in [LLD](../03-Modules/Store_Operations/LLD.md) and [edge cases](../03-Modules/Store_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
+| `TASK-056` | [`STO-05`](../09-References/Coverage-and-Traceability.md) | `TC-STO-05-OK` and `TC-STO-05-DENY` in [LLD](../03-Modules/Store_Operations/LLD.md) and [edge cases](../03-Modules/Store_Operations/Edge-Cases.md), reviewed and executed against approved fixtures |
 
 ### Warehouse
 
@@ -336,4 +336,4 @@ Resolve [module API readiness](../03-Modules/Warehouse/APIs.md), [write ownershi
 
 Under existing TASK-102–TASK-105 / AUTH-01–04, sequence: approve D-028 schema/context design and D-003 policy → implement shared challenge/proof/session/refresh commands → preserve legacy adapters → add current identity/workspaces/context/step-up → enrollment/password/recovery gates → live authorization integration for every protected module. ADM-03 assignment/permission administration delegates Identity commands, with no client-selected authority. Customer ACC-01 onboarding and Rider RID-01 OTP remain their existing business journeys.
 
-Acceptance evidence must include the designed cases in [Authentication contracts](../03-Modules/Authentication/APIs.md) and [Admin contracts](../03-Modules/Admin/APIs.md), plus primary-database revocation races, cross-scope failures and wireframe preservation. SQL rehearsal validates structure only; application/security/provider tests remain unexecuted. D-023 contact replacement and D-003 assisted authenticator-loss procedure remain release gates for those flows.
+Acceptance evidence must include the designed cases in [Authentication contracts](../03-Modules/Authentication_Access/APIs.md) and [Admin contracts](../03-Modules/Admin_CMS/APIs.md), plus primary-database revocation races, cross-scope failures and wireframe preservation. SQL rehearsal validates structure only; application/security/provider tests remain unexecuted. D-023 contact replacement and D-003 assisted authenticator-loss procedure remain release gates for those flows.

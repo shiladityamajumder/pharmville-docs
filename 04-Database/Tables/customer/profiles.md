@@ -141,7 +141,7 @@ Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, va
 | Scope | User/patient-specific protected party master. |
 | Referencing tables | No inbound FK recorded; API and logical consumers still require review. |
 | Features | `ACC-01`, `ACC-02`, `ACC-03`, `AUTH-03` |
-| API consumers | [API-002](../../../03-Modules/Customer-Accounts/APIs.md), [API-003](../../../03-Modules/Customer-Accounts/APIs.md), [API-004](../../../03-Modules/Customer-Accounts/APIs.md), [API-006](../../../03-Modules/Customer-Accounts/APIs.md), [ACC-ROUTE-001](../../../03-Modules/Customer-Accounts/APIs.md), [ACC-ROUTE-002](../../../03-Modules/Customer-Accounts/APIs.md) |
+| API consumers | [API-002](../../../03-Modules/Customer_Accounts/APIs.md), [API-003](../../../03-Modules/Customer_Accounts/APIs.md), [API-004](../../../03-Modules/Customer_Accounts/APIs.md), [API-006](../../../03-Modules/Customer_Accounts/APIs.md), [ACC-ROUTE-001](../../../03-Modules/Customer_Accounts/APIs.md), [ACC-ROUTE-002](../../../03-Modules/Customer_Accounts/APIs.md) |
 
 ### Expected initial records
 

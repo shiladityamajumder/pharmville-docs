@@ -117,7 +117,7 @@ Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, va
 | Scope | Global catalog/reference; scope still limits administrative maintenance. |
 | Referencing tables | `logistics.delivery_attempts`, `logistics.ndr_cases` |
 | Features | `DLV-03`, `RID-04`, `RID-06` |
-| API consumers | [API-066](../../../03-Modules/Delivery/APIs.md), [API-073](../../../03-Modules/Rider-Operations/APIs.md), [API-074](../../../03-Modules/Rider-Operations/APIs.md) |
+| API consumers | [API-066](../../../03-Modules/Delivery_Operations/APIs.md), [API-073](../../../03-Modules/Rider_App/APIs.md), [API-074](../../../03-Modules/Rider_App/APIs.md) |
 
 ### Expected initial records
 

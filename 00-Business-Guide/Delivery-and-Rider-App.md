@@ -63,8 +63,8 @@ D-007 (COD), D-011 (location/proof), D-021 (Android scope); RID-05 door checks a
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Delivery Operations | [HLD](../03-Modules/Delivery/HLD.md) | [LLD](../03-Modules/Delivery/LLD.md) | [API](../03-Modules/Delivery/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#delivery-operations) | [Cases](../03-Modules/Delivery/Edge-Cases.md) |
-| Rider App | [HLD](../03-Modules/Rider-Operations/HLD.md) | [LLD](../03-Modules/Rider-Operations/LLD.md) | [API](../03-Modules/Rider-Operations/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#rider-app) | [Cases](../03-Modules/Rider-Operations/Edge-Cases.md) |
+| Delivery Operations | [HLD](../03-Modules/Delivery_Operations/HLD.md) | [LLD](../03-Modules/Delivery_Operations/LLD.md) | [API](../03-Modules/Delivery_Operations/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#delivery-operations) | [Cases](../03-Modules/Delivery_Operations/Edge-Cases.md) |
+| Rider App | [HLD](../03-Modules/Rider_App/HLD.md) | [LLD](../03-Modules/Rider_App/LLD.md) | [API](../03-Modules/Rider_App/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#rider-app) | [Cases](../03-Modules/Rider_App/Edge-Cases.md) |
 
 Technical workflows: [WF-007](../06-Workflows/WF-007-Picking-Packing-and-Handoff.md) · [WF-008](../06-Workflows/WF-008-Rider-Assignment-and-POD.md) · [WF-009](../06-Workflows/WF-009-COD-Collection.md).
 

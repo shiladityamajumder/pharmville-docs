@@ -6,7 +6,7 @@
 
 All routes in this package are **proposed Pharmville contracts**. No Pharmville HTTP application or route-level contract tests were available for verification. A sibling healthcare authentication service does provide an implemented and unit-tested camelCase response envelope; that is evidence only for the envelope, not for Pharmville routes, authentication policy, domain DTOs, or runtime behavior. See [Standard responses](Standard-Responses.md).
 
-The historical API identifier range API-001–API-097 is preserved. The five historical account references API-005–API-009 are now listed as individual routes in [Customer Accounts](../03-Modules/Customer-Accounts/APIs.md). Ten additional account operations use stable `ACC-ROUTE-*` documentation references and do not consume historical IDs.
+The historical API identifier range API-001–API-097 is preserved. The five historical account references API-005–API-009 are now listed as individual routes in [Customer Accounts](../03-Modules/Customer_Accounts/APIs.md). Ten additional account operations use stable `ACC-ROUTE-*` documentation references and do not consume historical IDs.
 
 The complete mapping preserves 107 existing HTTP operations and adds 15 explicit unified-Identity proposals (122 total) and is recorded in the [API contract coverage ledger](API-Contract-Coverage.md).
 
@@ -16,21 +16,21 @@ Canonical endpoint contracts now live in each module’s `APIs.md`; this shared 
 
 | Domain | Contract |
 | --- | --- |
-| Authentication and access | [Authentication Access](../03-Modules/Authentication/APIs.md) |
-| Customer accounts | [Customer Accounts](../03-Modules/Customer-Accounts/APIs.md) |
-| Product catalog | [Product Catalog](../03-Modules/Product-Catalog/APIs.md) |
-| Cart and checkout | [Cart Checkout](../03-Modules/Cart-Checkout/APIs.md) |
-| Prescription upload | [Prescription Upload](../03-Modules/Prescription-Management/APIs.md) |
-| Pharmacist review | [Pharmacist Review](../03-Modules/Pharmacist-Review/APIs.md) |
-| Customer orders | [Customer Orders](../03-Modules/Customer-Orders/APIs.md) |
-| Order operations | [Order Operations](../03-Modules/Order-Management/APIs.md) |
-| Store operations | [Store Operations](../03-Modules/Store-Operations/APIs.md) |
+| Authentication and access | [Authentication Access](../03-Modules/Authentication_Access/APIs.md) |
+| Customer accounts | [Customer Accounts](../03-Modules/Customer_Accounts/APIs.md) |
+| Product catalog | [Product Catalog](../03-Modules/Product_Catalog/APIs.md) |
+| Cart and checkout | [Cart Checkout](../03-Modules/Cart_Checkout/APIs.md) |
+| Prescription upload | [Prescription Upload](../03-Modules/Prescription_Upload/APIs.md) |
+| Pharmacist review | [Pharmacist Review](../03-Modules/Pharmacist_Review/APIs.md) |
+| Customer orders | [Customer Orders](../03-Modules/Customer_Orders/APIs.md) |
+| Order operations | [Order Operations](../03-Modules/Order_Operations/APIs.md) |
+| Store operations | [Store Operations](../03-Modules/Store_Operations/APIs.md) |
 | Warehouse | [Warehouse](../03-Modules/Warehouse/APIs.md) |
 | Inventory | [Inventory](../03-Modules/Inventory/APIs.md) |
-| Delivery operations | [Delivery Operations](../03-Modules/Delivery/APIs.md) |
-| Rider app | [Rider App](../03-Modules/Rider-Operations/APIs.md) |
-| Finance and payments | [Finance Payments](../03-Modules/Payments/APIs.md) |
-| Admin and CMS | [Admin CMS](../03-Modules/Admin/APIs.md) |
+| Delivery operations | [Delivery Operations](../03-Modules/Delivery_Operations/APIs.md) |
+| Rider app | [Rider App](../03-Modules/Rider_App/APIs.md) |
+| Finance and payments | [Finance Payments](../03-Modules/Finance_Payments/APIs.md) |
+| Admin and CMS | [Admin CMS](../03-Modules/Admin_CMS/APIs.md) |
 | Notifications | [Notifications](../03-Modules/Notifications/APIs.md) |
 | Reporting | [Reporting](../03-Modules/Reporting/APIs.md) |
 | Audit | [Audit](../03-Modules/Audit/APIs.md) |
@@ -72,4 +72,4 @@ The preserved 107-operation inventory now has **97 documentation-complete propos
 Use the existing four-field response envelope and the [error catalog](Error-Catalog.md). Each endpoint supplies its applicable error triggers and recovery; protected failures redact patient, credential, provider and hidden-resource information. HTTP 204 has no body. Shared envelope reuse does not replace an operation DTO.
 
 
-[Unified Identity architecture](../03-Modules/Authentication/Unified-Identity-Architecture.md) · [compatibility and rollout](../03-Modules/Authentication/API-Compatibility.md) · [workspace matrix](../01-Project/User-Roles.md).
+[Unified Identity architecture](../03-Modules/Authentication_Access/Unified-Identity-Architecture.md) · [compatibility and rollout](../03-Modules/Authentication_Access/API-Compatibility.md) · [workspace matrix](../01-Project/User-Roles.md).

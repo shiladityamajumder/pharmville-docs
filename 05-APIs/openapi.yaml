@@ -335,7 +335,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-001
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -463,7 +463,7 @@ paths:
         unknown accounts. Authentication_Access owns proof delivery; this route never creates a separate
         customer login database or trusts a role.
       x-authentication-architecture: One shared identity/session/authorization service; legacy surface adapter
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/auth/customer/otp/verify:
     post:
       operationId: API_002_Verify_OTP
@@ -762,7 +762,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-002
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -1011,7 +1011,7 @@ paths:
         checks. No Customer assignment gives account-access state, not a fabricated role. Multi-role clients
         discover/switch through unified routes.
       x-authentication-architecture: One shared identity/session/authorization service; legacy surface adapter
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/me:
     get:
       operationId: API_003_Read_profile
@@ -1302,8 +1302,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-003
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -1714,8 +1714,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-004
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -2098,8 +2098,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-005
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -2515,8 +2515,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-006
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -2916,8 +2916,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-007
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -3322,8 +3322,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-008
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -3752,8 +3752,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-009
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -4120,8 +4120,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-005
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -4416,7 +4416,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-010
-      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
+      x-contract-document: ../03-Modules/Product_Catalog/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -4712,7 +4712,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-011
-      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
+      x-contract-document: ../03-Modules/Product_Catalog/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -5044,7 +5044,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-012
-      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
+      x-contract-document: ../03-Modules/Product_Catalog/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -5419,7 +5419,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-013
-      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
+      x-contract-document: ../03-Modules/Product_Catalog/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -5746,7 +5746,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-014
-      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
+      x-contract-document: ../03-Modules/Product_Catalog/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -6206,8 +6206,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-015
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Product_Catalog/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -6659,8 +6659,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-016
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Product_Catalog/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -7127,8 +7127,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-017
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Product-Catalog/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Product_Catalog/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -7533,8 +7533,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-018
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Cart-Checkout/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Cart_Checkout/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -7956,8 +7956,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-019
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Cart-Checkout/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Cart_Checkout/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -8418,8 +8418,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-020
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Cart-Checkout/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Cart_Checkout/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -8946,8 +8946,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-021
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Cart-Checkout/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Cart_Checkout/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -9463,8 +9463,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-022
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Prescription-Management/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Prescription_Upload/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -9908,8 +9908,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-023
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Prescription-Management/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Prescription_Upload/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -10351,8 +10351,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-024
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Prescription-Management/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Prescription_Upload/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -10794,8 +10794,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-025
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Orders/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -11162,8 +11162,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-026
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -11598,8 +11598,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-027
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -12069,8 +12069,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-028
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -12502,8 +12502,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-029
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -12911,8 +12911,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-030
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Orders/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -13263,8 +13263,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-031
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Orders/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Orders/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -13582,8 +13582,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-032
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -14031,7 +14031,7 @@ paths:
       security:
         - bearerAuth: []
       x-api-id: API-033
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -14153,7 +14153,7 @@ paths:
         membership/location and current actor permission; pending enrollment/invitation cannot grant a
         privileged session. Existing response fields are preserved.
       x-authentication-architecture: One shared identity/session/authorization service; legacy surface adapter
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/admin/staff/{staff_id}:
     patch:
       operationId: API_034_PATCH_v1_admin_staff_staff_id
@@ -14525,7 +14525,7 @@ paths:
       security:
         - bearerAuth: []
       x-api-id: API-034
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -14674,7 +14674,7 @@ paths:
         other organization access. Suspension and allowed reviewed reactivation remain separate from
         lock/recovery bypass.
       x-authentication-architecture: One shared identity/session/authorization service; legacy surface adapter
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/admin/settings:
     get:
       operationId: API_035_GET_v1_admin_settings
@@ -14936,8 +14936,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-035
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -15329,8 +15329,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-036
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -15750,8 +15750,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-037
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -16171,8 +16171,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-038
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -16584,8 +16584,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-039
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Order-Management/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Order_Operations/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -16980,8 +16980,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-040
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Order-Management/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Order_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -17434,8 +17434,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-041
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Order-Management/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Order_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -17969,8 +17969,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-042
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Order-Management/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Order_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -18432,8 +18432,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-043
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Order-Management/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Order_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -18871,8 +18871,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-044
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Store-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Store_Operations/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -19299,8 +19299,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-045
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Store-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Store_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -19809,8 +19809,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-046
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Store-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Store_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -20349,8 +20349,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-047
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Store-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Store_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -20902,8 +20902,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-048
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Store-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Store_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -21364,8 +21364,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-049
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Store-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Store_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -21761,7 +21761,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-050
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -22182,7 +22182,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-051
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -23644,7 +23644,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-054
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -24053,7 +24053,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-055
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Inventory/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -24473,7 +24473,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-056
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Warehouse/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -24895,7 +24895,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-057
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Warehouse/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -25318,7 +25318,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-058
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Warehouse/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -25730,7 +25730,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-059
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Warehouse/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -26119,8 +26119,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-060
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Pharmacist-Review/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Pharmacist_Review/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -26507,8 +26507,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-061
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Pharmacist-Review/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Pharmacist_Review/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -26972,8 +26972,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-062
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Pharmacist-Review/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Pharmacist_Review/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -27494,8 +27494,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-063
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Pharmacist-Review/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Pharmacist_Review/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -27926,8 +27926,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-064
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Delivery/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Delivery_Operations/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -28360,8 +28360,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-065
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Delivery/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Delivery_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -28819,8 +28819,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-066
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Delivery/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Delivery_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -29234,8 +29234,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-067
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Delivery/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Delivery_Operations/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -29657,8 +29657,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-068
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Delivery/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Delivery_Operations/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -30108,8 +30108,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-069
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Rider_App/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -30462,8 +30462,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-070
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Rider_App/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -30882,8 +30882,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-071
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Rider_App/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -31418,8 +31418,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-072
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Rider_App/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -31856,8 +31856,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-073
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Rider_App/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -32375,8 +32375,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-074
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Rider-Operations/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Rider_App/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -32851,8 +32851,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-075
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Payments/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Finance_Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -33327,7 +33327,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-076
-      x-contract-document: ../03-Modules/Payments/APIs.md
+      x-contract-document: ../03-Modules/Finance_Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -33751,8 +33751,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-077
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Payments/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Finance_Payments/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -34166,8 +34166,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-078
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Payments/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Finance_Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -34585,8 +34585,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-079
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Payments/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Finance_Payments/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -34989,8 +34989,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-080
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Payments/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Finance_Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -35408,8 +35408,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-081
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Payments/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Finance_Payments/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -35812,7 +35812,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-082
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -36179,7 +36179,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-083
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -36544,7 +36544,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-084
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -36933,7 +36933,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-085
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -37354,7 +37354,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-086
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Reporting/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -37754,7 +37754,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-087
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Audit/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -38149,7 +38149,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-088
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Audit/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -38514,7 +38514,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-089
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -38662,7 +38662,7 @@ paths:
         Unknown/wrong/disabled accounts use generic denial; no session until required authenticator succeeds.
         First enrollment/recovery follows D-003; do not create a second account.
       x-authentication-architecture: One shared identity/session/authorization service; legacy surface adapter
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/auth/staff/mfa/verify:
     post:
       operationId: API_090_POST_v1_auth_staff_mfa_verify
@@ -38959,7 +38959,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-090
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -39189,7 +39189,7 @@ paths:
         eligible staff context exists it may be selected by backend; multiple choices require unified
         discovery/selection. Preserve identity-wide staff session limits.
       x-authentication-architecture: One shared identity/session/authorization service; legacy surface adapter
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/auth/sessions/refresh:
     post:
       operationId: API_091_POST_v1_auth_sessions_refresh
@@ -39494,7 +39494,7 @@ paths:
                       pagination: null
       security: []
       x-api-id: API-091
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -39656,7 +39656,7 @@ paths:
         Serialize clients and reauthenticate after a lost success response. Recheck live user/assignment and
         method/policy state; refresh never restores a revoked context or re-dates MFA/password proof.
       x-authentication-architecture: One shared identity/session/authorization service; legacy surface adapter
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/auth/sessions/revoke:
     post:
       operationId: API_092_POST_v1_auth_sessions_revoke
@@ -40011,7 +40011,7 @@ paths:
       security:
         - bearerAuth: []
       x-api-id: API-092
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -40082,7 +40082,7 @@ paths:
         Authorization is auth.self for an active requester and owned session; another user target returns
         privacy-safe 404. It works without a business workspace.
       x-authentication-architecture: One shared identity/session/authorization service; legacy surface adapter
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/auth/permissions:
     get:
       operationId: API_093_GET_v1_auth_permissions
@@ -40377,7 +40377,7 @@ paths:
       security:
         - bearerAuth: []
       x-api-id: API-093
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: offset
@@ -40500,7 +40500,7 @@ paths:
         limit/offset/meta pagination. Never return the union of unrelated assignments or expose another
         subject’s grants.
       x-authentication-architecture: One shared identity/session/authorization service; legacy surface adapter
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/internal/notifications/jobs:
     post:
       operationId: API_094_POST_v1_internal_notifications_jobs
@@ -41278,7 +41278,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-095
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Notifications/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -41690,7 +41690,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-096
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Notifications/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -42065,7 +42065,7 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: API-097
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       x-contract-document: ../03-Modules/Notifications/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
@@ -42486,8 +42486,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-001
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -42969,8 +42969,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-002
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -43387,8 +43387,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-007
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -43768,8 +43768,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-006
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -44177,8 +44177,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-003
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -44626,8 +44626,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-004
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -44973,8 +44973,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-008
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: parameters
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: cursor
@@ -45377,8 +45377,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-009
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -45824,8 +45824,8 @@ paths:
       security:
       - bearerAuth: []
       x-api-id: ACC-ROUTE-010
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
-      x-contract-document: ../03-Modules/Customer-Accounts/APIs.md
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-contract-document: ../03-Modules/Customer_Accounts/APIs.md
       x-query-applicability: not-applicable
       x-query-rationale: Only the explicitly declared filters are accepted. Unknown query fields rejected.
       x-pagination-strategy: none
@@ -46207,7 +46207,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-098
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - ACC-01
         - AUTH-03
@@ -46293,7 +46293,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '202'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -46756,7 +46756,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-099
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - ACC-01
         - AUTH-01
@@ -47002,7 +47002,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -47354,7 +47354,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-100
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - AUTH-02
         - AUTH-04
@@ -47479,7 +47479,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/auth/workspaces:
     get:
       operationId: API_101_UnifiedIdentity
@@ -47847,7 +47847,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-101
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - AUTH-04
         - ADM-03
@@ -47973,7 +47973,7 @@ paths:
       x-pagination-strategy: offset
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/auth/context:
     post:
       operationId: API_102_UnifiedIdentity
@@ -48488,7 +48488,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-102
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - AUTH-04
         - AUTH-02
@@ -48628,7 +48628,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -49058,7 +49058,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-103
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - AUTH-01
         - AUTH-02
@@ -49267,7 +49267,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -49734,7 +49734,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-104
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - AUTH-01
         - AUTH-02
@@ -49952,7 +49952,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -50375,7 +50375,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-105
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - AUTH-01
         - AUTH-02
@@ -50546,7 +50546,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -50886,7 +50886,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-106
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - AUTH-02
         - AUTH-03
@@ -50974,7 +50974,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '202'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -51359,7 +51359,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-107
-      x-contract-document: ../03-Modules/Authentication/APIs.md
+      x-contract-document: ../03-Modules/Authentication_Access/APIs.md
       x-feature-ids:
         - AUTH-01
         - AUTH-02
@@ -51508,7 +51508,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -52117,7 +52117,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-108
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-feature-ids:
         - ADM-03
         - AUTH-04
@@ -52260,7 +52260,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -52687,7 +52687,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-111
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-feature-ids:
         - ADM-03
         - AUTH-04
@@ -52813,7 +52813,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Single role policy; no list query.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/admin/users/{user_id}/role-assignments:
     post:
       operationId: API_109_UnifiedIdentity
@@ -53325,7 +53325,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-109
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-feature-ids:
         - ADM-02
         - ADM-03
@@ -53470,7 +53470,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '201'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:
@@ -53931,7 +53931,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-112
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-feature-ids:
         - ADM-03
         - AUTH-04
@@ -54060,7 +54060,7 @@ paths:
       x-pagination-strategy: offset
       x-query-rationale: Scope filtering precedes stable ordering, total count and limit/offset.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
   /v1/admin/role-assignments/{assignment_id}:
     patch:
       operationId: API_110_UnifiedIdentity
@@ -54663,7 +54663,7 @@ paths:
                       timestamp: '2026-10-24T10:30:00Z'
                       pagination: null
       x-api-id: API-110
-      x-contract-document: ../03-Modules/Admin/APIs.md
+      x-contract-document: ../03-Modules/Admin_CMS/APIs.md
       x-feature-ids:
         - ADM-02
         - ADM-03
@@ -54809,7 +54809,7 @@ paths:
       x-pagination-strategy: none
       x-query-rationale: Only declared fields; no arbitrary identity/role/workspace/scope selectors.
       x-proposed-success-status: '200'
-      x-authorization-policy: ../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
+      x-authorization-policy: ../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation
       requestBody:
         required: true
         content:

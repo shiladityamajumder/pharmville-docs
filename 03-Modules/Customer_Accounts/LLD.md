@@ -99,7 +99,7 @@ See [customer profile schema](../../04-Database/Tables/customer/profiles.md), [i
 
 ## APIs and integration
 
-Proposed contracts are indexed in [Customer Accounts API](APIs.md) and [Authentication and Access API](../Authentication/APIs.md). Customer_Accounts calls Authentication_Access for challenge verification and session creation; Notifications handles channel delivery.
+Proposed contracts are indexed in [Customer Accounts API](APIs.md) and [Authentication and Access API](../Authentication_Access/APIs.md). Customer_Accounts calls Authentication_Access for challenge verification and session creation; Notifications handles channel delivery.
 
 Provider callbacks must be authenticated, deduplicated, and stored before processing. User/profile writes and their audit/outbox records commit together; outbound notifications occur after commit.
 

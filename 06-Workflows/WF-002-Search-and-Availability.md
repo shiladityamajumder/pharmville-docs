@@ -20,7 +20,7 @@ Catalog owns published discovery; Inventory owns availability evidence. A read g
 
 Candidate existing tables: `catalog.products`, `catalog.product_variants`, `search.documents`, `warehouse.stock_balances`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-013/API-014; Inventory API-050. [Product Catalog](../03-Modules/Product-Catalog/APIs.md) · [Inventory](../03-Modules/Inventory/APIs.md).
+Related proposed operations: API-013/API-014; Inventory API-050. [Product Catalog](../03-Modules/Product_Catalog/APIs.md) · [Inventory](../03-Modules/Inventory/APIs.md).
 
 ## Sequence
 

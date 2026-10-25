@@ -142,7 +142,7 @@ Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, va
 | Scope | Organization-specific via organization_id. |
 | Referencing tables | `organization.departments`, `organization.memberships` |
 | Features | `ADM-02`, `DLV-01`, `DLV-02`, `DLV-04`, `DLV-05`, `OMS-01`, `PHM-01`, `REP-07`, `STO-01` |
-| API consumers | [API-033](../../../03-Modules/Admin/APIs.md), [API-034](../../../03-Modules/Admin/APIs.md), [API-039](../../../03-Modules/Order-Management/APIs.md), [API-044](../../../03-Modules/Store-Operations/APIs.md), [API-060](../../../03-Modules/Pharmacist-Review/APIs.md), [API-064](../../../03-Modules/Delivery/APIs.md), [API-065](../../../03-Modules/Delivery/APIs.md), [API-067](../../../03-Modules/Delivery/APIs.md), [API-068](../../../03-Modules/Delivery/APIs.md), [API-086](../../../03-Modules/Reporting/APIs.md) |
+| API consumers | [API-033](../../../03-Modules/Admin_CMS/APIs.md), [API-034](../../../03-Modules/Admin_CMS/APIs.md), [API-039](../../../03-Modules/Order_Operations/APIs.md), [API-044](../../../03-Modules/Store_Operations/APIs.md), [API-060](../../../03-Modules/Pharmacist_Review/APIs.md), [API-064](../../../03-Modules/Delivery_Operations/APIs.md), [API-065](../../../03-Modules/Delivery_Operations/APIs.md), [API-067](../../../03-Modules/Delivery_Operations/APIs.md), [API-068](../../../03-Modules/Delivery_Operations/APIs.md), [API-086](../../../03-Modules/Reporting/APIs.md) |
 
 ### Expected initial records
 

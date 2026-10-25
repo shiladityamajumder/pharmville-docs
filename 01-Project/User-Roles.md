@@ -1,6 +1,6 @@
 # User roles and authorized workspaces
 
-**Proposed defaults, not approved grants.** The [unified Identity architecture](../03-Modules/Authentication/Unified-Identity-Architecture.md) owns authentication and backend authorization for every person. Role names are not login databases, identities, app-specific accounts or PostgreSQL runtime roles. D-003/D-024 must approve permissions and method policy; D-020 covers Support.
+**Proposed defaults, not approved grants.** The [unified Identity architecture](../03-Modules/Authentication_Access/Unified-Identity-Architecture.md) owns authentication and backend authorization for every person. Role names are not login databases, identities, app-specific accounts or PostgreSQL runtime roles. D-003/D-024 must approve permissions and method policy; D-020 covers Support.
 
 ## Role-to-workspace access matrix
 
@@ -36,7 +36,7 @@ All roles use one `identity.users.id`. Multiple active `identity.user_roles` row
 - **Switching:** submit the server-issued context selector and current ETag. Recheck assignment, membership, organization/site, method freshness and policy; atomically advance session context generation.
 - **Organizations/locations:** reselect an authorized context. A supplied scope UUID is only a target. Do not combine permissions from one assignment with a resource in another assignment's scope.
 - **Denied panel:** return 403 `AUTH_WORKSPACE_FORBIDDEN`, no data/grant. Use privacy-safe 404 for hidden business objects.
-- **Role removal:** deny the removed context at the next authoritative check after revocation commits; clear it and expose other valid choices. See the exact [consistency/locking policy](../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation).
+- **Role removal:** deny the removed context at the next authoritative check after revocation commits; clear it and expose other valid choices. See the exact [consistency/locking policy](../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation).
 - **Suspension/closure:** revoke sessions/proofs, block all protected business operations and reauthentication. Reopening needs the reviewed Identity process.
 - **Expiry/replay:** 401 requires fresh authentication; replay revokes the refresh family. Switching old tabs fails with a context-generation conflict.
 - **Step-up:** challenge only for an already granted target, bind it to session/assignment/policy, and verify missing password/TOTP proofs. A completed challenge alone does not bypass context activation.
@@ -48,4 +48,4 @@ Customer access is limited to owned resources and explicitly permitted dependent
 
 Existing SQL uses null/null for global grants and supports a `warehouse` UUID scope in its stock RLS helper. Organization/location/warehouse hierarchies are validated on the backend; polymorphic scope fields are not FKs. PostgreSQL's four NOLOGIN capability groups and three RLS policies are defense in depth, separate from business-role/workspace grants. No menu, role code, membership or integer ID replaces the explicit endpoint permission/resource check.
 
-[Machine-readable proposed policy](../03-Modules/Authentication/Workspace-Access-Policy.json) · [master roles](../04-Database/Tables/identity/roles.md#master-data-planning) · [security](../07-Engineering/Security.md).
+[Machine-readable proposed policy](../03-Modules/Authentication_Access/Workspace-Access-Policy.json) · [master roles](../04-Database/Tables/identity/roles.md#master-data-planning) · [security](../07-Engineering/Security.md).

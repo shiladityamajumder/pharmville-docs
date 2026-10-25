@@ -8,23 +8,23 @@ This table links a feature module to the actual database schemas it may read or 
 
 | Module | Database ER diagrams |
 |---|---|
-| [Admin_CMS](../03-Modules/Admin/README.md) | [`organization`](ER-Diagrams/16-organization.md), [`platform`](ER-Diagrams/18-platform.md) |
+| [Admin_CMS](../03-Modules/Admin_CMS/README.md) | [`organization`](ER-Diagrams/16-organization.md), [`platform`](ER-Diagrams/18-platform.md) |
 | [Audit](../03-Modules/Audit/README.md) | [`compliance`](ER-Diagrams/05-compliance.md), [`platform`](ER-Diagrams/18-platform.md), [`risk`](ER-Diagrams/21-risk.md) |
-| [Authentication_Access](../03-Modules/Authentication/README.md) | [`identity`](ER-Diagrams/10-identity.md), [`organization`](ER-Diagrams/16-organization.md) |
-| [Cart_Checkout](../03-Modules/Cart-Checkout/README.md) | [`commerce`](ER-Diagrams/04-commerce.md), [`pricing`](ER-Diagrams/19-pricing.md), [`warehouse`](ER-Diagrams/24-warehouse.md) |
-| [Customer_Accounts](../03-Modules/Customer-Accounts/README.md) | [`customer`](ER-Diagrams/06-customer.md), [`identity`](ER-Diagrams/10-identity.md), [`clinical`](ER-Diagrams/03-clinical.md) |
-| [Customer_Orders](../03-Modules/Customer-Orders/README.md) | [`commerce`](ER-Diagrams/04-commerce.md), [`logistics`](ER-Diagrams/12-logistics.md) |
-| [Delivery_Operations](../03-Modules/Delivery/README.md) | [`logistics`](ER-Diagrams/12-logistics.md), [`organization`](ER-Diagrams/16-organization.md) |
-| [Finance_Payments](../03-Modules/Payments/README.md) | [`payment`](ER-Diagrams/17-payment.md), [`finance`](ER-Diagrams/08-finance.md), [`commerce`](ER-Diagrams/04-commerce.md) |
+| [Authentication_Access](../03-Modules/Authentication_Access/README.md) | [`identity`](ER-Diagrams/10-identity.md), [`organization`](ER-Diagrams/16-organization.md) |
+| [Cart_Checkout](../03-Modules/Cart_Checkout/README.md) | [`commerce`](ER-Diagrams/04-commerce.md), [`pricing`](ER-Diagrams/19-pricing.md), [`warehouse`](ER-Diagrams/24-warehouse.md) |
+| [Customer_Accounts](../03-Modules/Customer_Accounts/README.md) | [`customer`](ER-Diagrams/06-customer.md), [`identity`](ER-Diagrams/10-identity.md), [`clinical`](ER-Diagrams/03-clinical.md) |
+| [Customer_Orders](../03-Modules/Customer_Orders/README.md) | [`commerce`](ER-Diagrams/04-commerce.md), [`logistics`](ER-Diagrams/12-logistics.md) |
+| [Delivery_Operations](../03-Modules/Delivery_Operations/README.md) | [`logistics`](ER-Diagrams/12-logistics.md), [`organization`](ER-Diagrams/16-organization.md) |
+| [Finance_Payments](../03-Modules/Finance_Payments/README.md) | [`payment`](ER-Diagrams/17-payment.md), [`finance`](ER-Diagrams/08-finance.md), [`commerce`](ER-Diagrams/04-commerce.md) |
 | [Inventory](../03-Modules/Inventory/README.md) | [`warehouse`](ER-Diagrams/24-warehouse.md), [`catalog`](ER-Diagrams/02-catalog.md), [`procurement`](ER-Diagrams/20-procurement.md) |
 | [Notifications](../03-Modules/Notifications/README.md) | [`notification`](ER-Diagrams/15-notification.md), [`platform`](ER-Diagrams/18-platform.md) |
-| [Order_Operations](../03-Modules/Order-Management/README.md) | [`commerce`](ER-Diagrams/04-commerce.md), [`fulfillment`](ER-Diagrams/09-fulfillment.md), [`organization`](ER-Diagrams/16-organization.md) |
-| [Pharmacist_Review](../03-Modules/Pharmacist-Review/README.md) | [`clinical`](ER-Diagrams/03-clinical.md), [`commerce`](ER-Diagrams/04-commerce.md) |
-| [Prescription_Upload](../03-Modules/Prescription-Management/README.md) | [`clinical`](ER-Diagrams/03-clinical.md), [`platform`](ER-Diagrams/18-platform.md) |
-| [Product_Catalog](../03-Modules/Product-Catalog/README.md) | [`catalog`](ER-Diagrams/02-catalog.md), [`marketplace`](ER-Diagrams/13-marketplace.md), [`pricing`](ER-Diagrams/19-pricing.md), [`search`](ER-Diagrams/22-search.md) |
+| [Order_Operations](../03-Modules/Order_Operations/README.md) | [`commerce`](ER-Diagrams/04-commerce.md), [`fulfillment`](ER-Diagrams/09-fulfillment.md), [`organization`](ER-Diagrams/16-organization.md) |
+| [Pharmacist_Review](../03-Modules/Pharmacist_Review/README.md) | [`clinical`](ER-Diagrams/03-clinical.md), [`commerce`](ER-Diagrams/04-commerce.md) |
+| [Prescription_Upload](../03-Modules/Prescription_Upload/README.md) | [`clinical`](ER-Diagrams/03-clinical.md), [`platform`](ER-Diagrams/18-platform.md) |
+| [Product_Catalog](../03-Modules/Product_Catalog/README.md) | [`catalog`](ER-Diagrams/02-catalog.md), [`marketplace`](ER-Diagrams/13-marketplace.md), [`pricing`](ER-Diagrams/19-pricing.md), [`search`](ER-Diagrams/22-search.md) |
 | [Reporting](../03-Modules/Reporting/README.md) | [`platform`](ER-Diagrams/18-platform.md), [`finance`](ER-Diagrams/08-finance.md) |
-| [Rider_App](../03-Modules/Rider-Operations/README.md) | [`identity`](ER-Diagrams/10-identity.md), [`logistics`](ER-Diagrams/12-logistics.md), [`notification`](ER-Diagrams/15-notification.md) |
-| [Store_Operations](../03-Modules/Store-Operations/README.md) | [`fulfillment`](ER-Diagrams/09-fulfillment.md), [`warehouse`](ER-Diagrams/24-warehouse.md), [`procurement`](ER-Diagrams/20-procurement.md) |
+| [Rider_App](../03-Modules/Rider_App/README.md) | [`identity`](ER-Diagrams/10-identity.md), [`logistics`](ER-Diagrams/12-logistics.md), [`notification`](ER-Diagrams/15-notification.md) |
+| [Store_Operations](../03-Modules/Store_Operations/README.md) | [`fulfillment`](ER-Diagrams/09-fulfillment.md), [`warehouse`](ER-Diagrams/24-warehouse.md), [`procurement`](ER-Diagrams/20-procurement.md) |
 | [Warehouse](../03-Modules/Warehouse/README.md) | [`warehouse`](ER-Diagrams/24-warehouse.md), [`procurement`](ER-Diagrams/20-procurement.md) |
 
 <!-- ERD-MODULE-MAP-END -->
@@ -667,4 +667,4 @@ All 266 physical tables have a proposed accountable write owner below. Future ow
 
 ## Unified Identity ownership extension — D-028
 
-Authentication_Access owns [authentication_challenges](Tables/identity/authentication_challenges.md), [session_refresh_tokens](Tables/identity/session_refresh_tokens.md) and shared identity/session/grant commands. Customer Accounts and Admin are historical API surfaces invoking those commands. Rider is a consumer of the same identity and OTP policy. Exact current read/write columns and API IDs are in [Authentication database contract](../03-Modules/Authentication/Database.md). No new SQL runtime grants are implied.
+Authentication_Access owns [authentication_challenges](Tables/identity/authentication_challenges.md), [session_refresh_tokens](Tables/identity/session_refresh_tokens.md) and shared identity/session/grant commands. Customer Accounts and Admin are historical API surfaces invoking those commands. Rider is a consumer of the same identity and OTP policy. Exact current read/write columns and API IDs are in [Authentication database contract](../03-Modules/Authentication_Access/Database.md). No new SQL runtime grants are implied.

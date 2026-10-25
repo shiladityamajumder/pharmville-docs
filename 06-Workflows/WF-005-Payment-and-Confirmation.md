@@ -21,7 +21,7 @@ Finance owns trusted money evidence; Order Operations consumes it and updates on
 
 Candidate existing tables: `payment.payment_intents`, `payment.payment_attempts`, `payment.payment_webhooks`, `commerce.orders`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-075/API-076/API-077; API-026 reads customer order outcome. [Finance Payments](../03-Modules/Payments/APIs.md) · [Customer Orders](../03-Modules/Customer-Orders/APIs.md).
+Related proposed operations: API-075/API-076/API-077; API-026 reads customer order outcome. [Finance Payments](../03-Modules/Finance_Payments/APIs.md) · [Customer Orders](../03-Modules/Customer_Orders/APIs.md).
 
 ## Sequence
 

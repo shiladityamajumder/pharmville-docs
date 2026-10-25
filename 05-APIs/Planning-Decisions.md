@@ -6,16 +6,16 @@ All proposals are **Unapproved / Not Implemented**. This register refines existi
 
 | Existing decision | Affected contract | Concrete missing evidence | Accountable reviewers |
 | --- | --- | --- | --- |
-| D-023 | [API-004](../03-Modules/Customer-Accounts/APIs.md) | D-023: exact replacement proof DTO/storage is absent. Profile-only subset proposed, full route incomplete. | Customer_Accounts / Tech lead / QA lead |
-| D-019/D-024 | [API-015](../03-Modules/Product-Catalog/APIs.md) | D-019/D-024: spreadsheet columns, row atomicity and durable import result/status model are not documented. | Product_Catalog / Tech lead / QA lead |
+| D-023 | [API-004](../03-Modules/Customer_Accounts/APIs.md) | D-023: exact replacement proof DTO/storage is absent. Profile-only subset proposed, full route incomplete. | Customer_Accounts / Tech lead / QA lead |
+| D-019/D-024 | [API-015](../03-Modules/Product_Catalog/APIs.md) | D-019/D-024: spreadsheet columns, row atomicity and durable import result/status model are not documented. | Product_Catalog / Tech lead / QA lead |
 | D-005 | [API-051](../03-Modules/Inventory/APIs.md) | D-005: source authentication, exact quantities-to-ledger reconciliation and atomic batch outcome are unspecified; timestamps alone are not sufficient evidence. | Inventory / Tech lead / QA lead |
-| D-010/D-011 | [API-066](../03-Modules/Delivery/APIs.md) | D-010/D-011: reattempt limits, custody and precise action-to-status progression need approved policy. | Delivery_Operations / Tech lead / QA lead |
-| D-004/D-016 | [API-075](../03-Modules/Payments/APIs.md) | D-004/D-016: exact continuation DTO, capture sequence and provider-supported replay contract require evidence. | Finance_Payments / Tech lead / QA lead |
-| D-016 | [API-076](../03-Modules/Payments/APIs.md) | D-016: signature header names, wire schema, canonicalization and acknowledgment status are unknown. Conceptual DTO is explicitly not a provider wire contract. | Finance_Payments / Tech lead / QA lead |
-| D-008/D-016 | [API-079](../03-Modules/Payments/APIs.md) | D-008/D-016: settle-vs-reconcile dataset definition and provider report layout need Finance approval. | Finance_Payments / Tech lead / QA lead |
-| D-007/D-008 | [API-080](../03-Modules/Payments/APIs.md) | D-007/D-008: exact handover/deposit evidence and independent approval model are missing. | Finance_Payments / Tech lead / QA lead |
-| D-003 | [API-089](../03-Modules/Authentication/APIs.md) | D-003: challenge replay prevention and exact MFA enrollment/recovery/session-limits policy require reviewed persistence/credential design. | Authentication_Access / Tech lead / QA lead |
-| D-003 | [API-090](../03-Modules/Authentication/APIs.md) | D-003: exact single-use authenticator/challenge persistence is absent in schema documentation. | Authentication_Access / Tech lead / QA lead |
+| D-010/D-011 | [API-066](../03-Modules/Delivery_Operations/APIs.md) | D-010/D-011: reattempt limits, custody and precise action-to-status progression need approved policy. | Delivery_Operations / Tech lead / QA lead |
+| D-004/D-016 | [API-075](../03-Modules/Finance_Payments/APIs.md) | D-004/D-016: exact continuation DTO, capture sequence and provider-supported replay contract require evidence. | Finance_Payments / Tech lead / QA lead |
+| D-016 | [API-076](../03-Modules/Finance_Payments/APIs.md) | D-016: signature header names, wire schema, canonicalization and acknowledgment status are unknown. Conceptual DTO is explicitly not a provider wire contract. | Finance_Payments / Tech lead / QA lead |
+| D-008/D-016 | [API-079](../03-Modules/Finance_Payments/APIs.md) | D-008/D-016: settle-vs-reconcile dataset definition and provider report layout need Finance approval. | Finance_Payments / Tech lead / QA lead |
+| D-007/D-008 | [API-080](../03-Modules/Finance_Payments/APIs.md) | D-007/D-008: exact handover/deposit evidence and independent approval model are missing. | Finance_Payments / Tech lead / QA lead |
+| D-003 | [API-089](../03-Modules/Authentication_Access/APIs.md) | D-003: challenge replay prevention and exact MFA enrollment/recovery/session-limits policy require reviewed persistence/credential design. | Authentication_Access / Tech lead / QA lead |
+| D-003 | [API-090](../03-Modules/Authentication_Access/APIs.md) | D-003: exact single-use authenticator/challenge persistence is absent in schema documentation. | Authentication_Access / Tech lead / QA lead |
 
 ## Complete proposals still requiring approval
 

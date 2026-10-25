@@ -113,23 +113,23 @@ The [master register](../09-References/Coverage-and-Traceability.md) owns featur
 
 | Module | Normal/implementation tests | Adverse cases |
 | --- | --- | --- |
-| Admin CMS (`ADM-01`, `ADM-02`, `ADM-03`, `ADM-04`, `ADM-05`, `ADM-06`, `ADM-07`, `ADM-08`, `ADM-09`) | [LLD](../03-Modules/Admin/LLD.md) | [Edge cases](../03-Modules/Admin/Edge-Cases.md) |
+| Admin CMS (`ADM-01`, `ADM-02`, `ADM-03`, `ADM-04`, `ADM-05`, `ADM-06`, `ADM-07`, `ADM-08`, `ADM-09`) | [LLD](../03-Modules/Admin_CMS/LLD.md) | [Edge cases](../03-Modules/Admin_CMS/Edge-Cases.md) |
 | Audit (`AUD-01`, `AUD-02`) | [LLD](../03-Modules/Audit/LLD.md) | [Edge cases](../03-Modules/Audit/Edge-Cases.md) |
-| Authentication Access (`AUTH-01`, `AUTH-02`, `AUTH-03`, `AUTH-04`) | [LLD](../03-Modules/Authentication/LLD.md) | [Edge cases](../03-Modules/Authentication/Edge-Cases.md) |
-| Cart Checkout (`CHK-01`, `CHK-02`, `CHK-03`, `CHK-04`, `CHK-05`, `CHK-06`, `CHK-07`, `CHK-08`) | [LLD](../03-Modules/Cart-Checkout/LLD.md) | [Edge cases](../03-Modules/Cart-Checkout/Edge-Cases.md) |
-| Customer Accounts (`ACC-01`, `ACC-02`, `ACC-03`, `ACC-04`, `ACC-05`, `ACC-06`, `ACC-07`) | [LLD](../03-Modules/Customer-Accounts/LLD.md) | [Edge cases](../03-Modules/Customer-Accounts/Edge-Cases.md) |
-| Customer Orders (`ORD-01`, `ORD-02`, `ORD-03`, `ORD-04`, `ORD-05`, `ORD-06`, `ORD-07`, `ORD-08`, `ORD-09`) | [LLD](../03-Modules/Customer-Orders/LLD.md) | [Edge cases](../03-Modules/Customer-Orders/Edge-Cases.md) |
-| Delivery Operations (`DLV-01`, `DLV-02`, `DLV-03`, `DLV-04`, `DLV-05`) | [LLD](../03-Modules/Delivery/LLD.md) | [Edge cases](../03-Modules/Delivery/Edge-Cases.md) |
-| Finance Payments (`FIN-01`, `FIN-02`, `FIN-03`, `FIN-04`, `FIN-05`, `FIN-06`, `FIN-07`) | [LLD](../03-Modules/Payments/LLD.md) | [Edge cases](../03-Modules/Payments/Edge-Cases.md) |
+| Authentication Access (`AUTH-01`, `AUTH-02`, `AUTH-03`, `AUTH-04`) | [LLD](../03-Modules/Authentication_Access/LLD.md) | [Edge cases](../03-Modules/Authentication_Access/Edge-Cases.md) |
+| Cart Checkout (`CHK-01`, `CHK-02`, `CHK-03`, `CHK-04`, `CHK-05`, `CHK-06`, `CHK-07`, `CHK-08`) | [LLD](../03-Modules/Cart_Checkout/LLD.md) | [Edge cases](../03-Modules/Cart_Checkout/Edge-Cases.md) |
+| Customer Accounts (`ACC-01`, `ACC-02`, `ACC-03`, `ACC-04`, `ACC-05`, `ACC-06`, `ACC-07`) | [LLD](../03-Modules/Customer_Accounts/LLD.md) | [Edge cases](../03-Modules/Customer_Accounts/Edge-Cases.md) |
+| Customer Orders (`ORD-01`, `ORD-02`, `ORD-03`, `ORD-04`, `ORD-05`, `ORD-06`, `ORD-07`, `ORD-08`, `ORD-09`) | [LLD](../03-Modules/Customer_Orders/LLD.md) | [Edge cases](../03-Modules/Customer_Orders/Edge-Cases.md) |
+| Delivery Operations (`DLV-01`, `DLV-02`, `DLV-03`, `DLV-04`, `DLV-05`) | [LLD](../03-Modules/Delivery_Operations/LLD.md) | [Edge cases](../03-Modules/Delivery_Operations/Edge-Cases.md) |
+| Finance Payments (`FIN-01`, `FIN-02`, `FIN-03`, `FIN-04`, `FIN-05`, `FIN-06`, `FIN-07`) | [LLD](../03-Modules/Finance_Payments/LLD.md) | [Edge cases](../03-Modules/Finance_Payments/Edge-Cases.md) |
 | Inventory (`INV-01`, `INV-02`, `INV-03`, `INV-04`, `INV-05`, `INV-06`, `INV-07`) | [LLD](../03-Modules/Inventory/LLD.md) | [Edge cases](../03-Modules/Inventory/Edge-Cases.md) |
 | Notifications (`NOT-01`, `NOT-02`, `NOT-03`, `NOT-04`, `NOT-05`) | [LLD](../03-Modules/Notifications/LLD.md) | [Edge cases](../03-Modules/Notifications/Edge-Cases.md) |
-| Order Operations (`OMS-01`, `OMS-02`, `OMS-03`, `OMS-04`, `OMS-05`, `OMS-06`, `OMS-07`) | [LLD](../03-Modules/Order-Management/LLD.md) | [Edge cases](../03-Modules/Order-Management/Edge-Cases.md) |
-| Pharmacist Review (`PHM-01`, `PHM-02`, `PHM-03`, `PHM-04`, `PHM-05`) | [LLD](../03-Modules/Pharmacist-Review/LLD.md) | [Edge cases](../03-Modules/Pharmacist-Review/Edge-Cases.md) |
-| Prescription Upload (`RX-01`, `RX-02`, `RX-03`, `RX-04`, `RX-05`) | [LLD](../03-Modules/Prescription-Management/LLD.md) | [Edge cases](../03-Modules/Prescription-Management/Edge-Cases.md) |
-| Product Catalog (`CAT-01`, `CAT-02`, `CAT-03`, `CAT-04`, `CAT-05`, `CAT-06`) | [LLD](../03-Modules/Product-Catalog/LLD.md) | [Edge cases](../03-Modules/Product-Catalog/Edge-Cases.md) |
+| Order Operations (`OMS-01`, `OMS-02`, `OMS-03`, `OMS-04`, `OMS-05`, `OMS-06`, `OMS-07`) | [LLD](../03-Modules/Order_Operations/LLD.md) | [Edge cases](../03-Modules/Order_Operations/Edge-Cases.md) |
+| Pharmacist Review (`PHM-01`, `PHM-02`, `PHM-03`, `PHM-04`, `PHM-05`) | [LLD](../03-Modules/Pharmacist_Review/LLD.md) | [Edge cases](../03-Modules/Pharmacist_Review/Edge-Cases.md) |
+| Prescription Upload (`RX-01`, `RX-02`, `RX-03`, `RX-04`, `RX-05`) | [LLD](../03-Modules/Prescription_Upload/LLD.md) | [Edge cases](../03-Modules/Prescription_Upload/Edge-Cases.md) |
+| Product Catalog (`CAT-01`, `CAT-02`, `CAT-03`, `CAT-04`, `CAT-05`, `CAT-06`) | [LLD](../03-Modules/Product_Catalog/LLD.md) | [Edge cases](../03-Modules/Product_Catalog/Edge-Cases.md) |
 | Reporting (`REP-01`, `REP-02`, `REP-03`, `REP-04`, `REP-05`, `REP-06`, `REP-07`) | [LLD](../03-Modules/Reporting/LLD.md) | [Edge cases](../03-Modules/Reporting/Edge-Cases.md) |
-| Rider App (`RID-01`, `RID-02`, `RID-03`, `RID-04`, `RID-05`, `RID-06`, `RID-07`) | [LLD](../03-Modules/Rider-Operations/LLD.md) | [Edge cases](../03-Modules/Rider-Operations/Edge-Cases.md) |
-| Store Operations (`STO-01`, `STO-02`, `STO-03`, `STO-04`, `STO-05`) | [LLD](../03-Modules/Store-Operations/LLD.md) | [Edge cases](../03-Modules/Store-Operations/Edge-Cases.md) |
+| Rider App (`RID-01`, `RID-02`, `RID-03`, `RID-04`, `RID-05`, `RID-06`, `RID-07`) | [LLD](../03-Modules/Rider_App/LLD.md) | [Edge cases](../03-Modules/Rider_App/Edge-Cases.md) |
+| Store Operations (`STO-01`, `STO-02`, `STO-03`, `STO-04`, `STO-05`) | [LLD](../03-Modules/Store_Operations/LLD.md) | [Edge cases](../03-Modules/Store_Operations/Edge-Cases.md) |
 | Warehouse (`WH-01`, `WH-02`, `WH-03`, `WH-04`, `WH-05`) | [LLD](../03-Modules/Warehouse/LLD.md) | [Edge cases](../03-Modules/Warehouse/Edge-Cases.md) |
 
 ## Interrupted-workflow checks
@@ -140,6 +140,6 @@ Last-unit, review-versus-revision, cancellation-versus-packing, duplicate-refund
 
 ## Unified Identity acceptance slice — Designed / NOT RUN
 
-Use the endpoint-specific CT-API scenarios in [Authentication](../03-Modules/Authentication/APIs.md), [Customer adapters](../03-Modules/Customer-Accounts/APIs.md) and [Admin](../03-Modules/Admin/APIs.md), traced to AUTH-01–04, ACC-01/02 and ADM-02/03. Cover: uniform unknown-identifier responses; Customer/Rider OTP and required privileged MFA; multi-role/site selection without scope union; challenge/factor/refresh replay; context ETags and stale tabs; membership/role/account revocation under commit ordering; missing-workspace fallback; scoped offboarding without global identity suspension; conditional global authority for API-034 status; locked/suspended recovery and factor replacement without MFA bypass; first-profile dependency with no fabricated name. Verify audit redaction and provider fallback. Application/security/provider results remain unexecuted.
+Use the endpoint-specific CT-API scenarios in [Authentication](../03-Modules/Authentication_Access/APIs.md), [Customer adapters](../03-Modules/Customer_Accounts/APIs.md) and [Admin](../03-Modules/Admin_CMS/APIs.md), traced to AUTH-01–04, ACC-01/02 and ADM-02/03. Cover: uniform unknown-identifier responses; Customer/Rider OTP and required privileged MFA; multi-role/site selection without scope union; challenge/factor/refresh replay; context ETags and stale tabs; membership/role/account revocation under commit ordering; missing-workspace fallback; scoped offboarding without global identity suspension; conditional global authority for API-034 status; locked/suspended recovery and factor replacement without MFA bypass; first-profile dependency with no fabricated name. Verify audit redaction and provider fallback. Application/security/provider results remain unexecuted.
 
 [Current evidence](../09-References/Unified-Authentication-Validation.md) records only actual isolated SQL/constraint, schema/example and documentation validations. The absent optional formal OpenAPI validator is not reported as passed; historical meta-schema results do not cover D-028.

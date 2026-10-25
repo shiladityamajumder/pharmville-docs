@@ -4,7 +4,7 @@
 
 ## Architecture and access
 
-One identity in identity.users supports multiple assignments, one shared credential/session service and backend-authorized workspace contexts. [Canonical architecture](../03-Modules/Authentication/Unified-Identity-Architecture.md) defines live revocation consistency, method-specific assurance, context switching, credential replay handling and recovery. [Role/workspace matrix](../01-Project/User-Roles.md) covers the 16 inherited role codes plus a separate Support candidate; navigation defaults grant no permissions. Customer/Rider OTP and required privileged password/authenticator remain preserved.
+One identity in identity.users supports multiple assignments, one shared credential/session service and backend-authorized workspace contexts. [Canonical architecture](../03-Modules/Authentication_Access/Unified-Identity-Architecture.md) defines live revocation consistency, method-specific assurance, context switching, credential replay handling and recovery. [Role/workspace matrix](../01-Project/User-Roles.md) covers the 16 inherited role codes plus a separate Support candidate; navigation defaults grant no permissions. Customer/Rider OTP and required privileged password/authenticator remain preserved.
 
 ## APIs and planning evidence
 
@@ -18,7 +18,7 @@ One identity in identity.users supports multiple assignments, one shared credent
 | Approved contracts | 0 / 107 | 0 / 122 (0%) |
 | Application implementations / executed application contract tests | 0 | 0 |
 
-Updated API-001/002, API-033/034 and API-089–093 preserve IDs, methods, paths and existing DTO compatibility while delegating to shared Identity commands. New API-098–107 cover common proofs, identity, workspaces, context, step-up, factors and credentials; API-108–112 cover existing role/assignment administration including version reads. No runtime endpoint is deprecated. [Compatibility](../03-Modules/Authentication/API-Compatibility.md) records behavior/client rollout impact. [Coverage ledger](../05-APIs/API-Contract-Coverage.md) excludes API-004, API-015, API-051, API-066, API-075, API-076, API-079 and API-080. All 110 feature IDs and 18 modules remain.
+Updated API-001/002, API-033/034 and API-089–093 preserve IDs, methods, paths and existing DTO compatibility while delegating to shared Identity commands. New API-098–107 cover common proofs, identity, workspaces, context, step-up, factors and credentials; API-108–112 cover existing role/assignment administration including version reads. No runtime endpoint is deprecated. [Compatibility](../03-Modules/Authentication_Access/API-Compatibility.md) records behavior/client rollout impact. [Coverage ledger](../05-APIs/API-Contract-Coverage.md) excludes API-004, API-015, API-051, API-066, API-075, API-076, API-079 and API-080. All 110 feature IDs and 18 modules remain.
 
 ## Database evidence
 

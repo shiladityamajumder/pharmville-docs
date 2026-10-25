@@ -1,35 +1,92 @@
-# Compatibility navigation
+# Customer Orders
 
-This document moved to the module-first source of truth. [Open the canonical document](../Customer-Orders/README.md). Existing paths and section anchors remain available for wireframe and historical references.
+**Stable module ID:** `Customer_Orders` · **Proposed accountable role:** Customer commerce surface.
 
-<a id="customer-orders"></a>
+## Module blueprint navigation
 
-[Open section](../Customer-Orders/README.md#customer-orders)
+| Planning concern | Canonical reference |
+| --- | --- |
+| Scope, requirements and business flow | [Business flow](Business-Flow.md) |
+| Components, boundaries and design | [HLD](HLD.md) · [LLD](LLD.md) |
+| Operation contracts and DTOs | [APIs](APIs.md) |
+| Owned and consumed database objects | [Database](Database.md) |
+| State, permissions, recovery and tests | [Operating contract](Operations.md) · [edge cases](Edge-Cases.md) |
+| Dependencies and owner decisions | [Dependencies](Dependencies.md) |
 
-<a id="mod-005--order-tracking-and-aftercare"></a>
 
-[Open section](../Customer-Orders/README.md#mod-005--order-tracking-and-aftercare)
+[Business flow](../../00-Business-Guide/Orders-and-Fulfillment.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
-<a id="developer-navigation"></a>
+## MOD-005 — Order tracking and aftercare
 
-[Open section](../Customer-Orders/README.md#developer-navigation)
+**Source classification:** 9 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
 
-<a id="mod-005-order-tracking-and-aftercare--hld"></a>
+**Purpose:** Customer cancellation or return requests must respect current order/fulfillment/payment states.
 
-[Open section](../Customer-Orders/README.md#mod-005-order-tracking-and-aftercare--hld)
+**Feature coverage**
 
-<a id="major-operations"></a>
+- **ORD-01 / REQ-027:** Order confirmation on screen, WhatsApp and email (Must (draft)).
+- **ORD-02 / REQ-028:** Status timeline (placed → packed → out for delivery → delivered) (Must (draft)).
+- **ORD-03 / REQ-029:** Order history with GST invoice download (Must (draft)).
+- **ORD-04 / REQ-030:** Cancel before the order is packed (Must (draft)).
+- **ORD-05 / REQ-031:** Return request within the return window (Should (draft)).
+- **ORD-06 / REQ-032:** Refund status for cancelled and returned orders (Must (draft)).
+- **ORD-07 / REQ-033:** Live rider location on a map, estimated arrival, masked call button (Must (draft)).
+- **ORD-08 / REQ-034:** Delivery OTP shown to the customer (Must (draft)).
+- **ORD-09 / REQ-035:** Change items or address after placing an order (Could (draft)).
 
-[Open section](../Customer-Orders/README.md#major-operations)
+### Developer navigation
 
-<a id="dependencies-and-trust-boundaries"></a>
+- 🏗️ [Module HLD](HLD.md)
+- ⚙️ [Module LLD](LLD.md)
+- Internal architecture
+- 🔗 [API contracts](APIs.md)
+- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
+- 🧪 [Testing](../../07-Engineering/Testing.md)
+- 🗓️ [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
 
-[Open section](../Customer-Orders/README.md#dependencies-and-trust-boundaries)
+**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
 
-<a id="risk"></a>
+## MOD-005: Order tracking and aftercare — HLD
 
-[Open section](../Customer-Orders/README.md#risk)
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
-<a id="related-design-and-delivery-references"></a>
+**Business responsibility:** Order tracking and aftercare. Customer cancellation or return requests must respect current order/fulfillment/payment states.
 
-[Open section](../Customer-Orders/README.md#related-design-and-delivery-references)
+**System responsibility:** The `Customer_Orders` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
+
+### Major operations
+
+- Order confirmation on screen, WhatsApp and email (`ORD-01`)
+- Status timeline (placed → packed → out for delivery → delivered) (`ORD-02`)
+- Order history with GST invoice download (`ORD-03`)
+- Cancel before the order is packed (`ORD-04`)
+- Return request within the return window (`ORD-05`)
+- Refund status for cancelled and returned orders (`ORD-06`)
+- Live rider location on a map, estimated arrival, masked call button (`ORD-07`)
+- Delivery OTP shown to the customer (`ORD-08`)
+- Change items or address after placing an order (`ORD-09`)
+
+### Dependencies and trust boundaries
+
+- Database candidates: `commerce.orders`, `commerce.order_items`, `commerce.cancellations`, `commerce.returns`, `commerce.order_status_history`.
+- Role, patient, store and order scope resolved from trusted access context, not JSON body.
+- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
+- Use local transactions for authoritative state; publish external side effects only after commit.
+
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
+
+### Risk
+
+Customer cancellation or return requests must respect current order/fulfillment/payment states. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
+
+## Related design and delivery references
+
+- 🏗️ [HLD](HLD.md)
+- ⚙️ [LLD](LLD.md)
+- 🧪 [Edge cases](Edge-Cases.md)
+- 🔗 [API contracts](APIs.md)
+- 🗄️ [Database mapping](../../04-Database/Module-Mapping.md)
+- 🧪 [QA scenarios](../../07-Engineering/Testing.md)
+- 🗓️ [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
+- End-to-end flows: [workflows](../../06-Workflows/README.md)

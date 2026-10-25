@@ -140,7 +140,7 @@ Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, va
 | Scope | User/patient-specific protected party master. |
 | Referencing tables | `appointment.appointments`, `appointment.practitioner_services`, `clinical.consultations`, `clinical.practitioner_organizations` |
 | Features | `PHM-01`, `PHM-03`, `PHM-05`, `RX-05` |
-| API consumers | [API-060](../../../03-Modules/Pharmacist-Review/APIs.md), [API-062](../../../03-Modules/Pharmacist-Review/APIs.md) |
+| API consumers | [API-060](../../../03-Modules/Pharmacist_Review/APIs.md), [API-062](../../../03-Modules/Pharmacist_Review/APIs.md) |
 
 ### Expected initial records
 

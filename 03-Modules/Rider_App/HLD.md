@@ -1,35 +1,73 @@
-# Compatibility navigation
+# Rider App HLD
 
-This document moved to the module-first source of truth. [Open the canonical document](../Rider-Operations/HLD.md). Existing paths and section anchors remain available for wireframe and historical references.
+<!-- ERD-NAV-START -->
 
-<a id="rider-app-hld"></a>
+## Database relationships
 
-[Open section](../Rider-Operations/HLD.md#rider-app-hld)
+[`identity` ERD](../../04-Database/ER-Diagrams/10-identity.md) · [`logistics` ERD](../../04-Database/ER-Diagrams/12-logistics.md) · [`notification` ERD](../../04-Database/ER-Diagrams/15-notification.md) · [FK catalog](../../04-Database/ER-Diagrams/Relationship-Catalog.md)
 
-<a id="database-relationships"></a>
+These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See [migration evidence](../../04-Database/Migrations.md) for the supplied source and deployment verification limits.
 
-[Open section](../Rider-Operations/HLD.md#database-relationships)
+<!-- ERD-NAV-END -->
 
-<a id="mod-013-rider-shifts-and-delivery-actions--hld"></a>
+[Business flow](../../00-Business-Guide/Delivery-and-Rider-App.md) · [feature register](../../09-References/Coverage-and-Traceability.md) · [ownership and recovery](../../07-Engineering/State-and-Recovery-Contracts.md)
 
-[Open section](../Rider-Operations/HLD.md#mod-013-rider-shifts-and-delivery-actions--hld)
+## MOD-013: Rider shifts and delivery actions — HLD
 
-<a id="major-operations"></a>
+> [!NOTE]
+> **Status:** Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.
 
-[Open section](../Rider-Operations/HLD.md#major-operations)
+**Business responsibility:** Rider shifts and delivery actions. Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated.
 
-<a id="dependencies-and-trust-boundaries"></a>
+**System responsibility:** The `Rider_App` NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are **not** proof of exclusive write ownership.
 
-[Open section](../Rider-Operations/HLD.md#dependencies-and-trust-boundaries)
+### Major operations
 
-<a id="risk"></a>
+- OTP login; on duty, off duty and break (`RID-01`)
+- Task list; accept; open Google Maps to navigate; mark picked up (`RID-02`)
+- Background location: every 5–10 s on delivery, 15–30 s idle (`RID-03`)
+- Complete delivery with customer OTP and photo; record COD collected (`RID-04`)
+- Door checks for prescription medicines (`RID-05`)
+- Failed attempt with a reason from a fixed list (`RID-06`)
+- Daily deliveries and incentive earned (`RID-07`)
 
-[Open section](../Rider-Operations/HLD.md#risk)
+### Dependencies and trust boundaries
 
-<a id="mod-013--rider-shifts-and-delivery-actions"></a>
+- Database candidates: `logistics.rider_shifts`, `logistics.delivery_assignments`, `logistics.delivery_otp_challenges`, `logistics.delivery_location_updates`, `payment.cod_collections`.
+- Role, patient, store and order scope resolved from trusted access context, not JSON body.
+- External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.
+- Use local transactions for authoritative state; publish external side effects only after commit.
 
-[Open section](../Rider-Operations/HLD.md#mod-013--rider-shifts-and-delivery-actions)
+**Technical design:** [Module LLD](LLD.md) · [API index](../../05-APIs/README.md) · [Tests](../../07-Engineering/Testing.md)
 
-<a id="developer-navigation"></a>
+### Risk
 
-[Open section](../Rider-Operations/HLD.md#developer-navigation)
+Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.
+
+## MOD-013 — Rider shifts and delivery actions
+
+**Source classification:** 7 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.
+
+**Purpose:** Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated.
+
+**Feature coverage**
+
+- **RID-01 / REQ-079:** OTP login; on duty, off duty and break (Must (draft)).
+- **RID-02 / REQ-080:** Task list; accept; open Google Maps to navigate; mark picked up (Must (draft)).
+- **RID-03 / REQ-081:** Background location: every 5–10 s on delivery, 15–30 s idle (Must (draft)).
+- **RID-04 / REQ-082:** Complete delivery with customer OTP and photo; record COD collected (Must (draft)).
+- **RID-05 / REQ-083:** Door checks for prescription medicines (Should (draft)).
+- **RID-06 / REQ-084:** Failed attempt with a reason from a fixed list (Must (draft)).
+- **RID-07 / REQ-085:** Daily deliveries and incentive earned (Should (draft)).
+
+### Developer navigation
+
+- [Module HLD](HLD.md)
+- [Module LLD](LLD.md)
+- Internal architecture
+- [API contracts](APIs.md)
+- [Database mapping](../../04-Database/Module-Mapping.md)
+- [Testing](../../07-Engineering/Testing.md)
+- [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
+
+**Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.

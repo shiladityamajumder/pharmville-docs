@@ -56,8 +56,8 @@ D-003 (login), D-013 (consent and retention), D-023 (contact changes). The [deci
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Customer Accounts | [HLD](../03-Modules/Customer-Accounts/HLD.md) | [LLD](../03-Modules/Customer-Accounts/LLD.md) | [API](../03-Modules/Customer-Accounts/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#customer-accounts) | [Cases](../03-Modules/Customer-Accounts/Edge-Cases.md) |
-| Authentication Access | [HLD](../03-Modules/Authentication/HLD.md) | [LLD](../03-Modules/Authentication/LLD.md) | [API](../03-Modules/Authentication/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#authentication-access) | [Cases](../03-Modules/Authentication/Edge-Cases.md) |
+| Customer Accounts | [HLD](../03-Modules/Customer_Accounts/HLD.md) | [LLD](../03-Modules/Customer_Accounts/LLD.md) | [API](../03-Modules/Customer_Accounts/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#customer-accounts) | [Cases](../03-Modules/Customer_Accounts/Edge-Cases.md) |
+| Authentication Access | [HLD](../03-Modules/Authentication_Access/HLD.md) | [LLD](../03-Modules/Authentication_Access/LLD.md) | [API](../03-Modules/Authentication_Access/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#authentication-access) | [Cases](../03-Modules/Authentication_Access/Edge-Cases.md) |
 
 Technical workflows: [WF-001](../06-Workflows/WF-001-Identity-and-Session.md).
 
@@ -68,4 +68,4 @@ Feature references: `ACC-01`, `ACC-02`, `ACC-03`, `ACC-04`, `ACC-05`, `ACC-06`, 
 
 ## Unified identity and workspace access
 
-**Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.** [Unified Identity policy](../03-Modules/Authentication/Unified-Identity-Architecture.md) is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. [Role/workspace matrix](../01-Project/User-Roles.md) defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.
+**Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.** [Unified Identity policy](../03-Modules/Authentication_Access/Unified-Identity-Architecture.md) is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. [Role/workspace matrix](../01-Project/User-Roles.md) defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.

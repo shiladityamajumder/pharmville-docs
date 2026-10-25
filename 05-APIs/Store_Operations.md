@@ -1,399 +1,399 @@
 # Compatibility navigation
 
-This document moved to the module-first source of truth. [Open the canonical document](../03-Modules/Store-Operations/APIs.md). Existing paths and section anchors remain available for wireframe and historical references.
+This document moved to the module-first source of truth. [Open the canonical document](../03-Modules/Store_Operations/APIs.md). Existing paths and section anchors remain available for wireframe and historical references.
 
 <a id="store-operations-api-contracts"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#store-operations-api-contracts)
+[Open section](../03-Modules/Store_Operations/APIs.md#store-operations-api-contracts)
 
 <a id="api-044--get-v1staffstoreorders"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#api-044--get-v1staffstoreorders)
+[Open section](../03-Modules/Store_Operations/APIs.md#api-044--get-v1staffstoreorders)
 
 <a id="caller-permissions-and-dependencies"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#caller-permissions-and-dependencies)
+[Open section](../03-Modules/Store_Operations/APIs.md#caller-permissions-and-dependencies)
 
 <a id="http-request-contract"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#http-request-contract)
+[Open section](../03-Modules/Store_Operations/APIs.md#http-request-contract)
 
 <a id="success-response-illustrative"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-illustrative)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-illustrative)
 
 <a id="errors-concurrency-and-failure-recovery"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#errors-concurrency-and-failure-recovery)
+[Open section](../03-Modules/Store_Operations/APIs.md#errors-concurrency-and-failure-recovery)
 
 <a id="required-verification"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#required-verification)
+[Open section](../03-Modules/Store_Operations/APIs.md#required-verification)
 
 <a id="api-045--post-v1staffstoreordersorder_idaccept"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#api-045--post-v1staffstoreordersorder_idaccept)
+[Open section](../03-Modules/Store_Operations/APIs.md#api-045--post-v1staffstoreordersorder_idaccept)
 
 <a id="caller-permissions-and-dependencies-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#caller-permissions-and-dependencies-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#caller-permissions-and-dependencies-1)
 
 <a id="http-request-contract-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#http-request-contract-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#http-request-contract-1)
 
 <a id="success-response-illustrative-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-illustrative-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-illustrative-1)
 
 <a id="errors-concurrency-and-failure-recovery-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#errors-concurrency-and-failure-recovery-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#errors-concurrency-and-failure-recovery-1)
 
 <a id="required-verification-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#required-verification-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#required-verification-1)
 
 <a id="api-046--post-v1staffstorepickspick_idscan"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#api-046--post-v1staffstorepickspick_idscan)
+[Open section](../03-Modules/Store_Operations/APIs.md#api-046--post-v1staffstorepickspick_idscan)
 
 <a id="caller-permissions-and-dependencies-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#caller-permissions-and-dependencies-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#caller-permissions-and-dependencies-2)
 
 <a id="http-request-contract-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#http-request-contract-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#http-request-contract-2)
 
 <a id="success-response-illustrative-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-illustrative-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-illustrative-2)
 
 <a id="errors-concurrency-and-failure-recovery-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#errors-concurrency-and-failure-recovery-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#errors-concurrency-and-failure-recovery-2)
 
 <a id="required-verification-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#required-verification-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#required-verification-2)
 
 <a id="api-047--post-v1staffstorepackspack_idclose"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#api-047--post-v1staffstorepackspack_idclose)
+[Open section](../03-Modules/Store_Operations/APIs.md#api-047--post-v1staffstorepackspack_idclose)
 
 <a id="caller-permissions-and-dependencies-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#caller-permissions-and-dependencies-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#caller-permissions-and-dependencies-3)
 
 <a id="http-request-contract-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#http-request-contract-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#http-request-contract-3)
 
 <a id="success-response-illustrative-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-illustrative-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-illustrative-3)
 
 <a id="errors-concurrency-and-failure-recovery-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#errors-concurrency-and-failure-recovery-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#errors-concurrency-and-failure-recovery-3)
 
 <a id="required-verification-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#required-verification-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#required-verification-3)
 
 <a id="api-048--post-v1staffstorereplenishments"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#api-048--post-v1staffstorereplenishments)
+[Open section](../03-Modules/Store_Operations/APIs.md#api-048--post-v1staffstorereplenishments)
 
 <a id="caller-permissions-and-dependencies-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#caller-permissions-and-dependencies-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#caller-permissions-and-dependencies-4)
 
 <a id="http-request-contract-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#http-request-contract-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#http-request-contract-4)
 
 <a id="success-response-illustrative-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-illustrative-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-illustrative-4)
 
 <a id="errors-concurrency-and-failure-recovery-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#errors-concurrency-and-failure-recovery-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#errors-concurrency-and-failure-recovery-4)
 
 <a id="required-verification-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#required-verification-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#required-verification-4)
 
 <a id="api-049--post-v1staffstoretransferstransfer_idreceipt"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#api-049--post-v1staffstoretransferstransfer_idreceipt)
+[Open section](../03-Modules/Store_Operations/APIs.md#api-049--post-v1staffstoretransferstransfer_idreceipt)
 
 <a id="caller-permissions-and-dependencies-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#caller-permissions-and-dependencies-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#caller-permissions-and-dependencies-5)
 
 <a id="http-request-contract-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#http-request-contract-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#http-request-contract-5)
 
 <a id="success-response-illustrative-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-illustrative-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-illustrative-5)
 
 <a id="errors-concurrency-and-failure-recovery-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#errors-concurrency-and-failure-recovery-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#errors-concurrency-and-failure-recovery-5)
 
 <a id="required-verification-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#required-verification-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#required-verification-5)
 
 <a id="operation-index"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#operation-index)
+[Open section](../03-Modules/Store_Operations/APIs.md#operation-index)
 
 <a id="feature-to-operation-coverage"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#feature-to-operation-coverage)
+[Open section](../03-Modules/Store_Operations/APIs.md#feature-to-operation-coverage)
 
 <a id="authentication-and-authorization"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#authentication-and-authorization)
+[Open section](../03-Modules/Store_Operations/APIs.md#authentication-and-authorization)
 
 <a id="request-headers"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-headers)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-headers)
 
 <a id="path-parameters"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#path-parameters)
+[Open section](../03-Modules/Store_Operations/APIs.md#path-parameters)
 
 <a id="query-parameters"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#query-parameters)
+[Open section](../03-Modules/Store_Operations/APIs.md#query-parameters)
 
 <a id="request-body-and-uploads"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-body-and-uploads)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-body-and-uploads)
 
 <a id="success-response"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response)
 
 <a id="endpoint-errors-and-recovery"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#endpoint-errors-and-recovery)
+[Open section](../03-Modules/Store_Operations/APIs.md#endpoint-errors-and-recovery)
 
 <a id="database-mapping-and-ownership"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#database-mapping-and-ownership)
+[Open section](../03-Modules/Store_Operations/APIs.md#database-mapping-and-ownership)
 
 <a id="operational-rules"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#operational-rules)
+[Open section](../03-Modules/Store_Operations/APIs.md#operational-rules)
 
 <a id="designed-contract-tests--not-run"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#designed-contract-tests--not-run)
+[Open section](../03-Modules/Store_Operations/APIs.md#designed-contract-tests--not-run)
 
 <a id="authentication-and-authorization-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#authentication-and-authorization-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#authentication-and-authorization-1)
 
 <a id="request-headers-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-headers-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-headers-1)
 
 <a id="path-parameters-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#path-parameters-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#path-parameters-1)
 
 <a id="query-parameters-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#query-parameters-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#query-parameters-1)
 
 <a id="request-body-and-uploads-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-body-and-uploads-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-body-and-uploads-1)
 
 <a id="success-response-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-1)
 
 <a id="endpoint-errors-and-recovery-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#endpoint-errors-and-recovery-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#endpoint-errors-and-recovery-1)
 
 <a id="database-mapping-and-ownership-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#database-mapping-and-ownership-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#database-mapping-and-ownership-1)
 
 <a id="operational-rules-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#operational-rules-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#operational-rules-1)
 
 <a id="designed-contract-tests--not-run-1"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#designed-contract-tests--not-run-1)
+[Open section](../03-Modules/Store_Operations/APIs.md#designed-contract-tests--not-run-1)
 
 <a id="authentication-and-authorization-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#authentication-and-authorization-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#authentication-and-authorization-2)
 
 <a id="request-headers-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-headers-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-headers-2)
 
 <a id="path-parameters-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#path-parameters-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#path-parameters-2)
 
 <a id="query-parameters-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#query-parameters-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#query-parameters-2)
 
 <a id="request-body-and-uploads-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-body-and-uploads-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-body-and-uploads-2)
 
 <a id="success-response-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-2)
 
 <a id="endpoint-errors-and-recovery-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#endpoint-errors-and-recovery-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#endpoint-errors-and-recovery-2)
 
 <a id="database-mapping-and-ownership-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#database-mapping-and-ownership-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#database-mapping-and-ownership-2)
 
 <a id="operational-rules-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#operational-rules-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#operational-rules-2)
 
 <a id="designed-contract-tests--not-run-2"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#designed-contract-tests--not-run-2)
+[Open section](../03-Modules/Store_Operations/APIs.md#designed-contract-tests--not-run-2)
 
 <a id="authentication-and-authorization-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#authentication-and-authorization-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#authentication-and-authorization-3)
 
 <a id="request-headers-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-headers-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-headers-3)
 
 <a id="path-parameters-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#path-parameters-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#path-parameters-3)
 
 <a id="query-parameters-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#query-parameters-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#query-parameters-3)
 
 <a id="request-body-and-uploads-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-body-and-uploads-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-body-and-uploads-3)
 
 <a id="success-response-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-3)
 
 <a id="endpoint-errors-and-recovery-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#endpoint-errors-and-recovery-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#endpoint-errors-and-recovery-3)
 
 <a id="database-mapping-and-ownership-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#database-mapping-and-ownership-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#database-mapping-and-ownership-3)
 
 <a id="operational-rules-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#operational-rules-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#operational-rules-3)
 
 <a id="designed-contract-tests--not-run-3"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#designed-contract-tests--not-run-3)
+[Open section](../03-Modules/Store_Operations/APIs.md#designed-contract-tests--not-run-3)
 
 <a id="authentication-and-authorization-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#authentication-and-authorization-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#authentication-and-authorization-4)
 
 <a id="request-headers-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-headers-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-headers-4)
 
 <a id="path-parameters-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#path-parameters-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#path-parameters-4)
 
 <a id="query-parameters-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#query-parameters-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#query-parameters-4)
 
 <a id="request-body-and-uploads-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-body-and-uploads-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-body-and-uploads-4)
 
 <a id="success-response-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-4)
 
 <a id="endpoint-errors-and-recovery-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#endpoint-errors-and-recovery-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#endpoint-errors-and-recovery-4)
 
 <a id="database-mapping-and-ownership-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#database-mapping-and-ownership-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#database-mapping-and-ownership-4)
 
 <a id="operational-rules-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#operational-rules-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#operational-rules-4)
 
 <a id="designed-contract-tests--not-run-4"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#designed-contract-tests--not-run-4)
+[Open section](../03-Modules/Store_Operations/APIs.md#designed-contract-tests--not-run-4)
 
 <a id="authentication-and-authorization-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#authentication-and-authorization-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#authentication-and-authorization-5)
 
 <a id="request-headers-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-headers-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-headers-5)
 
 <a id="path-parameters-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#path-parameters-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#path-parameters-5)
 
 <a id="query-parameters-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#query-parameters-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#query-parameters-5)
 
 <a id="request-body-and-uploads-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#request-body-and-uploads-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#request-body-and-uploads-5)
 
 <a id="success-response-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#success-response-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#success-response-5)
 
 <a id="endpoint-errors-and-recovery-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#endpoint-errors-and-recovery-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#endpoint-errors-and-recovery-5)
 
 <a id="database-mapping-and-ownership-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#database-mapping-and-ownership-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#database-mapping-and-ownership-5)
 
 <a id="operational-rules-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#operational-rules-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#operational-rules-5)
 
 <a id="designed-contract-tests--not-run-5"></a>
 
-[Open section](../03-Modules/Store-Operations/APIs.md#designed-contract-tests--not-run-5)
+[Open section](../03-Modules/Store_Operations/APIs.md#designed-contract-tests--not-run-5)

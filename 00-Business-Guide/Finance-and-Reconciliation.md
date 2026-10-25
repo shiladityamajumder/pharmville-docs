@@ -55,7 +55,7 @@ D-004 (provider results), D-007 (cash accountability), D-008/D-012 (accounting),
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Finance Payments | [HLD](../03-Modules/Payments/HLD.md) | [LLD](../03-Modules/Payments/LLD.md) | [API](../03-Modules/Payments/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#finance-payments) | [Cases](../03-Modules/Payments/Edge-Cases.md) |
+| Finance Payments | [HLD](../03-Modules/Finance_Payments/HLD.md) | [LLD](../03-Modules/Finance_Payments/LLD.md) | [API](../03-Modules/Finance_Payments/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#finance-payments) | [Cases](../03-Modules/Finance_Payments/Edge-Cases.md) |
 
 Technical workflows: [WF-005](../06-Workflows/WF-005-Payment-and-Confirmation.md) · [WF-009](../06-Workflows/WF-009-COD-Collection.md) · [WF-010](../06-Workflows/WF-010-Cancellation-Return-and-Refund.md) · [WF-012](../06-Workflows/WF-012-Report-Export-and-Audit.md).
 

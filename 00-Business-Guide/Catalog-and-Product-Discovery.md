@@ -51,7 +51,7 @@ D-005 (stock), D-006 (classification), D-010 (alternatives), D-019 (catalog sour
 
 | Module | Architecture | Implementation | API | Data | Edge cases and tests |
 | --- | --- | --- | --- | --- | --- |
-| Product Catalog | [HLD](../03-Modules/Product-Catalog/HLD.md) | [LLD](../03-Modules/Product-Catalog/LLD.md) | [API](../03-Modules/Product-Catalog/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#product-catalog) | [Cases](../03-Modules/Product-Catalog/Edge-Cases.md) |
+| Product Catalog | [HLD](../03-Modules/Product_Catalog/HLD.md) | [LLD](../03-Modules/Product_Catalog/LLD.md) | [API](../03-Modules/Product_Catalog/APIs.md) | [Mapping](../04-Database/Module-Mapping.md#product-catalog) | [Cases](../03-Modules/Product_Catalog/Edge-Cases.md) |
 
 Technical workflows: [WF-002](../06-Workflows/WF-002-Search-and-Availability.md).
 

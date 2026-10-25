@@ -21,7 +21,7 @@ Checkout owns the cart/quote/intent and delegates order creation to Operations; 
 
 Candidate existing tables: `commerce.carts`, `commerce.cart_items`, `commerce.checkouts`, `commerce.orders`, `commerce.order_revisions`, `warehouse.stock_reservations`. Exact write fields and runtime grants remain per-operation review under D-024.
 
-Related proposed operations: API-018–API-021 and API-052/API-053. [Cart Checkout](../03-Modules/Cart-Checkout/APIs.md) · [Inventory](../03-Modules/Inventory/APIs.md) · [Order Operations](../03-Modules/Order-Management/APIs.md).
+Related proposed operations: API-018–API-021 and API-052/API-053. [Cart Checkout](../03-Modules/Cart_Checkout/APIs.md) · [Inventory](../03-Modules/Inventory/APIs.md) · [Order Operations](../03-Modules/Order_Operations/APIs.md).
 
 ## Sequence
 

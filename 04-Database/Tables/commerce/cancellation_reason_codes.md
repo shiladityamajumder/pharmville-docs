@@ -116,7 +116,7 @@ Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, va
 | Scope | Global catalog/reference; scope still limits administrative maintenance. |
 | Referencing tables | `commerce.cancellations` |
 | Features | `ORD-04` |
-| API consumers | [API-027](../../../03-Modules/Customer-Orders/APIs.md) |
+| API consumers | [API-027](../../../03-Modules/Customer_Orders/APIs.md) |
 
 ### Expected initial records
 

@@ -6,7 +6,7 @@ Status: proposed orchestration for ACC-01 and AUTH-01–AUTH-04. Customer_Accoun
 
 Initial login has no existing-session requirement. It requires a valid normalized destination or approved staff identifier and the proof required by the current role policy. MFA completion uses a purpose-bound pre-session challenge; refresh uses a refresh credential.
 
-Only protected post-login operations require an existing application session. See [authentication contracts](../03-Modules/Authentication/APIs.md) and [customer contracts](../03-Modules/Customer-Accounts/APIs.md).
+Only protected post-login operations require an existing application session. See [authentication contracts](../03-Modules/Authentication_Access/APIs.md) and [customer contracts](../03-Modules/Customer_Accounts/APIs.md).
 
 ## Normal path and transaction boundary
 
@@ -48,13 +48,13 @@ sequenceDiagram
 
 ## Required tests
 
-Link TC-ACC-01-01 through TC-ACC-01-05 in [Customer LLD](../03-Modules/Customer-Accounts/LLD.md). Also test login without an existing bearer token, MFA bypass, refresh replay, role removal during verification, rollback before credential return, missing profile name, required consent, provider fallback and redacted logs. Proposed tests are not execution evidence.
+Link TC-ACC-01-01 through TC-ACC-01-05 in [Customer LLD](../03-Modules/Customer_Accounts/LLD.md). Also test login without an existing bearer token, MFA bypass, refresh replay, role removal during verification, rollback before credential return, missing profile name, required consent, provider fallback and redacted logs. Proposed tests are not execution evidence.
 
 
 ## Unified multi-workspace continuation
 
 After committed proof/session creation, API-099 returns identity and permission-derived choices. API-101 pages current choices; API-102 activates one signed assignment/scope selector with session context ETag. A stronger target requires API-103 proof first; API-104 enrollment cannot bootstrap without fresh phone OTP/password and staff eligibility. API-093 returns permissions only for the active context. Role removal clears that context; another valid assignment remains selectable. API-091 rotation detects spent-token replay; API-092 revokes owned lineage.
 
-The [authorization commit-order policy](../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation) supersedes any ambiguous cache-expiry wording above: no positive authorization cache; new checks after revocation commit deny. Failure attempt counters commit on denied proofs; successful proof/session/factor-counter/refresh-lineage changes commit together. Added security tables are [authentication_challenges](../04-Database/Tables/identity/authentication_challenges.md) and [session_refresh_tokens](../04-Database/Tables/identity/session_refresh_tokens.md).
+The [authorization commit-order policy](../03-Modules/Authentication_Access/Unified-Identity-Architecture.md#authorization-consistency-and-revocation) supersedes any ambiguous cache-expiry wording above: no positive authorization cache; new checks after revocation commit deny. Failure attempt counters commit on denied proofs; successful proof/session/factor-counter/refresh-lineage changes commit together. Added security tables are [authentication_challenges](../04-Database/Tables/identity/authentication_challenges.md) and [session_refresh_tokens](../04-Database/Tables/identity/session_refresh_tokens.md).
 
 Designed tests additionally cover revoked assignment after chooser, stale generation in another tab, cross-organization selector substitution, one staff session across panels, factor replay during concurrent step-up, enrollment without existing staff eligibility, no-workspace fallback, and refresh response loss. Tests remain NOT RUN.
