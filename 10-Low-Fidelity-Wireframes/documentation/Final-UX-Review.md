@@ -20,7 +20,9 @@ Mobile has customer bottom navigation, stacked product/cart/checkout content and
 
 Direct navigation preserves the current role. Unsupported Staff Mobile and Rider Website combinations provide helpful handling.
 
-Nine guided tasks remain available. Required actions gate continuation and explain what is missing. The prescription handoff explicitly offers Continue as Pharmacist, opens the Website workspace and retains the submitted order. Prepared starting records require deliberate selection and confirmation before replacing progress.
+Thirteen guided tasks are available. Required actions gate continuation and explain what is missing. The prescription handoff explicitly offers Continue as Pharmacist, opens the Website workspace and retains the submitted order. Procurement/replenishment, reverse logistics and customer support now follow linked shared demo records. Prepared starting records require deliberate selection and confirmation before replacing progress.
+
+The shared Access workspace illustrates one identity session, derived demo workspace choices, staff password plus authenticator, customer/rider OTP adapters, revocation and a fresh step-up challenge for proposed elevated workspace examples. The local step-up is an interaction demonstration; target list, proof freshness and session policy remain pending Security/IAM approval. Return eligibility remains an owner-provided decision, quarantined returns are never restocked automatically, and the Finance decision remains separate from pickup/inspection.
 
 Situation selection and accepted business commands remain distinct. Payment situations use the existing quote, stock, clinical and payment handlers. Other situation controls preview the task’s condition and retain its existing command checks. Returning to normal does not reverse recorded money, stock, review or delivery effects.
 
@@ -28,11 +30,11 @@ The optional checkout example creates an eligible fictional checkout without cre
 
 ## Browser and visual evidence
 
-The explicit-experience suite passes **170 assertions** with no JavaScript errors. It exercises both shopping paths from selection through search, exact product, cart, address, patient, accepted summary, lost-confirmation payment recovery and order tracking. Account/address setup is explicitly supplied as a test fixture; shopping and payment actions use the UI.
+The explicit-experience suite result and current assertion count are recorded in [Validation Results](Validation-Results.md). It exercises both shopping paths from selection through search, exact product, cart, address, patient, accepted summary, lost-confirmation payment recovery and order tracking. Account/address setup is explicitly supplied as a test fixture; shopping and payment actions use the UI.
 
 It verifies Mobile-added cart quantity/price on Website, unknown pending payments without duplicate references, real prescription upload and handoff, actual pharmacist rejection, store picking/packing, assignment, rider acceptance/custody/pickup, real failed delivery and pending refund projection.
 
-Every supported experience-prefixed screen is also checked in its intended normal layout: Mobile at 390 px, Website at 1440 px. The existing full suite separately visits 83 legacy screens, 718 screen/scenario combinations and all six required widths. Product UX regressions pass 13 assertions. See [Validation Results](Validation-Results.md) for final counts and commands.
+Every supported experience-prefixed screen is also checked in its intended normal layout: Mobile at 390 px, Website at 1440 px. The full suite visits all 91 registered screens, 779 screen/scenario render associations and all six required widths. Product UX assertions, domain-flow assertions, and exact run results are reported in [Validation Results](Validation-Results.md); that file is updated only from current execution evidence.
 
 Fresh screenshots in ignored `artifacts/experiences/` cover the chooser, both selectors, both customer homes/products/carts/checkouts/pending payments, prescription rejection, pharmacist decision, Rider task, failed delivery and guided handoff. Additional captures show stock shortage and refund pending.
 

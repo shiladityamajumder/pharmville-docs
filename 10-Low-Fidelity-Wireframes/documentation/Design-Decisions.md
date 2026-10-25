@@ -6,6 +6,8 @@ Current sources contain 110 inherited draft features, 18 module groups, a Busine
 
 Customer and rider are mobile-first experiences. Administration, pharmacy, fulfillment, inventory, delivery management, finance, reporting and audit are views of one shared protected staff experience. The Explorer groups workspaces for navigation; it does not propose fifteen separate applications.
 
+Prototype counts and limits are tracked in the [completion ledger](Prototype-Completion-Ledger.md). The user-facing 13 journeys supplement, and do not replace, the 14 authoritative cross-module workflows in the project documentation.
+
 ## UX choices
 
 - Experience mode is the initial view. Product screens show the user task and its next action; feature IDs, screen IDs, role selection, scenario details and reset controls live in the Review tools dialog. The fictional-demo banner is compact and stays outside the workflow.
@@ -16,6 +18,8 @@ Customer and rider are mobile-first experiences. Administration, pharmacy, fulfi
 - White/gray/black, borders, system fonts and labelled placeholders emphasize hierarchy and behavior. Mobile operational tables become cards retaining column labels; no dense table is simply clipped.
 - Hash routes support direct links, Back/Forward and refresh under a project subpath. One shared order and append-only demonstration movements connect customer, pharmacy, stock, fulfillment, rider and finance. Browser storage persists the demo and updates other local tabs, not real devices.
 - Selecting a screen card explicitly chooses its illustrative role/site. Entering a workspace URL retains the current persona and denies inappropriate access. These controls simulate permissions; they are not production authentication. Explicit session revocation blocks protected staff forms until demo MFA completes.
+- The Access workspace demonstrates one synthetic identity session across staff password/authenticator and customer/rider OTP adapters. Workspaces come from fixture assignments; unauthorized context requests are denied. Administration, Pharmacist and Finance show a fresh authenticator step-up before context activation as proposed examples. Exact target policy/freshness, session limits and revocation consistency remain open; see the [role/workspace matrix](Role-Workspace-Matrix.md). Review Mode persona selection is isolated and never creates an authenticated session.
+- Shared local state connects supplier/PO proposal → linked receiving → warehouse/store transfer, customer return → owner eligibility → reverse pickup → quarantine → independent Finance review, and customer support case → triage/status → customer view. These flows append synthetic events; no provider or supplier is contacted.
 - Native dialogs support keyboard focus, Escape and return to the invoking action. Inputs have labels and visible focus; errors/statuses are announced without relying on color.
 
 ## Clinical, payment and stock sequence
@@ -33,6 +37,7 @@ COD begins as amount due and becomes actual collection only with accepted doorst
 - No real auth, password storage, provider request, WhatsApp/SMS/push, GPS, map/call or financial transaction occurs. Local code is not a security boundary.
 - Bulk tabular import uses pasted CSV rather than reading Excel workbooks. Export creates Excel-readable TSV, not native XLSX. These format approximations support UX review and are not claimed spreadsheet integrations.
 - Legal invoices, GST filing definitions, credit-note issuance, real COD destination proof, offers activation, warehouse dispensing fallback, urgent capacity, rider earnings and doorstep clinical SOPs are blocked/proposed where policy is missing. Their screens explain the missing decision or record a review request; they do not fabricate approved outcomes.
+- Procurement is an illustrative extension beyond the inherited receiving/replenishment behavior; supplier qualification, purchasing authority, commercial fields and external ordering remain undecided. Return eligibility and condition rules are never inferred; the local operator must supply a policy reference, returned stock stays quarantined, and Finance approval remains independent.
 - No put-away workflow is invented; the current scoped receiving/lot flow has no approved put-away requirement. Future diagnostics, insurance, teleconsultation, membership and marketplace schemas do not create extra wireframe scope.
 
 See [feature coverage](Feature-Coverage.md) for each classification and its actual UI evidence.

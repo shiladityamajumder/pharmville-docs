@@ -1,9 +1,9 @@
 {
-  "screens": 83,
+  "screens": 91,
   "features": 110,
   "modules": 18,
   "scenarioDefinitions": 35,
-  "screenScenarioCombinations": 718,
+  "screenScenarioCombinations": 779,
   "coverage": {
     "Covered by interaction/state": 23,
     "Covered by screen": 70,

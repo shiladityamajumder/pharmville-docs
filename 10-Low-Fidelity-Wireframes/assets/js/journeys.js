@@ -1,12 +1,17 @@
 export const userEntries = [
-  {label:'Customer', detail:'Find products, place orders and follow delivery.', route:'customer/home'},
-  {label:'Pharmacist', detail:'Review prescriptions and record line decisions.', route:'pharmacy/queue'},
-  {label:'Store staff', detail:'Prepare accepted orders and hand parcels to riders.', route:'store/queue'},
-  {label:'Warehouse staff', detail:'Receive stock and fulfill store requests.', route:'warehouse/receiving'},
-  {label:'Delivery manager', detail:'Assign ready parcels and resolve exceptions.', route:'delivery/assignment'},
-  {label:'Delivery rider', detail:'Pick up, deliver and record proof on a phone.', route:'rider/tasks'},
-  {label:'Admin', detail:'Manage people and approved catalog content.', route:'staff/dashboard'},
-  {label:'Finance team', detail:'Review payments, refunds and cash differences.', route:'staff/reconciliation'}
+  {label:'Customer', detail:'Shop, manage an account, track orders and contact support.', route:'customer/home'},
+  {label:'Pharmacist', detail:'Review assigned prescriptions and record exact-line decisions.', route:'pharmacy/queue'},
+  {label:'Store staff', detail:'Prepare eligible orders and request replenishment for an assigned store.', route:'store/queue'},
+  {label:'Warehouse staff', detail:'Receive supplier stock, dispatch transfers and inspect quarantined returns.', route:'warehouse/receiving'},
+  {label:'Procurement', detail:'Review supplier proposals and purchase orders linked to stock demand.', route:'procurement/orders'},
+  {label:'Order operations', detail:'Monitor orders, return intake and operational exceptions.', route:'staff/orders'},
+  {label:'Delivery manager', detail:'Assign customer deliveries and reverse pickups.', route:'delivery/assignment'},
+  {label:'Delivery rider', detail:'Accept tasks and record delivery or return custody on a phone.', route:'rider/tasks'},
+  {label:'Finance team', detail:'Review payments, return decisions, refunds and cash differences.', route:'staff/refunds'},
+  {label:'Customer support', detail:'Route and update customer cases across responsible teams.', route:'staff/support'},
+  {label:'Admin', detail:'Manage proposed access, approved catalog content and locations.', route:'staff/dashboard'},
+  {label:'Auditor', detail:'Review read-only activity history within the selected demo scope.', route:'staff/audit'},
+  {label:'Reports', detail:'Prepare scoped synthetic operational reports.', route:'staff/reports'}
 ];
 
 const step = (route, title, help, role='') => ({route,title,help,role});
@@ -78,12 +83,47 @@ export const journeys = {
     step('warehouse/replenishment','Review the store request','Check the request and available capacity.', 'Warehouse staff'),
     step('warehouse/dispatch','Dispatch a transfer','Deduct the exact source quantity once.', 'Warehouse staff'),
     step('store/receipt','Confirm what arrived','Record actual received quantity; preserve any shortage.', 'Store staff')
+  ]},
+  procurement: {title:'Replenish stock through procurement', goal:'Connect a store request to a proposed purchase order and receiving record using the same synthetic supplier and stock state.', steps:[
+    step('warehouse/replenishment','Review stock demand','Open the current store replenishment request.', 'Warehouse staff'),
+    step('procurement/orders','Create and approve a purchase order','Record a local approval; no supplier is contacted.', 'Procurement'),
+    step('warehouse/receiving','Receive approved goods','Use the linked purchase order and record actual quantity.', 'Warehouse staff'),
+    step('warehouse/dispatch','Dispatch to the requesting store','Pick the exact newly received warehouse batch.', 'Warehouse staff'),
+    step('store/receipt','Confirm store receipt','Record actual quantity received at the store.', 'Store staff'),
+    step('staff/inventory','Review warehouse stock','Verify the accepted batch in the shared inventory state.', 'Store worker')
+  ]},
+  replenishment: {title:'Recover from an unavailable product', goal:'Review an unavailable item, request stock, link a purchase order and update shared warehouse inventory.', steps:[
+    step('staff/inventory','Review current availability','Inspect batches and blocked lots.', 'Store worker'),
+    step('store/replenishment','Submit store demand','Use a unique request reference and quantity.', 'Store staff'),
+    step('procurement/orders','Create and approve replenishment PO','Link procurement approval to this store request.', 'Procurement'),
+    step('warehouse/receiving','Receive supplier stock','Record actual usable batch quantity.', 'Warehouse staff'),
+    step('warehouse/dispatch','Dispatch stock to the store','Use the exact supplier-received batch.', 'Warehouse staff'),
+    step('store/receipt','Confirm accepted store quantity','Only received packs update store availability.', 'Store staff'),
+    step('customer/search','Confirm catalog availability','Review the indicative stock change in the customer catalog.')
+  ]},
+  reverse: {title:'Return and reverse logistics', goal:'Carry a delivered order through owner eligibility, pickup, quarantine inspection and separate Finance review.', steps:[
+    step('customer/return','Submit an item-specific request','Eligibility and inspection await an owner outcome.'),
+    step('staff/returns','Record owner eligibility outcome','Enter an approved policy reference; no criteria are inferred.', 'Order operator'),
+    step('delivery/returns','Assign a reverse pickup','Assign a rider only after an Eligible outcome.', 'Delivery manager'),
+    step('rider/login','Sign in as the assigned rider','Use the fictional identity and demo code.', 'Delivery rider'),
+    step('rider/returns','Confirm pickup custody','Record the assigned pickup reference.', 'Delivery rider'),
+    step('warehouse/returns','Receive and quarantine','Record physical receipt; inventory is not restocked.', 'Warehouse staff'),
+    step('staff/refunds','Record Finance review','A separate Finance decision is required before any refund intent.', 'Finance team'),
+    step('customer/refund','Follow refund status','The customer sees the same refund reference and status.')
+  ]},
+  support: {title:'Resolve a customer support case', goal:'Create an order-linked case, route it, record operational history and show the updated status to the customer.', steps:[
+    step('customer/login','Start a customer session','Use the fictional OTP flow.'),
+    step('customer/otp','Verify the demo code','The customer identity is established after OTP verification.'),
+    step('customer/help','Contact support','Sign in and provide a minimal non-sensitive summary.'),
+    step('staff/support','Assign and update the case','Route to the responsible team and record an update.', 'Support'),
+    step('customer/help','Check case history','Review the latest status and response.')
   ]}
 };
 
 export function stepsForJourney(id, state) {
   const selected=journeys[id];
   if(!selected)return [];
+  if(id==='reverse'&&state.returnCases?.[0]?.eligibility==='Not eligible')return selected.steps.slice(0,2);
   if(id==='order' && state.cart.some(item=>state.products.find(p=>p.id===item.productId)?.class==='P')) {
     return [step('customer/home','Find a product','Search or browse, then add a prescription medicine.'),step('customer/cart','Review your cart','Check the items and quantities.'),step('customer/checkout-address','Choose a delivery address','Only a confirmed serviceable address can continue.'),step('customer/checkout-patient','Choose the patient','One authorized patient is used for this order.'),step('customer/checkout-summary','Review your order','Accept the current items, address and total.'),step('customer/prescription-upload','Provide prescription details','Enter a fictional filename; no file contents are uploaded.'),step('pharmacy/queue','Pharmacist receives the request','The order waits for an authorized pharmacist.','Pharmacist'),step('pharmacy/review','Review the submitted evidence','Compare the patient, prescription and exact P lines.','Pharmacist'),step('pharmacy/decision','Record a decision','The pharmacist must make the applicable line decision.','Pharmacist'),step('customer/prescription-status','Customer reviews the result','Eligible lines still require customer acceptance.','Customer'),step('customer/payment','Complete the payment step','Payment remains blocked until review and stock checks pass.'),step('customer/payment-result','Check the payment result','The order is updated only after payment is verified.'),step('customer/tracking','Follow the order','See the next fulfillment milestone.')];
   }
@@ -129,6 +169,32 @@ export function journeyGate(id, route, state) {
   if(id==='return'){
     if(route==='customer/cancellation')return Boolean(o.items?.length);
     if(route==='customer/return')return o.delivery==='Delivered';
+  }
+  if(id==='reverse'){
+    const c=state.returnCases?.[0];
+    if(route==='customer/return')return Boolean(o.delivery==='Delivered'&&c);
+    if(route==='staff/returns')return Boolean(c&&c.eligibility!=='Pending owner policy review');
+    if(route==='delivery/returns')return Boolean(c?.pickup?.status==='Assigned');
+    if(route==='rider/login')return state.riderSession===true;
+    if(route==='rider/returns')return Boolean(c?.pickup?.status==='Picked up');
+    if(route==='warehouse/returns')return Boolean(c?.inspection);
+    if(route==='staff/refunds')return Boolean(c?.financeDecision);
+  }
+  if(id==='procurement'||id==='replenishment'){
+    const po=state.procurement?.purchaseOrders?.[0];
+    if(route==='store/replenishment')return state.warehouse.transferStatus==='Requested';
+    if(route==='procurement/orders')return Boolean(po&&['Approved — local simulation','Received','Received with discrepancy'].includes(po.status));
+    if(route==='warehouse/receiving')return Boolean(state.warehouse.receiptKey&&['Received','Received with discrepancy'].includes(po?.status));
+    if(route==='warehouse/dispatch')return state.warehouse.transferStatus==='In transit';
+    if(route==='store/receipt')return ['Received','Received with shortage'].includes(state.warehouse.transferStatus);
+    if(route==='staff/inventory')return ['Received','Received with shortage'].includes(state.warehouse.transferStatus);
+    if(route==='customer/search')return ['Received','Received with shortage'].includes(state.warehouse.transferStatus);
+  }
+  if(id==='support'){
+    if(route==='customer/login')return Boolean(state.customer.otpRequested);
+    if(route==='customer/otp')return Boolean(state.customer.loggedIn);
+    if(route==='customer/help')return Boolean(state.supportCases?.length);
+    if(route==='staff/support')return Boolean(state.supportCases?.[0]?.history?.length>1);
   }
   if(id==='receiving'&&route==='store/receipt')return state.warehouse.transferStatus==='In transit'||state.warehouse.transferStatus==='Received';
   return true;

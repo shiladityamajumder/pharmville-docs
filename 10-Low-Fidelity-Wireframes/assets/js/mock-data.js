@@ -1,6 +1,6 @@
 export const STORAGE_KEY='pharmville-wireframe-demo-v1';
 export function initialState(){return {
- schema:1,role:'Customer',location:'Demo Store 01',demoOtp:'246810',demoDeliveryOtp:'135790',duty:'Off duty',search:'',category:'All',demoFixture:{id:'customer',label:'Fresh shopping demo',description:'No order, payment, prescription approval or stock movement has been completed.',prepared:false},
+ schema:1,role:'Customer',location:'Demo Store 01',demoOtp:'246810',demoDeliveryOtp:'135790',duty:'Off duty',search:'',category:'All',identitySession:null,domainEvents:[],supportCases:[],returnCases:[],suppliers:[{id:'SUP-DEMO-01',name:'Fictional supplier A',status:'Demo reference only',approval:'Not verified'}],procurement:{purchaseOrders:[]},demoFixture:{id:'customer',label:'Fresh shopping demo',description:'No order, payment, prescription approval or stock movement has been completed.',prepared:false},
  customer:{loggedIn:false,otpRequested:false,profileComplete:false,name:'Demo Customer',email:'customer@example.test',phone:'0000000000',consent:false,addresses:[{id:'ADDR-1',label:'Home (fictional)',line:'10 Fictional Lane, Demo Block',pin:'000000',serviceable:true}],family:[{id:'PAT-1',name:'Self (demo)',relation:'Self'}],wishlist:[],deletion:'Not requested',contactPending:''},
  products:[
  {id:'PRD-1',name:'Demo wellness pack',class:'O',category:'Wellness',composition:'Fictional non-medicine product',strength:'Not applicable',form:'Pack',pack:'1 demo pack',price:80,stock:12,image:false,approved:true},

@@ -4,15 +4,16 @@ import {screens as customer} from '../customer/screens.js';
 import {screens as staff} from '../staff/screens.js';
 import {screens as operations} from '../operations/screens.js';
 import {screens as access} from '../shared/access-screens.js';
+import {screens as extended} from '../operations/extended-screens.js';
 import {initialState} from '../assets/js/mock-data.js';
 import {scenarios} from '../assets/js/scenarios.js';
 import {featureCatalog} from '../assets/js/feature-catalog.js';
 import {chooser,selector,journeyChooser} from '../assets/js/experience-pages.js';
 import {journeys} from '../assets/js/journeys.js';
 const root=path.resolve(import.meta.dirname,'..');
-const screens=[...customer,...staff,...operations,...access];
+const screens=[...customer,...staff,...operations,...access,...extended];
 const errors=[],actions=new Set(),links=new Set();
-const sourceFiles=['customer/screens.js','staff/screens.js','operations/screens.js','shared/access-screens.js','assets/js/app.js'];
+const sourceFiles=['customer/screens.js','staff/screens.js','operations/screens.js','operations/extended-screens.js','shared/access-screens.js','assets/js/app.js'];
 const source=sourceFiles.map(p=>fs.readFileSync(path.join(root,p),'utf8')).join('\n');
 const known=new Set(screens.map(s=>s.route));
 for(const s of screens){for(const key of new Set(['normal',...s.scenarios])){
@@ -33,7 +34,7 @@ const sourceIds=[...authoritative.matchAll(/^\| `([A-Z]+-\d{2})` \|/gm)].map(m=>
 if(JSON.stringify(sourceIds)!==JSON.stringify(featureCatalog.map(f=>f.id)))errors.push('Generated feature catalog differs from authoritative source');
 for(const id of sourceIds)if(!screens.some(s=>s.features.includes(id)))errors.push('Missing screen/state mapping: '+id);
 const ids=new Set(sourceIds);for(const s of screens)for(const id of s.features)if(!ids.has(id))errors.push('Unknown feature '+id+' on '+s.route);
-for(const file of ['index.html','assets/css/base.css','assets/css/components.css','assets/css/responsive.css','assets/js/app.js','documentation/Screen-Inventory.md','documentation/Complete-Screen-Matrix.md','documentation/Feature-Coverage.md','documentation/User-Flows.md','documentation/Edge-Case-Coverage.md','documentation/UX-State-Coverage.md','documentation/Design-Decisions.md','documentation/Final-UX-Review.md','documentation/Prototype-Test-Plan.md','documentation/How-to-Run.md'])if(!fs.existsSync(path.join(root,file)))errors.push('Missing required artifact '+file);
+for(const file of ['index.html','assets/css/base.css','assets/css/components.css','assets/css/responsive.css','assets/js/app.js','documentation/Screen-Inventory.md','documentation/Complete-Screen-Matrix.md','documentation/Feature-Coverage.md','documentation/User-Flows.md','documentation/Role-Workspace-Matrix.md','documentation/Prototype-Completion-Ledger.md','documentation/Validation-Results.md','documentation/Edge-Case-Coverage.md','documentation/UX-State-Coverage.md','documentation/Design-Decisions.md','documentation/Final-UX-Review.md','documentation/Prototype-Test-Plan.md','documentation/How-to-Run.md','tests/domain-workflows.mjs','tests/extended-workflows.mjs'])if(!fs.existsSync(path.join(root,file)))errors.push('Missing required artifact '+file);
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 for(const file of ['assets/js/experience-pages.js','assets/js/situation-copy.js','assets/css/experience-choice.css','documentation/Platform-and-Screen-Coverage.md'])if(!fs.existsSync(path.join(root,file)))errors.push('Missing experience artifact '+file);
 for(const m of html.matchAll(/(?:src|href)="([^"]+)"/g))if(!m[1].startsWith('#')&&!m[1].startsWith('data:')&&!fs.existsSync(path.join(root,m[1])))errors.push('Broken HTML asset '+m[1]);

@@ -84,8 +84,16 @@ Generated from the actual screen registry by `node 10-Low-Fidelity-Wireframes/to
 | SCR-RID-005 | Doorstep proof and completion | rider / rider | Rider | `RID-04`, `RID-05` | normal, loading, empty, validation, network, permission, session, duplicate, conflict, otp-wrong, offline, cod-shortage | [Open](../index.html#/rider/completion) |
 | SCR-RID-006 | Failed attempt and rider history | rider / rider | Rider | `RID-06`, `RID-07` | normal, loading, empty, validation, network, permission, session, duplicate, conflict, delivery-failed | [Open](../index.html#/rider/failure) |
 | SCR-RID-007 | Daily deliveries and earnings status | rider / rider | Rider | `RID-07`, `RID-04` | normal, loading, empty, validation, network, permission, session, duplicate, conflict | [Open](../index.html#/rider/history) |
-| SCR-ACC-001 | Staff sign-in | staff / access | Admin | `AUTH-01`, `AUTH-03` | normal, validation, permission, session, conflict | [Open](../index.html#/access/login) |
-| SCR-ACC-002 | Authenticator verification | staff / access | Admin | `AUTH-01`, `AUTH-02` | normal, validation, otp-wrong, otp-expired, rate-limit | [Open](../index.html#/access/mfa) |
-| SCR-ACC-003 | Sessions and access checks | staff / access | Admin | `AUTH-02`, `AUTH-03`, `AUTH-04` | normal, validation, permission, session, conflict | [Open](../index.html#/access/sessions) |
+| SCR-ACC-001 | Unified staff identity sign-in | staff / access | Admin | `AUTH-01`, `AUTH-03` | normal, validation, permission, session, conflict | [Open](../index.html#/access/login) |
+| SCR-ACC-002 | Privileged authenticator challenge | staff / access | Admin | `AUTH-01`, `AUTH-02` | normal, validation, otp-wrong, otp-expired, rate-limit | [Open](../index.html#/access/mfa) |
+| SCR-ACC-003 | Identity session and access checks | staff / access | Admin | `AUTH-02`, `AUTH-03`, `AUTH-04` | normal, validation, permission, session, conflict | [Open](../index.html#/access/sessions) |
+| SCR-ACC-004 | Authorized workspace selection | staff / access | Admin | `AUTH-04` | normal, validation, permission, session, conflict | [Open](../index.html#/access/workspaces) |
+| SCR-PRO-001 | Supplier directory and proposals | staff / procurement | Procurement | `WH-01` | normal, loading, empty, network, permission, session, duplicate, conflict | [Open](../index.html#/procurement/suppliers) |
+| SCR-PRO-002 | Replenishment demand and purchase orders | staff / procurement | Procurement | `WH-02`, `WH-01` | normal, loading, empty, network, permission, session, duplicate, conflict | [Open](../index.html#/procurement/orders) |
+| SCR-RET-001 | Return eligibility and owner review queue | staff / returns | Order operator | `ORD-05`, `ORD-06` | normal, loading, empty, network, permission, session, duplicate, conflict | [Open](../index.html#/staff/returns) |
+| SCR-RET-002 | Reverse pickup dispatch | staff / delivery | Dispatcher | `DLV-03`, `DLV-05` | normal, loading, empty, network, permission, session, duplicate, conflict | [Open](../index.html#/delivery/returns) |
+| SCR-RET-003 | Rider return pickup task | rider / rider | Rider | `RID-02`, `RID-06` | normal, loading, empty, network, permission, session, duplicate, conflict | [Open](../index.html#/rider/returns) |
+| SCR-RET-004 | Returned item receipt and inspection | staff / warehouse | Warehouse worker | `WH-05` | normal, loading, empty, network, permission, session, duplicate, conflict | [Open](../index.html#/warehouse/returns) |
+| SCR-CUS-HELP-001 | Customer help and case history | customer / customer | Customer | `ORD-05` | normal, loading, empty, network, permission, session, duplicate, conflict | [Open](../index.html#/customer/help) |
 
-83 actual screens. See [Feature Coverage](Feature-Coverage.md) for what is demonstrated, backend-only or blocked. The role dropdown is a reviewer fixture; signed production permissions remain undecided.
+91 actual screens. See [Feature Coverage](Feature-Coverage.md) for what is demonstrated, backend-only or blocked. The role dropdown is a reviewer fixture; signed production permissions remain undecided.

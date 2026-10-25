@@ -4,11 +4,11 @@ The prototype opens at [Choose Experience](../index.html#/choose). [Mobile App](
 
 Journey progress follows the current route and shared mock data; required business actions remain explicit.
 
-The Journeys page offers these guided tasks: **Create an account**, **Find and order a product**, **Order a prescription medicine**, **Pay for an order**, **Prepare an order at a store**, **Deliver an order**, **Request a return**, **Process a refund**, and **Receive stock at a warehouse**.
+The Journeys page offers 13 guided tasks: **Create an account**, **Find and order a product**, **Order a prescription medicine**, **Pay for an order**, **Prepare an order at a store**, **Deliver an order**, **Request a return**, **Process a refund**, **Receive stock at a warehouse**, **Replenish stock through procurement**, **Recover from an unavailable product**, **Return and reverse logistics**, and **Resolve a customer support case**. The [role/workspace matrix](Role-Workspace-Matrix.md) explains proposed access boundaries; the [completion ledger](Prototype-Completion-Ledger.md) records current coverage and limitations.
 
 At each journey start, keep the current data or load that journey’s prepared demo fixture. Replacing existing progress requires confirmation. Cross-role handoffs offer **Continue as [role]** in the journey itself, preserve the same record, and retain permission and business gates.
 
-Staff handoffs open Website; Rider handoffs open Mobile. Entering the destination URL does not grant its role.
+Staff handoffs open Website; Rider handoffs open Mobile. Entering the destination URL does not grant its role. The local Access workspace illustrates a single session with backend-derived demo workspaces and permission checks; demo reviewer persona controls remain separate from authenticated workspace selection.
 
 All links below open the same local application and persistent fictional records. The first visit is a fresh shopping state with an empty cart and no order or payment. Prepared fixtures are visibly labelled as demo data; any prior completed action they contain is historical. Reset between independent demonstrations.
 
@@ -71,13 +71,25 @@ A delivered item can have an item/quantity-specific [return request](../index.ht
 3. The store [records actual receipt](../index.html#/store/receipt). Four accepted packs from five dispatched leaves a shortage of one. Duplicate receipt/dispatch references cannot apply the movement twice.
 4. Inspect [scoped batches](../index.html#/staff/inventory) and [movement ledger](../index.html#/staff/ledger). Warehouse fallback/urgent capacity remain policy review requests.
 
+## Procurement and unavailable-item recovery
+
+Use **Replenish stock through procurement** for the PO-linked path, or **Recover from an unavailable product** to start at the current store stock view. The store raises one unique replenishment request, Procurement creates and locally approves a PO against the synthetic unverified supplier, and Warehouse records actual accepted quantity against that PO. Warehouse receipt increases only warehouse stock. A separate transfer and actual store receipt are required before the customer catalog reflects the indicative availability.
+
+This is a proposed procurement interaction because the inherited warehouse flow starts from receiving and replenishment approval but does not approve supplier commercial terms, ordering integration, or procurement authority. No supplier is contacted. Existing product and warehouse invariants still apply: replay does not credit twice, unreceived transfers remain in transit, and stock becomes available at the destination only after receipt.
+
+## Return, reverse pickup and support
+
+The basic return journey records a delivered-item request and leaves eligibility pending. **Return and reverse logistics** continues through an owner-entered eligibility outcome with a policy reference, dispatcher assignment, current rider pickup, warehouse physical receipt and quarantine, then an independent Finance decision before a refund intent can be created. The prototype does not infer return windows or condition rules, issue refunds automatically, or place returned goods back into saleable inventory.
+
+For support, sign in through the customer OTP fixture, open [Customer Help](../index.html#/customer/help), and create a minimal case linked to the current order. A support persona assigns and updates the case through its lifecycle; the customer sees the same status/history and a shared synthetic notification event. Keep personal, prescription and payment secrets out of demo text.
+
 ## COD, deposit and reconciliation
 
 For a completed COD demo order, [record actual cash handover](../index.html#/delivery/riders) or Finance’s cash receipt, then [compare COD collected/deposited](../index.html#/staff/reconciliation). A shortage stays an open exception. Provider settlement comparison checks reference/amount/currency and never overwrites an unpaid order to make totals match.
 
 ## Staff, permissions, reporting and audit
 
-[Invite fictional staff](../index.html#/staff/staff), inspect the [draft permission matrix](../index.html#/staff/permissions) and try the Permission denied scenario. A role proposal cannot grant its own privileges. [Password plus authenticator](../index.html#/access/login) demonstrates staff access; [revocation](../index.html#/access/sessions) blocks protected forms until another demo sign-in.
+[Invite fictional staff](../index.html#/staff/staff), inspect the [draft permission matrix](../index.html#/staff/permissions) and try the Permission denied scenario. A role proposal cannot grant its own privileges. [Password plus authenticator](../index.html#/access/login) demonstrates the shared staff identity session. [Authorized workspaces](../index.html#/access/workspaces) are derived from the session fixture; Administration, Pharmacist and Finance entries show a proposed step-up authenticator challenge before context activation. [Revocation](../index.html#/access/sessions) blocks protected forms until another demo sign-in. No UI role selection acts as production authorization.
 
 Select a [report](../index.html#/staff/reports), filters and dates, generate results, sort them, prepare an export and download the local TSV. Access-revoked and failed-generation states block output. [Audit](../index.html#/staff/audit) filters/exports read-only events; historical mutation has no control.
 

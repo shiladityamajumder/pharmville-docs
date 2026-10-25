@@ -4,12 +4,13 @@ import {screens as customers} from '../customer/screens.js';
 import {screens as staff} from '../staff/screens.js';
 import {screens as operations} from '../operations/screens.js';
 import {screens as access} from '../shared/access-screens.js';
+import {screens as extended} from '../operations/extended-screens.js';
 import {scenarios} from '../assets/js/scenarios.js';
 import {workspaceRoles} from '../assets/js/navigation.js';
 const root=path.resolve(import.meta.dirname,'..');
 const source=fs.readFileSync(path.resolve(root,'../01-Project/Features-and-Modules.md'),'utf8');
 const features=[...source.matchAll(/^\| `([A-Z]+-\d{2})` \| (\w+) \| (.*?) \| (.*?) \|$/gm)].map(m=>({id:m[1],module:m[2],priority:m[3],description:m[4]}));
-const screens=[...customers,...staff,...operations,...access];
+const screens=[...customers,...staff,...operations,...access,...extended];
 const blocked={
 'RX-02':'D-004/D-006: post-order deferred upload conflicts with review-before-payment. Control explains the block; no timer is invented.',
 'ORD-09':'D-010/D-024: post-order edits need accepted-revision, stock, clinical and price contracts. Existing order is preserved.',

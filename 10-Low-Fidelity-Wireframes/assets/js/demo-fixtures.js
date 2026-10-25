@@ -1,4 +1,5 @@
 import {initialState} from './mock-data.js';
+import {establishSession} from '../../shared/mock-domain.js';
 
 const copy = value => structuredClone(value);
 const fresh = (id, label, description) => {
@@ -21,9 +22,13 @@ export const fixtureInfo={
   payment:{label:'Payment walkthrough',description:'A fresh fictional checkout. Payment can start only after the customer completes each current gate.'},
   prepare:{label:'Store fulfillment',description:'An accepted demo cash-on-delivery order is ready for store picking. No cash is collected and stock is not yet committed.'},
   deliver:{label:'Rider delivery',description:'A prepared fictional parcel is ready for Dispatch. Its stock movement is labelled historical demo data; delivery is not complete.'},
-  return:{label:'Return request',description:'A delivered fictional order is provided as prepared history. No return or refund is already approved.'},
+  return:{label:'Return request',description:'A signed-in fictional customer and delivered order are provided as prepared history. No return or refund is already approved.'},
   refund:{label:'Refund review',description:'A fictional paid order has a pending refund request. This prepared history does not create a new payment or payout.'},
   receiving:{label:'Warehouse receiving',description:'A fresh warehouse demo is ready to record actual accepted quantity and any discrepancy.'}
+  ,procurement:{label:'Procurement review',description:'A synthetic store replenishment request and unverified supplier fixture are ready for purchase-order planning.'}
+  ,replenishment:{label:'Out-of-stock recovery',description:'A fresh demo with no open transfer request; the team must request stock before drafting procurement.'}
+  ,reverse:{label:'Reverse logistics',description:'A signed-in customer and historical delivered order are ready for a new return request. Eligibility is not pre-approved.'}
+  ,support:{label:'Support case walkthrough',description:'A fresh fictional customer account and empty support queue are prepared; the customer verifies by demo OTP before contacting support.'}
 };
 
 export function fixtureFor(id) {
@@ -46,7 +51,13 @@ export function fixtureFor(id) {
   }
   if(id==='return') {
     Object.assign(state.order,{id:'PV-DEMO-RETURN-001',items:[{productId:'PRD-1',qty:1}],status:'Delivered',review:'Not required',payment:'Paid',method:'online',stock:'Committed',site:'Demo Store 01',revision:2,total:80,history:['Prepared historical demo order; delivered before this walkthrough.'],pack:'Handed over',delivery:'Delivered',riderId:'RID-1',codCollected:0,refund:'Not requested',returnStatus:'Not requested',note:'',hold:'Committed',customerAccepted:true,customerSubmitted:true,quoteAccepted:true,codEligible:false,inventoryCommitted:true,packageRef:'PKG-HISTORY-001'});
+    state.customer.loggedIn=true;state.customer.profileComplete=true;establishSession(state,{identityId:'USR-DEMO-CUSTOMER',role:'Customer',method:'Prepared synthetic OTP session',workspace:'customer'});
   }
+  if(id==='reverse') {
+    Object.assign(state.order,{id:'PV-DEMO-RETURN-001',items:[{productId:'PRD-1',qty:1}],status:'Delivered',review:'Not required',payment:'Paid',method:'online',stock:'Committed',site:'Demo Store 01',revision:2,total:80,history:['Prepared historical demo order; delivered before this walkthrough.'],pack:'Handed over',delivery:'Delivered',riderId:'RID-1',codCollected:0,refund:'Not requested',returnStatus:'Not requested',note:'',hold:'Committed',customerAccepted:true,customerSubmitted:true,quoteAccepted:true,codEligible:false,inventoryCommitted:true,packageRef:'PKG-HISTORY-001'});
+    state.customer.loggedIn=true;state.customer.profileComplete=true;establishSession(state,{identityId:'USR-DEMO-CUSTOMER',role:'Customer',method:'Prepared synthetic OTP session',workspace:'customer'});
+  }
+  if(id==='replenishment') Object.assign(state.warehouse,{requestProductId:'PRD-2',requestKey:'',destination:'Demo Store 01',priority:'Normal',transferStatus:'Not started',requestedQty:0,dispatchedQty:0,receivedTransferQty:0,shortage:0});
   if(id==='refund') {
     Object.assign(state.order,{id:'PV-DEMO-REFUND-001',items:[{productId:'PRD-1',qty:1}],status:'Cancelled',review:'Not required',payment:'Paid',method:'online',stock:'Released',site:'Demo Store 01',revision:2,total:80,history:['Prepared historical demo order; payment was previously recorded.','Finance refund instruction is pending review.'],pack:'Not started',delivery:'Unassigned',riderId:null,codCollected:0,refund:'Pending',returnStatus:'Not requested',note:'',hold:'Released',customerAccepted:true,customerSubmitted:true,quoteAccepted:true,codEligible:false,inventoryCommitted:false,refundReference:'RF-PREPARED-001'});
     state.staffUi={staffSearch:'',orderSearch:'',orderFilter:'All',auditSearch:'',locationSearch:'',ledger:[],importRows:[],importKind:'catalog',importId:'',importApplied:[],refunds:[{id:'RF-PREPARED-001',amount:40,reason:'Prepared fictional refund request',destination:'Original payment method',status:'Pending'}],refundAmount:'40',refundReason:'Prepared fictional refund request',refundDestination:'Original payment method',refundVerified:false,invoice:'',invoiceStatus:'Pending tax approval',creditReason:'',creditAmount:0,reportFrom:'2026-10-01',reportTo:'2026-10-23',reportSite:'Current location',catalogDraft:null,settingsDraft:null,locations:[],cases:[],alertRead:false,adjustment:null};

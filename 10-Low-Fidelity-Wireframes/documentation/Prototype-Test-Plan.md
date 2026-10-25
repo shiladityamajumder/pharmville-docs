@@ -11,6 +11,8 @@ node 10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs
 node 10-Low-Fidelity-Wireframes/tests/browser.mjs
 node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs
 node 10-Low-Fidelity-Wireframes/tests/experience-flows.mjs
+node 10-Low-Fidelity-Wireframes/tests/domain-workflows.mjs
+node 10-Low-Fidelity-Wireframes/tests/extended-workflows.mjs
 node 10-Low-Fidelity-Wireframes/tools/generate-experience-coverage.mjs
 node 10-Low-Fidelity-Wireframes/tools/validate-prototype.mjs
 node scripts/validate-docs.mjs
@@ -25,6 +27,8 @@ The browser test reuses the repository’s existing `node_modules/puppeteer`; no
 3. **BR-03 — Responsive sweep:** visit all screens at 360 × 800, 390 × 844, 430 × 932, 768 × 1024, 1280 × 800 and 1440 × 900; compare document/viewport width and capture representative customer, pharmacy and rider screenshots. Separately switch the internal Mobile, Tablet and Desktop previews.
 4. **BR-04 — Core interactions and safeguards:** submit incorrect/valid OTP, profile/email errors, search, cart and accepted checkout through their actual forms; test payment pending/recovery/idempotency, cancellation/refund, prescription review gates, exact batch pick/pack, rider proof/offline recovery, COD and stock receipt, access denial/MFA and report export.
 5. **BR-05 — Basic accessibility and navigation:** check labels and duplicate IDs on each normal screen, route links, keyboard dialog dismissal, browser history and saved form recovery.
+6. **DW-01 — Shared-domain flow assertions:** run the no-browser domain handlers for unified identity and workspace checks (including elevated step-up), out-of-stock procurement through store availability, return custody/quarantine and separate Finance review, and customer support lifecycle. This validates local state transitions, not an API, database transaction or production security policy.
+7. **EW-01 — Extended browser workflows:** through actual screens and forms, exercise an unavailable product through PO proposal, linked receipt, transfer and destination availability; a return through owner eligibility, reverse rider custody, warehouse quarantine, Finance decision and refund status; and customer support request, staff resolution and customer-visible update. Results are written to ignored `artifacts/extended-workflow-results.json`.
 
 The [Complete Screen Matrix](Complete-Screen-Matrix.md) maps each route to the test groups that exercise it. BR-02 is screen/state rendering coverage; only rows that list BR-04 have named direct interaction assertions for that route. Core journeys also cross roles, so assertions are not isolated to a single screen.
 
@@ -34,7 +38,7 @@ The `experience-flows.mjs` suite assigns stable `EXP-nnn` assertion IDs in its r
 
 Account/address fixtures supply setup; shopping actions, payment, prescription upload, pharmacist rejection, store preparation, rider assignment/pickup and delivery failure use the existing UI handlers. Incorrect OTP checks include the contextual error, denied session and corrected retry.
 
-The suite separately checks every supported experience-prefixed route at its intended normal width. Normal route rendering is not treated as full interaction verification.
+The suite separately checks every supported experience-prefixed route at its intended normal width. Normal route rendering is not treated as full interaction verification. The main browser regression also enters a proposed elevated workspace, supplies a second synthetic authenticator code and confirms the context activates only after that step.
 
 Fresh screenshots cover all 18 requested categories plus journey selection, stock shortage and refund pending. They are generated from the current run, with actual phone-width customer captures and desktop customer/staff captures. `generate-experience-coverage.mjs` requires a successful results file before recording verified platform/scenario rows.
 
