@@ -1,0 +1,159 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database Rules · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Database rules and ownership</h1>
+<h2>Table-domain ownership and shared access rules</h2>
+<p>Ownership is service-level responsibility for validating changes, not unrestricted ability to write every schema. The table below associates <strong>schemas</strong> with candidate active modules, using feature behavior. Several domains also contain future-phase data.</p>
+<table>
+<thead>
+<tr>
+<th>Schema</th>
+<th>Possible application module users</th>
+<th>Ownership caveat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>appointment</code></td>
+<td>Future/nonlaunch capability</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>catalog</code></td>
+<td>Product_Catalog, Inventory</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>clinical</code></td>
+<td>Customer_Accounts, Prescription_Upload, Pharmacist_Review</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>commerce</code></td>
+<td>Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review, Finance_Payments, Reporting</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>compliance</code></td>
+<td>Pharmacist_Review, Audit</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>customer</code></td>
+<td>Customer_Accounts, Cart_Checkout, Prescription_Upload</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>diagnostics</code></td>
+<td>Future/nonlaunch capability</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>finance</code></td>
+<td>Customer_Orders, Finance_Payments, Reporting</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>fulfillment</code></td>
+<td>Customer_Orders, Order_Operations, Store_Operations, Warehouse, Delivery_Operations</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>identity</code></td>
+<td>Customer_Accounts, Admin_CMS, Rider_App, Authentication_Access</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>insurance</code></td>
+<td>Future/nonlaunch capability</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>logistics</code></td>
+<td>Customer_Orders, Delivery_Operations, Rider_App</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>marketplace</code></td>
+<td>Product_Catalog</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>membership</code></td>
+<td>Future/nonlaunch capability</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>notification</code></td>
+<td>Rider_App, Notifications</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>organization</code></td>
+<td>Admin_CMS, Order_Operations, Delivery_Operations, Authentication_Access</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td>Finance_Payments</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td>Prescription_Upload, Admin_CMS, Reporting, Audit, Authentication_Access, Notifications</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>pricing</code></td>
+<td>Product_Catalog, Cart_Checkout</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>procurement</code></td>
+<td>Store_Operations, Warehouse</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>risk</code></td>
+<td>Audit</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>Product_Catalog</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>support</code></td>
+<td>Future/nonlaunch capability</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+<tr>
+<td><code>warehouse</code></td>
+<td>Cart_Checkout, Order_Operations, Store_Operations, Inventory, Warehouse</td>
+<td>Proposed — per-table read/write scope pending application design review</td>
+</tr>
+</tbody>
+</table>
+<p>Before implementing a write, name a single command owner, one transaction boundary and which other modules may read it. Keep clinical/patient identity, finance/payment truth, stock reservations and audit evidence separate. Runtime capability groups are <code>NOLOGIN</code>; a trusted backend issues scoped and audited statements, not unreviewed broad table grants. File/report object access must be rechecked after signed URL creation.</p>
+<p>See Module Dependency Matrix, Database Coverage and Security.</p>
+<h2>Database security and protected records</h2>
+<p>The final SQL adds four restricted NOLOGIN capability groups, explicit customer-order and staff-warehouse RLS, protected-DML denials and V0029 default <code>PUBLIC EXECUTE</code> denial for future routines. These are tested capabilities only for the recorded coverage; they do not mean that every table automatically has RLS.</p>
+<p>Trusted backend transactions must set audit actor context from server-verified authentication, never from a browser-controlled field. PostgreSQL migration-owner credentials must remain completely separate from runtime. Do not give analytics/export roles direct access to raw prescriptions, private files, credential hashes, clinical records or finance details not required by their purpose. Use scoped views and recheck file download authorization.</p>
+<p>Encrypt at rest and in transit in deployed environments, apply S3 private object access, KMS key lifecycle, secrets rotation, export retention rules and detection of mass reads. Simulated integration/ACL test passes do not prove real provider or production cloud setup.</p>
+<p>See Security Overview, Database Tests and Runtime Roles.</p>
+<h2>Database reference — exact checked-in catalog snapshot</h2>
+<p><strong>Authoritative structure:</strong> <a href="../pharmville-database/pharmville_schema.sql">standalone effective SQL</a>, validated on isolated PostgreSQL 18.6. Future populated-database releases require a separately approved procedure.</p>
+<p><strong>Snapshot evidence:</strong> local PG18 final inventory; not a production deployment.</p>
+<ul>
+<li>All 266 tables</li>
+<li>Stable DB IDs</li>
+<li>Every recorded foreign key</li>
+<li>SQL/catalog and documentation parity evidence</li>
+<li>1,204 indexes</li>
+<li>3,198 constraints</li>
+<li>56 functions — exact DDL</li>
+<li>879 triggers</li>
+<li>3 RLS policies</li>
+<li>Empty-schema installation prerequisites and separate release-policy decisions</li>
+<li>Gap classification</li>
+</ul>
+<p>Every schema has per-table field metadata and structural SQL contracts. Business meanings not backed by an approved PRD are explicitly inferred.</p>
+</main></body></html>

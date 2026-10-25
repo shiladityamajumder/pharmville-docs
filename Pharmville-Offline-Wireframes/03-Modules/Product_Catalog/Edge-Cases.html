@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Product Catalog edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Catalog-and-Product-Discovery.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-CAT-01-01</code></td>
+<td><code>CAT-01</code></td>
+<td>Inactive category is requested from an old link</td>
+<td>No unpublished contents leak; clear empty/unavailable result</td>
+<td>Catalog editor corrects publication; customer browses current categories</td>
+<td><code>TC-CAT-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CAT-02-01</code></td>
+<td><code>CAT-02</code></td>
+<td>Product commerce classification is unknown</td>
+<td>Ordering blocked rather than defaulting to M/O</td>
+<td>Catalog and Pharmacy approve classification</td>
+<td><code>TC-CAT-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CAT-03-01</code></td>
+<td><code>CAT-03</code></td>
+<td>Search backend fails</td>
+<td>Unavailable result differs from valid no matches; no fabricated substitution</td>
+<td>Search owner restores service; customer can browse</td>
+<td><code>TC-CAT-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CAT-04-01</code></td>
+<td><code>CAT-04</code></td>
+<td>Stock observation exceeds approved freshness</td>
+<td>Availability cannot authorize a new hold</td>
+<td>Inventory restores authoritative evidence</td>
+<td><code>TC-CAT-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CAT-05-01</code></td>
+<td><code>CAT-05</code></td>
+<td>Similar-name product has different strength</td>
+<td>Not treated as an interchangeable approved P line</td>
+<td>Pharmacy reviews candidate; customer accepts a permitted revision</td>
+<td><code>TC-CAT-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CAT-06-01</code></td>
+<td><code>CAT-06</code></td>
+<td>Image asset returns not found</td>
+<td>Product remains readable; no broken-image-only purchase cue</td>
+<td>Catalog editor replaces missing asset</td>
+<td><code>TC-CAT-06-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+</main></body></html>

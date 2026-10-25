@@ -1,0 +1,616 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>adverse_event_reports · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>compliance.adverse_event_reports</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds adverse event reports records within the compliance domain (regulatory documentation and retention actions). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>compliance.adverse_event_reports</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Transactional</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Pharmacist_Review via Compliance owner</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>21 columns; 16 PK/FK/UQ/CHECK/exclusion constraints; 10 named PostgreSQL 18 NOT NULL constraints; 6 indexes; 3 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_compliance_adverse_event_reports_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>event_description_encrypted</code></td>
+<td><code>bytea</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores event description encrypted for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>occurred_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of occurred</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>outcome</code></td>
+<td><code>character varying(64)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores outcome for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>patient_profile_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to patient profiles</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>clinical.patient_profiles</code> via <code>fk_compliance_adverse_event_reports_patient_profile_id__4b0b</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>clinical.patient_profiles</code> via <code>fk_compliance_adverse_event_reports_patient_profile_id__6d1c</code></td>
+</tr>
+<tr>
+<td><code>prescription_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to prescriptions</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>clinical.prescriptions</code> via <code>fk_compliance_adverse_event_reports_prescription_id_pre_e002</code></td>
+</tr>
+<tr>
+<td><code>prescription_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>clinical.prescriptions</code> via <code>fk_compliance_adverse_event_reports_prescription_id_pre_401a</code></td>
+</tr>
+<tr>
+<td><code>product_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to products</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>catalog.products</code> via <code>fk_compliance_adverse_event_reports_product_id_products</code></td>
+</tr>
+<tr>
+<td><code>product_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>catalog.products</code> via <code>fk_compliance_adverse_event_reports_product_id_products_numeric</code></td>
+</tr>
+<tr>
+<td><code>report_number</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores report number for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>reported_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Time of reported</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>reported_by_user_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_compliance_adverse_event_reports_reported_by_user_id_users</code></td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>seriousness</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores seriousness for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td><code>'submitted'::character varying</code></td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_compliance_adverse_event_reports_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the adverse event reports business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Pharmacist_Review, Audit. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>compliance.adverse_event_reports</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_compliance_adverse_event_reports_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_compliance_adverse_event_reports_patient_profile_id__4b0b</td>
+<td><code>patient_profile_id</code></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_compliance_adverse_event_reports_patient_profile_id__6d1c</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_compliance_adverse_event_reports_prescription_id_pre_401a</td>
+<td><code>prescription_id_internal_id</code></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_compliance_adverse_event_reports_prescription_id_pre_e002</td>
+<td><code>prescription_id</code></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_compliance_adverse_event_reports_product_id_products</td>
+<td><code>product_id</code></td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><code>FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_compliance_adverse_event_reports_product_id_products_numeric</td>
+<td><code>product_id_internal_id</code></td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><code>FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_compliance_adverse_event_reports_reported_by_user_id_users</td>
+<td><code>reported_by_user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (reported_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_compliance_adverse_event_reports_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<p>No inbound FK is present in the validated catalog.</p>
+<h2><code>compliance.adverse_event_reports</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_compliance_adverse_event_reports_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id</code></td>
+<td><code>clinical.patient_profiles</code></td>
+<td><code>fk_compliance_adverse_event_reports_patient_profile_id__4b0b</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>clinical.patient_profiles</code></td>
+<td><code>fk_compliance_adverse_event_reports_patient_profile_id__6d1c</code></td>
+</tr>
+<tr>
+<td><code>prescription_id_internal_id</code></td>
+<td><code>clinical.prescriptions</code></td>
+<td><code>fk_compliance_adverse_event_reports_prescription_id_pre_401a</code></td>
+</tr>
+<tr>
+<td><code>prescription_id</code></td>
+<td><code>clinical.prescriptions</code></td>
+<td><code>fk_compliance_adverse_event_reports_prescription_id_pre_e002</code></td>
+</tr>
+<tr>
+<td><code>product_id</code></td>
+<td><code>catalog.products</code></td>
+<td><code>fk_compliance_adverse_event_reports_product_id_products</code></td>
+</tr>
+<tr>
+<td><code>product_id_internal_id</code></td>
+<td><code>catalog.products</code></td>
+<td><code>fk_compliance_adverse_event_reports_product_id_products_numeric</code></td>
+</tr>
+<tr>
+<td><code>reported_by_user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_compliance_adverse_event_reports_reported_by_user_id_users</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_compliance_adverse_event_reports_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>adverse_event_report_number</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (report_number)</code></td>
+</tr>
+<tr>
+<td><code>ck_compliance_adverse_event_reports_numeric_pair_patien_1b26</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((patient_profile_id IS NULL) = (patient_profile_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_compliance_adverse_event_reports_numeric_pair_prescr_be1f</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((prescription_id IS NULL) = (prescription_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_compliance_adverse_event_reports_numeric_pair_product_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((product_id IS NULL) = (product_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_compliance_adverse_event_reports_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>fk_compliance_adverse_event_reports_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_compliance_adverse_event_reports_patient_profile_id__4b0b</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_compliance_adverse_event_reports_patient_profile_id__6d1c</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_compliance_adverse_event_reports_prescription_id_pre_401a</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_compliance_adverse_event_reports_prescription_id_pre_e002</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_compliance_adverse_event_reports_product_id_products</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (product_id) REFERENCES catalog.products(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_compliance_adverse_event_reports_product_id_products_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (product_id_internal_id) REFERENCES catalog.products(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_compliance_adverse_event_reports_reported_by_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (reported_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_compliance_adverse_event_reports_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_compliance_adverse_event_reports</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_compliance_adverse_event_reports_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_event_description_encrypted_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL event_description_encrypted</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_report_number_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL report_number</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_reported_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL reported_at</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_seriousness_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL seriousness</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+<tr>
+<td><code>adverse_event_reports_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>adverse_event_report_number</code></td>
+<td>btree</td>
+<td><code>(report_number)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX adverse_event_report_number ON compliance.adverse_event_reports USING btree (report_number)</code></td>
+</tr>
+<tr>
+<td><code>ix_compliance_adverse_events_patient</code></td>
+<td>btree</td>
+<td><code>(patient_profile_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_compliance_adverse_events_patient ON compliance.adverse_event_reports USING btree (patient_profile_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_compliance_adverse_events_product</code></td>
+<td>btree</td>
+<td><code>(product_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_compliance_adverse_events_product ON compliance.adverse_event_reports USING btree (product_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_compliance_adverse_events_status</code></td>
+<td>btree</td>
+<td><code>(status)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_compliance_adverse_events_status ON compliance.adverse_event_reports USING btree (status)</code></td>
+</tr>
+<tr>
+<td><code>pk_compliance_adverse_event_reports</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_compliance_adverse_event_reports ON compliance.adverse_event_reports USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_compliance_adverse_event_reports_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_compliance_adverse_event_reports_id ON compliance.adverse_event_reports USING btree (id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON compliance.adverse_event_reports FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;patient_profile_id&quot;,&quot;patient_profile_id_internal_id&quot;,&quot;clinical&quot;,&quot;patient_profiles&quot;],[&quot;prescription_id&quot;,&quot;prescription_id_internal_id&quot;,&quot;clinical&quot;,&quot;prescriptions&quot;],[&quot;product_id&quot;,&quot;product_id_internal_id&quot;,&quot;catalog&quot;,&quot;products&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON compliance.adverse_event_reports FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON compliance.adverse_event_reports FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;patient_profile_id&quot;,&quot;patient_profile_id_internal_id&quot;,&quot;clinical&quot;,&quot;patient_profiles&quot;],[&quot;prescription_id&quot;,&quot;prescription_id_internal_id&quot;,&quot;clinical&quot;,&quot;prescriptions&quot;],[&quot;product_id&quot;,&quot;product_id_internal_id&quot;,&quot;catalog&quot;,&quot;products&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

@@ -1,0 +1,211 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>System HLD · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>System architecture (HLD)</h1>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../07-Engineering/State-and-Recovery-Contracts.html">command/data ownership</a> · <a href="../03-Modules/README.html">module designs</a></p>
+<h2>Master High-Level Design (HLD)</h2>
+<p><strong>Proposed technology direction (D-001/D-014):</strong> multi-repository, modular-monolith NestJS API, Next.js/React/TypeScript web clients, PostgreSQL, Redis/BullMQ, S3, AWS Mumbai, Docker, Nginx and GitHub Actions. These are proposed design choices, not evidence a production app exists.</p>
+<p>The final database deliverable is SQL only: <a href="../pharmville-database/pharmville_schema.sql">pharmville_schema.sql</a>. Historical Python/models/migrations are privately archived, not deployment dependencies. Effective catalog parity was validated in isolated PostgreSQL 18.6; runtime grants and application behavior remain separate acceptance gates.</p>
+<pre><code class="language-mermaid">flowchart TB
+ C[Customer web / Next.js] --&gt; API[REST v1 / NestJS modular monolith]
+ A[Protected staff web] --&gt; API
+ R[Rider Android / technology open] --&gt; API
+ API --&gt; IAM[Authentication and scoped policies]
+ API --&gt; CAT[Catalog and pricing]
+ API --&gt; OMS[Checkout / orders / pharmacy]
+ API --&gt; OPS[Inventory / store / delivery]
+ API --&gt; FIN[Payments / reports / audit]
+ IAM &amp; CAT &amp; OMS &amp; OPS &amp; FIN --&gt; PG[(PostgreSQL)]
+ API --&gt; Q[Redis + BullMQ queued jobs]
+ API --&gt; FS[Private S3 objects]
+ Q --&gt; EXT[Cashfree / MSG91 / SES / POS / maps]
+ FIN --&gt; EXT
+</code></pre>
+<p>The database remains source of truth for money, stock, clinical decisions and state history. Redis is a cache/worker mechanism, not a durable clinical or financial ledger. Integration calls must be signed or independently authorized and reconciled. No service should receive unconstrained SQL access because all modules share a database.</p>
+<p><strong>Failure-domain choice:</strong> begin with a modular monolith to simplify transactions and releases. Split services only after measured operational or team-domain pressure. Public API routes must enforce actor, patient and location scope; PostgreSQL additionally enforces FKs, checks, triggers, and restricted capability roles. Outbox events are proposed for post-commit notifications and eventual delivery.</p>
+<p><strong>Critical architecture risks:</strong> stale POS stock, unapproved production pharmacy licenses, webhook ambiguity, money/stock concurrency, unapproved retention and incomplete external provider contracts. Related Module dependencies, Cross-module order flow, Database, and Decisions.</p>
+<h2>Customer, staff, rider and database platform boundaries</h2>
+<p>Customer Web is mobile-first Next.js and displays browse/search, dependent patient selection, Rx upload and a safe order timeline. Staff Web is a separate protected role- and location-scoped surface for product admin, pharmacist workbench, stock, store/warehouse, rider assignment, finance, reports and audit.</p>
+<p>Riders use an Android workflow in later Phase 1 decisions, but the mobile framework/distribution rules remain open. Native customer apps are future-phase scope.</p>
+<p>All clients call REST v1 through a controlled API ingress. Session refresh and OTP login are centralized. A client supplies public UUIDs as resource locators, but backend services derive current user, location and patient scope independently. Business rules are server-side; a hidden UI control is not authorization.</p>
+<p>The standalone schema can be installed independently into a fresh empty database without Python or migrations. Application releases must use the exact reviewed SQL/catalog contract. Existing populated-database upgrade design is a separately approved deployment concern, not provided by this empty-schema deliverable.</p>
+<p><strong>Delivery units:</strong> independent repositories are a proposed preference; agree API version, shared schema migration ownership and coordinated release contracts to avoid drift. See Environments, API and Source conflicts.</p>
+<h2>System components and responsibility boundaries</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Owns</th>
+<th>Should not do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer web</td>
+<td>Client-side navigation, forms, order status projections</td>
+<td>Infer pharmacy eligibility or payment success</td>
+</tr>
+<tr>
+<td>Staff/admin web</td>
+<td>Scopes and queues by staff role, approvals, CMS</td>
+<td>Call internal SQL functions or bypass clinic/payment rules</td>
+</tr>
+<tr>
+<td>Rider app</td>
+<td>Task/shift interaction, GPS and delivery evidence</td>
+<td>Decide that money is settled or P dispensing approved</td>
+</tr>
+<tr>
+<td>NestJS domain modules</td>
+<td>All validated business commands and transactional orchestration</td>
+<td>Use one giant controller or share unrestricted ORM models</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>Authoritative relations, transaction guards, history and scoped privileges</td>
+<td>Replace required external provider evidence</td>
+</tr>
+<tr>
+<td>Redis/BullMQ</td>
+<td>Ephemeral cache, queued safe retries and timed jobs</td>
+<td>Be source of account balance, stock or clinical truth</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>Private Rx/media/export objects, short-lived scoped access</td>
+<td>Serve unreviewed document URLs publicly</td>
+</tr>
+<tr>
+<td>Adapter processes</td>
+<td>Cashfree, MSG91/SES/FCM, Maps/OSRM, POS, GPS</td>
+<td>Trust unsigned callbacks or make blind money retries</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cross-cutting services:</strong> authentication, permission policies, audit records, configuration/controlled masters, telemetry, notification templates and versioned events. Source HLDs are proposals. The modules each have an actual design folder under LLD.</p>
+<h2>Module dependencies and interaction matrix</h2>
+<p>A domain schema can be referenced by multiple modules. The table below denotes <strong>potential read/collaboration</strong>, not blanket permission to write another module's tables. Clinical, money, stock and identity own separate evidence; order orchestration consumes their approved results.</p>
+<table>
+<thead>
+<tr>
+<th>Active module</th>
+<th>Potential collaborator modules (shared schemas)</th>
+<th>Core business gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer_Accounts</td>
+<td>Admin_CMS, Authentication_Access, Cart_Checkout, Pharmacist_Review, Prescription_Upload, Rider_App</td>
+<td>An address is not serviceable merely because its PIN is syntactically valid; family profiles must be access controlled</td>
+</tr>
+<tr>
+<td>Product_Catalog</td>
+<td>Cart_Checkout, Inventory</td>
+<td>Unknown or unsafe class blocks ordering; price and stock are separate sources of truth</td>
+</tr>
+<tr>
+<td>Cart_Checkout</td>
+<td>Customer_Accounts, Customer_Orders, Finance_Payments, Inventory, Order_Operations, Pharmacist_Review, Prescription_Upload, Product_Catalog</td>
+<td>Never charge an unapproved revision; distinct idempotency key per intent</td>
+</tr>
+<tr>
+<td>Prescription_Upload</td>
+<td>Admin_CMS, Audit, Authentication_Access, Cart_Checkout, Customer_Accounts, Notifications, Pharmacist_Review, Reporting</td>
+<td>M/O never requires Rx; unsafe or inaccessible file cannot be used as evidence</td>
+</tr>
+<tr>
+<td>Customer_Orders</td>
+<td>Cart_Checkout, Delivery_Operations, Finance_Payments, Order_Operations, Pharmacist_Review, Reporting, Rider_App, Store_Operations</td>
+<td>Customer status is projection of clinical/payment/inventory/delivery facts</td>
+</tr>
+<tr>
+<td>Admin_CMS</td>
+<td>Audit, Authentication_Access, Customer_Accounts, Delivery_Operations, Notifications, Order_Operations, Prescription_Upload, Reporting</td>
+<td>No self-granting privileges; content publish and configuration changes audited</td>
+</tr>
+<tr>
+<td>Order_Operations</td>
+<td>Admin_CMS, Authentication_Access, Cart_Checkout, Customer_Orders, Delivery_Operations, Finance_Payments, Inventory, Pharmacist_Review</td>
+<td>Never split one order across sites without explicit approved design</td>
+</tr>
+<tr>
+<td>Store_Operations</td>
+<td>Cart_Checkout, Customer_Orders, Delivery_Operations, Inventory, Order_Operations, Warehouse</td>
+<td>Recheck P decisions, license, active inventory observation, exact reservation before packing</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>Cart_Checkout, Order_Operations, Product_Catalog, Store_Operations, Warehouse</td>
+<td>Never derive orderable stock from stale or unknown upstream observations</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td>Cart_Checkout, Customer_Orders, Delivery_Operations, Inventory, Order_Operations, Store_Operations</td>
+<td>Phase 1 minimum and advanced Phase 2 split disputed; license and scope apply</td>
+</tr>
+<tr>
+<td>Pharmacist_Review</td>
+<td>Audit, Cart_Checkout, Customer_Accounts, Customer_Orders, Finance_Payments, Order_Operations, Prescription_Upload, Reporting</td>
+<td>Only currently approved P lines for accepted order revision may be dispatched</td>
+</tr>
+<tr>
+<td>Delivery_Operations</td>
+<td>Admin_CMS, Authentication_Access, Customer_Orders, Order_Operations, Rider_App, Store_Operations, Warehouse</td>
+<td>Proof of delivery and cash collection are different business facts</td>
+</tr>
+<tr>
+<td>Rider_App</td>
+<td>Admin_CMS, Authentication_Access, Customer_Accounts, Customer_Orders, Delivery_Operations, Notifications</td>
+<td>Access limited to assigned deliveries; protect location traces and OTP</td>
+</tr>
+<tr>
+<td>Finance_Payments</td>
+<td>Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review, Reporting</td>
+<td>Unknown provider result remains pending; refunds and credits are idempotent</td>
+</tr>
+<tr>
+<td>Reporting</td>
+<td>Admin_CMS, Audit, Authentication_Access, Cart_Checkout, Customer_Orders, Finance_Payments, Notifications, Order_Operations</td>
+<td>Reports cannot bypass protected clinical/finance or location permissions</td>
+</tr>
+<tr>
+<td>Audit</td>
+<td>Admin_CMS, Authentication_Access, Notifications, Pharmacist_Review, Prescription_Upload, Reporting</td>
+<td>No application role may silently modify historical audit facts</td>
+</tr>
+<tr>
+<td>Authentication_Access</td>
+<td>Admin_CMS, Audit, Customer_Accounts, Delivery_Operations, Notifications, Order_Operations, Prescription_Upload, Reporting</td>
+<td>Never trust client-provided actor IDs; runtime DB users are least privilege</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>Admin_CMS, Audit, Authentication_Access, Prescription_Upload, Reporting, Rider_App</td>
+<td>Never include Rx/image/diagnosis in notification body; retry safely</td>
+</tr>
+</tbody>
+</table>
+<p>Use synchronous in-process service APIs for transactional reads and validated commands. Where eventual processing is acceptable, persist a local outbox event in the same transaction and handle it idempotently. A new microservice is not justified by a domain folder alone. The manual next-step dependency ordering is in Implementation_Order.</p>
+<h2>Security trust boundaries</h2>
+<p>Trust boundaries exist between public customer browser, protected staff web, rider Android app, backend API, DB capability roles, private S3, payment/OTP services and workers. Each request is untrusted until session, per-object scope, version and business policy are checked by a backend service.</p>
+<p>The database final report records four NOLOGIN capability roles and RLS on selected order and stock tables, plus a <code>PUBLIC EXECUTE</code> default-denial change in V0029. These tests are <strong>not</strong> authorization coverage for every table; unsupported polymorphic access stays denied.</p>
+<p>Never use migration-owner DB credentials in an API runtime and never accept browser-supplied SQL or <code>actor_user_id</code> as trusted context.</p>
+<p>Encryption of RDS/S3/ElastiCache with KMS, Secrets Manager, TLS, staff MFA, access limits, scan/authorization of Rx uploads and report download re-checks are part of the selected/recommended design but require deployed evidence. Healthcare permissions and retention rules need specialist review before launch.</p>
+<p>See Threat Model, Auth flows and Audit.</p>
+<h2>PostgreSQL architecture and identity strategy</h2>
+<p><strong>Canonical database source:</strong> <a href="../pharmville-database/pharmville_schema.sql">standalone SQL</a>, reconstructed through V0030 and verified with zero structural differences in isolated PostgreSQL. The private legacy archive preserves source/history. See <a href="../04-Database/Installation.html">installation</a> and <a href="Module-Boundaries.html">module boundaries</a>.</p>
+<p><strong>Primary keys:</strong> <code>identity.users.id</code> is UUID; 257 older entity tables use BIGINT <code>internal_id</code> as their primary key with original immutable UNIQUE public UUID <code>id</code>; eight newer tables use BIGINT <code>id</code> identity PK. Key crosswalks and paired numeric FKs preserve existing public contracts.</p>
+<p>Internal numeric IDs are join keys, not access tokens; service authorization always checks actor, owner, scope and state.</p>
+<p><strong>Deployment rule:</strong> write new forward-only SQL versions, rehearse on an isolated copy, run the repo's verified <code>status/migrate/verify</code> runner with explicitly approved database URL, compare schema/ORM/catalog and release only after approvals. Never stamp, reset or run Alembic side by side.</p>
+<p>Schema migration and application rollout must use compatibility-aware expand/backfill/contract transitions.</p>
+<p>Full existing table/field/constraint inventories are generated under Database design from the supplied catalog. <a href="../04-Database/Migrations.html">Migration evidence</a> records the source verification and historical acceptance report. The source reference is resolved for documentation; target deployment and production approval remain separate checks.</p>
+<h2>Growth without premature distributed systems</h2>
+<p>The proposed architecture is a modular monolith, so maintain cohesive domain ownership before deciding to split services. Scale stateless NestJS/Next.js containers, isolate queue workers from interactive traffic, and use PostgreSQL query plans and resource limits before adding caches. Do not add a distributed bus or Kubernetes simply because many domains exist.</p>
+<p>Primary scaling risks: hot inventory lot rows during last-unit holds, checkout peak concurrency, large order/history/report scans, POS reconciliation lag, rider GPS write volume, and Rx/private-file access throughput. Use measured scoped indexes and representative workloads.</p>
+<p>The database repo records a synthetic 19-query benchmark and 50,000-row key experiment, but neither proves production capacity or a business SLA.</p>
+<p>Redis may cache published catalogue summaries or rate limits, never authoritative payment/stock/Rx approval. Add asynchronous jobs for provider callbacks, notifications and large reports with durability/replay controls. Keep partitioning, pooling, replicas and service extraction as evidence-based future choices.</p>
+<p>Track latency, connection pool saturation, inventory conflicts, webhook delay and queue backlog. See Performance testing.</p>
+<h2>Reliability and disaster recovery design</h2>
+<p>Prioritize <em>correctness under partial failure</em> over optimistic progress. A customer closing the browser cannot duplicate an order; a Cashfree timeout cannot become “payment succeeded”; a stale Techsmith stock feed cannot authorize another reservation; a rider GPS outage cannot mark parcel delivered; a rejected P line cannot pass packing gates.</p>
+<p>Use idempotency on commands, reconciliation for external provider uncertainty, database transaction/row-version guards for competing writers, and outbox publication for committed effects. Bounded retries and escalation queues should distinguish transient provider failure from irrecoverable authorization/clinical denial. Do not retry a financial write blindly after network timeout.</p>
+<p>The checklist proposes daily backups with 30-day retention, enabled PITR, target RPO 15–30 min and RTO 1–2 h. These values are owner decisions in documentation, not measured achievements. Verify an actual restore including migration ledger, runtime ACLs/RLS, encryption and object-store file access; do not announce availability targets met without evidence.</p>
+<p>See Incidents and Reconciliation.</p>
+</main></body></html>

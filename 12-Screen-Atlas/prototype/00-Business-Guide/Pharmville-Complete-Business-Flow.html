@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pharmville Complete Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Pharmville: the complete business flow</h1>
+<h2>What is this process?</h2>
+<p>Pharmville helps a customer order health products from an eligible location and receive them through a tracked delivery. Pharmacy, store, warehouse, rider and finance staff each record their part so that a customer can understand what has happened and what is still waiting.</p>
+<p>This is the intended flow in the current draft documentation. It is not a claim that the application is implemented or that every launch policy has been approved. In particular, prescription review, payment capture, deferred upload, stock policy and warehouse scope need the owners listed below.</p>
+<h2>Who is involved?</h2>
+<p>The customer buys for themselves or an authorized dependent. Catalog staff maintain approved product information. Pharmacists review prescription medicines. Operations chooses the fulfillment site and resolves exceptions. Inventory staff protect batch stock; store and warehouse workers receive, pick and pack goods.</p>
+<p>Dispatchers and riders deliver parcels. Finance checks payments, refunds, invoices and cash; administrators manage permitted access/settings, and support coordinates help.</p>
+<h2>How does it normally work?</h2>
+<h3>1. Join, find products and build the basket</h3>
+<ol>
+<li>The customer enters a mobile number, reads the privacy notice and verifies a one-time code. They supply required profile details and can save addresses, map pins and authorized family profiles. Browsing may begin before sign-in; an existing session is not required to request the login code. See <a href="Accounts-and-Login.html">accounts</a>.</li>
+<li>The customer searches by name, brand or composition, or browses categories. Product pages show the exact pack, composition, price and prescription label. P products need a prescription; M products are other medicines and O products are other goods. Unknown classifications cannot be ordered. See <a href="Catalog-and-Product-Discovery.html">discovery</a>.</li>
+<li>The customer adds quantities to a saved cart. A mixed P/M/O basket is allowed in the draft design; ordinary M/O items do not need pharmacist review just because P is present.</li>
+<li>At checkout the customer selects a delivery address. Pharmville checks actual serviceability, not just whether the PIN looks valid. For P products the customer selects the patient; the detailed draft uses one patient per such order.</li>
+<li>Pharmville rechecks contents, price, fees, minimum value, classification and availability. The customer accepts the current summary. A cart or quote does not by itself mean stock has been reserved. See <a href="Cart-and-Checkout.html">checkout</a>.</li>
+</ol>
+<h3>2. Follow the correct prescription branch</h3>
+<ol start="6">
+<li><strong>Without P products:</strong> the order request can continue toward stock hold and payment without an upload, patient-specific pharmacy queue or pharmacist decision.</li>
+<li><strong>With P products:</strong> the customer attaches private prescription evidence. Pharmville records one request and shows that review is next. The pharmacist compares each P line with the selected patient and prescription, recording approval or a reason for correction/rejection.</li>
+<li>If review changes the basket, the customer chooses to correct evidence, accept a revised basket/total or cancel under the applicable rule. Eligible M/O lines are retained; a changed medicine is not silently approved or charged.</li>
+<li>The current detailed journey completes the required review before payment. RX-02 separately proposes uploading within 24 hours after ordering, with automatic cancellation. That deferred route is not approved and does not establish permission to collect money before review. Product, Pharmacy and Finance must settle it before it is enabled. See <a href="Prescription-and-Pharmacy.html">prescriptions</a>.</li>
+</ol>
+<h3>3. Check stock and money</h3>
+<ol start="10">
+<li>Operations and Inventory identify an eligible open licensed location with the whole accepted basket and current usable batches. Stores are primary; warehouse fallback remains subject to approved scope and license. A tentative route can be evaluated earlier, but final stock evidence and assignment must agree.</li>
+<li>Pharmville obtains a temporary hold on exact eligible stock before payment proceeds. The hold protects against another order taking the same pack; its duration and late-payment recovery require approval. If supply cannot be confirmed, the customer sees a problem before being asked to pay.</li>
+<li><strong>Online payment:</strong> the customer chooses a supported method through the proposed provider. Pharmville verifies money through trusted provider evidence rather than a browser return screen. <strong>COD:</strong> only eligible customers/orders can choose it; the recorded amount is due, not cash already collected.</li>
+<li>The customer sees the recorded order and money status. Confirmation can appear in the app and approved message channels. Failure to send WhatsApp or email does not undo a committed order. See <a href="Payments-and-Billing.html">payments</a>.</li>
+</ol>
+<h3>4. Prepare, dispatch and deliver</h3>
+<ol start="14">
+<li>Store or approved warehouse workers accept the task, pick the exact products/batches and report shortages. Packing checks the accepted basket, current prescription evidence, licensed site and reservation. Unsafe stock or a changed order stops preparation.</li>
+<li>Dispatch requires completed fulfillment evidence, exact committed stock and authoritative full online payment or approved COD. Staff cannot bypass these gates because the order screen looks ready. See <a href="Store-and-Warehouse.html">store and warehouse</a>.</li>
+<li>A dispatcher confirms an eligible rider. The rider accepts, records pickup and navigates to the customer. The customer sees out-for-delivery progress, permitted tracking, estimate and masked calling.</li>
+<li>At the doorstep, Pharmville validates the customer delivery OTP and approved proof. COD actual collection is recorded separately. A location ping or photograph alone does not automatically settle money. See <a href="Delivery-and-Rider-App.html">delivery</a>.</li>
+<li>The customer sees delivered only after accepted completion evidence. They can revisit order history and download an issued invoice. Finance later compares provider settlement and rider cash handover with the recorded transactions. See <a href="Finance-and-Reconciliation.html">reconciliation</a>.</li>
+</ol>
+<h3>5. Handle after-purchase requests and replenish supply</h3>
+<ol start="19">
+<li>Customer cancellation is a draft before-packed rule. A return is a request subject to approved product/window/safety criteria. Operations checks the current state; receiving verifies actual returned goods, and Pharmacy/Inventory decide whether those goods can ever be saleable again.</li>
+<li>Finance checks eligibility, previous refunds, approvals and payment evidence before sending one refund. The customer follows refund progress; an accepted request is not proof the bank received money. See <a href="Returns-and-Refunds.html">returns and refunds</a>.</li>
+<li>In parallel, stores request replenishment. Warehouse staff receive supplier batches and dispatch approved transfers; destinations acknowledge actual receipts and shortages. Inventory updates only evidenced quantities and records reasons for adjustments. See <a href="Inventory-and-Stock.html">stock</a>.</li>
+<li>Administrators maintain approved users, masters and content. Notifications point people to current protected records. Reports and audit history let authorized staff inspect outcomes without rewriting past evidence.</li>
+</ol>
+<h2>What happens next?</h2>
+<p>Each order either advances through its satisfied gates, waits with a named team, or ends through an approved cancellation/return/refund outcome. A delivered order can still have an unresolved finance exception; closing delivery does not automatically close reconciliation.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<ul>
+<li><strong>Money paid, confirmation missing:</strong> a connection drops after the bank debit. The customer sees checking payment and is not immediately asked to pay again. Finance checks the trusted provider record against the existing order; Operations rechecks any expired stock hold. The order resumes only with valid supply or follows approved compensation. <a href="Payments-and-Billing.html#what-can-go-wrong-and-what-does-the-system-do">Payment recovery</a>.</li>
+<li><strong>No safe stock, site or pharmacist:</strong> an expiry, closure, stale feed or staffing gap prevents progress. The order stays blocked/waiting with Pharmacy or Operations, and the customer sees the actual outstanding step. No automatic approval, silent site split or unapproved substitution is allowed. <a href="Orders-and-Fulfillment.html#what-can-go-wrong-and-what-does-the-system-do">Order exceptions</a>.</li>
+<li><strong>Duplicate actions or an interrupted service:</strong> a retry after lost acknowledgment must load the existing recorded result. Relevant owners resolve conflicting versions, pending money and incomplete work. Workers resume from committed facts; they do not restart charges or stock movements blindly. During an outage the screen must not invent success. <a href="../07-Engineering/State-and-Recovery-Contracts.html">Technical recovery</a>.</li>
+<li><strong>Rider, proof or doorstep failure:</strong> dispatch owns unassigned parcels and failed attempts. Incorrect OTP leaves delivery incomplete; offline actions stay pending until validated. Tracked goods and actual COD remain accountable. <a href="Delivery-and-Rider-App.html#what-can-go-wrong-and-what-does-the-system-do">Delivery exceptions</a>.</li>
+<li><strong>Privacy or permission failure:</strong> the server denies another patient’s record or another location’s operation. Security reviews suspicious access, support uses verified identity, and protected files stay private. A UI role is not a clinical or financial approval.</li>
+</ul>
+<h2>What does the user see?</h2>
+<p>Customers see their current basket, outstanding prescription/payment step, confirmed order progress, delivery proof action and any eligible after-purchase options. Staff see scoped queues, reasons and recovery work. Notifications explain committed changes; reopening them loads the current record.</p>
+<p>Exact copy and waiting estimates need UX/Operations approval and must not promise unapproved deadlines.</p>
+<h2>What still needs approval?</h2>
+<p>The <a href="../09-References/Sources-and-Decisions.html">decision register</a> covers launch boundaries (D-001/D-002/D-021), login/privacy (D-003/D-013/D-023), payment/COD/tax (D-004/D-007/D-008/D-012), stock and clinical rules (D-005/D-006/D-009/D-010), rider proof (D-011), providers (D-014/D-016), operations readiness (D-017/D-022) and feature contracts (D-024).</p>
+<p>The available database baseline also needs reconciliation under D-015. These are not substituted by the business examples above.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../01-Project/Features-and-Modules.html">Requirements and feature IDs</a> · <a href="../02-Architecture/System-HLD.html">System HLD</a> · <a href="../03-Modules/README.html">module HLD/LLD</a> · <a href="../05-APIs/README.html">APIs</a> · <a href="../04-Database/Module-Mapping.html">database mappings</a> · <a href="../06-Workflows/README.html">technical workflows</a> · <a href="../09-References/Coverage-and-Traceability.html">edge cases/tests by feature</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development plan</a></p>
+<p><a href="README.html">Business Guide</a> · <a href="Customer-Experience.html">Customer experience</a></p>
+</main></body></html>

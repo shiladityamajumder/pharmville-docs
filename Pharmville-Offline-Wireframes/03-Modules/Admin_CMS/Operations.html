@@ -1,0 +1,131 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Operations · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Admin operations and acceptance</h1>
+<h2>Workflow and state ownership</h2>
+<p>CMS/settings and operating organization/location management; domain owners retain controlled master semantics.</p>
+<p><a href="../../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a>. The <a href="LLD.html">LLD</a> holds module algorithms and transition cases; <a href="APIs.html">APIs</a> holds command-specific allowed/denied transitions. <a href="../../07-Engineering/State-and-Recovery-Contracts.html">Shared recovery contracts</a> define cross-owner compensation.</p>
+<h2>Authentication and authorization</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Authentication</th>
+<th>Roles / permission</th>
+<th>Command owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-032 GET <code>/v1/admin/dashboard</code></td>
+<td>Yes</td>
+<td>Admin / scoped Operations Manager; admin.dashboard.read</td>
+<td>Admin_CMS</td>
+</tr>
+<tr>
+<td>API-033 POST <code>/v1/admin/staff</code></td>
+<td>Yes</td>
+<td>Identity Administrator; identity.staff.invite</td>
+<td>Authentication_Access with organization membership owner</td>
+</tr>
+<tr>
+<td>API-034 PATCH <code>/v1/admin/staff/{staff_id}</code></td>
+<td>Yes</td>
+<td>Identity Administrator; identity.staff.manage</td>
+<td>Authentication_Access with organization membership owner</td>
+</tr>
+<tr>
+<td>API-035 GET <code>/v1/admin/settings</code></td>
+<td>Yes</td>
+<td>Admin / Configuration Manager; admin.settings.read</td>
+<td>Admin_CMS</td>
+</tr>
+<tr>
+<td>API-036 PATCH <code>/v1/admin/settings</code></td>
+<td>Yes</td>
+<td>Configuration Manager with Finance approval; admin.settings.manage</td>
+<td>Admin_CMS</td>
+</tr>
+<tr>
+<td>API-037 POST <code>/v1/admin/cms/pages/{page_id}/publish</code></td>
+<td>Yes</td>
+<td>Content Publisher; cms.publish</td>
+<td>Admin_CMS</td>
+</tr>
+<tr>
+<td>API-038 POST <code>/v1/admin/locations</code></td>
+<td>Yes</td>
+<td>Organization Administrator; organization.locations.create</td>
+<td>Admin_CMS</td>
+</tr>
+</tbody>
+</table>
+<p>Resource/patient/location checks and sensitive-field filtering are endpoint-specific in <a href="APIs.html">APIs</a>; roles never replace object authorization. For file/provider callbacks, use the documented capability/signature path. <a href="../../07-Engineering/Security.html">Security</a> applies alongside the exact retained SQL ACL/RLS policies.</p>
+<h2>Designed tests and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Normal case</th>
+<th>Denied / failure evidence</th>
+<th>Execution status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ADM-01</code></td>
+<td><a href="LLD.html">TC-ADM-01-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ADM-02</code></td>
+<td><a href="LLD.html">TC-ADM-02-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ADM-03</code></td>
+<td><a href="LLD.html">TC-ADM-03-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ADM-04</code></td>
+<td><a href="LLD.html">TC-ADM-04-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ADM-05</code></td>
+<td><a href="LLD.html">TC-ADM-05-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ADM-06</code></td>
+<td><a href="LLD.html">TC-ADM-06-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ADM-07</code></td>
+<td><a href="LLD.html">TC-ADM-07-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ADM-08</code></td>
+<td><a href="LLD.html">TC-ADM-08-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ADM-09</code></td>
+<td><a href="LLD.html">TC-ADM-09-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<p>Each endpoint additionally defines validation, authentication, authorization, business-gate, duplicate-intent, stale-version/concurrency and recovery cases. No execution is claimed. <a href="../../07-Engineering/Testing.html">Testing strategy</a> separates schema parity from application acceptance; <a href="../../08-Development-Plan/Implementation-Plan.html">delivery tasks</a> preserve existing TASK IDs.</p>
+<h2>Unified identity and workspace access</h2>
+<p><strong>Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.</strong> <a href="../Authentication_Access/Unified-Identity-Architecture.html">Unified Identity policy</a> is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. <a href="../../01-Project/User-Roles.html">Role/workspace matrix</a> defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.</p>
+</main></body></html>

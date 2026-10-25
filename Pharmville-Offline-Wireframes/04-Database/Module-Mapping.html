@@ -1,0 +1,2457 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Module Mapping · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Module to database mapping</h1>
+<p>&lt;!-- ERD-MODULE-MAP-START --&gt;</p>
+<h2>ER diagram navigation</h2>
+<p>This table links a feature module to the actual database schemas it may read or write; it does not assign exclusive ownership. The candidate modules are inherited from the existing module-to-database map.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Database ER diagrams</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/README.html">Admin_CMS</a></td>
+<td><a href="ER-Diagrams/16-organization.html"><code>organization</code></a>, <a href="ER-Diagrams/18-platform.html"><code>platform</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Audit/README.html">Audit</a></td>
+<td><a href="ER-Diagrams/05-compliance.html"><code>compliance</code></a>, <a href="ER-Diagrams/18-platform.html"><code>platform</code></a>, <a href="ER-Diagrams/21-risk.html"><code>risk</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/README.html">Authentication_Access</a></td>
+<td><a href="ER-Diagrams/10-identity.html"><code>identity</code></a>, <a href="ER-Diagrams/16-organization.html"><code>organization</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Cart_Checkout/README.html">Cart_Checkout</a></td>
+<td><a href="ER-Diagrams/04-commerce.html"><code>commerce</code></a>, <a href="ER-Diagrams/19-pricing.html"><code>pricing</code></a>, <a href="ER-Diagrams/24-warehouse.html"><code>warehouse</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/README.html">Customer_Accounts</a></td>
+<td><a href="ER-Diagrams/06-customer.html"><code>customer</code></a>, <a href="ER-Diagrams/10-identity.html"><code>identity</code></a>, <a href="ER-Diagrams/03-clinical.html"><code>clinical</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/README.html">Customer_Orders</a></td>
+<td><a href="ER-Diagrams/04-commerce.html"><code>commerce</code></a>, <a href="ER-Diagrams/12-logistics.html"><code>logistics</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/README.html">Delivery_Operations</a></td>
+<td><a href="ER-Diagrams/12-logistics.html"><code>logistics</code></a>, <a href="ER-Diagrams/16-organization.html"><code>organization</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/README.html">Finance_Payments</a></td>
+<td><a href="ER-Diagrams/17-payment.html"><code>payment</code></a>, <a href="ER-Diagrams/08-finance.html"><code>finance</code></a>, <a href="ER-Diagrams/04-commerce.html"><code>commerce</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/README.html">Inventory</a></td>
+<td><a href="ER-Diagrams/24-warehouse.html"><code>warehouse</code></a>, <a href="ER-Diagrams/02-catalog.html"><code>catalog</code></a>, <a href="ER-Diagrams/20-procurement.html"><code>procurement</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Notifications/README.html">Notifications</a></td>
+<td><a href="ER-Diagrams/15-notification.html"><code>notification</code></a>, <a href="ER-Diagrams/18-platform.html"><code>platform</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/README.html">Order_Operations</a></td>
+<td><a href="ER-Diagrams/04-commerce.html"><code>commerce</code></a>, <a href="ER-Diagrams/09-fulfillment.html"><code>fulfillment</code></a>, <a href="ER-Diagrams/16-organization.html"><code>organization</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Pharmacist_Review/README.html">Pharmacist_Review</a></td>
+<td><a href="ER-Diagrams/03-clinical.html"><code>clinical</code></a>, <a href="ER-Diagrams/04-commerce.html"><code>commerce</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Prescription_Upload/README.html">Prescription_Upload</a></td>
+<td><a href="ER-Diagrams/03-clinical.html"><code>clinical</code></a>, <a href="ER-Diagrams/18-platform.html"><code>platform</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/README.html">Product_Catalog</a></td>
+<td><a href="ER-Diagrams/02-catalog.html"><code>catalog</code></a>, <a href="ER-Diagrams/13-marketplace.html"><code>marketplace</code></a>, <a href="ER-Diagrams/19-pricing.html"><code>pricing</code></a>, <a href="ER-Diagrams/22-search.html"><code>search</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/README.html">Reporting</a></td>
+<td><a href="ER-Diagrams/18-platform.html"><code>platform</code></a>, <a href="ER-Diagrams/08-finance.html"><code>finance</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/README.html">Rider_App</a></td>
+<td><a href="ER-Diagrams/10-identity.html"><code>identity</code></a>, <a href="ER-Diagrams/12-logistics.html"><code>logistics</code></a>, <a href="ER-Diagrams/15-notification.html"><code>notification</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/README.html">Store_Operations</a></td>
+<td><a href="ER-Diagrams/09-fulfillment.html"><code>fulfillment</code></a>, <a href="ER-Diagrams/24-warehouse.html"><code>warehouse</code></a>, <a href="ER-Diagrams/20-procurement.html"><code>procurement</code></a></td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Warehouse/README.html">Warehouse</a></td>
+<td><a href="ER-Diagrams/24-warehouse.html"><code>warehouse</code></a>, <a href="ER-Diagrams/20-procurement.html"><code>procurement</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>&lt;!-- ERD-MODULE-MAP-END --&gt;</p>
+<p><a href="../07-Engineering/State-and-Recovery-Contracts.html#command-ownership-and-transaction-boundary">Command/data ownership and transaction boundaries</a> define the proposed writers. The lists below discover tables; they do not grant write access.</p>
+<h2>Admin CMS</h2>
+<h3>Admin masters and editorial pages — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>platform.cms_pages</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.cms_page_versions</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.cms_banners</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.application_settings</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>organization.locations</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Master data publication is an approved versioned action; staff scope is checked server-side. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Audit</h2>
+<h3>Immutable change evidence — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>platform.audit_logs</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.file_access_events</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>compliance.evidence</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.report_runs</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>identity.login_attempts</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: All privileged and denied actions generate minimum necessary audit evidence without raw secrets. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Authentication Access</h2>
+<h3>Login, sessions, roles and access control — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identity.users</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>identity.sessions</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>identity.roles</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>identity.user_roles</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>identity.permissions</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Client-supplied actor, role and location are never trusted as authorisation context. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Cart Checkout</h2>
+<h3>Cart, quote and placement intent — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>commerce.carts</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.cart_items</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.checkouts</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.orders</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.idempotency_keys</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: A changed fee, classification or inventory observation invalidates a quote until reaccepted; replay cannot create two orders. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Customer Accounts</h2>
+<h3>Customer profiles and family access — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identity.users</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>customer.profiles</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>customer.family_members</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>customer.addresses</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>clinical.patient_profiles</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Customer submits OTP, selects patient/address; sensitive information is never returned to other accounts. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Customer Orders</h2>
+<h3>Order tracking and aftercare — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>commerce.orders</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.order_items</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.cancellations</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.returns</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.order_status_history</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Customer cancellation or return requests must respect current order/fulfillment/payment states. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Delivery Operations</h2>
+<h3>Delivery planning, route and proof — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>logistics.shipments</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_assignments</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_attempts</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_slots</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>logistics.ndr_cases</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Finance Payments</h2>
+<h3>Payment truth, refunds and invoice evidence — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>payment.payment_intents</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>payment.payment_attempts</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>payment.payment_webhooks</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>payment.refunds</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>finance.invoices</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Unknown provider outcomes stay pending; external callbacks cannot double-apply money. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Inventory</h2>
+<h3>Lot-aware inventory and reservation — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>warehouse.stock_balances</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_reservations</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>warehouse.inventory_lots</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_ledger</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_holds</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: A reservation must not create negative eligible stock and must not use expired/blocked lots. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Notifications</h2>
+<h3>Transactional customer/staff messaging — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>notification.messages</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>notification.message_attempts</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>notification.templates</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>notification.user_channel_preferences</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.outbox_events</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Notification delivery is best effort after commit; it must never determine success of a stock or money action. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Order Operations</h2>
+<h3>Order orchestration and routing — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>commerce.orders</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.order_revisions</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.order_allocations</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>fulfillment.fulfillment_orders</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>organization.licenses</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: One order must have one accepted revision and an auditable licensed location/fulfillment decision. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Pharmacist Review</h2>
+<h3>Clinical review for prescription items — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clinical.order_reviews</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>clinical.order_review_items</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>clinical.prescriptions</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>clinical.review_reason_codes</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.order_items</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Only P-classified products trigger mandatory pharmacist review; M and O do not on classification alone. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Prescription Upload</h2>
+<h3>Private prescription intake — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clinical.prescriptions</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>clinical.prescription_documents</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.file_objects</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.file_access_events</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.file_upload_sessions</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Product Catalog</h2>
+<h3>Product discovery and classification — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>catalog.products</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>catalog.product_variants</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>catalog.product_classification_history</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>catalog.categories</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>search.documents</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Only approved and classified items can enter a legally permitted checkout path. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Reporting</h2>
+<h3>Scoped operations and financial reports — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>platform.report_definitions</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.report_runs</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>finance.settlement_runs</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>commerce.orders</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>platform.file_access_grants</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Reports must be authorised by entity scope and must not export unapproved patient data. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Rider App</h2>
+<h3>Rider shifts and delivery actions — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>logistics.rider_shifts</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_assignments</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_otp_challenges</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_location_updates</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>payment.cod_collections</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Rider sees only assigned delivery and masked necessary information; OTP outcome stays server-validated. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Store Operations</h2>
+<h3>Picking, packing and store replenishment — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fulfillment.pick_tasks</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>fulfillment.pack_tasks</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>fulfillment.packages</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_balances</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>procurement.purchase_requisitions</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Store actors can mutate only scoped tasks and must report actual shortages, never silently substitute. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Warehouse</h2>
+<h3>Warehouse replenishment and transfers — existing database usage</h3>
+<p><strong>Status: Inferred application usage backed by confirmed table existence.</strong> Do not confuse a physical schema with a write-access entitlement. Module table choices are implementation candidates until contract reviewed.</p>
+<table>
+<thead>
+<tr>
+<th>Verified table</th>
+<th>Intended use</th>
+<th>Schema/field reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>warehouse.warehouses</code></td>
+<td>Candidate read/write aggregate</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_transfers</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_transfer_items</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>procurement.goods_receipts</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_ledger</code></td>
+<td>Candidate read/integrate with domain owner</td>
+<td>all fields</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction boundary</h3>
+<p>Enforce: Receiving and transfers create a traceable stock ledger and require location/lot scope. Store durable business facts and outbox events atomically. Reconcile external side effects after commit. Verify appropriate database capability grants and RLS before enabling writes.</p>
+<p><strong>Related:</strong> LLD database operations · API index.</p>
+<h2>Effective table ownership register</h2>
+<p>All 266 physical tables have a proposed accountable write owner below. Future ownership requires D-027; shared infrastructure is separately assigned. API column writes remain proposals until D-024/runtime privilege review. Read access does not imply write ownership. The per-module Database pages list exact consuming API columns, delegated writes and master dependencies.</p>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Classification</th>
+<th>Proposed writer / accountable decision</th>
+<th>Contract-consuming modules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="Tables/appointment/appointment_slots.html"><code>appointment.appointment_slots</code></a></td>
+<td>Derived / Operational</td>
+<td>Future appointment owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/appointment/appointment_status_history.html"><code>appointment.appointment_status_history</code></a></td>
+<td>Audit / History</td>
+<td>Future appointment owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td>Transactional</td>
+<td>Future appointment owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/appointment/availability_exceptions.html"><code>appointment.availability_exceptions</code></a></td>
+<td>Configuration</td>
+<td>Future appointment owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/appointment/availability_rules.html"><code>appointment.availability_rules</code></a></td>
+<td>Configuration</td>
+<td>Future appointment owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future appointment owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/appointment/service_types.html"><code>appointment.service_types</code></a></td>
+<td>Master / Reference</td>
+<td>Future appointment owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/appointment/teleconsultation_sessions.html"><code>appointment.teleconsultation_sessions</code></a></td>
+<td>Transactional</td>
+<td>Future appointment owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/appointment/waiting_room_events.html"><code>appointment.waiting_room_events</code></a></td>
+<td>Audit / History</td>
+<td>Future appointment owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>Cart_Checkout, Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/product_attributes.html"><code>catalog.product_attributes</code></a></td>
+<td>Configuration</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/product_classification_history.html"><code>catalog.product_classification_history</code></a></td>
+<td>Audit / History</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/product_content.html"><code>catalog.product_content</code></a></td>
+<td>Configuration</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/product_identifiers.html"><code>catalog.product_identifiers</code></a></td>
+<td>Mapping / Junction</td>
+<td>Product_Catalog</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/product_media.html"><code>catalog.product_media</code></a></td>
+<td>Mapping / Junction</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/product_regulatory.html"><code>catalog.product_regulatory</code></a></td>
+<td>Configuration</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/product_relationships.html"><code>catalog.product_relationships</code></a></td>
+<td>Mapping / Junction</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/product_salts.html"><code>catalog.product_salts</code></a></td>
+<td>Mapping / Junction</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>Cart_Checkout, Customer_Accounts, Inventory, Order_Operations, Product_Catalog, Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/salts.html"><code>catalog.salts</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/substitution_group_products.html"><code>catalog.substitution_group_products</code></a></td>
+<td>Mapping / Junction</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/substitution_groups.html"><code>catalog.substitution_groups</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/catalog/units_of_measure.html"><code>catalog.units_of_measure</code></a></td>
+<td>Master / Reference</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td>Transactional</td>
+<td>Future clinical-care owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td>Transactional</td>
+<td>Future clinical-care owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/diagnoses.html"><code>clinical.diagnoses</code></a></td>
+<td>Transactional</td>
+<td>Future clinical-care owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td>Transactional</td>
+<td>Future clinical-care owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>Transactional</td>
+<td>Pharmacist_Review</td>
+<td>Finance_Payments, Inventory, Order_Operations, Pharmacist_Review, Prescription_Upload, Rider_App, Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>Transactional</td>
+<td>Pharmacist_Review</td>
+<td>Admin_CMS, Finance_Payments, Inventory, Order_Operations, Pharmacist_Review, Prescription_Upload, Rider_App, Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td>Transactional</td>
+<td>Future clinical-care owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td>Transactional</td>
+<td>Future clinical-care owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td>Transactional</td>
+<td>Future clinical-care owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td>Master / Reference</td>
+<td>Prescription_Upload</td>
+<td>Cart_Checkout, Customer_Accounts, Prescription_Upload</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future clinical-care owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td>Master / Reference</td>
+<td>Pharmacist_Review</td>
+<td>Pharmacist_Review</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/prescription_access_logs.html"><code>clinical.prescription_access_logs</code></a></td>
+<td>Audit / History</td>
+<td>Prescription_Upload</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td>Mapping / Junction</td>
+<td>Prescription_Upload</td>
+<td>Pharmacist_Review, Prescription_Upload</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td>Transactional</td>
+<td>Prescription_Upload</td>
+<td>Pharmacist_Review</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>Transactional</td>
+<td>Prescription_Upload</td>
+<td>Pharmacist_Review, Prescription_Upload</td>
+</tr>
+<tr>
+<td><a href="Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a></td>
+<td>Master / Reference</td>
+<td>Pharmacist_Review</td>
+<td>Pharmacist_Review</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/cancellation_items.html"><code>commerce.cancellation_items</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>Customer_Orders</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/cancellation_reason_codes.html"><code>commerce.cancellation_reason_codes</code></a></td>
+<td>Master / Reference</td>
+<td>Order_Operations</td>
+<td>Customer_Orders</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/cancellations.html"><code>commerce.cancellations</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>Customer_Orders</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/cart_items.html"><code>commerce.cart_items</code></a></td>
+<td>Transactional</td>
+<td>Cart_Checkout</td>
+<td>Cart_Checkout</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/carts.html"><code>commerce.carts</code></a></td>
+<td>Transactional</td>
+<td>Cart_Checkout</td>
+<td>Cart_Checkout</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/checkouts.html"><code>commerce.checkouts</code></a></td>
+<td>Transactional</td>
+<td>Cart_Checkout</td>
+<td>Cart_Checkout, Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/order_allocations.html"><code>commerce.order_allocations</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>Order_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/order_charges.html"><code>commerce.order_charges</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/order_discounts.html"><code>commerce.order_discounts</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>Cart_Checkout, Customer_Orders, Inventory, Order_Operations, Pharmacist_Review, Prescription_Upload, Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>Cart_Checkout, Customer_Orders, Finance_Payments, Inventory, Order_Operations, Pharmacist_Review, Rider_App, Store_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/order_status_history.html"><code>commerce.order_status_history</code></a></td>
+<td>Audit / History</td>
+<td>Order_Operations</td>
+<td>Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>Admin_CMS, Cart_Checkout, Customer_Accounts, Customer_Orders, Finance_Payments, Inventory, Notifications, Order_Operations, Pharmacist_Review, Prescription_Upload, Reporting, Rider_App, Store_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/return_items.html"><code>commerce.return_items</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>Customer_Orders</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/return_reason_codes.html"><code>commerce.return_reason_codes</code></a></td>
+<td>Master / Reference</td>
+<td>Order_Operations</td>
+<td>Customer_Orders</td>
+</tr>
+<tr>
+<td><a href="Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td>Transactional</td>
+<td>Order_Operations</td>
+<td>Customer_Orders</td>
+</tr>
+<tr>
+<td><a href="Tables/compliance/adverse_event_reports.html"><code>compliance.adverse_event_reports</code></a></td>
+<td>Transactional</td>
+<td>Pharmacist_Review via Compliance owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/compliance/evidence.html"><code>compliance.evidence</code></a></td>
+<td>Transactional</td>
+<td>Customer_Accounts via Privacy/Legal owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/compliance/legal_holds.html"><code>compliance.legal_holds</code></a></td>
+<td>Transactional</td>
+<td>Customer_Accounts via Privacy/Legal owner</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/compliance/privacy_requests.html"><code>compliance.privacy_requests</code></a></td>
+<td>Transactional</td>
+<td>Customer_Accounts via Privacy/Legal owner</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/compliance/product_recalls.html"><code>compliance.product_recalls</code></a></td>
+<td>Transactional</td>
+<td>Pharmacist_Review via Compliance owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/compliance/recall_lots.html"><code>compliance.recall_lots</code></a></td>
+<td>Mapping / Junction</td>
+<td>Pharmacist_Review via Compliance owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/compliance/regulatory_authorities.html"><code>compliance.regulatory_authorities</code></a></td>
+<td>Master / Reference</td>
+<td>Pharmacist_Review via Compliance owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/compliance/regulatory_registrations.html"><code>compliance.regulatory_registrations</code></a></td>
+<td>Transactional</td>
+<td>Pharmacist_Review via Compliance owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/customer/addresses.html"><code>customer.addresses</code></a></td>
+<td>Transactional</td>
+<td>Customer_Accounts</td>
+<td>Cart_Checkout, Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/customer/consent_events.html"><code>customer.consent_events</code></a></td>
+<td>Audit / History</td>
+<td>Customer_Accounts</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/customer/consents.html"><code>customer.consents</code></a></td>
+<td>Transactional</td>
+<td>Customer_Accounts</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>Mapping / Junction</td>
+<td>Customer_Accounts</td>
+<td>Cart_Checkout, Customer_Accounts, Prescription_Upload</td>
+</tr>
+<tr>
+<td><a href="Tables/customer/preferences.html"><code>customer.preferences</code></a></td>
+<td>Configuration</td>
+<td>Customer_Accounts</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/customer/profiles.html"><code>customer.profiles</code></a></td>
+<td>Master / Reference</td>
+<td>Customer_Accounts</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/customer/wishlist_items.html"><code>customer.wishlist_items</code></a></td>
+<td>Mapping / Junction</td>
+<td>Customer_Accounts</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/customer/wishlists.html"><code>customer.wishlists</code></a></td>
+<td>Transactional</td>
+<td>Customer_Accounts</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/diagnostic_order_items.html"><code>diagnostics.diagnostic_order_items</code></a></td>
+<td>Transactional</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+<td>Transactional</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/diagnostic_reports.html"><code>diagnostics.diagnostic_reports</code></a></td>
+<td>Transactional</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/diagnostic_result_values.html"><code>diagnostics.diagnostic_result_values</code></a></td>
+<td>Transactional</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/lab_locations.html"><code>diagnostics.lab_locations</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/lab_offerings.html"><code>diagnostics.lab_offerings</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/lab_providers.html"><code>diagnostics.lab_providers</code></a></td>
+<td>Master / Reference</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/sample_collections.html"><code>diagnostics.sample_collections</code></a></td>
+<td>Transactional</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/sample_events.html"><code>diagnostics.sample_events</code></a></td>
+<td>Audit / History</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/samples.html"><code>diagnostics.samples</code></a></td>
+<td>Transactional</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/test_definitions.html"><code>diagnostics.test_definitions</code></a></td>
+<td>Master / Reference</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/test_package_items.html"><code>diagnostics.test_package_items</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/diagnostics/test_packages.html"><code>diagnostics.test_packages</code></a></td>
+<td>Master / Reference</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/finance/accounts.html"><code>finance.accounts</code></a></td>
+<td>Master / Reference</td>
+<td>Finance_Payments</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/finance/credit_notes.html"><code>finance.credit_notes</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/finance/invoice_items.html"><code>finance.invoice_items</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Customer_Orders, Finance_Payments, Reporting</td>
+</tr>
+<tr>
+<td><a href="Tables/finance/invoices.html"><code>finance.invoices</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Customer_Orders, Finance_Payments, Reporting</td>
+</tr>
+<tr>
+<td><a href="Tables/finance/journal_entries.html"><code>finance.journal_entries</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/finance/journal_lines.html"><code>finance.journal_lines</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/finance/settlement_items.html"><code>finance.settlement_items</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/finance/settlement_runs.html"><code>finance.settlement_runs</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/fulfillment_events.html"><code>fulfillment.fulfillment_events</code></a></td>
+<td>Audit / History</td>
+<td>Store_Operations</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/fulfillment_order_items.html"><code>fulfillment.fulfillment_order_items</code></a></td>
+<td>Transactional</td>
+<td>Store_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td>Transactional</td>
+<td>Store_Operations</td>
+<td>Customer_Orders, Order_Operations, Reporting, Rider_App, Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/pack_tasks.html"><code>fulfillment.pack_tasks</code></a></td>
+<td>Transactional</td>
+<td>Store_Operations</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/package_items.html"><code>fulfillment.package_items</code></a></td>
+<td>Mapping / Junction</td>
+<td>Store_Operations</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td>Transactional</td>
+<td>Store_Operations</td>
+<td>Delivery_Operations, Reporting, Rider_App, Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/pick_task_items.html"><code>fulfillment.pick_task_items</code></a></td>
+<td>Transactional</td>
+<td>Store_Operations</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/pick_tasks.html"><code>fulfillment.pick_tasks</code></a></td>
+<td>Transactional</td>
+<td>Store_Operations</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/picking_wave_orders.html"><code>fulfillment.picking_wave_orders</code></a></td>
+<td>Mapping / Junction</td>
+<td>Store_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/fulfillment/picking_waves.html"><code>fulfillment.picking_waves</code></a></td>
+<td>Derived / Operational</td>
+<td>Store_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/api_client_secrets.html"><code>identity.api_client_secrets</code></a></td>
+<td>Configuration</td>
+<td>Authentication_Access</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/api_clients.html"><code>identity.api_clients</code></a></td>
+<td>Configuration</td>
+<td>Authentication_Access</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/login_attempts.html"><code>identity.login_attempts</code></a></td>
+<td>Audit / History</td>
+<td>Authentication_Access</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/mfa_factors.html"><code>identity.mfa_factors</code></a></td>
+<td>Configuration</td>
+<td>Authentication_Access</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/otp_challenges.html"><code>identity.otp_challenges</code></a></td>
+<td>Transactional</td>
+<td>Authentication_Access</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/password_history.html"><code>identity.password_history</code></a></td>
+<td>Audit / History</td>
+<td>Authentication_Access</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/permissions.html"><code>identity.permissions</code></a></td>
+<td>Master / Reference</td>
+<td>Authentication_Access</td>
+<td>Admin_CMS, Authentication_Access</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/role_permissions.html"><code>identity.role_permissions</code></a></td>
+<td>Mapping / Junction</td>
+<td>Authentication_Access</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/roles.html"><code>identity.roles</code></a></td>
+<td>Master / Reference</td>
+<td>Authentication_Access</td>
+<td>Admin_CMS, Authentication_Access, Delivery_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/sessions.html"><code>identity.sessions</code></a></td>
+<td>Transactional</td>
+<td>Authentication_Access</td>
+<td>Admin_CMS, Authentication_Access, Customer_Accounts</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/trusted_devices.html"><code>identity.trusted_devices</code></a></td>
+<td>Configuration</td>
+<td>Authentication_Access</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/user_profiles.html"><code>identity.user_profiles</code></a></td>
+<td>Master / Reference</td>
+<td>Authentication_Access</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/user_roles.html"><code>identity.user_roles</code></a></td>
+<td>Mapping / Junction</td>
+<td>Authentication_Access</td>
+<td>Admin_CMS, Authentication_Access, Delivery_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/identity/users.html"><code>identity.users</code></a></td>
+<td>Master / Reference</td>
+<td>Authentication_Access</td>
+<td>Admin_CMS, Authentication_Access, Customer_Accounts, Delivery_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/insurance/claim_documents.html"><code>insurance.claim_documents</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future insurance owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/insurance/claim_status_history.html"><code>insurance.claim_status_history</code></a></td>
+<td>Audit / History</td>
+<td>Future insurance owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/insurance/claims.html"><code>insurance.claims</code></a></td>
+<td>Transactional</td>
+<td>Future insurance owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/insurance/eligibility_checks.html"><code>insurance.eligibility_checks</code></a></td>
+<td>Transactional</td>
+<td>Future insurance owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/insurance/insurers.html"><code>insurance.insurers</code></a></td>
+<td>Master / Reference</td>
+<td>Future insurance owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/insurance/policies.html"><code>insurance.policies</code></a></td>
+<td>Transactional</td>
+<td>Future insurance owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/insurance/policy_members.html"><code>insurance.policy_members</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future insurance owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/insurance/tpas.html"><code>insurance.tpas</code></a></td>
+<td>Master / Reference</td>
+<td>Future insurance owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/carrier_accounts.html"><code>logistics.carrier_accounts</code></a></td>
+<td>Configuration</td>
+<td>Delivery_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td>Master / Reference</td>
+<td>Delivery_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/delivery_assignments.html"><code>logistics.delivery_assignments</code></a></td>
+<td>Transactional</td>
+<td>Delivery_Operations</td>
+<td>Admin_CMS, Delivery_Operations, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/delivery_attempts.html"><code>logistics.delivery_attempts</code></a></td>
+<td>Audit / History</td>
+<td>Delivery_Operations</td>
+<td>Delivery_Operations, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/delivery_failure_reasons.html"><code>logistics.delivery_failure_reasons</code></a></td>
+<td>Master / Reference</td>
+<td>Delivery_Operations</td>
+<td>Delivery_Operations, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/delivery_location_updates.html"><code>logistics.delivery_location_updates</code></a></td>
+<td>Audit / History</td>
+<td>Delivery_Operations</td>
+<td>Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/delivery_otp_challenges.html"><code>logistics.delivery_otp_challenges</code></a></td>
+<td>Transactional</td>
+<td>Delivery_Operations</td>
+<td>Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/delivery_routes.html"><code>logistics.delivery_routes</code></a></td>
+<td>Derived / Operational</td>
+<td>Delivery_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/delivery_slots.html"><code>logistics.delivery_slots</code></a></td>
+<td>Derived / Operational</td>
+<td>Delivery_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/ndr_cases.html"><code>logistics.ndr_cases</code></a></td>
+<td>Transactional</td>
+<td>Delivery_Operations</td>
+<td>Delivery_Operations, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/reverse_shipments.html"><code>logistics.reverse_shipments</code></a></td>
+<td>Transactional</td>
+<td>Delivery_Operations</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/rider_shifts.html"><code>logistics.rider_shifts</code></a></td>
+<td>Transactional</td>
+<td>Delivery_Operations</td>
+<td>Delivery_Operations, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/serviceability_rules.html"><code>logistics.serviceability_rules</code></a></td>
+<td>Configuration</td>
+<td>Delivery_Operations</td>
+<td>Cart_Checkout, Order_Operations, Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/shipment_events.html"><code>logistics.shipment_events</code></a></td>
+<td>Audit / History</td>
+<td>Delivery_Operations</td>
+<td>Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td>Transactional</td>
+<td>Delivery_Operations</td>
+<td>Admin_CMS, Customer_Orders, Delivery_Operations, Reporting, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/marketplace/commission_plans.html"><code>marketplace.commission_plans</code></a></td>
+<td>Configuration</td>
+<td>Future marketplace owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/marketplace/seller_commission_assignments.html"><code>marketplace.seller_commission_assignments</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future marketplace owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/marketplace/seller_locations.html"><code>marketplace.seller_locations</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future marketplace owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/marketplace/seller_product_listings.html"><code>marketplace.seller_product_listings</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future marketplace owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/marketplace/seller_ratings.html"><code>marketplace.seller_ratings</code></a></td>
+<td>Transactional</td>
+<td>Future marketplace owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/marketplace/seller_service_levels.html"><code>marketplace.seller_service_levels</code></a></td>
+<td>Configuration</td>
+<td>Future marketplace owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a></td>
+<td>Master / Reference</td>
+<td>Future marketplace owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/membership/benefit_usage.html"><code>membership.benefit_usage</code></a></td>
+<td>Transactional</td>
+<td>Future membership owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td>Derived / Operational</td>
+<td>Future membership owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/membership/loyalty_ledger.html"><code>membership.loyalty_ledger</code></a></td>
+<td>Audit / History</td>
+<td>Future membership owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td>Configuration</td>
+<td>Future membership owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td>Master / Reference</td>
+<td>Future membership owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td>Transactional</td>
+<td>Future membership owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/device_endpoints.html"><code>notification.device_endpoints</code></a></td>
+<td>Configuration</td>
+<td>Notifications</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td>Transactional</td>
+<td>Notifications</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td>Mapping / Junction</td>
+<td>Notifications</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/message_attempts.html"><code>notification.message_attempts</code></a></td>
+<td>Audit / History</td>
+<td>Notifications</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td>Transactional</td>
+<td>Notifications</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td>Configuration</td>
+<td>Notifications</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/provider_webhooks.html"><code>notification.provider_webhooks</code></a></td>
+<td>Audit / History</td>
+<td>Notifications</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/suppressions.html"><code>notification.suppressions</code></a></td>
+<td>Configuration</td>
+<td>Notifications</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td>Configuration</td>
+<td>Notifications</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td><a href="Tables/notification/user_channel_preferences.html"><code>notification.user_channel_preferences</code></a></td>
+<td>Configuration</td>
+<td>Notifications</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td><a href="Tables/organization/bank_accounts.html"><code>organization.bank_accounts</code></a></td>
+<td>Configuration</td>
+<td>Admin_CMS</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td>Master / Reference</td>
+<td>Admin_CMS</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td>Transactional</td>
+<td>Admin_CMS</td>
+<td>Inventory, Order_Operations, Product_Catalog, Rider_App, Store_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td>Master / Reference</td>
+<td>Admin_CMS</td>
+<td>Admin_CMS, Delivery_Operations, Inventory, Order_Operations, Product_Catalog, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td>Mapping / Junction</td>
+<td>Admin_CMS</td>
+<td>Admin_CMS, Delivery_Operations, Order_Operations, Pharmacist_Review, Reporting, Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td>Master / Reference</td>
+<td>Admin_CMS</td>
+<td>Admin_CMS</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Delivery_Operations, Finance_Payments, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td>Configuration</td>
+<td>Finance_Payments</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/payment_attempts.html"><code>payment.payment_attempts</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Finance_Payments, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/payment_transactions.html"><code>payment.payment_transactions</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/payment_webhooks.html"><code>payment.payment_webhooks</code></a></td>
+<td>Audit / History</td>
+<td>Finance_Payments</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td>Configuration</td>
+<td>Finance_Payments</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/reconciliation_items.html"><code>payment.reconciliation_items</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/refund_allocations.html"><code>payment.refund_allocations</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/refund_reason_codes.html"><code>payment.refund_reason_codes</code></a></td>
+<td>Master / Reference</td>
+<td>Finance_Payments</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td><a href="Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td>Transactional</td>
+<td>Finance_Payments</td>
+<td>Customer_Orders, Finance_Payments</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+<td>Configuration</td>
+<td>Admin_CMS</td>
+<td>Admin_CMS, Cart_Checkout</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/audit_logs.html"><code>platform.audit_logs</code></a></td>
+<td>Audit / History</td>
+<td>Audit</td>
+<td>Audit</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/cms_banners.html"><code>platform.cms_banners</code></a></td>
+<td>Configuration</td>
+<td>Admin_CMS</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/cms_page_versions.html"><code>platform.cms_page_versions</code></a></td>
+<td>Audit / History</td>
+<td>Admin_CMS</td>
+<td>Admin_CMS</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td>Configuration</td>
+<td>Admin_CMS</td>
+<td>Admin_CMS</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/data_retention_policies.html"><code>platform.data_retention_policies</code></a></td>
+<td>Configuration</td>
+<td>Admin_CMS</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/feature_flags.html"><code>platform.feature_flags</code></a></td>
+<td>Configuration</td>
+<td>Admin_CMS</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/file_access_events.html"><code>platform.file_access_events</code></a></td>
+<td>Audit / History</td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td>Mapping / Junction</td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>Customer_Orders, Finance_Payments, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>Derived / Operational</td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>Customer_Orders, Finance_Payments, Prescription_Upload, Product_Catalog, Rider_App</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/file_scan_events.html"><code>platform.file_scan_events</code></a></td>
+<td>Audit / History</td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td>Derived / Operational</td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>Prescription_Upload</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td>Mapping / Junction</td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/idempotency_keys.html"><code>platform.idempotency_keys</code></a></td>
+<td>Derived / Operational</td>
+<td>Shared platform runtime — engineering owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/inbox_messages.html"><code>platform.inbox_messages</code></a></td>
+<td>Derived / Operational</td>
+<td>Shared platform runtime — engineering owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/outbox_events.html"><code>platform.outbox_events</code></a></td>
+<td>Derived / Operational</td>
+<td>Shared platform runtime — engineering owner</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a></td>
+<td>Configuration</td>
+<td>Reporting</td>
+<td>Audit, Reporting</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td>Derived / Operational</td>
+<td>Reporting</td>
+<td>Audit, Reporting</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/scheduled_jobs.html"><code>platform.scheduled_jobs</code></a></td>
+<td>Derived / Operational</td>
+<td>Shared platform runtime — engineering owner</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/webhook_deliveries.html"><code>platform.webhook_deliveries</code></a></td>
+<td>Transactional</td>
+<td>Shared platform runtime — engineering owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+<td>Configuration</td>
+<td>Shared platform runtime — engineering owner</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td>Configuration</td>
+<td>Product_Catalog</td>
+<td>Cart_Checkout</td>
+</tr>
+<tr>
+<td><a href="Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td>Configuration</td>
+<td>Product_Catalog</td>
+<td>Cart_Checkout, Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/pricing/pricing_evaluations.html"><code>pricing.pricing_evaluations</code></a></td>
+<td>Derived / Operational</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td>Configuration</td>
+<td>Product_Catalog</td>
+<td>Cart_Checkout, Order_Operations, Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td>Transactional</td>
+<td>Product_Catalog</td>
+<td>Cart_Checkout</td>
+</tr>
+<tr>
+<td><a href="Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td>Audit / History</td>
+<td>Product_Catalog</td>
+<td>Cart_Checkout</td>
+</tr>
+<tr>
+<td><a href="Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td>Configuration</td>
+<td>Product_Catalog</td>
+<td>Cart_Checkout</td>
+</tr>
+<tr>
+<td><a href="Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td>Configuration</td>
+<td>Finance_Payments</td>
+<td>Cart_Checkout, Order_Operations, Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/goods_receipt_items.html"><code>procurement.goods_receipt_items</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/goods_receipt_quality_checks.html"><code>procurement.goods_receipt_quality_checks</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/goods_receipts.html"><code>procurement.goods_receipts</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/purchase_order_items.html"><code>procurement.purchase_order_items</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/purchase_orders.html"><code>procurement.purchase_orders</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/purchase_requisition_items.html"><code>procurement.purchase_requisition_items</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Store_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/purchase_requisitions.html"><code>procurement.purchase_requisitions</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Store_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/purchase_return_items.html"><code>procurement.purchase_return_items</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/purchase_returns.html"><code>procurement.purchase_returns</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/supplier_invoices.html"><code>procurement.supplier_invoices</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/supplier_licenses.html"><code>procurement.supplier_licenses</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/supplier_products.html"><code>procurement.supplier_products</code></a></td>
+<td>Mapping / Junction</td>
+<td>Warehouse</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/procurement/suppliers.html"><code>procurement.suppliers</code></a></td>
+<td>Master / Reference</td>
+<td>Warehouse</td>
+<td>Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/risk/assessments.html"><code>risk.assessments</code></a></td>
+<td>Derived / Operational</td>
+<td>Future risk owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/risk/blocklists.html"><code>risk.blocklists</code></a></td>
+<td>Configuration</td>
+<td>Future risk owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td>Transactional</td>
+<td>Future risk owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/risk/rules.html"><code>risk.rules</code></a></td>
+<td>Configuration</td>
+<td>Future risk owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/risk/signals.html"><code>risk.signals</code></a></td>
+<td>Transactional</td>
+<td>Future risk owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/search/documents.html"><code>search.documents</code></a></td>
+<td>Derived / Operational</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/search/indexing_jobs.html"><code>search.indexing_jobs</code></a></td>
+<td>Derived / Operational</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/search/query_events.html"><code>search.query_events</code></a></td>
+<td>Audit / History</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/search/redirects.html"><code>search.redirects</code></a></td>
+<td>Configuration</td>
+<td>Product_Catalog</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/search/synonyms.html"><code>search.synonyms</code></a></td>
+<td>Configuration</td>
+<td>Product_Catalog</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td><a href="Tables/support/sla_policies.html"><code>support.sla_policies</code></a></td>
+<td>Configuration</td>
+<td>Future support owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td>Audit / History</td>
+<td>Future support owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future support owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td>Audit / History</td>
+<td>Future support owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/support/ticket_status_history.html"><code>support.ticket_status_history</code></a></td>
+<td>Audit / History</td>
+<td>Future support owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/support/ticket_tag_assignments.html"><code>support.ticket_tag_assignments</code></a></td>
+<td>Mapping / Junction</td>
+<td>Future support owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/support/ticket_tags.html"><code>support.ticket_tags</code></a></td>
+<td>Master / Reference</td>
+<td>Future support owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td>Transactional</td>
+<td>Future support owner — Requires Decision D-027</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td>Master / Reference</td>
+<td>Warehouse</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td>Master / Reference</td>
+<td>Warehouse</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td>Transactional</td>
+<td>Inventory</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td>Transactional</td>
+<td>Inventory</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td>Transactional</td>
+<td>Inventory</td>
+<td>Inventory</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td>Transactional</td>
+<td>Inventory</td>
+<td>Inventory</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td>Transactional</td>
+<td>Inventory</td>
+<td>Inventory, Order_Operations, Product_Catalog, Reporting, Store_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td>Master / Reference</td>
+<td>Warehouse</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td>Configuration</td>
+<td>Warehouse</td>
+<td>Inventory, Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td>Derived / Operational</td>
+<td>Inventory</td>
+<td>Admin_CMS, Inventory, Order_Operations, Product_Catalog, Reporting, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td>Transactional</td>
+<td>Inventory</td>
+<td>Inventory</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td>Audit / History</td>
+<td>Inventory</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/stock_movement_reason_codes.html"><code>warehouse.stock_movement_reason_codes</code></a></td>
+<td>Master / Reference</td>
+<td>Inventory</td>
+<td>Inventory</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td>Transactional</td>
+<td>Inventory</td>
+<td>Finance_Payments, Inventory, Rider_App, Store_Operations</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Store_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td>Transactional</td>
+<td>Warehouse</td>
+<td>Store_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td>Master / Reference</td>
+<td>Warehouse</td>
+<td>Inventory, Order_Operations, Reporting, Store_Operations, Warehouse</td>
+</tr>
+<tr>
+<td><a href="Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td>Master / Reference</td>
+<td>Warehouse</td>
+<td>No current API; retain for future/operational scope</td>
+</tr>
+</tbody>
+</table>
+<h2>Unified Identity ownership extension — D-028</h2>
+<p>Authentication_Access owns <a href="Tables/identity/authentication_challenges.html">authentication_challenges</a>, <a href="Tables/identity/session_refresh_tokens.html">session_refresh_tokens</a> and shared identity/session/grant commands. Customer Accounts and Admin are historical API surfaces invoking those commands. Rider is a consumer of the same identity and OTP policy. Exact current read/write columns and API IDs are in <a href="../03-Modules/Authentication_Access/Database.html">Authentication database contract</a>. No new SQL runtime grants are implied.</p>
+</main></body></html>

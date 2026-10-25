@@ -1,0 +1,419 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>notification · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Notification foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>notification</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-0898</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/device_endpoints.html"><code>notification.device_endpoints</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0899</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/device_endpoints.html"><code>notification.device_endpoints</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0900</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/device_endpoints.html"><code>notification.device_endpoints</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0901</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/device_endpoints.html"><code>notification.device_endpoints</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0902</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0903</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0904</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td><code>image_file_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0905</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td><code>image_file_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0906</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0907</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0908</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0909</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0910</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td><code>file_object_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0911</td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td><code>message_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0912</td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td><code>message_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0913</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0914</td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><a href="../../Tables/notification/message_attempts.html"><code>notification.message_attempts</code></a></td>
+<td><code>message_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-02">15-notification.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0915</td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><a href="../../Tables/notification/message_attempts.html"><code>notification.message_attempts</code></a></td>
+<td><code>message_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-02">15-notification.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0916</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0917</td>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><code>provider_configuration_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0918</td>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><code>provider_configuration_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0919</td>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><code>template_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0920</td>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><code>template_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0921</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0922</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0923</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0924</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0925</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0926</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/provider_webhooks.html"><code>notification.provider_webhooks</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-02">15-notification.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0927</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/provider_webhooks.html"><code>notification.provider_webhooks</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-02">15-notification.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0928</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/suppressions.html"><code>notification.suppressions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0929</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/suppressions.html"><code>notification.suppressions</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0930</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/suppressions.html"><code>notification.suppressions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0931</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0932</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0933</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0934</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/user_channel_preferences.html"><code>notification.user_channel_preferences</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0935</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/user_channel_preferences.html"><code>notification.user_channel_preferences</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0936</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/user_channel_preferences.html"><code>notification.user_channel_preferences</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0937</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/notification/user_channel_preferences.html"><code>notification.user_channel_preferences</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../15-notification.html#diagram-01">15-notification.md#diagram-01</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

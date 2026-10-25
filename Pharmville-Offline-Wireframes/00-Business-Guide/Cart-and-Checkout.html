@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cart and Checkout · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Cart and checkout</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.</p>
+</blockquote>
+<h2>What is this process?</h2>
+<p>Checkout turns a basket into one understandable order request. The customer sees and accepts its contents, destination and total before payment proceeds.</p>
+<h2>Who is involved?</h2>
+<p>Customers, Pharmacy, order operations, Inventory and Finance.</p>
+<h2>How does it normally work?</h2>
+<ol>
+<li>A signed-in customer builds a cart that can be reopened on another device. Adding an item does not reserve stock.</li>
+<li>The customer chooses a serviceable address. For P medicines they select themselves or an authorized dependent; the detailed draft uses one patient per such order.</li>
+<li>Pharmville rechecks quantities, classification, prices, minimum value, delivery fee and estimate. The customer explicitly accepts a changed summary.</li>
+<li>P baskets require prescription evidence and one recorded request for review. The current detailed journey completes pharmacist review and customer acceptance of any revision before payment. M/O-only baskets skip review.</li>
+<li>Before payment, Pharmville checks eligible licensed-location and batch stock and obtains a temporary hold. A failed hold cannot be treated as confirmed supply.</li>
+<li>The customer pays online or chooses eligible COD. Limits, refusal rules and hold duration require approval. The screen distinguishes awaiting review, checking payment and confirmed.</li>
+</ol>
+<h2>What happens next?</h2>
+<p>Continue to <a href="Prescription-and-Pharmacy.html">pharmacy</a>, <a href="Payments-and-Billing.html">payment</a> or <a href="Orders-and-Fulfillment.html">fulfillment</a>, according to the remaining gates.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<h3>The customer taps twice or loses the response</h3>
+<p>A slow connection encourages repetition. Pharmville returns the same recorded outcome for that attempt and lets the customer reopen status. Support checks its reference; no second order or charge is created.</p>
+<h3>The quote, address or payment choice is no longer valid</h3>
+<p>Another device, a price update or an unsupported destination can invalidate checkout. Pharmville explains what changed and pauses for a fresh accepted summary or eligible method. The customer corrects it; the old quote cannot authorize a new amount.</p>
+<h3>A hold expires while money is uncertain</h3>
+<p>A delayed payment may outlast the approved hold. Inventory releases unused held stock once; Finance checks the existing payment. The customer sees checking payment and must not be asked to pay again immediately. Operations secures valid stock or Finance applies approved compensation; neither is assumed.</p>
+<h3>Only some items remain available</h3>
+<p>Rejection or shortage can leave eligible lines. Pharmville offers a revision only under approved policy and waits for customer acceptance. It does not silently split sites, substitute or charge a changed basket.</p>
+<h2>What does the user see?</h2>
+<p>Customers see the accepted summary and fee, changed-line warnings, review/payment next steps and the existing order reference. Duplicate clicks reopen that result.</p>
+<h2>What still needs approval?</h2>
+<p>D-004 (payment sequence), D-005/D-009 (holds), D-007 (COD), D-010 (changes). The <a href="../09-References/Sources-and-Decisions.html#open-decisions">decision register</a> names owners and blocked actions.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../02-Architecture/System-HLD.html">System HLD</a> · <a href="../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development tasks</a></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Architecture</th>
+<th>Implementation</th>
+<th>API</th>
+<th>Data</th>
+<th>Edge cases and tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cart Checkout</td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#cart-checkout">Mapping</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Cases</a></td>
+</tr>
+</tbody>
+</table>
+<p>Technical workflows: <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a> · <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a> · <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a> · <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>.</p>
+<p>Feature references: <code>CHK-01</code>, <code>CHK-02</code>, <code>CHK-03</code>, <code>CHK-04</code>, <code>CHK-05</code>, <code>CHK-06</code>, <code>CHK-07</code>, <code>CHK-08</code>.</p>
+<p><a href="README.html">Business Guide</a> · <a href="Pharmville-Complete-Business-Flow.html">Complete journey</a></p>
+</main></body></html>

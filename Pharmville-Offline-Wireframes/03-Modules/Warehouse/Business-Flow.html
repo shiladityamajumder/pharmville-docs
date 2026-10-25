@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Warehouse business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Warehouse / Procurement. Warehouse geometry, receiving and transfers/procurement; Inventory owns stock ledger and balances.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Load scoped warehouse tasks, receiving or transfer intent and approved supplier/location dependencies.</li>
+<li>Receive exact products and lots with batch/expiry/quality evidence; Inventory applies durable stock effects.</li>
+<li>Dispatch and receive transfers with distinct custody outcomes; never count in-transit quantities twice.</li>
+<li>Replenish within approved launch scope; full procurement/fallback rollout remains a product/operations decision.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WH-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-WH-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>WH-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-WH-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>WH-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-WH-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>WH-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-WH-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>WH-05</code></td>
+<td>Could (draft)</td>
+<td><a href="LLD.html">TC-WH-05-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Store-and-Warehouse.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-002; D-007; D-012; D-024.</p>
+</main></body></html>

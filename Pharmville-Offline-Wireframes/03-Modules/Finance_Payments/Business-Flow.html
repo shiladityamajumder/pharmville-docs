@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Payments business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Finance / Payments. Money, refunds, invoices, accounting and reconciliation; no direct clinical or stock approval.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Create one payment attempt for the accepted order revision and amount; uncertain provider outcomes remain pending.</li>
+<li>Authenticate provider evidence using the validated provider signature contract; reconcile trusted callback/status evidence before marking money.</li>
+<li>Process permitted COD collection/handover and reconcile collected versus deposited money without treating delivery as bank settlement.</li>
+<li>Create reasoned idempotent refunds and approved ledger/invoice/settlement effects; duplicate events cannot duplicate money.</li>
+<li>Expose scoped reconciliation/reporting; provider wire formats and multi-state action mappings remain incomplete where recorded.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FIN-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-FIN-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>FIN-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-FIN-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>FIN-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-FIN-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>FIN-04</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-FIN-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>FIN-05</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-FIN-05-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>FIN-06</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-FIN-06-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>FIN-07</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-FIN-07-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Payments-and-Billing.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-004; D-007; D-008; D-011; D-012; D-016; D-024.</p>
+</main></body></html>

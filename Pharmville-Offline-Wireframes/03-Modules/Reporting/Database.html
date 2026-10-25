@@ -1,0 +1,151 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Reporting database contract</h1>
+<p><strong>Structure validated; business write assignment Proposed.</strong> Report definitions, runs and scoped read-only outputs; source domains own data and correction commands. Read access or a contract surface does not confer write ownership. Exact operation transactions/DTO columns are in <a href="APIs.html">APIs</a>; shared audit/outbox/idempotency writes are owner-coordinated infrastructure.</p>
+<h2>Proposed owned tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Classification</th>
+<th>Write-owner approval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td>Derived / Operational</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+</tbody>
+</table>
+<h2>Contract reads and writes</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Exact read columns</th>
+<th>Exact proposed write columns</th>
+<th>Proposed data owner</th>
+<th>API IDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Order_Operations</td>
+<td>API-082, API-083</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/finance/invoice_items.html"><code>finance.invoice_items</code></a></td>
+<td><code>hsn_code</code>, <code>id</code>, <code>invoice_id</code>, <code>line_total</code>, <code>order_item_id</code>, <code>row_version</code>, <code>tax_amount</code>, <code>tax_rate</code></td>
+<td>None</td>
+<td>Finance_Payments</td>
+<td>API-083</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/finance/invoices.html"><code>finance.invoices</code></a></td>
+<td><code>currency</code>, <code>grand_total</code>, <code>id</code>, <code>issued_at</code>, <code>order_id</code>, <code>row_version</code>, <code>status</code>, <code>subtotal</code>, <code>tax_total</code></td>
+<td>None</td>
+<td>Finance_Payments</td>
+<td>API-082, API-083</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td><code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>row_version</code>, <code>status</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Store_Operations</td>
+<td>API-085</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td><code>fulfillment_order_id</code>, <code>id</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Store_Operations</td>
+<td>API-085</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td><code>delivered_at</code>, <code>dispatched_at</code>, <code>estimated_delivery_at</code>, <code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>package_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Delivery_Operations</td>
+<td>API-085</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>id</code>, <code>location_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Admin_CMS</td>
+<td>API-086</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a></td>
+<td><code>code</code>, <code>id</code>, <code>is_active</code></td>
+<td>None</td>
+<td>Reporting</td>
+<td>API-082, API-083, API-084, API-085, API-086</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td>None</td>
+<td><code>definition_id</code>, <code>parameters</code>, <code>requested_at</code>, <code>requested_by_user_id</code>, <code>status</code></td>
+<td>Reporting</td>
+<td>API-086</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>batch_number</code>, <code>expires_at</code>, <code>id</code>, <code>quality_status</code>, <code>recall_status</code>, <code>row_version</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Inventory</td>
+<td>API-084</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>bin_id</code>, <code>damaged_qty</code>, <code>id</code>, <code>inventory_observed_at</code>, <code>inventory_source</code>, <code>lot_id</code>, <code>on_hand_qty</code>, <code>quarantined_qty</code>, <code>reserved_qty</code>, <code>row_version</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Inventory</td>
+<td>API-084</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>location_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Warehouse</td>
+<td>API-084</td>
+</tr>
+</tbody>
+</table>
+<h2>Master and transaction dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Controlled table</th>
+<th>Classification</th>
+<th>Lifecycle and initial data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+</tbody>
+</table>
+<p>Every mutation must enter the authoritative owner command with explicit scope/version, apply only that command’s invariant, and commit aggregate/audit/outbox together. External provider/file/message effects occur after commit; idempotency and recovery are per endpoint. Shared-table audit/outbox infrastructure does not acquire domain ownership. Physical SQL guards are recorded on each linked table page; application authorization remains additional.</p>
+</main></body></html>

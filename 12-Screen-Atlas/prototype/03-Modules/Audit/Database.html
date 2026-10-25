@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Audit database contract</h1>
+<p><strong>Structure validated; business write assignment Proposed.</strong> Append-only evidence infrastructure and authorized audit reads; business domains own command effects. Read access or a contract surface does not confer write ownership. Exact operation transactions/DTO columns are in <a href="APIs.html">APIs</a>; shared audit/outbox/idempotency writes are owner-coordinated infrastructure.</p>
+<h2>Proposed owned tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Classification</th>
+<th>Write-owner approval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/platform/audit_logs.html"><code>platform.audit_logs</code></a></td>
+<td>Audit / History</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+</tbody>
+</table>
+<h2>Contract reads and writes</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Exact read columns</th>
+<th>Exact proposed write columns</th>
+<th>Proposed data owner</th>
+<th>API IDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/platform/audit_logs.html"><code>platform.audit_logs</code></a></td>
+<td><code>action</code>, <code>actor_type</code>, <code>id</code>, <code>occurred_at</code>, <code>request_id</code>, <code>resource_id</code>, <code>resource_type</code></td>
+<td>None</td>
+<td>Audit</td>
+<td>API-087, API-088</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a></td>
+<td><code>code</code>, <code>id</code>, <code>is_active</code></td>
+<td>None</td>
+<td>Reporting</td>
+<td>API-088</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td>None</td>
+<td><code>definition_id</code>, <code>parameters</code>, <code>requested_at</code>, <code>requested_by_user_id</code>, <code>status</code></td>
+<td>Reporting</td>
+<td>API-088</td>
+</tr>
+</tbody>
+</table>
+<h2>Master and transaction dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Controlled table</th>
+<th>Classification</th>
+<th>Lifecycle and initial data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+</tbody>
+</table>
+<p>Every mutation must enter the authoritative owner command with explicit scope/version, apply only that command’s invariant, and commit aggregate/audit/outbox together. External provider/file/message effects occur after commit; idempotency and recovery are per endpoint. Shared-table audit/outbox infrastructure does not acquire domain ownership. Physical SQL guards are recorded on each linked table page; application authorization remains additional.</p>
+</main></body></html>

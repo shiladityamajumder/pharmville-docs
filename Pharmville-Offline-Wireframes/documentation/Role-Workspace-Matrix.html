@@ -1,0 +1,247 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Role Workspace Matrix · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Role-to-workspace access matrix</h1>
+<p><strong>Status: Prototype illustration of proposed defaults. No permissions are approved or granted by this document or the demo.</strong> The canonical <a href="../../01-Project/User-Roles.html">User Roles</a> and <a href="../../03-Modules/Authentication_Access/Unified-Identity-Architecture.html">Unified Identity architecture</a> remain authoritative. The access controls here are local fixtures, not a production authorization service.</p>
+<h2>Proposed role and workspace mapping</h2>
+<p>The role names and scope below follow the inherited role inventory where possible. Login/MFA notes preserve documented customer OTP, rider OTP and AUTH-01 requirements. Staff MFA beyond the specifically named privileged roles remains a proposal pending D-003/D-024. Workspace access requires a role assignment and explicit endpoint permission; a navigation card never grants either.</p>
+<table>
+<thead>
+<tr>
+<th>Role / candidate</th>
+<th>Workspace</th>
+<th>Login method</th>
+<th>MFA</th>
+<th>Permission scope</th>
+<th>Restrictions and status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer</td>
+<td>Customer app and website</td>
+<td>Verified phone OTP</td>
+<td>None mandatory in inherited flow</td>
+<td>Own profile, consent, patient/dependent, address, cart and orders</td>
+<td>No staff access; private evidence remains owner/consent scoped. Confirmed inherited flow.</td>
+</tr>
+<tr>
+<td>Super Admin</td>
+<td>Administration</td>
+<td>Password + authenticator</td>
+<td>Required by AUTH-01</td>
+<td>Explicit global identity/admin grants</td>
+<td>Cannot self-escalate; no clinical or finance bypass. Existing proposed role.</td>
+</tr>
+<tr>
+<td>Central Admin</td>
+<td>Administration</td>
+<td>Password + authenticator</td>
+<td>Required by AUTH-01</td>
+<td>Explicit central organization/location administration grants</td>
+<td>Scope depends on approved organization membership. Existing proposed role.</td>
+</tr>
+<tr>
+<td>Pharmacist / Licensed Pharmacist</td>
+<td>Pharmacist workbench</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned licensed site, patient, evidence and exact P-lines</td>
+<td>Clinical qualification and reviewer rules remain independent. Existing role alias.</td>
+</tr>
+<tr>
+<td>Store Manager</td>
+<td>Store operations</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned store and manager-only approved actions</td>
+<td>No other store, pharmacy or finance override. Existing proposed role.</td>
+</tr>
+<tr>
+<td>Store Staff / Store Worker</td>
+<td>Store operations</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned store and current pick, pack and receipt tasks</td>
+<td>No manager-only adjustments. Existing role alias.</td>
+</tr>
+<tr>
+<td>Warehouse Manager</td>
+<td>Warehouse operations</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned warehouse and approved supervisor actions</td>
+<td>No arbitrary source/destination scope or finance settlement. Existing proposed role.</td>
+</tr>
+<tr>
+<td>Warehouse Staff / Receiving Staff</td>
+<td>Warehouse operations</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned receiving, transfer and picking work</td>
+<td>Receiving does not authorize supplier payment. Existing role alias.</td>
+</tr>
+<tr>
+<td>Inventory Operator / Controller</td>
+<td>Inventory workspace</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted organization/location/warehouse stock actions</td>
+<td>Lot, reason, POS and approval rules remain. Existing alias.</td>
+</tr>
+<tr>
+<td>Order Operations / Operations Manager</td>
+<td>Order operations</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted organization/site order queues and named operations</td>
+<td>Cannot independently change clinical or money state. Existing role.</td>
+</tr>
+<tr>
+<td>Delivery Dispatcher</td>
+<td>Delivery dispatch</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Explicitly granted shipment assignment and location scope</td>
+<td>Separate permission-filtered capability of Ops Manager in the existing matrix; Orders does not imply Delivery.</td>
+</tr>
+<tr>
+<td>Rider / Delivery Rider</td>
+<td>Rider mobile app</td>
+<td>Verified phone OTP per RID-01</td>
+<td>No new mandatory MFA</td>
+<td>Current shift and assigned task only</td>
+<td>Cannot choose another rider's work; customer delivery OTP and photo proof remain. Confirmed inherited method.</td>
+</tr>
+<tr>
+<td>Finance Manager</td>
+<td>Finance workspace</td>
+<td>Password + authenticator</td>
+<td>Required by AUTH-01</td>
+<td>Explicit organization/site finance and refund permissions</td>
+<td>No prescription evidence; amount and approval rules remain. Existing proposed role.</td>
+</tr>
+<tr>
+<td>Finance Executive</td>
+<td>Finance workspace</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned finance tasks and scoped reports</td>
+<td>No manager override or self-approved refund. Existing role.</td>
+</tr>
+<tr>
+<td>Catalog Manager</td>
+<td>Catalog workspace within Administration</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted catalog import, classification and publication actions</td>
+<td>Product classification approvals remain separate. Existing proposed role.</td>
+</tr>
+<tr>
+<td>CMS Manager</td>
+<td>CMS workspace within Administration</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted content and template publication</td>
+<td>No implicit IAM, clinical, catalog-classification or finance access. Existing proposed role.</td>
+</tr>
+<tr>
+<td>Support Agent</td>
+<td>Support workspace</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003/D-020 approval</td>
+<td>Approved case scope and minimal customer projections</td>
+<td>No refund, dispensing, evidence alteration or cross-organization access. Candidate role, approval pending.</td>
+</tr>
+<tr>
+<td>Auditor / Security Reviewer</td>
+<td>Audit workspace</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Read-only audit evidence and purpose-scoped exports</td>
+<td>No business mutations or blanket patient access. Existing alias.</td>
+</tr>
+<tr>
+<td>Report Viewer / Exporter</td>
+<td>Reporting workspace</td>
+<td>Staff method from assigned role</td>
+<td>Inherited role policy</td>
+<td>Named report, date and location scope</td>
+<td>A capability on an assigned role, not an automatic identity or new grant.</td>
+</tr>
+<tr>
+<td>Notification Operator</td>
+<td>Notification workspace</td>
+<td>Staff method from assigned role</td>
+<td>Inherited role policy</td>
+<td>Event attempts and only explicitly granted template operations</td>
+<td>A capability, not a separate identity; no secret/template leakage.</td>
+</tr>
+<tr>
+<td>Procurement (candidate)</td>
+<td>Procurement workspace</td>
+<td>Staff password; authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Proposed supplier/PO work within an approved organization</td>
+<td>New demo persona only; no approved procurement role or supplier integration.</td>
+</tr>
+</tbody>
+</table>
+<p>See the canonical <a href="../../01-Project/User-Roles.html">role inventory</a> for the 16 proposed role codes and source status. The prototype also exposes candidate workspace cards to demonstrate task flow; candidate entries do not extend the approved role inventory.</p>
+<h2>Workspace selection and session behavior</h2>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Expected behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First sign-in with one eligible workspace</td>
+<td>The backend may suggest that workspace; the client still enters only through an authorized context.</td>
+</tr>
+<tr>
+<td>More than one assignment</td>
+<td>Show only backend-derived eligible workspaces, with organization/location labels; the person chooses one.</td>
+</tr>
+<tr>
+<td>Context switch</td>
+<td>Recheck assignment, status, target permissions and resource scope before changing the active workspace. Keep one identity and session.</td>
+</tr>
+<tr>
+<td>Higher-security workspace</td>
+<td>Require step-up bound to the session and authorized assignment before activation. The demo marks Administration, Pharmacist and Finance as illustrative targets; exact policy and freshness remain pending security approval.</td>
+</tr>
+<tr>
+<td>Unauthorized workspace</td>
+<td>Deny with no context or data. A typed role/panel value cannot create a grant.</td>
+</tr>
+<tr>
+<td>Assignment revoked</td>
+<td>Deny on the next authoritative authorization check after revocation; clear invalid active context and offer other valid assignments. Production propagation/locking is still governed by the canonical revocation decision.</td>
+</tr>
+<tr>
+<td>Account suspended or session expired</td>
+<td>Deny protected actions, revoke the session/proofs and return to eligible identity recovery.</td>
+</tr>
+<tr>
+<td>No workspace assigned</td>
+<td>Keep the identity in account-access state; do not show or invent a business workspace.</td>
+</tr>
+<tr>
+<td>Frontend menu hidden</td>
+<td>Treat only as navigation. Every API independently checks action permission and resource scope.</td>
+</tr>
+</tbody>
+</table>
+<p>The browser prototype demonstrates a single synthetic identity session, staff password plus authenticator, customer/rider OTP adapters, assigned-workspace selection, denial of arbitrary contexts, per-workspace step-up prompts and revocation. It does not implement credential storage, token rotation, concurrent-session limits, distributed revocation, session-cookie/CSRF controls or real-time assignment changes.</p>
+<h2>Workspace demonstration personas</h2>
+<p>For a repeatable local review, the browser-only fixture includes <code>demo.admin@example.test</code> (Admin), <code>pharmacist@example.test</code> (Pharmacist), <code>store@example.test</code> (Store Worker), <code>warehouse@example.test</code> (Warehouse Worker), <code>finance@example.test</code> (Finance), and <code>support@example.test</code> (Support). Staff sign-in uses the displayed fictional password/MFA flow; customer and rider flows use the displayed synthetic OTP. These are fake identifiers and must not be used as real credentials. Unknown identifiers receive the same generic sign-in response.</p>
+<p>The separate Review Mode persona selector can inspect screens and scenarios. It does not create an identity session, role assignment, location membership or permission grant. To demonstrate protected-workspace selection, use Access → sign in → Authorized workspaces.</p>
+<h2>Decisions that remain open</h2>
+<ul>
+<li>D-003 / D-024: approve the role/permission catalogue, staff authentication policy, assignment scope and access-review process.</li>
+<li>D-023: approve authorization consistency, revocation propagation and cache behavior.</li>
+<li>D-020: approve Support role, customer projection and case access boundaries.</li>
+<li>Security owner: approve which workspaces require step-up and the proof freshness/reuse window. The demo's three elevated destinations are proposed UX examples only.</li>
+<li>Product/IAM owner: decide whether Procurement is an existing capability assignment or a separately named role; this prototype only uses a candidate fixture.</li>
+</ul>
+</main></body></html>

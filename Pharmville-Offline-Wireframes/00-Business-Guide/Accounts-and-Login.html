@@ -1,0 +1,71 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Accounts and Login · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Accounts and login</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.</p>
+</blockquote>
+<h2>What is this process?</h2>
+<p>An account keeps a customer’s addresses, family details, wishlist and order history together. Signing in proves identity; access to a particular patient or staff action is checked separately.</p>
+<h2>Who is involved?</h2>
+<p>Customers, authorized family-account holders, staff, Security and support.</p>
+<h2>How does it normally work?</h2>
+<ol>
+<li>The customer enters a mobile number and reads the current privacy notice. Pharmville records explicit consent choices against that version of the notice.</li>
+<li>A one-time code is sent through the configured WhatsApp route, with SMS fallback under the approved rule. A valid unused code permits sign-in.</li>
+<li>A new customer supplies the required profile name. A verified number alone must not create a made-up completed profile. Permissions during incomplete signup need approval.</li>
+<li>The customer maintains their profile, saved addresses, map pins, authorized dependents and wishlist. Delivery availability is checked separately for each order.</li>
+<li>Staff sign in using their role’s approved method. The draft privileged-role policy requires password and authenticator verification; customer OTP alone must not unlock those roles.</li>
+<li>Deletion requests go to privacy review. The customer is told whether the request is pending or complete; required financial or clinical evidence is not silently erased.</li>
+</ol>
+<h2>What happens next?</h2>
+<p>The customer continues to <a href="Catalog-and-Product-Discovery.html">product discovery</a> or <a href="Cart-and-Checkout.html">checkout</a>.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<h3>The code is wrong, expired or entered twice</h3>
+<p>A typing error, delay or second browser tab can cause this. Pharmville refuses invalid proof and creates at most one session from a code. The customer sees a safe verification message and can request another code within approved limits; Security handles abuse.</p>
+<h3>No code arrives</h3>
+<p>The provider or mobile connection may fail. Delivery stays pending or failed and only the approved fallback is used. The customer can retry when allowed or contact support; support cannot bypass identity proof.</p>
+<h3>A contact change or patient link is unsafe</h3>
+<p>A replacement number may be unverified or a dependent may belong to another household. Pharmville preserves the verified contact and refuses unauthorized links. The customer sees a verification/access explanation; Security resolves legitimate recovery using approved proof.</p>
+<h3>Two edits or a retention hold interrupt the request</h3>
+<p>Competing profile edits require the stale device to reload, preserving the accepted edit. A deletion blocked by legal retention stays in review rather than completed. The customer resolves edit conflicts; Privacy owns retention review and protects the retained records.</p>
+<h2>What does the user see?</h2>
+<p>Customers see code delivery/verification, incomplete signup, saved details and deletion-review status. Staff see only actions allowed by their current role and location.</p>
+<h2>What still needs approval?</h2>
+<p>D-003 (login), D-013 (consent and retention), D-023 (contact changes). The <a href="../09-References/Sources-and-Decisions.html#open-decisions">decision register</a> names owners and blocked actions.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../02-Architecture/System-HLD.html">System HLD</a> · <a href="../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development tasks</a></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Architecture</th>
+<th>Implementation</th>
+<th>API</th>
+<th>Data</th>
+<th>Edge cases and tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer Accounts</td>
+<td><a href="../03-Modules/Customer_Accounts/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#customer-accounts">Mapping</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Cases</a></td>
+</tr>
+<tr>
+<td>Authentication Access</td>
+<td><a href="../03-Modules/Authentication_Access/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#authentication-access">Mapping</a></td>
+<td><a href="../03-Modules/Authentication_Access/Edge-Cases.html">Cases</a></td>
+</tr>
+</tbody>
+</table>
+<p>Technical workflows: <a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>.</p>
+<p>Feature references: <code>ACC-01</code>, <code>ACC-02</code>, <code>ACC-03</code>, <code>ACC-04</code>, <code>ACC-05</code>, <code>ACC-06</code>, <code>ACC-07</code>, <code>AUTH-01</code>, <code>AUTH-02</code>, <code>AUTH-03</code>, <code>AUTH-04</code>.</p>
+<p><a href="README.html">Business Guide</a> · <a href="Pharmville-Complete-Business-Flow.html">Complete journey</a></p>
+<h2>Unified identity and workspace access</h2>
+<p><strong>Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.</strong> <a href="../03-Modules/Authentication_Access/Unified-Identity-Architecture.html">Unified Identity policy</a> is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. <a href="../01-Project/User-Roles.html">Role/workspace matrix</a> defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.</p>
+</main></body></html>

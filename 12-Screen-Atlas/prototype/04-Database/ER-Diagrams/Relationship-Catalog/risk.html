@@ -1,0 +1,179 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>risk · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Risk foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>risk</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-1247</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/assessments.html"><code>risk.assessments</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1248</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/blocklists.html"><code>risk.blocklists</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1249</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/blocklists.html"><code>risk.blocklists</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1250</td>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td><a href="../../Tables/risk/blocklists.html"><code>risk.blocklists</code></a></td>
+<td><code>source_case_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1251</td>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td><a href="../../Tables/risk/blocklists.html"><code>risk.blocklists</code></a></td>
+<td><code>source_case_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1252</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/blocklists.html"><code>risk.blocklists</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1253</td>
+<td><a href="../../Tables/risk/assessments.html"><code>risk.assessments</code></a></td>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td><code>assessment_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1254</td>
+<td><a href="../../Tables/risk/assessments.html"><code>risk.assessments</code></a></td>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td><code>assessment_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1255</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td><code>assigned_to_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1256</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1257</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1258</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/rules.html"><code>risk.rules</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1259</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/rules.html"><code>risk.rules</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1260</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/risk/rules.html"><code>risk.rules</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1261</td>
+<td><a href="../../Tables/risk/assessments.html"><code>risk.assessments</code></a></td>
+<td><a href="../../Tables/risk/signals.html"><code>risk.signals</code></a></td>
+<td><code>assessment_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1262</td>
+<td><a href="../../Tables/risk/assessments.html"><code>risk.assessments</code></a></td>
+<td><a href="../../Tables/risk/signals.html"><code>risk.signals</code></a></td>
+<td><code>assessment_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../21-risk.html#diagram-01">21-risk.md#diagram-01</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

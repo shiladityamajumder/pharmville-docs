@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HLD · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Order Operations HLD</h1>
+<p>&lt;!-- ERD-NAV-START --&gt;</p>
+<h2>Database relationships</h2>
+<p><a href="../../04-Database/ER-Diagrams/04-commerce.html"><code>commerce</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/09-fulfillment.html"><code>fulfillment</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/16-organization.html"><code>organization</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/Relationship-Catalog.html">FK catalog</a></p>
+<p>These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See <a href="../../04-Database/Migrations.html">migration evidence</a> for the supplied source and deployment verification limits.</p>
+<p>&lt;!-- ERD-NAV-END --&gt;</p>
+<p><a href="../../00-Business-Guide/Orders-and-Fulfillment.html">Business flow</a> · <a href="../../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a></p>
+<h2>MOD-007: Order orchestration and routing — HLD</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.</p>
+</blockquote>
+<p><strong>Business responsibility:</strong> Order orchestration and routing. One order must have one accepted revision and an auditable licensed location/fulfillment decision.</p>
+<p><strong>System responsibility:</strong> The <code>Order_Operations</code> NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are <strong>not</strong> proof of exclusive write ownership.</p>
+<h3>Major operations</h3>
+<ul>
+<li>Order list with filters (status, location, date, payment, Rx) and search by order number or phone (<code>OMS-01</code>)</li>
+<li>Order detail: items, batches, prescription, payment, delivery, full history (<code>OMS-02</code>)</li>
+<li>Automatic routing to the nearest open store with every item; warehouse as fallback (<code>OMS-03</code>)</li>
+<li>Reassign an order to another location, with a reason (<code>OMS-04</code>)</li>
+<li>Cancel, partly fulfil, raise return, add internal note (<code>OMS-05</code>)</li>
+<li>Attention queue: payment pending, stuck orders, failed deliveries (<code>OMS-06</code>)</li>
+<li>Assisted order entry for phone orders (<code>OMS-07</code>)</li>
+</ul>
+<h3>Dependencies and trust boundaries</h3>
+<ul>
+<li>Database candidates: <code>commerce.orders</code>, <code>commerce.order_revisions</code>, <code>commerce.order_allocations</code>, <code>fulfillment.fulfillment_orders</code>, <code>organization.licenses</code>.</li>
+<li>Role, patient, store and order scope resolved from trusted access context, not JSON body.</li>
+<li>External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.</li>
+<li>Use local transactions for authoritative state; publish external side effects only after commit.</li>
+</ul>
+<p><strong>Technical design:</strong> <a href="LLD.html">Module LLD</a> · <a href="../../05-APIs/README.html">API index</a> · <a href="../../07-Engineering/Testing.html">Tests</a></p>
+<h3>Risk</h3>
+<p>One order must have one accepted revision and an auditable licensed location/fulfillment decision. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.</p>
+<h2>MOD-007 — Order orchestration and routing</h2>
+<p><strong>Source classification:</strong> 7 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.</p>
+<p><strong>Purpose:</strong> One order must have one accepted revision and an auditable licensed location/fulfillment decision.</p>
+<p><strong>Feature coverage</strong></p>
+<ul>
+<li><strong>OMS-01 / REQ-045:</strong> Order list with filters (status, location, date, payment, Rx) and search by order number or phone (Must (draft)).</li>
+<li><strong>OMS-02 / REQ-046:</strong> Order detail: items, batches, prescription, payment, delivery, full history (Must (draft)).</li>
+<li><strong>OMS-03 / REQ-047:</strong> Automatic routing to the nearest open store with every item; warehouse as fallback (Must (draft)).</li>
+<li><strong>OMS-04 / REQ-048:</strong> Reassign an order to another location, with a reason (Must (draft)).</li>
+<li><strong>OMS-05 / REQ-049:</strong> Cancel, partly fulfil, raise return, add internal note (Must (draft)).</li>
+<li><strong>OMS-06 / REQ-050:</strong> Attention queue: payment pending, stuck orders, failed deliveries (Must (draft)).</li>
+<li><strong>OMS-07 / REQ-051:</strong> Assisted order entry for phone orders (Could (draft)).</li>
+</ul>
+<h3>Developer navigation</h3>
+<ul>
+<li><a href="HLD.html">Module HLD</a></li>
+<li><a href="LLD.html">Module LLD</a></li>
+<li>Internal architecture</li>
+<li><a href="APIs.html">API contracts</a></li>
+<li><a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li><a href="../../07-Engineering/Testing.html">Testing</a></li>
+<li><a href="../../08-Development-Plan/Implementation-Plan.html">Implementation plan</a></li>
+</ul>
+<p><strong>Dependencies:</strong> all cross-module references require ownership and permission checks; see master dependency register.</p>
+</main></body></html>

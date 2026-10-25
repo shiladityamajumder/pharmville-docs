@@ -1,0 +1,429 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>pricing · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Pricing foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>pricing</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-1113</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><code>assigned_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1114</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1115</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1116</td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><code>promotion_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1117</td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><code>promotion_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1118</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1119</td>
+<td><a href="../../Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a></td>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><code>seller_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1120</td>
+<td><a href="../../Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a></td>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><code>seller_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1121</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1122</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1123</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1124</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1125</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1126</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/pricing_evaluations.html"><code>pricing.pricing_evaluations</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1127</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1128</td>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>price_book_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1129</td>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>price_book_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1130</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>product_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1131</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>product_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1132</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1133</td>
+<td><a href="../../Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>variant_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1134</td>
+<td><a href="../../Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>variant_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1135</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>order_id, user_id</code> → <code>id, user_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1136</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>order_id_internal_id, user_id</code> → <code>internal_id, user_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1137</td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>coupon_code_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1138</td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>coupon_code_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1139</td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>promotion_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1140</td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>promotion_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1141</td>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>promotion_version_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1142</td>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>promotion_version_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1143</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1144</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1145</td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td><code>promotion_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1146</td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td><code>promotion_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1147</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1148</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1149</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1150</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1151</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1152</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1153</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../19-pricing.html#diagram-01">19-pricing.md#diagram-01</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

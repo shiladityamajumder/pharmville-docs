@@ -1,0 +1,120 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>README · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>API contracts</h1>
+<p><a href="../00-Business-Guide/README.html">Business Guide</a> · <a href="Critical-Operation-Contracts.html">critical operation contracts</a> · <a href="../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a> · <a href="../09-References/Coverage-and-Traceability.html">feature traceability</a></p>
+<h2>Contract status</h2>
+<p>All routes in this package are <strong>proposed Pharmville contracts</strong>. No Pharmville HTTP application or route-level contract tests were available for verification. A sibling healthcare authentication service does provide an implemented and unit-tested camelCase response envelope; that is evidence only for the envelope, not for Pharmville routes, authentication policy, domain DTOs, or runtime behavior. See <a href="Standard-Responses.html">Standard responses</a>.</p>
+<p>The historical API identifier range API-001–API-097 is preserved. The five historical account references API-005–API-009 are now listed as individual routes in <a href="../03-Modules/Customer_Accounts/APIs.html">Customer Accounts</a>. Ten additional account operations use stable <code>ACC-ROUTE-*</code> documentation references and do not consume historical IDs.</p>
+<p>The complete mapping preserves 107 existing HTTP operations and adds 15 explicit unified-Identity proposals (122 total) and is recorded in the <a href="API-Contract-Coverage.html">API contract coverage ledger</a>.</p>
+<h2>Domain contracts</h2>
+<p>Canonical endpoint contracts now live in each module’s <code>APIs.md</code>; this shared area owns conventions, OpenAPI, indexes and coverage. Historical domain filenames are compatibility navigation only.</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication and access</td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">Authentication Access</a></td>
+</tr>
+<tr>
+<td>Customer accounts</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">Customer Accounts</a></td>
+</tr>
+<tr>
+<td>Product catalog</td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">Product Catalog</a></td>
+</tr>
+<tr>
+<td>Cart and checkout</td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">Cart Checkout</a></td>
+</tr>
+<tr>
+<td>Prescription upload</td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">Prescription Upload</a></td>
+</tr>
+<tr>
+<td>Pharmacist review</td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">Pharmacist Review</a></td>
+</tr>
+<tr>
+<td>Customer orders</td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">Customer Orders</a></td>
+</tr>
+<tr>
+<td>Order operations</td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">Order Operations</a></td>
+</tr>
+<tr>
+<td>Store operations</td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">Store Operations</a></td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td><a href="../03-Modules/Warehouse/APIs.html">Warehouse</a></td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td><a href="../03-Modules/Inventory/APIs.html">Inventory</a></td>
+</tr>
+<tr>
+<td>Delivery operations</td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">Delivery Operations</a></td>
+</tr>
+<tr>
+<td>Rider app</td>
+<td><a href="../03-Modules/Rider_App/APIs.html">Rider App</a></td>
+</tr>
+<tr>
+<td>Finance and payments</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">Finance Payments</a></td>
+</tr>
+<tr>
+<td>Admin and CMS</td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">Admin CMS</a></td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td><a href="../03-Modules/Notifications/APIs.html">Notifications</a></td>
+</tr>
+<tr>
+<td>Reporting</td>
+<td><a href="../03-Modules/Reporting/APIs.html">Reporting</a></td>
+</tr>
+<tr>
+<td>Audit</td>
+<td><a href="../03-Modules/Audit/APIs.html">Audit</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Shared contract standards</h2>
+<ul>
+<li><a href="API-Conventions.html">API conventions</a> define versioning, public identifiers, casing, request processing and server-generated fields.</li>
+<li><a href="Authentication-and-Authorization.html">Authentication and authorization</a> define caller trust, object ownership and candidate headers. D-003 and D-023 remain open.</li>
+<li><a href="Standard-Responses.html">Standard responses</a> define the verified reference envelope and its proposed Pharmville use, including list, async, replay and no-content exceptions.</li>
+<li><a href="Error-Catalog.html">Error catalog</a> gives stable proposed machine codes and retry guidance.</li>
+<li><a href="Pagination-and-Filtering.html">Pagination and filtering</a> define scope-safe cursor/offset rules; operation limits and supported fields remain owner decisions unless stated.</li>
+<li><a href="Idempotency-and-Concurrency.html">Idempotency and concurrency</a> define proposed replay and stale-version behavior; D-024 approval remains required.</li>
+<li><a href="Database-DTO-Mapping.html">Database-first DTO mapping</a> links operation groups to documented table fields, types, nullability, constraints and relationships while separating persisted, derived and public-only values.</li>
+<li><a href="openapi.yaml">OpenAPI 3.1</a> maps each operation to an owner contract. OpenAPI descriptions/extensions mark proposed contracts and blockers; it does not imply implementation.</li>
+</ul>
+<h2>Cross-domain invariants</h2>
+<p>Public catalog reads expose only published safe fields. Catalog availability is advisory; inventory rechecks eligible stock at reservation and picking. Prescription access is private and bound to the correct customer, patient, order revision and evidence. Clinical approval, order acceptance, payment success, stock commitment and delivery completion are distinct business facts.</p>
+<p>Browser payment redirects are not authoritative. Signed provider callbacks require D-016 wire evidence, durable deduplication and reconciliation. Staff, warehouse, pharmacist, finance, rider, export and audit access always checks server-side permissions and object scope.</p>
+<p>Each module document preserves its feature IDs, candidate data ownership, failure handling and designed test cases. These test scenarios are <strong>Designed / NOT RUN</strong> unless execution evidence is explicitly cited. The documented authoritative database source folder is absent here, and the adjacent similarly named folder does not match the evidence manifest; only checked-in database documentation is available for this turn.</p>
+<p>Review <a href="API-Contract-Coverage.html">API contract coverage</a> before implementation; remaining incomplete fields and all proposed owner decisions must be approved under D-024.</p>
+<h2>Detailed planning blueprint</h2>
+<p>The preserved 107-operation inventory now has <strong>97 documentation-complete proposed contracts (90.65%)</strong>, <strong>10 incomplete</strong>, <strong>0 approved</strong>, and <strong>0 verified implementations</strong>. Every operation has its own section in its module document, with request/auth/header/response/error/database/operational/test detail. Ten explicitly excluded contracts retain concrete unresolved gaps; complete proposals still require domain approval.</p>
+<ul>
+<li><a href="API-Contract-Coverage.html">Coverage and per-operation status</a></li>
+<li><a href="API-Database-Feature-Matrix.html">API/database/feature matrix</a></li>
+<li><a href="../04-Database/Master-Data-Inventory.html">Master inventory and initial records</a> — 266 tables classified, 44 masters, 11 explicit initial-value lists, 33 Open datasets.</li>
+<li><a href="Planning-Decisions.html">Planning decisions</a></li>
+<li><a href="Journey-API-Gaps.html">Journey gaps and 16 candidate commands</a> — not added to the existing inventory.</li>
+<li><a href="Planning-Validation.html">Validation evidence</a></li>
+</ul>
+<h2>Standard problem response behavior</h2>
+<p>Use the existing four-field response envelope and the <a href="Error-Catalog.html">error catalog</a>. Each endpoint supplies its applicable error triggers and recovery; protected failures redact patient, credential, provider and hidden-resource information. HTTP 204 has no body. Shared envelope reuse does not replace an operation DTO.</p>
+<p><a href="../03-Modules/Authentication_Access/Unified-Identity-Architecture.html">Unified Identity architecture</a> · <a href="../03-Modules/Authentication_Access/API-Compatibility.html">compatibility and rollout</a> · <a href="../01-Project/User-Roles.html">workspace matrix</a>.</p>
+</main></body></html>

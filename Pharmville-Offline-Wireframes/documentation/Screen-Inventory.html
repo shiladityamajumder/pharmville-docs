@@ -1,0 +1,838 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Screen Inventory · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Screen inventory</h1>
+<p>Generated from the actual screen registry by <code>node 10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs</code>. Stable screen IDs describe reusable views, not one HTML file per feature. The source still contains 110 draft features across 18 modules. Customer routes support Mobile App and Desktop Website presentations; staff workspaces are responsive desktop-first sites, and the rider workspace is mobile-first.</p>
+<table>
+<thead>
+<tr>
+<th>Screen ID</th>
+<th>Screen</th>
+<th>Experience / workspace</th>
+<th>Illustrative role</th>
+<th>Feature IDs</th>
+<th>Available states</th>
+<th>Prototype link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SCR-CUS-001</td>
+<td>Sign in with your mobile</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ACC-01</code>, <code>ACC-05</code>, <code>AUTH-03</code></td>
+<td>normal, loading, validation, network, session, otp-delivery, otp-fallback, rate-limit</td>
+<td><a href="../index.html#/customer/login">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-002</td>
+<td>Verify your code</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ACC-01</code>, <code>AUTH-03</code></td>
+<td>normal, loading, validation, network, session, otp-wrong, otp-expired, otp-delivery, otp-fallback, rate-limit, duplicate</td>
+<td><a href="../index.html#/customer/otp">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-003</td>
+<td>My profile</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ACC-02</code></td>
+<td>normal, loading, validation, network, session, conflict, permission</td>
+<td><a href="../index.html#/customer/profile">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-004</td>
+<td>Saved delivery addresses</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ACC-03</code></td>
+<td>normal, loading, validation, network, session, empty, invalid-address, permission</td>
+<td><a href="../index.html#/customer/addresses">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-005</td>
+<td>Family and patient profiles</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ACC-04</code>, <code>RX-04</code></td>
+<td>normal, loading, validation, network, session, empty, permission</td>
+<td><a href="../index.html#/customer/family">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-006</td>
+<td>Privacy notice and consent</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ACC-05</code></td>
+<td>normal, loading, validation, network, session, conflict</td>
+<td><a href="../index.html#/customer/privacy">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-007</td>
+<td>Request account deletion</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ACC-06</code></td>
+<td>normal, loading, validation, network, session, duplicate</td>
+<td><a href="../index.html#/customer/deletion">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-008</td>
+<td>My wishlist</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ACC-07</code></td>
+<td>normal, loading, empty, network, out-of-stock, duplicate, session</td>
+<td><a href="../index.html#/customer/wishlist">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-009</td>
+<td>Pharmville shop</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CAT-01</code>, <code>CAT-04</code>, <code>CAT-06</code></td>
+<td>normal, loading, empty, network, out-of-stock</td>
+<td><a href="../index.html#/customer/home">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-010</td>
+<td>Categories and subcategories</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CAT-01</code></td>
+<td>normal, loading, empty, network, out-of-stock</td>
+<td><a href="../index.html#/customer/categories">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-011</td>
+<td>Search results and suggestions</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CAT-03</code></td>
+<td>normal, loading, empty, network, out-of-stock</td>
+<td><a href="../index.html#/customer/search">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-012</td>
+<td>Product details</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CAT-02</code>, <code>CAT-04</code>, <code>CAT-06</code>, <code>ACC-07</code></td>
+<td>normal, loading, empty, network, out-of-stock, permission</td>
+<td><a href="../index.html#/customer/product">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-013</td>
+<td>Compare exact alternatives</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CAT-05</code></td>
+<td>normal, loading, empty, network, out-of-stock, prescription-rejected</td>
+<td><a href="../index.html#/customer/alternatives">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-014</td>
+<td>Your cart</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CHK-01</code>, <code>CHK-05</code>, <code>CHK-06</code></td>
+<td>normal, loading, empty, network, out-of-stock, conflict, price-change, session</td>
+<td><a href="../index.html#/customer/cart">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-015</td>
+<td>Checkout · delivery address</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CHK-02</code>, <code>ACC-03</code></td>
+<td>normal, loading, validation, network, session, empty, invalid-address, permission</td>
+<td><a href="../index.html#/customer/checkout-address">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-016</td>
+<td>Checkout · choose patient</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CHK-02</code>, <code>RX-04</code>, <code>ACC-04</code></td>
+<td>normal, loading, validation, network, session, permission</td>
+<td><a href="../index.html#/customer/checkout-patient">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-017</td>
+<td>Checkout · accept current summary</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CHK-02</code>, <code>CHK-05</code>, <code>CHK-06</code>, <code>CHK-07</code>, <code>CHK-08</code></td>
+<td>normal, loading, validation, network, session, price-change, out-of-stock, duplicate, stock-expired, invalid-address, conflict</td>
+<td><a href="../index.html#/customer/checkout-summary">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-018</td>
+<td>Prescription upload</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>RX-01</code>, <code>RX-02</code>, <code>RX-03</code>, <code>RX-04</code></td>
+<td>normal, loading, validation, network, session, prescription-missing, unreadable, permission</td>
+<td><a href="../index.html#/customer/prescription-upload">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-019</td>
+<td>Pharmacist review status</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>RX-05</code>, <code>RX-04</code></td>
+<td>normal, loading, validation, network, session, prescription-rejected, prescription-partial, prescription-missing, unreadable</td>
+<td><a href="../index.html#/customer/prescription-status">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-020</td>
+<td>Accept a revised order</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>RX-05</code>, <code>CHK-06</code></td>
+<td>normal, loading, validation, network, session, prescription-partial, price-change, conflict</td>
+<td><a href="../index.html#/customer/revised-order">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-021</td>
+<td>Choose a payment method</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CHK-03</code>, <code>CHK-04</code>, <code>CHK-07</code>, <code>CHK-08</code></td>
+<td>normal, loading, validation, network, session, payment-declined, payment-pending, confirmation-lost, duplicate, stock-expired, out-of-stock</td>
+<td><a href="../index.html#/customer/payment">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-022</td>
+<td>Payment and order result</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CHK-03</code>, <code>CHK-07</code>, <code>ORD-01</code></td>
+<td>normal, loading, network, payment-declined, payment-pending, confirmation-lost, duplicate</td>
+<td><a href="../index.html#/customer/payment-result">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-023</td>
+<td>Recover existing payment</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>CHK-07</code>, <code>CHK-08</code>, <code>FIN-01</code></td>
+<td>normal, loading, network, payment-pending, confirmation-lost, stock-expired, duplicate</td>
+<td><a href="../index.html#/customer/payment-recovery">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-024</td>
+<td>My orders</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ORD-01</code>, <code>ORD-02</code>, <code>ORD-03</code></td>
+<td>normal, loading, empty, network, out-of-stock, session, permission</td>
+<td><a href="../index.html#/customer/orders">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-025</td>
+<td>Order details and confirmation</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ORD-01</code>, <code>ORD-02</code>, <code>ORD-03</code>, <code>ORD-04</code>, <code>ORD-05</code>, <code>ORD-06</code>, <code>ORD-09</code></td>
+<td>normal, loading, validation, network, session, permission, confirmation-lost, conflict</td>
+<td><a href="../index.html#/customer/order-detail">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-026</td>
+<td>Delivery tracking and handover code</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ORD-02</code>, <code>ORD-07</code>, <code>ORD-08</code></td>
+<td>normal, loading, network, permission, session</td>
+<td><a href="../index.html#/customer/tracking">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-027</td>
+<td>Request cancellation</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ORD-04</code>, <code>ORD-06</code></td>
+<td>normal, loading, validation, network, session, conflict, duplicate</td>
+<td><a href="../index.html#/customer/cancellation">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-028</td>
+<td>Return or quality complaint</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ORD-05</code>, <code>ORD-06</code></td>
+<td>normal, loading, validation, network, session, duplicate</td>
+<td><a href="../index.html#/customer/return">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-029</td>
+<td>Refund progress</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ORD-06</code></td>
+<td>normal, loading, network, refund-delayed, session</td>
+<td><a href="../index.html#/customer/refund">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-030</td>
+<td>Invoice and billing evidence</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ORD-03</code>, <code>FIN-02</code></td>
+<td>normal, loading, network, permission, session</td>
+<td><a href="../index.html#/customer/invoice">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ADM-001</td>
+<td>Role and location dashboard</td>
+<td>staff / admin</td>
+<td>Admin</td>
+<td><code>ADM-01</code></td>
+<td>normal, loading, empty, network, permission, session</td>
+<td><a href="../index.html#/staff/dashboard">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ADM-002</td>
+<td>Staff invitations and session revocation</td>
+<td>staff / admin</td>
+<td>Admin</td>
+<td><code>ADM-02</code></td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate</td>
+<td><a href="../index.html#/staff/staff">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ADM-003</td>
+<td>Roles and permissions</td>
+<td>staff / admin</td>
+<td>Admin</td>
+<td><code>ADM-03</code></td>
+<td>normal, loading, empty, network, permission, session, validation</td>
+<td><a href="../index.html#/staff/permissions">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ADM-004</td>
+<td>CMS draft and publication</td>
+<td>staff / admin</td>
+<td>Admin</td>
+<td><code>ADM-04</code></td>
+<td>normal, loading, empty, network, permission, session, validation, conflict, duplicate</td>
+<td><a href="../index.html#/staff/cms">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ADM-005</td>
+<td>System settings and offer proposals</td>
+<td>staff / admin</td>
+<td>Admin</td>
+<td><code>ADM-05</code>, <code>ADM-09</code></td>
+<td>normal, loading, empty, network, permission, session, validation, conflict</td>
+<td><a href="../index.html#/staff/settings">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ADM-006</td>
+<td>Product masters and bulk import</td>
+<td>staff / admin</td>
+<td>Admin</td>
+<td><code>ADM-06</code>, <code>ADM-07</code></td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, conflict</td>
+<td><a href="../index.html#/staff/catalog">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ADM-007</td>
+<td>Store and warehouse masters</td>
+<td>staff / admin</td>
+<td>Admin</td>
+<td><code>ADM-08</code></td>
+<td>normal, loading, empty, network, permission, session, validation</td>
+<td><a href="../index.html#/staff/locations">Open</a></td>
+</tr>
+<tr>
+<td>SCR-OMS-001</td>
+<td>Order and attention queue</td>
+<td>staff / orders</td>
+<td>Order operator</td>
+<td><code>OMS-01</code>, <code>OMS-06</code></td>
+<td>normal, loading, empty, network, permission, session, payment-pending, confirmation-lost</td>
+<td><a href="../index.html#/staff/orders">Open</a></td>
+</tr>
+<tr>
+<td>SCR-OMS-002</td>
+<td>Order detail, revision and recovery</td>
+<td>staff / orders</td>
+<td>Order operator</td>
+<td><code>OMS-02</code>, <code>OMS-05</code></td>
+<td>normal, loading, empty, network, permission, session, validation, conflict, duplicate, payment-pending</td>
+<td><a href="../index.html#/staff/order-detail">Open</a></td>
+</tr>
+<tr>
+<td>SCR-OMS-003</td>
+<td>Licensed allocation and reassignment</td>
+<td>staff / orders</td>
+<td>Order operator</td>
+<td><code>OMS-03</code>, <code>OMS-04</code></td>
+<td>normal, loading, empty, network, permission, session, validation, conflict, duplicate, stale-stock, stock-expired, out-of-stock</td>
+<td><a href="../index.html#/staff/allocation">Open</a></td>
+</tr>
+<tr>
+<td>SCR-OMS-004</td>
+<td>Assisted phone-order intake — blocked contract</td>
+<td>staff / orders</td>
+<td>Order operator</td>
+<td><code>OMS-07</code></td>
+<td>normal, loading, empty, network, permission, session, validation</td>
+<td><a href="../index.html#/staff/assisted-order">Open</a></td>
+</tr>
+<tr>
+<td>SCR-INV-001</td>
+<td>Batch stock and FEFO eligibility</td>
+<td>staff / inventory</td>
+<td>Store worker</td>
+<td><code>INV-01</code>, <code>INV-03</code>, <code>INV-05</code></td>
+<td>normal, loading, empty, network, permission, session, stale-stock, stock-expired, out-of-stock</td>
+<td><a href="../index.html#/staff/inventory">Open</a></td>
+</tr>
+<tr>
+<td>SCR-INV-002</td>
+<td>Read-only stock movement ledger</td>
+<td>staff / inventory</td>
+<td>Store worker</td>
+<td><code>INV-02</code></td>
+<td>normal, loading, empty, network, permission, session, duplicate</td>
+<td><a href="../index.html#/staff/ledger">Open</a></td>
+</tr>
+<tr>
+<td>SCR-INV-003</td>
+<td>Stock adjustment and manager review</td>
+<td>staff / inventory</td>
+<td>Store worker</td>
+<td><code>INV-04</code></td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, conflict</td>
+<td><a href="../index.html#/staff/adjustment">Open</a></td>
+</tr>
+<tr>
+<td>SCR-INV-004</td>
+<td>Opening stock import and Techsmith sync</td>
+<td>staff / inventory</td>
+<td>Store worker</td>
+<td><code>INV-06</code>, <code>INV-07</code></td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, stale-stock, provider-error</td>
+<td><a href="../index.html#/staff/inventory-integration">Open</a></td>
+</tr>
+<tr>
+<td>SCR-FIN-001</td>
+<td>Payment records and uncertain outcome recovery</td>
+<td>staff / finance</td>
+<td>Finance</td>
+<td><code>FIN-01</code></td>
+<td>normal, loading, empty, network, permission, session, payment-pending, confirmation-lost, duplicate, provider-error</td>
+<td><a href="../index.html#/staff/payments">Open</a></td>
+</tr>
+<tr>
+<td>SCR-FIN-002</td>
+<td>Invoice evidence and blocked tax setup</td>
+<td>staff / finance</td>
+<td>Finance</td>
+<td><code>FIN-02</code></td>
+<td>normal, loading, empty, network, permission, session, provider-error, duplicate</td>
+<td><a href="../index.html#/staff/invoice">Open</a></td>
+</tr>
+<tr>
+<td>SCR-FIN-003</td>
+<td>Refund request, approval and tracking</td>
+<td>staff / finance</td>
+<td>Finance</td>
+<td><code>FIN-03</code>, <code>FIN-04</code></td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, refund-delayed, provider-error</td>
+<td><a href="../index.html#/staff/refunds">Open</a></td>
+</tr>
+<tr>
+<td>SCR-FIN-004</td>
+<td>Settlement and COD reconciliation</td>
+<td>staff / finance</td>
+<td>Finance</td>
+<td><code>FIN-05</code>, <code>FIN-06</code></td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, cod-shortage, provider-error, short-receipt</td>
+<td><a href="../index.html#/staff/reconciliation">Open</a></td>
+</tr>
+<tr>
+<td>SCR-FIN-005</td>
+<td>Credit-note proposal and original invoice</td>
+<td>staff / finance</td>
+<td>Finance</td>
+<td><code>FIN-07</code></td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate</td>
+<td><a href="../index.html#/staff/credit-note">Open</a></td>
+</tr>
+<tr>
+<td>SCR-REP-001</td>
+<td>Report selection and filters</td>
+<td>staff / reporting</td>
+<td>Report viewer</td>
+<td><code>REP-01</code>, <code>REP-02</code>, <code>REP-03</code>, <code>REP-04</code>, <code>REP-05</code>, <code>REP-06</code></td>
+<td>normal, loading, empty, network, permission, session, validation, report-failed, stale-stock</td>
+<td><a href="../index.html#/staff/reports">Open</a></td>
+</tr>
+<tr>
+<td>SCR-REP-002</td>
+<td>Report results and export job</td>
+<td>staff / reporting</td>
+<td>Report viewer</td>
+<td><code>REP-01</code>, <code>REP-02</code>, <code>REP-03</code>, <code>REP-04</code>, <code>REP-05</code>, <code>REP-06</code>, <code>REP-07</code></td>
+<td>normal, loading, empty, network, permission, session, report-failed, access-revoked, cod-shortage, short-receipt, stale-stock</td>
+<td><a href="../index.html#/staff/report-results">Open</a></td>
+</tr>
+<tr>
+<td>SCR-AUD-001</td>
+<td>Read-only audit search and export</td>
+<td>staff / audit</td>
+<td>Auditor</td>
+<td><code>AUD-01</code>, <code>AUD-02</code></td>
+<td>normal, loading, empty, network, permission, session, validation, access-revoked</td>
+<td><a href="../index.html#/staff/audit">Open</a></td>
+</tr>
+<tr>
+<td>SCR-NOT-001</td>
+<td>Notification attempts and staff alerts</td>
+<td>staff / notifications</td>
+<td>Admin</td>
+<td><code>NOT-01</code>, <code>NOT-02</code>, <code>NOT-04</code></td>
+<td>normal, loading, empty, network, permission, session, duplicate, provider-error, confirmation-lost</td>
+<td><a href="../index.html#/staff/notifications">Open</a></td>
+</tr>
+<tr>
+<td>SCR-NOT-002</td>
+<td>Channel preferences and optional push simulation</td>
+<td>staff / notifications</td>
+<td>Admin</td>
+<td><code>NOT-01</code>, <code>NOT-03</code>, <code>NOT-05</code></td>
+<td>normal, loading, empty, network, permission, session, access-revoked, provider-error</td>
+<td><a href="../index.html#/staff/notification-preferences">Open</a></td>
+</tr>
+<tr>
+<td>SCR-SUP-001</td>
+<td>Identity-aware support triage</td>
+<td>staff / support</td>
+<td>Support</td>
+<td><code>NOT-04</code></td>
+<td>normal, loading, empty, network, permission, session, validation, payment-pending, confirmation-lost</td>
+<td><a href="../index.html#/staff/support">Open</a></td>
+</tr>
+<tr>
+<td>SCR-PHM-001</td>
+<td>Prescription review queue</td>
+<td>staff / pharmacy</td>
+<td>Pharmacist</td>
+<td><code>PHM-01</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, prescription-missing, unreadable</td>
+<td><a href="../index.html#/pharmacy/queue">Open</a></td>
+</tr>
+<tr>
+<td>SCR-PHM-002</td>
+<td>Compare prescription and order</td>
+<td>staff / pharmacy</td>
+<td>Pharmacist</td>
+<td><code>PHM-02</code>, <code>PHM-04</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, prescription-missing, unreadable, prescription-rejected</td>
+<td><a href="../index.html#/pharmacy/review">Open</a></td>
+</tr>
+<tr>
+<td>SCR-PHM-003</td>
+<td>Record pharmacist decisions</td>
+<td>staff / pharmacy</td>
+<td>Pharmacist</td>
+<td><code>PHM-03</code>, <code>PHM-04</code>, <code>PHM-05</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, prescription-missing, unreadable, prescription-rejected, prescription-partial</td>
+<td><a href="../index.html#/pharmacy/decision">Open</a></td>
+</tr>
+<tr>
+<td>SCR-PHM-004</td>
+<td>Pharmacist decision history</td>
+<td>staff / pharmacy</td>
+<td>Pharmacist</td>
+<td><code>PHM-05</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/pharmacy/history">Open</a></td>
+</tr>
+<tr>
+<td>SCR-STO-001</td>
+<td>My store incoming orders</td>
+<td>staff / store</td>
+<td>Store worker</td>
+<td><code>STO-01</code>, <code>STO-02</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, out-of-stock, stale-stock</td>
+<td><a href="../index.html#/store/queue">Open</a></td>
+</tr>
+<tr>
+<td>SCR-STO-002</td>
+<td>Exact batch pick list</td>
+<td>staff / store</td>
+<td>Store worker</td>
+<td><code>STO-02</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, out-of-stock, stale-stock, prescription-rejected</td>
+<td><a href="../index.html#/store/pick">Open</a></td>
+</tr>
+<tr>
+<td>SCR-STO-003</td>
+<td>Packing and custody handoff</td>
+<td>staff / store</td>
+<td>Store worker</td>
+<td><code>STO-02</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, stale-stock, prescription-rejected, prescription-partial, rider-unavailable</td>
+<td><a href="../index.html#/store/pack">Open</a></td>
+</tr>
+<tr>
+<td>SCR-STO-004</td>
+<td>Store stock and replenishment</td>
+<td>staff / store</td>
+<td>Store worker</td>
+<td><code>STO-03</code>, <code>STO-05</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, out-of-stock, stale-stock</td>
+<td><a href="../index.html#/store/replenishment">Open</a></td>
+</tr>
+<tr>
+<td>SCR-STO-005</td>
+<td>Receive warehouse transfer</td>
+<td>staff / store</td>
+<td>Store worker</td>
+<td><code>STO-04</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, short-receipt, stock-expired</td>
+<td><a href="../index.html#/store/receipt">Open</a></td>
+</tr>
+<tr>
+<td>SCR-WH-001</td>
+<td>Supplier receiving</td>
+<td>staff / warehouse</td>
+<td>Warehouse worker</td>
+<td><code>WH-01</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, short-receipt, stock-expired</td>
+<td><a href="../index.html#/warehouse/receiving">Open</a></td>
+</tr>
+<tr>
+<td>SCR-WH-002</td>
+<td>Replenishment and urgent-run queue</td>
+<td>staff / warehouse</td>
+<td>Warehouse worker</td>
+<td><code>WH-02</code>, <code>WH-03</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/warehouse/replenishment">Open</a></td>
+</tr>
+<tr>
+<td>SCR-WH-003</td>
+<td>Warehouse transfer dispatch</td>
+<td>staff / warehouse</td>
+<td>Warehouse worker</td>
+<td><code>WH-02</code>, <code>WH-03</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, out-of-stock</td>
+<td><a href="../index.html#/warehouse/dispatch">Open</a></td>
+</tr>
+<tr>
+<td>SCR-WH-004</td>
+<td>Warehouse counts and fallback orders</td>
+<td>staff / warehouse</td>
+<td>Warehouse worker</td>
+<td><code>WH-04</code>, <code>WH-05</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, stale-stock</td>
+<td><a href="../index.html#/warehouse/audit">Open</a></td>
+</tr>
+<tr>
+<td>SCR-DLV-001</td>
+<td>Delivery dispatch dashboard</td>
+<td>staff / delivery</td>
+<td>Dispatcher</td>
+<td><code>DLV-01</code>, <code>DLV-04</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, offline, rider-unavailable, cod-shortage</td>
+<td><a href="../index.html#/delivery/dashboard">Open</a></td>
+</tr>
+<tr>
+<td>SCR-DLV-002</td>
+<td>Confirm rider assignment</td>
+<td>staff / delivery</td>
+<td>Dispatcher</td>
+<td><code>DLV-02</code>, <code>DLV-05</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, rider-unavailable</td>
+<td><a href="../index.html#/delivery/assignment">Open</a></td>
+</tr>
+<tr>
+<td>SCR-DLV-003</td>
+<td>Failed delivery resolution</td>
+<td>staff / delivery</td>
+<td>Dispatcher</td>
+<td><code>DLV-03</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, delivery-failed</td>
+<td><a href="../index.html#/delivery/failures">Open</a></td>
+</tr>
+<tr>
+<td>SCR-DLV-004</td>
+<td>Rider management and COD handover</td>
+<td>staff / delivery</td>
+<td>Dispatcher</td>
+<td><code>DLV-04</code>, <code>DLV-05</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, rider-unavailable, cod-shortage</td>
+<td><a href="../index.html#/delivery/riders">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RID-001</td>
+<td>Rider OTP sign in</td>
+<td>rider / rider</td>
+<td>Rider</td>
+<td><code>RID-01</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, otp-wrong</td>
+<td><a href="../index.html#/rider/login">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RID-002</td>
+<td>Duty and assigned tasks</td>
+<td>rider / rider</td>
+<td>Rider</td>
+<td><code>RID-01</code>, <code>RID-02</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, rider-unavailable</td>
+<td><a href="../index.html#/rider/tasks">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RID-003</td>
+<td>Rider pickup checklist</td>
+<td>rider / rider</td>
+<td>Rider</td>
+<td><code>RID-02</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, stale-stock</td>
+<td><a href="../index.html#/rider/pickup">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RID-004</td>
+<td>Navigation and last-known location</td>
+<td>rider / rider</td>
+<td>Rider</td>
+<td><code>RID-02</code>, <code>RID-03</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, offline</td>
+<td><a href="../index.html#/rider/navigation">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RID-005</td>
+<td>Doorstep proof and completion</td>
+<td>rider / rider</td>
+<td>Rider</td>
+<td><code>RID-04</code>, <code>RID-05</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, otp-wrong, offline, cod-shortage</td>
+<td><a href="../index.html#/rider/completion">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RID-006</td>
+<td>Failed attempt and rider history</td>
+<td>rider / rider</td>
+<td>Rider</td>
+<td><code>RID-06</code>, <code>RID-07</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, delivery-failed</td>
+<td><a href="../index.html#/rider/failure">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RID-007</td>
+<td>Daily deliveries and earnings status</td>
+<td>rider / rider</td>
+<td>Rider</td>
+<td><code>RID-07</code>, <code>RID-04</code></td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/rider/history">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ACC-001</td>
+<td>Unified staff identity sign-in</td>
+<td>staff / access</td>
+<td>Admin</td>
+<td><code>AUTH-01</code>, <code>AUTH-03</code></td>
+<td>normal, validation, permission, session, conflict</td>
+<td><a href="../index.html#/access/login">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ACC-002</td>
+<td>Privileged authenticator challenge</td>
+<td>staff / access</td>
+<td>Admin</td>
+<td><code>AUTH-01</code>, <code>AUTH-02</code></td>
+<td>normal, validation, otp-wrong, otp-expired, rate-limit</td>
+<td><a href="../index.html#/access/mfa">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ACC-003</td>
+<td>Identity session and access checks</td>
+<td>staff / access</td>
+<td>Admin</td>
+<td><code>AUTH-02</code>, <code>AUTH-03</code>, <code>AUTH-04</code></td>
+<td>normal, validation, permission, session, conflict</td>
+<td><a href="../index.html#/access/sessions">Open</a></td>
+</tr>
+<tr>
+<td>SCR-ACC-004</td>
+<td>Authorized workspace selection</td>
+<td>staff / access</td>
+<td>Admin</td>
+<td><code>AUTH-04</code></td>
+<td>normal, validation, permission, session, conflict</td>
+<td><a href="../index.html#/access/workspaces">Open</a></td>
+</tr>
+<tr>
+<td>SCR-PRO-001</td>
+<td>Supplier directory and proposals</td>
+<td>staff / procurement</td>
+<td>Procurement</td>
+<td><code>WH-01</code></td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/procurement/suppliers">Open</a></td>
+</tr>
+<tr>
+<td>SCR-PRO-002</td>
+<td>Replenishment demand and purchase orders</td>
+<td>staff / procurement</td>
+<td>Procurement</td>
+<td><code>WH-02</code>, <code>WH-01</code></td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/procurement/orders">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RET-001</td>
+<td>Return eligibility and owner review queue</td>
+<td>staff / returns</td>
+<td>Order operator</td>
+<td><code>ORD-05</code>, <code>ORD-06</code></td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/staff/returns">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RET-002</td>
+<td>Reverse pickup dispatch</td>
+<td>staff / delivery</td>
+<td>Dispatcher</td>
+<td><code>DLV-03</code>, <code>DLV-05</code></td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/delivery/returns">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RET-003</td>
+<td>Rider return pickup task</td>
+<td>rider / rider</td>
+<td>Rider</td>
+<td><code>RID-02</code>, <code>RID-06</code></td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/rider/returns">Open</a></td>
+</tr>
+<tr>
+<td>SCR-RET-004</td>
+<td>Returned item receipt and inspection</td>
+<td>staff / warehouse</td>
+<td>Warehouse worker</td>
+<td><code>WH-05</code></td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/warehouse/returns">Open</a></td>
+</tr>
+<tr>
+<td>SCR-CUS-HELP-001</td>
+<td>Customer help and case history</td>
+<td>customer / customer</td>
+<td>Customer</td>
+<td><code>ORD-05</code></td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td><a href="../index.html#/customer/help">Open</a></td>
+</tr>
+</tbody>
+</table>
+<p>91 actual screens. See <a href="Feature-Coverage.html">Feature Coverage</a> for what is demonstrated, backend-only or blocked. The role dropdown is a reviewer fixture; signed production permissions remain undecided.</p>
+</main></body></html>

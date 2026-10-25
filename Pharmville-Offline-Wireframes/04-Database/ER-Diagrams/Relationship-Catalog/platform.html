@@ -1,0 +1,679 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>platform · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Platform foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>platform</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-1047</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1048</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1049</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1050</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/audit_logs.html"><code>platform.audit_logs</code></a></td>
+<td><code>actor_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-03">18-platform.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1051</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/cms_banners.html"><code>platform.cms_banners</code></a></td>
+<td><code>image_file_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-03">18-platform.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1052</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/cms_banners.html"><code>platform.cms_banners</code></a></td>
+<td><code>image_file_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-03">18-platform.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1053</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/cms_page_versions.html"><code>platform.cms_page_versions</code></a></td>
+<td><code>approved_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1054</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/cms_page_versions.html"><code>platform.cms_page_versions</code></a></td>
+<td><code>created_by_user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1055</td>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td><a href="../../Tables/platform/cms_page_versions.html"><code>platform.cms_page_versions</code></a></td>
+<td><code>page_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1056</td>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td><a href="../../Tables/platform/cms_page_versions.html"><code>platform.cms_page_versions</code></a></td>
+<td><code>page_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1057</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td><code>created_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1058</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1059</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1060</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td><code>updated_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1061</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1062</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/data_retention_policies.html"><code>platform.data_retention_policies</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1063</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/data_retention_policies.html"><code>platform.data_retention_policies</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1064</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/data_retention_policies.html"><code>platform.data_retention_policies</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1065</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/feature_flags.html"><code>platform.feature_flags</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1066</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/feature_flags.html"><code>platform.feature_flags</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1067</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/feature_flags.html"><code>platform.feature_flags</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1068</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_access_events.html"><code>platform.file_access_events</code></a></td>
+<td><code>actor_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1069</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_access_events.html"><code>platform.file_access_events</code></a></td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1070</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_access_events.html"><code>platform.file_access_events</code></a></td>
+<td><code>file_object_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1071</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1072</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1073</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td><code>file_object_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1074</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1075</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1076</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1077</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1078</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><code>uploaded_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1079</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_scan_events.html"><code>platform.file_scan_events</code></a></td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-03">18-platform.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1080</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_scan_events.html"><code>platform.file_scan_events</code></a></td>
+<td><code>file_object_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-03">18-platform.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1081</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1082</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1083</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td><code>file_object_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1084</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td><code>requested_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1085</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1086</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1087</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1088</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td><code>source_file_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1089</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td><code>source_file_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1090</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1091</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td><code>variant_file_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..1 child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1092</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td><code>variant_file_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1093</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/idempotency_keys.html"><code>platform.idempotency_keys</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1094</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/idempotency_keys.html"><code>platform.idempotency_keys</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1095</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/inbox_messages.html"><code>platform.inbox_messages</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1096</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/inbox_messages.html"><code>platform.inbox_messages</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1097</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/outbox_events.html"><code>platform.outbox_events</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-03">18-platform.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1098</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/outbox_events.html"><code>platform.outbox_events</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-03">18-platform.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1099</td>
+<td><a href="../../Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a></td>
+<td><a href="../../Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td><code>definition_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1100</td>
+<td><a href="../../Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a></td>
+<td><a href="../../Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td><code>definition_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1101</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td><code>requested_by_user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1102</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td><code>result_file_object_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1103</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td><code>result_file_object_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-01">18-platform.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1104</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/scheduled_jobs.html"><code>platform.scheduled_jobs</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-03">18-platform.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1105</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/scheduled_jobs.html"><code>platform.scheduled_jobs</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-03">18-platform.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1106</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/webhook_deliveries.html"><code>platform.webhook_deliveries</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1107</td>
+<td><a href="../../Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+<td><a href="../../Tables/platform/webhook_deliveries.html"><code>platform.webhook_deliveries</code></a></td>
+<td><code>endpoint_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1108</td>
+<td><a href="../../Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+<td><a href="../../Tables/platform/webhook_deliveries.html"><code>platform.webhook_deliveries</code></a></td>
+<td><code>endpoint_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1109</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/webhook_deliveries.html"><code>platform.webhook_deliveries</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1110</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1111</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1112</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../18-platform.html#diagram-02">18-platform.md#diagram-02</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

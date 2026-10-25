@@ -1,0 +1,1009 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Feature Delivery Traceability · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Requirement-to-delivery traceability</h1>
+<p>All 110 stable requirements are accounted for. The <a href="Coverage-and-Traceability.html">master requirement register</a> preserves descriptions, evidence and existing tasks. This view derives route membership from OpenAPI <code>x-feature-ids</code>, tables from exact read/write maps, workflows from the module registry and task IDs from the existing register. Workflow links identify module orchestration participation, not a claim that every operation implements every workflow. Features without a direct route remain explicitly visible; policy/worker enforcement or missing proposed commands do not count as invented HTTP completion. All application tests are Designed / NOT RUN.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Module / business requirement</th>
+<th>Workflow participation</th>
+<th>Existing API contracts</th>
+<th>Table dependencies</th>
+<th>Designed tests</th>
+<th>Development task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACC-01</code></td>
+<td><a href="../03-Modules/Customer_Accounts/Business-Flow.html">Customer_Accounts</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-001</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-002</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-098</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-099</a></td>
+<td><code>customer.profiles</code>, <code>identity.authentication_challenges</code>, <code>identity.login_attempts</code>, <code>identity.mfa_factors</code>, <code>identity.otp_challenges</code>, <code>identity.permissions</code>, <code>identity.role_permissions</code>, <code>identity.roles</code>, <code>identity.session_refresh_tokens</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.memberships</code>, <code>organization.organizations</code>, <code>platform.audit_logs</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-001</a></td>
+</tr>
+<tr>
+<td><code>ACC-02</code></td>
+<td><a href="../03-Modules/Customer_Accounts/Business-Flow.html">Customer_Accounts</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-003</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-004</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-100</a></td>
+<td><code>customer.profiles</code>, <code>identity.permissions</code>, <code>identity.role_permissions</code>, <code>identity.roles</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.memberships</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-002</a></td>
+</tr>
+<tr>
+<td><code>ACC-03</code></td>
+<td><a href="../03-Modules/Customer_Accounts/Business-Flow.html">Customer_Accounts</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-005</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-006</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-001</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-002</a></td>
+<td><code>commerce.checkouts</code>, <code>customer.addresses</code>, <code>customer.profiles</code></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-003</a></td>
+</tr>
+<tr>
+<td><code>ACC-04</code></td>
+<td><a href="../03-Modules/Customer_Accounts/Business-Flow.html">Customer_Accounts</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-007</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-008</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-003</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-004</a></td>
+<td><code>clinical.patient_profiles</code>, <code>commerce.orders</code>, <code>customer.family_members</code></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-004</a></td>
+</tr>
+<tr>
+<td><code>ACC-05</code></td>
+<td><a href="../03-Modules/Customer_Accounts/Business-Flow.html">Customer_Accounts</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-009</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-005</a></td>
+<td><code>customer.consent_events</code>, <code>customer.consents</code></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-005</a></td>
+</tr>
+<tr>
+<td><code>ACC-06</code></td>
+<td><a href="../03-Modules/Customer_Accounts/Business-Flow.html">Customer_Accounts</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-007</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-006</a></td>
+<td><code>compliance.legal_holds</code>, <code>compliance.privacy_requests</code>, <code>identity.users</code></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-006</a></td>
+</tr>
+<tr>
+<td><code>ACC-07</code></td>
+<td><a href="../03-Modules/Customer_Accounts/Business-Flow.html">Customer_Accounts</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-008</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-009</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-010</a></td>
+<td><code>catalog.products</code>, <code>customer.wishlist_items</code>, <code>customer.wishlists</code></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-007</a></td>
+</tr>
+<tr>
+<td><code>CAT-01</code></td>
+<td><a href="../03-Modules/Product_Catalog/Business-Flow.html">Product_Catalog</a></td>
+<td><a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-010</a>, <a href="../03-Modules/Product_Catalog/APIs.html">API-011</a></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.products</code></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD tests</a> / <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-008</a></td>
+</tr>
+<tr>
+<td><code>CAT-02</code></td>
+<td><a href="../03-Modules/Product_Catalog/Business-Flow.html">Product_Catalog</a></td>
+<td><a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-012</a></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.manufacturers</code>, <code>catalog.product_content</code>, <code>catalog.product_salts</code>, <code>catalog.products</code>, <code>catalog.salts</code>, <code>pricing.price_books</code>, <code>pricing.product_prices</code></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD tests</a> / <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-009</a></td>
+</tr>
+<tr>
+<td><code>CAT-03</code></td>
+<td><a href="../03-Modules/Product_Catalog/Business-Flow.html">Product_Catalog</a></td>
+<td><a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-013</a></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.product_salts</code>, <code>catalog.products</code>, <code>catalog.salts</code>, <code>search.documents</code>, <code>search.synonyms</code></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD tests</a> / <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-010</a></td>
+</tr>
+<tr>
+<td><code>CAT-04</code></td>
+<td><a href="../03-Modules/Product_Catalog/Business-Flow.html">Product_Catalog</a></td>
+<td><a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-014</a></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.products</code>, <code>logistics.serviceability_rules</code>, <code>organization.licenses</code>, <code>organization.locations</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD tests</a> / <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-011</a></td>
+</tr>
+<tr>
+<td><code>CAT-05</code></td>
+<td><a href="../03-Modules/Product_Catalog/Business-Flow.html">Product_Catalog</a></td>
+<td><a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Product_Catalog/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD tests</a> / <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-012</a></td>
+</tr>
+<tr>
+<td><code>CAT-06</code></td>
+<td><a href="../03-Modules/Product_Catalog/Business-Flow.html">Product_Catalog</a></td>
+<td><a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Product_Catalog/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD tests</a> / <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-013</a></td>
+</tr>
+<tr>
+<td><code>CHK-01</code></td>
+<td><a href="../03-Modules/Cart_Checkout/Business-Flow.html">Cart_Checkout</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-018</a>, <a href="../03-Modules/Cart_Checkout/APIs.html">API-019</a></td>
+<td><code>catalog.products</code>, <code>commerce.cart_items</code>, <code>commerce.carts</code></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD tests</a> / <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-014</a></td>
+</tr>
+<tr>
+<td><code>CHK-02</code></td>
+<td><a href="../03-Modules/Cart_Checkout/Business-Flow.html">Cart_Checkout</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-020</a></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>commerce.cart_items</code>, <code>commerce.carts</code>, <code>customer.addresses</code>, <code>customer.family_members</code>, <code>logistics.serviceability_rules</code>, <code>platform.application_settings</code>, <code>pricing.coupon_codes</code>, <code>pricing.price_books</code>, <code>pricing.product_prices</code>, <code>pricing.promotion_redemptions</code>, <code>pricing.promotion_versions</code>, <code>pricing.promotions</code>, <code>pricing.tax_rules</code></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD tests</a> / <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-015</a></td>
+</tr>
+<tr>
+<td><code>CHK-03</code></td>
+<td><a href="../03-Modules/Cart_Checkout/Business-Flow.html">Cart_Checkout</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-075</a>, <a href="../03-Modules/Finance_Payments/APIs.html">API-076</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>payment.payment_attempts</code>, <code>payment.payment_intents</code>, <code>payment.payment_transactions</code>, <code>payment.payment_webhooks</code>, <code>payment.provider_accounts</code>, <code>warehouse.stock_reservations</code></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD tests</a> / <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-016</a></td>
+</tr>
+<tr>
+<td><code>CHK-04</code></td>
+<td><a href="../03-Modules/Cart_Checkout/Business-Flow.html">Cart_Checkout</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Cart_Checkout/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD tests</a> / <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-017</a></td>
+</tr>
+<tr>
+<td><code>CHK-05</code></td>
+<td><a href="../03-Modules/Cart_Checkout/Business-Flow.html">Cart_Checkout</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-020</a></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>commerce.cart_items</code>, <code>commerce.carts</code>, <code>customer.addresses</code>, <code>customer.family_members</code>, <code>logistics.serviceability_rules</code>, <code>platform.application_settings</code>, <code>pricing.coupon_codes</code>, <code>pricing.price_books</code>, <code>pricing.product_prices</code>, <code>pricing.promotion_redemptions</code>, <code>pricing.promotion_versions</code>, <code>pricing.promotions</code>, <code>pricing.tax_rules</code></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD tests</a> / <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-018</a></td>
+</tr>
+<tr>
+<td><code>CHK-06</code></td>
+<td><a href="../03-Modules/Cart_Checkout/Business-Flow.html">Cart_Checkout</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-020</a></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>commerce.cart_items</code>, <code>commerce.carts</code>, <code>customer.addresses</code>, <code>customer.family_members</code>, <code>logistics.serviceability_rules</code>, <code>platform.application_settings</code>, <code>pricing.coupon_codes</code>, <code>pricing.price_books</code>, <code>pricing.product_prices</code>, <code>pricing.promotion_redemptions</code>, <code>pricing.promotion_versions</code>, <code>pricing.promotions</code>, <code>pricing.tax_rules</code></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD tests</a> / <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-019</a></td>
+</tr>
+<tr>
+<td><code>CHK-07</code></td>
+<td><a href="../03-Modules/Cart_Checkout/Business-Flow.html">Cart_Checkout</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-021</a></td>
+<td><code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>commerce.cart_items</code>, <code>commerce.carts</code>, <code>commerce.checkouts</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.order_status_history</code>, <code>commerce.orders</code>, <code>customer.addresses</code></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD tests</a> / <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-020</a></td>
+</tr>
+<tr>
+<td><code>CHK-08</code></td>
+<td><a href="../03-Modules/Cart_Checkout/Business-Flow.html">Cart_Checkout</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-021</a>, <a href="../03-Modules/Inventory/APIs.html">API-052</a>, <a href="../03-Modules/Inventory/APIs.html">API-053</a></td>
+<td><code>catalog.products</code>, <code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>clinical.patient_profiles</code>, <code>commerce.cart_items</code>, <code>commerce.carts</code>, <code>commerce.checkouts</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.order_status_history</code>, <code>commerce.orders</code>, <code>customer.addresses</code>, <code>organization.licenses</code>, <code>organization.locations</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.stock_holds</code>, <code>warehouse.stock_movement_reason_codes</code>, <code>warehouse.stock_reservations</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD tests</a> / <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-021</a></td>
+</tr>
+<tr>
+<td><code>RX-01</code></td>
+<td><a href="../03-Modules/Prescription_Upload/Business-Flow.html">Prescription_Upload</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-022</a>, <a href="../03-Modules/Prescription_Upload/APIs.html">API-023</a></td>
+<td><code>platform.file_objects</code>, <code>platform.file_upload_sessions</code></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD tests</a> / <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-022</a></td>
+</tr>
+<tr>
+<td><code>RX-02</code></td>
+<td><a href="../03-Modules/Prescription_Upload/Business-Flow.html">Prescription_Upload</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Prescription_Upload/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD tests</a> / <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-023</a></td>
+</tr>
+<tr>
+<td><code>RX-03</code></td>
+<td><a href="../03-Modules/Prescription_Upload/Business-Flow.html">Prescription_Upload</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Prescription_Upload/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD tests</a> / <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-024</a></td>
+</tr>
+<tr>
+<td><code>RX-04</code></td>
+<td><a href="../03-Modules/Prescription_Upload/Business-Flow.html">Prescription_Upload</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-024</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>clinical.patient_profiles</code>, <code>clinical.prescription_documents</code>, <code>clinical.prescriptions</code>, <code>commerce.order_items</code>, <code>commerce.orders</code>, <code>customer.family_members</code>, <code>platform.file_objects</code></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD tests</a> / <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-025</a></td>
+</tr>
+<tr>
+<td><code>RX-05</code></td>
+<td><a href="../03-Modules/Prescription_Upload/Business-Flow.html">Prescription_Upload</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-062</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>clinical.practitioner_profiles</code>, <code>clinical.prescription_documents</code>, <code>clinical.prescription_items</code>, <code>clinical.prescriptions</code>, <code>clinical.review_reason_codes</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD tests</a> / <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-026</a></td>
+</tr>
+<tr>
+<td><code>ORD-01</code></td>
+<td><a href="../03-Modules/Customer_Orders/Business-Flow.html">Customer_Orders</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Customer_Orders/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-027</a></td>
+</tr>
+<tr>
+<td><code>ORD-02</code></td>
+<td><a href="../03-Modules/Customer_Orders/Business-Flow.html">Customer_Orders</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-025</a>, <a href="../03-Modules/Customer_Orders/APIs.html">API-026</a></td>
+<td><code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-028</a></td>
+</tr>
+<tr>
+<td><code>ORD-03</code></td>
+<td><a href="../03-Modules/Customer_Orders/Business-Flow.html">Customer_Orders</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-029</a></td>
+<td><code>commerce.orders</code>, <code>finance.invoice_items</code>, <code>finance.invoices</code>, <code>platform.file_access_grants</code>, <code>platform.file_objects</code></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-029</a></td>
+</tr>
+<tr>
+<td><code>ORD-04</code></td>
+<td><a href="../03-Modules/Customer_Orders/Business-Flow.html">Customer_Orders</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-027</a></td>
+<td><code>commerce.cancellation_items</code>, <code>commerce.cancellation_reason_codes</code>, <code>commerce.cancellations</code>, <code>commerce.order_items</code>, <code>commerce.order_status_history</code>, <code>commerce.orders</code>, <code>fulfillment.fulfillment_orders</code></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-030</a></td>
+</tr>
+<tr>
+<td><code>ORD-05</code></td>
+<td><a href="../03-Modules/Customer_Orders/Business-Flow.html">Customer_Orders</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-028</a></td>
+<td><code>commerce.order_items</code>, <code>commerce.orders</code>, <code>commerce.return_items</code>, <code>commerce.return_reason_codes</code>, <code>commerce.returns</code></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-031</a></td>
+</tr>
+<tr>
+<td><code>ORD-06</code></td>
+<td><a href="../03-Modules/Customer_Orders/Business-Flow.html">Customer_Orders</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-030</a></td>
+<td><code>commerce.orders</code>, <code>payment.refunds</code></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-032</a></td>
+</tr>
+<tr>
+<td><code>ORD-07</code></td>
+<td><a href="../03-Modules/Customer_Orders/Business-Flow.html">Customer_Orders</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-031</a></td>
+<td><code>commerce.orders</code>, <code>logistics.shipments</code></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-033</a></td>
+</tr>
+<tr>
+<td><code>ORD-08</code></td>
+<td><a href="../03-Modules/Customer_Orders/Business-Flow.html">Customer_Orders</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Customer_Orders/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-034</a></td>
+</tr>
+<tr>
+<td><code>ORD-09</code></td>
+<td><a href="../03-Modules/Customer_Orders/Business-Flow.html">Customer_Orders</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Customer_Orders/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD tests</a> / <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-035</a></td>
+</tr>
+<tr>
+<td><code>ADM-01</code></td>
+<td><a href="../03-Modules/Admin_CMS/Business-Flow.html">Admin_CMS</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-032</a></td>
+<td><code>clinical.order_reviews</code>, <code>commerce.orders</code>, <code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>warehouse.stock_balances</code></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD tests</a> / <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-036</a></td>
+</tr>
+<tr>
+<td><code>ADM-02</code></td>
+<td><a href="../03-Modules/Admin_CMS/Business-Flow.html">Admin_CMS</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-033</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-034</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-109</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-110</a></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.permissions</code>, <code>identity.role_permissions</code>, <code>identity.roles</code>, <code>identity.session_refresh_tokens</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.memberships</code>, <code>organization.organizations</code>, <code>platform.audit_logs</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD tests</a> / <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-037</a></td>
+</tr>
+<tr>
+<td><code>ADM-03</code></td>
+<td><a href="../03-Modules/Admin_CMS/Business-Flow.html">Admin_CMS</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-101</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-108</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-109</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-110</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-111</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-112</a></td>
+<td><code>identity.permissions</code>, <code>identity.role_permissions</code>, <code>identity.roles</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.memberships</code>, <code>organization.organizations</code>, <code>platform.audit_logs</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD tests</a> / <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-038</a></td>
+</tr>
+<tr>
+<td><code>ADM-04</code></td>
+<td><a href="../03-Modules/Admin_CMS/Business-Flow.html">Admin_CMS</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-037</a></td>
+<td><code>platform.cms_page_versions</code>, <code>platform.cms_pages</code></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD tests</a> / <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-039</a></td>
+</tr>
+<tr>
+<td><code>ADM-05</code></td>
+<td><a href="../03-Modules/Admin_CMS/Business-Flow.html">Admin_CMS</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-035</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-036</a></td>
+<td><code>platform.application_settings</code></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD tests</a> / <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-040</a></td>
+</tr>
+<tr>
+<td><code>ADM-06</code></td>
+<td><a href="../03-Modules/Admin_CMS/Business-Flow.html">Admin_CMS</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-016</a>, <a href="../03-Modules/Product_Catalog/APIs.html">API-017</a></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_classification_history</code>, <code>catalog.products</code>, <code>pricing.product_prices</code>, <code>pricing.tax_rules</code></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD tests</a> / <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-041</a></td>
+</tr>
+<tr>
+<td><code>ADM-07</code></td>
+<td><a href="../03-Modules/Admin_CMS/Business-Flow.html">Admin_CMS</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-015</a></td>
+<td><code>catalog.products</code>, <code>platform.file_objects</code>, <code>platform.scheduled_jobs</code>, <code>pricing.product_prices</code></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD tests</a> / <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-042</a></td>
+</tr>
+<tr>
+<td><code>ADM-08</code></td>
+<td><a href="../03-Modules/Admin_CMS/Business-Flow.html">Admin_CMS</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-038</a></td>
+<td><code>organization.locations</code>, <code>organization.organizations</code></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD tests</a> / <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-043</a></td>
+</tr>
+<tr>
+<td><code>ADM-09</code></td>
+<td><a href="../03-Modules/Admin_CMS/Business-Flow.html">Admin_CMS</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Admin_CMS/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD tests</a> / <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-044</a></td>
+</tr>
+<tr>
+<td><code>OMS-01</code></td>
+<td><a href="../03-Modules/Order_Operations/Business-Flow.html">Order_Operations</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-039</a></td>
+<td><code>commerce.order_allocations</code>, <code>commerce.orders</code>, <code>organization.memberships</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-045</a></td>
+</tr>
+<tr>
+<td><code>OMS-02</code></td>
+<td><a href="../03-Modules/Order_Operations/Business-Flow.html">Order_Operations</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-040</a></td>
+<td><code>commerce.order_allocations</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-046</a></td>
+</tr>
+<tr>
+<td><code>OMS-03</code></td>
+<td><a href="../03-Modules/Order_Operations/Business-Flow.html">Order_Operations</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-041</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>commerce.order_allocations</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>fulfillment.fulfillment_orders</code>, <code>logistics.serviceability_rules</code>, <code>organization.licenses</code>, <code>organization.locations</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-047</a></td>
+</tr>
+<tr>
+<td><code>OMS-04</code></td>
+<td><a href="../03-Modules/Order_Operations/Business-Flow.html">Order_Operations</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-042</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>commerce.order_allocations</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.order_status_history</code>, <code>commerce.orders</code>, <code>fulfillment.fulfillment_orders</code>, <code>logistics.serviceability_rules</code>, <code>organization.licenses</code>, <code>organization.locations</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-048</a></td>
+</tr>
+<tr>
+<td><code>OMS-05</code></td>
+<td><a href="../03-Modules/Order_Operations/Business-Flow.html">Order_Operations</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-043</a></td>
+<td><code>catalog.products</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>pricing.product_prices</code>, <code>pricing.tax_rules</code></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-049</a></td>
+</tr>
+<tr>
+<td><code>OMS-06</code></td>
+<td><a href="../03-Modules/Order_Operations/Business-Flow.html">Order_Operations</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Order_Operations/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-050</a></td>
+</tr>
+<tr>
+<td><code>OMS-07</code></td>
+<td><a href="../03-Modules/Order_Operations/Business-Flow.html">Order_Operations</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Order_Operations/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-051</a></td>
+</tr>
+<tr>
+<td><code>STO-01</code></td>
+<td><a href="../03-Modules/Store_Operations/Business-Flow.html">Store_Operations</a></td>
+<td><a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-044</a></td>
+<td><code>fulfillment.fulfillment_orders</code>, <code>organization.memberships</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-052</a></td>
+</tr>
+<tr>
+<td><code>STO-02</code></td>
+<td><a href="../03-Modules/Store_Operations/Business-Flow.html">Store_Operations</a></td>
+<td><a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-045</a>, <a href="../03-Modules/Store_Operations/APIs.html">API-046</a>, <a href="../03-Modules/Store_Operations/APIs.html">API-047</a></td>
+<td><code>catalog.product_identifiers</code>, <code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>fulfillment.fulfillment_events</code>, <code>fulfillment.fulfillment_orders</code>, <code>fulfillment.pack_tasks</code>, <code>fulfillment.package_items</code>, <code>fulfillment.packages</code>, <code>fulfillment.pick_task_items</code>, <code>fulfillment.pick_tasks</code>, <code>organization.licenses</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_reservations</code></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-053</a></td>
+</tr>
+<tr>
+<td><code>STO-03</code></td>
+<td><a href="../03-Modules/Store_Operations/Business-Flow.html">Store_Operations</a></td>
+<td><a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-048</a></td>
+<td><code>catalog.products</code>, <code>procurement.purchase_requisition_items</code>, <code>procurement.purchase_requisitions</code>, <code>warehouse.replenishment_rules</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-054</a></td>
+</tr>
+<tr>
+<td><code>STO-04</code></td>
+<td><a href="../03-Modules/Store_Operations/Business-Flow.html">Store_Operations</a></td>
+<td><a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-049</a></td>
+<td><code>warehouse.inventory_lots</code>, <code>warehouse.stock_transfer_items</code>, <code>warehouse.stock_transfers</code></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-055</a></td>
+</tr>
+<tr>
+<td><code>STO-05</code></td>
+<td><a href="../03-Modules/Store_Operations/Business-Flow.html">Store_Operations</a></td>
+<td><a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Store_Operations/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-056</a></td>
+</tr>
+<tr>
+<td><code>INV-01</code></td>
+<td><a href="../03-Modules/Inventory/Business-Flow.html">Inventory</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-050</a>, <a href="../03-Modules/Inventory/APIs.html">API-052</a></td>
+<td><code>catalog.products</code>, <code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>organization.licenses</code>, <code>organization.locations</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.stock_holds</code>, <code>warehouse.stock_reservations</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD tests</a> / <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-057</a></td>
+</tr>
+<tr>
+<td><code>INV-02</code></td>
+<td><a href="../03-Modules/Inventory/Business-Flow.html">Inventory</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Inventory/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD tests</a> / <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-058</a></td>
+</tr>
+<tr>
+<td><code>INV-03</code></td>
+<td><a href="../03-Modules/Inventory/Business-Flow.html">Inventory</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-052</a></td>
+<td><code>catalog.products</code>, <code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>organization.licenses</code>, <code>organization.locations</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.stock_holds</code>, <code>warehouse.stock_reservations</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD tests</a> / <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-059</a></td>
+</tr>
+<tr>
+<td><code>INV-04</code></td>
+<td><a href="../03-Modules/Inventory/Business-Flow.html">Inventory</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-054</a></td>
+<td><code>warehouse.inventory_adjustment_items</code>, <code>warehouse.inventory_adjustments</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.stock_movement_reason_codes</code></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD tests</a> / <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-060</a></td>
+</tr>
+<tr>
+<td><code>INV-05</code></td>
+<td><a href="../03-Modules/Inventory/Business-Flow.html">Inventory</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-055</a></td>
+<td><code>warehouse.inventory_lots</code>, <code>warehouse.replenishment_rules</code>, <code>warehouse.stock_balances</code></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD tests</a> / <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-061</a></td>
+</tr>
+<tr>
+<td><code>INV-06</code></td>
+<td><a href="../03-Modules/Inventory/Business-Flow.html">Inventory</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Inventory/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD tests</a> / <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-062</a></td>
+</tr>
+<tr>
+<td><code>INV-07</code></td>
+<td><a href="../03-Modules/Inventory/Business-Flow.html">Inventory</a></td>
+<td><a href="../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-051</a></td>
+<td><code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD tests</a> / <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-063</a></td>
+</tr>
+<tr>
+<td><code>WH-01</code></td>
+<td><a href="../03-Modules/Warehouse/Business-Flow.html">Warehouse</a></td>
+<td><a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-056</a></td>
+<td><code>procurement.goods_receipt_items</code>, <code>procurement.goods_receipt_quality_checks</code>, <code>procurement.goods_receipts</code>, <code>procurement.purchase_order_items</code>, <code>procurement.purchase_orders</code>, <code>procurement.supplier_invoices</code>, <code>procurement.suppliers</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD tests</a> / <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-064</a></td>
+</tr>
+<tr>
+<td><code>WH-02</code></td>
+<td><a href="../03-Modules/Warehouse/Business-Flow.html">Warehouse</a></td>
+<td><a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-057</a>, <a href="../03-Modules/Warehouse/APIs.html">API-058</a></td>
+<td><code>organization.licenses</code>, <code>procurement.purchase_requisition_items</code>, <code>procurement.purchase_requisitions</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.stock_transfer_items</code>, <code>warehouse.stock_transfers</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD tests</a> / <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-065</a></td>
+</tr>
+<tr>
+<td><code>WH-03</code></td>
+<td><a href="../03-Modules/Warehouse/Business-Flow.html">Warehouse</a></td>
+<td><a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Warehouse/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD tests</a> / <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-066</a></td>
+</tr>
+<tr>
+<td><code>WH-04</code></td>
+<td><a href="../03-Modules/Warehouse/Business-Flow.html">Warehouse</a></td>
+<td><a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-059</a></td>
+<td><code>commerce.order_allocations</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>organization.locations</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD tests</a> / <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-067</a></td>
+</tr>
+<tr>
+<td><code>WH-05</code></td>
+<td><a href="../03-Modules/Warehouse/Business-Flow.html">Warehouse</a></td>
+<td><a href="../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Warehouse/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD tests</a> / <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-068</a></td>
+</tr>
+<tr>
+<td><code>PHM-01</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/Business-Flow.html">Pharmacist_Review</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-060</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>clinical.practitioner_profiles</code>, <code>organization.memberships</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD tests</a> / <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-069</a></td>
+</tr>
+<tr>
+<td><code>PHM-02</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/Business-Flow.html">Pharmacist_Review</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-061</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>clinical.prescription_documents</code>, <code>clinical.prescriptions</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD tests</a> / <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-070</a></td>
+</tr>
+<tr>
+<td><code>PHM-03</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/Business-Flow.html">Pharmacist_Review</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-062</a>, <a href="../03-Modules/Pharmacist_Review/APIs.html">API-063</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>clinical.practitioner_profiles</code>, <code>clinical.prescription_documents</code>, <code>clinical.prescription_items</code>, <code>clinical.prescriptions</code>, <code>clinical.review_reason_codes</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.order_status_history</code>, <code>commerce.orders</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD tests</a> / <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-071</a></td>
+</tr>
+<tr>
+<td><code>PHM-04</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/Business-Flow.html">Pharmacist_Review</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Pharmacist_Review/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD tests</a> / <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-072</a></td>
+</tr>
+<tr>
+<td><code>PHM-05</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/Business-Flow.html">Pharmacist_Review</a></td>
+<td><a href="../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-062</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>clinical.practitioner_profiles</code>, <code>clinical.prescription_documents</code>, <code>clinical.prescription_items</code>, <code>clinical.prescriptions</code>, <code>clinical.review_reason_codes</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD tests</a> / <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-073</a></td>
+</tr>
+<tr>
+<td><code>DLV-01</code></td>
+<td><a href="../03-Modules/Delivery_Operations/Business-Flow.html">Delivery_Operations</a></td>
+<td><a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-064</a></td>
+<td><code>fulfillment.packages</code>, <code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>organization.memberships</code></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-074</a></td>
+</tr>
+<tr>
+<td><code>DLV-02</code></td>
+<td><a href="../03-Modules/Delivery_Operations/Business-Flow.html">Delivery_Operations</a></td>
+<td><a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-065</a></td>
+<td><code>identity.user_roles</code>, <code>logistics.delivery_assignments</code>, <code>logistics.rider_shifts</code>, <code>logistics.shipments</code>, <code>organization.memberships</code></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-075</a></td>
+</tr>
+<tr>
+<td><code>DLV-03</code></td>
+<td><a href="../03-Modules/Delivery_Operations/Business-Flow.html">Delivery_Operations</a></td>
+<td><a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-066</a></td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_failure_reasons</code>, <code>logistics.ndr_cases</code>, <code>logistics.shipments</code></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-076</a></td>
+</tr>
+<tr>
+<td><code>DLV-04</code></td>
+<td><a href="../03-Modules/Delivery_Operations/Business-Flow.html">Delivery_Operations</a></td>
+<td><a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-067</a></td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>organization.memberships</code>, <code>payment.cod_collections</code></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-077</a></td>
+</tr>
+<tr>
+<td><code>DLV-05</code></td>
+<td><a href="../03-Modules/Delivery_Operations/Business-Flow.html">Delivery_Operations</a></td>
+<td><a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-068</a></td>
+<td><code>identity.roles</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.memberships</code></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD tests</a> / <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-078</a></td>
+</tr>
+<tr>
+<td><code>RID-01</code></td>
+<td><a href="../03-Modules/Rider_App/Business-Flow.html">Rider_App</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-069</a></td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.rider_shifts</code></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD tests</a> / <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-079</a></td>
+</tr>
+<tr>
+<td><code>RID-02</code></td>
+<td><a href="../03-Modules/Rider_App/Business-Flow.html">Rider_App</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-070</a>, <a href="../03-Modules/Rider_App/APIs.html">API-071</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>fulfillment.fulfillment_orders</code>, <code>fulfillment.packages</code>, <code>logistics.delivery_assignments</code>, <code>logistics.rider_shifts</code>, <code>logistics.shipment_events</code>, <code>logistics.shipments</code>, <code>organization.licenses</code>, <code>payment.cod_collections</code>, <code>payment.payment_intents</code>, <code>warehouse.stock_reservations</code></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD tests</a> / <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-080</a></td>
+</tr>
+<tr>
+<td><code>RID-03</code></td>
+<td><a href="../03-Modules/Rider_App/Business-Flow.html">Rider_App</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-072</a></td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.delivery_location_updates</code>, <code>logistics.rider_shifts</code></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD tests</a> / <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-081</a></td>
+</tr>
+<tr>
+<td><code>RID-04</code></td>
+<td><a href="../03-Modules/Rider_App/Business-Flow.html">Rider_App</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-073</a></td>
+<td><code>commerce.orders</code>, <code>logistics.delivery_assignments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_otp_challenges</code>, <code>logistics.shipments</code>, <code>payment.cod_collections</code>, <code>platform.file_access_grants</code>, <code>platform.file_objects</code></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD tests</a> / <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-082</a></td>
+</tr>
+<tr>
+<td><code>RID-05</code></td>
+<td><a href="../03-Modules/Rider_App/Business-Flow.html">Rider_App</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Rider_App/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD tests</a> / <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-083</a></td>
+</tr>
+<tr>
+<td><code>RID-06</code></td>
+<td><a href="../03-Modules/Rider_App/Business-Flow.html">Rider_App</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-074</a></td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_failure_reasons</code>, <code>logistics.ndr_cases</code>, <code>logistics.shipments</code>, <code>platform.file_objects</code></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD tests</a> / <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-084</a></td>
+</tr>
+<tr>
+<td><code>RID-07</code></td>
+<td><a href="../03-Modules/Rider_App/Business-Flow.html">Rider_App</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Rider_App/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD tests</a> / <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-085</a></td>
+</tr>
+<tr>
+<td><code>FIN-01</code></td>
+<td><a href="../03-Modules/Finance_Payments/Business-Flow.html">Finance_Payments</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-075</a>, <a href="../03-Modules/Finance_Payments/APIs.html">API-076</a>, <a href="../03-Modules/Finance_Payments/APIs.html">API-077</a></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code>, <code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>payment.payment_attempts</code>, <code>payment.payment_intents</code>, <code>payment.payment_transactions</code>, <code>payment.payment_webhooks</code>, <code>payment.provider_accounts</code>, <code>warehouse.stock_reservations</code></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD tests</a> / <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-086</a></td>
+</tr>
+<tr>
+<td><code>FIN-02</code></td>
+<td><a href="../03-Modules/Finance_Payments/Business-Flow.html">Finance_Payments</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-081</a></td>
+<td><code>commerce.orders</code>, <code>finance.invoice_items</code>, <code>finance.invoices</code>, <code>platform.file_access_grants</code>, <code>platform.file_objects</code></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD tests</a> / <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-087</a></td>
+</tr>
+<tr>
+<td><code>FIN-03</code></td>
+<td><a href="../03-Modules/Finance_Payments/Business-Flow.html">Finance_Payments</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-078</a></td>
+<td><code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>payment.payment_intents</code>, <code>payment.payment_transactions</code>, <code>payment.refund_allocations</code>, <code>payment.refund_reason_codes</code>, <code>payment.refunds</code></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD tests</a> / <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-088</a></td>
+</tr>
+<tr>
+<td><code>FIN-04</code></td>
+<td><a href="../03-Modules/Finance_Payments/Business-Flow.html">Finance_Payments</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Finance_Payments/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD tests</a> / <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-089</a></td>
+</tr>
+<tr>
+<td><code>FIN-05</code></td>
+<td><a href="../03-Modules/Finance_Payments/Business-Flow.html">Finance_Payments</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-079</a></td>
+<td><code>payment.provider_accounts</code>, <code>payment.reconciliation_items</code>, <code>payment.reconciliation_runs</code></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD tests</a> / <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-090</a></td>
+</tr>
+<tr>
+<td><code>FIN-06</code></td>
+<td><a href="../03-Modules/Finance_Payments/Business-Flow.html">Finance_Payments</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-080</a></td>
+<td><code>payment.cod_collections</code>, <code>payment.reconciliation_items</code>, <code>payment.reconciliation_runs</code>, <code>platform.file_objects</code></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD tests</a> / <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-091</a></td>
+</tr>
+<tr>
+<td><code>FIN-07</code></td>
+<td><a href="../03-Modules/Finance_Payments/Business-Flow.html">Finance_Payments</a></td>
+<td><a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Finance_Payments/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD tests</a> / <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-092</a></td>
+</tr>
+<tr>
+<td><code>REP-01</code></td>
+<td><a href="../03-Modules/Reporting/Business-Flow.html">Reporting</a></td>
+<td><a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-082</a></td>
+<td><code>commerce.orders</code>, <code>finance.invoices</code>, <code>platform.report_definitions</code></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD tests</a> / <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-093</a></td>
+</tr>
+<tr>
+<td><code>REP-02</code></td>
+<td><a href="../03-Modules/Reporting/Business-Flow.html">Reporting</a></td>
+<td><a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-083</a></td>
+<td><code>commerce.orders</code>, <code>finance.invoice_items</code>, <code>finance.invoices</code>, <code>platform.report_definitions</code></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD tests</a> / <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-094</a></td>
+</tr>
+<tr>
+<td><code>REP-03</code></td>
+<td><a href="../03-Modules/Reporting/Business-Flow.html">Reporting</a></td>
+<td><a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-084</a></td>
+<td><code>platform.report_definitions</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD tests</a> / <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-095</a></td>
+</tr>
+<tr>
+<td><code>REP-04</code></td>
+<td><a href="../03-Modules/Reporting/Business-Flow.html">Reporting</a></td>
+<td><a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-085</a></td>
+<td><code>fulfillment.fulfillment_orders</code>, <code>fulfillment.packages</code>, <code>logistics.shipments</code>, <code>platform.report_definitions</code></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD tests</a> / <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-096</a></td>
+</tr>
+<tr>
+<td><code>REP-05</code></td>
+<td><a href="../03-Modules/Reporting/Business-Flow.html">Reporting</a></td>
+<td><a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Reporting/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD tests</a> / <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-097</a></td>
+</tr>
+<tr>
+<td><code>REP-06</code></td>
+<td><a href="../03-Modules/Reporting/Business-Flow.html">Reporting</a></td>
+<td><a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Reporting/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD tests</a> / <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-098</a></td>
+</tr>
+<tr>
+<td><code>REP-07</code></td>
+<td><a href="../03-Modules/Reporting/Business-Flow.html">Reporting</a></td>
+<td><a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-086</a></td>
+<td><code>organization.memberships</code>, <code>platform.report_definitions</code>, <code>platform.report_runs</code></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD tests</a> / <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-099</a></td>
+</tr>
+<tr>
+<td><code>AUD-01</code></td>
+<td><a href="../03-Modules/Audit/Business-Flow.html">Audit</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Audit/APIs.html">API-087</a></td>
+<td><code>platform.audit_logs</code></td>
+<td><a href="../03-Modules/Audit/LLD.html">LLD tests</a> / <a href="../03-Modules/Audit/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#audit">TASK-100</a></td>
+</tr>
+<tr>
+<td><code>AUD-02</code></td>
+<td><a href="../03-Modules/Audit/Business-Flow.html">Audit</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></td>
+<td><a href="../03-Modules/Audit/APIs.html">API-088</a></td>
+<td><code>platform.audit_logs</code>, <code>platform.report_definitions</code>, <code>platform.report_runs</code></td>
+<td><a href="../03-Modules/Audit/LLD.html">LLD tests</a> / <a href="../03-Modules/Audit/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#audit">TASK-101</a></td>
+</tr>
+<tr>
+<td><code>AUTH-01</code></td>
+<td><a href="../03-Modules/Authentication_Access/Business-Flow.html">Authentication_Access</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-089</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-090</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-099</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-103</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-104</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-105</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-107</a></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.login_attempts</code>, <code>identity.mfa_factors</code>, <code>identity.otp_challenges</code>, <code>identity.password_history</code>, <code>identity.permissions</code>, <code>identity.role_permissions</code>, <code>identity.roles</code>, <code>identity.session_refresh_tokens</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.memberships</code>, <code>organization.organizations</code>, <code>platform.audit_logs</code>, <code>platform.outbox_events</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD tests</a> / <a href="../03-Modules/Authentication_Access/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#authentication-access">TASK-102</a></td>
+</tr>
+<tr>
+<td><code>AUTH-02</code></td>
+<td><a href="../03-Modules/Authentication_Access/Business-Flow.html">Authentication_Access</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-089</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-090</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-091</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-092</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-099</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-100</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-102</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-103</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-104</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-105</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-106</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-107</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-110</a></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.login_attempts</code>, <code>identity.mfa_factors</code>, <code>identity.otp_challenges</code>, <code>identity.password_history</code>, <code>identity.permissions</code>, <code>identity.role_permissions</code>, <code>identity.roles</code>, <code>identity.session_refresh_tokens</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.memberships</code>, <code>organization.organizations</code>, <code>platform.audit_logs</code>, <code>platform.outbox_events</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD tests</a> / <a href="../03-Modules/Authentication_Access/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#authentication-access">TASK-103</a></td>
+</tr>
+<tr>
+<td><code>AUTH-03</code></td>
+<td><a href="../03-Modules/Authentication_Access/Business-Flow.html">Authentication_Access</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-001</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-002</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-098</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-099</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-106</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-107</a></td>
+<td><code>customer.profiles</code>, <code>identity.authentication_challenges</code>, <code>identity.login_attempts</code>, <code>identity.mfa_factors</code>, <code>identity.otp_challenges</code>, <code>identity.password_history</code>, <code>identity.permissions</code>, <code>identity.role_permissions</code>, <code>identity.roles</code>, <code>identity.session_refresh_tokens</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.memberships</code>, <code>organization.organizations</code>, <code>platform.audit_logs</code>, <code>platform.outbox_events</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD tests</a> / <a href="../03-Modules/Authentication_Access/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#authentication-access">TASK-104</a></td>
+</tr>
+<tr>
+<td><code>AUTH-04</code></td>
+<td><a href="../03-Modules/Authentication_Access/Business-Flow.html">Authentication_Access</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-093</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-100</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-101</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-102</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-103</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-108</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-109</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-110</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-111</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-112</a></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.login_attempts</code>, <code>identity.mfa_factors</code>, <code>identity.permissions</code>, <code>identity.role_permissions</code>, <code>identity.roles</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.memberships</code>, <code>organization.organizations</code>, <code>platform.audit_logs</code>, <code>warehouse.warehouses</code></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD tests</a> / <a href="../03-Modules/Authentication_Access/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#authentication-access">TASK-105</a></td>
+</tr>
+<tr>
+<td><code>NOT-01</code></td>
+<td><a href="../03-Modules/Notifications/Business-Flow.html">Notifications</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-013-Customer-Support-Triage.html">WF-013</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">API-094</a></td>
+<td><code>commerce.orders</code>, <code>notification.messages</code>, <code>notification.provider_configurations</code>, <code>notification.suppressions</code>, <code>notification.templates</code>, <code>notification.user_channel_preferences</code>, <code>platform.outbox_events</code></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD tests</a> / <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-106</a></td>
+</tr>
+<tr>
+<td><code>NOT-02</code></td>
+<td><a href="../03-Modules/Notifications/Business-Flow.html">Notifications</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-013-Customer-Support-Triage.html">WF-013</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">API-095</a></td>
+<td><code>commerce.orders</code>, <code>notification.message_attempts</code>, <code>notification.messages</code></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD tests</a> / <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-107</a></td>
+</tr>
+<tr>
+<td><code>NOT-03</code></td>
+<td><a href="../03-Modules/Notifications/Business-Flow.html">Notifications</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-013-Customer-Support-Triage.html">WF-013</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">API-096</a></td>
+<td><code>notification.device_endpoints</code></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD tests</a> / <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-108</a></td>
+</tr>
+<tr>
+<td><code>NOT-04</code></td>
+<td><a href="../03-Modules/Notifications/Business-Flow.html">Notifications</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-013-Customer-Support-Triage.html">WF-013</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">API-097</a></td>
+<td><code>notification.message_attempts</code>, <code>notification.messages</code></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD tests</a> / <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-109</a></td>
+</tr>
+<tr>
+<td><code>NOT-05</code></td>
+<td><a href="../03-Modules/Notifications/Business-Flow.html">Notifications</a></td>
+<td><a href="../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../06-Workflows/WF-013-Customer-Support-Triage.html">WF-013</a></td>
+<td>No direct existing route; policy/worker or proposed journey command — see gap register</td>
+<td><a href="../03-Modules/Notifications/Database.html">Module owner/consumption mapping</a>; no invented direct route</td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD tests</a> / <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-110</a></td>
+</tr>
+</tbody>
+</table>
+<p><a href="../05-APIs/Journey-API-Gaps.html">Proposed journey gaps</a> · <a href="../05-APIs/API-Database-Feature-Matrix.html">operation-level mapping</a> · <a href="../01-Project/Capability-Scope.html">scope decisions</a>.</p>
+</main></body></html>

@@ -1,0 +1,181 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>User Roles · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>User roles and authorized workspaces</h1>
+<p><strong>Proposed defaults, not approved grants.</strong> The <a href="../03-Modules/Authentication_Access/Unified-Identity-Architecture.html">unified Identity architecture</a> owns authentication and backend authorization for every person. Role names are not login databases, identities, app-specific accounts or PostgreSQL runtime roles. D-003/D-024 must approve permissions and method policy; D-020 covers Support.</p>
+<h2>Role-to-workspace access matrix</h2>
+<table>
+<thead>
+<tr>
+<th>Role / proposed code</th>
+<th>Workspace / navigation permission</th>
+<th>Login Method</th>
+<th>MFA</th>
+<th>Permission Scope</th>
+<th>Restrictions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer / <code>customer</code></td>
+<td>Customer website/app / <code>workspace.customer.enter</code></td>
+<td>Verified phone OTP</td>
+<td>No mandatory MFA in inherited customer flow</td>
+<td>Own customer/patient/address/order resources only</td>
+<td>No staff powers; private evidence needs ownership/consent</td>
+</tr>
+<tr>
+<td>Super Admin / <code>super_admin</code></td>
+<td>Administration / <code>workspace.administration.enter</code></td>
+<td>Password + authenticator</td>
+<td>Required by AUTH-01</td>
+<td>Explicit global IAM/admin permissions</td>
+<td>No clinical/finance bypass; cannot edit own role to escalate</td>
+</tr>
+<tr>
+<td>Central Admin / <code>central_admin</code></td>
+<td>Administration / <code>workspace.administration.enter</code></td>
+<td>Password + authenticator</td>
+<td>Required by AUTH-01</td>
+<td>Approved organization/global administrative scope</td>
+<td>Global role edits require global IAM policy authority</td>
+</tr>
+<tr>
+<td>Pharmacist / <code>licensed_pharmacist</code></td>
+<td>Pharmacist workbench / <code>workspace.pharmacist.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned licensed site, permitted patient/order/P lines</td>
+<td>Reviewer qualification and clinical evidence remain independently required</td>
+</tr>
+<tr>
+<td>Store Manager / <code>store_manager</code></td>
+<td>Store operations / <code>workspace.store.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned store locations and approved supervisor actions</td>
+<td>No other store stock or unilateral pharmacy/finance override</td>
+</tr>
+<tr>
+<td>Store Staff / <code>store_staff</code></td>
+<td>Store operations / <code>workspace.store.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned store and current pick/pack tasks</td>
+<td>No manager adjustment approval from staff menu</td>
+</tr>
+<tr>
+<td>Warehouse Manager / <code>warehouse_manager</code></td>
+<td>Warehouse operations / <code>workspace.warehouse.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned warehouse/location and approved supervisor actions</td>
+<td>Resolve warehouse UUID to organization/location; no arbitrary source/destination</td>
+</tr>
+<tr>
+<td>Warehouse Staff / Receiving Staff / <code>warehouse_staff</code></td>
+<td>Warehouse operations / <code>workspace.warehouse.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Assigned receiving/transfer/picking work</td>
+<td>Receiving evidence does not authorize financial settlement</td>
+</tr>
+<tr>
+<td>Inventory Operator / Controller / <code>inventory_controller</code></td>
+<td>Inventory workspace / <code>workspace.inventory.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted organization/location/warehouse stock actions</td>
+<td>Reason/approval/lot/POS guards still apply</td>
+</tr>
+<tr>
+<td>Order Operations / Operations Manager / <code>ops_manager</code></td>
+<td>Order operations / <code>workspace.orders.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted organization/site/order queues</td>
+<td>No unilateral clinical or money status changes</td>
+</tr>
+<tr>
+<td>Delivery Dispatcher (capability of Ops Manager) / <code>ops_manager</code></td>
+<td>Delivery dispatch / <code>workspace.delivery.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted organization/location shipments and assignment actions</td>
+<td>Requires its own entry and dispatch permissions; Orders does not imply Delivery</td>
+</tr>
+<tr>
+<td>Rider / <code>delivery_rider</code></td>
+<td>Rider application / <code>workspace.rider.enter</code></td>
+<td>Verified phone OTP, as RID-01</td>
+<td>No new mandatory MFA; stronger actions require reviewed policy</td>
+<td>Current assignment/shift and minimal delivery details</td>
+<td>Cannot select another rider; mandatory delivery OTP + photo unchanged</td>
+</tr>
+<tr>
+<td>Finance Manager / <code>finance_manager</code></td>
+<td>Finance workspace / <code>workspace.finance.enter</code></td>
+<td>Password + authenticator</td>
+<td>Required by AUTH-01</td>
+<td>Explicit organization/site finance/refund/settlement grants</td>
+<td>No raw prescription access; approval/amount policies remain</td>
+</tr>
+<tr>
+<td>Finance Executive / <code>finance_executive</code></td>
+<td>Finance workspace / <code>workspace.finance.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted finance tasks and scoped reports</td>
+<td>No manager override or self-approved refund</td>
+</tr>
+<tr>
+<td>Catalog Manager / <code>catalog_manager</code></td>
+<td>Catalog management / <code>workspace.catalog.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted catalog publication/import/classification actions</td>
+<td>P/M/O approval and source validation remain separate</td>
+</tr>
+<tr>
+<td>CMS Manager / <code>cms_manager</code></td>
+<td>CMS/content management / <code>workspace.cms.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Granted content/template publication scope</td>
+<td>No implicit IAM, catalog classification or finance grant</td>
+</tr>
+<tr>
+<td>Auditor / Security Reviewer / <code>auditor</code></td>
+<td>Audit workspace / <code>workspace.audit.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Read-limited evidence/export purpose and scope</td>
+<td>Append-only history; no business corrections or blanket patient access</td>
+</tr>
+<tr>
+<td>Support (additional candidate; D-003/D-020) / <code>support_agent</code></td>
+<td>Support workspace / <code>workspace.support.enter</code></td>
+<td>Password + authenticator proposed</td>
+<td>Proposed staff default; D-003 approval</td>
+<td>Approved case/organization and limited customer projections</td>
+<td>Outside the inherited 16-role proposal; no grant until support scope approved</td>
+</tr>
+</tbody>
+</table>
+<p>The existing role master proposes 16 distinct codes. This table adds no live role: Delivery Dispatcher and Order Operations are separate permission-filtered views of the existing Ops Manager candidate, not a forced new role. Inventory Operator aliases Inventory Controller. Pharmacist aliases Licensed Pharmacist; receiving staff aliases Warehouse Staff; Security Reviewer aliases Auditor. Support is an explicit additional candidate requiring D-003/D-020, not an invented seventeenth approved role. Report viewer/exporter and notification template administration are explicit capabilities of approved scoped roles, never automatic new identities. Doctor/lab/insurance/membership roles remain future-scope decisions D-018/D-027; table existence grants no workspace.</p>
+<h2>Authentication, authorization and navigation</h2>
+<p>All roles use one <code>identity.users.id</code>. Multiple active <code>identity.user_roles</code> rows carry role, scope and validity; role permissions are explicit allowlists. Each context uses one assignment and one workspace. The backend determines eligible panels from navigation AND action permissions; arbitrary role/panel names in a request are rejected. Menus may hide actions for usability, but every API checks authorization independently.</p>
+<ul>
+<li><strong>Default:</strong> keep the current context only while valid. On a fresh session, exactly one ready choice may be a default hint; otherwise return null and a chooser. No hint authorizes entry.</li>
+<li><strong>Multiple roles:</strong> show permitted contexts for the same identity. Customer OTP cannot unlock a privileged context; password plus authenticator is mandatory for the documented privileged roles.</li>
+<li><strong>Switching:</strong> submit the server-issued context selector and current ETag. Recheck assignment, membership, organization/site, method freshness and policy; atomically advance session context generation.</li>
+<li><strong>Organizations/locations:</strong> reselect an authorized context. A supplied scope UUID is only a target. Do not combine permissions from one assignment with a resource in another assignment's scope.</li>
+<li><strong>Denied panel:</strong> return 403 <code>AUTH_WORKSPACE_FORBIDDEN</code>, no data/grant. Use privacy-safe 404 for hidden business objects.</li>
+<li><strong>Role removal:</strong> deny the removed context at the next authoritative check after revocation commits; clear it and expose other valid choices. See the exact <a href="../03-Modules/Authentication_Access/Unified-Identity-Architecture.html#authorization-consistency-and-revocation">consistency/locking policy</a>.</li>
+<li><strong>Suspension/closure:</strong> revoke sessions/proofs, block all protected business operations and reauthentication. Reopening needs the reviewed Identity process.</li>
+<li><strong>Expiry/replay:</strong> 401 requires fresh authentication; replay revokes the refresh family. Switching old tabs fails with a context-generation conflict.</li>
+<li><strong>Step-up:</strong> challenge only for an already granted target, bind it to session/assignment/policy, and verify missing password/TOTP proofs. A completed challenge alone does not bypass context activation.</li>
+<li><strong>No assignment:</strong> remain in account-access state, display no business panel, allow only identity/workspace/credential/step-up/logout controls as eligible. Do not create a default staff/customer grant.</li>
+</ul>
+<h2>Resource and database boundaries</h2>
+<p>Customer access is limited to owned resources and explicitly permitted dependents. Store/Warehouse access requires exact assigned site/task. Pharmacy retains reviewer/site/patient/evidence and P-line constraints; M/O-only orders skip mandatory review. Finance sees scoped money facts and approved reports, not prescriptions. Auditor is read-only; Support cannot refund, dispense or alter evidence. Notifications/Reports use narrowly scoped workloads, not human role impersonation.</p>
+<p>Existing SQL uses null/null for global grants and supports a <code>warehouse</code> UUID scope in its stock RLS helper. Organization/location/warehouse hierarchies are validated on the backend; polymorphic scope fields are not FKs. PostgreSQL's four NOLOGIN capability groups and three RLS policies are defense in depth, separate from business-role/workspace grants. No menu, role code, membership or integer ID replaces the explicit endpoint permission/resource check.</p>
+<p><a href="../03-Modules/Authentication_Access/Workspace-Access-Policy.json">Machine-readable proposed policy</a> · <a href="../04-Database/Tables/identity/roles.html#master-data-planning">master roles</a> · <a href="../07-Engineering/Security.html">security</a>.</p>
+</main></body></html>

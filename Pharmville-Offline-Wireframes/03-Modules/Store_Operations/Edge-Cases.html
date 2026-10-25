@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Store Operations edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Store-and-Warehouse.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-STO-01-01</code></td>
+<td><code>STO-01</code></td>
+<td>Alert fails while order is committed</td>
+<td>Order remains in queue; alert retry creates no duplicate task</td>
+<td>Store refreshes queue; Notifications repairs alert</td>
+<td><code>TC-STO-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-STO-02-01</code></td>
+<td><code>STO-02</code></td>
+<td>Wrong batch or stale P approval is scanned</td>
+<td>Packing blocked; no stock commit or dispatch for mismatched evidence</td>
+<td>Store reports discrepancy; Inventory/Pharmacy resolves</td>
+<td><code>TC-STO-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-STO-03-01</code></td>
+<td><code>STO-03</code></td>
+<td>Store submits the same replenishment after lost response</td>
+<td>One request per intent, no duplicate dispatch demand</td>
+<td>Store checks recorded request; Warehouse reviews it</td>
+<td><code>TC-STO-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-STO-04-01</code></td>
+<td><code>STO-04</code></td>
+<td>Receiver reports fewer packs than dispatched</td>
+<td>Shortage remains recorded; missing stock not credited</td>
+<td>Warehouse/Inventory investigates in-transit discrepancy</td>
+<td><code>TC-STO-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-STO-05-01</code></td>
+<td><code>STO-05</code></td>
+<td>Staff requests another store’s near-expiry report</td>
+<td>No cross-location disclosure or adjustment authority</td>
+<td>Manager reviews scope; Inventory owns stock records</td>
+<td><code>TC-STO-05-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+<h2>Additional safety and recovery tests</h2>
+<p>Concrete interruption/race assertions supplement the feature table; detailed expected results are in the <a href="LLD.html#critical-recovery-scenarios">LLD</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Scenario</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>STO-02</code></td>
+<td>Exact held lot becomes expired/blocked before scan or pack closure</td>
+<td><code>TC-STO-02-01</code></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

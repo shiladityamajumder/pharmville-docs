@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dependencies · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Authentication dependencies and decisions</h1>
+<p><strong>Accountable role proposed:</strong> Security / Identity. Approval is not inferred from documentation completeness.</p>
+<h2>Domain dependencies</h2>
+<ul>
+<li>Customer_Accounts. See <a href="Database.html">exact table/API mapping</a>.</li>
+</ul>
+<p>Authentication mechanics and role grants; customer login endpoints retain their historical customer contract surface.</p>
+<h2>Decision gates</h2>
+<p>D-003; D-023; D-024. See the <a href="../../09-References/Sources-and-Decisions.html">business decision register</a> and <a href="../../05-APIs/Planning-Decisions.html">API decision detail</a>. Future physical domains require D-027 ownership/scope review.</p>
+<table>
+<thead>
+<tr>
+<th>Planning item</th>
+<th>Current evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Surface operations</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Documentation-complete proposed</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Incomplete contracts</td>
+<td>API-089, API-090</td>
+</tr>
+<tr>
+<td>Approved / implemented</td>
+<td>0 / 0</td>
+</tr>
+<tr>
+<td>Runtime/provider/application evidence</td>
+<td>Not executed; schema-only parity is independently validated</td>
+</tr>
+</tbody>
+</table>
+<p><a href="../../05-APIs/Journey-API-Gaps.html">Journey gaps</a> preserve proposed missing commands without expanding the 107-operation denominator. No provider, financial or clinical dependency is implicitly approved.</p>
+<h2>Unified IAM approval dependencies</h2>
+<p><strong>Proposed / Unapproved / Not Implemented.</strong> Security/Product own D-003 strength, single-session interpretation, bootstrap/recovery and abuse budgets; Customer Accounts/Security own D-023 contact replacement; Tech lead/module owners/QA own D-024 contracts and runtime permissions; Security/DBA/Product own D-028 persistence, context policy and additional API approval. Rider OTP, P/M/O clinical review and delivery evidence rules remain unchanged. <a href="API-Compatibility.html">Compatibility</a> defines client migration without runtime deprecation.</p>
+</main></body></html>

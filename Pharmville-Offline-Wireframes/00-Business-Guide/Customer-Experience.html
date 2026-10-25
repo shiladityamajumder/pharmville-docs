@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Customer Experience · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>The customer experience</h1>
+<h2>What is this process?</h2>
+<p>This page follows the choices a customer makes from finding an item to resolving a problem after delivery. The <a href="Pharmville-Complete-Business-Flow.html">complete business flow</a> explains the work behind those choices.</p>
+<h2>Who is involved?</h2>
+<p>The customer or authorized family-account holder, Pharmacy, fulfillment staff, the rider and support. Each staff team sees only the information its work requires.</p>
+<h2>How does it normally work?</h2>
+<ol>
+<li>Browse and compare exact products, packs, prices and prescription labels in <a href="Catalog-and-Product-Discovery.html">discovery</a>.</li>
+<li>Sign in, complete required profile information and choose a saved or new address through <a href="Accounts-and-Login.html">accounts</a>.</li>
+<li>Review the basket, delivery result, fee and estimate. If prescription medicines remain, select the correct patient and provide evidence. See <a href="Cart-and-Checkout.html">checkout</a>.</li>
+<li>For P medicines, wait for the pharmacist’s decision. Correct an unclear file or explicitly accept a permitted changed basket. M/O-only baskets skip this branch. See <a href="Prescription-and-Pharmacy.html">pharmacy</a>.</li>
+<li>After eligible stock is held, pay online or choose eligible COD. Reopen the existing status if the connection drops. See <a href="Payments-and-Billing.html">payments</a>.</li>
+<li>Follow actual preparation and delivery milestones. Use permitted tracking/masked calling and provide the correct doorstep OTP. See <a href="Delivery-and-Rider-App.html">delivery</a>.</li>
+<li>Open history for invoices, cancellation eligibility, return requests and refund progress. Keep the order/reference for support rather than starting another purchase to fix an uncertain result.</li>
+</ol>
+<h2>What happens next?</h2>
+<p>Delivery completes the purchase journey, while finance may still be checking settlement. A cancellation, return or refund follows <a href="Returns-and-Refunds.html">its own eligibility and progress</a>.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<ul>
+<li><strong>A field or file is wrong:</strong> the customer sees what needs correction, with no unauthorized patient association or assumed approval. The customer corrects it; a pharmacist reviews clinical evidence.</li>
+<li><strong>Price or supply changes:</strong> the customer receives a refreshed basket and accepts any permitted change. Operations handles shortages; no different medicine or amount is silently accepted.</li>
+<li><strong>The bank charges but the screen is pending:</strong> the customer stays on the existing reference and waits for the trusted payment check. Finance investigates; another immediate charge is not the recovery action.</li>
+<li><strong>Preparation or delivery stalls:</strong> Pharmacy, Operations or dispatch owns the displayed waiting step. Support explains the current record and available choices without promising an unapproved deadline.</li>
+<li><strong>Return or refund is refused/delayed:</strong> the customer sees the reason or pending reference and can contact support. Finance/Operations resolve it; neither a request nor a support message counts as completed payout.</li>
+</ul>
+<h2>What does the user see?</h2>
+<p>Clear product labels, an accepted summary, review/payment statuses, evidenced milestones and eligible actions. Waiting, failed and completed outcomes must be distinguishable. Exact interface design is future application work; these are business expectations, not implemented screens.</p>
+<h2>What still needs approval?</h2>
+<p>Payment and deferred-upload order (D-004), clinical rules (D-006), stock/partial fulfillment (D-005/D-009/D-010), rider privacy/proof (D-011), returns/refunds and support commitments (D-004/D-020). See <a href="../09-References/Sources-and-Decisions.html">owners and blocked actions</a>.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../01-Project/User-Journeys.html">Journey stages</a> · <a href="../02-Architecture/System-HLD.html">HLD</a> · <a href="../03-Modules/Customer_Orders/LLD.html">customer LLD</a> · <a href="../03-Modules/Customer_Orders/APIs.html">customer APIs</a> · <a href="../04-Database/Module-Mapping.html#customer-orders">data</a> · <a href="../06-Workflows/README.html">workflows</a> · <a href="../09-References/Coverage-and-Traceability.html">edge cases/tests and feature IDs</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development tasks</a></p>
+</main></body></html>

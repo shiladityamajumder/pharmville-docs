@@ -1,0 +1,304 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Analytics · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Analytics and tracking</h1>
+<h2>Proposed analytics event contracts</h2>
+<p><strong>Design only:</strong> event definitions and numerical business targets are not approved; no analytics SDK or collection has been deployed. Events must avoid patient names, medical details, raw addresses, GPS paths, OTPs or payment credentials.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Owner</th>
+<th>Emission trigger</th>
+<th>Allowed properties</th>
+<th>Metric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_started</code></td>
+<td><code>Authentication_Access</code></td>
+<td>session verified</td>
+<td><code>channel,role_group,outcome</code></td>
+<td>active users</td>
+</tr>
+<tr>
+<td><code>login_denied</code></td>
+<td><code>Authentication_Access</code></td>
+<td>login refused</td>
+<td><code>reason_bucket,channel</code></td>
+<td>login fail rate</td>
+</tr>
+<tr>
+<td><code>product_viewed</code></td>
+<td><code>Product_Catalog</code></td>
+<td>product detail shown</td>
+<td><code>product_public_id,category</code></td>
+<td>product engagement</td>
+</tr>
+<tr>
+<td><code>search_submitted</code></td>
+<td><code>Product_Catalog</code></td>
+<td>search requested</td>
+<td><code>query_length,result_count</code></td>
+<td>search effectiveness</td>
+</tr>
+<tr>
+<td><code>availability_checked</code></td>
+<td><code>Product_Catalog</code></td>
+<td>delivery availability query</td>
+<td><code>serviceability_code,stock_state</code></td>
+<td>stock data quality</td>
+</tr>
+<tr>
+<td><code>cart_item_changed</code></td>
+<td><code>Cart_Checkout</code></td>
+<td>cart accepted line update</td>
+<td><code>sku_public_id,quantity</code></td>
+<td>cart additions</td>
+</tr>
+<tr>
+<td><code>quote_created</code></td>
+<td><code>Cart_Checkout</code></td>
+<td>quote persisted</td>
+<td><code>revision,amount_currency</code></td>
+<td>checkout funnel</td>
+</tr>
+<tr>
+<td><code>quote_rejected</code></td>
+<td><code>Cart_Checkout</code></td>
+<td>policy/version rejection</td>
+<td><code>reason_code</code></td>
+<td>checkout failure</td>
+</tr>
+<tr>
+<td><code>prescription_uploaded</code></td>
+<td><code>Prescription_Upload</code></td>
+<td>scanned file reference linked</td>
+<td><code>document_public_id,scan_state</code></td>
+<td>upload completion</td>
+</tr>
+<tr>
+<td><code>review_completed</code></td>
+<td><code>Pharmacist_Review</code></td>
+<td>pharmacist stores decision</td>
+<td><code>review_reason_code,outcome</code></td>
+<td>review turnaround</td>
+</tr>
+<tr>
+<td><code>checkout_submitted</code></td>
+<td><code>Cart_Checkout</code></td>
+<td>accepted order intent</td>
+<td><code>order_public_id,revision</code></td>
+<td>conversion</td>
+</tr>
+<tr>
+<td><code>payment_initiated</code></td>
+<td><code>Finance_Payments</code></td>
+<td>payment intent created</td>
+<td><code>payment_public_id,provider_type</code></td>
+<td>pay starts</td>
+</tr>
+<tr>
+<td><code>payment_confirmed</code></td>
+<td><code>Finance_Payments</code></td>
+<td>authoritative confirmation applied</td>
+<td><code>payment_public_id,outcome</code></td>
+<td>payment success</td>
+</tr>
+<tr>
+<td><code>payment_unknown</code></td>
+<td><code>Finance_Payments</code></td>
+<td>provider result unresolved</td>
+<td><code>payment_public_id,age_bucket</code></td>
+<td>reconciliation backlog</td>
+</tr>
+<tr>
+<td><code>stock_reserved</code></td>
+<td><code>Inventory</code></td>
+<td>stock hold committed</td>
+<td><code>location_public_id,sku_public_id</code></td>
+<td>stock allocation</td>
+</tr>
+<tr>
+<td><code>stock_reservation_denied</code></td>
+<td><code>Inventory</code></td>
+<td>lot/site/freshness failure</td>
+<td><code>reason_code,site_bucket</code></td>
+<td>stock error rate</td>
+</tr>
+<tr>
+<td><code>order_placed</code></td>
+<td><code>Customer_Orders</code></td>
+<td>order accepted</td>
+<td><code>order_public_id,order_type</code></td>
+<td>orders</td>
+</tr>
+<tr>
+<td><code>order_cancelled</code></td>
+<td><code>Customer_Orders</code></td>
+<td>cancellation accepted</td>
+<td><code>reason_code,order_public_id</code></td>
+<td>cancellations</td>
+</tr>
+<tr>
+<td><code>pack_completed</code></td>
+<td><code>Store_Operations</code></td>
+<td>package approved</td>
+<td><code>shipment_public_id,location_public_id</code></td>
+<td>packing throughput</td>
+</tr>
+<tr>
+<td><code>rider_assigned</code></td>
+<td><code>Delivery_Operations</code></td>
+<td>delivery rider selected</td>
+<td><code>shipment_public_id,carrier_type</code></td>
+<td>dispatch throughput</td>
+</tr>
+<tr>
+<td><code>delivery_attempted</code></td>
+<td><code>Delivery_Operations</code></td>
+<td>delivery attempt recorded</td>
+<td><code>shipment_public_id,result</code></td>
+<td>first-attempt rate</td>
+</tr>
+<tr>
+<td><code>cod_collected</code></td>
+<td><code>Finance_Payments</code></td>
+<td>COD receipt recorded</td>
+<td><code>shipment_public_id,amount_currency</code></td>
+<td>cash reconciliation</td>
+</tr>
+<tr>
+<td><code>refund_recorded</code></td>
+<td><code>Finance_Payments</code></td>
+<td>authoritative refund result</td>
+<td><code>refund_public_id,status</code></td>
+<td>refund cycle</td>
+</tr>
+<tr>
+<td><code>export_denied</code></td>
+<td><code>Reporting</code></td>
+<td>report export forbidden</td>
+<td><code>reason_code,role_group</code></td>
+<td>permission denial</td>
+</tr>
+<tr>
+<td><code>notification_failed</code></td>
+<td><code>Notifications</code></td>
+<td>provider send failed</td>
+<td><code>channel,error_bucket</code></td>
+<td>delivery rate</td>
+</tr>
+</tbody>
+</table>
+<h2>Proposed analytics event dictionary</h2>
+<table>
+<thead>
+<tr>
+<th>Event name</th>
+<th>Trigger from server truth</th>
+<th>Minimal safe payload</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>catalog_product_viewed</code></td>
+<td>Authorized published product read</td>
+<td>Public product ID, approved class version</td>
+</tr>
+<tr>
+<td><code>checkout_quote_accepted</code></td>
+<td>Customer accepts current quote</td>
+<td>Public checkout/order reference, revision</td>
+</tr>
+<tr>
+<td><code>rx_review_decided</code></td>
+<td>Pharmacist decision committed</td>
+<td>Review reference, outcome code, latency bucket</td>
+</tr>
+<tr>
+<td><code>order_revision_accepted</code></td>
+<td>Explicit customer change approval</td>
+<td>Order reference, accepted revision</td>
+</tr>
+<tr>
+<td><code>stock_reservation_confirmed</code></td>
+<td>Eligible lot/site hold stored</td>
+<td>Order/site opaque ref, outcome</td>
+</tr>
+<tr>
+<td><code>payment_status_verified</code></td>
+<td>Signed/reconciled payment truth</td>
+<td>Order reference, sanitized provider state</td>
+</tr>
+<tr>
+<td><code>delivery_confirmed</code></td>
+<td>Recipient proof, accepted package outcome</td>
+<td>Order/delivery reference</td>
+</tr>
+<tr>
+<td><code>refund_reconciled</code></td>
+<td>Verified refund ledger and provider outcome</td>
+<td>Refund reference and status</td>
+</tr>
+</tbody>
+</table>
+<p>These event names are <strong>Proposed</strong> and do not automatically exist in the checked-in database schema or HTTP service. Minimize data, dedupe events and obey consent/retention policy. Tracking Plan.</p>
+<h2>Technical and staff workflow metrics</h2>
+<p>Collect order/request dedupe count, P review queue age, stock freshness by location, expired/unknown license blocks, last-unit reservation conflicts, payment webhook signature/replay/settlement backlog, COD collected-vs-deposited exceptions, refund aging, rider missed/late handoff, GPS sample latency, OTP denial, provider timeout, outbox retry/dead-letter queue and audit/report export denials.</p>
+<p>On the service side capture API p50/p95/p99, error-class rates, DB slow plans/lock wait, connection pool saturation, notification provider delivery and object-scan/storage failures. CloudWatch, Sentry and OpenTelemetry/New Relic are selected in the project notes; define actual alert thresholds and on-call owner before go-live.</p>
+<p>No precision claims or production availability are supported by the source. Track only purpose-limited rider/customer fields and keep clinical details out of generic telemetry. See Monitoring.</p>
+<h2>Business/product metrics requiring target approval</h2>
+<p>Track product search success and zero-results, add-to-cart, checkout started/completed, patient/P basket proportion, clinical review turnaround/rework, mixed-basket revision acceptance, safe order fulfillment rate, failed delivery, refund completion, COD eligibility refusal and repeat customer retention.</p>
+<p>Always distinguish numerator/denominator and filtered segments; separate stock/legal block from infrastructure failure.</p>
+<p>No baseline conversion, target revenue, SLA or real-user traffic was supplied. The proposed HLD targets are not confirmed performance promises. Define owner-approved targets after staging and launch instrumentation, with privacy filters so clinical reasons cannot appear in broad marketing reports.</p>
+<p>For operational debugging prefer business entity/audit events over generic frontend analytics; customer-visible order success must be reconciled to financial, clinical and delivery sources of truth. See Operational Metrics.</p>
+<h2>Proposed business success metrics</h2>
+<p>Do not fabricate targets, denominators, attribution windows or current values. Define the reporting period with the product owner and verify event delivery first.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Proposed numerator / denominator</th>
+<th>Reconciliation guard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Checkout completion</td>
+<td>unique accepted orders / unique checkout starts</td>
+<td>Count by durable order ID, never page redirects</td>
+</tr>
+<tr>
+<td>Payment confirmed</td>
+<td>unique provider-confirmed payments / initiated payment intents</td>
+<td>Ignore duplicate callbacks</td>
+</tr>
+<tr>
+<td>Eligible order fulfillment</td>
+<td>eligible dispatched orders / accepted orders</td>
+<td>Exclude invalidly licensed sites</td>
+</tr>
+<tr>
+<td>Delivery success</td>
+<td>successfully completed shipments / first eligible attempts</td>
+<td>distinguish retry attempts</td>
+</tr>
+<tr>
+<td>Inventory mismatch</td>
+<td>count of POS/physical discrepancies / checked SKU-site pairs</td>
+<td>preserve snapshot age</td>
+</tr>
+<tr>
+<td>Patient safety guard</td>
+<td>blocked unsafe P-classified review cases / attempted P-classified orders</td>
+<td>Do not treat unsafe bypass as conversion win</td>
+</tr>
+</tbody>
+</table>
+<p>Analytics retention, sampling and marketing permissions require privacy approval.</p>
+<h2>Product analytics tracking plan</h2>
+<p>Measure customer discovery/search, product view and P/M/O classification mix, checkout started/quote changed, Rx requested/submitted/correction, accepted revision, payment verified/pending, eligible stock hold, exact pick/dispatch, delivery/failed attempt, return/refund and support contact.</p>
+<p>Record business-safe event names, public correlation IDs, accepted version and anonymized category/status only.</p>
+<p>Do not send patient names, prescription images, OTPs, medical diagnosis, detailed bank references or rider precise GPS to general analytics. Event generation must follow committed domain state; a click or client callback is not successful payment, approval or delivery.</p>
+<p>Marketing analytics/consent policy requires owner privacy review. Source feature and workflow IDs provide the reference taxonomy; actual tag SDK and BI provider are unselected.</p>
+<p>See Analytics Events and Audit.</p>
+</main></body></html>

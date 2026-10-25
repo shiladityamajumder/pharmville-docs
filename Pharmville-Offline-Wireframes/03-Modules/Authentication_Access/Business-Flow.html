@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Authentication business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Security / Identity. Authentication mechanics and role grants; customer login endpoints retain their historical customer contract surface.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Resolve customer OTP or staff password/MFA proof through its own pre-login trust path; never require an existing bearer for login.</li>
+<li>Bind proof to purpose and expiry, consume it once, enforce approved throttling and staff session limits.</li>
+<li>Issue or rotate a session only after valid proof; resolve current permission and organization/location scope server-side.</li>
+<li>Revoke the owned session on logout and deny stale/replayed refresh proof.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AUTH-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-AUTH-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>AUTH-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-AUTH-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>AUTH-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-AUTH-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>AUTH-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-AUTH-04-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Accounts-and-Login.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-003; D-023; D-024.</p>
+<h2>Common login and authorized workspace journey</h2>
+<p><strong>Proposed / Unapproved / Not Implemented.</strong> Enter phone/email at one entry point → neutral challenge → OTP or password proof → required authenticator proof → authenticated identity → permission-filtered workspace chooser → step-up if necessary → explicit active context. Customer/rider OTP remains valid for those grants; no privileged access follows from OTP alone. Switching sites repeats grant and resource checks. No workspace routes to account access/help/logout, not to an administrative panel. <a href="../../01-Project/User-Roles.html">Role matrix</a>.</p>
+</main></body></html>

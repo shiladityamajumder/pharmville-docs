@@ -1,0 +1,113 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>README · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Authentication Access</h1>
+<p><strong>Stable module ID:</strong> <code>Authentication_Access</code> · <strong>Proposed accountable role:</strong> Security / Identity.</p>
+<h2>Module blueprint navigation</h2>
+<table>
+<thead>
+<tr>
+<th>Planning concern</th>
+<th>Canonical reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unified Identity, scoped sessions and revocation</td>
+<td><a href="Unified-Identity-Architecture.html">Canonical architecture</a></td>
+</tr>
+<tr>
+<td>Role/workspace defaults and permissions</td>
+<td><a href="../../01-Project/User-Roles.html">Access matrix</a></td>
+</tr>
+<tr>
+<td>Legacy adapters and new API rollout</td>
+<td><a href="API-Compatibility.html">Compatibility</a></td>
+</tr>
+<tr>
+<td>Identity persistence changes and decisions</td>
+<td><a href="../../04-Database/Identity-Authentication-Assessment.html">Assessment</a></td>
+</tr>
+<tr>
+<td>Scope, requirements and business flow</td>
+<td><a href="Business-Flow.html">Business flow</a></td>
+</tr>
+<tr>
+<td>Components, boundaries and design</td>
+<td><a href="HLD.html">HLD</a> · <a href="LLD.html">LLD</a></td>
+</tr>
+<tr>
+<td>Operation contracts and DTOs</td>
+<td><a href="APIs.html">APIs</a></td>
+</tr>
+<tr>
+<td>Owned and consumed database objects</td>
+<td><a href="Database.html">Database</a></td>
+</tr>
+<tr>
+<td>State, permissions, recovery and tests</td>
+<td><a href="Operations.html">Operating contract</a> · <a href="Edge-Cases.html">edge cases</a></td>
+</tr>
+<tr>
+<td>Dependencies and owner decisions</td>
+<td><a href="Dependencies.html">Dependencies</a></td>
+</tr>
+</tbody>
+</table>
+<p><a href="../../00-Business-Guide/Accounts-and-Login.html">Business flow</a> · <a href="../../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a></p>
+<h2>MOD-017 — Login, sessions, roles and access control</h2>
+<p><strong>Source classification:</strong> 4 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.</p>
+<p><strong>Purpose:</strong> Client-supplied actor, role and location are never trusted as authorisation context.</p>
+<p><strong>Feature coverage</strong></p>
+<ul>
+<li><strong>AUTH-01 / REQ-102:</strong> Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager (Must (draft)).</li>
+<li><strong>AUTH-02 / REQ-103:</strong> Lockout rules, session limits, one session per staff account (Must (draft)).</li>
+<li><strong>AUTH-03 / REQ-104:</strong> OTP rate limits per number and IP (Must (draft)).</li>
+<li><strong>AUTH-04 / REQ-105:</strong> Permissions checked on the server for every request (Must (draft)).</li>
+</ul>
+<h3>Developer navigation</h3>
+<ul>
+<li>🏗️ <a href="HLD.html">Module HLD</a></li>
+<li>⚙️ <a href="LLD.html">Module LLD</a></li>
+<li>Internal architecture</li>
+<li>🔗 <a href="APIs.html">API contracts</a></li>
+<li>🗄️ <a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li>🧪 <a href="../../07-Engineering/Testing.html">Testing</a></li>
+<li>🗓️ <a href="../../08-Development-Plan/Implementation-Plan.html">Implementation plan</a></li>
+</ul>
+<p><strong>Dependencies:</strong> all cross-module references require ownership and permission checks; see master dependency register.</p>
+<h2>MOD-017: Login, sessions, roles and access control — HLD</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.</p>
+</blockquote>
+<p><strong>Business responsibility:</strong> Login, sessions, roles and access control. Client-supplied actor, role and location are never trusted as authorisation context.</p>
+<p><strong>System responsibility:</strong> The <code>Authentication_Access</code> NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are <strong>not</strong> proof of exclusive write ownership.</p>
+<h3>Major operations</h3>
+<ul>
+<li>Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager (<code>AUTH-01</code>)</li>
+<li>Lockout rules, session limits, one session per staff account (<code>AUTH-02</code>)</li>
+<li>OTP rate limits per number and IP (<code>AUTH-03</code>)</li>
+<li>Permissions checked on the server for every request (<code>AUTH-04</code>)</li>
+</ul>
+<h3>Dependencies and trust boundaries</h3>
+<ul>
+<li>Database candidates: <code>identity.users</code>, <code>identity.sessions</code>, <code>identity.roles</code>, <code>identity.user_roles</code>, <code>identity.permissions</code>.</li>
+<li>Role, patient, store and order scope resolved from trusted access context, not JSON body.</li>
+<li>External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.</li>
+<li>Use local transactions for authoritative state; publish external side effects only after commit.</li>
+</ul>
+<p><strong>Technical design:</strong> <a href="LLD.html">Module LLD</a> · <a href="../../05-APIs/README.html">API index</a> · <a href="../../07-Engineering/Testing.html">Tests</a></p>
+<h3>Risk</h3>
+<p>Client-supplied actor, role and location are never trusted as authorisation context. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.</p>
+<h2>Related design and delivery references</h2>
+<ul>
+<li>🏗️ <a href="HLD.html">HLD</a></li>
+<li>⚙️ <a href="LLD.html">LLD</a></li>
+<li>🧪 <a href="Edge-Cases.html">Edge cases</a></li>
+<li>🔗 <a href="APIs.html">API contracts</a></li>
+<li>🗄️ <a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li>🧪 <a href="../../07-Engineering/Testing.html">QA scenarios</a></li>
+<li>🗓️ <a href="../../08-Development-Plan/Implementation-Plan.html">Development tasks</a></li>
+<li>End-to-end flows: <a href="../../06-Workflows/README.html">workflows</a></li>
+</ul>
+<h2>Unified authentication source of truth</h2>
+<p><strong>Proposed / Unapproved / Not Implemented.</strong> All people share Identity; application panels consume verified workspace projections. Start with <a href="Unified-Identity-Architecture.html">unified architecture</a>, <a href="../../01-Project/User-Roles.html">role/workspace policy</a>, <a href="API-Compatibility.html">API compatibility</a> and <a href="../../04-Database/Identity-Authentication-Assessment.html">database assessment</a>. Historical Customer/Admin contract surfaces are adapters; Authentication owns credential and grant commands.</p>
+</main></body></html>

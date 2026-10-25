@@ -1,0 +1,189 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Rider Operations database contract</h1>
+<p><strong>Structure validated; business write assignment Proposed.</strong> Rider client workflows; no independent direct table write ownership or clinical/finance authority. Read access or a contract surface does not confer write ownership. Exact operation transactions/DTO columns are in <a href="APIs.html">APIs</a>; shared audit/outbox/idempotency writes are owner-coordinated infrastructure.</p>
+<h2>Proposed owned tables</h2>
+<p>This client/projection module has no independently owned authoritative tables. It delegates commands to the owners below.</p>
+<h2>Contract reads and writes</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Exact read columns</th>
+<th>Exact proposed write columns</th>
+<th>Proposed data owner</th>
+<th>API IDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td><code>approved_quantity</code>, <code>decided_at</code>, <code>decision</code>, <code>id</code>, <code>order_id</code>, <code>order_item_id</code>, <code>prescription_id</code>, <code>review_id</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Pharmacist_Review</td>
+<td>API-071</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>assigned_to_user_id</code>, <code>id</code>, <code>order_id</code>, <code>patient_profile_id</code>, <code>prescription_document_id</code>, <code>prescription_id</code>, <code>review_version</code>, <code>reviewed_by_user_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Pharmacist_Review</td>
+<td>API-071</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><code>id</code>, <code>order_id</code>, <code>status</code></td>
+<td>None</td>
+<td>Order_Operations</td>
+<td>API-071</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>currency</code>, <code>current_revision_id</code>, <code>id</code>, <code>internal_id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Order_Operations</td>
+<td>API-071, API-073</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td><code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>row_version</code>, <code>status</code>, <code>warehouse_id</code></td>
+<td><code>status</code></td>
+<td>Store_Operations</td>
+<td>API-071</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td><code>fulfillment_order_id</code>, <code>id</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Store_Operations</td>
+<td>API-071</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/delivery_assignments.html"><code>logistics.delivery_assignments</code></a></td>
+<td><code>accepted_at</code>, <code>assigned_at</code>, <code>completed_at</code>, <code>delivery_user_id</code>, <code>ended_at</code>, <code>id</code>, <code>is_current</code>, <code>row_version</code>, <code>shipment_id</code>, <code>status</code></td>
+<td><code>accepted_at</code>, <code>completed_at</code>, <code>status</code></td>
+<td>Delivery_Operations</td>
+<td>API-069, API-070, API-071, API-072, API-073, API-074</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/delivery_attempts.html"><code>logistics.delivery_attempts</code></a></td>
+<td><code>attempt_number</code>, <code>attempted_at</code>, <code>delivery_user_id</code>, <code>id</code>, <code>proof_file_id</code>, <code>proof_metadata</code>, <code>reason_code</code>, <code>reason_code_id</code>, <code>row_version</code>, <code>shipment_id</code>, <code>status</code></td>
+<td><code>attempt_number</code>, <code>attempted_at</code>, <code>delivery_user_id</code>, <code>otp_verified</code>, <code>proof_file_id</code>, <code>proof_metadata</code>, <code>reason_code</code>, <code>shipment_id</code>, <code>status</code></td>
+<td>Delivery_Operations</td>
+<td>API-073, API-074</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/delivery_failure_reasons.html"><code>logistics.delivery_failure_reasons</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Delivery_Operations</td>
+<td>API-074</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/delivery_location_updates.html"><code>logistics.delivery_location_updates</code></a></td>
+<td>None</td>
+<td><code>accuracy_m</code>, <code>assignment_id</code>, <code>delivery_user_id</code>, <code>latitude</code>, <code>longitude</code>, <code>received_at</code>, <code>recorded_at</code>, <code>shift_id</code>, <code>source</code></td>
+<td>Delivery_Operations</td>
+<td>API-072</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/delivery_otp_challenges.html"><code>logistics.delivery_otp_challenges</code></a></td>
+<td><code>assignment_id</code>, <code>attempt_count</code>, <code>expires_at</code>, <code>id</code>, <code>max_attempts</code>, <code>otp_digest</code>, <code>shipment_id</code>, <code>status</code>, <code>verified_at</code></td>
+<td><code>attempt_count</code>, <code>status</code>, <code>verified_at</code></td>
+<td>Delivery_Operations</td>
+<td>API-073</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/ndr_cases.html"><code>logistics.ndr_cases</code></a></td>
+<td>None</td>
+<td><code>reason_code</code>, <code>shipment_id</code>, <code>status</code></td>
+<td>Delivery_Operations</td>
+<td>API-074</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/rider_shifts.html"><code>logistics.rider_shifts</code></a></td>
+<td><code>ended_at</code>, <code>id</code>, <code>rider_user_id</code>, <code>started_at</code></td>
+<td><code>ended_at</code>, <code>rider_user_id</code>, <code>started_at</code></td>
+<td>Delivery_Operations</td>
+<td>API-069, API-070, API-072</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/shipment_events.html"><code>logistics.shipment_events</code></a></td>
+<td>None</td>
+<td><code>event_code</code>, <code>event_time</code>, <code>raw_payload</code>, <code>shipment_id</code>, <code>status</code></td>
+<td>Delivery_Operations</td>
+<td>API-071</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td><code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>package_id</code>, <code>row_version</code>, <code>shipping_label_file_id</code>, <code>status</code></td>
+<td><code>delivered_at</code>, <code>dispatched_at</code>, <code>status</code></td>
+<td>Delivery_Operations</td>
+<td>API-070, API-071, API-073, API-074</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>expires_at</code>, <code>id</code>, <code>is_deleted</code>, <code>location_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>verification_status</code></td>
+<td>None</td>
+<td>Admin_CMS</td>
+<td>API-071</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>amount</code>, <code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>row_version</code>, <code>shipment_id</code>, <code>status</code></td>
+<td><code>amount</code>, <code>collected_at</code>, <code>collected_by_user_id</code>, <code>status</code></td>
+<td>Finance_Payments</td>
+<td>API-071, API-073</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><code>expires_at</code>, <code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Finance_Payments</td>
+<td>API-071</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td><code>expires_at</code>, <code>file_object_id</code>, <code>id</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>API-073</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><code>access_type</code>, <code>classification</code>, <code>id</code>, <code>is_deleted</code>, <code>malware_scan_status</code>, <code>owner_id</code>, <code>owner_type</code>, <code>row_version</code>, <code>sha256</code>, <code>size_bytes</code>, <code>status</code></td>
+<td>None</td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>API-073, API-074</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>expires_at</code>, <code>id</code>, <code>order_id</code>, <code>order_item_id</code>, <code>order_revision_id</code>, <code>row_version</code>, <code>status</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Inventory</td>
+<td>API-071</td>
+</tr>
+</tbody>
+</table>
+<h2>Master and transaction dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Controlled table</th>
+<th>Classification</th>
+<th>Lifecycle and initial data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/delivery_failure_reasons.html"><code>logistics.delivery_failure_reasons</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+</tbody>
+</table>
+<p>Every mutation must enter the authoritative owner command with explicit scope/version, apply only that command’s invariant, and commit aggregate/audit/outbox together. External provider/file/message effects occur after commit; idempotency and recovery are per endpoint. Shared-table audit/outbox infrastructure does not acquire domain ownership. Physical SQL guards are recorded on each linked table page; application authorization remains additional.</p>
+</main></body></html>

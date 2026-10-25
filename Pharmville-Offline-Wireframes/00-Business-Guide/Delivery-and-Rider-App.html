@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Delivery and Rider App · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Delivery and the rider app</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.</p>
+</blockquote>
+<h2>What is this process?</h2>
+<p>Delivery moves a prepared parcel to its customer and records the outcome. Tracking helps coordination; a map position is not proof of delivery or cash settlement.</p>
+<h2>Who is involved?</h2>
+<p>Dispatchers, assigned riders, customers, handoff staff, support and Finance.</p>
+<h2>How does it normally work?</h2>
+<ol>
+<li>Riders sign in, start authorized shifts and set availability. Dispatchers see eligible riders and ready parcels.</li>
+<li>Pharmville suggests a nearby available rider; staff confirm or choose another. Riders see only necessary assigned-delivery information.</li>
+<li>The rider accepts, records pickup and opens navigation. The customer sees delivery progress, permitted tracking, estimated arrival and masked calling.</li>
+<li>At the doorstep, the rider requests the customer OTP and approved photo evidence. Pharmville checks proof for the current assignment before accepting completion.</li>
+<li>COD actual collection is recorded separately from delivery completion and later deposit. Failed attempts receive an approved reason; dispatch selects a permitted reattempt, reschedule or return.</li>
+</ol>
+<h2>What happens next?</h2>
+<p>Delivery completion ends this leg. <a href="Finance-and-Reconciliation.html">Finance</a> checks cash; failed/returned parcels enter <a href="Returns-and-Refunds.html">exception handling</a>.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<h3>No rider is available</h3>
+<p>Busy or off-duty riders leave the parcel ready and unassigned. Dispatch arranges an eligible rider or an approved revised promise. The customer sees awaiting assignment, not out for delivery; parcel stock stays tracked.</p>
+<h3>The OTP is wrong</h3>
+<p>A typo, old code or wrong doorstep prevents completion. The rider sees verification failed, retries only within approved limits or contacts dispatch. Delivery stays incomplete; no collection or refund is invented.</p>
+<h3>The device goes offline</h3>
+<p>Tracking and acknowledgments may stop. The app shows pending actions; customers see the last known update, not a false live point. On reconnect the server rechecks assignment/state/evidence before accepting replay. Dispatch resolves conflicts; offline storage and replay details require their reviewed contract.</p>
+<h3>The customer is absent or refuses</h3>
+<p>The rider records the actual reason. Dispatch chooses an approved next action and support communicates it. Stock remains with the tracked parcel until receiving; money and COD balances are not automatically cleared.</p>
+<h3>A reassigned rider replays completion</h3>
+<p>An old task screen cannot authorize delivery. Pharmville rejects stale assignment actions and asks the rider to refresh/contact dispatch. One current assignment can complete; Finance must not count cash twice.</p>
+<h3>A tracking link exposes unrelated information</h3>
+<p>An old link or wrong role must not reveal another customer’s route or prescription. Access is denied; Security reviews suspected disclosure while authorized work continues with minimum details.</p>
+<h2>What does the user see?</h2>
+<p>Riders see assigned tasks, current custody and proof result; customers see permitted tracking, OTP, last update and delivery/attempt status. Dispatch sees unassigned and failed work.</p>
+<h2>What still needs approval?</h2>
+<p>D-007 (COD), D-011 (location/proof), D-021 (Android scope); RID-05 door checks and RID-07 incentives remain draft. The <a href="../09-References/Sources-and-Decisions.html#open-decisions">decision register</a> names owners and blocked actions.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../02-Architecture/System-HLD.html">System HLD</a> · <a href="../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development tasks</a></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Architecture</th>
+<th>Implementation</th>
+<th>API</th>
+<th>Data</th>
+<th>Edge cases and tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Delivery Operations</td>
+<td><a href="../03-Modules/Delivery_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#delivery-operations">Mapping</a></td>
+<td><a href="../03-Modules/Delivery_Operations/Edge-Cases.html">Cases</a></td>
+</tr>
+<tr>
+<td>Rider App</td>
+<td><a href="../03-Modules/Rider_App/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#rider-app">Mapping</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Cases</a></td>
+</tr>
+</tbody>
+</table>
+<p>Technical workflows: <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a> · <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a> · <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a>.</p>
+<p>Feature references: <code>DLV-01</code>, <code>DLV-02</code>, <code>DLV-03</code>, <code>DLV-04</code>, <code>DLV-05</code>, <code>RID-01</code>, <code>RID-02</code>, <code>RID-03</code>, <code>RID-04</code>, <code>RID-05</code>, <code>RID-06</code>, <code>RID-07</code>.</p>
+<p><a href="README.html">Business Guide</a> · <a href="Pharmville-Complete-Business-Flow.html">Complete journey</a></p>
+</main></body></html>

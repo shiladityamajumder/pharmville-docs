@@ -1,0 +1,268 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ERD Coverage Report · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>ERD coverage report</h1>
+<h2>Measured coverage</h2>
+<table>
+<thead>
+<tr>
+<th>Measure</th>
+<th style="text-align:right">Result</th>
+<th>Evidence status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL schemas</td>
+<td style="text-align:right">24</td>
+<td>Confirmed in checked-out catalog snapshot</td>
+</tr>
+<tr>
+<td>Tables</td>
+<td style="text-align:right">268</td>
+<td>Confirmed in checked-out catalog snapshot</td>
+</tr>
+<tr>
+<td>Columns</td>
+<td style="text-align:right">4,485</td>
+<td>Confirmed in checked-out catalog snapshot</td>
+</tr>
+<tr>
+<td>Declared foreign keys</td>
+<td style="text-align:right">1,476</td>
+<td>Parsed from catalog constraint definitions</td>
+</tr>
+<tr>
+<td>Cross-schema foreign keys</td>
+<td style="text-align:right">894</td>
+<td>Computed from FK child/parent schemas</td>
+</tr>
+<tr>
+<td>Cross-schema schema pairs</td>
+<td style="text-align:right">92</td>
+<td>Computed from FK inventory</td>
+</tr>
+<tr>
+<td>Focused domain ER diagrams</td>
+<td style="text-align:right">42</td>
+<td>Generated; 18 max entities per diagram</td>
+</tr>
+<tr>
+<td>Tables represented as focus entities</td>
+<td style="text-align:right">268 / 268</td>
+<td>Every table appears as a focus table once</td>
+</tr>
+<tr>
+<td>Foreign keys represented by diagram IDs and catalog rows</td>
+<td style="text-align:right">1476 / 1476</td>
+<td>Complete in snapshot scope</td>
+</tr>
+<tr>
+<td>Tables with no declared FK</td>
+<td style="text-align:right">1</td>
+<td>See <a href="Logical-References.html">logical-reference review</a></td>
+</tr>
+<tr>
+<td>SQLAlchemy ORM <code>relationship()</code> declarations</td>
+<td style="text-align:right">0</td>
+<td>Historical scan only; archived models are not schema authority</td>
+</tr>
+<tr>
+<td>Non-FK UUID references</td>
+<td style="text-align:right">29</td>
+<td>Classified separately; see <a href="Logical-References.html">Logical References</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Schema coverage</h2>
+<table>
+<thead>
+<tr>
+<th>Schema</th>
+<th style="text-align:right">Tables</th>
+<th style="text-align:right">FK rows</th>
+<th style="text-align:right">Cross-schema FK rows</th>
+<th style="text-align:right">ER diagrams</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>appointment</code></td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">49</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">2 (<a href="01-appointment.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>catalog</code></td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">105</td>
+<td style="text-align:right">58</td>
+<td style="text-align:right">3 (<a href="02-catalog.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>clinical</code></td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">111</td>
+<td style="text-align:right">63</td>
+<td style="text-align:right">3 (<a href="03-clinical.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>commerce</code></td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">117</td>
+<td style="text-align:right">73</td>
+<td style="text-align:right">3 (<a href="04-commerce.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>compliance</code></td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">43</td>
+<td style="text-align:right">37</td>
+<td style="text-align:right">1 (<a href="05-compliance.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>customer</code></td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">38</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">1 (<a href="06-customer.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>diagnostics</code></td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">79</td>
+<td style="text-align:right">43</td>
+<td style="text-align:right">2 (<a href="07-diagnostics.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>finance</code></td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">45</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">1 (<a href="08-finance.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>fulfillment</code></td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">70</td>
+<td style="text-align:right">46</td>
+<td style="text-align:right">2 (<a href="09-fulfillment.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>identity</code></td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">60</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2 (<a href="10-identity.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>insurance</code></td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">42</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">1 (<a href="11-insurance.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>logistics</code></td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">84</td>
+<td style="text-align:right">51</td>
+<td style="text-align:right">2 (<a href="12-logistics.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>marketplace</code></td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">45</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">1 (<a href="13-marketplace.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>membership</code></td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">1 (<a href="14-membership.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>notification</code></td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">40</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">2 (<a href="15-notification.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>organization</code></td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">39</td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">1 (<a href="16-organization.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">70</td>
+<td style="text-align:right">48</td>
+<td style="text-align:right">2 (<a href="17-payment.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">66</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">3 (<a href="18-platform.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>pricing</code></td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">41</td>
+<td style="text-align:right">29</td>
+<td style="text-align:right">1 (<a href="19-pricing.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>procurement</code></td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">93</td>
+<td style="text-align:right">61</td>
+<td style="text-align:right">2 (<a href="20-procurement.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>risk</code></td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">1 (<a href="21-risk.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">1 (<a href="22-search.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>support</code></td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">1 (<a href="23-support.html">details</a>)</td>
+</tr>
+<tr>
+<td><code>warehouse</code></td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">144</td>
+<td style="text-align:right">70</td>
+<td style="text-align:right">3 (<a href="24-warehouse.html">details</a>)</td>
+</tr>
+</tbody>
+</table>
+<h2>Relationship and diagram rules</h2>
+<ul>
+<li>Each catalog row is one physical PostgreSQL FK constraint. Composite source and target columns stay in their declared order.</li>
+<li>Cardinality is derived from FK nullability and exact unique keys/indexes. A child FK is optional if any source column permits null; a child is unique per parent only when the complete FK column set is unique.</li>
+<li>Diagram labels use stable <code>FK-####</code> identifiers. Constraints between the same entity pair may share a labeled Mermaid edge only when their cardinality matches; each ID still resolves to a separate catalog row with exact columns and delete/update actions.</li>
+<li>Entities use safe Mermaid aliases <code>schema__table</code>. Every diagram has an alias-to-qualified-table mapping.</li>
+<li>The overall map is intentionally conceptual and includes only verified domains and representative declared schema links; <a href="15-Cross-Domain-Relationships.html">the cross-domain register</a> and child-schema catalog pages provide complete FK detail.</li>
+</ul>
+<h2>Evidence and limitations</h2>
+<p>The generator verifies the standalone SQL, derived catalog/table register and logical-reference decision checksums against <a href="../../09-References/Database-Evidence.json">Database-Evidence.json</a>. All 268 table pages and 4,485 columns are validated against the effective catalog. Private PostgreSQL fresh-install parity is recorded separately; no production connection is used.</p>
+<p>These ERDs cover every physical foreign key in the validated effective V0030 schema. SQL installation and zero catalog differences were verified in isolated disposable databases. Future proposals, business ownership approval and production deployment are separate states. The archived migration sources and nested Git history remain intact.</p>
+<p>Potential review items are not declared defects: <code>platform.report_definitions</code> has no FK in the snapshot; polymorphic and opaque UUID references are explicitly classified and kept outside FK diagrams; and the 24 schema ownership boundaries remain candidate service ownership rather than access grants.</p>
+</main></body></html>

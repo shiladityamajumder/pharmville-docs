@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Module Dependencies · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Module dependencies</h1>
+<h2>Planning dependency graph</h2>
+<pre><code class="language-mermaid">flowchart LR
+ DB[Standalone SQL and role policies] --&gt; AUTH[Identity/auth]
+ DB --&gt; CAT[Catalog / approved classification]
+ AUTH --&gt; CUST[Customer profiles + patient]
+ CAT --&gt; CART[Cart / quote]
+ CUST --&gt; CART
+ CART --&gt; RX[Conditional Rx review]
+ CART --&gt; STOCK[POS / license / inventory hold]
+ RX --&gt; STOCK
+ STOCK --&gt; PAY[Payment and COD truth]
+ PAY --&gt; PICK[Store/warehouse picking]
+ PICK --&gt; RIDER[Rider dispatch + OTP]
+ RIDER --&gt; REC[Reconciliation / audit / reporting]
+</code></pre>
+<p>The graph represents prerequisite domain evidence, not a mandatory serial sprint schedule. Catalog and identity tasks can run in parallel after SQL conventions. Private Rx storage and payment adapter setup can proceed in parallel while business rules are being signed off, but cannot be enabled before the corresponding safety/owner gates are approved.</p>
+<p>Basic warehouse transfers are needed in the current operational flow but Phase 1 vs Phase 2 ownership remains D-002. Hosted PG15, integration credentials and production content are external dependencies and can block release despite completed coding. See Roadmap.</p>
+</main></body></html>

@@ -1,0 +1,409 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>organization · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Organization foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>organization</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-0938</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/bank_accounts.html"><code>organization.bank_accounts</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0939</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/bank_accounts.html"><code>organization.bank_accounts</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0940</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/bank_accounts.html"><code>organization.bank_accounts</code></a></td>
+<td><code>organization_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0941</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/bank_accounts.html"><code>organization.bank_accounts</code></a></td>
+<td><code>organization_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0942</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/bank_accounts.html"><code>organization.bank_accounts</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0943</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0944</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0945</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><code>organization_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0946</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><code>organization_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0947</td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><code>parent_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0948</td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><code>parent_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0949</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0950</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0951</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0952</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>document_file_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0953</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>document_file_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0954</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>location_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0955</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>location_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0956</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>organization_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0957</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>organization_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0958</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0959</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0960</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0961</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><code>organization_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0962</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><code>organization_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0963</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0964</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0965</td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>department_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0966</td>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>department_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0967</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>location_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0968</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>location_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0969</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>manager_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0970</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>organization_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0971</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>organization_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0972</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0973</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0974</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0975</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0976</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../16-organization.html#diagram-01">16-organization.md#diagram-01</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

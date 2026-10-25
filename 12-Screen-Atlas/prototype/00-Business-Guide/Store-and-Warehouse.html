@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Store and Warehouse · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Store and warehouse work</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.</p>
+</blockquote>
+<h2>What is this process?</h2>
+<p>Store and warehouse teams prepare correct parcels and replenish locations. A dispatched transfer is not yet stock received by the destination.</p>
+<h2>Who is involved?</h2>
+<p>Store workers/managers, warehouse receivers/pickers, Inventory, supplier contacts, Operations and riders.</p>
+<h2>How does it normally work?</h2>
+<ol>
+<li>Workers sign in to their assigned location, see incoming queues and accept only permitted tasks.</li>
+<li>Workers follow the exact product, batch and quantity on the pick list. Shortages are reported rather than replaced by a different medicine.</li>
+<li>Packing rechecks accepted contents, current prescription decisions, license and reserved stock. Staff record packages and hand over only after dispatch gates pass.</li>
+<li>Stores request replenishment. Warehouse staff review it, pick eligible batches and record transfer quantities and dispatch notes as in transit.</li>
+<li>The destination counts actual received quantities and shortages before stock is credited. Supplier receiving also records invoice, batch, manufacturing/expiry dates and required quality checks.</li>
+<li>Warehouse fallback orders obey the same gates as store orders. A warehouse label alone does not authorize medicine dispensing.</li>
+</ol>
+<p>A basic warehouse stock audit is a draft optional feature. If included, staff compare actual batch counts with the recorded movements and request reasoned Inventory adjustments; counting is not permission to overwrite stock.</p>
+<h2>What happens next?</h2>
+<p>Customer parcels go to <a href="Delivery-and-Rider-App.html">delivery</a>; receipts and discrepancies go to <a href="Inventory-and-Stock.html">Inventory</a>.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<h3>The worker is assigned to the wrong site</h3>
+<p>An old link or bad assignment cannot authorize another store’s task. Pharmville denies the action, explains access and changes no stock or task there. A manager corrects assignment before work resumes.</p>
+<h3>The batch is expired or wrong</h3>
+<p>A shelf error or similar pack can cause mismatch. Packing stops and Inventory/Pharmacy review the item. The customer sees delay; no unsafe parcel is handed over or silently substituted.</p>
+<h3>Receiving finds shortage or damage</h3>
+<p>Counting errors or transit damage reduce usable supply. Staff record actual accepted quantity and discrepancy. Inventory credits only accepted goods; Operations/procurement investigate while Finance retains the unmatched invoice evidence.</p>
+<h3>Receiving or handoff is repeated</h3>
+<p>A scanner retry or dropped response may repeat the command. The saved outcome is returned and stock is credited or handed off once. Staff refresh the task; Inventory resolves any discrepancy.</p>
+<h3>A site or urgent run is unavailable</h3>
+<p>Closure or an interrupted route leaves supply waiting. Operations arranges an approved alternative and communicates delay. The inherited two-extra-runs figure remains draft; in-transit stock is not treated as received.</p>
+<h2>What does the user see?</h2>
+<p>Workers see their location queue, exact pick list, packing gates, transfer note, accepted receipt quantity and shortage reasons. Customers see evidenced preparation progress.</p>
+<h2>What still needs approval?</h2>
+<p>D-002 (warehouse scope), D-006/D-009 (licensed stock), D-010 (fallback/transfers). The <a href="../09-References/Sources-and-Decisions.html#open-decisions">decision register</a> names owners and blocked actions.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../02-Architecture/System-HLD.html">System HLD</a> · <a href="../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development tasks</a></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Architecture</th>
+<th>Implementation</th>
+<th>API</th>
+<th>Data</th>
+<th>Edge cases and tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Store Operations</td>
+<td><a href="../03-Modules/Store_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#store-operations">Mapping</a></td>
+<td><a href="../03-Modules/Store_Operations/Edge-Cases.html">Cases</a></td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td><a href="../03-Modules/Warehouse/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#warehouse">Mapping</a></td>
+<td><a href="../03-Modules/Warehouse/Edge-Cases.html">Cases</a></td>
+</tr>
+</tbody>
+</table>
+<p>Technical workflows: <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a> · <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a> · <a href="../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a>.</p>
+<p>Feature references: <code>STO-01</code>, <code>STO-02</code>, <code>STO-03</code>, <code>STO-04</code>, <code>STO-05</code>, <code>WH-01</code>, <code>WH-02</code>, <code>WH-03</code>, <code>WH-04</code>, <code>WH-05</code>.</p>
+<p><a href="README.html">Business Guide</a> · <a href="Pharmville-Complete-Business-Flow.html">Complete journey</a></p>
+</main></body></html>

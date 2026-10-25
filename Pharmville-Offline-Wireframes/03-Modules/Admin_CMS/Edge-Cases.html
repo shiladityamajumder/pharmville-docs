@@ -1,0 +1,96 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Admin CMS edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Admin-and-Operations.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-ADM-01-01</code></td>
+<td><code>ADM-01</code></td>
+<td>Store user changes location filter to another store</td>
+<td>No other-location orders or patient counts disclosed</td>
+<td>Manager corrects assignment; Security tests filter enforcement</td>
+<td><code>TC-ADM-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ADM-02-01</code></td>
+<td><code>ADM-02</code></td>
+<td>Deactivated staff uses an old session</td>
+<td>Protected command denied under approved revocation policy</td>
+<td>Security verifies revocation propagation</td>
+<td><code>TC-ADM-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ADM-03-01</code></td>
+<td><code>ADM-03</code></td>
+<td>Staff attempts to grant itself a privileged role</td>
+<td>No self-authorized privilege increase</td>
+<td>Authorized Security/manager reviews grants</td>
+<td><code>TC-ADM-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ADM-04-01</code></td>
+<td><code>ADM-04</code></td>
+<td>Two editors publish from the same stale draft</td>
+<td>Stale publish conflicts; one accepted version remains</td>
+<td>Editor reloads and resolves change</td>
+<td><code>TC-ADM-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ADM-05-01</code></td>
+<td><code>ADM-05</code></td>
+<td>Fee change is applied to an already accepted basket</td>
+<td>No silent reprice; explicit revision if allowed</td>
+<td>Product/Finance approves setting and customer consent path</td>
+<td><code>TC-ADM-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ADM-06-01</code></td>
+<td><code>ADM-06</code></td>
+<td>Admin submits unsupported HSN/tax or clinical class</td>
+<td>Invalid publication blocked; no direct bypass of Catalog/Finance/Pharmacy</td>
+<td>Responsible catalog/tax/clinical owner corrects approved master</td>
+<td><code>TC-ADM-06-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ADM-07-01</code></td>
+<td><code>ADM-07</code></td>
+<td>Sheet contains duplicate SKU and malformed price</td>
+<td>Specific row errors; no silent duplicate product or partial unknown outcome</td>
+<td>Catalog owner reviews approved import atomicity and retries corrected input</td>
+<td><code>TC-ADM-07-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ADM-08-01</code></td>
+<td><code>ADM-08</code></td>
+<td>Expired license site is marked operationally open</td>
+<td>Open flag cannot make site eligible for regulated fulfillment</td>
+<td>Operations/Pharmacy renew approved license evidence</td>
+<td><code>TC-ADM-08-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ADM-09-01</code></td>
+<td><code>ADM-09</code></td>
+<td>Expired offer is submitted from an old basket</td>
+<td>Reprice/reaccept; no stale unapproved discount</td>
+<td>Product approves offer; customer reviews total</td>
+<td><code>TC-ADM-09-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+</main></body></html>

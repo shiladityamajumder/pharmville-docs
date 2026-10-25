@@ -1,0 +1,478 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>session_refresh_tokens · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>identity.session_refresh_tokens</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Hashed refresh credential lineage retained to detect spent-token replay and revoke the owning session family.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>identity.session_refresh_tokens</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Transactional</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>13 columns; 12 PK/FK/UQ/CHECK/exclusion constraints; 8 named PostgreSQL 18 NOT NULL constraints; 6 indexes; 1 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>consumed_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Consumed at</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Created at</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Created by</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>FK → <code>identity.users</code> via <code>session_refresh_tokens_created_by_fkey</code></td>
+</tr>
+<tr>
+<td><code>expires_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td>—</td>
+<td>Expires at</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Id</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal id</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>parent_token_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Parent token id</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>FK → <code>identity.session_refresh_tokens</code> via <code>fk_refresh_parent_same_session</code>; FK → <code>identity.session_refresh_tokens</code> via <code>session_refresh_tokens_parent_token_id_fkey</code></td>
+</tr>
+<tr>
+<td><code>revoked_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Revoked at</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Row version</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>session_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Session id</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>FK → <code>identity.session_refresh_tokens</code> via <code>fk_refresh_parent_same_session</code>; FK → <code>identity.sessions</code> via <code>session_refresh_tokens_session_id_fkey</code></td>
+</tr>
+<tr>
+<td><code>token_hash</code></td>
+<td><code>character varying(255)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Token hash</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Updated at</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Updated by</td>
+<td>Supports the documented owner workflow or referential invariant.</td>
+<td>FK → <code>identity.users</code> via <code>session_refresh_tokens_updated_by_fkey</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<p>Identity creates transient transactional security state after abuse checks; consumes/blocks/expires or revokes it through a locked owner command. Retain replay evidence through the full credential acceptance horizon; D-003 approves purge limits. No deployment seeds; no raw credentials. All application behaviors remain unimplemented.</p>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_refresh_parent_same_session</td>
+<td><code>parent_token_id, session_id</code></td>
+<td><a href="../../Tables/identity/session_refresh_tokens.html"><code>identity.session_refresh_tokens</code></a></td>
+<td><code>FOREIGN KEY (parent_token_id, session_id) REFERENCES identity.session_refresh_tokens(id, session_id) DEFERRABLE INITIALLY DEFERRED</code></td>
+</tr>
+<tr>
+<td>session_refresh_tokens_created_by_fkey</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id)</code></td>
+</tr>
+<tr>
+<td>session_refresh_tokens_parent_token_id_fkey</td>
+<td><code>parent_token_id</code></td>
+<td><a href="../../Tables/identity/session_refresh_tokens.html"><code>identity.session_refresh_tokens</code></a></td>
+<td><code>FOREIGN KEY (parent_token_id) REFERENCES identity.session_refresh_tokens(id)</code></td>
+</tr>
+<tr>
+<td>session_refresh_tokens_session_id_fkey</td>
+<td><code>session_id</code></td>
+<td><a href="../../Tables/identity/sessions.html"><code>identity.sessions</code></a></td>
+<td><code>FOREIGN KEY (session_id) REFERENCES identity.sessions(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td>session_refresh_tokens_updated_by_fkey</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/identity/session_refresh_tokens.html"><code>identity.session_refresh_tokens</code></a></td>
+<td>fk_refresh_parent_same_session</td>
+<td><code>parent_token_id, session_id</code></td>
+<td><code>id, session_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/session_refresh_tokens.html"><code>identity.session_refresh_tokens</code></a></td>
+<td>session_refresh_tokens_parent_token_id_fkey</td>
+<td><code>parent_token_id</code></td>
+<td><code>id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>identity.session_refresh_tokens</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parent_token_id, session_id</code></td>
+<td><code>identity.session_refresh_tokens</code></td>
+<td><code>fk_refresh_parent_same_session</code></td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>session_refresh_tokens_created_by_fkey</code></td>
+</tr>
+<tr>
+<td><code>parent_token_id</code></td>
+<td><code>identity.session_refresh_tokens</code></td>
+<td><code>session_refresh_tokens_parent_token_id_fkey</code></td>
+</tr>
+<tr>
+<td><code>session_id</code></td>
+<td><code>identity.sessions</code></td>
+<td><code>session_refresh_tokens_session_id_fkey</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>session_refresh_tokens_updated_by_fkey</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_identity_refresh_expiry</code></td>
+<td>CHECK</td>
+<td><code>CHECK (expires_at &gt; created_at)</code></td>
+</tr>
+<tr>
+<td><code>ck_identity_refresh_not_self_parent</code></td>
+<td>CHECK</td>
+<td><code>CHECK (parent_token_id IS NULL OR parent_token_id &lt;&gt; id)</code></td>
+</tr>
+<tr>
+<td><code>fk_refresh_parent_same_session</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (parent_token_id, session_id) REFERENCES identity.session_refresh_tokens(id, session_id) DEFERRABLE INITIALLY DEFERRED</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_created_by_fkey</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_id_key</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_parent_token_id_fkey</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (parent_token_id) REFERENCES identity.session_refresh_tokens(id)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_pkey</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_row_version_check</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_session_id_fkey</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (session_id) REFERENCES identity.sessions(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_token_hash_key</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (token_hash)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_updated_by_fkey</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id)</code></td>
+</tr>
+<tr>
+<td><code>uq_refresh_token_id_session</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id, session_id)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_expires_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL expires_at</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_session_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL session_id</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_token_hash_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL token_hash</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_identity_refresh_session</code></td>
+<td>btree</td>
+<td><code>(session_id, created_at)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_identity_refresh_session ON identity.session_refresh_tokens USING btree (session_id, created_at)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_id_key</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX session_refresh_tokens_id_key ON identity.session_refresh_tokens USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_pkey</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX session_refresh_tokens_pkey ON identity.session_refresh_tokens USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>session_refresh_tokens_token_hash_key</code></td>
+<td>btree</td>
+<td><code>(token_hash)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX session_refresh_tokens_token_hash_key ON identity.session_refresh_tokens USING btree (token_hash)</code></td>
+</tr>
+<tr>
+<td><code>uq_identity_refresh_child</code></td>
+<td>btree</td>
+<td><code>(parent_token_id)</code></td>
+<td>parent_token_id IS NOT NULL</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_identity_refresh_child ON identity.session_refresh_tokens USING btree (parent_token_id) WHERE parent_token_id IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>uq_refresh_token_id_session</code></td>
+<td>btree</td>
+<td><code>(id, session_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_refresh_token_id_session ON identity.session_refresh_tokens USING btree (id, session_id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.session_refresh_tokens FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

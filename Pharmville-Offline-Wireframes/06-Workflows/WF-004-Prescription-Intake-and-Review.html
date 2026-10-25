@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 004 Prescription Intake and Review · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-004 — Prescription Intake and Review</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Customer, Prescription intake and Pharmacist. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>For P only, authorize patient and order linkage and create a private upload session. A file must be complete and pass safety checks before review.</li>
+<li>Pharmacy loads authorized evidence and the current accepted revision, then compares each P line’s exact SKU, strength, form, quantity and patient.</li>
+<li>Commit a decision with reviewer identity, registration, reason and evidence/revision binding. Concurrent stale decisions cannot overwrite the accepted result.</li>
+<li>For rejection/correction, keep affected P lines held and offer re-upload, a permitted revised basket or cancellation. M/O are not automatically rejected.</li>
+<li>Payment proceeds only when remaining P lines are approved and any changed basket is accepted under the current detailed journey. Deferred upload RX-02 remains blocked pending D-004/D-006.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Intake owns safe patient/document linkage; Pharmacy owns per-line clinical decisions; Operations/Checkout coordinates an accepted revision.</p>
+<p>Candidate existing tables: <code>clinical.prescriptions</code>, <code>clinical.prescription_documents</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>platform.file_objects</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: API-022–API-024 and API-060–API-063; exact revision-command ownership needs D-024 review. <a href="../03-Modules/Prescription_Upload/APIs.html">Prescription Upload</a> · <a href="../03-Modules/Pharmacist_Review/APIs.html">Pharmacist Review</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Customer
+  participant O as Prescription intake
+  participant S as Pharmacist
+  participant D as PostgreSQL
+  C-&gt;&gt;O: Upload for permitted patient and order
+  O-&gt;&gt;D: Complete safe private evidence linkage
+  S-&gt;&gt;D: Read current P lines and evidence
+  S-&gt;&gt;D: Commit scoped per-line decision
+  O-&gt;&gt;D: Load committed review outcome
+  alt All remaining P approved
+    O--&gt;&gt;C: Review complete, continue checkout
+  else Correction or partial rejection
+    O--&gt;&gt;C: Reason and correction or revision choices
+    C-&gt;&gt;O: Supply evidence or accept permitted revision
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-RX-01-DENY</code>, <code>TC-RX-04-DENY</code>, <code>TC-PHM-03-DENY</code>, <code>TC-PHM-05-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

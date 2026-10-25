@@ -1,0 +1,559 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>promotion_redemptions · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>pricing.promotion_redemptions</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds promotion redemptions records within the pricing domain (prices, taxes, promotions). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>pricing.promotion_redemptions</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Transactional</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>15 columns; 18 PK/FK/UQ/CHECK/exclusion constraints; 9 named PostgreSQL 18 NOT NULL constraints; 5 indexes; 3 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>coupon_code_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to coupon codes</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>pricing.coupon_codes</code> via <code>fk_pricing_promotion_redemptions_coupon_code_id_coupon_codes</code></td>
+</tr>
+<tr>
+<td><code>coupon_code_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>pricing.coupon_codes</code> via <code>fk_pricing_promotion_redemptions_coupon_code_id_coupon__6f82</code></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>discount_amount</code></td>
+<td><code>numeric(14,2)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Value of discount amount</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>idempotency_key</code></td>
+<td><code>character varying(128)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores idempotency key for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>order_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to orders</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.orders</code> via <code>fk_domain_pricing_promotion_redemptions_order_id</code></td>
+</tr>
+<tr>
+<td><code>order_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>commerce.orders</code> via <code>fk_domain_pricing_promotion_redemptions_order_id_numeric</code></td>
+</tr>
+<tr>
+<td><code>promotion_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to promotions</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>pricing.promotions</code> via <code>fk_pricing_promotion_redemptions_promotion_id_promotions</code></td>
+</tr>
+<tr>
+<td><code>promotion_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>pricing.promotions</code> via <code>fk_pricing_promotion_redemptions_promotion_id_promotion_069a</code></td>
+</tr>
+<tr>
+<td><code>promotion_version_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to promotion versions</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>pricing.promotion_versions</code> via <code>fk_pricing_promotion_redemptions_promotion_version_id_p_00d1</code></td>
+</tr>
+<tr>
+<td><code>promotion_version_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>pricing.promotion_versions</code> via <code>fk_pricing_promotion_redemptions_promotion_version_id_p_0bd8</code></td>
+</tr>
+<tr>
+<td><code>redeemed_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Time of redeemed</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.orders</code> via <code>fk_domain_pricing_promotion_redemptions_order_id</code>; FK → <code>commerce.orders</code> via <code>fk_domain_pricing_promotion_redemptions_order_id_numeric</code>; FK → <code>identity.users</code> via <code>fk_pricing_promotion_redemptions_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the promotion redemptions business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Product_Catalog, Cart_Checkout. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>pricing.promotion_redemptions</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_domain_pricing_promotion_redemptions_order_id</td>
+<td><code>order_id, user_id</code></td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>FOREIGN KEY (order_id, user_id) REFERENCES commerce.orders(id, user_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_domain_pricing_promotion_redemptions_order_id_numeric</td>
+<td><code>order_id_internal_id, user_id</code></td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>FOREIGN KEY (order_id_internal_id, user_id) REFERENCES commerce.orders(internal_id, user_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_pricing_promotion_redemptions_coupon_code_id_coupon__6f82</td>
+<td><code>coupon_code_id_internal_id</code></td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><code>FOREIGN KEY (coupon_code_id_internal_id) REFERENCES pricing.coupon_codes(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_pricing_promotion_redemptions_coupon_code_id_coupon_codes</td>
+<td><code>coupon_code_id</code></td>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><code>FOREIGN KEY (coupon_code_id) REFERENCES pricing.coupon_codes(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_pricing_promotion_redemptions_promotion_id_promotion_069a</td>
+<td><code>promotion_id_internal_id</code></td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><code>FOREIGN KEY (promotion_id_internal_id) REFERENCES pricing.promotions(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_pricing_promotion_redemptions_promotion_id_promotions</td>
+<td><code>promotion_id</code></td>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><code>FOREIGN KEY (promotion_id) REFERENCES pricing.promotions(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_pricing_promotion_redemptions_promotion_version_id_p_00d1</td>
+<td><code>promotion_version_id</code></td>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td><code>FOREIGN KEY (promotion_version_id) REFERENCES pricing.promotion_versions(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_pricing_promotion_redemptions_promotion_version_id_p_0bd8</td>
+<td><code>promotion_version_id_internal_id</code></td>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td><code>FOREIGN KEY (promotion_version_id_internal_id) REFERENCES pricing.promotion_versions(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_pricing_promotion_redemptions_user_id_users</td>
+<td><code>user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<p>No inbound FK is present in the validated catalog.</p>
+<h2><code>pricing.promotion_redemptions</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order_id, user_id</code></td>
+<td><code>commerce.orders</code></td>
+<td><code>fk_domain_pricing_promotion_redemptions_order_id</code></td>
+</tr>
+<tr>
+<td><code>order_id_internal_id, user_id</code></td>
+<td><code>commerce.orders</code></td>
+<td><code>fk_domain_pricing_promotion_redemptions_order_id_numeric</code></td>
+</tr>
+<tr>
+<td><code>coupon_code_id_internal_id</code></td>
+<td><code>pricing.coupon_codes</code></td>
+<td><code>fk_pricing_promotion_redemptions_coupon_code_id_coupon__6f82</code></td>
+</tr>
+<tr>
+<td><code>coupon_code_id</code></td>
+<td><code>pricing.coupon_codes</code></td>
+<td><code>fk_pricing_promotion_redemptions_coupon_code_id_coupon_codes</code></td>
+</tr>
+<tr>
+<td><code>promotion_id_internal_id</code></td>
+<td><code>pricing.promotions</code></td>
+<td><code>fk_pricing_promotion_redemptions_promotion_id_promotion_069a</code></td>
+</tr>
+<tr>
+<td><code>promotion_id</code></td>
+<td><code>pricing.promotions</code></td>
+<td><code>fk_pricing_promotion_redemptions_promotion_id_promotions</code></td>
+</tr>
+<tr>
+<td><code>promotion_version_id</code></td>
+<td><code>pricing.promotion_versions</code></td>
+<td><code>fk_pricing_promotion_redemptions_promotion_version_id_p_00d1</code></td>
+</tr>
+<tr>
+<td><code>promotion_version_id_internal_id</code></td>
+<td><code>pricing.promotion_versions</code></td>
+<td><code>fk_pricing_promotion_redemptions_promotion_version_id_p_0bd8</code></td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_pricing_promotion_redemptions_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_pricing_promotion_redemptions_discount_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (discount_amount &gt;= 0::numeric)</code></td>
+</tr>
+<tr>
+<td><code>ck_pricing_promotion_redemptions_finite_numeric_values</code></td>
+<td>CHECK</td>
+<td><code>CHECK (discount_amount IS NULL OR (discount_amount &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric])))</code></td>
+</tr>
+<tr>
+<td><code>ck_pricing_promotion_redemptions_numeric_pair_coupon_code_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((coupon_code_id IS NULL) = (coupon_code_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_pricing_promotion_redemptions_numeric_pair_order_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((order_id IS NULL) = (order_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_pricing_promotion_redemptions_numeric_pair_promotion_8674</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((promotion_version_id IS NULL) = (promotion_version_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_pricing_promotion_redemptions_numeric_pair_promotion_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((promotion_id IS NULL) = (promotion_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>fk_domain_pricing_promotion_redemptions_order_id</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_id, user_id) REFERENCES commerce.orders(id, user_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_domain_pricing_promotion_redemptions_order_id_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_id_internal_id, user_id) REFERENCES commerce.orders(internal_id, user_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_pricing_promotion_redemptions_coupon_code_id_coupon__6f82</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (coupon_code_id_internal_id) REFERENCES pricing.coupon_codes(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_pricing_promotion_redemptions_coupon_code_id_coupon_codes</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (coupon_code_id) REFERENCES pricing.coupon_codes(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_pricing_promotion_redemptions_promotion_id_promotion_069a</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (promotion_id_internal_id) REFERENCES pricing.promotions(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_pricing_promotion_redemptions_promotion_id_promotions</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (promotion_id) REFERENCES pricing.promotions(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_pricing_promotion_redemptions_promotion_version_id_p_00d1</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (promotion_version_id) REFERENCES pricing.promotion_versions(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_pricing_promotion_redemptions_promotion_version_id_p_0bd8</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (promotion_version_id_internal_id) REFERENCES pricing.promotion_versions(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_pricing_promotion_redemptions_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_pricing_promotion_redemptions</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_pricing_promotion_redemptions_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_pricing_promotion_redemptions_idempotency_key</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (idempotency_key)</code></td>
+</tr>
+<tr>
+<td><code>promotion_redemptions_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>promotion_redemptions_discount_amount_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL discount_amount</code></td>
+</tr>
+<tr>
+<td><code>promotion_redemptions_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>promotion_redemptions_idempotency_key_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL idempotency_key</code></td>
+</tr>
+<tr>
+<td><code>promotion_redemptions_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>promotion_redemptions_promotion_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL promotion_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>promotion_redemptions_promotion_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL promotion_id</code></td>
+</tr>
+<tr>
+<td><code>promotion_redemptions_redeemed_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL redeemed_at</code></td>
+</tr>
+<tr>
+<td><code>promotion_redemptions_user_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_pricing_redemptions_order</code></td>
+<td>btree</td>
+<td><code>(order_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_pricing_redemptions_order ON pricing.promotion_redemptions USING btree (order_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_pricing_redemptions_promotion_user</code></td>
+<td>btree</td>
+<td><code>(promotion_id, user_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_pricing_redemptions_promotion_user ON pricing.promotion_redemptions USING btree (promotion_id, user_id)</code></td>
+</tr>
+<tr>
+<td><code>pk_pricing_promotion_redemptions</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_pricing_promotion_redemptions ON pricing.promotion_redemptions USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_pricing_promotion_redemptions_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_pricing_promotion_redemptions_id ON pricing.promotion_redemptions USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_pricing_promotion_redemptions_idempotency_key</code></td>
+<td>btree</td>
+<td><code>(idempotency_key)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_pricing_promotion_redemptions_idempotency_key ON pricing.promotion_redemptions USING btree (idempotency_key)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON pricing.promotion_redemptions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;coupon_code_id&quot;,&quot;coupon_code_id_internal_id&quot;,&quot;pricing&quot;,&quot;coupon_codes&quot;],[&quot;order_id&quot;,&quot;order_id_internal_id&quot;,&quot;commerce&quot;,&quot;orders&quot;],[&quot;promotion_id&quot;,&quot;promotion_id_internal_id&quot;,&quot;pricing&quot;,&quot;promotions&quot;],[&quot;promotion_version_id&quot;,&quot;promotion_version_id_internal_id&quot;,&quot;pricing&quot;,&quot;promotion_versions&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>immutable_record_guard</code></td>
+<td><code>CREATE TRIGGER immutable_record_guard BEFORE DELETE OR UPDATE ON pricing.promotion_redemptions FOR EACH ROW EXECUTE FUNCTION platform.deny_mutation()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON pricing.promotion_redemptions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;coupon_code_id&quot;,&quot;coupon_code_id_internal_id&quot;,&quot;pricing&quot;,&quot;coupon_codes&quot;],[&quot;order_id&quot;,&quot;order_id_internal_id&quot;,&quot;commerce&quot;,&quot;orders&quot;],[&quot;promotion_id&quot;,&quot;promotion_id_internal_id&quot;,&quot;pricing&quot;,&quot;promotions&quot;],[&quot;promotion_version_id&quot;,&quot;promotion_version_id_internal_id&quot;,&quot;pricing&quot;,&quot;promotion_versions&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

@@ -1,0 +1,86 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Validation Results · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Prototype validation results</h1>
+<p>Validated locally on <strong>25 October 2026</strong> against the current HTML/CSS/JavaScript and cached Chromium. These checks establish local prototype behavior, linked demo state and layout; they do not approve production policy, API implementation, database execution or external integrations.</p>
+<h2>Current run</h2>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Executed result</th>
+<th>Evidence boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prototype registry and source traceability</td>
+<td>91 unique screens; all 110 inherited feature IDs mapped across 18 module groups; 35 scenarios; 779 screen/scenario associations; 111 registered action/form names; zero static errors</td>
+<td><code>tools/validate-prototype.mjs</code>, <code>artifacts/static-results.json</code></td>
+</tr>
+<tr>
+<td>Full browser regression</td>
+<td>Passed 116 assertions; visited all 91 screens and 779 screen/scenario combinations at 360×800, 390×844, 430×932, 768×1024, 1280×800 and 1440×900; zero JavaScript errors, broken routes, overflows, unlabeled normal inputs/duplicate IDs or external requests</td>
+<td><code>tests/browser.mjs</code>, <code>artifacts/browser-results.json</code></td>
+</tr>
+<tr>
+<td>Product UX regression</td>
+<td>Passed 13 assertions; created 30 representative screenshots; zero errors</td>
+<td><code>tests/product-ux.mjs</code>, <code>artifacts/product-ux/results.json</code></td>
+</tr>
+<tr>
+<td>Experience-flow regression</td>
+<td>Passed 179 assertions; zero errors</td>
+<td><code>tests/experience-flows.mjs</code>, <code>artifacts/experiences/results.json</code></td>
+</tr>
+<tr>
+<td>Shared-domain flow test</td>
+<td>Passed; 29 handled actions and all inline assertions across identity/workspace step-up, procurement stock recovery, reverse logistics/refund and support lifecycle</td>
+<td><code>tests/domain-workflows.mjs</code> output</td>
+</tr>
+<tr>
+<td>Extended browser workflows</td>
+<td>Passed 11 assertions across PO-linked stockout recovery, return pickup/quarantine/refund and support lifecycle using actual forms; zero JavaScript errors</td>
+<td><code>tests/extended-workflows.mjs</code>, <code>artifacts/extended-workflow-results.json</code></td>
+</tr>
+<tr>
+<td>Coverage generation</td>
+<td>91 screens; 122 normal experience visits; 1,000 documented screen/platform/scenario rows; 11 named behavioral assertion mappings</td>
+<td><code>tools/generate-experience-coverage.mjs</code>, <code>documentation/UX-State-Coverage.md</code></td>
+</tr>
+<tr>
+<td>Documentation generation</td>
+<td>91 screens; 18 source modules; 110 feature IDs; 35 scenarios; 779 screen/scenario combinations; classification: 70 screen, 23 interaction/state, 16 decision-blocked, 1 backend-only</td>
+<td><code>tools/generate-documentation.mjs</code></td>
+</tr>
+<tr>
+<td>Markdown relative links</td>
+<td>16 Markdown files scanned; no missing relative targets</td>
+<td>Targeted local link check for this wireframe directory and referenced project documents</td>
+</tr>
+<tr>
+<td>Git whitespace and scope</td>
+<td><code>git diff --check</code> passes; final status contains changes only under <code>10-Low-Fidelity-Wireframes/</code></td>
+<td>Repository status and diff review</td>
+</tr>
+</tbody>
+</table>
+<p>Scenario rendering is not equivalent to behavioral testing. The matrices retain unverified cases as unverified. All generated PNGs and result JSON are local ignored artifacts under this directory.</p>
+<h2>New journey verification</h2>
+<p>The unified identity demo verifies password plus authenticator for staff, OTP adapters for customer/rider, generic failure for unknown staff identifiers, assignment-derived workspaces, denial of an unauthorized workspace, context activation only after a step-up prompt for proposed elevated destinations, and local session revocation. It does not claim real credential validation or backend authorization.</p>
+<p>The PO-linked stockout path records a store request, a synthetic unverified supplier reference, a local purchase-order approval, linked warehouse receipt, transfer in transit and actual destination receipt. Customer availability changes only after store receipt. The return path records an owner-supplied eligibility reference, dispatcher assignment, current-rider custody, physical warehouse receipt/quarantine, separate Finance decision and separate synthetic refund. The support path records an OTP-authenticated customer case, staff lifecycle updates, and customer-visible status from shared browser state.</p>
+<p>These workflows use only fictional records. The local PO is not transmitted; return criteria are not invented; quarantined items are not restocked; no supplier, SMS, payment, maps, GPS, email or push provider is contacted.</p>
+<h2>Reproduce</h2>
+<p>Start the local server as described in <a href="How-to-Run.html">How to Run</a>, then run from the repository root:</p>
+<pre><code class="language-bash">node 10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs
+node 10-Low-Fidelity-Wireframes/tests/browser.mjs
+node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs
+node 10-Low-Fidelity-Wireframes/tests/experience-flows.mjs
+node 10-Low-Fidelity-Wireframes/tests/domain-workflows.mjs
+node 10-Low-Fidelity-Wireframes/tests/extended-workflows.mjs
+node 10-Low-Fidelity-Wireframes/tools/generate-experience-coverage.mjs
+node 10-Low-Fidelity-Wireframes/tools/validate-prototype.mjs
+git diff --check
+</code></pre>
+<p>Browser tests use the repository's existing development-only Puppeteer and local Chrome. Set <code>PUPPETEER_EXECUTABLE_PATH</code> if Chrome is not detected automatically. The prototype itself needs no install and has no runtime network dependency.</p>
+<h2>Limits</h2>
+<p>The 16 owner-dependent feature decisions and backend-only AUTH-04 remain as listed in <a href="Feature-Coverage.html">Feature Coverage</a>. Proposed Procurement and support roles, return policy outcomes, and elevated step-up targets remain unapproved. The demo does not implement production authentication/session controls, database/API behavior, provider contracts, financial or clinical policy, or persistent server state.</p>
+<p>The automated checks do not establish WCAG conformance or usability on real devices. Full assistive-technology review, moderated task research, real rider GPS/background behavior, provider integration and exhaustive interaction tests for all 1,000 matrix rows remain open. No test result in this report claims application or production test success.</p>
+</main></body></html>

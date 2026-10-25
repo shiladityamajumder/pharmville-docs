@@ -1,0 +1,342 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>query_events · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>search.query_events</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds query events records within the search domain (search indexing and query signals). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>search.query_events</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Audit / History</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Product_Catalog</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>11 columns; 3 PK/FK/UQ/CHECK/exclusion constraints; 7 named PostgreSQL 18 NOT NULL constraints; 4 indexes; 3 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>filters</code></td>
+<td><code>jsonb</code></td>
+<td>No</td>
+<td><code>'{}'::jsonb</code></td>
+<td>Structured filters information</td>
+<td>Retain a versioned payload or relevant details</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>query_normalized</code></td>
+<td><code>character varying(512)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores query normalized for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>query_raw</code></td>
+<td><code>text</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores query raw for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>result_count</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Inferred: stores result count for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>selected_entity_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Identifier associated with selected entity</td>
+<td>Link the event or entity to its subject; verify constraints</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>selected_entity_type</code></td>
+<td><code>character varying(64)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores selected entity type for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>session_id</code></td>
+<td><code>character varying(128)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Identifier associated with session</td>
+<td>Link the event or entity to its subject; verify constraints</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_search_query_events_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the query events business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Product_Catalog. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>search.query_events</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_search_query_events_user_id_users</td>
+<td><code>user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<p>No inbound FK is present in the validated catalog.</p>
+<h2><code>search.query_events</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_search_query_events_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fk_search_query_events_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_search_query_events</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_search_query_events_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>query_events_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>query_events_filters_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL filters</code></td>
+</tr>
+<tr>
+<td><code>query_events_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>query_events_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>query_events_query_normalized_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL query_normalized</code></td>
+</tr>
+<tr>
+<td><code>query_events_query_raw_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL query_raw</code></td>
+</tr>
+<tr>
+<td><code>query_events_result_count_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL result_count</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_search_query_events_query_time</code></td>
+<td>btree</td>
+<td><code>(query_normalized, created_at)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_search_query_events_query_time ON search.query_events USING btree (query_normalized, created_at)</code></td>
+</tr>
+<tr>
+<td><code>ix_search_query_events_user_time</code></td>
+<td>btree</td>
+<td><code>(user_id, created_at)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_search_query_events_user_time ON search.query_events USING btree (user_id, created_at)</code></td>
+</tr>
+<tr>
+<td><code>pk_search_query_events</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_search_query_events ON search.query_events USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_search_query_events_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_search_query_events_id ON search.query_events USING btree (id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON search.query_events FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>immutable_record_guard</code></td>
+<td><code>CREATE TRIGGER immutable_record_guard BEFORE DELETE OR UPDATE ON search.query_events FOR EACH ROW EXECUTE FUNCTION platform.deny_mutation()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON search.query_events FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

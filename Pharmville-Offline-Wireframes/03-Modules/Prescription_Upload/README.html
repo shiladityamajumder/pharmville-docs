@@ -1,0 +1,97 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>README · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Prescription Upload</h1>
+<p><strong>Stable module ID:</strong> <code>Prescription_Upload</code> · <strong>Proposed accountable role:</strong> Prescription intake.</p>
+<h2>Module blueprint navigation</h2>
+<table>
+<thead>
+<tr>
+<th>Planning concern</th>
+<th>Canonical reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scope, requirements and business flow</td>
+<td><a href="Business-Flow.html">Business flow</a></td>
+</tr>
+<tr>
+<td>Components, boundaries and design</td>
+<td><a href="HLD.html">HLD</a> · <a href="LLD.html">LLD</a></td>
+</tr>
+<tr>
+<td>Operation contracts and DTOs</td>
+<td><a href="APIs.html">APIs</a></td>
+</tr>
+<tr>
+<td>Owned and consumed database objects</td>
+<td><a href="Database.html">Database</a></td>
+</tr>
+<tr>
+<td>State, permissions, recovery and tests</td>
+<td><a href="Operations.html">Operating contract</a> · <a href="Edge-Cases.html">edge cases</a></td>
+</tr>
+<tr>
+<td>Dependencies and owner decisions</td>
+<td><a href="Dependencies.html">Dependencies</a></td>
+</tr>
+</tbody>
+</table>
+<p><a href="../../00-Business-Guide/Prescription-and-Pharmacy.html">Business flow</a> · <a href="../../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a></p>
+<h2>MOD-004 — Private prescription intake</h2>
+<p><strong>Source classification:</strong> 5 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.</p>
+<p><strong>Purpose:</strong> An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers.</p>
+<p><strong>Feature coverage</strong></p>
+<ul>
+<li><strong>RX-01 / REQ-022:</strong> Upload one or more prescriptions (JPG, PNG, PDF) at checkout (Must (draft)).</li>
+<li><strong>RX-02 / REQ-023:</strong> Upload within 24 hours after ordering; auto-cancel after that (Should (draft)).</li>
+<li><strong>RX-03 / REQ-024:</strong> Reuse a saved, still-valid prescription (Should (draft)).</li>
+<li><strong>RX-04 / REQ-025:</strong> Link each prescription to the patient (self or family member) (Must (draft)).</li>
+<li><strong>RX-05 / REQ-026:</strong> See the pharmacist's decision and reason; re-upload after rejection (Must (draft)).</li>
+</ul>
+<h3>Developer navigation</h3>
+<ul>
+<li>🏗️ <a href="HLD.html">Module HLD</a></li>
+<li>⚙️ <a href="LLD.html">Module LLD</a></li>
+<li>Internal architecture</li>
+<li>🔗 <a href="APIs.html">API contracts</a></li>
+<li>🗄️ <a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li>🧪 <a href="../../07-Engineering/Testing.html">Testing</a></li>
+<li>🗓️ <a href="../../08-Development-Plan/Implementation-Plan.html">Implementation plan</a></li>
+</ul>
+<p><strong>Dependencies:</strong> all cross-module references require ownership and permission checks; see master dependency register.</p>
+<h2>MOD-004: Private prescription intake — HLD</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.</p>
+</blockquote>
+<p><strong>Business responsibility:</strong> Private prescription intake. An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers.</p>
+<p><strong>System responsibility:</strong> The <code>Prescription_Upload</code> NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are <strong>not</strong> proof of exclusive write ownership.</p>
+<h3>Major operations</h3>
+<ul>
+<li>Upload one or more prescriptions (JPG, PNG, PDF) at checkout (<code>RX-01</code>)</li>
+<li>Upload within 24 hours after ordering; auto-cancel after that (<code>RX-02</code>)</li>
+<li>Reuse a saved, still-valid prescription (<code>RX-03</code>)</li>
+<li>Link each prescription to the patient (self or family member) (<code>RX-04</code>)</li>
+<li>See the pharmacist's decision and reason; re-upload after rejection (<code>RX-05</code>)</li>
+</ul>
+<h3>Dependencies and trust boundaries</h3>
+<ul>
+<li>Database candidates: <code>clinical.prescriptions</code>, <code>clinical.prescription_documents</code>, <code>platform.file_objects</code>, <code>platform.file_access_events</code>, <code>platform.file_upload_sessions</code>.</li>
+<li>Role, patient, store and order scope resolved from trusted access context, not JSON body.</li>
+<li>External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.</li>
+<li>Use local transactions for authoritative state; publish external side effects only after commit.</li>
+</ul>
+<p><strong>Technical design:</strong> <a href="LLD.html">Module LLD</a> · <a href="../../05-APIs/README.html">API index</a> · <a href="../../07-Engineering/Testing.html">Tests</a></p>
+<h3>Risk</h3>
+<p>An uploaded file is quarantined until inspected and can only be accessed by permitted patients and reviewers. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.</p>
+<h2>Related design and delivery references</h2>
+<ul>
+<li>🏗️ <a href="HLD.html">HLD</a></li>
+<li>⚙️ <a href="LLD.html">LLD</a></li>
+<li>🧪 <a href="Edge-Cases.html">Edge cases</a></li>
+<li>🔗 <a href="APIs.html">API contracts</a></li>
+<li>🗄️ <a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li>🧪 <a href="../../07-Engineering/Testing.html">QA scenarios</a></li>
+<li>🗓️ <a href="../../08-Development-Plan/Implementation-Plan.html">Development tasks</a></li>
+<li>End-to-end flows: <a href="../../06-Workflows/README.html">workflows</a></li>
+</ul>
+</main></body></html>

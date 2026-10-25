@@ -1,0 +1,1302 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>permissions · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>identity.permissions</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds permissions records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>identity.permissions</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Master / Reference</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>14 columns; 7 PK/FK/UQ/CHECK/exclusion constraints; 9 named PostgreSQL 18 NOT NULL constraints; 4 indexes; 4 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>action</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores action for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td><code>character varying(128)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores code for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_identity_permissions_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>deleted_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Soft-deletion time when used</td>
+<td>Avoid treating hidden records as active</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>deleted_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_identity_permissions_deleted_by_users</code></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>text</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores description for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>is_deleted</code></td>
+<td><code>boolean</code></td>
+<td>No</td>
+<td><code>false</code></td>
+<td>Yes/no flag for is deleted</td>
+<td>Control conditional business behavior</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>resource</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores resource for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_identity_permissions_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the permissions business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Customer_Accounts, Admin_CMS, Rider_App, Authentication_Access. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>identity.permissions</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_identity_permissions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_identity_permissions_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_identity_permissions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/identity/role_permissions.html"><code>identity.role_permissions</code></a></td>
+<td>fk_identity_role_permissions_permission_id_permissions</td>
+<td><code>permission_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/role_permissions.html"><code>identity.role_permissions</code></a></td>
+<td>fk_identity_role_permissions_permission_id_permissions_numeric</td>
+<td><code>permission_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>identity.permissions</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_identity_permissions_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>deleted_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_identity_permissions_deleted_by_users</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_identity_permissions_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_identity_permissions_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_identity_permissions_stable_code_nonblank_trimmed</code></td>
+<td>CHECK</td>
+<td><code>CHECK (length(btrim(code::text)) &gt; 0 AND code::text = btrim(code::text))</code></td>
+</tr>
+<tr>
+<td><code>fk_identity_permissions_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_identity_permissions_deleted_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_identity_permissions_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_identity_permissions</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_identity_permissions_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>permissions_action_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL action</code></td>
+</tr>
+<tr>
+<td><code>permissions_code_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL code</code></td>
+</tr>
+<tr>
+<td><code>permissions_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>permissions_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>permissions_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>permissions_is_deleted_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL is_deleted</code></td>
+</tr>
+<tr>
+<td><code>permissions_resource_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL resource</code></td>
+</tr>
+<tr>
+<td><code>permissions_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>permissions_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_identity_permissions_resource_action</code></td>
+<td>btree</td>
+<td><code>(resource, action)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_identity_permissions_resource_action ON identity.permissions USING btree (resource, action)</code></td>
+</tr>
+<tr>
+<td><code>pk_identity_permissions</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_identity_permissions ON identity.permissions USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_identity_permissions_code_active</code></td>
+<td>btree</td>
+<td><code>(code)</code></td>
+<td>is_deleted = false</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_identity_permissions_code_active ON identity.permissions USING btree (code) WHERE is_deleted = false</code></td>
+</tr>
+<tr>
+<td><code>uq_identity_permissions_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_identity_permissions_id ON identity.permissions USING btree (id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON identity.permissions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>stable_code_guard</code></td>
+<td><code>CREATE TRIGGER stable_code_guard BEFORE INSERT OR DELETE OR UPDATE ON identity.permissions FOR EACH ROW EXECUTE FUNCTION platform.guard_stable_code('code', '[]')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.permissions FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON identity.permissions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+<h2>Master-data planning</h2>
+<p><strong>Status: Proposed maintenance design; Unapproved; no seed or migration modified.</strong> <a href="../../Master-Data-Inventory.html">Central inventory</a> · <a href="../../../05-APIs/Planning-Decisions.html">planning decisions</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Definition</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schema/table</td>
+<td><code>identity.permissions</code></td>
+</tr>
+<tr>
+<td>Category</td>
+<td>Master / Reference — Action/resource grant vocabulary</td>
+</tr>
+<tr>
+<td>Proposed owner / maintenance role</td>
+<td>Authentication_Access / Security administrator</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Global catalog/reference; scope still limits administrative maintenance.</td>
+</tr>
+<tr>
+<td>Referencing tables</td>
+<td><code>identity.role_permissions</code></td>
+</tr>
+<tr>
+<td>Features</td>
+<td><code>ACC-02</code>, <code>ACC-03</code>, <code>ACC-04</code>, <code>ACC-05</code>, <code>ACC-06</code>, <code>ACC-07</code>, <code>ADM-01</code>, <code>ADM-02</code>, <code>ADM-04</code>, <code>ADM-05</code>, <code>ADM-06</code>, <code>ADM-07</code>, <code>ADM-08</code>, <code>AUD-01</code>, <code>AUD-02</code>, <code>AUTH-02</code>, <code>AUTH-04</code>, <code>CHK-01</code>, <code>CHK-02</code>, <code>CHK-03</code>, <code>CHK-05</code>, <code>CHK-06</code>, <code>CHK-07</code>, <code>CHK-08</code>, <code>DLV-01</code>, <code>DLV-02</code>, <code>DLV-03</code>, <code>DLV-04</code>, <code>DLV-05</code>, <code>FIN-01</code>, <code>FIN-02</code>, <code>FIN-03</code>, <code>FIN-05</code>, <code>FIN-06</code>, <code>INV-01</code>, <code>INV-03</code>, <code>INV-04</code>, <code>INV-05</code>, <code>INV-07</code>, <code>NOT-01</code>, <code>NOT-02</code>, <code>NOT-03</code>, <code>NOT-04</code>, <code>OMS-01</code>, <code>OMS-02</code>, <code>OMS-03</code>, <code>OMS-04</code>, <code>OMS-05</code>, <code>ORD-02</code>, <code>ORD-03</code>, <code>ORD-04</code>, <code>ORD-05</code>, <code>ORD-06</code>, <code>ORD-07</code>, <code>PHM-01</code>, <code>PHM-02</code>, <code>PHM-03</code>, <code>PHM-05</code>, <code>REP-01</code>, <code>REP-02</code>, <code>REP-03</code>, <code>REP-04</code>, <code>REP-07</code>, <code>RID-01</code>, <code>RID-02</code>, <code>RID-03</code>, <code>RID-04</code>, <code>RID-06</code>, <code>RX-01</code>, <code>RX-04</code>, <code>RX-05</code>, <code>STO-01</code>, <code>STO-02</code>, <code>STO-03</code>, <code>STO-04</code>, <code>WH-01</code>, <code>WH-02</code>, <code>WH-04</code></td>
+</tr>
+<tr>
+<td>API consumers</td>
+<td><a href="../../../03-Modules/Customer_Accounts/APIs.html">API-003</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-004</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-005</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-006</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-007</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-008</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-009</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-005</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-015</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-016</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-017</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-018</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-019</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-020</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-021</a>, <a href="../../../03-Modules/Prescription_Upload/APIs.html">API-022</a>, <a href="../../../03-Modules/Prescription_Upload/APIs.html">API-023</a>, <a href="../../../03-Modules/Prescription_Upload/APIs.html">API-024</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-025</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-026</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-027</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-028</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-029</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-030</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-031</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-032</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-033</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-034</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-035</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-036</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-037</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-038</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-039</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-040</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-041</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-042</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-043</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-044</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-045</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-046</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-047</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-048</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-049</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-050</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-051</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-052</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-053</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-054</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-055</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-056</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-057</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-058</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-059</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-060</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-061</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-062</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-063</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-064</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-065</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-066</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-067</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-068</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-069</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-070</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-071</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-072</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-073</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-074</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-075</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-077</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-078</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-079</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-080</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-081</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-082</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-083</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-084</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-085</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-086</a>, <a href="../../../03-Modules/Audit/APIs.html">API-087</a>, <a href="../../../03-Modules/Audit/APIs.html">API-088</a>, <a href="../../../03-Modules/Authentication_Access/APIs.html">API-091</a>, <a href="../../../03-Modules/Authentication_Access/APIs.html">API-092</a>, <a href="../../../03-Modules/Authentication_Access/APIs.html">API-093</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-094</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-095</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-096</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-097</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-001</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-002</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-007</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-006</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-003</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-004</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-008</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-009</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-010</a></td>
+</tr>
+</tbody>
+</table>
+<h3>Expected initial records</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Description</th>
+<th>Status</th>
+<th>Source</th>
+<th>Additional schema attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>admin.dashboard.read</td>
+<td>admin.dashboard.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=admin; action=dashboard.read; description=Proposed admin.dashboard.read capability</td>
+</tr>
+<tr>
+<td>admin.settings.manage</td>
+<td>admin.settings.manage</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=admin; action=settings.manage; description=Proposed admin.settings.manage capability</td>
+</tr>
+<tr>
+<td>admin.settings.read</td>
+<td>admin.settings.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=admin; action=settings.read; description=Proposed admin.settings.read capability</td>
+</tr>
+<tr>
+<td>audit.events.read</td>
+<td>audit.events.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=audit; action=events.read; description=Proposed audit.events.read capability</td>
+</tr>
+<tr>
+<td>audit.export</td>
+<td>audit.export</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=audit; action=export; description=Proposed audit.export capability</td>
+</tr>
+<tr>
+<td>cart-checkout.manage.own</td>
+<td>cart-checkout.manage.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=cart-checkout; action=manage.own; description=Proposed cart-checkout.manage.own capability</td>
+</tr>
+<tr>
+<td>cart-checkout.read.own</td>
+<td>cart-checkout.read.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=cart-checkout; action=read.own; description=Proposed cart-checkout.read.own capability</td>
+</tr>
+<tr>
+<td>catalog.classification.approve</td>
+<td>catalog.classification.approve</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=catalog; action=classification.approve; description=Proposed catalog.classification.approve capability</td>
+</tr>
+<tr>
+<td>catalog.import</td>
+<td>catalog.import</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=catalog; action=import; description=Proposed catalog.import capability</td>
+</tr>
+<tr>
+<td>catalog.publish</td>
+<td>catalog.publish</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=catalog; action=publish; description=Proposed catalog.publish capability</td>
+</tr>
+<tr>
+<td>clinical.reviews.decide</td>
+<td>clinical.reviews.decide</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=clinical; action=reviews.decide; description=Proposed clinical.reviews.decide capability</td>
+</tr>
+<tr>
+<td>clinical.reviews.read</td>
+<td>clinical.reviews.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=clinical; action=reviews.read; description=Proposed clinical.reviews.read capability</td>
+</tr>
+<tr>
+<td>cms.publish</td>
+<td>cms.publish</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=cms; action=publish; description=Proposed cms.publish capability</td>
+</tr>
+<tr>
+<td>customer-accounts.manage.own</td>
+<td>customer-accounts.manage.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=customer-accounts; action=manage.own; description=Proposed customer-accounts.manage.own capability</td>
+</tr>
+<tr>
+<td>customer-accounts.read.own</td>
+<td>customer-accounts.read.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=customer-accounts; action=read.own; description=Proposed customer-accounts.read.own capability</td>
+</tr>
+<tr>
+<td>customer-orders.manage.own</td>
+<td>customer-orders.manage.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=customer-orders; action=manage.own; description=Proposed customer-orders.manage.own capability</td>
+</tr>
+<tr>
+<td>customer-orders.read.own</td>
+<td>customer-orders.read.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=customer-orders; action=read.own; description=Proposed customer-orders.read.own capability</td>
+</tr>
+<tr>
+<td>delivery.assign</td>
+<td>delivery.assign</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=assign; description=Proposed delivery.assign capability</td>
+</tr>
+<tr>
+<td>delivery.complete.own</td>
+<td>delivery.complete.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=complete.own; description=Proposed delivery.complete.own capability</td>
+</tr>
+<tr>
+<td>delivery.exceptions.resolve</td>
+<td>delivery.exceptions.resolve</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=exceptions.resolve; description=Proposed delivery.exceptions.resolve capability</td>
+</tr>
+<tr>
+<td>delivery.failure.record.own</td>
+<td>delivery.failure.record.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=failure.record.own; description=Proposed delivery.failure.record.own capability</td>
+</tr>
+<tr>
+<td>delivery.location.write.own</td>
+<td>delivery.location.write.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=location.write.own; description=Proposed delivery.location.write.own capability</td>
+</tr>
+<tr>
+<td>delivery.pickup.own</td>
+<td>delivery.pickup.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=pickup.own; description=Proposed delivery.pickup.own capability</td>
+</tr>
+<tr>
+<td>delivery.riders.onboard</td>
+<td>delivery.riders.onboard</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=riders.onboard; description=Proposed delivery.riders.onboard capability</td>
+</tr>
+<tr>
+<td>delivery.shift.manage.own</td>
+<td>delivery.shift.manage.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=shift.manage.own; description=Proposed delivery.shift.manage.own capability</td>
+</tr>
+<tr>
+<td>delivery.tasks.read</td>
+<td>delivery.tasks.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=tasks.read; description=Proposed delivery.tasks.read capability</td>
+</tr>
+<tr>
+<td>delivery.tasks.read.own</td>
+<td>delivery.tasks.read.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=delivery; action=tasks.read.own; description=Proposed delivery.tasks.read.own capability</td>
+</tr>
+<tr>
+<td>finance.cod.handover.read</td>
+<td>finance.cod.handover.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=finance; action=cod.handover.read; description=Proposed finance.cod.handover.read capability</td>
+</tr>
+<tr>
+<td>finance.cod.reconcile</td>
+<td>finance.cod.reconcile</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=finance; action=cod.reconcile; description=Proposed finance.cod.reconcile capability</td>
+</tr>
+<tr>
+<td>finance.invoices.read</td>
+<td>finance.invoices.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=finance; action=invoices.read; description=Proposed finance.invoices.read capability</td>
+</tr>
+<tr>
+<td>finance.payments.read</td>
+<td>finance.payments.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=finance; action=payments.read; description=Proposed finance.payments.read capability</td>
+</tr>
+<tr>
+<td>finance.refunds.instruct</td>
+<td>finance.refunds.instruct</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=finance; action=refunds.instruct; description=Proposed finance.refunds.instruct capability</td>
+</tr>
+<tr>
+<td>finance.settlements.read</td>
+<td>finance.settlements.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=finance; action=settlements.read; description=Proposed finance.settlements.read capability</td>
+</tr>
+<tr>
+<td>fulfillment.accept</td>
+<td>fulfillment.accept</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=fulfillment; action=accept; description=Proposed fulfillment.accept capability</td>
+</tr>
+<tr>
+<td>fulfillment.pack.close</td>
+<td>fulfillment.pack.close</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=fulfillment; action=pack.close; description=Proposed fulfillment.pack.close capability</td>
+</tr>
+<tr>
+<td>fulfillment.pick.scan</td>
+<td>fulfillment.pick.scan</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=fulfillment; action=pick.scan; description=Proposed fulfillment.pick.scan capability</td>
+</tr>
+<tr>
+<td>fulfillment.queue.read</td>
+<td>fulfillment.queue.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=fulfillment; action=queue.read; description=Proposed fulfillment.queue.read capability</td>
+</tr>
+<tr>
+<td>identity.permissions.read.own</td>
+<td>identity.permissions.read.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=identity; action=permissions.read.own; description=Proposed identity.permissions.read.own capability</td>
+</tr>
+<tr>
+<td>identity.sessions.revoke.own</td>
+<td>identity.sessions.revoke.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=identity; action=sessions.revoke.own; description=Proposed identity.sessions.revoke.own capability</td>
+</tr>
+<tr>
+<td>identity.staff.invite</td>
+<td>identity.staff.invite</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=identity; action=staff.invite; description=Proposed identity.staff.invite capability</td>
+</tr>
+<tr>
+<td>identity.staff.manage</td>
+<td>identity.staff.manage</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=identity; action=staff.manage; description=Proposed identity.staff.manage capability</td>
+</tr>
+<tr>
+<td>inventory.adjustments.request</td>
+<td>inventory.adjustments.request</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=inventory; action=adjustments.request; description=Proposed inventory.adjustments.request capability</td>
+</tr>
+<tr>
+<td>inventory.alerts.read</td>
+<td>inventory.alerts.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=inventory; action=alerts.read; description=Proposed inventory.alerts.read capability</td>
+</tr>
+<tr>
+<td>inventory.observation.ingest</td>
+<td>inventory.observation.ingest</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=inventory; action=observation.ingest; description=Proposed inventory.observation.ingest capability</td>
+</tr>
+<tr>
+<td>inventory.read</td>
+<td>inventory.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=inventory; action=read; description=Proposed inventory.read capability</td>
+</tr>
+<tr>
+<td>inventory.reservations.create</td>
+<td>inventory.reservations.create</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=inventory; action=reservations.create; description=Proposed inventory.reservations.create capability</td>
+</tr>
+<tr>
+<td>inventory.reservations.release</td>
+<td>inventory.reservations.release</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=inventory; action=reservations.release; description=Proposed inventory.reservations.release capability</td>
+</tr>
+<tr>
+<td>notifications.alerts.read</td>
+<td>notifications.alerts.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=notifications; action=alerts.read; description=Proposed notifications.alerts.read capability</td>
+</tr>
+<tr>
+<td>notifications.deliveries.read</td>
+<td>notifications.deliveries.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=notifications; action=deliveries.read; description=Proposed notifications.deliveries.read capability</td>
+</tr>
+<tr>
+<td>notifications.devices.manage.own</td>
+<td>notifications.devices.manage.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=notifications; action=devices.manage.own; description=Proposed notifications.devices.manage.own capability</td>
+</tr>
+<tr>
+<td>notifications.jobs.create</td>
+<td>notifications.jobs.create</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=notifications; action=jobs.create; description=Proposed notifications.jobs.create capability</td>
+</tr>
+<tr>
+<td>orders.allocate</td>
+<td>orders.allocate</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=orders; action=allocate; description=Proposed orders.allocate capability</td>
+</tr>
+<tr>
+<td>orders.detail.read</td>
+<td>orders.detail.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=orders; action=detail.read; description=Proposed orders.detail.read capability</td>
+</tr>
+<tr>
+<td>orders.queue.read</td>
+<td>orders.queue.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=orders; action=queue.read; description=Proposed orders.queue.read capability</td>
+</tr>
+<tr>
+<td>orders.reassign</td>
+<td>orders.reassign</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=orders; action=reassign; description=Proposed orders.reassign capability</td>
+</tr>
+<tr>
+<td>orders.revision.accept.own</td>
+<td>orders.revision.accept.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=orders; action=revision.accept.own; description=Proposed orders.revision.accept.own capability</td>
+</tr>
+<tr>
+<td>orders.revision.propose</td>
+<td>orders.revision.propose</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=orders; action=revision.propose; description=Proposed orders.revision.propose capability</td>
+</tr>
+<tr>
+<td>organization.locations.create</td>
+<td>organization.locations.create</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=organization; action=locations.create; description=Proposed organization.locations.create capability</td>
+</tr>
+<tr>
+<td>payments.initiate.own</td>
+<td>payments.initiate.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=payments; action=initiate.own; description=Proposed payments.initiate.own capability</td>
+</tr>
+<tr>
+<td>prescription-upload.manage.own</td>
+<td>prescription-upload.manage.own</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=prescription-upload; action=manage.own; description=Proposed prescription-upload.manage.own capability</td>
+</tr>
+<tr>
+<td>reports.deliveries.read</td>
+<td>reports.deliveries.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=reports; action=deliveries.read; description=Proposed reports.deliveries.read capability</td>
+</tr>
+<tr>
+<td>reports.export</td>
+<td>reports.export</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=reports; action=export; description=Proposed reports.export capability</td>
+</tr>
+<tr>
+<td>reports.sales.read</td>
+<td>reports.sales.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=reports; action=sales.read; description=Proposed reports.sales.read capability</td>
+</tr>
+<tr>
+<td>reports.stock.read</td>
+<td>reports.stock.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=reports; action=stock.read; description=Proposed reports.stock.read capability</td>
+</tr>
+<tr>
+<td>reports.tax.read</td>
+<td>reports.tax.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=reports; action=tax.read; description=Proposed reports.tax.read capability</td>
+</tr>
+<tr>
+<td>warehouse.fallback.read</td>
+<td>warehouse.fallback.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=warehouse; action=fallback.read; description=Proposed warehouse.fallback.read capability</td>
+</tr>
+<tr>
+<td>warehouse.receipts.create</td>
+<td>warehouse.receipts.create</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=warehouse; action=receipts.create; description=Proposed warehouse.receipts.create capability</td>
+</tr>
+<tr>
+<td>warehouse.replenishment.read</td>
+<td>warehouse.replenishment.read</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=warehouse; action=replenishment.read; description=Proposed warehouse.replenishment.read capability</td>
+</tr>
+<tr>
+<td>warehouse.replenishment.request</td>
+<td>warehouse.replenishment.request</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=warehouse; action=replenishment.request; description=Proposed warehouse.replenishment.request capability</td>
+</tr>
+<tr>
+<td>warehouse.transfer.dispatch</td>
+<td>warehouse.transfer.dispatch</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=warehouse; action=transfer.dispatch; description=Proposed warehouse.transfer.dispatch capability</td>
+</tr>
+<tr>
+<td>warehouse.transfer.receive</td>
+<td>warehouse.transfer.receive</td>
+<td>Required action proposed by the per-operation authorization contract.</td>
+<td>Proposed</td>
+<td>107-operation contract review; D-003/D-024</td>
+<td>resource=warehouse; action=transfer.receive; description=Proposed warehouse.transfer.receive capability</td>
+</tr>
+</tbody>
+</table>
+<h3>Lifecycle and seed requirements</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed lifecycle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deployment or operational creation</td>
+<td>Deployment reference seed after approval, followed by controlled administration.</td>
+</tr>
+<tr>
+<td>Create/update permissions</td>
+<td>Security administrator through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority.</td>
+</tr>
+<tr>
+<td>Activation/deactivation</td>
+<td>No is_active/status column. Soft-delete through is_deleted only after privacy/reference review; retain historical FK targets.</td>
+</tr>
+<tr>
+<td>Deletion</td>
+<td>Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission.</td>
+</tr>
+<tr>
+<td>Uniqueness / stable codes</td>
+<td>UNIQUE: UNIQUE (id); CREATE UNIQUE INDEX uq_identity_permissions_code_active ON identity.permissions USING btree (code) WHERE is_deleted = false; CREATE UNIQUE INDEX uq_identity_permissions_id ON identity.permissions USING btree (id)</td>
+</tr>
+<tr>
+<td>Foreign-key dependencies</td>
+<td>No non-actor FK dependencies recorded.</td>
+</tr>
+<tr>
+<td>Initial load order</td>
+<td>Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness.</td>
+</tr>
+<tr>
+<td>Seed status</td>
+<td>Explicit rows above are Confirmed domain values or Proposed initial records, never observed production/seed data. No live row existence or seed execution was verified.</td>
+</tr>
+<tr>
+<td>Pending decisions</td>
+<td>D-024 ownership/lifecycle approval; D-003 exact role/grant and identity lifecycle approval.</td>
+</tr>
+</tbody>
+</table>
+<h3>Unified workspace and Identity permission proposals</h3>
+<p>These additional controlled values fit existing code/resource/action columns. They are <strong>Proposed</strong>, not inserted, approved or inferred existing data. auth.self is an intrinsic owned-session control capability, not a staff role grant; it cannot authorize business resources. Workspace entry also requires action permission, live scope and sufficient proof.</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Description</th>
+<th>Status</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>workspace.customer.enter</td>
+<td>workspace.customer.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.administration.enter</td>
+<td>workspace.administration.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.pharmacist.enter</td>
+<td>workspace.pharmacist.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.store.enter</td>
+<td>workspace.store.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.warehouse.enter</td>
+<td>workspace.warehouse.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.inventory.enter</td>
+<td>workspace.inventory.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.orders.enter</td>
+<td>workspace.orders.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.delivery.enter</td>
+<td>workspace.delivery.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.rider.enter</td>
+<td>workspace.rider.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.finance.enter</td>
+<td>workspace.finance.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.catalog.enter</td>
+<td>workspace.catalog.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.cms.enter</td>
+<td>workspace.cms.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.audit.enter</td>
+<td>workspace.audit.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>workspace.support.enter</td>
+<td>workspace.support.enter</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>auth.self</td>
+<td>auth.self</td>
+<td>Read/control own valid session without business authority</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>identity.roles.manage</td>
+<td>identity.roles.manage</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+<tr>
+<td>identity.user_roles.manage</td>
+<td>identity.user_roles.manage</td>
+<td>Explicit backend capability; resource/action are code prefix/suffix</td>
+<td>Proposed</td>
+<td>D-028; workspace policy and API-100–110</td>
+</tr>
+</tbody>
+</table>
+<h3>IAM administration read permissions</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Description</th>
+<th>Status</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>identity.roles.read</td>
+<td>Role policy read</td>
+<td>Global IAM policy visibility; does not grant returned permissions.</td>
+<td>Proposed</td>
+<td>API-111 / D-028</td>
+</tr>
+<tr>
+<td>identity.user_roles.read</td>
+<td>Scoped assignment read</td>
+<td>Target assignment visibility contained by the actor delegation scope.</td>
+<td>Proposed</td>
+<td>API-112 / D-028</td>
+</tr>
+</tbody>
+</table>
+<h3>Identity-wide status authority</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Description</th>
+<th>Status</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>identity.accounts.manage</td>
+<td>Shared identity status administration</td>
+<td>Explicit global authority for API-034 status changes; organization-scoped offboarding cannot suspend a multi-role person.</td>
+<td>Proposed</td>
+<td>D-028 / AUTH-04 / retained API-034 status field; no automatic grant</td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

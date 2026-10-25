@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Delivery Operations edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Delivery-and-Rider-App.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-DLV-01-01</code></td>
+<td><code>DLV-01</code></td>
+<td>Rider telemetry stops</td>
+<td>Last update/offline indicated; no fictitious live location</td>
+<td>Dispatcher contacts rider and reviews assignment</td>
+<td><code>TC-DLV-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-DLV-02-01</code></td>
+<td><code>DLV-02</code></td>
+<td>Two dispatchers assign the same ready task</td>
+<td>Single current assignment; stale write conflicts</td>
+<td>Dispatcher refreshes and communicates accepted task</td>
+<td><code>TC-DLV-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-DLV-03-01</code></td>
+<td><code>DLV-03</code></td>
+<td>Resolution is submitted after reassignment</td>
+<td>Stale resolution denied; parcel remains with current accountable task</td>
+<td>Dispatch checks current assignment and reason</td>
+<td><code>TC-DLV-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-DLV-04-01</code></td>
+<td><code>DLV-04</code></td>
+<td>Handover is less than collection</td>
+<td>Unresolved cash difference remains, no forced clear</td>
+<td>Finance/Operations investigates evidence with rider</td>
+<td><code>TC-DLV-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-DLV-05-01</code></td>
+<td><code>DLV-05</code></td>
+<td>Off-duty or deactivated rider is assigned</td>
+<td>Assignment refused without rewriting rider eligibility</td>
+<td>Manager corrects approved shift/access</td>
+<td><code>TC-DLV-05-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+</main></body></html>

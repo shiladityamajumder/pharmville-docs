@@ -1,0 +1,4439 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>users · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>identity.users</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds users records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>identity.users</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Master / Reference</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>22 columns; 9 PK/FK/UQ/CHECK/exclusion constraints; 8 named PostgreSQL 18 NOT NULL constraints; 5 indexes; 1 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>account_closed_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of account closed</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_identity_users_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>character varying(320)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores email for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>email_normalized</code></td>
+<td><code>character varying(320)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores email normalized for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>email_verified_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of email verified</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>failed_login_count</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Inferred: stores failed login count for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Primary key</td>
+</tr>
+<tr>
+<td><code>last_login_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of last login</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>locked_until</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores locked until for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>password_hash</code></td>
+<td><code>character varying(255)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores password hash for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>phone_country_code</code></td>
+<td><code>character varying(8)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Code for phone country</td>
+<td>Link to controlled business classification or an external reference</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>phone_number</code></td>
+<td><code>character varying(32)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores phone number for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>phone_verified_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of phone verified</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>preferred_locale</code></td>
+<td><code>character varying(16)</code></td>
+<td>No</td>
+<td><code>'en-IN'::character varying</code></td>
+<td>Inferred: stores preferred locale for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>privacy_version</code></td>
+<td><code>character varying(32)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores privacy version for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(16)</code></td>
+<td>No</td>
+<td><code>'active'::character varying</code></td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>terms_version</code></td>
+<td><code>character varying(32)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores terms version for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>timezone</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td><code>'Asia/Kolkata'::character varying</code></td>
+<td>Inferred: stores timezone for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_identity_users_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the users business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Customer_Accounts, Admin_CMS, Rider_App, Authentication_Access. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>identity.users</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_identity_users_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_identity_users_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/appointment/appointment_slots.html"><code>appointment.appointment_slots</code></a></td>
+<td>fk_appointment_appointment_slots_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/appointment_slots.html"><code>appointment.appointment_slots</code></a></td>
+<td>fk_appointment_appointment_slots_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/appointment_status_history.html"><code>appointment.appointment_status_history</code></a></td>
+<td>fk_appointment_appointment_status_history_actor_user_id_users</td>
+<td><code>actor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td>fk_appointment_appointments_booked_by_user_id_users</td>
+<td><code>booked_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td>fk_appointment_appointments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td>fk_appointment_appointments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/availability_exceptions.html"><code>appointment.availability_exceptions</code></a></td>
+<td>fk_appointment_availability_exceptions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/availability_exceptions.html"><code>appointment.availability_exceptions</code></a></td>
+<td>fk_appointment_availability_exceptions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/availability_rules.html"><code>appointment.availability_rules</code></a></td>
+<td>fk_appointment_availability_rules_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/availability_rules.html"><code>appointment.availability_rules</code></a></td>
+<td>fk_appointment_availability_rules_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/availability_rules.html"><code>appointment.availability_rules</code></a></td>
+<td>fk_appointment_availability_rules_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td>fk_appointment_practitioner_services_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td>fk_appointment_practitioner_services_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td>fk_appointment_practitioner_services_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/service_types.html"><code>appointment.service_types</code></a></td>
+<td>fk_appointment_service_types_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/service_types.html"><code>appointment.service_types</code></a></td>
+<td>fk_appointment_service_types_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/service_types.html"><code>appointment.service_types</code></a></td>
+<td>fk_appointment_service_types_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/teleconsultation_sessions.html"><code>appointment.teleconsultation_sessions</code></a></td>
+<td>fk_appointment_teleconsultation_sessions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/teleconsultation_sessions.html"><code>appointment.teleconsultation_sessions</code></a></td>
+<td>fk_appointment_teleconsultation_sessions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>fk_catalog_brands_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>fk_catalog_brands_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>fk_catalog_brands_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>fk_catalog_categories_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>fk_catalog_categories_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>fk_catalog_categories_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>fk_catalog_commerce_classes_created_by_user_id_users</td>
+<td><code>created_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>fk_catalog_commerce_classes_updated_by_user_id_users</td>
+<td><code>updated_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a></td>
+<td>fk_catalog_dosage_forms_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a></td>
+<td>fk_catalog_dosage_forms_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a></td>
+<td>fk_catalog_dosage_forms_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a></td>
+<td>fk_catalog_manufacturers_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a></td>
+<td>fk_catalog_manufacturers_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a></td>
+<td>fk_catalog_manufacturers_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_attributes.html"><code>catalog.product_attributes</code></a></td>
+<td>fk_catalog_product_attributes_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_attributes.html"><code>catalog.product_attributes</code></a></td>
+<td>fk_catalog_product_attributes_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_classification_history.html"><code>catalog.product_classification_history</code></a></td>
+<td>fk_catalog_product_classification_history_approved_by_u_625c</td>
+<td><code>approved_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_content.html"><code>catalog.product_content</code></a></td>
+<td>fk_catalog_product_content_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_content.html"><code>catalog.product_content</code></a></td>
+<td>fk_catalog_product_content_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_content.html"><code>catalog.product_content</code></a></td>
+<td>fk_catalog_product_content_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_identifiers.html"><code>catalog.product_identifiers</code></a></td>
+<td>fk_catalog_product_identifiers_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_identifiers.html"><code>catalog.product_identifiers</code></a></td>
+<td>fk_catalog_product_identifiers_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_media.html"><code>catalog.product_media</code></a></td>
+<td>fk_catalog_product_media_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_media.html"><code>catalog.product_media</code></a></td>
+<td>fk_catalog_product_media_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_media.html"><code>catalog.product_media</code></a></td>
+<td>fk_catalog_product_media_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_regulatory.html"><code>catalog.product_regulatory</code></a></td>
+<td>fk_catalog_product_regulatory_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_regulatory.html"><code>catalog.product_regulatory</code></a></td>
+<td>fk_catalog_product_regulatory_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_regulatory.html"><code>catalog.product_regulatory</code></a></td>
+<td>fk_catalog_product_regulatory_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_relationships.html"><code>catalog.product_relationships</code></a></td>
+<td>fk_catalog_product_relationships_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_relationships.html"><code>catalog.product_relationships</code></a></td>
+<td>fk_catalog_product_relationships_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_salts.html"><code>catalog.product_salts</code></a></td>
+<td>fk_catalog_product_salts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_salts.html"><code>catalog.product_salts</code></a></td>
+<td>fk_catalog_product_salts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td>fk_catalog_product_variants_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td>fk_catalog_product_variants_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td>fk_catalog_product_variants_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>fk_catalog_products_commerce_class_approved_by_user_id_users</td>
+<td><code>commerce_class_approved_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>fk_catalog_products_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>fk_catalog_products_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>fk_catalog_products_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/salts.html"><code>catalog.salts</code></a></td>
+<td>fk_catalog_salts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/salts.html"><code>catalog.salts</code></a></td>
+<td>fk_catalog_salts_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/salts.html"><code>catalog.salts</code></a></td>
+<td>fk_catalog_salts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/substitution_group_products.html"><code>catalog.substitution_group_products</code></a></td>
+<td>fk_catalog_substitution_group_products_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/substitution_group_products.html"><code>catalog.substitution_group_products</code></a></td>
+<td>fk_catalog_substitution_group_products_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/substitution_groups.html"><code>catalog.substitution_groups</code></a></td>
+<td>fk_catalog_substitution_groups_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/substitution_groups.html"><code>catalog.substitution_groups</code></a></td>
+<td>fk_catalog_substitution_groups_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/substitution_groups.html"><code>catalog.substitution_groups</code></a></td>
+<td>fk_catalog_substitution_groups_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/units_of_measure.html"><code>catalog.units_of_measure</code></a></td>
+<td>fk_catalog_units_of_measure_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/units_of_measure.html"><code>catalog.units_of_measure</code></a></td>
+<td>fk_catalog_units_of_measure_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/catalog/units_of_measure.html"><code>catalog.units_of_measure</code></a></td>
+<td>fk_catalog_units_of_measure_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td>fk_clinical_care_episodes_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td>fk_clinical_care_episodes_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td>fk_clinical_care_episodes_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td>fk_clinical_consultations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td>fk_clinical_consultations_doctor_user_id_users</td>
+<td><code>doctor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td>fk_clinical_consultations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/diagnoses.html"><code>clinical.diagnoses</code></a></td>
+<td>fk_clinical_diagnoses_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/diagnoses.html"><code>clinical.diagnoses</code></a></td>
+<td>fk_clinical_diagnoses_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td>fk_clinical_observations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td>fk_clinical_observations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>fk_clinical_order_reviews_assigned_to_user_id_users</td>
+<td><code>assigned_to_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>fk_clinical_order_reviews_reviewed_by_user_id_users</td>
+<td><code>reviewed_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td>fk_clinical_patient_allergies_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td>fk_clinical_patient_allergies_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td>fk_clinical_patient_allergies_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td>fk_clinical_patient_conditions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td>fk_clinical_patient_conditions_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td>fk_clinical_patient_conditions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td>fk_clinical_patient_medications_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td>fk_clinical_patient_medications_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td>fk_clinical_patient_medications_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td>fk_clinical_patient_profiles_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td>fk_clinical_patient_profiles_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td>fk_clinical_patient_profiles_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td>fk_clinical_patient_profiles_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td>fk_clinical_practitioner_organizations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td>fk_clinical_practitioner_organizations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td>fk_clinical_practitioner_profiles_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td>fk_clinical_practitioner_profiles_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td>fk_clinical_practitioner_profiles_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td>fk_clinical_practitioner_profiles_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescription_access_logs.html"><code>clinical.prescription_access_logs</code></a></td>
+<td>fk_clinical_prescription_access_logs_actor_user_id_users</td>
+<td><code>actor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td>fk_clinical_prescription_documents_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td>fk_clinical_prescription_documents_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td>fk_clinical_prescription_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td>fk_clinical_prescription_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>fk_clinical_prescriptions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>fk_clinical_prescriptions_prescriber_user_id_users</td>
+<td><code>prescriber_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>fk_clinical_prescriptions_reviewed_by_user_id_users</td>
+<td><code>reviewed_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>fk_clinical_prescriptions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>fk_clinical_prescriptions_uploaded_by_user_id_users</td>
+<td><code>uploaded_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a></td>
+<td>fk_clinical_review_reason_codes_created_by_user_id_users</td>
+<td><code>created_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a></td>
+<td>fk_clinical_review_reason_codes_updated_by_user_id_users</td>
+<td><code>updated_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellation_items.html"><code>commerce.cancellation_items</code></a></td>
+<td>fk_commerce_cancellation_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellation_items.html"><code>commerce.cancellation_items</code></a></td>
+<td>fk_commerce_cancellation_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellation_reason_codes.html"><code>commerce.cancellation_reason_codes</code></a></td>
+<td>fk_commerce_cancellation_reason_codes_created_by_user_id_users</td>
+<td><code>created_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellation_reason_codes.html"><code>commerce.cancellation_reason_codes</code></a></td>
+<td>fk_commerce_cancellation_reason_codes_updated_by_user_id_users</td>
+<td><code>updated_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellations.html"><code>commerce.cancellations</code></a></td>
+<td>fk_commerce_cancellations_approved_by_user_id_users</td>
+<td><code>approved_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellations.html"><code>commerce.cancellations</code></a></td>
+<td>fk_commerce_cancellations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellations.html"><code>commerce.cancellations</code></a></td>
+<td>fk_commerce_cancellations_requested_by_user_id_users</td>
+<td><code>requested_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellations.html"><code>commerce.cancellations</code></a></td>
+<td>fk_commerce_cancellations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cart_items.html"><code>commerce.cart_items</code></a></td>
+<td>fk_commerce_cart_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cart_items.html"><code>commerce.cart_items</code></a></td>
+<td>fk_commerce_cart_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/carts.html"><code>commerce.carts</code></a></td>
+<td>fk_commerce_carts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/carts.html"><code>commerce.carts</code></a></td>
+<td>fk_commerce_carts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/carts.html"><code>commerce.carts</code></a></td>
+<td>fk_commerce_carts_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/checkouts.html"><code>commerce.checkouts</code></a></td>
+<td>fk_commerce_checkouts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/checkouts.html"><code>commerce.checkouts</code></a></td>
+<td>fk_commerce_checkouts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/checkouts.html"><code>commerce.checkouts</code></a></td>
+<td>fk_commerce_checkouts_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_allocations.html"><code>commerce.order_allocations</code></a></td>
+<td>fk_commerce_order_allocations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_allocations.html"><code>commerce.order_allocations</code></a></td>
+<td>fk_commerce_order_allocations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_charges.html"><code>commerce.order_charges</code></a></td>
+<td>fk_commerce_order_charges_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_charges.html"><code>commerce.order_charges</code></a></td>
+<td>fk_commerce_order_charges_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_discounts.html"><code>commerce.order_discounts</code></a></td>
+<td>fk_commerce_order_discounts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_discounts.html"><code>commerce.order_discounts</code></a></td>
+<td>fk_commerce_order_discounts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+<td>fk_commerce_order_groups_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+<td>fk_commerce_order_groups_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>fk_commerce_order_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>fk_commerce_order_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>fk_commerce_order_revisions_accepted_by_user_id_users</td>
+<td><code>accepted_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_status_history.html"><code>commerce.order_status_history</code></a></td>
+<td>fk_commerce_order_status_history_changed_by_user_id_users</td>
+<td><code>changed_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>fk_commerce_orders_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>fk_commerce_orders_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>fk_commerce_orders_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/return_items.html"><code>commerce.return_items</code></a></td>
+<td>fk_commerce_return_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/return_items.html"><code>commerce.return_items</code></a></td>
+<td>fk_commerce_return_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/return_reason_codes.html"><code>commerce.return_reason_codes</code></a></td>
+<td>fk_commerce_return_reason_codes_created_by_user_id_users</td>
+<td><code>created_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/return_reason_codes.html"><code>commerce.return_reason_codes</code></a></td>
+<td>fk_commerce_return_reason_codes_updated_by_user_id_users</td>
+<td><code>updated_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td>fk_commerce_returns_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td>fk_commerce_returns_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td>fk_commerce_returns_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/adverse_event_reports.html"><code>compliance.adverse_event_reports</code></a></td>
+<td>fk_compliance_adverse_event_reports_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/adverse_event_reports.html"><code>compliance.adverse_event_reports</code></a></td>
+<td>fk_compliance_adverse_event_reports_reported_by_user_id_users</td>
+<td><code>reported_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/adverse_event_reports.html"><code>compliance.adverse_event_reports</code></a></td>
+<td>fk_compliance_adverse_event_reports_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/legal_holds.html"><code>compliance.legal_holds</code></a></td>
+<td>fk_compliance_legal_holds_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/legal_holds.html"><code>compliance.legal_holds</code></a></td>
+<td>fk_compliance_legal_holds_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/legal_holds.html"><code>compliance.legal_holds</code></a></td>
+<td>fk_compliance_legal_holds_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/privacy_requests.html"><code>compliance.privacy_requests</code></a></td>
+<td>fk_compliance_privacy_requests_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/privacy_requests.html"><code>compliance.privacy_requests</code></a></td>
+<td>fk_compliance_privacy_requests_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/privacy_requests.html"><code>compliance.privacy_requests</code></a></td>
+<td>fk_compliance_privacy_requests_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/product_recalls.html"><code>compliance.product_recalls</code></a></td>
+<td>fk_compliance_product_recalls_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/product_recalls.html"><code>compliance.product_recalls</code></a></td>
+<td>fk_compliance_product_recalls_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/recall_lots.html"><code>compliance.recall_lots</code></a></td>
+<td>fk_compliance_recall_lots_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/recall_lots.html"><code>compliance.recall_lots</code></a></td>
+<td>fk_compliance_recall_lots_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/regulatory_authorities.html"><code>compliance.regulatory_authorities</code></a></td>
+<td>fk_compliance_regulatory_authorities_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/regulatory_authorities.html"><code>compliance.regulatory_authorities</code></a></td>
+<td>fk_compliance_regulatory_authorities_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/regulatory_authorities.html"><code>compliance.regulatory_authorities</code></a></td>
+<td>fk_compliance_regulatory_authorities_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/regulatory_registrations.html"><code>compliance.regulatory_registrations</code></a></td>
+<td>fk_compliance_regulatory_registrations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/regulatory_registrations.html"><code>compliance.regulatory_registrations</code></a></td>
+<td>fk_compliance_regulatory_registrations_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/regulatory_registrations.html"><code>compliance.regulatory_registrations</code></a></td>
+<td>fk_compliance_regulatory_registrations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/addresses.html"><code>customer.addresses</code></a></td>
+<td>fk_customer_addresses_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/addresses.html"><code>customer.addresses</code></a></td>
+<td>fk_customer_addresses_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/addresses.html"><code>customer.addresses</code></a></td>
+<td>fk_customer_addresses_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/addresses.html"><code>customer.addresses</code></a></td>
+<td>fk_customer_addresses_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/consent_events.html"><code>customer.consent_events</code></a></td>
+<td>fk_customer_consent_events_actor_user_id_users</td>
+<td><code>actor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/consents.html"><code>customer.consents</code></a></td>
+<td>fk_customer_consents_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/consents.html"><code>customer.consents</code></a></td>
+<td>fk_customer_consents_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/consents.html"><code>customer.consents</code></a></td>
+<td>fk_customer_consents_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>fk_customer_family_members_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>fk_customer_family_members_customer_user_id_users</td>
+<td><code>customer_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>fk_customer_family_members_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>fk_customer_family_members_guardian_user_id_users</td>
+<td><code>guardian_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>fk_customer_family_members_linked_user_id_users</td>
+<td><code>linked_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>fk_customer_family_members_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/preferences.html"><code>customer.preferences</code></a></td>
+<td>fk_customer_preferences_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/preferences.html"><code>customer.preferences</code></a></td>
+<td>fk_customer_preferences_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/preferences.html"><code>customer.preferences</code></a></td>
+<td>fk_customer_preferences_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/preferences.html"><code>customer.preferences</code></a></td>
+<td>fk_customer_preferences_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/profiles.html"><code>customer.profiles</code></a></td>
+<td>fk_customer_profiles_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/profiles.html"><code>customer.profiles</code></a></td>
+<td>fk_customer_profiles_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/profiles.html"><code>customer.profiles</code></a></td>
+<td>fk_customer_profiles_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/profiles.html"><code>customer.profiles</code></a></td>
+<td>fk_customer_profiles_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/wishlist_items.html"><code>customer.wishlist_items</code></a></td>
+<td>fk_customer_wishlist_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/wishlist_items.html"><code>customer.wishlist_items</code></a></td>
+<td>fk_customer_wishlist_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/wishlists.html"><code>customer.wishlists</code></a></td>
+<td>fk_customer_wishlists_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/wishlists.html"><code>customer.wishlists</code></a></td>
+<td>fk_customer_wishlists_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/wishlists.html"><code>customer.wishlists</code></a></td>
+<td>fk_customer_wishlists_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/customer/wishlists.html"><code>customer.wishlists</code></a></td>
+<td>fk_customer_wishlists_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_order_items.html"><code>diagnostics.diagnostic_order_items</code></a></td>
+<td>fk_diagnostics_diagnostic_order_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_order_items.html"><code>diagnostics.diagnostic_order_items</code></a></td>
+<td>fk_diagnostics_diagnostic_order_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+<td>fk_diagnostics_diagnostic_orders_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+<td>fk_diagnostics_diagnostic_orders_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+<td>fk_diagnostics_diagnostic_orders_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_reports.html"><code>diagnostics.diagnostic_reports</code></a></td>
+<td>fk_diagnostics_diagnostic_reports_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_reports.html"><code>diagnostics.diagnostic_reports</code></a></td>
+<td>fk_diagnostics_diagnostic_reports_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_reports.html"><code>diagnostics.diagnostic_reports</code></a></td>
+<td>fk_diagnostics_diagnostic_reports_verified_by_user_id_users</td>
+<td><code>verified_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_result_values.html"><code>diagnostics.diagnostic_result_values</code></a></td>
+<td>fk_diagnostics_diagnostic_result_values_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_result_values.html"><code>diagnostics.diagnostic_result_values</code></a></td>
+<td>fk_diagnostics_diagnostic_result_values_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/lab_locations.html"><code>diagnostics.lab_locations</code></a></td>
+<td>fk_diagnostics_lab_locations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/lab_locations.html"><code>diagnostics.lab_locations</code></a></td>
+<td>fk_diagnostics_lab_locations_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/lab_locations.html"><code>diagnostics.lab_locations</code></a></td>
+<td>fk_diagnostics_lab_locations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/lab_offerings.html"><code>diagnostics.lab_offerings</code></a></td>
+<td>fk_diagnostics_lab_offerings_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/lab_offerings.html"><code>diagnostics.lab_offerings</code></a></td>
+<td>fk_diagnostics_lab_offerings_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/lab_offerings.html"><code>diagnostics.lab_offerings</code></a></td>
+<td>fk_diagnostics_lab_offerings_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/lab_providers.html"><code>diagnostics.lab_providers</code></a></td>
+<td>fk_diagnostics_lab_providers_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/lab_providers.html"><code>diagnostics.lab_providers</code></a></td>
+<td>fk_diagnostics_lab_providers_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/lab_providers.html"><code>diagnostics.lab_providers</code></a></td>
+<td>fk_diagnostics_lab_providers_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/sample_collections.html"><code>diagnostics.sample_collections</code></a></td>
+<td>fk_diagnostics_sample_collections_collector_user_id_users</td>
+<td><code>collector_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/sample_collections.html"><code>diagnostics.sample_collections</code></a></td>
+<td>fk_diagnostics_sample_collections_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/sample_collections.html"><code>diagnostics.sample_collections</code></a></td>
+<td>fk_diagnostics_sample_collections_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/sample_events.html"><code>diagnostics.sample_events</code></a></td>
+<td>fk_diagnostics_sample_events_actor_user_id_users</td>
+<td><code>actor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/samples.html"><code>diagnostics.samples</code></a></td>
+<td>fk_diagnostics_samples_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/samples.html"><code>diagnostics.samples</code></a></td>
+<td>fk_diagnostics_samples_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/test_definitions.html"><code>diagnostics.test_definitions</code></a></td>
+<td>fk_diagnostics_test_definitions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/test_definitions.html"><code>diagnostics.test_definitions</code></a></td>
+<td>fk_diagnostics_test_definitions_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/test_definitions.html"><code>diagnostics.test_definitions</code></a></td>
+<td>fk_diagnostics_test_definitions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/test_package_items.html"><code>diagnostics.test_package_items</code></a></td>
+<td>fk_diagnostics_test_package_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/test_package_items.html"><code>diagnostics.test_package_items</code></a></td>
+<td>fk_diagnostics_test_package_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/test_packages.html"><code>diagnostics.test_packages</code></a></td>
+<td>fk_diagnostics_test_packages_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/test_packages.html"><code>diagnostics.test_packages</code></a></td>
+<td>fk_diagnostics_test_packages_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/test_packages.html"><code>diagnostics.test_packages</code></a></td>
+<td>fk_diagnostics_test_packages_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/accounts.html"><code>finance.accounts</code></a></td>
+<td>fk_finance_accounts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/accounts.html"><code>finance.accounts</code></a></td>
+<td>fk_finance_accounts_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/accounts.html"><code>finance.accounts</code></a></td>
+<td>fk_finance_accounts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/credit_notes.html"><code>finance.credit_notes</code></a></td>
+<td>fk_finance_credit_notes_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/credit_notes.html"><code>finance.credit_notes</code></a></td>
+<td>fk_finance_credit_notes_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/invoice_items.html"><code>finance.invoice_items</code></a></td>
+<td>fk_finance_invoice_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/invoice_items.html"><code>finance.invoice_items</code></a></td>
+<td>fk_finance_invoice_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/invoices.html"><code>finance.invoices</code></a></td>
+<td>fk_finance_invoices_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/invoices.html"><code>finance.invoices</code></a></td>
+<td>fk_finance_invoices_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/journal_entries.html"><code>finance.journal_entries</code></a></td>
+<td>fk_finance_journal_entries_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/journal_entries.html"><code>finance.journal_entries</code></a></td>
+<td>fk_finance_journal_entries_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/settlement_runs.html"><code>finance.settlement_runs</code></a></td>
+<td>fk_finance_settlement_runs_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/settlement_runs.html"><code>finance.settlement_runs</code></a></td>
+<td>fk_finance_settlement_runs_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/fulfillment_events.html"><code>fulfillment.fulfillment_events</code></a></td>
+<td>fk_fulfillment_fulfillment_events_actor_user_id_users</td>
+<td><code>actor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/fulfillment_order_items.html"><code>fulfillment.fulfillment_order_items</code></a></td>
+<td>fk_fulfillment_fulfillment_order_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/fulfillment_order_items.html"><code>fulfillment.fulfillment_order_items</code></a></td>
+<td>fk_fulfillment_fulfillment_order_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td>fk_fulfillment_fulfillment_orders_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td>fk_fulfillment_fulfillment_orders_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/pack_tasks.html"><code>fulfillment.pack_tasks</code></a></td>
+<td>fk_fulfillment_pack_tasks_assigned_to_user_id_users</td>
+<td><code>assigned_to_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/pack_tasks.html"><code>fulfillment.pack_tasks</code></a></td>
+<td>fk_fulfillment_pack_tasks_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/pack_tasks.html"><code>fulfillment.pack_tasks</code></a></td>
+<td>fk_fulfillment_pack_tasks_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/package_items.html"><code>fulfillment.package_items</code></a></td>
+<td>fk_fulfillment_package_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/package_items.html"><code>fulfillment.package_items</code></a></td>
+<td>fk_fulfillment_package_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td>fk_fulfillment_packages_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td>fk_fulfillment_packages_packed_by_user_id_users</td>
+<td><code>packed_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td>fk_fulfillment_packages_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/pick_task_items.html"><code>fulfillment.pick_task_items</code></a></td>
+<td>fk_fulfillment_pick_task_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/pick_task_items.html"><code>fulfillment.pick_task_items</code></a></td>
+<td>fk_fulfillment_pick_task_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/pick_tasks.html"><code>fulfillment.pick_tasks</code></a></td>
+<td>fk_fulfillment_pick_tasks_assigned_to_user_id_users</td>
+<td><code>assigned_to_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/pick_tasks.html"><code>fulfillment.pick_tasks</code></a></td>
+<td>fk_fulfillment_pick_tasks_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/pick_tasks.html"><code>fulfillment.pick_tasks</code></a></td>
+<td>fk_fulfillment_pick_tasks_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/picking_wave_orders.html"><code>fulfillment.picking_wave_orders</code></a></td>
+<td>fk_fulfillment_picking_wave_orders_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/picking_wave_orders.html"><code>fulfillment.picking_wave_orders</code></a></td>
+<td>fk_fulfillment_picking_wave_orders_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/picking_waves.html"><code>fulfillment.picking_waves</code></a></td>
+<td>fk_fulfillment_picking_waves_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/picking_waves.html"><code>fulfillment.picking_waves</code></a></td>
+<td>fk_fulfillment_picking_waves_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/api_client_secrets.html"><code>identity.api_client_secrets</code></a></td>
+<td>fk_identity_api_client_secrets_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/api_client_secrets.html"><code>identity.api_client_secrets</code></a></td>
+<td>fk_identity_api_client_secrets_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/api_clients.html"><code>identity.api_clients</code></a></td>
+<td>fk_identity_api_clients_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/api_clients.html"><code>identity.api_clients</code></a></td>
+<td>fk_identity_api_clients_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/api_clients.html"><code>identity.api_clients</code></a></td>
+<td>fk_identity_api_clients_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/authentication_challenges.html"><code>identity.authentication_challenges</code></a></td>
+<td>authentication_challenges_created_by_fkey</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/authentication_challenges.html"><code>identity.authentication_challenges</code></a></td>
+<td>authentication_challenges_updated_by_fkey</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/authentication_challenges.html"><code>identity.authentication_challenges</code></a></td>
+<td>authentication_challenges_user_id_fkey</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/login_attempts.html"><code>identity.login_attempts</code></a></td>
+<td>fk_identity_login_attempts_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/mfa_factors.html"><code>identity.mfa_factors</code></a></td>
+<td>fk_identity_mfa_factors_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/mfa_factors.html"><code>identity.mfa_factors</code></a></td>
+<td>fk_identity_mfa_factors_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/mfa_factors.html"><code>identity.mfa_factors</code></a></td>
+<td>fk_identity_mfa_factors_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/otp_challenges.html"><code>identity.otp_challenges</code></a></td>
+<td>fk_identity_otp_challenges_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/otp_challenges.html"><code>identity.otp_challenges</code></a></td>
+<td>fk_identity_otp_challenges_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/password_history.html"><code>identity.password_history</code></a></td>
+<td>fk_identity_password_history_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/permissions.html"><code>identity.permissions</code></a></td>
+<td>fk_identity_permissions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/permissions.html"><code>identity.permissions</code></a></td>
+<td>fk_identity_permissions_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/permissions.html"><code>identity.permissions</code></a></td>
+<td>fk_identity_permissions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/role_permissions.html"><code>identity.role_permissions</code></a></td>
+<td>fk_identity_role_permissions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/role_permissions.html"><code>identity.role_permissions</code></a></td>
+<td>fk_identity_role_permissions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/roles.html"><code>identity.roles</code></a></td>
+<td>fk_identity_roles_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/roles.html"><code>identity.roles</code></a></td>
+<td>fk_identity_roles_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/roles.html"><code>identity.roles</code></a></td>
+<td>fk_identity_roles_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/session_refresh_tokens.html"><code>identity.session_refresh_tokens</code></a></td>
+<td>session_refresh_tokens_created_by_fkey</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/session_refresh_tokens.html"><code>identity.session_refresh_tokens</code></a></td>
+<td>session_refresh_tokens_updated_by_fkey</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/sessions.html"><code>identity.sessions</code></a></td>
+<td>fk_identity_sessions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/sessions.html"><code>identity.sessions</code></a></td>
+<td>fk_identity_sessions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/sessions.html"><code>identity.sessions</code></a></td>
+<td>fk_identity_sessions_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/trusted_devices.html"><code>identity.trusted_devices</code></a></td>
+<td>fk_identity_trusted_devices_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/trusted_devices.html"><code>identity.trusted_devices</code></a></td>
+<td>fk_identity_trusted_devices_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/trusted_devices.html"><code>identity.trusted_devices</code></a></td>
+<td>fk_identity_trusted_devices_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/user_profiles.html"><code>identity.user_profiles</code></a></td>
+<td>fk_identity_user_profiles_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/user_profiles.html"><code>identity.user_profiles</code></a></td>
+<td>fk_identity_user_profiles_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/user_profiles.html"><code>identity.user_profiles</code></a></td>
+<td>fk_identity_user_profiles_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/user_profiles.html"><code>identity.user_profiles</code></a></td>
+<td>fk_identity_user_profiles_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/user_roles.html"><code>identity.user_roles</code></a></td>
+<td>fk_identity_user_roles_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/user_roles.html"><code>identity.user_roles</code></a></td>
+<td>fk_identity_user_roles_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/user_roles.html"><code>identity.user_roles</code></a></td>
+<td>fk_identity_user_roles_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td>fk_identity_users_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td>fk_identity_users_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/claim_documents.html"><code>insurance.claim_documents</code></a></td>
+<td>fk_insurance_claim_documents_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/claim_documents.html"><code>insurance.claim_documents</code></a></td>
+<td>fk_insurance_claim_documents_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/claims.html"><code>insurance.claims</code></a></td>
+<td>fk_insurance_claims_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/claims.html"><code>insurance.claims</code></a></td>
+<td>fk_insurance_claims_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/insurers.html"><code>insurance.insurers</code></a></td>
+<td>fk_insurance_insurers_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/insurers.html"><code>insurance.insurers</code></a></td>
+<td>fk_insurance_insurers_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/insurers.html"><code>insurance.insurers</code></a></td>
+<td>fk_insurance_insurers_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policies.html"><code>insurance.policies</code></a></td>
+<td>fk_insurance_policies_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policies.html"><code>insurance.policies</code></a></td>
+<td>fk_insurance_policies_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policies.html"><code>insurance.policies</code></a></td>
+<td>fk_insurance_policies_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policies.html"><code>insurance.policies</code></a></td>
+<td>fk_insurance_policies_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policy_members.html"><code>insurance.policy_members</code></a></td>
+<td>fk_insurance_policy_members_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policy_members.html"><code>insurance.policy_members</code></a></td>
+<td>fk_insurance_policy_members_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/tpas.html"><code>insurance.tpas</code></a></td>
+<td>fk_insurance_tpas_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/tpas.html"><code>insurance.tpas</code></a></td>
+<td>fk_insurance_tpas_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/tpas.html"><code>insurance.tpas</code></a></td>
+<td>fk_insurance_tpas_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/carrier_accounts.html"><code>logistics.carrier_accounts</code></a></td>
+<td>fk_logistics_carrier_accounts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/carrier_accounts.html"><code>logistics.carrier_accounts</code></a></td>
+<td>fk_logistics_carrier_accounts_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/carrier_accounts.html"><code>logistics.carrier_accounts</code></a></td>
+<td>fk_logistics_carrier_accounts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td>fk_logistics_carriers_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td>fk_logistics_carriers_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td>fk_logistics_carriers_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_assignments.html"><code>logistics.delivery_assignments</code></a></td>
+<td>fk_logistics_delivery_assignments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_assignments.html"><code>logistics.delivery_assignments</code></a></td>
+<td>fk_logistics_delivery_assignments_delivery_user_id_users</td>
+<td><code>delivery_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_assignments.html"><code>logistics.delivery_assignments</code></a></td>
+<td>fk_logistics_delivery_assignments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_attempts.html"><code>logistics.delivery_attempts</code></a></td>
+<td>fk_logistics_delivery_attempts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_attempts.html"><code>logistics.delivery_attempts</code></a></td>
+<td>fk_logistics_delivery_attempts_delivery_user_id_users</td>
+<td><code>delivery_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_attempts.html"><code>logistics.delivery_attempts</code></a></td>
+<td>fk_logistics_delivery_attempts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_failure_reasons.html"><code>logistics.delivery_failure_reasons</code></a></td>
+<td>fk_logistics_delivery_failure_reasons_created_by_user_id_users</td>
+<td><code>created_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_failure_reasons.html"><code>logistics.delivery_failure_reasons</code></a></td>
+<td>fk_logistics_delivery_failure_reasons_updated_by_user_id_users</td>
+<td><code>updated_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_location_updates.html"><code>logistics.delivery_location_updates</code></a></td>
+<td>fk_logistics_delivery_location_updates_delivery_user_id_users</td>
+<td><code>delivery_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_routes.html"><code>logistics.delivery_routes</code></a></td>
+<td>fk_logistics_delivery_routes_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_routes.html"><code>logistics.delivery_routes</code></a></td>
+<td>fk_logistics_delivery_routes_delivery_user_id_users</td>
+<td><code>delivery_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_routes.html"><code>logistics.delivery_routes</code></a></td>
+<td>fk_logistics_delivery_routes_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_slots.html"><code>logistics.delivery_slots</code></a></td>
+<td>fk_logistics_delivery_slots_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_slots.html"><code>logistics.delivery_slots</code></a></td>
+<td>fk_logistics_delivery_slots_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_slots.html"><code>logistics.delivery_slots</code></a></td>
+<td>fk_logistics_delivery_slots_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/ndr_cases.html"><code>logistics.ndr_cases</code></a></td>
+<td>fk_logistics_ndr_cases_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/ndr_cases.html"><code>logistics.ndr_cases</code></a></td>
+<td>fk_logistics_ndr_cases_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/reverse_shipments.html"><code>logistics.reverse_shipments</code></a></td>
+<td>fk_logistics_reverse_shipments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/reverse_shipments.html"><code>logistics.reverse_shipments</code></a></td>
+<td>fk_logistics_reverse_shipments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/rider_shifts.html"><code>logistics.rider_shifts</code></a></td>
+<td>fk_logistics_rider_shifts_rider_user_id_users</td>
+<td><code>rider_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/serviceability_rules.html"><code>logistics.serviceability_rules</code></a></td>
+<td>fk_logistics_serviceability_rules_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/serviceability_rules.html"><code>logistics.serviceability_rules</code></a></td>
+<td>fk_logistics_serviceability_rules_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/serviceability_rules.html"><code>logistics.serviceability_rules</code></a></td>
+<td>fk_logistics_serviceability_rules_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td>fk_logistics_shipments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td>fk_logistics_shipments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/commission_plans.html"><code>marketplace.commission_plans</code></a></td>
+<td>fk_marketplace_commission_plans_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/commission_plans.html"><code>marketplace.commission_plans</code></a></td>
+<td>fk_marketplace_commission_plans_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/commission_plans.html"><code>marketplace.commission_plans</code></a></td>
+<td>fk_marketplace_commission_plans_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_commission_assignments.html"><code>marketplace.seller_commission_assignments</code></a></td>
+<td>fk_marketplace_seller_commission_assignments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_commission_assignments.html"><code>marketplace.seller_commission_assignments</code></a></td>
+<td>fk_marketplace_seller_commission_assignments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_locations.html"><code>marketplace.seller_locations</code></a></td>
+<td>fk_marketplace_seller_locations_approved_by_user_id_users</td>
+<td><code>approved_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_locations.html"><code>marketplace.seller_locations</code></a></td>
+<td>fk_marketplace_seller_locations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_locations.html"><code>marketplace.seller_locations</code></a></td>
+<td>fk_marketplace_seller_locations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_product_listings.html"><code>marketplace.seller_product_listings</code></a></td>
+<td>fk_marketplace_seller_product_listings_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_product_listings.html"><code>marketplace.seller_product_listings</code></a></td>
+<td>fk_marketplace_seller_product_listings_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_product_listings.html"><code>marketplace.seller_product_listings</code></a></td>
+<td>fk_marketplace_seller_product_listings_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_ratings.html"><code>marketplace.seller_ratings</code></a></td>
+<td>fk_marketplace_seller_ratings_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_service_levels.html"><code>marketplace.seller_service_levels</code></a></td>
+<td>fk_marketplace_seller_service_levels_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_service_levels.html"><code>marketplace.seller_service_levels</code></a></td>
+<td>fk_marketplace_seller_service_levels_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a></td>
+<td>fk_marketplace_sellers_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a></td>
+<td>fk_marketplace_sellers_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a></td>
+<td>fk_marketplace_sellers_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td>fk_membership_loyalty_accounts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td>fk_membership_loyalty_accounts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td>fk_membership_loyalty_accounts_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td>fk_membership_plan_benefits_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td>fk_membership_plan_benefits_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td>fk_membership_plan_benefits_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td>fk_membership_plans_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td>fk_membership_plans_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td>fk_membership_plans_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td>fk_membership_subscriptions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td>fk_membership_subscriptions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td>fk_membership_subscriptions_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/device_endpoints.html"><code>notification.device_endpoints</code></a></td>
+<td>fk_notification_device_endpoints_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/device_endpoints.html"><code>notification.device_endpoints</code></a></td>
+<td>fk_notification_device_endpoints_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/device_endpoints.html"><code>notification.device_endpoints</code></a></td>
+<td>fk_notification_device_endpoints_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/device_endpoints.html"><code>notification.device_endpoints</code></a></td>
+<td>fk_notification_device_endpoints_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td>fk_notification_in_app_notifications_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td>fk_notification_in_app_notifications_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td>fk_notification_in_app_notifications_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/in_app_notifications.html"><code>notification.in_app_notifications</code></a></td>
+<td>fk_notification_in_app_notifications_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td>fk_notification_message_attachments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td>fk_notification_message_attachments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td>fk_notification_messages_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td>fk_notification_messages_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/messages.html"><code>notification.messages</code></a></td>
+<td>fk_notification_messages_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td>fk_notification_provider_configurations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td>fk_notification_provider_configurations_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td>fk_notification_provider_configurations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/provider_webhooks.html"><code>notification.provider_webhooks</code></a></td>
+<td>fk_notification_provider_webhooks_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/provider_webhooks.html"><code>notification.provider_webhooks</code></a></td>
+<td>fk_notification_provider_webhooks_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/suppressions.html"><code>notification.suppressions</code></a></td>
+<td>fk_notification_suppressions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/suppressions.html"><code>notification.suppressions</code></a></td>
+<td>fk_notification_suppressions_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/suppressions.html"><code>notification.suppressions</code></a></td>
+<td>fk_notification_suppressions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td>fk_notification_templates_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td>fk_notification_templates_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td>fk_notification_templates_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/user_channel_preferences.html"><code>notification.user_channel_preferences</code></a></td>
+<td>fk_notification_user_channel_preferences_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/user_channel_preferences.html"><code>notification.user_channel_preferences</code></a></td>
+<td>fk_notification_user_channel_preferences_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/user_channel_preferences.html"><code>notification.user_channel_preferences</code></a></td>
+<td>fk_notification_user_channel_preferences_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/user_channel_preferences.html"><code>notification.user_channel_preferences</code></a></td>
+<td>fk_notification_user_channel_preferences_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/bank_accounts.html"><code>organization.bank_accounts</code></a></td>
+<td>fk_organization_bank_accounts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/bank_accounts.html"><code>organization.bank_accounts</code></a></td>
+<td>fk_organization_bank_accounts_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/bank_accounts.html"><code>organization.bank_accounts</code></a></td>
+<td>fk_organization_bank_accounts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td>fk_organization_departments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td>fk_organization_departments_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/departments.html"><code>organization.departments</code></a></td>
+<td>fk_organization_departments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td>fk_organization_licenses_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td>fk_organization_licenses_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td>fk_organization_licenses_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td>fk_organization_locations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td>fk_organization_locations_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td>fk_organization_locations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td>fk_organization_memberships_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td>fk_organization_memberships_manager_user_id_users</td>
+<td><code>manager_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td>fk_organization_memberships_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td>fk_organization_memberships_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td>fk_organization_organizations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td>fk_organization_organizations_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td>fk_organization_organizations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td>fk_payment_chargebacks_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td>fk_payment_chargebacks_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td>fk_payment_cod_collections_collected_by_user_id_users</td>
+<td><code>collected_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td>fk_payment_cod_collections_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td>fk_payment_cod_collections_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td>fk_payment_customer_payment_methods_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td>fk_payment_customer_payment_methods_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td>fk_payment_customer_payment_methods_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td>fk_payment_customer_payment_methods_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/payment_attempts.html"><code>payment.payment_attempts</code></a></td>
+<td>fk_payment_payment_attempts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/payment_attempts.html"><code>payment.payment_attempts</code></a></td>
+<td>fk_payment_payment_attempts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td>fk_payment_payment_intents_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td>fk_payment_payment_intents_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/payment_webhooks.html"><code>payment.payment_webhooks</code></a></td>
+<td>fk_payment_payment_webhooks_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/payment_webhooks.html"><code>payment.payment_webhooks</code></a></td>
+<td>fk_payment_payment_webhooks_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td>fk_payment_provider_accounts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td>fk_payment_provider_accounts_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td>fk_payment_provider_accounts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/reconciliation_items.html"><code>payment.reconciliation_items</code></a></td>
+<td>fk_payment_reconciliation_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/reconciliation_items.html"><code>payment.reconciliation_items</code></a></td>
+<td>fk_payment_reconciliation_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td>fk_payment_reconciliation_runs_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td>fk_payment_reconciliation_runs_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/refund_reason_codes.html"><code>payment.refund_reason_codes</code></a></td>
+<td>fk_payment_refund_reason_codes_created_by_user_id_users</td>
+<td><code>created_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/refund_reason_codes.html"><code>payment.refund_reason_codes</code></a></td>
+<td>fk_payment_refund_reason_codes_updated_by_user_id_users</td>
+<td><code>updated_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td>fk_payment_refunds_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td>fk_payment_refunds_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+<td>fk_platform_application_settings_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+<td>fk_platform_application_settings_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+<td>fk_platform_application_settings_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/audit_logs.html"><code>platform.audit_logs</code></a></td>
+<td>fk_platform_audit_logs_actor_user_id_users</td>
+<td><code>actor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/cms_page_versions.html"><code>platform.cms_page_versions</code></a></td>
+<td>fk_platform_cms_page_versions_approved_by_user_id_users</td>
+<td><code>approved_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/cms_page_versions.html"><code>platform.cms_page_versions</code></a></td>
+<td>fk_platform_cms_page_versions_created_by_user_id_users</td>
+<td><code>created_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td>fk_platform_cms_pages_created_by_user_id_users</td>
+<td><code>created_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td>fk_platform_cms_pages_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td>fk_platform_cms_pages_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td>fk_platform_cms_pages_updated_by_user_id_users</td>
+<td><code>updated_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+<td>fk_platform_cms_pages_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/data_retention_policies.html"><code>platform.data_retention_policies</code></a></td>
+<td>fk_platform_data_retention_policies_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/data_retention_policies.html"><code>platform.data_retention_policies</code></a></td>
+<td>fk_platform_data_retention_policies_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/data_retention_policies.html"><code>platform.data_retention_policies</code></a></td>
+<td>fk_platform_data_retention_policies_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/feature_flags.html"><code>platform.feature_flags</code></a></td>
+<td>fk_platform_feature_flags_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/feature_flags.html"><code>platform.feature_flags</code></a></td>
+<td>fk_platform_feature_flags_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/feature_flags.html"><code>platform.feature_flags</code></a></td>
+<td>fk_platform_feature_flags_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_access_events.html"><code>platform.file_access_events</code></a></td>
+<td>fk_platform_file_access_events_actor_user_id_users</td>
+<td><code>actor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td>fk_platform_file_access_grants_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td>fk_platform_file_access_grants_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>fk_platform_file_objects_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>fk_platform_file_objects_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>fk_platform_file_objects_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>fk_platform_file_objects_uploaded_by_user_id_users</td>
+<td><code>uploaded_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td>fk_platform_file_upload_sessions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td>fk_platform_file_upload_sessions_requested_by_user_id_users</td>
+<td><code>requested_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td>fk_platform_file_upload_sessions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td>fk_platform_file_variants_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td>fk_platform_file_variants_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+<td>fk_platform_file_variants_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/idempotency_keys.html"><code>platform.idempotency_keys</code></a></td>
+<td>fk_platform_idempotency_keys_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/idempotency_keys.html"><code>platform.idempotency_keys</code></a></td>
+<td>fk_platform_idempotency_keys_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/inbox_messages.html"><code>platform.inbox_messages</code></a></td>
+<td>fk_platform_inbox_messages_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/inbox_messages.html"><code>platform.inbox_messages</code></a></td>
+<td>fk_platform_inbox_messages_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/outbox_events.html"><code>platform.outbox_events</code></a></td>
+<td>fk_platform_outbox_events_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/outbox_events.html"><code>platform.outbox_events</code></a></td>
+<td>fk_platform_outbox_events_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+<td>fk_platform_report_runs_requested_by_user_id_users</td>
+<td><code>requested_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/scheduled_jobs.html"><code>platform.scheduled_jobs</code></a></td>
+<td>fk_platform_scheduled_jobs_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/scheduled_jobs.html"><code>platform.scheduled_jobs</code></a></td>
+<td>fk_platform_scheduled_jobs_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/webhook_deliveries.html"><code>platform.webhook_deliveries</code></a></td>
+<td>fk_platform_webhook_deliveries_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/webhook_deliveries.html"><code>platform.webhook_deliveries</code></a></td>
+<td>fk_platform_webhook_deliveries_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+<td>fk_platform_webhook_endpoints_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+<td>fk_platform_webhook_endpoints_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+<td>fk_platform_webhook_endpoints_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td>fk_pricing_coupon_codes_assigned_user_id_users</td>
+<td><code>assigned_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td>fk_pricing_coupon_codes_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td>fk_pricing_coupon_codes_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td>fk_pricing_coupon_codes_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td>fk_pricing_price_books_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td>fk_pricing_price_books_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td>fk_pricing_price_books_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/pricing_evaluations.html"><code>pricing.pricing_evaluations</code></a></td>
+<td>fk_pricing_pricing_evaluations_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td>fk_pricing_product_prices_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td>fk_pricing_product_prices_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td>fk_pricing_promotion_redemptions_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td>fk_pricing_promotion_versions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td>fk_pricing_promotion_versions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td>fk_pricing_promotions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td>fk_pricing_promotions_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td>fk_pricing_promotions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td>fk_pricing_tax_rules_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td>fk_pricing_tax_rules_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td>fk_pricing_tax_rules_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/goods_receipt_items.html"><code>procurement.goods_receipt_items</code></a></td>
+<td>fk_procurement_goods_receipt_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/goods_receipt_items.html"><code>procurement.goods_receipt_items</code></a></td>
+<td>fk_procurement_goods_receipt_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/goods_receipt_quality_checks.html"><code>procurement.goods_receipt_quality_checks</code></a></td>
+<td>fk_procurement_goods_receipt_quality_checks_checked_by__6713</td>
+<td><code>checked_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/goods_receipt_quality_checks.html"><code>procurement.goods_receipt_quality_checks</code></a></td>
+<td>fk_procurement_goods_receipt_quality_checks_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/goods_receipt_quality_checks.html"><code>procurement.goods_receipt_quality_checks</code></a></td>
+<td>fk_procurement_goods_receipt_quality_checks_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/goods_receipts.html"><code>procurement.goods_receipts</code></a></td>
+<td>fk_procurement_goods_receipts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/goods_receipts.html"><code>procurement.goods_receipts</code></a></td>
+<td>fk_procurement_goods_receipts_received_by_user_id_users</td>
+<td><code>received_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/goods_receipts.html"><code>procurement.goods_receipts</code></a></td>
+<td>fk_procurement_goods_receipts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_order_items.html"><code>procurement.purchase_order_items</code></a></td>
+<td>fk_procurement_purchase_order_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_order_items.html"><code>procurement.purchase_order_items</code></a></td>
+<td>fk_procurement_purchase_order_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_orders.html"><code>procurement.purchase_orders</code></a></td>
+<td>fk_procurement_purchase_orders_approved_by_user_id_users</td>
+<td><code>approved_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_orders.html"><code>procurement.purchase_orders</code></a></td>
+<td>fk_procurement_purchase_orders_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_orders.html"><code>procurement.purchase_orders</code></a></td>
+<td>fk_procurement_purchase_orders_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_requisition_items.html"><code>procurement.purchase_requisition_items</code></a></td>
+<td>fk_procurement_purchase_requisition_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_requisition_items.html"><code>procurement.purchase_requisition_items</code></a></td>
+<td>fk_procurement_purchase_requisition_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_requisitions.html"><code>procurement.purchase_requisitions</code></a></td>
+<td>fk_procurement_purchase_requisitions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_requisitions.html"><code>procurement.purchase_requisitions</code></a></td>
+<td>fk_procurement_purchase_requisitions_requested_by_user_id_users</td>
+<td><code>requested_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_requisitions.html"><code>procurement.purchase_requisitions</code></a></td>
+<td>fk_procurement_purchase_requisitions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_return_items.html"><code>procurement.purchase_return_items</code></a></td>
+<td>fk_procurement_purchase_return_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_return_items.html"><code>procurement.purchase_return_items</code></a></td>
+<td>fk_procurement_purchase_return_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_returns.html"><code>procurement.purchase_returns</code></a></td>
+<td>fk_procurement_purchase_returns_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/purchase_returns.html"><code>procurement.purchase_returns</code></a></td>
+<td>fk_procurement_purchase_returns_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/supplier_invoices.html"><code>procurement.supplier_invoices</code></a></td>
+<td>fk_procurement_supplier_invoices_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/supplier_invoices.html"><code>procurement.supplier_invoices</code></a></td>
+<td>fk_procurement_supplier_invoices_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/supplier_licenses.html"><code>procurement.supplier_licenses</code></a></td>
+<td>fk_procurement_supplier_licenses_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/supplier_licenses.html"><code>procurement.supplier_licenses</code></a></td>
+<td>fk_procurement_supplier_licenses_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/supplier_licenses.html"><code>procurement.supplier_licenses</code></a></td>
+<td>fk_procurement_supplier_licenses_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/supplier_products.html"><code>procurement.supplier_products</code></a></td>
+<td>fk_procurement_supplier_products_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/supplier_products.html"><code>procurement.supplier_products</code></a></td>
+<td>fk_procurement_supplier_products_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/supplier_products.html"><code>procurement.supplier_products</code></a></td>
+<td>fk_procurement_supplier_products_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/suppliers.html"><code>procurement.suppliers</code></a></td>
+<td>fk_procurement_suppliers_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/suppliers.html"><code>procurement.suppliers</code></a></td>
+<td>fk_procurement_suppliers_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/procurement/suppliers.html"><code>procurement.suppliers</code></a></td>
+<td>fk_procurement_suppliers_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/assessments.html"><code>risk.assessments</code></a></td>
+<td>fk_risk_assessments_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/blocklists.html"><code>risk.blocklists</code></a></td>
+<td>fk_risk_blocklists_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/blocklists.html"><code>risk.blocklists</code></a></td>
+<td>fk_risk_blocklists_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/blocklists.html"><code>risk.blocklists</code></a></td>
+<td>fk_risk_blocklists_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td>fk_risk_cases_assigned_to_user_id_users</td>
+<td><code>assigned_to_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td>fk_risk_cases_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/cases.html"><code>risk.cases</code></a></td>
+<td>fk_risk_cases_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/rules.html"><code>risk.rules</code></a></td>
+<td>fk_risk_rules_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/rules.html"><code>risk.rules</code></a></td>
+<td>fk_risk_rules_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/risk/rules.html"><code>risk.rules</code></a></td>
+<td>fk_risk_rules_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/documents.html"><code>search.documents</code></a></td>
+<td>fk_search_documents_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/documents.html"><code>search.documents</code></a></td>
+<td>fk_search_documents_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/indexing_jobs.html"><code>search.indexing_jobs</code></a></td>
+<td>fk_search_indexing_jobs_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/indexing_jobs.html"><code>search.indexing_jobs</code></a></td>
+<td>fk_search_indexing_jobs_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/query_events.html"><code>search.query_events</code></a></td>
+<td>fk_search_query_events_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/redirects.html"><code>search.redirects</code></a></td>
+<td>fk_search_redirects_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/redirects.html"><code>search.redirects</code></a></td>
+<td>fk_search_redirects_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/redirects.html"><code>search.redirects</code></a></td>
+<td>fk_search_redirects_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/synonyms.html"><code>search.synonyms</code></a></td>
+<td>fk_search_synonyms_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/synonyms.html"><code>search.synonyms</code></a></td>
+<td>fk_search_synonyms_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/search/synonyms.html"><code>search.synonyms</code></a></td>
+<td>fk_search_synonyms_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/sla_policies.html"><code>support.sla_policies</code></a></td>
+<td>fk_support_sla_policies_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/sla_policies.html"><code>support.sla_policies</code></a></td>
+<td>fk_support_sla_policies_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/sla_policies.html"><code>support.sla_policies</code></a></td>
+<td>fk_support_sla_policies_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td>fk_support_ticket_actions_approved_by_user_id_users</td>
+<td><code>approved_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td>fk_support_ticket_actions_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td>fk_support_ticket_actions_requested_by_user_id_users</td>
+<td><code>requested_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td>fk_support_ticket_actions_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td>fk_support_ticket_attachments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td>fk_support_ticket_attachments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td>fk_support_ticket_messages_author_user_id_users</td>
+<td><code>author_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td>fk_support_ticket_messages_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td>fk_support_ticket_messages_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_status_history.html"><code>support.ticket_status_history</code></a></td>
+<td>fk_support_ticket_status_history_actor_user_id_users</td>
+<td><code>actor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_tags.html"><code>support.ticket_tags</code></a></td>
+<td>fk_support_ticket_tags_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_tags.html"><code>support.ticket_tags</code></a></td>
+<td>fk_support_ticket_tags_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/ticket_tags.html"><code>support.ticket_tags</code></a></td>
+<td>fk_support_ticket_tags_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td>fk_support_tickets_assigned_to_user_id_users</td>
+<td><code>assigned_to_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td>fk_support_tickets_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td>fk_support_tickets_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td>fk_support_tickets_user_id_users</td>
+<td><code>user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td>fk_warehouse_aisles_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td>fk_warehouse_aisles_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td>fk_warehouse_aisles_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td>fk_warehouse_bins_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td>fk_warehouse_bins_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td>fk_warehouse_bins_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td>fk_warehouse_cycle_count_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td>fk_warehouse_cycle_count_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td>fk_warehouse_cycle_counts_assigned_to_user_id_users</td>
+<td><code>assigned_to_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td>fk_warehouse_cycle_counts_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td>fk_warehouse_cycle_counts_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td>fk_warehouse_inventory_adjustment_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td>fk_warehouse_inventory_adjustment_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td>fk_warehouse_inventory_adjustments_approved_by_user_id_users</td>
+<td><code>approved_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td>fk_warehouse_inventory_adjustments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td>fk_warehouse_inventory_adjustments_requested_by_user_id_users</td>
+<td><code>requested_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td>fk_warehouse_inventory_adjustments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td>fk_warehouse_inventory_lots_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td>fk_warehouse_inventory_lots_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td>fk_warehouse_racks_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td>fk_warehouse_racks_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td>fk_warehouse_racks_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td>fk_warehouse_replenishment_rules_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td>fk_warehouse_replenishment_rules_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td>fk_warehouse_replenishment_rules_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td>fk_warehouse_stock_balances_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td>fk_warehouse_stock_balances_inventory_observed_by_user_id_users</td>
+<td><code>inventory_observed_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td>fk_warehouse_stock_balances_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td>fk_warehouse_stock_holds_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td>fk_warehouse_stock_holds_released_by_user_id_users</td>
+<td><code>released_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td>fk_warehouse_stock_holds_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td>fk_warehouse_stock_ledger_actor_user_id_users</td>
+<td><code>actor_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_movement_reason_codes.html"><code>warehouse.stock_movement_reason_codes</code></a></td>
+<td>fk_warehouse_stock_movement_reason_codes_created_by_use_4ca9</td>
+<td><code>created_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_movement_reason_codes.html"><code>warehouse.stock_movement_reason_codes</code></a></td>
+<td>fk_warehouse_stock_movement_reason_codes_updated_by_use_6a3d</td>
+<td><code>updated_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td>fk_warehouse_stock_reservations_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td>fk_warehouse_stock_reservations_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td>fk_warehouse_stock_transfer_items_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td>fk_warehouse_stock_transfer_items_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td>fk_warehouse_stock_transfers_approved_by_user_id_users</td>
+<td><code>approved_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td>fk_warehouse_stock_transfers_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td>fk_warehouse_stock_transfers_requested_by_user_id_users</td>
+<td><code>requested_by_user_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td>fk_warehouse_stock_transfers_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td>fk_warehouse_warehouses_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td>fk_warehouse_warehouses_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td>fk_warehouse_warehouses_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td>fk_warehouse_zones_created_by_users</td>
+<td><code>created_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td>fk_warehouse_zones_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td>fk_warehouse_zones_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><code>id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>identity.users</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_identity_users_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_identity_users_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_identity_users_contact_required</code></td>
+<td>CHECK</td>
+<td><code>CHECK (email_normalized IS NOT NULL OR phone_number IS NOT NULL)</code></td>
+</tr>
+<tr>
+<td><code>ck_identity_users_failed_login_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (failed_login_count &gt;= 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_identity_users_phone_pair_complete</code></td>
+<td>CHECK</td>
+<td><code>CHECK (phone_country_code IS NULL AND phone_number IS NULL OR phone_country_code IS NOT NULL AND phone_number IS NOT NULL)</code></td>
+</tr>
+<tr>
+<td><code>ck_identity_users_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_identity_users_userstatus</code></td>
+<td>CHECK</td>
+<td><code>CHECK (status::text = ANY (ARRAY['pending'::text, 'active'::text, 'locked'::text, 'suspended'::text, 'closed'::text]))</code></td>
+</tr>
+<tr>
+<td><code>fk_identity_users_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_identity_users_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_identity_users</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (id)</code></td>
+</tr>
+<tr>
+<td><code>users_email_normalized</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (email_normalized)</code></td>
+</tr>
+<tr>
+<td><code>users_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>users_failed_login_count_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL failed_login_count</code></td>
+</tr>
+<tr>
+<td><code>users_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>users_preferred_locale_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL preferred_locale</code></td>
+</tr>
+<tr>
+<td><code>users_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>users_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+<tr>
+<td><code>users_timezone_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL timezone</code></td>
+</tr>
+<tr>
+<td><code>users_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_identity_users_last_login_at</code></td>
+<td>btree</td>
+<td><code>(last_login_at)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_identity_users_last_login_at ON identity.users USING btree (last_login_at)</code></td>
+</tr>
+<tr>
+<td><code>ix_identity_users_status</code></td>
+<td>btree</td>
+<td><code>(status)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_identity_users_status ON identity.users USING btree (status)</code></td>
+</tr>
+<tr>
+<td><code>pk_identity_users</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_identity_users ON identity.users USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_identity_users_phone_present</code></td>
+<td>btree</td>
+<td><code>(phone_country_code, phone_number)</code></td>
+<td>phone_country_code IS NOT NULL AND phone_number IS NOT NULL</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_identity_users_phone_present ON identity.users USING btree (phone_country_code, phone_number) WHERE phone_country_code IS NOT NULL AND phone_number IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>users_email_normalized</code></td>
+<td>btree</td>
+<td><code>(email_normalized)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX users_email_normalized ON identity.users USING btree (email_normalized)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.users FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+<h2>Master-data planning</h2>
+<p><strong>Status: Proposed maintenance design; Unapproved; no seed or migration modified.</strong> <a href="../../Master-Data-Inventory.html">Central inventory</a> · <a href="../../../05-APIs/Planning-Decisions.html">planning decisions</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Definition</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schema/table</td>
+<td><code>identity.users</code></td>
+</tr>
+<tr>
+<td>Category</td>
+<td>Master / Reference — Stable identity account master; credentials are protected attributes</td>
+</tr>
+<tr>
+<td>Proposed owner / maintenance role</td>
+<td>Authentication_Access / Identity administrator / verified onboarding</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>User/patient-specific protected party master.</td>
+</tr>
+<tr>
+<td>Referencing tables</td>
+<td><code>appointment.appointment_slots</code>, <code>appointment.appointment_status_history</code>, <code>appointment.appointments</code>, <code>appointment.availability_exceptions</code>, <code>appointment.availability_rules</code>, <code>appointment.practitioner_services</code>, <code>appointment.service_types</code>, <code>appointment.teleconsultation_sessions</code>, <code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_attributes</code>, <code>catalog.product_classification_history</code>, <code>catalog.product_content</code>, <code>catalog.product_identifiers</code>, <code>catalog.product_media</code>, <code>catalog.product_regulatory</code>, <code>catalog.product_relationships</code>, <code>catalog.product_salts</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>catalog.salts</code>, <code>catalog.substitution_group_products</code>, <code>catalog.substitution_groups</code>, <code>catalog.units_of_measure</code>, <code>clinical.care_episodes</code>, <code>clinical.consultations</code>, <code>clinical.diagnoses</code>, <code>clinical.observations</code>, <code>clinical.order_reviews</code>, <code>clinical.patient_allergies</code>, <code>clinical.patient_conditions</code>, <code>clinical.patient_medications</code>, <code>clinical.patient_profiles</code>, <code>clinical.practitioner_organizations</code>, <code>clinical.practitioner_profiles</code>, <code>clinical.prescription_access_logs</code>, <code>clinical.prescription_documents</code>, <code>clinical.prescription_items</code>, <code>clinical.prescriptions</code>, <code>clinical.review_reason_codes</code>, <code>commerce.cancellation_items</code>, <code>commerce.cancellation_reason_codes</code>, <code>commerce.cancellations</code>, <code>commerce.cart_items</code>, <code>commerce.carts</code>, <code>commerce.checkouts</code>, <code>commerce.order_allocations</code>, <code>commerce.order_charges</code>, <code>commerce.order_discounts</code>, <code>commerce.order_groups</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.order_status_history</code>, <code>commerce.orders</code>, <code>commerce.return_items</code>, <code>commerce.return_reason_codes</code>, <code>commerce.returns</code>, <code>compliance.adverse_event_reports</code>, <code>compliance.legal_holds</code>, <code>compliance.privacy_requests</code>, <code>compliance.product_recalls</code>, <code>compliance.recall_lots</code>, <code>compliance.regulatory_authorities</code>, <code>compliance.regulatory_registrations</code>, <code>customer.addresses</code>, <code>customer.consent_events</code>, <code>customer.consents</code>, <code>customer.family_members</code>, <code>customer.preferences</code>, <code>customer.profiles</code>, <code>customer.wishlist_items</code>, <code>customer.wishlists</code>, <code>diagnostics.diagnostic_order_items</code>, <code>diagnostics.diagnostic_orders</code>, <code>diagnostics.diagnostic_reports</code>, <code>diagnostics.diagnostic_result_values</code>, <code>diagnostics.lab_locations</code>, <code>diagnostics.lab_offerings</code>, <code>diagnostics.lab_providers</code>, <code>diagnostics.sample_collections</code>, <code>diagnostics.sample_events</code>, <code>diagnostics.samples</code>, <code>diagnostics.test_definitions</code>, <code>diagnostics.test_package_items</code>, <code>diagnostics.test_packages</code>, <code>finance.accounts</code>, <code>finance.credit_notes</code>, <code>finance.invoice_items</code>, <code>finance.invoices</code>, <code>finance.journal_entries</code>, <code>finance.settlement_runs</code>, <code>fulfillment.fulfillment_events</code>, <code>fulfillment.fulfillment_order_items</code>, <code>fulfillment.fulfillment_orders</code>, <code>fulfillment.pack_tasks</code>, <code>fulfillment.package_items</code>, <code>fulfillment.packages</code>, <code>fulfillment.pick_task_items</code>, <code>fulfillment.pick_tasks</code>, <code>fulfillment.picking_wave_orders</code>, <code>fulfillment.picking_waves</code>, <code>identity.api_client_secrets</code>, <code>identity.api_clients</code>, <code>identity.login_attempts</code>, <code>identity.mfa_factors</code>, <code>identity.otp_challenges</code>, <code>identity.password_history</code>, <code>identity.permissions</code>, <code>identity.role_permissions</code>, <code>identity.roles</code>, <code>identity.sessions</code>, <code>identity.trusted_devices</code>, <code>identity.user_profiles</code>, <code>identity.user_roles</code>, <code>identity.users</code>, <code>insurance.claim_documents</code>, <code>insurance.claims</code>, <code>insurance.insurers</code>, <code>insurance.policies</code>, <code>insurance.policy_members</code>, <code>insurance.tpas</code>, <code>logistics.carrier_accounts</code>, <code>logistics.carriers</code>, <code>logistics.delivery_assignments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_failure_reasons</code>, <code>logistics.delivery_location_updates</code>, <code>logistics.delivery_routes</code>, <code>logistics.delivery_slots</code>, <code>logistics.ndr_cases</code>, <code>logistics.reverse_shipments</code>, <code>logistics.rider_shifts</code>, <code>logistics.serviceability_rules</code>, <code>logistics.shipments</code>, <code>marketplace.commission_plans</code>, <code>marketplace.seller_commission_assignments</code>, <code>marketplace.seller_locations</code>, <code>marketplace.seller_product_listings</code>, <code>marketplace.seller_ratings</code>, <code>marketplace.seller_service_levels</code>, <code>marketplace.sellers</code>, <code>membership.loyalty_accounts</code>, <code>membership.plan_benefits</code>, <code>membership.plans</code>, <code>membership.subscriptions</code>, <code>notification.device_endpoints</code>, <code>notification.in_app_notifications</code>, <code>notification.message_attachments</code>, <code>notification.messages</code>, <code>notification.provider_configurations</code>, <code>notification.provider_webhooks</code>, <code>notification.suppressions</code>, <code>notification.templates</code>, <code>notification.user_channel_preferences</code>, <code>organization.bank_accounts</code>, <code>organization.departments</code>, <code>organization.licenses</code>, <code>organization.locations</code>, <code>organization.memberships</code>, <code>organization.organizations</code>, <code>payment.chargebacks</code>, <code>payment.cod_collections</code>, <code>payment.customer_payment_methods</code>, <code>payment.payment_attempts</code>, <code>payment.payment_intents</code>, <code>payment.payment_webhooks</code>, <code>payment.provider_accounts</code>, <code>payment.reconciliation_items</code>, <code>payment.reconciliation_runs</code>, <code>payment.refund_reason_codes</code>, <code>payment.refunds</code>, <code>platform.application_settings</code>, <code>platform.audit_logs</code>, <code>platform.cms_page_versions</code>, <code>platform.cms_pages</code>, <code>platform.data_retention_policies</code>, <code>platform.feature_flags</code>, <code>platform.file_access_events</code>, <code>platform.file_access_grants</code>, <code>platform.file_objects</code>, <code>platform.file_upload_sessions</code>, <code>platform.file_variants</code>, <code>platform.idempotency_keys</code>, <code>platform.inbox_messages</code>, <code>platform.outbox_events</code>, <code>platform.report_runs</code>, <code>platform.scheduled_jobs</code>, <code>platform.webhook_deliveries</code>, <code>platform.webhook_endpoints</code>, <code>pricing.coupon_codes</code>, <code>pricing.price_books</code>, <code>pricing.pricing_evaluations</code>, <code>pricing.product_prices</code>, <code>pricing.promotion_redemptions</code>, <code>pricing.promotion_versions</code>, <code>pricing.promotions</code>, <code>pricing.tax_rules</code>, <code>procurement.goods_receipt_items</code>, <code>procurement.goods_receipt_quality_checks</code>, <code>procurement.goods_receipts</code>, <code>procurement.purchase_order_items</code>, <code>procurement.purchase_orders</code>, <code>procurement.purchase_requisition_items</code>, <code>procurement.purchase_requisitions</code>, <code>procurement.purchase_return_items</code>, <code>procurement.purchase_returns</code>, <code>procurement.supplier_invoices</code>, <code>procurement.supplier_licenses</code>, <code>procurement.supplier_products</code>, <code>procurement.suppliers</code>, <code>risk.assessments</code>, <code>risk.blocklists</code>, <code>risk.cases</code>, <code>risk.rules</code>, <code>search.documents</code>, <code>search.indexing_jobs</code>, <code>search.query_events</code>, <code>search.redirects</code>, <code>search.synonyms</code>, <code>support.sla_policies</code>, <code>support.ticket_actions</code>, <code>support.ticket_attachments</code>, <code>support.ticket_messages</code>, <code>support.ticket_status_history</code>, <code>support.ticket_tags</code>, <code>support.tickets</code>, <code>warehouse.aisles</code>, <code>warehouse.bins</code>, <code>warehouse.cycle_count_items</code>, <code>warehouse.cycle_counts</code>, <code>warehouse.inventory_adjustment_items</code>, <code>warehouse.inventory_adjustments</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.racks</code>, <code>warehouse.replenishment_rules</code>, <code>warehouse.stock_balances</code>, <code>warehouse.stock_holds</code>, <code>warehouse.stock_ledger</code>, <code>warehouse.stock_movement_reason_codes</code>, <code>warehouse.stock_reservations</code>, <code>warehouse.stock_transfer_items</code>, <code>warehouse.stock_transfers</code>, <code>warehouse.warehouses</code>, <code>warehouse.zones</code></td>
+</tr>
+<tr>
+<td>Features</td>
+<td><code>ACC-01</code>, <code>ACC-02</code>, <code>ACC-03</code>, <code>ACC-04</code>, <code>ACC-05</code>, <code>ACC-06</code>, <code>ACC-07</code>, <code>ADM-01</code>, <code>ADM-02</code>, <code>ADM-04</code>, <code>ADM-05</code>, <code>ADM-06</code>, <code>ADM-07</code>, <code>ADM-08</code>, <code>AUD-01</code>, <code>AUD-02</code>, <code>AUTH-01</code>, <code>AUTH-02</code>, <code>AUTH-03</code>, <code>AUTH-04</code>, <code>CAT-01</code>, <code>CAT-02</code>, <code>CAT-03</code>, <code>CAT-04</code>, <code>CHK-01</code>, <code>CHK-02</code>, <code>CHK-03</code>, <code>CHK-05</code>, <code>CHK-06</code>, <code>CHK-07</code>, <code>CHK-08</code>, <code>DLV-01</code>, <code>DLV-02</code>, <code>DLV-03</code>, <code>DLV-04</code>, <code>DLV-05</code>, <code>FIN-01</code>, <code>FIN-02</code>, <code>FIN-03</code>, <code>FIN-05</code>, <code>FIN-06</code>, <code>INV-01</code>, <code>INV-03</code>, <code>INV-04</code>, <code>INV-05</code>, <code>INV-07</code>, <code>NOT-01</code>, <code>NOT-02</code>, <code>NOT-03</code>, <code>NOT-04</code>, <code>OMS-01</code>, <code>OMS-02</code>, <code>OMS-03</code>, <code>OMS-04</code>, <code>OMS-05</code>, <code>ORD-02</code>, <code>ORD-03</code>, <code>ORD-04</code>, <code>ORD-05</code>, <code>ORD-06</code>, <code>ORD-07</code>, <code>PHM-01</code>, <code>PHM-02</code>, <code>PHM-03</code>, <code>PHM-05</code>, <code>REP-01</code>, <code>REP-02</code>, <code>REP-03</code>, <code>REP-04</code>, <code>REP-07</code>, <code>RID-01</code>, <code>RID-02</code>, <code>RID-03</code>, <code>RID-04</code>, <code>RID-06</code>, <code>RX-01</code>, <code>RX-04</code>, <code>RX-05</code>, <code>STO-01</code>, <code>STO-02</code>, <code>STO-03</code>, <code>STO-04</code>, <code>WH-01</code>, <code>WH-02</code>, <code>WH-04</code></td>
+</tr>
+<tr>
+<td>API consumers</td>
+<td><a href="../../../03-Modules/Customer_Accounts/APIs.html">API-001</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-002</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-003</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-004</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-005</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-006</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-007</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-008</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-009</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-005</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-010</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-011</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-012</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-013</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-014</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-015</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-016</a>, <a href="../../../03-Modules/Product_Catalog/APIs.html">API-017</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-018</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-019</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-020</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-021</a>, <a href="../../../03-Modules/Prescription_Upload/APIs.html">API-022</a>, <a href="../../../03-Modules/Prescription_Upload/APIs.html">API-023</a>, <a href="../../../03-Modules/Prescription_Upload/APIs.html">API-024</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-025</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-026</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-027</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-028</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-029</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-030</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-031</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-032</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-033</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-034</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-035</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-036</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-037</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-038</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-039</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-040</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-041</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-042</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-043</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-044</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-045</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-046</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-047</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-048</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-049</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-050</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-051</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-052</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-053</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-054</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-055</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-056</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-057</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-058</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-059</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-060</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-061</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-062</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-063</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-064</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-065</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-066</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-067</a>, <a href="../../../03-Modules/Delivery_Operations/APIs.html">API-068</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-069</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-070</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-071</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-072</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-073</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-074</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-075</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-076</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-077</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-078</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-079</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-080</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-081</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-082</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-083</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-084</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-085</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-086</a>, <a href="../../../03-Modules/Audit/APIs.html">API-087</a>, <a href="../../../03-Modules/Audit/APIs.html">API-088</a>, <a href="../../../03-Modules/Authentication_Access/APIs.html">API-089</a>, <a href="../../../03-Modules/Authentication_Access/APIs.html">API-090</a>, <a href="../../../03-Modules/Authentication_Access/APIs.html">API-091</a>, <a href="../../../03-Modules/Authentication_Access/APIs.html">API-092</a>, <a href="../../../03-Modules/Authentication_Access/APIs.html">API-093</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-094</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-095</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-096</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-097</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-001</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-002</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-007</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-006</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-003</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-004</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-008</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-009</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-010</a></td>
+</tr>
+</tbody>
+</table>
+<h3>Expected initial records</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Description</th>
+<th>Status</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not allocated</td>
+<td>No approved initial record</td>
+<td>Verified real records and identifiers must come from the responsible business owner; the schema/page contains no seed-row evidence. Never create synthetic live parties/products or claim rows exist.</td>
+<td>Open</td>
+<td>Checked-in table schema only; owner evidence required.</td>
+</tr>
+</tbody>
+</table>
+<p>Required nondefault business attributes to obtain: .</p>
+<h3>Lifecycle and seed requirements</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed lifecycle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deployment or operational creation</td>
+<td>Operationally curated/imported after verification; no production seed identities or fabricated product rows.</td>
+</tr>
+<tr>
+<td>Create/update permissions</td>
+<td>Identity administrator / verified onboarding through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority.</td>
+</tr>
+<tr>
+<td>Activation/deactivation</td>
+<td>Use approved inactive/closed status from the table CHECK/owner policy; do not invent unsupported status values.</td>
+</tr>
+<tr>
+<td>Deletion</td>
+<td>Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission.</td>
+</tr>
+<tr>
+<td>Uniqueness / stable codes</td>
+<td>UNIQUE: UNIQUE (email_normalized); CREATE UNIQUE INDEX uq_identity_users_phone_present ON identity.users USING btree (phone_country_code, phone_number) WHERE phone_country_code IS NOT NULL AND phone_number IS NOT NULL; CREATE UNIQUE INDEX users_email_normalized ON identity.users USING btree (email_normalized)</td>
+</tr>
+<tr>
+<td>Foreign-key dependencies</td>
+<td>No non-actor FK dependencies recorded.</td>
+</tr>
+<tr>
+<td>Initial load order</td>
+<td>Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness.</td>
+</tr>
+<tr>
+<td>Seed status</td>
+<td>Open; an empty migration/schema is not a usable approved business seed. Obtain the named owner dataset before enabling dependent journeys.</td>
+</tr>
+<tr>
+<td>Pending decisions</td>
+<td>D-024 ownership/lifecycle approval; D-003 exact role/grant and identity lifecycle approval.</td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

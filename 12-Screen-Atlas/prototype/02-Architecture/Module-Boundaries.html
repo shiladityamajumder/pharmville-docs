@@ -1,0 +1,152 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Module Boundaries · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Module boundaries and command ownership</h1>
+<p><strong>Architecture: Proposed modular monolith, retaining the selected Next.js/NestJS/PostgreSQL/Redis/BullMQ/private S3 stack.</strong> The directory reorganization does not create independent deployable microservices. Boundary assignments remain subject to D-001/D-024; database objects are validated independently from product approval.</p>
+<pre><code class="language-mermaid">flowchart LR
+  Customer[&quot;Customer web&quot;] --&gt; Accounts[&quot;Authentication and Accounts&quot;]
+  Customer --&gt; Discovery[&quot;Catalog and Checkout&quot;]
+  Discovery --&gt; Orders[&quot;Order Management&quot;]
+  Orders --&gt; Clinical[&quot;Prescription intake and Pharmacist Review&quot;]
+  Orders --&gt; Stock[&quot;Inventory and licensed site selection&quot;]
+  Orders --&gt; Money[&quot;Payments and Finance&quot;]
+  Orders --&gt; Fulfill[&quot;Store and Warehouse&quot;]
+  Fulfill --&gt; Delivery[&quot;Delivery and Rider Operations&quot;]
+  Clinical --&gt; SQL[&quot;PostgreSQL database / 24 schemas&quot;]
+  Stock --&gt; SQL
+  Money --&gt; SQL
+  Delivery --&gt; SQL
+  SQL --&gt; Outbox[&quot;Committed outbox and workers&quot;]
+  Outbox --&gt; Messages[&quot;Notifications and provider adapters&quot;]
+  SQL --&gt; Reports[&quot;Scoped Reporting and Audit&quot;]
+</code></pre>
+<h2>Business domains and surfaces</h2>
+<table>
+<thead>
+<tr>
+<th>Stable module</th>
+<th>Canonical blueprint</th>
+<th>Accountable role proposed</th>
+<th>Boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication_Access</td>
+<td><a href="../03-Modules/Authentication_Access/README.html">Authentication</a></td>
+<td>Security / Identity</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Customer_Accounts</td>
+<td><a href="../03-Modules/Customer_Accounts/README.html">Customer Accounts</a></td>
+<td>Customer platform</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Product_Catalog</td>
+<td><a href="../03-Modules/Product_Catalog/README.html">Product Catalog</a></td>
+<td>Catalog / Merchandising</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Cart_Checkout</td>
+<td><a href="../03-Modules/Cart_Checkout/README.html">Cart Checkout</a></td>
+<td>Commerce / Checkout</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Prescription_Upload</td>
+<td><a href="../03-Modules/Prescription_Upload/README.html">Prescription Management</a></td>
+<td>Prescription intake</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Pharmacist_Review</td>
+<td><a href="../03-Modules/Pharmacist_Review/README.html">Pharmacist Review</a></td>
+<td>Pharmacy clinical lead</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Customer_Orders</td>
+<td><a href="../03-Modules/Customer_Orders/README.html">Customer Orders</a></td>
+<td>Customer commerce surface</td>
+<td>Client/projection facade; delegates authoritative writes</td>
+</tr>
+<tr>
+<td>Order_Operations</td>
+<td><a href="../03-Modules/Order_Operations/README.html">Order Management</a></td>
+<td>Order operations</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td><a href="../03-Modules/Inventory/README.html">Inventory</a></td>
+<td>Inventory control</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Store_Operations</td>
+<td><a href="../03-Modules/Store_Operations/README.html">Store Operations</a></td>
+<td>Store fulfillment</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td><a href="../03-Modules/Warehouse/README.html">Warehouse</a></td>
+<td>Warehouse / Procurement</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Finance_Payments</td>
+<td><a href="../03-Modules/Finance_Payments/README.html">Payments</a></td>
+<td>Finance / Payments</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Delivery_Operations</td>
+<td><a href="../03-Modules/Delivery_Operations/README.html">Delivery</a></td>
+<td>Delivery operations</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Rider_App</td>
+<td><a href="../03-Modules/Rider_App/README.html">Rider Operations</a></td>
+<td>Rider operations / mobile client</td>
+<td>Client/projection facade; delegates authoritative writes</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td><a href="../03-Modules/Notifications/README.html">Notifications</a></td>
+<td>Communications / Platform</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Admin_CMS</td>
+<td><a href="../03-Modules/Admin_CMS/README.html">Admin</a></td>
+<td>Administration / Operations</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Reporting</td>
+<td><a href="../03-Modules/Reporting/README.html">Reporting</a></td>
+<td>Reporting / Finance analytics</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+<tr>
+<td>Audit</td>
+<td><a href="../03-Modules/Audit/README.html">Audit</a></td>
+<td>Security / Audit platform</td>
+<td>Domain command/policy boundary; exact table rights per operation</td>
+</tr>
+</tbody>
+</table>
+<h2>Database ownership and transactions</h2>
+<p><a href="../04-Database/Ownership-and-Scope.json">Ownership-and-Scope.json</a> assigns every one of the 268 tables a proposed domain owner, shared infrastructure owner or explicit future-owner decision. Domain write owners enforce invariants; HTTP surface ownership and SQL access alone do not grant writes. Customer Orders delegates to Order Management, Delivery and Payments; Rider Operations is an assigned-task client. Authentication owns OTP execution even though the historical customer OTP contracts stay on the Customer Accounts surface.</p>
+<p>Within one process/database, orchestration calls the responsible module command with the existing transaction context when atomicity is required. Do not independently commit Inventory, clinical or money rows inside another owner's transaction. Stable command DTOs and return results are internal contracts; an internal HTTP route does not imply a microservice. No module obtains unrestricted shared ORM writes.</p>
+<p>Orders, stock, clinical approval, payment evidence and delivery remain separate facts. A coordinator composes progress; it cannot mark another domain's fact true. Aggregate changes, versions, audit and outbox commit together. External side effects use outbox/inbox, idempotency and reconciliation. Payment timeouts remain uncertain; neither retries nor compensation fabricate money or stock.</p>
+<h2>Shared platform and future domains</h2>
+<p>Private file sessions/scan/grants, idempotency, audit/outbox/inbox, jobs and provider adapters are engineering capabilities within the modular application/worker deployment. They do not grant clinical access or overwrite domain truth. Only three RLS policies are currently installed; service authorization must protect every other resource as well.</p>
+<p>Appointment, diagnostics, insurance, membership, support, risk and marketplace objects are retained. Their existence does not approve launch APIs or a new service. D-027 requires Product and the applicable domain lead to assign ownership and phase before implementation. <a href="../01-Project/Capability-Scope.html">Capability scope</a> distinguishes inherited requirements and proposals.</p>
+<h2>Cross-module contract evidence</h2>
+<p><a href="../06-Workflows/README.html">Fourteen workflows</a> specify orchestration and recovery. <a href="../05-APIs/API-Database-Feature-Matrix.html">API matrix</a> covers every route and exact table dependencies; <a href="../09-References/Feature-Delivery-Traceability.html">feature delivery trace</a> connects all 110 requirements to workflows, designed tests and stable tasks. Detailed auth, allowed transitions, idempotency and recovery remain endpoint-specific. Documentation completeness, approval and implementation are independent states.</p>
+<h2>Shared Identity and scoped workspace boundary</h2>
+<p>Authentication_Access is the sole proposed credential/session/grant command owner. Customer, Staff/Admin, Pharmacist and Rider panels consume one identity and verified workspace projection; Customer Accounts owns onboarding/profile/consent and Admin delegates Identity administration. <a href="../03-Modules/Authentication_Access/Unified-Identity-Architecture.html">Unified design</a> defines stronger-workspace proof, assignment scope, live revocation and the distinction between scoped offboarding and globally authorized identity suspension. PostgreSQL runtime capabilities remain separate from business roles.</p>
+</main></body></html>

@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>README · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Pharmville ER diagram documentation</h1>
+<h2>Start here</h2>
+<ul>
+<li><a href="00-System-Data-Map.html">System data map</a> for the major stored-data areas and representative links.</li>
+<li><a href="ERD-Coverage-Report.html">ERD coverage report</a> for measured scope, evidence status, gaps, and validation limits.</li>
+<li><a href="15-Cross-Domain-Relationships.html">Cross-domain relationships</a> for all 92 observed schema-to-schema FK pairs.</li>
+<li><a href="Relationship-Catalog.html">Relationship catalog</a> for all 1476 physical FK constraints, split by child schema.</li>
+<li><a href="Logical-References.html">Logical references</a> for UUID/polymorphic references that are not declared foreign keys.</li>
+<li><a href="ERD-Inventory.json">Machine-readable ERD inventory</a> for reproducible table keys and relationship data.</li>
+</ul>
+<h2>Browse all database schemas</h2>
+<ul>
+<li><a href="01-appointment.html">appointment — Appointments and scheduling</a> (9 tables, 49 FK constraints)</li>
+<li><a href="02-catalog.html">catalog — Products, medicines, and classification</a> (19 tables, 105 FK constraints)</li>
+<li><a href="03-clinical.html">clinical — Prescriptions and pharmacist decisions</a> (17 tables, 111 FK constraints)</li>
+<li><a href="04-commerce.html">commerce — Carts, checkout, orders, and returns</a> (17 tables, 117 FK constraints)</li>
+<li><a href="05-compliance.html">compliance — Regulatory records and retention actions</a> (8 tables, 43 FK constraints)</li>
+<li><a href="06-customer.html">customer — Customer profiles and addresses</a> (8 tables, 38 FK constraints)</li>
+<li><a href="07-diagnostics.html">diagnostics — Tests and laboratory services</a> (13 tables, 79 FK constraints)</li>
+<li><a href="08-finance.html">finance — Invoices, ledgers, and settlements</a> (8 tables, 45 FK constraints)</li>
+<li><a href="09-fulfillment.html">fulfillment — Picking, packing, and shipment preparation</a> (10 tables, 70 FK constraints)</li>
+<li><a href="10-identity.html">identity — Accounts, sessions, and permissions</a> (16 tables, 60 FK constraints)</li>
+<li><a href="11-insurance.html">insurance — Policies and claims</a> (8 tables, 42 FK constraints)</li>
+<li><a href="12-logistics.html">logistics — Riders, shipments, and delivery</a> (15 tables, 84 FK constraints)</li>
+<li><a href="13-marketplace.html">marketplace — Sellers and listings</a> (7 tables, 45 FK constraints)</li>
+<li><a href="14-membership.html">membership — Benefits and loyalty</a> (6 tables, 24 FK constraints)</li>
+<li><a href="15-notification.html">notification — Templates, messages, and delivery attempts</a> (10 tables, 40 FK constraints)</li>
+<li><a href="16-organization.html">organization — Operating companies, sites, and licenses</a> (6 tables, 39 FK constraints)</li>
+<li><a href="17-payment.html">payment — Payment attempts, confirmation, and refunds</a> (13 tables, 70 FK constraints)</li>
+<li><a href="18-platform.html">platform — Configuration, files, audit, events, and reports</a> (21 tables, 66 FK constraints)</li>
+<li><a href="19-pricing.html">pricing — Prices, taxes, and promotions</a> (8 tables, 41 FK constraints)</li>
+<li><a href="20-procurement.html">procurement — Suppliers, purchase orders, and receiving</a> (13 tables, 93 FK constraints)</li>
+<li><a href="21-risk.html">risk — Risk rules, cases, and signals</a> (5 tables, 16 FK constraints)</li>
+<li><a href="22-search.html">search — Search indexes and query signals</a> (5 tables, 11 FK constraints)</li>
+<li><a href="23-support.html">support — Customer support cases</a> (8 tables, 44 FK constraints)</li>
+<li><a href="24-warehouse.html">warehouse — Stock balances, lots, and transfers</a> (18 tables, 144 FK constraints)</li>
+</ul>
+<h2>Evidence boundary</h2>
+<p>These diagrams use the <a href="../../pharmville-database/pharmville_schema.sql">validated standalone schema</a>, with the derived register and all source checksums recorded in <a href="../../09-References/Database-Evidence.json">evidence</a>. No production database or shared endpoint was queried.</p>
+<h2>Regenerate and validate</h2>
+<p>From the repository root, run <code>npm run generate:erd</code>, then <code>npm run validate:erd</code> and <code>npm run validate</code>. Sources are the canonical SQL and derived catalog/table register; missing or changed checksums fail verification. No legacy checkout, application models or migration runner is needed. Mermaid parsing is handled by the documentation validator.</p>
+</main></body></html>

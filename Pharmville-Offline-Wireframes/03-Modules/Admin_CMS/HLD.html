@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HLD · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Admin CMS HLD</h1>
+<p>&lt;!-- ERD-NAV-START --&gt;</p>
+<h2>Database relationships</h2>
+<p><a href="../../04-Database/ER-Diagrams/16-organization.html"><code>organization</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/18-platform.html"><code>platform</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/Relationship-Catalog.html">FK catalog</a></p>
+<p>These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See <a href="../../04-Database/Migrations.html">migration evidence</a> for the supplied source and deployment verification limits.</p>
+<p>&lt;!-- ERD-NAV-END --&gt;</p>
+<p><a href="../../00-Business-Guide/Admin-and-Operations.html">Business flow</a> · <a href="../../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a></p>
+<h2>MOD-006: Admin masters and editorial pages — HLD</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.</p>
+</blockquote>
+<p><strong>Business responsibility:</strong> Admin masters and editorial pages. Master data publication is an approved versioned action; staff scope is checked server-side.</p>
+<p><strong>System responsibility:</strong> The <code>Admin_CMS</code> NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are <strong>not</strong> proof of exclusive write ownership.</p>
+<h3>Major operations</h3>
+<ul>
+<li>Dashboard per role: orders by status, pending prescriptions, alerts, deliveries in progress (<code>ADM-01</code>)</li>
+<li>Staff users: invite, assign role and location, deactivate, log out sessions (<code>ADM-02</code>)</li>
+<li>Roles and permissions for 16 roles, limited to own store or warehouse (<code>ADM-03</code>)</li>
+<li>CMS: home banners, FAQs, policy pages, with draft and publish (<code>ADM-04</code>)</li>
+<li>System settings (PRD section 8) (<code>ADM-05</code>)</li>
+<li>Catalogue admin: products, categories, brands, salt master, prices, GST and HSN (<code>ADM-06</code>)</li>
+<li>Bulk product import from Excel, with error report (<code>ADM-07</code>)</li>
+<li>Store and warehouse master: address, hours, GSTIN, service areas (<code>ADM-08</code>)</li>
+<li>Offer settings: start and end dates, maximum discount, first-order offer (<code>ADM-09</code>)</li>
+</ul>
+<h3>Dependencies and trust boundaries</h3>
+<ul>
+<li>Database candidates: <code>platform.cms_pages</code>, <code>platform.cms_page_versions</code>, <code>platform.cms_banners</code>, <code>platform.application_settings</code>, <code>organization.locations</code>.</li>
+<li>Role, patient, store and order scope resolved from trusted access context, not JSON body.</li>
+<li>External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.</li>
+<li>Use local transactions for authoritative state; publish external side effects only after commit.</li>
+</ul>
+<p><strong>Technical design:</strong> <a href="LLD.html">Module LLD</a> · <a href="../../05-APIs/README.html">API index</a> · <a href="../../07-Engineering/Testing.html">Tests</a></p>
+<h3>Risk</h3>
+<p>Master data publication is an approved versioned action; staff scope is checked server-side. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.</p>
+<h2>MOD-006 — Admin masters and editorial pages</h2>
+<p><strong>Source classification:</strong> 9 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.</p>
+<p><strong>Purpose:</strong> Master data publication is an approved versioned action; staff scope is checked server-side.</p>
+<p><strong>Feature coverage</strong></p>
+<ul>
+<li><strong>ADM-01 / REQ-036:</strong> Dashboard per role: orders by status, pending prescriptions, alerts, deliveries in progress (Must (draft)).</li>
+<li><strong>ADM-02 / REQ-037:</strong> Staff users: invite, assign role and location, deactivate, log out sessions (Must (draft)).</li>
+<li><strong>ADM-03 / REQ-038:</strong> Roles and permissions for 16 roles, limited to own store or warehouse (Must (draft)).</li>
+<li><strong>ADM-04 / REQ-039:</strong> CMS: home banners, FAQs, policy pages, with draft and publish (Must (draft)).</li>
+<li><strong>ADM-05 / REQ-040:</strong> System settings (PRD section 8) (Must (draft)).</li>
+<li><strong>ADM-06 / REQ-041:</strong> Catalogue admin: products, categories, brands, salt master, prices, GST and HSN (Must (draft)).</li>
+<li><strong>ADM-07 / REQ-042:</strong> Bulk product import from Excel, with error report (Must (draft)).</li>
+<li><strong>ADM-08 / REQ-043:</strong> Store and warehouse master: address, hours, GSTIN, service areas (Must (draft)).</li>
+<li><strong>ADM-09 / REQ-044:</strong> Offer settings: start and end dates, maximum discount, first-order offer (Should (draft)).</li>
+</ul>
+<h3>Developer navigation</h3>
+<ul>
+<li><a href="HLD.html">Module HLD</a></li>
+<li><a href="LLD.html">Module LLD</a></li>
+<li>Internal architecture</li>
+<li><a href="APIs.html">API contracts</a></li>
+<li><a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li><a href="../../07-Engineering/Testing.html">Testing</a></li>
+<li><a href="../../08-Development-Plan/Implementation-Plan.html">Implementation plan</a></li>
+</ul>
+<p><strong>Dependencies:</strong> all cross-module references require ownership and permission checks; see master dependency register.</p>
+</main></body></html>

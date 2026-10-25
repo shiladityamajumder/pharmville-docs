@@ -1,0 +1,222 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Planning Decisions · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>API and master-data planning decisions</h1>
+<p>All proposals are <strong>Unapproved / Not Implemented</strong>. This register refines existing D-001–D-024; it does not fabricate new approvals or alter requirements. <a href="../09-References/Sources-and-Decisions.html">Original decision register</a> remains authoritative. <a href="API-Contract-Coverage.html">Coverage</a> separates documentation gaps from owner approval; <a href="Journey-API-Gaps.html">candidate commands</a> remain outside the preserved inventory.</p>
+<h2>Operation-contract exclusions</h2>
+<table>
+<thead>
+<tr>
+<th>Existing decision</th>
+<th>Affected contract</th>
+<th>Concrete missing evidence</th>
+<th>Accountable reviewers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-023</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-004</a></td>
+<td>D-023: exact replacement proof DTO/storage is absent. Profile-only subset proposed, full route incomplete.</td>
+<td>Customer_Accounts / Tech lead / QA lead</td>
+</tr>
+<tr>
+<td>D-019/D-024</td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-015</a></td>
+<td>D-019/D-024: spreadsheet columns, row atomicity and durable import result/status model are not documented.</td>
+<td>Product_Catalog / Tech lead / QA lead</td>
+</tr>
+<tr>
+<td>D-005</td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-051</a></td>
+<td>D-005: source authentication, exact quantities-to-ledger reconciliation and atomic batch outcome are unspecified; timestamps alone are not sufficient evidence.</td>
+<td>Inventory / Tech lead / QA lead</td>
+</tr>
+<tr>
+<td>D-010/D-011</td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-066</a></td>
+<td>D-010/D-011: reattempt limits, custody and precise action-to-status progression need approved policy.</td>
+<td>Delivery_Operations / Tech lead / QA lead</td>
+</tr>
+<tr>
+<td>D-004/D-016</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-075</a></td>
+<td>D-004/D-016: exact continuation DTO, capture sequence and provider-supported replay contract require evidence.</td>
+<td>Finance_Payments / Tech lead / QA lead</td>
+</tr>
+<tr>
+<td>D-016</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-076</a></td>
+<td>D-016: signature header names, wire schema, canonicalization and acknowledgment status are unknown. Conceptual DTO is explicitly not a provider wire contract.</td>
+<td>Finance_Payments / Tech lead / QA lead</td>
+</tr>
+<tr>
+<td>D-008/D-016</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-079</a></td>
+<td>D-008/D-016: settle-vs-reconcile dataset definition and provider report layout need Finance approval.</td>
+<td>Finance_Payments / Tech lead / QA lead</td>
+</tr>
+<tr>
+<td>D-007/D-008</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-080</a></td>
+<td>D-007/D-008: exact handover/deposit evidence and independent approval model are missing.</td>
+<td>Finance_Payments / Tech lead / QA lead</td>
+</tr>
+<tr>
+<td>D-003</td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-089</a></td>
+<td>D-003: challenge replay prevention and exact MFA enrollment/recovery/session-limits policy require reviewed persistence/credential design.</td>
+<td>Authentication_Access / Tech lead / QA lead</td>
+</tr>
+<tr>
+<td>D-003</td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-090</a></td>
+<td>D-003: exact single-use authenticator/challenge persistence is absent in schema documentation.</td>
+<td>Authentication_Access / Tech lead / QA lead</td>
+</tr>
+</tbody>
+</table>
+<h2>Complete proposals still requiring approval</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Proposal / evidence required</th>
+<th>Owner</th>
+<th>Blocked enablement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-024</td>
+<td>Approve every operation field/type/constraint/example, scoped permission, exact table owner/write columns, transaction interface, state guard, technical rate/deadline proposal and designed CT assertions. Typed documentation is not a runtime grant.</td>
+<td>Tech lead, each module owner, QA lead</td>
+<td>Implementation acceptance of that contract.</td>
+</tr>
+<tr>
+<td>D-003</td>
+<td>Approve JWT/session/refresh token transports and lifetimes; purpose-bound OTP/lockout limits; 16 suggested role codes and per-operation permissions. Define least-privilege role_permissions, delegated grant ceilings and session revocation propagation. No role automatically gets every permission.</td>
+<td>Security / Product owner</td>
+<td>Production identity and all privileged access.</td>
+</tr>
+<tr>
+<td>D-023</td>
+<td>Proven replacement contact must remain separate from current verified contact until atomic replacement; exact proof/storage absent. No pending-contact columns are invented.</td>
+<td>Security / Product owner</td>
+<td>API-004 contact replacement.</td>
+</tr>
+<tr>
+<td>D-004/D-006</td>
+<td>Preserve detailed review-before-payment P flow; decide deferred RX-02 conflict, late payment compensation, cancellation-before-packed and refund approvals without new clinical rules.</td>
+<td>Product / Pharmacy / Finance / Legal</td>
+<td>Clinical/money-dependent transitions.</td>
+</tr>
+<tr>
+<td>D-005/D-009</td>
+<td>Name stock authority; approve freshness, FEFO/expiry eligibility and hold TTL. Define exact reserved-to-committed physical movement and back-office adjustment approval command. No numeric freshness or shelf-life value invented.</td>
+<td>Operations / Pharmacy / POS vendor</td>
+<td>Real reservations and fulfillment.</td>
+</tr>
+<tr>
+<td>D-007/D-008</td>
+<td>Approve COD cap/refusal rule, order-stage authorization persistence, actual collection/deposit/remittance evidence, independent refund approvals and accounting chart.</td>
+<td>Finance / Product / Legal</td>
+<td>COD selection, handover, reconciliation and COD refund destination.</td>
+</tr>
+<tr>
+<td>D-010/D-011</td>
+<td>Approve no-split launch boundary, fallback/reassignment compensation, failed-attempt next actions, proof requirements, GPS cadence/privacy/retention and OTP recipient challenge trigger.</td>
+<td>Operations / Product / Privacy</td>
+<td>Delivery/return exceptions and rider tracking.</td>
+</tr>
+<tr>
+<td>D-012/D-019</td>
+<td>Supply authoritative dated product/brand/manufacturer/medicine/HSN/tax datasets. Approve category proposal, dosage/salt sources and import columns/atomicity. Numeric invoice/tax examples are synthetic amounts, not legal rates.</td>
+<td>Catalog / Pharmacy / Finance / CA</td>
+<td>Catalog seed/publication, import and tax/report enablement.</td>
+</tr>
+<tr>
+<td>D-013</td>
+<td>Supply policy purpose/version list, legal holds, data deletion exceptions, retention and file/export grant TTL; no legal SLA inferred.</td>
+<td>Privacy / Legal</td>
+<td>Consents, privacy requests, clinical files and exports.</td>
+</tr>
+<tr>
+<td>D-014/D-016</td>
+<td>Supply exact provider accounts, signed sandbox payload/header/canonicalization/ack/retry contracts and template registration; Cashfree/FCM/SMS/WhatsApp choices are not live account evidence.</td>
+<td>Provider owner / Security / Product</td>
+<td>Payment/provider integrations.</td>
+</tr>
+<tr>
+<td>D-015/D-017</td>
+<td>Standalone SQL/catalog parity is verified in isolated PostgreSQL. Verify independently provisioned runtime login memberships, actual restricted permissions/RLS/guards and application data-access parity before activation.</td>
+<td>DBA / Tech lead / DevOps</td>
+<td>Deployment/runtime parity and operational readiness.</td>
+</tr>
+<tr>
+<td>D-001/D-002/D-018/D-020/D-021</td>
+<td>Resolve receiving/fallback/rider phase scope, advanced support and future modules. An available table is not launch scope.</td>
+<td>Product / Operations / Engineering</td>
+<td>New scope and candidate routes.</td>
+</tr>
+</tbody>
+</table>
+<h2>Database compatibility findings — no schema changes</h2>
+<table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Proposed compatible treatment</th>
+<th>Separate schema proposal if required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>logistics.rider_shifts.id is BIGINT and there is no row_version</td>
+<td>Use signed opaque shiftToken bound to actor/start identity; row lock and ended_at predicate. Never expose numeric ID or invent UUID/version.</td>
+<td>A public UUID/version could be a later approved migration; not required or modified here.</td>
+</tr>
+<tr>
+<td>commerce.order_revisions has revision_number but no row_version</td>
+<td>API-063 uses expectedRevisionNumber plus expectedOrderVersion, locks revision status and accepted order aggregate.</td>
+<td>No migration needed for the proposed interface.</td>
+</tr>
+<tr>
+<td>warehouse.stock_reservations has per-item/lot rows, not an aggregate parent</td>
+<td>Return reservations[] of exact persisted rows; release accepts one public row ID/version. Decrement reserved only; physical on_hand remains unchanged on unused release.</td>
+<td>Do not invent reservation parent/reason columns. Optional reason in audit metadata, future physical movement reason only if a ledger movement actually exists.</td>
+</tr>
+<tr>
+<td>customer.wishlist_items has no is_deleted/deleted_at/deleted_by</td>
+<td>DELETE removes only the association using ID/version and records safe removal audit.</td>
+<td>Soft deletion would require a separate migration decision; not assumed.</td>
+</tr>
+<tr>
+<td>payment.cod_collections/refunds have no currency column</td>
+<td>Derive currency from order/linked payment intent.</td>
+<td>No duplicate currency field added.</td>
+</tr>
+<tr>
+<td>logistics.delivery_attempts has one proof_file_id</td>
+<td>API-073 accepts a singular proofFileId.</td>
+<td>Multiple proofs require an approved junction/evidence design; no schema change made.</td>
+</tr>
+<tr>
+<td>Required customer.profiles.first_name is not part of OTP input</td>
+<td>OTP creates/resolves identity/session only, restrict onboarding until actual first name supplied; do not manufacture profile name.</td>
+<td>Profile-completion/create-if-missing branch is candidate JAPI-15; D-024.</td>
+</tr>
+<tr>
+<td>Provider/MFA/import/COD proof concepts lack exact storage or wire model</td>
+<td>Keep affected operations incomplete; conceptual fields are not claimed as actual provider schema or stored columns.</td>
+<td>Potential dedicated import result, MFA replay, contact verification and order-stage COD authorization records require owner/DBA design; migrations untouched.</td>
+</tr>
+<tr>
+<td>Location/license eligibility and immutable fulfillment site identity</td>
+<td>Location creation starts inactive; reassignment creates new work through owner compensation. Existing completed package/dispatch guard semantics retained.</td>
+<td>No license bypass, split order or mutation of existing fulfillment site identity.</td>
+</tr>
+</tbody>
+</table>
+<h2>Review deliverable</h2>
+<p>Owners can approve small vertical slices using the operation contract, typed OpenAPI, exact mapping, master prerequisites and CT scenarios together. Record approver/date/evidence per operation before changing approval status. Real provider sandbox, database-backed application tests and production seed execution remain separate evidence; no test result is asserted here.</p>
+<h2>Unified authentication reconciliation</h2>
+<p>D-028 explicitly proposes durable challenge/refresh persistence and session context, resolving the <em>documentation/persistence design</em> gaps in API-089/090. Those two contracts can be complete proposed without D-003/D-024/D-028 approval; no security policy or implementation is approved. API-098–112 add the minimum separated credential, context and grant commands traced to ACC-01/AUTH-01–04/ADM-03. D-023 profile/contact replacement remains incomplete. Authenticator-loss assisted recovery remains a blocked procedure under D-003; these proposals do not manufacture a reset API.</p>
+</main></body></html>

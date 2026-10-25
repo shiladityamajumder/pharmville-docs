@@ -1,0 +1,62 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Customer Accounts business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Customer platform. Profiles, addresses, family associations and consent; delegates credentials and sessions to Authentication.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Complete destination-bound OTP through Authentication; return only the authenticated customer profile.</li>
+<li>Create or select an owned address and patient association; do not infer legal consent from family membership.</li>
+<li>Record an explicit versioned consent choice and preferences; keep withdrawn consent effective for subsequent access.</li>
+<li>Expose saved products and own-account resources; account changes needing renewed proof remain blocked by D-023.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACC-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ACC-01-01 / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ACC-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ACC-02-01 / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ACC-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ACC-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ACC-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ACC-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ACC-05</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ACC-05-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ACC-06</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-ACC-06-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ACC-07</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-ACC-07-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Accounts-and-Login.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-003; D-010; D-023; D-024.</p>
+<h2>Unified identity and workspace access</h2>
+<p><strong>Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.</strong> <a href="../Authentication_Access/Unified-Identity-Architecture.html">Unified Identity policy</a> is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. <a href="../../01-Project/User-Roles.html">Role/workspace matrix</a> defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.</p>
+</main></body></html>

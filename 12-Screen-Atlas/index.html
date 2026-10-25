@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Pharmville · Screen Atlas</title>
+  <meta name="description" content="Offline Figma-style screen canvas containing all 91 Pharmville wireframes and 13 guided journeys.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/css/atlas.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Atlas navigation">
+      <div class="brand"><div class="brand-mark">P<span>+</span></div><div><b>PHARMVILLE</b><small>PRODUCT BLUEPRINT / 2026</small></div></div>
+      <div class="sidebar-intro"><span class="eyebrow">DESIGN WORKSPACE</span><h1>Screen Atlas<span class="status-dot"></span></h1><p>Every screen, one connected view.</p></div>
+      <div class="tab-bar" role="tablist" aria-label="Canvas mode"><button id="tab-modules" class="tab active" role="tab" aria-selected="true" data-mode="modules">Modules</button><button id="tab-journeys" class="tab" role="tab" aria-selected="false" data-mode="journeys">Journeys</button></div>
+      <label class="search-wrap" for="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="search" placeholder="Search screens, IDs, features…" autocomplete="off"><kbd>/</kbd></label>
+      <div class="side-heading"><span id="navigation-label">MODULE GROUPS</span><span id="navigation-count">18</span></div>
+      <nav id="side-navigation" class="side-navigation" aria-label="Screen groups"></nav>
+      <div class="side-footer"><div class="legend-title">VIEWING GUIDE</div><div class="legend-line"><i class="keyline mobile"></i> Customer & rider mobile</div><div class="legend-line"><i class="keyline desktop"></i> Staff & operations desktop</div><div class="side-help">Drag the canvas to move · scroll to pan<br>Ctrl/⌘ + scroll to zoom · double-click a screen to interact</div></div>
+    </aside>
+    <div class="workspace">
+      <header class="toolbar"><div class="toolbar-title"><span class="crumb">PHARMVILLE <span>›</span> DESIGN</span><div><b id="current-mode-title">Module overview</b><span id="current-mode-subtitle">91 real screen previews · 18 modules</span></div></div><div class="toolbar-actions"><span class="offline-pill"><span></span> 100% OFFLINE</span><button class="toolbar-button" id="open-full-prototype" title="Open original interactive wireframe explorer">↗ <span>Prototype</span></button><div class="toolbar-separator"></div><button class="toolbar-button icon" id="zoom-out" title="Zoom out (−)" aria-label="Zoom out">−</button><button class="zoom-value" id="zoom-label" title="Current canvas zoom">100%</button><button class="toolbar-button icon" id="zoom-in" title="Zoom in (+)" aria-label="Zoom in">+</button><button class="toolbar-button" id="fit-board" title="Fit entire canvas (0)">⛶ <span>Fit all</span></button><button class="toolbar-button" id="home-board" title="Back to the start">⌂</button></div></header>
+      <div class="canvas-area" id="canvas-area">
+        <div class="canvas-top-note"><span class="pulse"></span><span id="canvas-context">MODULE MAP · SOURCE-ALIGNED GROUPS</span><span class="note-divider">·</span><span>PREVIEW IMAGES FROM THE LIVE WIREFRAMES</span></div>
+        <div id="viewport" tabindex="0" aria-label="Pan and zoom screen atlas canvas"><div id="world"></div></div>
+        <div class="canvas-bottom"><span id="visible-status">91 screens</span><span class="dot-spacer">·</span><span>Drag to explore</span><span class="dot-spacer">·</span><span>Double-click to open</span></div>
+        <div class="minimap" id="minimap" aria-label="Canvas minimap"><div class="minimap-title">OVERVIEW</div><canvas id="minimap-canvas" width="188" height="112"></canvas></div>
+        <div class="canvas-mobile-tip" id="mobile-tip">Pinch or use + / − to zoom</div>
+      </div>
+    </div>
+    <aside class="inspector" id="inspector" aria-label="Selected screen details"><div id="inspector-content"></div></aside>
+  </div>
+  <dialog id="interactive-dialog" class="interactive-dialog" aria-label="Interactive wireframe screen"><div class="dialog-header"><div><div class="eyebrow">INTERACTIVE PREVIEW · FICTIONAL DATA</div><strong id="dialog-screen-name">Screen preview</strong><span id="dialog-screen-code"></span></div><div class="dialog-actions"><a id="dialog-newtab" href="prototype/index.html" target="_blank" rel="noopener">↗ Open in new tab</a><button id="dialog-close" aria-label="Close interactive preview">✕</button></div></div><div class="dialog-info">This is the original interactive prototype. Some actions require completing earlier steps or signing in with a fictional demo identity.</div><iframe id="live-frame" title="Live Pharmville wireframe" loading="lazy"></iframe></dialog>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/atlas.js"></script>
+</body>
+</html>

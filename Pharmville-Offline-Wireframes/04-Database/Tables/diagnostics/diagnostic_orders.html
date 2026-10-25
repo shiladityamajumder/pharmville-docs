@@ -1,0 +1,809 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>diagnostic_orders · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>diagnostics.diagnostic_orders</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds diagnostic orders records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>diagnostics.diagnostic_orders</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Transactional</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Future diagnostics owner — Requires Decision D-027</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>27 columns; 18 PK/FK/UQ/CHECK/exclusion constraints; 20 named PostgreSQL 18 NOT NULL constraints; 7 indexes; 3 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to addresses</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>customer.addresses</code> via <code>fk_diagnostics_diagnostic_orders_address_id_addresses</code></td>
+</tr>
+<tr>
+<td><code>address_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>customer.addresses</code> via <code>fk_diagnostics_diagnostic_orders_address_id_addresses_numeric</code></td>
+</tr>
+<tr>
+<td><code>address_snapshot</code></td>
+<td><code>jsonb</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Structured address snapshot information</td>
+<td>Retain a versioned payload or relevant details</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>collection_fee</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Value of collection fee</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>collection_type</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores collection type for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_diagnostics_diagnostic_orders_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td><code>character varying(3)</code></td>
+<td>No</td>
+<td><code>'INR'::character varying</code></td>
+<td>Monetary currency code</td>
+<td>Avoid interpreting amounts without a denomination</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>discount_total</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Value of discount total</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>grand_total</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Value of grand total</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>lab_location_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to lab locations</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>diagnostics.lab_locations</code> via <code>fk_diagnostics_diagnostic_orders_lab_location_id_lab_locations</code></td>
+</tr>
+<tr>
+<td><code>lab_location_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>diagnostics.lab_locations</code> via <code>fk_diagnostics_diagnostic_orders_lab_location_id_lab_lo_e7ed</code></td>
+</tr>
+<tr>
+<td><code>order_number</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores order number for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>patient_profile_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to patient profiles</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>clinical.patient_profiles</code> via <code>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_4a11</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>clinical.patient_profiles</code> via <code>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_0689</code></td>
+</tr>
+<tr>
+<td><code>payment_status</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores payment status for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>scheduled_end</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores scheduled end for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>scheduled_start</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores scheduled start for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(20)</code></td>
+<td>No</td>
+<td><code>'created'::character varying</code></td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>subtotal</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores subtotal for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>tax_total</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Value of tax total</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_diagnostics_diagnostic_orders_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_diagnostics_diagnostic_orders_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the diagnostic orders business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> future-domain features. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>diagnostics.diagnostic_orders</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_diagnostics_diagnostic_orders_address_id_addresses</td>
+<td><code>address_id</code></td>
+<td><a href="../../Tables/customer/addresses.html"><code>customer.addresses</code></a></td>
+<td><code>FOREIGN KEY (address_id) REFERENCES customer.addresses(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_diagnostics_diagnostic_orders_address_id_addresses_numeric</td>
+<td><code>address_id_internal_id</code></td>
+<td><a href="../../Tables/customer/addresses.html"><code>customer.addresses</code></a></td>
+<td><code>FOREIGN KEY (address_id_internal_id) REFERENCES customer.addresses(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_diagnostics_diagnostic_orders_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_diagnostics_diagnostic_orders_lab_location_id_lab_lo_e7ed</td>
+<td><code>lab_location_id_internal_id</code></td>
+<td><a href="../../Tables/diagnostics/lab_locations.html"><code>diagnostics.lab_locations</code></a></td>
+<td><code>FOREIGN KEY (lab_location_id_internal_id) REFERENCES diagnostics.lab_locations(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_diagnostics_diagnostic_orders_lab_location_id_lab_locations</td>
+<td><code>lab_location_id</code></td>
+<td><a href="../../Tables/diagnostics/lab_locations.html"><code>diagnostics.lab_locations</code></a></td>
+<td><code>FOREIGN KEY (lab_location_id) REFERENCES diagnostics.lab_locations(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_0689</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_4a11</td>
+<td><code>patient_profile_id</code></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_diagnostics_diagnostic_orders_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_diagnostics_diagnostic_orders_user_id_users</td>
+<td><code>user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_order_items.html"><code>diagnostics.diagnostic_order_items</code></a></td>
+<td>fk_diagnostics_diagnostic_order_items_diagnostic_order__0be4</td>
+<td><code>diagnostic_order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_order_items.html"><code>diagnostics.diagnostic_order_items</code></a></td>
+<td>fk_diagnostics_diagnostic_order_items_diagnostic_order__67ff</td>
+<td><code>diagnostic_order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_reports.html"><code>diagnostics.diagnostic_reports</code></a></td>
+<td>fk_diagnostics_diagnostic_reports_diagnostic_order_id_d_378a</td>
+<td><code>diagnostic_order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_reports.html"><code>diagnostics.diagnostic_reports</code></a></td>
+<td>fk_diagnostics_diagnostic_reports_diagnostic_order_id_d_64d1</td>
+<td><code>diagnostic_order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/sample_collections.html"><code>diagnostics.sample_collections</code></a></td>
+<td>fk_diagnostics_sample_collections_diagnostic_order_id_d_9075</td>
+<td><code>diagnostic_order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/sample_collections.html"><code>diagnostics.sample_collections</code></a></td>
+<td>fk_diagnostics_sample_collections_diagnostic_order_id_d_c953</td>
+<td><code>diagnostic_order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/samples.html"><code>diagnostics.samples</code></a></td>
+<td>fk_diagnostics_samples_diagnostic_order_id_diagnostic_o_a6c8</td>
+<td><code>diagnostic_order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/samples.html"><code>diagnostics.samples</code></a></td>
+<td>fk_diagnostics_samples_diagnostic_order_id_diagnostic_orders</td>
+<td><code>diagnostic_order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td>fk_support_tickets_diagnostic_order_id_diagnostic_order_e812</td>
+<td><code>diagnostic_order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td>fk_support_tickets_diagnostic_order_id_diagnostic_orders</td>
+<td><code>diagnostic_order_id</code></td>
+<td><code>id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>diagnostics.diagnostic_orders</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address_id</code></td>
+<td><code>customer.addresses</code></td>
+<td><code>fk_diagnostics_diagnostic_orders_address_id_addresses</code></td>
+</tr>
+<tr>
+<td><code>address_id_internal_id</code></td>
+<td><code>customer.addresses</code></td>
+<td><code>fk_diagnostics_diagnostic_orders_address_id_addresses_numeric</code></td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_diagnostics_diagnostic_orders_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>lab_location_id_internal_id</code></td>
+<td><code>diagnostics.lab_locations</code></td>
+<td><code>fk_diagnostics_diagnostic_orders_lab_location_id_lab_lo_e7ed</code></td>
+</tr>
+<tr>
+<td><code>lab_location_id</code></td>
+<td><code>diagnostics.lab_locations</code></td>
+<td><code>fk_diagnostics_diagnostic_orders_lab_location_id_lab_locations</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>clinical.patient_profiles</code></td>
+<td><code>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_0689</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id</code></td>
+<td><code>clinical.patient_profiles</code></td>
+<td><code>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_4a11</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_diagnostics_diagnostic_orders_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_diagnostics_diagnostic_orders_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_diagnostics_diagnostic_orders_diagnosticorderstatus</code></td>
+<td>CHECK</td>
+<td><code>CHECK (status::text = ANY (ARRAY['created'::text, 'confirmed'::text, 'collection_scheduled'::text, 'sample_collected'::text, 'sample_received'::text, 'processing'::text, 'partially_reported'::text, 'reported'::text, 'cancelled'::text]))</code></td>
+</tr>
+<tr>
+<td><code>ck_diagnostics_diagnostic_orders_finite_numeric_values</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((subtotal IS NULL OR (subtotal &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (discount_total IS NULL OR (discount_total &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (tax_total IS NULL OR (tax_total &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (collection_fee IS NULL OR (collection_fee &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (grand_total IS NULL OR (grand_total &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))))</code></td>
+</tr>
+<tr>
+<td><code>ck_diagnostics_diagnostic_orders_numeric_pair_address_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((address_id IS NULL) = (address_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_diagnostics_diagnostic_orders_numeric_pair_lab_location_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((lab_location_id IS NULL) = (lab_location_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_diagnostics_diagnostic_orders_numeric_pair_patient_p_0d93</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((patient_profile_id IS NULL) = (patient_profile_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_diagnostics_diagnostic_orders_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>fk_diagnostics_diagnostic_orders_address_id_addresses</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (address_id) REFERENCES customer.addresses(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_diagnostics_diagnostic_orders_address_id_addresses_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (address_id_internal_id) REFERENCES customer.addresses(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_diagnostics_diagnostic_orders_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_diagnostics_diagnostic_orders_lab_location_id_lab_lo_e7ed</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (lab_location_id_internal_id) REFERENCES diagnostics.lab_locations(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_diagnostics_diagnostic_orders_lab_location_id_lab_locations</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (lab_location_id) REFERENCES diagnostics.lab_locations(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_0689</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_4a11</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_diagnostics_diagnostic_orders_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_diagnostics_diagnostic_orders_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_diagnostics_diagnostic_orders</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_diagnostics_diagnostic_orders_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_diagnostics_diagnostic_orders_order_number</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (order_number)</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_collection_fee_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL collection_fee</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_collection_type_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL collection_type</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_currency_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL currency</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_discount_total_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL discount_total</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_grand_total_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL grand_total</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_lab_location_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL lab_location_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_lab_location_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL lab_location_id</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_order_number_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL order_number</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_patient_profile_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL patient_profile_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_patient_profile_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL patient_profile_id</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_payment_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL payment_status</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_subtotal_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL subtotal</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_tax_total_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL tax_total</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+<tr>
+<td><code>diagnostic_orders_user_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_diagnostics_orders_lab_location</code></td>
+<td>btree</td>
+<td><code>(lab_location_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_diagnostics_orders_lab_location ON diagnostics.diagnostic_orders USING btree (lab_location_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_diagnostics_orders_patient_time</code></td>
+<td>btree</td>
+<td><code>(patient_profile_id, created_at)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_diagnostics_orders_patient_time ON diagnostics.diagnostic_orders USING btree (patient_profile_id, created_at)</code></td>
+</tr>
+<tr>
+<td><code>ix_diagnostics_orders_status</code></td>
+<td>btree</td>
+<td><code>(status)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_diagnostics_orders_status ON diagnostics.diagnostic_orders USING btree (status)</code></td>
+</tr>
+<tr>
+<td><code>ix_diagnostics_orders_user</code></td>
+<td>btree</td>
+<td><code>(user_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_diagnostics_orders_user ON diagnostics.diagnostic_orders USING btree (user_id)</code></td>
+</tr>
+<tr>
+<td><code>pk_diagnostics_diagnostic_orders</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_diagnostics_diagnostic_orders ON diagnostics.diagnostic_orders USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_diagnostics_diagnostic_orders_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_diagnostics_diagnostic_orders_id ON diagnostics.diagnostic_orders USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_diagnostics_diagnostic_orders_order_number</code></td>
+<td>btree</td>
+<td><code>(order_number)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_diagnostics_diagnostic_orders_order_number ON diagnostics.diagnostic_orders USING btree (order_number)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON diagnostics.diagnostic_orders FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;address_id&quot;,&quot;address_id_internal_id&quot;,&quot;customer&quot;,&quot;addresses&quot;],[&quot;lab_location_id&quot;,&quot;lab_location_id_internal_id&quot;,&quot;diagnostics&quot;,&quot;lab_locations&quot;],[&quot;patient_profile_id&quot;,&quot;patient_profile_id_internal_id&quot;,&quot;clinical&quot;,&quot;patient_profiles&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON diagnostics.diagnostic_orders FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON diagnostics.diagnostic_orders FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;address_id&quot;,&quot;address_id_internal_id&quot;,&quot;customer&quot;,&quot;addresses&quot;],[&quot;lab_location_id&quot;,&quot;lab_location_id_internal_id&quot;,&quot;diagnostics&quot;,&quot;lab_locations&quot;],[&quot;patient_profile_id&quot;,&quot;patient_profile_id_internal_id&quot;,&quot;clinical&quot;,&quot;patient_profiles&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

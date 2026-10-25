@@ -1,0 +1,152 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Prescription Management database contract</h1>
+<p><strong>Structure validated; business write assignment Proposed.</strong> Patient/prescription linkage; shared file infrastructure controls object storage and Pharmacist Review owns clinical decisions. Read access or a contract surface does not confer write ownership. Exact operation transactions/DTO columns are in <a href="APIs.html">APIs</a>; shared audit/outbox/idempotency writes are owner-coordinated infrastructure.</p>
+<h2>Proposed owned tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Classification</th>
+<th>Write-owner approval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescription_access_logs.html"><code>clinical.prescription_access_logs</code></a></td>
+<td>Audit / History</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+</tbody>
+</table>
+<h2>Contract reads and writes</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Exact read columns</th>
+<th>Exact proposed write columns</th>
+<th>Proposed data owner</th>
+<th>API IDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>None</td>
+<td><code>decision</code>, <code>order_id</code>, <code>order_item_id</code>, <code>prescription_id</code>, <code>review_id</code></td>
+<td>Pharmacist_Review</td>
+<td>API-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>None</td>
+<td><code>order_id</code>, <code>patient_profile_id</code>, <code>prescription_document_id</code>, <code>prescription_id</code>, <code>requested_at</code>, <code>review_version</code>, <code>status</code></td>
+<td>Pharmacist_Review</td>
+<td>API-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>family_member_id</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Prescription_Upload</td>
+<td>API-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td>None</td>
+<td><code>file_object_id</code>, <code>prescription_id</code>, <code>redaction_status</code>, <code>version_number</code></td>
+<td>Prescription_Upload</td>
+<td>API-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>None</td>
+<td><code>patient_profile_id</code>, <code>source</code>, <code>status</code>, <code>uploaded_by_user_id</code></td>
+<td>Prescription_Upload</td>
+<td>API-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td><code>id</code>, <code>order_id</code>, <code>prescription_id</code>, <code>row_version</code>, <code>status</code></td>
+<td><code>prescription_id</code></td>
+<td>Order_Operations</td>
+<td>API-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Order_Operations</td>
+<td>API-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td><code>customer_user_id</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Customer_Accounts</td>
+<td>API-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><code>access_type</code>, <code>classification</code>, <code>content_type</code>, <code>expected_size_bytes</code>, <code>id</code>, <code>is_deleted</code>, <code>malware_scan_status</code>, <code>original_filename</code>, <code>owner_id</code>, <code>owner_type</code>, <code>row_version</code>, <code>sha256</code>, <code>size_bytes</code>, <code>status</code></td>
+<td><code>access_type</code>, <code>bucket</code>, <code>classification</code>, <code>content_type</code>, <code>etag</code>, <code>expected_size_bytes</code>, <code>malware_scan_status</code>, <code>object_key</code>, <code>original_filename</code>, <code>owner_id</code>, <code>owner_type</code>, <code>sha256</code>, <code>size_bytes</code>, <code>status</code>, <code>storage_provider</code>, <code>storage_version_id</code>, <code>uploaded_by_user_id</code></td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>API-022, API-023, API-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td><code>expires_at</code>, <code>file_object_id</code>, <code>id</code>, <code>row_version</code>, <code>status</code></td>
+<td><code>completed_at</code>, <code>expires_at</code>, <code>file_object_id</code>, <code>idempotency_key</code>, <code>requested_by_user_id</code>, <code>scope</code>, <code>status</code>, <code>upload_method</code></td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>API-022, API-023</td>
+</tr>
+</tbody>
+</table>
+<h2>Master and transaction dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Controlled table</th>
+<th>Classification</th>
+<th>Lifecycle and initial data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+</tbody>
+</table>
+<p>Every mutation must enter the authoritative owner command with explicit scope/version, apply only that command’s invariant, and commit aggregate/audit/outbox together. External provider/file/message effects occur after commit; idempotency and recovery are per endpoint. Shared-table audit/outbox infrastructure does not acquire domain ownership. Physical SQL guards are recorded on each linked table page; application authorization remains additional.</p>
+</main></body></html>

@@ -1,0 +1,1701 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Coverage and Traceability · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Feature traceability register</h1>
+<p>This is the authoritative navigation register for the 110 draft feature IDs in <a href="../01-Project/Features-and-Modules.html">Feature inventory</a>. Links reach module-level design artifacts. They do not claim that every feature has a signed endpoint, exact table write contract, or executed test. Feature-specific gaps are listed after the table.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Requirement</th>
+<th>Owner</th>
+<th>Business flow</th>
+<th>HLD</th>
+<th>LLD</th>
+<th>API</th>
+<th>Database</th>
+<th>Edge cases</th>
+<th>Tests</th>
+<th>Development task</th>
+<th>Audit status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACC-01</code></td>
+<td>Sign up and log in with mobile OTP (WhatsApp first, SMS fallback)</td>
+<td><code>Customer_Accounts</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Accounts/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html#feature-tests">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-001</a></td>
+<td>Distinct flow and tests; D-003/D-013 onboarding policy remains.</td>
+</tr>
+<tr>
+<td><code>ACC-02</code></td>
+<td>Profile: name, email, phone</td>
+<td><code>Customer_Accounts</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Accounts/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html#feature-tests">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-002</a></td>
+<td>Distinct profile design; D-023 contact proof remains.</td>
+</tr>
+<tr>
+<td><code>ACC-03</code></td>
+<td>Saved addresses with map pin; serviceability checked when the address is entered</td>
+<td><code>Customer_Accounts</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Accounts/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-003</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ACC-04</code></td>
+<td>Family profiles for dependents (name, age, relation)</td>
+<td><code>Customer_Accounts</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Accounts/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-004</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ACC-05</code></td>
+<td>Privacy notice and consent at signup</td>
+<td><code>Customer_Accounts</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Accounts/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-005</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ACC-06</code></td>
+<td>Account deletion request</td>
+<td><code>Customer_Accounts</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Accounts/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-006</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ACC-07</code></td>
+<td>Wishlist</td>
+<td><code>Customer_Accounts</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Accounts/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-accounts">TASK-007</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CAT-01</code></td>
+<td>Browse by category and sub-category</td>
+<td><code>Product_Catalog</code></td>
+<td><a href="../00-Business-Guide/Catalog-and-Product-Discovery.html">Business</a></td>
+<td><a href="../03-Modules/Product_Catalog/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Product_Catalog/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-008</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CAT-02</code></td>
+<td>Product page: brand, manufacturer, composition, pack size, MRP, price, images, &quot;Prescription required&quot; label</td>
+<td><code>Product_Catalog</code></td>
+<td><a href="../00-Business-Guide/Catalog-and-Product-Discovery.html">Business</a></td>
+<td><a href="../03-Modules/Product_Catalog/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Product_Catalog/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-009</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CAT-03</code></td>
+<td>Search by name, brand and composition, with typo tolerance and autosuggest</td>
+<td><code>Product_Catalog</code></td>
+<td><a href="../00-Business-Guide/Catalog-and-Product-Discovery.html">Business</a></td>
+<td><a href="../03-Modules/Product_Catalog/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Product_Catalog/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-010</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CAT-04</code></td>
+<td>Availability for the customer's pin code (in stock / out of stock)</td>
+<td><code>Product_Catalog</code></td>
+<td><a href="../00-Business-Guide/Catalog-and-Product-Discovery.html">Business</a></td>
+<td><a href="../03-Modules/Product_Catalog/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Product_Catalog/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-011</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CAT-05</code></td>
+<td>Alternative medicines: same composition, strength and dosage form, ranked by a configurable rule</td>
+<td><code>Product_Catalog</code></td>
+<td><a href="../00-Business-Guide/Catalog-and-Product-Discovery.html">Business</a></td>
+<td><a href="../03-Modules/Product_Catalog/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Product_Catalog/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-012</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>CAT-06</code></td>
+<td>Placeholder image when a product has none</td>
+<td><code>Product_Catalog</code></td>
+<td><a href="../00-Business-Guide/Catalog-and-Product-Discovery.html">Business</a></td>
+<td><a href="../03-Modules/Product_Catalog/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Product_Catalog/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#product-catalog">TASK-013</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CHK-01</code></td>
+<td>Cart saved across devices for logged-in customers</td>
+<td><code>Cart_Checkout</code></td>
+<td><a href="../00-Business-Guide/Cart-and-Checkout.html">Business</a></td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-014</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CHK-02</code></td>
+<td>Checkout: address, patient (self or family), payment method, delivery fee and estimated time shown before paying</td>
+<td><code>Cart_Checkout</code></td>
+<td><a href="../00-Business-Guide/Cart-and-Checkout.html">Business</a></td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-015</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CHK-03</code></td>
+<td>Online payment via Cashfree: UPI, cards, net banking</td>
+<td><code>Cart_Checkout</code></td>
+<td><a href="../00-Business-Guide/Cart-and-Checkout.html">Business</a></td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-016</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>CHK-04</code></td>
+<td>Cash on delivery, with a maximum order value and a block after repeated refusals</td>
+<td><code>Cart_Checkout</code></td>
+<td><a href="../00-Business-Guide/Cart-and-Checkout.html">Business</a></td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-017</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>CHK-05</code></td>
+<td>Minimum order value and delivery fee applied from settings</td>
+<td><code>Cart_Checkout</code></td>
+<td><a href="../00-Business-Guide/Cart-and-Checkout.html">Business</a></td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-018</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CHK-06</code></td>
+<td>Price or stock change detected before payment; customer confirms</td>
+<td><code>Cart_Checkout</code></td>
+<td><a href="../00-Business-Guide/Cart-and-Checkout.html">Business</a></td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-019</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CHK-07</code></td>
+<td>No duplicate orders or charges (double tap, refresh, closed browser after payment)</td>
+<td><code>Cart_Checkout</code></td>
+<td><a href="../00-Business-Guide/Cart-and-Checkout.html">Business</a></td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-020</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>CHK-08</code></td>
+<td>Stock reserved during checkout, released automatically if payment does not finish</td>
+<td><code>Cart_Checkout</code></td>
+<td><a href="../00-Business-Guide/Cart-and-Checkout.html">Business</a></td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#cart-checkout">TASK-021</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>RX-01</code></td>
+<td>Upload one or more prescriptions (JPG, PNG, PDF) at checkout</td>
+<td><code>Prescription_Upload</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Prescription_Upload/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Prescription_Upload/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-022</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>RX-02</code></td>
+<td>Upload within 24 hours after ordering; auto-cancel after that</td>
+<td><code>Prescription_Upload</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Prescription_Upload/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Prescription_Upload/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-023</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>RX-03</code></td>
+<td>Reuse a saved, still-valid prescription</td>
+<td><code>Prescription_Upload</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Prescription_Upload/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Prescription_Upload/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-024</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>RX-04</code></td>
+<td>Link each prescription to the patient (self or family member)</td>
+<td><code>Prescription_Upload</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Prescription_Upload/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Prescription_Upload/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-025</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>RX-05</code></td>
+<td>See the pharmacist's decision and reason; re-upload after rejection</td>
+<td><code>Prescription_Upload</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Prescription_Upload/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Prescription_Upload/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#prescription-upload">TASK-026</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ORD-01</code></td>
+<td>Order confirmation on screen, WhatsApp and email</td>
+<td><code>Customer_Orders</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-027</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>ORD-02</code></td>
+<td>Status timeline (placed → packed → out for delivery → delivered)</td>
+<td><code>Customer_Orders</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-028</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ORD-03</code></td>
+<td>Order history with GST invoice download</td>
+<td><code>Customer_Orders</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-029</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ORD-04</code></td>
+<td>Cancel before the order is packed</td>
+<td><code>Customer_Orders</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-030</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ORD-05</code></td>
+<td>Return request within the return window</td>
+<td><code>Customer_Orders</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-031</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ORD-06</code></td>
+<td>Refund status for cancelled and returned orders</td>
+<td><code>Customer_Orders</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-032</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ORD-07</code></td>
+<td>Live rider location on a map, estimated arrival, masked call button</td>
+<td><code>Customer_Orders</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-033</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ORD-08</code></td>
+<td>Delivery OTP shown to the customer</td>
+<td><code>Customer_Orders</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-034</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ORD-09</code></td>
+<td>Change items or address after placing an order</td>
+<td><code>Customer_Orders</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#customer-orders">TASK-035</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>ADM-01</code></td>
+<td>Dashboard per role: orders by status, pending prescriptions, alerts, deliveries in progress</td>
+<td><code>Admin_CMS</code></td>
+<td><a href="../00-Business-Guide/Admin-and-Operations.html">Business</a></td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-036</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ADM-02</code></td>
+<td>Staff users: invite, assign role and location, deactivate, log out sessions</td>
+<td><code>Admin_CMS</code></td>
+<td><a href="../00-Business-Guide/Admin-and-Operations.html">Business</a></td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-037</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ADM-03</code></td>
+<td>Roles and permissions for 16 roles, limited to own store or warehouse</td>
+<td><code>Admin_CMS</code></td>
+<td><a href="../00-Business-Guide/Admin-and-Operations.html">Business</a></td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-038</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ADM-04</code></td>
+<td>CMS: home banners, FAQs, policy pages, with draft and publish</td>
+<td><code>Admin_CMS</code></td>
+<td><a href="../00-Business-Guide/Admin-and-Operations.html">Business</a></td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-039</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ADM-05</code></td>
+<td>System settings (PRD section 8)</td>
+<td><code>Admin_CMS</code></td>
+<td><a href="../00-Business-Guide/Admin-and-Operations.html">Business</a></td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-040</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ADM-06</code></td>
+<td>Catalogue admin: products, categories, brands, salt master, prices, GST and HSN</td>
+<td><code>Admin_CMS</code></td>
+<td><a href="../00-Business-Guide/Admin-and-Operations.html">Business</a></td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-041</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>ADM-07</code></td>
+<td>Bulk product import from Excel, with error report</td>
+<td><code>Admin_CMS</code></td>
+<td><a href="../00-Business-Guide/Admin-and-Operations.html">Business</a></td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-042</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>ADM-08</code></td>
+<td>Store and warehouse master: address, hours, GSTIN, service areas</td>
+<td><code>Admin_CMS</code></td>
+<td><a href="../00-Business-Guide/Admin-and-Operations.html">Business</a></td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-043</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>ADM-09</code></td>
+<td>Offer settings: start and end dates, maximum discount, first-order offer</td>
+<td><code>Admin_CMS</code></td>
+<td><a href="../00-Business-Guide/Admin-and-Operations.html">Business</a></td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#admin-cms">TASK-044</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>OMS-01</code></td>
+<td>Order list with filters (status, location, date, payment, Rx) and search by order number or phone</td>
+<td><code>Order_Operations</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-045</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>OMS-02</code></td>
+<td>Order detail: items, batches, prescription, payment, delivery, full history</td>
+<td><code>Order_Operations</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-046</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>OMS-03</code></td>
+<td>Automatic routing to the nearest open store with every item; warehouse as fallback</td>
+<td><code>Order_Operations</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-047</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>OMS-04</code></td>
+<td>Reassign an order to another location, with a reason</td>
+<td><code>Order_Operations</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-048</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>OMS-05</code></td>
+<td>Cancel, partly fulfil, raise return, add internal note</td>
+<td><code>Order_Operations</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-049</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>OMS-06</code></td>
+<td>Attention queue: payment pending, stuck orders, failed deliveries</td>
+<td><code>Order_Operations</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-050</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>OMS-07</code></td>
+<td>Assisted order entry for phone orders</td>
+<td><code>Order_Operations</code></td>
+<td><a href="../00-Business-Guide/Orders-and-Fulfillment.html">Business</a></td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#order-operations">TASK-051</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>STO-01</code></td>
+<td>Incoming order queue for my store, with sound alert</td>
+<td><code>Store_Operations</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Store_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Store_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-052</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>STO-02</code></td>
+<td>Accept order, pick list, mark packed, hand over to rider</td>
+<td><code>Store_Operations</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Store_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Store_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-053</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>STO-03</code></td>
+<td>Raise replenishment request (normal or urgent)</td>
+<td><code>Store_Operations</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Store_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Store_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-054</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>STO-04</code></td>
+<td>Confirm receipt of a transfer; record shortages</td>
+<td><code>Store_Operations</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Store_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Store_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-055</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>STO-05</code></td>
+<td>My store's stock, with low-stock and near-expiry alerts</td>
+<td><code>Store_Operations</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Store_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Store_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#store-operations">TASK-056</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>INV-01</code></td>
+<td>Stock per location and batch, with manufacturing and expiry dates</td>
+<td><code>Inventory</code></td>
+<td><a href="../00-Business-Guide/Inventory-and-Stock.html">Business</a></td>
+<td><a href="../03-Modules/Inventory/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Inventory/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-057</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>INV-02</code></td>
+<td>Stock ledger: every movement recorded; stock is the sum of the ledger</td>
+<td><code>Inventory</code></td>
+<td><a href="../00-Business-Guide/Inventory-and-Stock.html">Business</a></td>
+<td><a href="../03-Modules/Inventory/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Inventory/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-058</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>INV-03</code></td>
+<td>Allocate nearest-expiry batch first; block batches below minimum shelf life</td>
+<td><code>Inventory</code></td>
+<td><a href="../00-Business-Guide/Inventory-and-Stock.html">Business</a></td>
+<td><a href="../03-Modules/Inventory/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Inventory/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-059</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>INV-04</code></td>
+<td>Stock adjustments with reason; manager approval above a threshold</td>
+<td><code>Inventory</code></td>
+<td><a href="../00-Business-Guide/Inventory-and-Stock.html">Business</a></td>
+<td><a href="../03-Modules/Inventory/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Inventory/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-060</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>INV-05</code></td>
+<td>Low-stock and near-expiry alerts</td>
+<td><code>Inventory</code></td>
+<td><a href="../00-Business-Guide/Inventory-and-Stock.html">Business</a></td>
+<td><a href="../03-Modules/Inventory/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Inventory/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-061</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>INV-06</code></td>
+<td>Opening stock import per location</td>
+<td><code>Inventory</code></td>
+<td><a href="../00-Business-Guide/Inventory-and-Stock.html">Business</a></td>
+<td><a href="../03-Modules/Inventory/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Inventory/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-062</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>INV-07</code></td>
+<td>Stock sync with Techsmith</td>
+<td><code>Inventory</code></td>
+<td><a href="../00-Business-Guide/Inventory-and-Stock.html">Business</a></td>
+<td><a href="../03-Modules/Inventory/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Inventory/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#inventory">TASK-063</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>WH-01</code></td>
+<td>Receive stock: batch, manufacturing and expiry dates, quantity, supplier invoice</td>
+<td><code>Warehouse</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Warehouse/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Warehouse/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-064</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>WH-02</code></td>
+<td>Replenishment queue: approve, dispatch with note, stock &quot;in transit&quot;</td>
+<td><code>Warehouse</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Warehouse/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Warehouse/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-065</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>WH-03</code></td>
+<td>Urgent runs, up to two extra a day</td>
+<td><code>Warehouse</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Warehouse/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Warehouse/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-066</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>WH-04</code></td>
+<td>Pick, pack and dispatch fallback online orders</td>
+<td><code>Warehouse</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Warehouse/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Warehouse/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-067</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>WH-05</code></td>
+<td>Basic stock audit</td>
+<td><code>Warehouse</code></td>
+<td><a href="../00-Business-Guide/Store-and-Warehouse.html">Business</a></td>
+<td><a href="../03-Modules/Warehouse/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Warehouse/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#warehouse">TASK-068</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>PHM-01</code></td>
+<td>Review queue, oldest first, with waiting time</td>
+<td><code>Pharmacist_Review</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-069</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>PHM-02</code></td>
+<td>Side-by-side view: zoomable prescription and order items</td>
+<td><code>Pharmacist_Review</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-070</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>PHM-03</code></td>
+<td>Approve all, approve some, or reject with a reason</td>
+<td><code>Pharmacist_Review</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-071</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>PHM-04</code></td>
+<td>Confirm a chosen alternative matches the prescription</td>
+<td><code>Pharmacist_Review</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-072</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>PHM-05</code></td>
+<td>Pharmacist name, registration number and time on every decision</td>
+<td><code>Pharmacist_Review</code></td>
+<td><a href="../00-Business-Guide/Prescription-and-Pharmacy.html">Business</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#pharmacist-review">TASK-073</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>DLV-01</code></td>
+<td>Live map of riders (available, on delivery, offline) and orders ready for pickup</td>
+<td><code>Delivery_Operations</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Delivery_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Delivery_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-074</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>DLV-02</code></td>
+<td>Suggest the nearest available rider; staff confirm or choose another</td>
+<td><code>Delivery_Operations</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Delivery_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Delivery_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-075</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>DLV-03</code></td>
+<td>Failed-delivery queue: reattempt, reschedule or return to store</td>
+<td><code>Delivery_Operations</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Delivery_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Delivery_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-076</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>DLV-04</code></td>
+<td>COD handover: cash collected vs deposited per rider per day</td>
+<td><code>Delivery_Operations</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Delivery_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Delivery_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-077</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>DLV-05</code></td>
+<td>Rider management: onboard, assign location, shifts</td>
+<td><code>Delivery_Operations</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Delivery_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Delivery_Operations/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#delivery-operations">TASK-078</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>RID-01</code></td>
+<td>OTP login; on duty, off duty and break</td>
+<td><code>Rider_App</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Rider_App/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-079</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>RID-02</code></td>
+<td>Task list; accept; open Google Maps to navigate; mark picked up</td>
+<td><code>Rider_App</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Rider_App/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-080</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>RID-03</code></td>
+<td>Background location: every 5–10 s on delivery, 15–30 s idle</td>
+<td><code>Rider_App</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Rider_App/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-081</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>RID-04</code></td>
+<td>Complete delivery with customer OTP and photo; record COD collected</td>
+<td><code>Rider_App</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Rider_App/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-082</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>RID-05</code></td>
+<td>Door checks for prescription medicines</td>
+<td><code>Rider_App</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Rider_App/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-083</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>RID-06</code></td>
+<td>Failed attempt with a reason from a fixed list</td>
+<td><code>Rider_App</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Rider_App/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-084</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>RID-07</code></td>
+<td>Daily deliveries and incentive earned</td>
+<td><code>Rider_App</code></td>
+<td><a href="../00-Business-Guide/Delivery-and-Rider-App.html">Business</a></td>
+<td><a href="../03-Modules/Rider_App/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#rider-app">TASK-085</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>FIN-01</code></td>
+<td>Payment records from Cashfree webhooks and COD collections</td>
+<td><code>Finance_Payments</code></td>
+<td><a href="../00-Business-Guide/Finance-and-Reconciliation.html">Business</a></td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-086</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>FIN-02</code></td>
+<td>GST invoice per order, from the right GSTIN</td>
+<td><code>Finance_Payments</code></td>
+<td><a href="../00-Business-Guide/Finance-and-Reconciliation.html">Business</a></td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-087</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>FIN-03</code></td>
+<td>Automatic refunds; manual refunds need approval above a set amount</td>
+<td><code>Finance_Payments</code></td>
+<td><a href="../00-Business-Guide/Finance-and-Reconciliation.html">Business</a></td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-088</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>FIN-04</code></td>
+<td>COD refunds by bank transfer or UPI</td>
+<td><code>Finance_Payments</code></td>
+<td><a href="../00-Business-Guide/Finance-and-Reconciliation.html">Business</a></td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-089</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>FIN-05</code></td>
+<td>Daily reconciliation: Cashfree settlements vs orders</td>
+<td><code>Finance_Payments</code></td>
+<td><a href="../00-Business-Guide/Finance-and-Reconciliation.html">Business</a></td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-090</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>FIN-06</code></td>
+<td>COD reconciliation: collected vs deposited</td>
+<td><code>Finance_Payments</code></td>
+<td><a href="../00-Business-Guide/Finance-and-Reconciliation.html">Business</a></td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-091</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>FIN-07</code></td>
+<td>Credit notes for refunds and returns</td>
+<td><code>Finance_Payments</code></td>
+<td><a href="../00-Business-Guide/Finance-and-Reconciliation.html">Business</a></td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#finance-payments">TASK-092</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>REP-01</code></td>
+<td>Sales and orders, by date, store and product</td>
+<td><code>Reporting</code></td>
+<td><a href="../00-Business-Guide/Reporting-and-Audit.html">Business</a></td>
+<td><a href="../03-Modules/Reporting/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Reporting/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-093</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>REP-02</code></td>
+<td>GST report for filing</td>
+<td><code>Reporting</code></td>
+<td><a href="../00-Business-Guide/Reporting-and-Audit.html">Business</a></td>
+<td><a href="../03-Modules/Reporting/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Reporting/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-094</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>REP-03</code></td>
+<td>Stock, low stock and near-expiry</td>
+<td><code>Reporting</code></td>
+<td><a href="../00-Business-Guide/Reporting-and-Audit.html">Business</a></td>
+<td><a href="../03-Modules/Reporting/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Reporting/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-095</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>REP-04</code></td>
+<td>COD, rider collections and deliveries per rider</td>
+<td><code>Reporting</code></td>
+<td><a href="../00-Business-Guide/Reporting-and-Audit.html">Business</a></td>
+<td><a href="../03-Modules/Reporting/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Reporting/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-096</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>REP-05</code></td>
+<td>Refunds, cancellations and failed deliveries</td>
+<td><code>Reporting</code></td>
+<td><a href="../00-Business-Guide/Reporting-and-Audit.html">Business</a></td>
+<td><a href="../03-Modules/Reporting/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Reporting/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-097</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>REP-06</code></td>
+<td>Replenishment transfers</td>
+<td><code>Reporting</code></td>
+<td><a href="../00-Business-Guide/Reporting-and-Audit.html">Business</a></td>
+<td><a href="../03-Modules/Reporting/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Reporting/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-098</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+<tr>
+<td><code>REP-07</code></td>
+<td>Excel export for every report</td>
+<td><code>Reporting</code></td>
+<td><a href="../00-Business-Guide/Reporting-and-Audit.html">Business</a></td>
+<td><a href="../03-Modules/Reporting/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Reporting/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#reporting">TASK-099</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>AUD-01</code></td>
+<td>Log logins, changes, stock movements and prescription views</td>
+<td><code>Audit</code></td>
+<td><a href="../00-Business-Guide/Reporting-and-Audit.html">Business</a></td>
+<td><a href="../03-Modules/Audit/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Audit/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Audit/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Audit/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Audit/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#audit">TASK-100</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>AUD-02</code></td>
+<td>Search and export the audit log; read-only for everyone</td>
+<td><code>Audit</code></td>
+<td><a href="../00-Business-Guide/Reporting-and-Audit.html">Business</a></td>
+<td><a href="../03-Modules/Audit/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Audit/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Audit/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Audit/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Audit/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#audit">TASK-101</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>AUTH-01</code></td>
+<td>Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager</td>
+<td><code>Authentication_Access</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Authentication_Access/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Authentication_Access/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#authentication-access">TASK-102</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>AUTH-02</code></td>
+<td>Lockout rules, session limits, one session per staff account</td>
+<td><code>Authentication_Access</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Authentication_Access/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Authentication_Access/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#authentication-access">TASK-103</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>AUTH-03</code></td>
+<td>OTP rate limits per number and IP</td>
+<td><code>Authentication_Access</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Authentication_Access/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Authentication_Access/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#authentication-access">TASK-104</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>AUTH-04</code></td>
+<td>Permissions checked on the server for every request</td>
+<td><code>Authentication_Access</code></td>
+<td><a href="../00-Business-Guide/Accounts-and-Login.html">Business</a></td>
+<td><a href="../03-Modules/Authentication_Access/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Authentication_Access/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#authentication-access">TASK-105</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>NOT-01</code></td>
+<td>One notification service: templates, WhatsApp first, SMS fallback, email</td>
+<td><code>Notifications</code></td>
+<td><a href="../00-Business-Guide/Notifications-and-Support.html">Business</a></td>
+<td><a href="../03-Modules/Notifications/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Notifications/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-106</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>NOT-02</code></td>
+<td>Delivery log with retries</td>
+<td><code>Notifications</code></td>
+<td><a href="../00-Business-Guide/Notifications-and-Support.html">Business</a></td>
+<td><a href="../03-Modules/Notifications/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Notifications/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-107</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>NOT-03</code></td>
+<td>Rider push notifications (FCM)</td>
+<td><code>Notifications</code></td>
+<td><a href="../00-Business-Guide/Notifications-and-Support.html">Business</a></td>
+<td><a href="../03-Modules/Notifications/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Notifications/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-108</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>NOT-04</code></td>
+<td>Staff alerts in the admin panel</td>
+<td><code>Notifications</code></td>
+<td><a href="../00-Business-Guide/Notifications-and-Support.html">Business</a></td>
+<td><a href="../03-Modules/Notifications/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Notifications/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-109</a></td>
+<td>Designed feature assertions; API/data review remains D-024.</td>
+</tr>
+<tr>
+<td><code>NOT-05</code></td>
+<td>Customer browser push notifications</td>
+<td><code>Notifications</code></td>
+<td><a href="../00-Business-Guide/Notifications-and-Support.html">Business</a></td>
+<td><a href="../03-Modules/Notifications/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">API index</a></td>
+<td><a href="../04-Database/Module-Mapping.html">Module map</a></td>
+<td><a href="../03-Modules/Notifications/Edge-Cases.html">Cases</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">Feature tests</a></td>
+<td><a href="../08-Development-Plan/Implementation-Plan.html#notifications">TASK-110</a></td>
+<td>Designed feature assertions; API/data review remains D-024. No direct same-owner API reference.</td>
+</tr>
+</tbody>
+</table>
+<h2>Mapping status and gaps</h2>
+<p>The table links each feature to its owning module. API and database links are module-level indexes; they are not proof of a feature-specific operation or approved table ownership. The historical exact-ID metric identifies 23 features without a mention in their owning API document.</p>
+<p>The review below distinguishes supporting owner commands from genuinely absent operations; neither count proves complete contracts. Do not fill those gaps by inventing endpoints or inserting ID mentions without a real mapping. The database module map is schema discovery only.</p>
+<p>For <code>ACC-01</code> and <code>ACC-02</code>, the <a href="../03-Modules/Customer_Accounts/LLD.html">Customer Accounts LLD</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API contracts</a>, and <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a> now define distinct flows, table mapping, and feature-specific tests.</p>
+<p>Every feature now has distinct normal/adverse assertions in module LLD/edge pages. Operation schemas and exact write fields still require the review identified in <a href="Coverage-Report.html">Coverage report</a>.</p>
+<p>All development tasks are proposed and not tracked in an issue system. Proposed tests are not executed tests.</p>
+<h2>Direct API reference gaps measured by owner</h2>
+<p>A direct reference means an exact feature ID appears in its owning module API file. It does not verify the payload or approval. This is 87/110 after the authentication corrections; 23 lack that reference. Supporting contracts can exist in another module, so these gaps require mapping review rather than automatic endpoint creation.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Owning API document</th>
+<th>Review required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CAT-05</code></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">Product_Catalog</a></td>
+<td>Blocked: no alternative-selection/ranking contract. Catalog/Pharmacy must define exact match evidence and review handoff; do not repurpose search as clinical approval.</td>
+</tr>
+<tr>
+<td><code>CHK-03</code></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">Cart_Checkout</a></td>
+<td>Supporting Finance API-075/API-076 initiate/verify online money; Checkout owns accepted-revision and hold preconditions. Critical operation schemas are proposed; D-004/D-016 remain.</td>
+</tr>
+<tr>
+<td><code>CHK-04</code></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">Cart_Checkout</a></td>
+<td>Blocked COD selection/eligibility command. Finance owns policy and amount-due evidence; API-080 reconciles cash and cannot approve COD.</td>
+</tr>
+<tr>
+<td><code>RX-02</code></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">Prescription_Upload</a></td>
+<td>Blocked conflicting deferred-upload path. D-004/D-006 must settle timing, cancellation, hold and refund outcomes before a deadline job/API exists.</td>
+</tr>
+<tr>
+<td><code>RX-03</code></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">Prescription_Upload</a></td>
+<td>Blocked saved-prescription selection/validity contract. Intake verifies owner/patient/file state; Pharmacy rechecks current evidence.</td>
+</tr>
+<tr>
+<td><code>ORD-01</code></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">Customer_Orders</a></td>
+<td>Supporting Customer Orders API-026 and committed order event plus Notifications API-094. Message failure must not recreate the order; final event/response schema remains review work.</td>
+</tr>
+<tr>
+<td><code>ORD-09</code></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">Customer_Orders</a></td>
+<td>Blocked Could-scope post-order edit contract. Revalidate serviceability, clinical evidence, price and stock with explicit customer acceptance.</td>
+</tr>
+<tr>
+<td><code>ADM-06</code></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">Admin_CMS</a></td>
+<td>Supporting Catalog API-015–API-017 cover import/classification/publication only. Remaining CRUD, price and tax-owner commands need specific contracts; Admin is a consuming surface.</td>
+</tr>
+<tr>
+<td><code>ADM-07</code></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">Admin_CMS</a></td>
+<td>Supporting Product Catalog API-015 owns import. Define file/row schemas, atomicity, error report and replay identity before implementation.</td>
+</tr>
+<tr>
+<td><code>ADM-09</code></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">Admin_CMS</a></td>
+<td>Blocked offer-management contract. Pricing owner, schedule/discount rules and accepted-basket version behavior need approval.</td>
+</tr>
+<tr>
+<td><code>OMS-07</code></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">Order_Operations</a></td>
+<td>Blocked assisted-order contract and Could scope. Product/Security must approve customer identity, patient consent, payment and audit boundaries.</td>
+</tr>
+<tr>
+<td><code>STO-05</code></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">Store_Operations</a></td>
+<td>Supporting Inventory API-050/API-055 supply scoped stock/alerts. Store consumes them; no independent stock-writing permission.</td>
+</tr>
+<tr>
+<td><code>INV-03</code></td>
+<td><a href="../03-Modules/Inventory/APIs.html">Inventory</a></td>
+<td>Supporting Inventory API-052 needs explicit FEFO/shelf-life and eligible-lot assertions; proposed critical schema does not approve D-009 values.</td>
+</tr>
+<tr>
+<td><code>INV-06</code></td>
+<td><a href="../03-Modules/Inventory/APIs.html">Inventory</a></td>
+<td>Blocked opening-stock import command, row schema, ledger effect and replay/partial-failure result; cannot reuse catalog import.</td>
+</tr>
+<tr>
+<td><code>WH-05</code></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">Warehouse</a></td>
+<td>Blocked optional stock-audit/count contract. Inventory owns any approved adjustment; counting must not overwrite balances.</td>
+</tr>
+<tr>
+<td><code>PHM-04</code></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">Pharmacist_Review</a></td>
+<td>Supporting API-062 can record exact current line decision, but alternative selection/evidence mapping and customer revision acceptance need review.</td>
+</tr>
+<tr>
+<td><code>RID-05</code></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">Rider_App</a></td>
+<td>Blocked doorstep-check SOP/command. Rider cannot supply pharmacist approval; Pharmacy/Operations must approve exact permissible check and evidence.</td>
+</tr>
+<tr>
+<td><code>RID-07</code></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">Rider_App</a></td>
+<td>Blocked incentive-view/calculation contract. Finance/Product must approve earned-value formula, period and payment distinction.</td>
+</tr>
+<tr>
+<td><code>FIN-04</code></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">Finance_Payments</a></td>
+<td>Blocked verified COD-refund destination and transfer adapter contract. API-078 alone does not specify destination proof or provider behavior.</td>
+</tr>
+<tr>
+<td><code>FIN-07</code></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">Finance_Payments</a></td>
+<td>Blocked credit-note issuance/approval contract with invoice/refund links and duplicate accounting guards; invoice-read API-081 is insufficient.</td>
+</tr>
+<tr>
+<td><code>REP-05</code></td>
+<td><a href="../03-Modules/Reporting/APIs.html">Reporting</a></td>
+<td>Blocked refund/cancellation/failed-delivery dataset/filter schema. Define pending/completed semantics, scope and data time before claiming report coverage.</td>
+</tr>
+<tr>
+<td><code>REP-06</code></td>
+<td><a href="../03-Modules/Reporting/APIs.html">Reporting</a></td>
+<td>Blocked transfer-report dataset/filter schema. Distinguish dispatched, in-transit, received and shortage without treating dispatch as receipt.</td>
+</tr>
+<tr>
+<td><code>NOT-05</code></td>
+<td><a href="../03-Modules/Notifications/APIs.html">Notifications</a></td>
+<td>Blocked optional browser-push subscription/delivery contract. Requires customer opt-in, endpoint ownership, revocation and fallback semantics.</td>
+</tr>
+</tbody>
+</table>
+<p>Known cross-module candidates: CHK-03 uses Finance_Payments API-075/API-076; ADM-07 uses Product_Catalog API-015; STO-05 uses Inventory API-050/API-055. ORD-01 combines Customer_Orders API-026 with the committed order event and Notifications API-094. These are supporting mappings, not proof the entire feature is designed.</p>
+<h2>Operation review status</h2>
+<p><a href="../05-APIs/Critical-Operation-Contracts.html">Critical operation refinements</a> now specify proposed typed inputs/results, trust, persistence, concurrency and recovery for checkout, reservation, review, money, cancellation/return, refund and delivery proof. D-024 remains open for exact write fields, DTO bounds, runtime grants, enum mappings and evidence.</p>
+<p>The 23 historical textual gaps remain visible; cross-module support is not miscounted as a new same-owner endpoint.</p>
+</main></body></html>

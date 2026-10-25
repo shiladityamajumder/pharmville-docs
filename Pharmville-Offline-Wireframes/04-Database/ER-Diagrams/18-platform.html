@@ -1,0 +1,533 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>18 platform · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Platform ER diagrams</h1>
+<h2>What this part of the database stores</h2>
+<p>The <code>platform</code> schema stores configuration, files, audit, events, and reports. The names and structural relationships below come from the checked-out database catalog snapshot; business-purpose summaries marked inferred are not product-owner approval.</p>
+<h2>Main tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Recorded purpose</th>
+<th>Table definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../Tables/platform/application_settings.html"><code>application_settings</code></a></td>
+<td>Holds application settings records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/application_settings.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/audit_logs.html"><code>audit_logs</code></a></td>
+<td>Holds audit logs records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/audit_logs.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/cms_banners.html"><code>cms_banners</code></a></td>
+<td>Holds cms banners records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/cms_banners.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/cms_page_versions.html"><code>cms_page_versions</code></a></td>
+<td>Holds cms page versions records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/cms_page_versions.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/cms_pages.html"><code>cms_pages</code></a></td>
+<td>Holds cms pages records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/cms_pages.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/data_retention_policies.html"><code>data_retention_policies</code></a></td>
+<td>Holds data retention policies records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/data_retention_policies.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/feature_flags.html"><code>feature_flags</code></a></td>
+<td>Holds feature flags records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/feature_flags.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/file_access_events.html"><code>file_access_events</code></a></td>
+<td>Holds file access events records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/file_access_events.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/file_access_grants.html"><code>file_access_grants</code></a></td>
+<td>Holds file access grants records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/file_access_grants.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/file_objects.html"><code>file_objects</code></a></td>
+<td>Holds file objects records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/file_objects.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/file_scan_events.html"><code>file_scan_events</code></a></td>
+<td>Holds file scan events records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/file_scan_events.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/file_upload_sessions.html"><code>file_upload_sessions</code></a></td>
+<td>Holds file upload sessions records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/file_upload_sessions.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/file_variants.html"><code>file_variants</code></a></td>
+<td>Holds file variants records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/file_variants.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/idempotency_keys.html"><code>idempotency_keys</code></a></td>
+<td>Holds idempotency keys records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/idempotency_keys.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/inbox_messages.html"><code>inbox_messages</code></a></td>
+<td>Holds inbox messages records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/inbox_messages.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/outbox_events.html"><code>outbox_events</code></a></td>
+<td>Holds outbox events records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/outbox_events.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/report_definitions.html"><code>report_definitions</code></a></td>
+<td>Holds report definitions records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/report_definitions.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/report_runs.html"><code>report_runs</code></a></td>
+<td>Holds report runs records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/report_runs.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/scheduled_jobs.html"><code>scheduled_jobs</code></a></td>
+<td>Holds scheduled jobs records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/scheduled_jobs.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/webhook_deliveries.html"><code>webhook_deliveries</code></a></td>
+<td>Holds webhook deliveries records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/webhook_deliveries.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/platform/webhook_endpoints.html"><code>webhook_endpoints</code></a></td>
+<td>Holds webhook endpoints records within the platform domain (configuration, documents, audit, events and reports). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/platform/webhook_endpoints.html">Table contract</a></td>
+</tr>
+</tbody>
+</table>
+<h2>ER diagrams</h2>
+<p>These diagrams show declared PostgreSQL foreign keys from focused source tables. Entity fields include primary keys, unique keys, and FK columns; exact data types remain in the linked table contracts. <code>PK</code>, <code>FK</code>, and <code>UK</code> mark key roles. Relationship cardinality comes from FK nullability and unique constraints/indexes in the recorded catalog.</p>
+<p>&lt;a id=&quot;diagram-01&quot;&gt;&lt;/a&gt;</p>
+<h3>Diagram 01 — file_variants, file_objects, file_upload_sessions, file_access_grants, file_access_events, report_runs, report_definitions, cms_pages</h3>
+<p>This focused view contains every declared FK owned by the listed focus tables. Referenced tables outside that set appear as context. Parallel FK constraints are distinguished by their stable IDs; search those IDs in the <a href="Relationship-Catalog/platform.html">relationship catalog</a> for exact columns and actions.</p>
+<pre><code class="language-mermaid">erDiagram
+    identity__users {
+        uuid created_by FK
+        varchar email_normalized UK
+        uuid id PK, FK, UK
+        uuid updated_by FK
+    }
+    platform__cms_pages {
+        uuid created_by FK
+        uuid created_by_user_id FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+        uuid updated_by_user_id FK
+    }
+    platform__file_access_events {
+        uuid actor_user_id FK
+        uuid file_object_id FK
+        bigint file_object_id_internal_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+    }
+    platform__file_access_grants {
+        uuid created_by FK
+        uuid file_object_id FK
+        bigint file_object_id_internal_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid updated_by FK
+    }
+    platform__file_objects {
+        varchar bucket UK
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        varchar object_key UK
+        uuid updated_by FK
+        uuid uploaded_by_user_id FK
+    }
+    platform__file_upload_sessions {
+        uuid created_by FK
+        uuid file_object_id FK
+        bigint file_object_id_internal_id FK
+        uuid id UK
+        varchar idempotency_key UK
+        bigint internal_id PK, UK
+        uuid requested_by_user_id FK
+        varchar scope UK
+        uuid updated_by FK
+    }
+    platform__file_variants {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid source_file_id FK
+        bigint source_file_id_internal_id FK
+        uuid updated_by FK
+        uuid variant_file_id FK, UK
+        bigint variant_file_id_internal_id FK
+    }
+    platform__report_definitions {
+        varchar code UK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+    }
+    platform__report_runs {
+        uuid definition_id FK
+        bigint definition_id_internal_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid requested_by_user_id FK
+        uuid result_file_object_id FK
+        bigint result_file_object_id_internal_id FK
+    }
+    identity__users o|--o{ platform__file_variants : &quot;FK-1086 FK-1087 FK-1090&quot;
+    platform__file_objects ||--o{ platform__file_variants : &quot;FK-1088 FK-1089 FK-1092&quot;
+    platform__file_objects ||--o| platform__file_variants : &quot;FK-1091&quot;
+    identity__users o|--o{ platform__file_objects : &quot;FK-1075 FK-1076 FK-1077 FK-1078&quot;
+    identity__users o|--o{ platform__file_upload_sessions : &quot;FK-1081 FK-1084 FK-1085&quot;
+    platform__file_objects ||--o{ platform__file_upload_sessions : &quot;FK-1082 FK-1083&quot;
+    identity__users o|--o{ platform__file_access_grants : &quot;FK-1071 FK-1074&quot;
+    platform__file_objects ||--o{ platform__file_access_grants : &quot;FK-1072 FK-1073&quot;
+    identity__users o|--o{ platform__file_access_events : &quot;FK-1068&quot;
+    platform__file_objects ||--o{ platform__file_access_events : &quot;FK-1069 FK-1070&quot;
+    platform__report_definitions ||--o{ platform__report_runs : &quot;FK-1099 FK-1100&quot;
+    identity__users ||--o{ platform__report_runs : &quot;FK-1101&quot;
+    platform__file_objects o|--o{ platform__report_runs : &quot;FK-1102 FK-1103&quot;
+    identity__users o|--o{ platform__cms_pages : &quot;FK-1057 FK-1058 FK-1059 FK-1060 FK-1061&quot;
+</code></pre>
+<p><strong>Entity name mapping</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mermaid name</th>
+<th>PostgreSQL table</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identity__users</code></td>
+<td><a href="../Tables/identity/users.html"><code>identity.users</code></a></td>
+</tr>
+<tr>
+<td><code>platform__cms_pages</code></td>
+<td><a href="../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+</tr>
+<tr>
+<td><code>platform__file_access_events</code></td>
+<td><a href="../Tables/platform/file_access_events.html"><code>platform.file_access_events</code></a></td>
+</tr>
+<tr>
+<td><code>platform__file_access_grants</code></td>
+<td><a href="../Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+</tr>
+<tr>
+<td><code>platform__file_objects</code></td>
+<td><a href="../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+</tr>
+<tr>
+<td><code>platform__file_upload_sessions</code></td>
+<td><a href="../Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+</tr>
+<tr>
+<td><code>platform__file_variants</code></td>
+<td><a href="../Tables/platform/file_variants.html"><code>platform.file_variants</code></a></td>
+</tr>
+<tr>
+<td><code>platform__report_definitions</code></td>
+<td><a href="../Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a></td>
+</tr>
+<tr>
+<td><code>platform__report_runs</code></td>
+<td><a href="../Tables/platform/report_runs.html"><code>platform.report_runs</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Coverage: 8 focus tables, 9 entities, 33 FK constraints (33 unique IDs).</p>
+<p>&lt;a id=&quot;diagram-02&quot;&gt;&lt;/a&gt;</p>
+<h3>Diagram 02 — cms_page_versions, application_settings, data_retention_policies, feature_flags, webhook_endpoints, webhook_deliveries, idempotency_keys, inbox_messages</h3>
+<p>This focused view contains every declared FK owned by the listed focus tables. Referenced tables outside that set appear as context. Parallel FK constraints are distinguished by their stable IDs; search those IDs in the <a href="Relationship-Catalog/platform.html">relationship catalog</a> for exact columns and actions.</p>
+<pre><code class="language-mermaid">erDiagram
+    identity__users {
+        uuid created_by FK
+        varchar email_normalized UK
+        uuid id PK, FK, UK
+        uuid updated_by FK
+    }
+    platform__application_settings {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        varchar key UK
+        varchar namespace UK
+        uuid updated_by FK
+    }
+    platform__cms_page_versions {
+        uuid approved_by_user_id FK
+        uuid created_by_user_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid page_id FK, UK
+        bigint page_id_internal_id FK
+        integer version UK
+    }
+    platform__cms_pages {
+        uuid created_by FK
+        uuid created_by_user_id FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+        uuid updated_by_user_id FK
+    }
+    platform__data_retention_policies {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid updated_by FK
+    }
+    platform__feature_flags {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid updated_by FK
+    }
+    platform__idempotency_keys {
+        uuid created_by FK
+        uuid id UK
+        varchar idempotency_key UK
+        bigint internal_id PK, UK
+        varchar scope UK
+        uuid updated_by FK
+    }
+    platform__inbox_messages {
+        varchar consumer_name UK
+        uuid created_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid message_id UK
+        uuid updated_by FK
+    }
+    platform__webhook_deliveries {
+        uuid created_by FK
+        uuid endpoint_id FK, UK
+        bigint endpoint_id_internal_id FK
+        uuid event_id UK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid updated_by FK
+    }
+    platform__webhook_endpoints {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+    }
+    identity__users o|--o{ platform__cms_page_versions : &quot;FK-1053&quot;
+    identity__users ||--o{ platform__cms_page_versions : &quot;FK-1054&quot;
+    platform__cms_pages ||--o{ platform__cms_page_versions : &quot;FK-1055 FK-1056&quot;
+    identity__users o|--o{ platform__application_settings : &quot;FK-1047 FK-1048 FK-1049&quot;
+    identity__users o|--o{ platform__data_retention_policies : &quot;FK-1062 FK-1063 FK-1064&quot;
+    identity__users o|--o{ platform__feature_flags : &quot;FK-1065 FK-1066 FK-1067&quot;
+    identity__users o|--o{ platform__webhook_endpoints : &quot;FK-1110 FK-1111 FK-1112&quot;
+    identity__users o|--o{ platform__webhook_deliveries : &quot;FK-1106 FK-1109&quot;
+    platform__webhook_endpoints ||--o{ platform__webhook_deliveries : &quot;FK-1107 FK-1108&quot;
+    identity__users o|--o{ platform__idempotency_keys : &quot;FK-1093 FK-1094&quot;
+    identity__users o|--o{ platform__inbox_messages : &quot;FK-1095 FK-1096&quot;
+</code></pre>
+<p><strong>Entity name mapping</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mermaid name</th>
+<th>PostgreSQL table</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identity__users</code></td>
+<td><a href="../Tables/identity/users.html"><code>identity.users</code></a></td>
+</tr>
+<tr>
+<td><code>platform__application_settings</code></td>
+<td><a href="../Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+</tr>
+<tr>
+<td><code>platform__cms_page_versions</code></td>
+<td><a href="../Tables/platform/cms_page_versions.html"><code>platform.cms_page_versions</code></a></td>
+</tr>
+<tr>
+<td><code>platform__cms_pages</code></td>
+<td><a href="../Tables/platform/cms_pages.html"><code>platform.cms_pages</code></a></td>
+</tr>
+<tr>
+<td><code>platform__data_retention_policies</code></td>
+<td><a href="../Tables/platform/data_retention_policies.html"><code>platform.data_retention_policies</code></a></td>
+</tr>
+<tr>
+<td><code>platform__feature_flags</code></td>
+<td><a href="../Tables/platform/feature_flags.html"><code>platform.feature_flags</code></a></td>
+</tr>
+<tr>
+<td><code>platform__idempotency_keys</code></td>
+<td><a href="../Tables/platform/idempotency_keys.html"><code>platform.idempotency_keys</code></a></td>
+</tr>
+<tr>
+<td><code>platform__inbox_messages</code></td>
+<td><a href="../Tables/platform/inbox_messages.html"><code>platform.inbox_messages</code></a></td>
+</tr>
+<tr>
+<td><code>platform__webhook_deliveries</code></td>
+<td><a href="../Tables/platform/webhook_deliveries.html"><code>platform.webhook_deliveries</code></a></td>
+</tr>
+<tr>
+<td><code>platform__webhook_endpoints</code></td>
+<td><a href="../Tables/platform/webhook_endpoints.html"><code>platform.webhook_endpoints</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Coverage: 8 focus tables, 10 entities, 24 FK constraints (24 unique IDs).</p>
+<p>&lt;a id=&quot;diagram-03&quot;&gt;&lt;/a&gt;</p>
+<h3>Diagram 03 — cms_banners, file_scan_events, outbox_events, scheduled_jobs, audit_logs</h3>
+<p>This focused view contains every declared FK owned by the listed focus tables. Referenced tables outside that set appear as context. Parallel FK constraints are distinguished by their stable IDs; search those IDs in the <a href="Relationship-Catalog/platform.html">relationship catalog</a> for exact columns and actions.</p>
+<pre><code class="language-mermaid">erDiagram
+    identity__users {
+        uuid created_by FK
+        varchar email_normalized UK
+        uuid id PK, FK, UK
+        uuid updated_by FK
+    }
+    platform__audit_logs {
+        uuid actor_user_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+    }
+    platform__cms_banners {
+        varchar code UK
+        uuid id UK
+        uuid image_file_id FK
+        bigint image_file_id_internal_id FK
+        bigint internal_id PK, UK
+        varchar locale UK
+    }
+    platform__file_objects {
+        varchar bucket UK
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        varchar object_key UK
+        uuid updated_by FK
+        uuid uploaded_by_user_id FK
+    }
+    platform__file_scan_events {
+        uuid file_object_id FK
+        bigint file_object_id_internal_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+    }
+    platform__outbox_events {
+        uuid created_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid updated_by FK
+    }
+    platform__scheduled_jobs {
+        uuid created_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        varchar job_key UK
+        uuid updated_by FK
+    }
+    platform__file_objects o|--o{ platform__cms_banners : &quot;FK-1051 FK-1052&quot;
+    platform__file_objects ||--o{ platform__file_scan_events : &quot;FK-1079 FK-1080&quot;
+    identity__users o|--o{ platform__outbox_events : &quot;FK-1097 FK-1098&quot;
+    identity__users o|--o{ platform__scheduled_jobs : &quot;FK-1104 FK-1105&quot;
+    identity__users o|--o{ platform__audit_logs : &quot;FK-1050&quot;
+</code></pre>
+<p><strong>Entity name mapping</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mermaid name</th>
+<th>PostgreSQL table</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identity__users</code></td>
+<td><a href="../Tables/identity/users.html"><code>identity.users</code></a></td>
+</tr>
+<tr>
+<td><code>platform__audit_logs</code></td>
+<td><a href="../Tables/platform/audit_logs.html"><code>platform.audit_logs</code></a></td>
+</tr>
+<tr>
+<td><code>platform__cms_banners</code></td>
+<td><a href="../Tables/platform/cms_banners.html"><code>platform.cms_banners</code></a></td>
+</tr>
+<tr>
+<td><code>platform__file_objects</code></td>
+<td><a href="../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+</tr>
+<tr>
+<td><code>platform__file_scan_events</code></td>
+<td><a href="../Tables/platform/file_scan_events.html"><code>platform.file_scan_events</code></a></td>
+</tr>
+<tr>
+<td><code>platform__outbox_events</code></td>
+<td><a href="../Tables/platform/outbox_events.html"><code>platform.outbox_events</code></a></td>
+</tr>
+<tr>
+<td><code>platform__scheduled_jobs</code></td>
+<td><a href="../Tables/platform/scheduled_jobs.html"><code>platform.scheduled_jobs</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Coverage: 5 focus tables, 7 entities, 9 FK constraints (9 unique IDs).</p>
+<h2>How the tables connect</h2>
+<ul>
+<li><strong>platform.application_settings → identity.users:</strong> <code>created_by</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>platform.application_settings → identity.users:</strong> <code>deleted_by</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>platform.application_settings → identity.users:</strong> <code>updated_by</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>platform.audit_logs → identity.users:</strong> <code>actor_user_id</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE SET NULL</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>platform.cms_banners → platform.file_objects:</strong> <code>image_file_id</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>platform.cms_banners → platform.file_objects:</strong> <code>image_file_id_internal_id</code> references <code>internal_id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+</ul>
+<p>Paired public UUID and internal BIGINT foreign keys are real separate constraints. Diagrams use relationship IDs to keep those links readable; each underlying constraint is listed separately in the catalog. The application must keep paired identifiers consistent under the database's numeric-key guards. A relationship does not itself grant read or write permission.</p>
+<h2>Important database rules</h2>
+<ul>
+<li>The database primary key strategy uses an internal numeric key for most domain rows while retaining public UUID aliases; <code>identity.users</code> retains a UUID primary key. The table diagram labels expose the exact keys for each entity.</li>
+<li>A nullable FK permits a child row without that association; it does not make the referenced parent optional when a value is present.</li>
+<li>Composite FKs remain composite in the relationship catalog. Their scope columns must not be dropped when reading the diagram.</li>
+<li>A many-to-many association uses its actual junction table where one exists; no direct association is inferred.</li>
+<li>Authorization, tenant/site scoping, and service write ownership are separate contracts. See the linked database rules and module designs.</li>
+</ul>
+<h2>What happens during normal operations</h2>
+<p>See <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a> for the reviewed workflows that touch this schema. The workflows describe business sequencing; these ERDs describe enforced database references.</p>
+<h2>Related documents</h2>
+<p><a href="../Schema-Overview.html">Schema overview</a> · <a href="../Database-Rules.html">Database rules</a> · <a href="../Models-and-Parity.html">Model and parity notes</a> · <a href="../Migrations.html">Migration evidence</a> · <a href="Relationship-Catalog.html">Full relationship catalog</a> · <a href="Logical-References.html">Non-FK reference review</a> · <a href="../Tables/platform/README.html">Table index</a> · <a href="../../03-Modules/Admin_CMS/HLD.html">Admin_CMS HLD</a> · <a href="../../03-Modules/Admin_CMS/LLD.html">Admin_CMS LLD</a> · <a href="../../03-Modules/Audit/HLD.html">Audit HLD</a> · <a href="../../03-Modules/Audit/LLD.html">Audit LLD</a> · <a href="../../03-Modules/Notifications/HLD.html">Notifications HLD</a> · <a href="../../03-Modules/Notifications/LLD.html">Notifications LLD</a> · <a href="../../03-Modules/Prescription_Upload/HLD.html">Prescription_Upload HLD</a> · <a href="../../03-Modules/Prescription_Upload/LLD.html">Prescription_Upload LLD</a> · <a href="../../03-Modules/Reporting/HLD.html">Reporting HLD</a> · <a href="../../03-Modules/Reporting/LLD.html">Reporting LLD</a> · <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a> · <a href="../../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></p>
+</main></body></html>

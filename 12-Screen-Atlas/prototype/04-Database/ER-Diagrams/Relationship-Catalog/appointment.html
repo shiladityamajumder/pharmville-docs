@@ -1,0 +1,509 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>appointment · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Appointment foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>appointment</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-0001</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/appointment_slots.html"><code>appointment.appointment_slots</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0002</td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><a href="../../Tables/appointment/appointment_slots.html"><code>appointment.appointment_slots</code></a></td>
+<td><code>practitioner_service_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0003</td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><a href="../../Tables/appointment/appointment_slots.html"><code>appointment.appointment_slots</code></a></td>
+<td><code>practitioner_service_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0004</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/appointment_slots.html"><code>appointment.appointment_slots</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0005</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/appointment_status_history.html"><code>appointment.appointment_status_history</code></a></td>
+<td><code>actor_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0006</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/appointment/appointment_status_history.html"><code>appointment.appointment_status_history</code></a></td>
+<td><code>appointment_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0007</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/appointment/appointment_status_history.html"><code>appointment.appointment_status_history</code></a></td>
+<td><code>appointment_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0008</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>booked_by_user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0009</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0010</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0011</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>patient_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0012</td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>practitioner_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0013</td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>practitioner_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0014</td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>practitioner_service_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0015</td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>practitioner_service_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0016</td>
+<td><a href="../../Tables/appointment/appointment_slots.html"><code>appointment.appointment_slots</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>slot_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0017</td>
+<td><a href="../../Tables/appointment/appointment_slots.html"><code>appointment.appointment_slots</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>slot_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0018</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0019</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/availability_exceptions.html"><code>appointment.availability_exceptions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0020</td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><a href="../../Tables/appointment/availability_exceptions.html"><code>appointment.availability_exceptions</code></a></td>
+<td><code>practitioner_service_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0021</td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><a href="../../Tables/appointment/availability_exceptions.html"><code>appointment.availability_exceptions</code></a></td>
+<td><code>practitioner_service_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0022</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/availability_exceptions.html"><code>appointment.availability_exceptions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0023</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/availability_rules.html"><code>appointment.availability_rules</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0024</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/availability_rules.html"><code>appointment.availability_rules</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0025</td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><a href="../../Tables/appointment/availability_rules.html"><code>appointment.availability_rules</code></a></td>
+<td><code>practitioner_service_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0026</td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><a href="../../Tables/appointment/availability_rules.html"><code>appointment.availability_rules</code></a></td>
+<td><code>practitioner_service_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0027</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/availability_rules.html"><code>appointment.availability_rules</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0028</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0029</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0030</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>location_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0031</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>location_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0032</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>organization_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0033</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>organization_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0034</td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>practitioner_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0035</td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>practitioner_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0036</td>
+<td><a href="../../Tables/appointment/service_types.html"><code>appointment.service_types</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>service_type_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0037</td>
+<td><a href="../../Tables/appointment/service_types.html"><code>appointment.service_types</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>service_type_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0038</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/practitioner_services.html"><code>appointment.practitioner_services</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0039</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/service_types.html"><code>appointment.service_types</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0040</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/service_types.html"><code>appointment.service_types</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0041</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/service_types.html"><code>appointment.service_types</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0042</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/appointment/teleconsultation_sessions.html"><code>appointment.teleconsultation_sessions</code></a></td>
+<td><code>appointment_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0043</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/appointment/teleconsultation_sessions.html"><code>appointment.teleconsultation_sessions</code></a></td>
+<td><code>appointment_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..1 child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0044</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/teleconsultation_sessions.html"><code>appointment.teleconsultation_sessions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0045</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/appointment/teleconsultation_sessions.html"><code>appointment.teleconsultation_sessions</code></a></td>
+<td><code>recording_file_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0046</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/appointment/teleconsultation_sessions.html"><code>appointment.teleconsultation_sessions</code></a></td>
+<td><code>recording_file_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0047</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/appointment/teleconsultation_sessions.html"><code>appointment.teleconsultation_sessions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-01">01-appointment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0048</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/appointment/waiting_room_events.html"><code>appointment.waiting_room_events</code></a></td>
+<td><code>appointment_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-02">01-appointment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0049</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/appointment/waiting_room_events.html"><code>appointment.waiting_room_events</code></a></td>
+<td><code>appointment_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../01-appointment.html#diagram-02">01-appointment.md#diagram-02</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

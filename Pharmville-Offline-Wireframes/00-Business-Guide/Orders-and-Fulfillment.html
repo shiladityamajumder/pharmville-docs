@@ -1,0 +1,69 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Orders and Fulfillment · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Orders and fulfillment</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.</p>
+</blockquote>
+<h2>What is this process?</h2>
+<p>An order coordinates the teams supplying a customer’s accepted purchase. The timeline explains progress while keeping payment, prescription, stock and delivery facts distinct.</p>
+<h2>Who is involved?</h2>
+<p>Customers, order operations, pharmacists, store/warehouse teams, dispatchers, riders, Finance and support.</p>
+<h2>How does it normally work?</h2>
+<ol>
+<li>Pharmville records one request and shows the outstanding review/payment step. Request receipt is not proof of payment.</li>
+<li>Operations chooses an eligible open store with the whole basket. Warehouse fallback remains subject to scope, stock and licensed-site approval.</li>
+<li>Inventory supplies the exact hold. Workers accept the task, pick the recorded batches, recheck clinical approval and pack accepted items.</li>
+<li>After fulfillment checks and verified online payment or approved COD, staff hand the parcel to the assigned rider. Missing safety or money evidence prevents dispatch.</li>
+<li>The customer follows placed, packed, out-for-delivery and delivered milestones backed by actual work, and can open history, invoice, permitted tracking and OTP.</li>
+<li>Operations follows attention queues for uncertain money, stalled preparation and failed deliveries. Support explains the same recorded facts.</li>
+</ol>
+<h2>What happens next?</h2>
+<p>Prepared parcels enter <a href="Delivery-and-Rider-App.html">delivery</a>. Exceptions can enter <a href="Returns-and-Refunds.html">returns/refunds</a>.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<h3>No location can supply the whole basket</h3>
+<p>Closure, expired license, stale stock or missing packs can eliminate every candidate. Operations keeps the order blocked and offers approved waiting, revision or cancellation. The customer sees an action/delay status; no silent site split occurs and paid money remains Finance’s responsibility.</p>
+<h3>Stock fails after checkout</h3>
+<p>A physical shortage or blocked batch stops picking. Staff record the discrepancy. Operations considers permitted reassignment or customer-approved revision; Finance handles any required refund. The customer sees preparation delayed, not packed.</p>
+<h3>Reassignment or cancellation races with packing</h3>
+<p>Operators and customers may act on old screens. Pharmville accepts only a valid current transition; others refresh. Unused holds are released through Inventory, not duplicated across sites. Cancellation follows the draft before-packed rule or moves to the approved support/return path.</p>
+<h3>The customer requests an edit after placing</h3>
+<p>ORD-09 remains a draft Could feature. Address/item changes can invalidate price, serviceability, patient approval and stock. Staff route for review until its contract is approved; they do not silently rewrite the accepted order.</p>
+<h2>What does the user see?</h2>
+<p>Customers see recorded milestones, permitted invoice/tracking access and eligible cancellation/return actions. Operators see site, task and exception reasons.</p>
+<h2>What still needs approval?</h2>
+<p>D-004 (payment/cancellation), D-009 (site eligibility), D-010 (partial supply/reassignment). The <a href="../09-References/Sources-and-Decisions.html#open-decisions">decision register</a> names owners and blocked actions.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../02-Architecture/System-HLD.html">System HLD</a> · <a href="../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development tasks</a></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Architecture</th>
+<th>Implementation</th>
+<th>API</th>
+<th>Data</th>
+<th>Edge cases and tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer Orders</td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#customer-orders">Mapping</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+</tr>
+<tr>
+<td>Order Operations</td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#order-operations">Mapping</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Cases</a></td>
+</tr>
+</tbody>
+</table>
+<p>Technical workflows: <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a> · <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a> · <a href="../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a> · <a href="../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a> · <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>.</p>
+<p>Feature references: <code>ORD-01</code>, <code>ORD-02</code>, <code>ORD-03</code>, <code>ORD-04</code>, <code>ORD-05</code>, <code>ORD-06</code>, <code>ORD-07</code>, <code>ORD-08</code>, <code>ORD-09</code>, <code>OMS-01</code>, <code>OMS-02</code>, <code>OMS-03</code>, <code>OMS-04</code>, <code>OMS-05</code>, <code>OMS-06</code>, <code>OMS-07</code>.</p>
+<p><a href="README.html">Business Guide</a> · <a href="Pharmville-Complete-Business-Flow.html">Complete journey</a></p>
+</main></body></html>

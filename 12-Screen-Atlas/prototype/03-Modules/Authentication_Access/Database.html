@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Authentication database contract</h1>
+<p><strong>Structure validated; business write assignment Proposed.</strong> Authentication mechanics and role grants; customer login endpoints retain their historical customer contract surface. Read access or a contract surface does not confer write ownership. Exact operation transactions/DTO columns are in <a href="APIs.html">APIs</a>; shared audit/outbox/idempotency writes are owner-coordinated infrastructure.</p>
+<h2>Proposed owned tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Classification</th>
+<th>Write-owner approval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/identity/api_client_secrets.html"><code>identity.api_client_secrets</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/api_clients.html"><code>identity.api_clients</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/login_attempts.html"><code>identity.login_attempts</code></a></td>
+<td>Audit / History</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/mfa_factors.html"><code>identity.mfa_factors</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/otp_challenges.html"><code>identity.otp_challenges</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/password_history.html"><code>identity.password_history</code></a></td>
+<td>Audit / History</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/role_permissions.html"><code>identity.role_permissions</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/sessions.html"><code>identity.sessions</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/trusted_devices.html"><code>identity.trusted_devices</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/user_profiles.html"><code>identity.user_profiles</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/user_roles.html"><code>identity.user_roles</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/authentication_challenges.html"><code>identity.authentication_challenges</code></a></td>
+<td>Transactional</td>
+<td>Proposed D-028 / D-024</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/session_refresh_tokens.html"><code>identity.session_refresh_tokens</code></a></td>
+<td>Transactional</td>
+<td>Proposed D-028 / D-024</td>
+</tr>
+</tbody>
+</table>
+<h2>Contract reads and writes</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Exact read columns</th>
+<th>Exact proposed write columns</th>
+<th>Proposed data owner</th>
+<th>API IDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/customer/profiles.html"><code>customer.profiles</code></a></td>
+<td><code>created_by</code>, <code>deleted_by</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>updated_by</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Customer_Accounts</td>
+<td>API-002</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/authentication_challenges.html"><code>identity.authentication_challenges</code></a></td>
+<td><code>attempts</code>, <code>binding_json</code>, <code>blocked_at</code>, <code>consumed_at</code>, <code>created_at</code>, <code>created_by</code>, <code>expires_at</code>, <code>factor_type</code>, <code>id</code>, <code>identifier_encrypted</code>, <code>identity_version</code>, <code>max_attempts</code>, <code>mfa_factor_id</code>, <code>otp_challenge_id</code>, <code>parent_challenge_id</code>, <code>policy_version</code>, <code>purpose</code>, <code>requested_context_hash</code>, <code>row_version</code>, <code>session_id</code>, <code>token_hash</code>, <code>updated_at</code>, <code>updated_by</code>, <code>user_id</code></td>
+<td><code>attempts</code>, <code>binding_json</code>, <code>blocked_at</code>, <code>consumed_at</code>, <code>expires_at</code>, <code>factor_type</code>, <code>identifier_encrypted</code>, <code>identity_version</code>, <code>max_attempts</code>, <code>mfa_factor_id</code>, <code>otp_challenge_id</code>, <code>parent_challenge_id</code>, <code>policy_version</code>, <code>purpose</code>, <code>requested_context_hash</code>, <code>session_id</code>, <code>token_hash</code>, <code>user_id</code></td>
+<td>Authentication_Access</td>
+<td>API-001, API-002, API-034, API-089, API-090, API-092, API-098, API-099, API-103, API-104, API-105, API-106, API-107</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/login_attempts.html"><code>identity.login_attempts</code></a></td>
+<td>None</td>
+<td><code>failure_code</code>, <code>ip_address</code>, <code>login_identifier_hash</code>, <code>request_id</code>, <code>success</code>, <code>user_agent</code>, <code>user_id</code></td>
+<td>Authentication_Access</td>
+<td>API-002, API-089, API-090, API-099, API-103, API-104, API-105, API-107</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/mfa_factors.html"><code>identity.mfa_factors</code></a></td>
+<td><code>created_by</code>, <code>disabled_at</code>, <code>factor_type</code>, <code>id</code>, <code>label</code>, <code>last_accepted_totp_counter</code>, <code>row_version</code>, <code>secret_encrypted</code>, <code>updated_by</code>, <code>user_id</code>, <code>verified_at</code></td>
+<td><code>factor_type</code>, <code>label</code>, <code>last_accepted_totp_counter</code>, <code>secret_encrypted</code>, <code>user_id</code>, <code>verified_at</code></td>
+<td>Authentication_Access</td>
+<td>API-089, API-090, API-099, API-103, API-104, API-107</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/otp_challenges.html"><code>identity.otp_challenges</code></a></td>
+<td><code>attempts</code>, <code>blocked_at</code>, <code>consumed_at</code>, <code>created_by</code>, <code>destination_hash</code>, <code>expires_at</code>, <code>id</code>, <code>max_attempts</code>, <code>otp_hash</code>, <code>purpose</code>, <code>row_version</code>, <code>updated_by</code></td>
+<td><code>attempts</code>, <code>blocked_at</code>, <code>channel</code>, <code>consumed_at</code>, <code>destination_hash</code>, <code>expires_at</code>, <code>max_attempts</code>, <code>otp_hash</code>, <code>purpose</code></td>
+<td>Authentication_Access</td>
+<td>API-001, API-002, API-098, API-099, API-106, API-107</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/password_history.html"><code>identity.password_history</code></a></td>
+<td><code>created_at</code>, <code>password_hash</code>, <code>user_id</code></td>
+<td><code>password_hash</code>, <code>user_id</code></td>
+<td>Authentication_Access</td>
+<td>API-105, API-107</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a></td>
+<td><code>action</code>, <code>code</code>, <code>created_by</code>, <code>deleted_by</code>, <code>id</code>, <code>is_deleted</code>, <code>resource</code>, <code>row_version</code>, <code>updated_by</code></td>
+<td>None</td>
+<td>Authentication_Access</td>
+<td>API-002, API-033, API-090, API-091, API-093, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/role_permissions.html"><code>identity.role_permissions</code></a></td>
+<td><code>permission_id</code>, <code>role_id</code>, <code>row_version</code></td>
+<td><code>permission_id</code>, <code>permission_id_internal_id</code>, <code>role_id</code>, <code>role_id_internal_id</code></td>
+<td>Authentication_Access</td>
+<td>API-002, API-090, API-091, API-093, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a></td>
+<td><code>code</code>, <code>created_by</code>, <code>deleted_by</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>updated_by</code></td>
+<td><code>row_version</code></td>
+<td>Authentication_Access</td>
+<td>API-002, API-033, API-034, API-089, API-090, API-091, API-093, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/session_refresh_tokens.html"><code>identity.session_refresh_tokens</code></a></td>
+<td><code>consumed_at</code>, <code>created_at</code>, <code>created_by</code>, <code>expires_at</code>, <code>id</code>, <code>parent_token_id</code>, <code>revoked_at</code>, <code>row_version</code>, <code>session_id</code>, <code>token_hash</code>, <code>updated_at</code>, <code>updated_by</code></td>
+<td><code>consumed_at</code>, <code>expires_at</code>, <code>parent_token_id</code>, <code>revoked_at</code>, <code>session_id</code>, <code>token_hash</code></td>
+<td>Authentication_Access</td>
+<td>API-002, API-034, API-090, API-091, API-092, API-099, API-105, API-107</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/sessions.html"><code>identity.sessions</code></a></td>
+<td><code>active_assignment_id</code>, <code>active_workspace_code</code>, <code>authentication_policy_version</code>, <code>context_version</code>, <code>created_by</code>, <code>expires_at</code>, <code>id</code>, <code>mfa_verified_at</code>, <code>otp_verified_at</code>, <code>password_verified_at</code>, <code>refresh_token_hash</code>, <code>revoked_at</code>, <code>row_version</code>, <code>token_family_id</code>, <code>updated_by</code>, <code>user_id</code></td>
+<td><code>active_assignment_id</code>, <code>active_workspace_code</code>, <code>authenticated_at</code>, <code>authentication_policy_version</code>, <code>context_version</code>, <code>expires_at</code>, <code>mfa_verified_at</code>, <code>otp_verified_at</code>, <code>password_verified_at</code>, <code>refresh_token_hash</code>, <code>revoke_reason</code>, <code>revoked_at</code>, <code>token_family_id</code>, <code>user_id</code></td>
+<td>Authentication_Access</td>
+<td>API-002, API-034, API-090, API-091, API-092, API-093, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-107, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/user_roles.html"><code>identity.user_roles</code></a></td>
+<td><code>created_at</code>, <code>created_by</code>, <code>id</code>, <code>is_active</code>, <code>role_id</code>, <code>row_version</code>, <code>scope_id</code>, <code>scope_type</code>, <code>updated_by</code>, <code>user_id</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td><code>is_active</code>, <code>role_id</code>, <code>role_id_internal_id</code>, <code>scope_id</code>, <code>scope_type</code>, <code>user_id</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>Authentication_Access</td>
+<td>API-002, API-033, API-034, API-089, API-090, API-091, API-093, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>account_closed_at</code>, <code>created_by</code>, <code>email</code>, <code>email_normalized</code>, <code>email_verified_at</code>, <code>failed_login_count</code>, <code>id</code>, <code>locked_until</code>, <code>password_hash</code>, <code>phone_country_code</code>, <code>phone_number</code>, <code>phone_verified_at</code>, <code>row_version</code>, <code>status</code>, <code>updated_by</code></td>
+<td><code>email</code>, <code>email_normalized</code>, <code>failed_login_count</code>, <code>last_login_at</code>, <code>locked_until</code>, <code>password_hash</code>, <code>phone_country_code</code>, <code>phone_number</code>, <code>phone_verified_at</code>, <code>status</code></td>
+<td>Authentication_Access</td>
+<td>API-001, API-002, API-033, API-034, API-089, API-090, API-091, API-093, API-098, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-106, API-107, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><code>created_by</code>, <code>deleted_by</code>, <code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>location_type</code>, <code>organization_id</code>, <code>row_version</code>, <code>updated_by</code></td>
+<td>None</td>
+<td>Admin_CMS</td>
+<td>API-002, API-033, API-034, API-090, API-091, API-093, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>created_by</code>, <code>id</code>, <code>location_id</code>, <code>manager_user_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>status</code>, <code>updated_by</code>, <code>user_id</code></td>
+<td><code>left_at</code>, <code>location_id</code>, <code>organization_id</code>, <code>status</code>, <code>user_id</code></td>
+<td>Admin_CMS</td>
+<td>API-002, API-033, API-034, API-090, API-091, API-093, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>status</code></td>
+<td>None</td>
+<td>Admin_CMS</td>
+<td>API-002, API-090, API-091, API-093, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/audit_logs.html"><code>platform.audit_logs</code></a></td>
+<td>None</td>
+<td><code>action</code>, <code>actor_user_id</code>, <code>after_data</code>, <code>before_data</code>, <code>request_id</code>, <code>resource_id</code>, <code>resource_type</code></td>
+<td>Audit</td>
+<td>API-098, API-099, API-102, API-103, API-104, API-105, API-106, API-107, API-108, API-109, API-110</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/outbox_events.html"><code>platform.outbox_events</code></a></td>
+<td>None</td>
+<td><code>aggregate_id</code>, <code>aggregate_type</code>, <code>available_at</code>, <code>event_type</code>, <code>event_version</code>, <code>headers</code>, <code>payload</code></td>
+<td>Shared platform runtime — engineering owner</td>
+<td>API-104, API-105, API-107</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>location_id</code>, <code>organization_id</code>, <code>status</code></td>
+<td>None</td>
+<td>Warehouse</td>
+<td>API-002, API-090, API-091, API-093, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-108, API-111, API-109, API-112, API-110</td>
+</tr>
+</tbody>
+</table>
+<h2>Master and transaction dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Controlled table</th>
+<th>Classification</th>
+<th>Lifecycle and initial data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/customer/profiles.html"><code>customer.profiles</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/mfa_factors.html"><code>identity.mfa_factors</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/role_permissions.html"><code>identity.role_permissions</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/user_roles.html"><code>identity.user_roles</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+</tbody>
+</table>
+<p>Every mutation must enter the authoritative owner command with explicit scope/version, apply only that command’s invariant, and commit aggregate/audit/outbox together. External provider/file/message effects occur after commit; idempotency and recovery are per endpoint. Shared-table audit/outbox infrastructure does not acquire domain ownership. Physical SQL guards are recorded on each linked table page; application authorization remains additional.</p>
+</main></body></html>

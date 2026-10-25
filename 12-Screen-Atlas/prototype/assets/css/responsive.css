@@ -1,0 +1,293 @@
+@container app (min-width:1600px) {
+  .main-column {
+    padding-inline:48px
+  }
+
+  .screen-content {
+    max-width:1320px
+  }
+
+}
+
+@container app (max-width:1100px) {
+  .workspace-grid {
+    grid-template-columns:repeat(3,minmax(0,1fr))
+  }
+
+  .screen-catalog {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+
+  .prototype-layout {
+    grid-template-columns:180px minmax(0,1fr)
+  }
+
+  .main-column {
+    padding:24px
+  }
+
+  .product-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+
+  .stat-grid,.metrics {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+
+}
+
+@container app (max-width:800px) {
+  .prototype-layout {
+    display:block
+  }
+
+  .side-nav {
+    position:static;
+    height:auto;
+    border-right:0;
+    border-bottom:1px solid #aaa;
+    padding:12px 16px;
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    align-items:center
+  }
+
+  .side-nav .eyebrow {
+    display:none
+  }
+
+  .side-nav a {
+    flex-shrink:0;
+    max-width:220px;
+    padding:10px;
+    font-size:.75rem
+  }
+
+  .explorer {
+    padding:28px 22px
+  }
+
+  .workspace-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+
+  .scenario-panel {
+    grid-template-columns:1fr;
+    gap:10px
+  }
+
+  .two-column,.two-col,.form-grid {
+    grid-template-columns:1fr
+  }
+
+  .screen-heading {
+    display:block
+  }
+
+  .screen-id {
+    margin-bottom:8px
+  }
+
+  .explorer-intro {
+    align-items:flex-start
+  }
+
+  .explorer-intro .count {
+    white-space:normal;
+    min-width:120px
+  }
+
+  .screen-content.rider {
+    max-width:520px
+  }
+
+  .main-column {
+    padding:22px 20px 86px
+  }
+
+  .role-bar {
+    gap:10px
+  }
+
+  .explorer-filters {
+    grid-template-columns:1fr 1fr
+  }
+
+  .explorer-filters>.field:first-child {
+    grid-column:1/-1
+  }
+
+}
+
+@container app (max-width:520px) {
+  .main-column {
+    padding:20px 16px 88px
+  }
+
+  .explorer {
+    padding:26px 16px 42px
+  }
+
+  .explorer-intro {
+    display:block
+  }
+
+  .explorer-intro .count {
+    display:inline-block;
+    margin-top:12px;
+    font-size:.69rem;
+    padding:8px 12px
+  }
+
+  .workspace-grid {
+    gap:10px
+  }
+
+  .workspace-card {
+    padding:14px;
+    min-height:155px
+  }
+
+  .workspace-card strong {
+    font-size:.87rem
+  }
+
+  .workspace-card p {
+    font-size:.73rem
+  }
+
+  .screen-catalog,.grid,.grid.three,.cards,.product-grid,.stat-grid,.metrics {
+    grid-template-columns:1fr
+  }
+
+  .explorer-filters {
+    padding:16px;
+    gap:12px
+  }
+
+  .panel,.card {
+    padding:18px
+  }
+
+  .screen-content.rider {
+    padding:18px;
+    border-radius:0
+  }
+
+  .role-bar {
+    padding:12px
+  }
+
+  .role-bar select {
+    max-width:190px
+  }
+
+  .screen-footer {
+    font-size:.7rem
+  }
+
+  .mobile-nav {
+    display:flex;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    border-top:1px solid #999;
+    background:white;
+    justify-content:space-around;
+    padding:8px 4px;
+    z-index:10
+  }
+
+  .screen-content.customer {
+    padding-bottom:88px
+  }
+
+  .mobile-nav a {
+    font-size:.71rem;
+    text-decoration:none;
+    padding:10px 6px;
+    min-height:42px
+  }
+
+  .mobile-nav a.active {
+    font-weight:750;
+    text-decoration:underline
+  }
+
+  .actions>* {
+    flex-grow:1
+  }
+
+  .table-wrap {
+    overflow-x:visible
+  }
+
+  table,thead,tbody,tr,td {
+    display:block
+  }
+
+  thead {
+    position:absolute;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0)
+  }
+
+  tr {
+    border:1px solid #bbb;
+    margin-bottom:12px;
+    padding:8px 12px;
+    background:white
+  }
+
+  td {
+    border-bottom:1px solid #e0e0db;
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:9px 0;
+    flex-wrap:wrap;
+    min-width:0
+  }
+
+  td:before {
+    content:attr(data-label);
+    font-size:.66rem;
+    min-width:84px;
+    font-weight:650;
+    text-transform:uppercase;
+    color:#555
+  }
+
+  td:last-child {
+    border:0
+  }
+
+  .screen-content input,.screen-content select {
+    max-width:100%
+  }
+
+  .field input[type=file] {
+    font-size:.75rem
+  }
+
+  dl {
+    grid-template-columns:1fr
+  }
+
+  dd {
+    margin-bottom:8px
+  }
+
+  .scenario-panel {
+    padding:14px
+  }
+
+  .screen-catalog .actions>* {
+    flex-grow:0
+  }
+
+}

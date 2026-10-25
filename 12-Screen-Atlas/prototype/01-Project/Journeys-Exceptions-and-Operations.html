@@ -1,0 +1,255 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Journeys Exceptions and Operations · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Exceptions and operations</h1>
+<h2>S27 — Handle a failed delivery</h2>
+<ul>
+<li><strong>Source classification:</strong> the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.</li>
+<li><strong>Owning module:</strong> Delivery_Operations.</li>
+<li><strong>Actor:</strong> Rider / dispatch.</li>
+</ul>
+<h3>Trigger and preconditions</h3>
+<p>A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to <code>S27</code>. Preconditions are rechecked server-side; UI status is not authority.</p>
+<h3>Normal path and on-screen behavior</h3>
+<p>If the rider cannot hand over the parcel, Pharmville chooses an approved retry, reschedule or return-to-store route.</p>
+<p><strong>User sees:</strong> Delivery attempt unsuccessful, reason and next attempt where available.</p>
+<p><strong>Service responsibility:</strong> Keep custody clear; returned P products must go through the required safety check before any stock action.</p>
+<p><strong>Completion condition:</strong> Another delivery attempt begins, or the parcel returns to the store.</p>
+<h3>Data and cross-module handoff</h3>
+<p>Primary affected database domain(s): <code>logistics</code>, <code>fulfillment</code>, <code>organization</code>. Representative existing tables: <code>logistics.delivery_assignments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_failure_reasons</code>, <code>logistics.delivery_location_updates</code>. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.</p>
+<p>Related APIs: <code>GET /v1/staff/delivery/tasks</code>, <code>POST /v1/staff/delivery/tasks/{task_id}/assign</code>, <code>POST /v1/staff/delivery/tasks/{task_id}/resolution</code>. All endpoints are <strong>Proposed</strong>, not implemented.</p>
+<h3>Alternative paths and recovery</h3>
+<ul>
+<li><strong>Missing/invalid evidence:</strong> return a specific validation reason; preserve already committed business facts.</li>
+<li><strong>Duplicate or concurrent command:</strong> use an idempotency key and row/version guard so exactly one transition wins.</li>
+<li><strong>Unavailable upstream service:</strong> leave the item pending, do not assume success and create a recoverable operations alert.</li>
+<li><strong>Cancelled/unsafe/ineligible state:</strong> stop progression; release uncommitted holds or create compensating records when required.</li>
+</ul>
+<p><strong>Safety invariant:</strong> Never silently bypass a policy or retry a non-idempotent state change.</p>
+<h3>Acceptance checks</h3>
+<ol>
+<li>Authorized actor completes the step with one stored transition and audit actor.</li>
+<li>A stale, unauthorized or duplicate command has no unintended side effects.</li>
+<li>The correct customer-visible outcome reflects committed subsystem states.</li>
+</ol>
+<p>See module test plan and end-to-end sequence.</p>
+<h2>S28 — Cancel safely at the correct stage</h2>
+<ul>
+<li><strong>Source classification:</strong> the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.</li>
+<li><strong>Owning module:</strong> Customer_Orders.</li>
+<li><strong>Actor:</strong> Customer / support.</li>
+</ul>
+<h3>Trigger and preconditions</h3>
+<p>A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to <code>S28</code>. Preconditions are rechecked server-side; UI status is not authority.</p>
+<h3>Normal path and on-screen behavior</h3>
+<p>Cancellation depends on whether the order is still awaiting payment, being packed or already travelling. A cancel request is not proof that a rider or packer has stopped.</p>
+<p><strong>User sees:</strong> Cancel availability, confirmation and any refund status.</p>
+<p><strong>Service responsibility:</strong> Stop work where possible, record the reason and arrange a return if the parcel has already left.</p>
+<p><strong>Completion condition:</strong> An unpaid order closes or any paid amount moves to refund handling.</p>
+<h3>Data and cross-module handoff</h3>
+<p>Primary affected database domain(s): <code>commerce</code>, <code>finance</code>, <code>logistics</code>, <code>fulfillment</code>. Representative existing tables: <code>commerce.cancellations</code>, <code>commerce.order_items</code>, <code>commerce.orders</code>, <code>commerce.returns</code>. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.</p>
+<p>Related APIs: <code>GET /v1/me/orders</code>, <code>GET /v1/me/orders/{order_id}</code>, <code>POST /v1/me/orders/{order_id}/cancel</code>. All endpoints are <strong>Proposed</strong>, not implemented.</p>
+<h3>Alternative paths and recovery</h3>
+<ul>
+<li><strong>Missing/invalid evidence:</strong> return a specific validation reason; preserve already committed business facts.</li>
+<li><strong>Duplicate or concurrent command:</strong> use an idempotency key and row/version guard so exactly one transition wins.</li>
+<li><strong>Unavailable upstream service:</strong> leave the item pending, do not assume success and create a recoverable operations alert.</li>
+<li><strong>Cancelled/unsafe/ineligible state:</strong> stop progression; release uncommitted holds or create compensating records when required.</li>
+</ul>
+<p><strong>Safety invariant:</strong> Never silently bypass a policy or retry a non-idempotent state change.</p>
+<h3>Acceptance checks</h3>
+<ol>
+<li>Authorized actor completes the step with one stored transition and audit actor.</li>
+<li>A stale, unauthorized or duplicate command has no unintended side effects.</li>
+<li>The correct customer-visible outcome reflects committed subsystem states.</li>
+</ol>
+<p>See module test plan and end-to-end sequence.</p>
+<h2>S29 — Raise a return, wrong item or quality complaint</h2>
+<ul>
+<li><strong>Source classification:</strong> the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.</li>
+<li><strong>Owning module:</strong> Customer_Orders.</li>
+<li><strong>Actor:</strong> Customer / support.</li>
+</ul>
+<h3>Trigger and preconditions</h3>
+<p>A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to <code>S29</code>. Preconditions are rechecked server-side; UI status is not authority.</p>
+<h3>Normal path and on-screen behavior</h3>
+<p>After delivery, the customer selects the issue and affected items. Refund or return eligibility depends on product type, safety and approved policies.</p>
+<p><strong>User sees:</strong> Raise an issue, upload evidence if relevant and see what happens next.</p>
+<p><strong>Service responsibility:</strong> Do not treat medicines as ordinary resale returns; escalate wrong or unsafe P products immediately.</p>
+<p><strong>Completion condition:</strong> A permitted pickup is booked, an approved adjustment is made or support investigates.</p>
+<h3>Data and cross-module handoff</h3>
+<p>Primary affected database domain(s): <code>commerce</code>, <code>finance</code>, <code>logistics</code>, <code>fulfillment</code>. Representative existing tables: <code>commerce.cancellations</code>, <code>commerce.order_items</code>, <code>commerce.orders</code>, <code>commerce.returns</code>. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.</p>
+<p>Related APIs: <code>GET /v1/me/orders</code>, <code>GET /v1/me/orders/{order_id}</code>, <code>POST /v1/me/orders/{order_id}/cancel</code>. All endpoints are <strong>Proposed</strong>, not implemented.</p>
+<h3>Alternative paths and recovery</h3>
+<ul>
+<li><strong>Missing/invalid evidence:</strong> return a specific validation reason; preserve already committed business facts.</li>
+<li><strong>Duplicate or concurrent command:</strong> use an idempotency key and row/version guard so exactly one transition wins.</li>
+<li><strong>Unavailable upstream service:</strong> leave the item pending, do not assume success and create a recoverable operations alert.</li>
+<li><strong>Cancelled/unsafe/ineligible state:</strong> stop progression; release uncommitted holds or create compensating records when required.</li>
+</ul>
+<p><strong>Safety invariant:</strong> Never silently bypass a policy or retry a non-idempotent state change.</p>
+<h3>Acceptance checks</h3>
+<ol>
+<li>Authorized actor completes the step with one stored transition and audit actor.</li>
+<li>A stale, unauthorized or duplicate command has no unintended side effects.</li>
+<li>The correct customer-visible outcome reflects committed subsystem states.</li>
+</ol>
+<p>See module test plan and end-to-end sequence.</p>
+<h2>S30 — Receive and inspect returned items</h2>
+<ul>
+<li><strong>Source classification:</strong> the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.</li>
+<li><strong>Owning module:</strong> Store_Operations.</li>
+<li><strong>Actor:</strong> Returns / quality team.</li>
+</ul>
+<h3>Trigger and preconditions</h3>
+<p>A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to <code>S30</code>. Preconditions are rechecked server-side; UI status is not authority.</p>
+<h3>Normal path and on-screen behavior</h3>
+<p>If a physical return is approved, the parcel is collected, received and checked. Items that may be unsafe are kept away from saleable stock.</p>
+<p><strong>User sees:</strong> Return pickup and inspection status.</p>
+<p><strong>Service responsibility:</strong> Check identity, condition, lot, missing items and the reason for return before deciding next action.</p>
+<p><strong>Completion condition:</strong> Inspection supports a refund or sends a disputed case to support.</p>
+<h3>Data and cross-module handoff</h3>
+<p>Primary affected database domain(s): <code>warehouse</code>, <code>fulfillment</code>, <code>procurement</code>. Representative existing tables: <code>fulfillment.fulfillment_events</code>, <code>fulfillment.fulfillment_order_items</code>, <code>fulfillment.fulfillment_orders</code>, <code>fulfillment.pack_tasks</code>. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.</p>
+<p>Related APIs: <code>GET /v1/staff/store/orders</code>, <code>POST /v1/staff/store/orders/{order_id}/accept</code>, <code>POST /v1/staff/store/picks/{pick_id}/scan</code>. All endpoints are <strong>Proposed</strong>, not implemented.</p>
+<h3>Alternative paths and recovery</h3>
+<ul>
+<li><strong>Missing/invalid evidence:</strong> return a specific validation reason; preserve already committed business facts.</li>
+<li><strong>Duplicate or concurrent command:</strong> use an idempotency key and row/version guard so exactly one transition wins.</li>
+<li><strong>Unavailable upstream service:</strong> leave the item pending, do not assume success and create a recoverable operations alert.</li>
+<li><strong>Cancelled/unsafe/ineligible state:</strong> stop progression; release uncommitted holds or create compensating records when required.</li>
+</ul>
+<p><strong>Safety invariant:</strong> Never silently bypass a policy or retry a non-idempotent state change.</p>
+<h3>Acceptance checks</h3>
+<ol>
+<li>Authorized actor completes the step with one stored transition and audit actor.</li>
+<li>A stale, unauthorized or duplicate command has no unintended side effects.</li>
+<li>The correct customer-visible outcome reflects committed subsystem states.</li>
+</ol>
+<p>See module test plan and end-to-end sequence.</p>
+<h2>S31 — Return the correct money once</h2>
+<ul>
+<li><strong>Source classification:</strong> the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.</li>
+<li><strong>Owning module:</strong> Finance_Payments.</li>
+<li><strong>Actor:</strong> Finance / payment team.</li>
+</ul>
+<h3>Trigger and preconditions</h3>
+<p>A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to <code>S31</code>. Preconditions are rechecked server-side; UI status is not authority.</p>
+<h3>Normal path and on-screen behavior</h3>
+<p>Refunds may follow cancellation, failed payment, shortages or approved returns. The amount must match the affected order lines and prior payments.</p>
+<p><strong>User sees:</strong> Refund started, expected method and confirmed completion.</p>
+<p><strong>Service responsibility:</strong> Avoid double refunds, handle partial refunds and reconcile online or COD refunds separately.</p>
+<p><strong>Completion condition:</strong> The refund is confirmed, or a payment investigation is opened.</p>
+<h3>Data and cross-module handoff</h3>
+<p>Primary affected database domain(s): <code>payment</code>, <code>finance</code>, <code>commerce</code>. Representative existing tables: <code>commerce.orders</code>, <code>finance.accounts</code>, <code>finance.credit_notes</code>, <code>finance.invoice_items</code>. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.</p>
+<p>Related APIs: <code>POST /v1/payments/intents</code>, <code>POST /v1/webhooks/cashfree</code>, <code>GET /v1/admin/finance/payments</code>. All endpoints are <strong>Proposed</strong>, not implemented.</p>
+<h3>Alternative paths and recovery</h3>
+<ul>
+<li><strong>Missing/invalid evidence:</strong> return a specific validation reason; preserve already committed business facts.</li>
+<li><strong>Duplicate or concurrent command:</strong> use an idempotency key and row/version guard so exactly one transition wins.</li>
+<li><strong>Unavailable upstream service:</strong> leave the item pending, do not assume success and create a recoverable operations alert.</li>
+<li><strong>Cancelled/unsafe/ineligible state:</strong> stop progression; release uncommitted holds or create compensating records when required.</li>
+</ul>
+<p><strong>Safety invariant:</strong> No external payment confirmation may be inferred from a browser redirect.</p>
+<h3>Acceptance checks</h3>
+<ol>
+<li>Authorized actor completes the step with one stored transition and audit actor.</li>
+<li>A stale, unauthorized or duplicate command has no unintended side effects.</li>
+<li>The correct customer-visible outcome reflects committed subsystem states.</li>
+</ol>
+<p>See module test plan and end-to-end sequence.</p>
+<h2>S32 — Close the order records</h2>
+<ul>
+<li><strong>Source classification:</strong> the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.</li>
+<li><strong>Owning module:</strong> Order_Operations.</li>
+<li><strong>Actor:</strong> Finance / operations.</li>
+</ul>
+<h3>Trigger and preconditions</h3>
+<p>A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to <code>S32</code>. Preconditions are rechecked server-side; UI status is not authority.</p>
+<h3>Normal path and on-screen behavior</h3>
+<p>After delivery or cancellation, finance confirms that money, stock, delivery and any refund records agree.</p>
+<p><strong>User sees:</strong> Final order history and invoice/refund records remain accessible.</p>
+<p><strong>Service responsibility:</strong> Complete cash and settlement checks without changing the earlier history.</p>
+<p><strong>Completion condition:</strong> The case is closed unless a new support problem arises.</p>
+<h3>Data and cross-module handoff</h3>
+<p>Primary affected database domain(s): <code>commerce</code>, <code>fulfillment</code>, <code>warehouse</code>, <code>organization</code>. Representative existing tables: <code>commerce.order_allocations</code>, <code>commerce.orders</code>, <code>fulfillment.fulfillment_events</code>, <code>fulfillment.fulfillment_order_items</code>. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.</p>
+<p>Related APIs: <code>GET /v1/admin/orders</code>, <code>GET /v1/admin/orders/{order_id}</code>, <code>POST /v1/admin/orders/{order_id}/allocate</code>. All endpoints are <strong>Proposed</strong>, not implemented.</p>
+<h3>Alternative paths and recovery</h3>
+<ul>
+<li><strong>Missing/invalid evidence:</strong> return a specific validation reason; preserve already committed business facts.</li>
+<li><strong>Duplicate or concurrent command:</strong> use an idempotency key and row/version guard so exactly one transition wins.</li>
+<li><strong>Unavailable upstream service:</strong> leave the item pending, do not assume success and create a recoverable operations alert.</li>
+<li><strong>Cancelled/unsafe/ineligible state:</strong> stop progression; release uncommitted holds or create compensating records when required.</li>
+</ul>
+<p><strong>Safety invariant:</strong> Never silently bypass a policy or retry a non-idempotent state change.</p>
+<h3>Acceptance checks</h3>
+<ol>
+<li>Authorized actor completes the step with one stored transition and audit actor.</li>
+<li>A stale, unauthorized or duplicate command has no unintended side effects.</li>
+<li>The correct customer-visible outcome reflects committed subsystem states.</li>
+</ol>
+<p>See module test plan and end-to-end sequence.</p>
+<h2>S33 — Investigate an unusual problem</h2>
+<ul>
+<li><strong>Source classification:</strong> the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.</li>
+<li><strong>Owning module:</strong> Audit.</li>
+<li><strong>Actor:</strong> Customer support / specialist.</li>
+</ul>
+<h3>Trigger and preconditions</h3>
+<p>A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to <code>S33</code>. Preconditions are rechecked server-side; UI status is not authority.</p>
+<h3>Normal path and on-screen behavior</h3>
+<p>If the normal flow cannot resolve a customer problem, a trained support owner investigates and coordinates the right team.</p>
+<p><strong>User sees:</strong> A case number, current status and next update.</p>
+<p><strong>Service responsibility:</strong> Support can solve service issues, but cannot personally approve a P prescription.</p>
+<p><strong>Completion condition:</strong> The appropriate team resolves the problem and returns the order to a safe next step.</p>
+<h3>Data and cross-module handoff</h3>
+<p>Primary affected database domain(s): <code>platform</code>, <code>compliance</code>, <code>risk</code>. Representative existing tables: <code>compliance.adverse_event_reports</code>, <code>compliance.evidence</code>, <code>compliance.legal_holds</code>, <code>compliance.privacy_requests</code>. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.</p>
+<p>Related APIs: <code>GET /v1/admin/audit/events</code>, <code>POST /v1/admin/audit/exports</code>. All endpoints are <strong>Proposed</strong>, not implemented.</p>
+<h3>Alternative paths and recovery</h3>
+<ul>
+<li><strong>Missing/invalid evidence:</strong> return a specific validation reason; preserve already committed business facts.</li>
+<li><strong>Duplicate or concurrent command:</strong> use an idempotency key and row/version guard so exactly one transition wins.</li>
+<li><strong>Unavailable upstream service:</strong> leave the item pending, do not assume success and create a recoverable operations alert.</li>
+<li><strong>Cancelled/unsafe/ineligible state:</strong> stop progression; release uncommitted holds or create compensating records when required.</li>
+</ul>
+<p><strong>Safety invariant:</strong> Never silently bypass a policy or retry a non-idempotent state change.</p>
+<h3>Acceptance checks</h3>
+<ol>
+<li>Authorized actor completes the step with one stored transition and audit actor.</li>
+<li>A stale, unauthorized or duplicate command has no unintended side effects.</li>
+<li>The correct customer-visible outcome reflects committed subsystem states.</li>
+</ol>
+<p>See module test plan and end-to-end sequence.</p>
+<h2>S34 — Stop unsafe products immediately</h2>
+<ul>
+<li><strong>Source classification:</strong> the documented draft requirements — documented desired workflow; individual recovery details may still require business approval.</li>
+<li><strong>Owning module:</strong> Product_Catalog.</li>
+<li><strong>Actor:</strong> Pharmacy quality / operations.</li>
+</ul>
+<h3>Trigger and preconditions</h3>
+<p>A customer, staff member, or committed prior stage causes this stage to begin. The caller must have a valid session and the preceding clinical, payment, stock and authorization gates appropriate to <code>S34</code>. Preconditions are rechecked server-side; UI status is not authority.</p>
+<h3>Normal path and on-screen behavior</h3>
+<p>A recall, suspected incorrect medicine, damaged parcel or serious safety concern can stop picking, delivery or further sale at any point.</p>
+<p><strong>User sees:</strong> Clear safety guidance and a support channel, without exposing private health data.</p>
+<p><strong>Service responsibility:</strong> Block affected batches/orders, trace deliveries and follow the approved quality process.</p>
+<p><strong>Completion condition:</strong> A qualified authority approves release, safe cancellation or recall/refund handling.</p>
+<h3>Data and cross-module handoff</h3>
+<p>Primary affected database domain(s): <code>catalog</code>, <code>search</code>, <code>pricing</code>, <code>marketplace</code>. Representative existing tables: <code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.product_classification_history</code>, <code>catalog.products</code>. The owning service must use a transaction for linked writes and record the current accepted order revision when applicable.</p>
+<p>Related APIs: <code>GET /v1/catalog/categories</code>, <code>GET /v1/catalog/products</code>, <code>GET /v1/catalog/products/{product_id}</code>. All endpoints are <strong>Proposed</strong>, not implemented.</p>
+<h3>Alternative paths and recovery</h3>
+<ul>
+<li><strong>Missing/invalid evidence:</strong> return a specific validation reason; preserve already committed business facts.</li>
+<li><strong>Duplicate or concurrent command:</strong> use an idempotency key and row/version guard so exactly one transition wins.</li>
+<li><strong>Unavailable upstream service:</strong> leave the item pending, do not assume success and create a recoverable operations alert.</li>
+<li><strong>Cancelled/unsafe/ineligible state:</strong> stop progression; release uncommitted holds or create compensating records when required.</li>
+</ul>
+<p><strong>Safety invariant:</strong> Never silently bypass a policy or retry a non-idempotent state change.</p>
+<h3>Acceptance checks</h3>
+<ol>
+<li>Authorized actor completes the step with one stored transition and audit actor.</li>
+<li>A stale, unauthorized or duplicate command has no unintended side effects.</li>
+<li>The correct customer-visible outcome reflects committed subsystem states.</li>
+</ol>
+<p>See module test plan and end-to-end sequence.</p>
+<h3>Phase 1 screen and interaction state inventory</h3>
+<p><strong>Source:</strong> 60-screen wireframe specification and order journey v3. This is a text-only behavioral inventory, not new UI mockups. Implement customer browsing/category/search, product detail with P badge and strength/form, cart editable quantities, address/serviceability, OTP, family/patient selection conditional on P, private prescription upload/preview/correction, accepted order summary, clinical wait/rejected line revision acceptance, payment pending/verified/COD, stock unavailable or changed ETA, order status/invoice, live rider/OTP, cancellation/return/refund.</p>
+<p>Staff surfaces include role-scoped dashboard, catalog import/classification/publish, warehouse/store/location masters, pharmacist queue and side-by-side Rx/P-line decisions, order exception queue, stock lot/hold/adjustments, replenishment/transfer, picking/packing and license blocks, rider map/assignments, finance settlement/COD/refunds, reports/export and immutable audit.</p>
+<p>Rider Android includes shift, task, accept/pickup, location consent, recipient OTP, failure reasons and COD collection.</p>
+<p>Every form needs empty/loading/validation/expired-session/stale-version/provider-unknown/offline/permission-denied states. Customer must deliberately choose new order revision; no hidden automatic substitution or payment. File-upload progress cannot be shown as pharmacist approval. All stage contracts and Module LLD supply dependencies and authoritative API mapping.</p>
+</main></body></html>

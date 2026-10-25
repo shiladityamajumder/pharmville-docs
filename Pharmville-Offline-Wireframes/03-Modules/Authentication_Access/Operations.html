@@ -1,0 +1,89 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Operations · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Authentication operations and acceptance</h1>
+<h2>Workflow and state ownership</h2>
+<p>Authentication mechanics and role grants; customer login endpoints retain their historical customer contract surface.</p>
+<p><a href="../../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>. The <a href="LLD.html">LLD</a> holds module algorithms and transition cases; <a href="APIs.html">APIs</a> holds command-specific allowed/denied transitions. <a href="../../07-Engineering/State-and-Recovery-Contracts.html">Shared recovery contracts</a> define cross-owner compensation.</p>
+<h2>Authentication and authorization</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Authentication</th>
+<th>Roles / permission</th>
+<th>Command owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-089 POST <code>/v1/auth/staff/login</code></td>
+<td>No; endpoint-specific pre-login/provider trust</td>
+<td>Public pre-login Staff; Credential proof; no existing role claim</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td>API-090 POST <code>/v1/auth/staff/mfa/verify</code></td>
+<td>No; endpoint-specific pre-login/provider trust</td>
+<td>Public Staff with pending MFA proof; Valid MFA challenge + authenticator proof</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td>API-091 POST <code>/v1/auth/sessions/refresh</code></td>
+<td>Yes</td>
+<td>Customer / Staff / Rider holding a valid refresh session; Own refresh session</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td>API-092 POST <code>/v1/auth/sessions/revoke</code></td>
+<td>Yes</td>
+<td>Customer / Staff / Rider; identity.sessions.revoke.own</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td>API-093 GET <code>/v1/auth/permissions</code></td>
+<td>Yes</td>
+<td>Customer / Staff / Rider; identity.permissions.read.own</td>
+<td>Authentication_Access</td>
+</tr>
+</tbody>
+</table>
+<p>Resource/patient/location checks and sensitive-field filtering are endpoint-specific in <a href="APIs.html">APIs</a>; roles never replace object authorization. For file/provider callbacks, use the documented capability/signature path. <a href="../../07-Engineering/Security.html">Security</a> applies alongside the exact retained SQL ACL/RLS policies.</p>
+<h2>Designed tests and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Normal case</th>
+<th>Denied / failure evidence</th>
+<th>Execution status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AUTH-01</code></td>
+<td><a href="LLD.html">TC-AUTH-01-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>AUTH-02</code></td>
+<td><a href="LLD.html">TC-AUTH-02-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>AUTH-03</code></td>
+<td><a href="LLD.html">TC-AUTH-03-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>AUTH-04</code></td>
+<td><a href="LLD.html">TC-AUTH-04-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<p>Each endpoint additionally defines validation, authentication, authorization, business-gate, duplicate-intent, stale-version/concurrency and recovery cases. No execution is claimed. <a href="../../07-Engineering/Testing.html">Testing strategy</a> separates schema parity from application acceptance; <a href="../../08-Development-Plan/Implementation-Plan.html">delivery tasks</a> preserve existing TASK IDs.</p>
+<h2>Context and credential lifecycle</h2>
+<p><strong>Proposed / Unapproved / Not Implemented.</strong> Apply the <a href="Unified-Identity-Architecture.html#authorization-consistency-and-revocation">live authorization consistency policy</a> to every protected operation. Unavailable primary policy fails closed. Revoke matching context on role removal; revoke all sessions/proofs on suspension or password change; refresh never extends method freshness. First enrollment requires fresh phone OTP and password with staff eligibility; factor replacement requires existing MFA. Assisted factor-loss recovery is pending Security approval, never OTP-only reset.</p>
+</main></body></html>

@@ -1,0 +1,1138 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>orders · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>commerce.orders</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds orders records within the commerce domain (shopping cart, checkout, order and returns). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>commerce.orders</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Transactional</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Order_Operations</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>32 columns; 28 PK/FK/UQ/CHECK/exclusion constraints; 21 named PostgreSQL 18 NOT NULL constraints; 11 indexes; 4 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>billing_address_snapshot</code></td>
+<td><code>jsonb</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Structured billing address snapshot information</td>
+<td>Retain a versioned payload or relevant details</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>cancelled_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of cancelled</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>checkout_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to checkouts</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.checkouts</code> via <code>fk_commerce_orders_checkout_id_checkouts</code></td>
+</tr>
+<tr>
+<td><code>checkout_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>commerce.checkouts</code> via <code>fk_commerce_orders_checkout_id_checkouts_numeric</code></td>
+</tr>
+<tr>
+<td><code>confirmed_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of confirmed</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_commerce_orders_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td><code>character varying(3)</code></td>
+<td>No</td>
+<td><code>'INR'::character varying</code></td>
+<td>Monetary currency code</td>
+<td>Avoid interpreting amounts without a denomination</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>current_revision_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to order revisions</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.order_revisions</code> via <code>fk_commerce_orders_revision_scope</code></td>
+</tr>
+<tr>
+<td><code>current_revision_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>commerce.order_revisions</code> via <code>fk_commerce_orders_revision_scope_numeric</code></td>
+</tr>
+<tr>
+<td><code>discount_total</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Value of discount total</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>fulfillment_status</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores fulfillment status for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>grand_total</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Value of grand total</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>FK → <code>commerce.order_revisions</code> via <code>fk_commerce_orders_revision_scope</code></td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>FK → <code>commerce.order_revisions</code> via <code>fk_commerce_orders_revision_scope_numeric</code>; GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>order_number</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores order number for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>other_charges_total</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Value of other charges total</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>patient_profile_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to patient profiles</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>clinical.patient_profiles</code> via <code>fk_commerce_orders_patient_profile_id_patient_profiles</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>clinical.patient_profiles</code> via <code>fk_commerce_orders_patient_profile_id_patient_profiles_numeric</code></td>
+</tr>
+<tr>
+<td><code>payment_status</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores payment status for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>placed_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Time of placed</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>prescription_status</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores prescription status for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>shipping_address_snapshot</code></td>
+<td><code>jsonb</code></td>
+<td>No</td>
+<td>—</td>
+<td>Structured shipping address snapshot information</td>
+<td>Retain a versioned payload or relevant details</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>shipping_total</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Value of shipping total</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>source_channel</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td><code>'app'::character varying</code></td>
+<td>Inferred: stores source channel for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(19)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>subtotal</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores subtotal for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>tax_total</code></td>
+<td><code>numeric(16,2)</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Value of tax total</td>
+<td>Enable pricing, reconciliation or reporting</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_commerce_orders_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_commerce_orders_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the orders business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review, Finance_Payments, Reporting. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>commerce.orders</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_commerce_orders_checkout_id_checkouts</td>
+<td><code>checkout_id</code></td>
+<td><a href="../../Tables/commerce/checkouts.html"><code>commerce.checkouts</code></a></td>
+<td><code>FOREIGN KEY (checkout_id) REFERENCES commerce.checkouts(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_commerce_orders_checkout_id_checkouts_numeric</td>
+<td><code>checkout_id_internal_id</code></td>
+<td><a href="../../Tables/commerce/checkouts.html"><code>commerce.checkouts</code></a></td>
+<td><code>FOREIGN KEY (checkout_id_internal_id) REFERENCES commerce.checkouts(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_commerce_orders_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_commerce_orders_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_commerce_orders_patient_profile_id_patient_profiles_numeric</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_commerce_orders_revision_scope</td>
+<td><code>current_revision_id, id</code></td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><code>FOREIGN KEY (current_revision_id, id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_commerce_orders_revision_scope_numeric</td>
+<td><code>current_revision_id_internal_id, internal_id</code></td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><code>FOREIGN KEY (current_revision_id_internal_id, internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_commerce_orders_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_commerce_orders_user_id_users</td>
+<td><code>user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>fk_clinical_order_reviews_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>fk_clinical_order_reviews_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>fk_clinical_order_reviews_order_patient</td>
+<td><code>order_id, patient_profile_id</code></td>
+<td><code>id, patient_profile_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>fk_clinical_order_reviews_order_patient_numeric</td>
+<td><code>order_id_internal_id, patient_profile_id_internal_id</code></td>
+<td><code>internal_id, patient_profile_id_internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellations.html"><code>commerce.cancellations</code></a></td>
+<td>fk_commerce_cancellations_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/cancellations.html"><code>commerce.cancellations</code></a></td>
+<td>fk_commerce_cancellations_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_charges.html"><code>commerce.order_charges</code></a></td>
+<td>fk_commerce_order_charges_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_charges.html"><code>commerce.order_charges</code></a></td>
+<td>fk_commerce_order_charges_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_discounts.html"><code>commerce.order_discounts</code></a></td>
+<td>fk_commerce_order_discounts_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_discounts.html"><code>commerce.order_discounts</code></a></td>
+<td>fk_commerce_order_discounts_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+<td>fk_commerce_order_groups_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+<td>fk_commerce_order_groups_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>fk_commerce_order_items_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>fk_commerce_order_items_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>fk_commerce_order_revisions_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>fk_commerce_order_revisions_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_status_history.html"><code>commerce.order_status_history</code></a></td>
+<td>fk_commerce_order_status_history_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/order_status_history.html"><code>commerce.order_status_history</code></a></td>
+<td>fk_commerce_order_status_history_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td>fk_commerce_returns_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td>fk_commerce_returns_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/invoices.html"><code>finance.invoices</code></a></td>
+<td>fk_finance_invoices_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/invoices.html"><code>finance.invoices</code></a></td>
+<td>fk_finance_invoices_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/settlement_items.html"><code>finance.settlement_items</code></a></td>
+<td>fk_finance_settlement_items_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/finance/settlement_items.html"><code>finance.settlement_items</code></a></td>
+<td>fk_finance_settlement_items_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td>fk_fulfillment_fulfillment_orders_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td>fk_fulfillment_fulfillment_orders_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td>fk_logistics_shipments_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td>fk_logistics_shipments_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_ratings.html"><code>marketplace.seller_ratings</code></a></td>
+<td>fk_domain_marketplace_seller_ratings_order_id</td>
+<td><code>order_id, user_id</code></td>
+<td><code>id, user_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/marketplace/seller_ratings.html"><code>marketplace.seller_ratings</code></a></td>
+<td>fk_domain_marketplace_seller_ratings_order_id_numeric</td>
+<td><code>order_id_internal_id, user_id</code></td>
+<td><code>internal_id, user_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td>fk_payment_chargebacks_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td>fk_payment_chargebacks_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td>fk_payment_cod_collections_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td>fk_payment_cod_collections_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td>fk_payment_payment_intents_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td>fk_payment_payment_intents_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td>fk_payment_refunds_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td>fk_payment_refunds_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td>fk_domain_pricing_promotion_redemptions_order_id</td>
+<td><code>order_id, user_id</code></td>
+<td><code>id, user_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td>fk_domain_pricing_promotion_redemptions_order_id_numeric</td>
+<td><code>order_id_internal_id, user_id</code></td>
+<td><code>internal_id, user_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td>fk_support_tickets_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td>fk_support_tickets_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>commerce.orders</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>checkout_id</code></td>
+<td><code>commerce.checkouts</code></td>
+<td><code>fk_commerce_orders_checkout_id_checkouts</code></td>
+</tr>
+<tr>
+<td><code>checkout_id_internal_id</code></td>
+<td><code>commerce.checkouts</code></td>
+<td><code>fk_commerce_orders_checkout_id_checkouts_numeric</code></td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_commerce_orders_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id</code></td>
+<td><code>clinical.patient_profiles</code></td>
+<td><code>fk_commerce_orders_patient_profile_id_patient_profiles</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>clinical.patient_profiles</code></td>
+<td><code>fk_commerce_orders_patient_profile_id_patient_profiles_numeric</code></td>
+</tr>
+<tr>
+<td><code>current_revision_id, id</code></td>
+<td><code>commerce.order_revisions</code></td>
+<td><code>fk_commerce_orders_revision_scope</code></td>
+</tr>
+<tr>
+<td><code>current_revision_id_internal_id, internal_id</code></td>
+<td><code>commerce.order_revisions</code></td>
+<td><code>fk_commerce_orders_revision_scope_numeric</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_commerce_orders_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_commerce_orders_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_commerce_orders_discount_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (discount_total &gt;= 0::numeric)</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_finite_numeric_values</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((subtotal IS NULL OR (subtotal &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (discount_total IS NULL OR (discount_total &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (tax_total IS NULL OR (tax_total &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (shipping_total IS NULL OR (shipping_total &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (other_charges_total IS NULL OR (other_charges_total &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (grand_total IS NULL OR (grand_total &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))))</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_grand_total_formula</code></td>
+<td>CHECK</td>
+<td><code>CHECK (grand_total = (subtotal - discount_total + tax_total + shipping_total + other_charges_total))</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_grand_total_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (grand_total &gt;= 0::numeric)</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_numeric_pair_checkout_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((checkout_id IS NULL) = (checkout_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_numeric_pair_current_revision_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((current_revision_id IS NULL) = (current_revision_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_numeric_pair_patient_profile_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((patient_profile_id IS NULL) = (patient_profile_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_orderstatus</code></td>
+<td>CHECK</td>
+<td><code>CHECK (status::text = ANY (ARRAY['created'::text, 'pending_payment'::text, 'payment_confirmed'::text, 'prescription_review'::text, 'confirmed'::text, 'allocated'::text, 'processing'::text, 'partially_fulfilled'::text, 'fulfilled'::text, 'cancelled'::text, 'closed'::text]))</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_shipping_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (shipping_total &gt;= 0::numeric)</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_subtotal_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (subtotal &gt;= 0::numeric)</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_orders_tax_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (tax_total &gt;= 0::numeric)</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_orders_checkout_id_checkouts</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (checkout_id) REFERENCES commerce.checkouts(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_orders_checkout_id_checkouts_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (checkout_id_internal_id) REFERENCES commerce.checkouts(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_orders_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_orders_patient_profile_id_patient_profiles</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_orders_patient_profile_id_patient_profiles_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_orders_revision_scope</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (current_revision_id, id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_orders_revision_scope_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (current_revision_id_internal_id, internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_orders_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_orders_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>order_number</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (order_number)</code></td>
+</tr>
+<tr>
+<td><code>pk_commerce_orders</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_commerce_orders_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_commerce_orders_id_patient</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id, patient_profile_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_numeric_commerce_orders_internal_id_patient_profile__4a64</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (internal_id, patient_profile_id_internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_numeric_commerce_orders_internal_id_user_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (internal_id, user_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_scope_commerce_orders_user_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id, user_id)</code></td>
+</tr>
+<tr>
+<td><code>orders_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>orders_currency_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL currency</code></td>
+</tr>
+<tr>
+<td><code>orders_discount_total_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL discount_total</code></td>
+</tr>
+<tr>
+<td><code>orders_fulfillment_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL fulfillment_status</code></td>
+</tr>
+<tr>
+<td><code>orders_grand_total_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL grand_total</code></td>
+</tr>
+<tr>
+<td><code>orders_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>orders_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>orders_order_number_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL order_number</code></td>
+</tr>
+<tr>
+<td><code>orders_other_charges_total_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL other_charges_total</code></td>
+</tr>
+<tr>
+<td><code>orders_payment_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL payment_status</code></td>
+</tr>
+<tr>
+<td><code>orders_placed_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL placed_at</code></td>
+</tr>
+<tr>
+<td><code>orders_prescription_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL prescription_status</code></td>
+</tr>
+<tr>
+<td><code>orders_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>orders_shipping_address_snapshot_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL shipping_address_snapshot</code></td>
+</tr>
+<tr>
+<td><code>orders_shipping_total_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL shipping_total</code></td>
+</tr>
+<tr>
+<td><code>orders_source_channel_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL source_channel</code></td>
+</tr>
+<tr>
+<td><code>orders_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+<tr>
+<td><code>orders_subtotal_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL subtotal</code></td>
+</tr>
+<tr>
+<td><code>orders_tax_total_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL tax_total</code></td>
+</tr>
+<tr>
+<td><code>orders_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+<tr>
+<td><code>orders_user_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_commerce_orders_payment_status</code></td>
+<td>btree</td>
+<td><code>(payment_status)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_commerce_orders_payment_status ON commerce.orders USING btree (payment_status)</code></td>
+</tr>
+<tr>
+<td><code>ix_commerce_orders_status</code></td>
+<td>btree</td>
+<td><code>(status)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_commerce_orders_status ON commerce.orders USING btree (status)</code></td>
+</tr>
+<tr>
+<td><code>ix_commerce_orders_user_time</code></td>
+<td>btree</td>
+<td><code>(user_id, placed_at)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_commerce_orders_user_time ON commerce.orders USING btree (user_id, placed_at)</code></td>
+</tr>
+<tr>
+<td><code>order_number</code></td>
+<td>btree</td>
+<td><code>(order_number)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX order_number ON commerce.orders USING btree (order_number)</code></td>
+</tr>
+<tr>
+<td><code>pk_commerce_orders</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_commerce_orders ON commerce.orders USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_commerce_orders_checkout_present</code></td>
+<td>btree</td>
+<td><code>(checkout_id)</code></td>
+<td>checkout_id IS NOT NULL</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_commerce_orders_checkout_present ON commerce.orders USING btree (checkout_id) WHERE checkout_id IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>uq_commerce_orders_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_commerce_orders_id ON commerce.orders USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_commerce_orders_id_patient</code></td>
+<td>btree</td>
+<td><code>(id, patient_profile_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_commerce_orders_id_patient ON commerce.orders USING btree (id, patient_profile_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_numeric_commerce_orders_internal_id_patient_profile__4a64</code></td>
+<td>btree</td>
+<td><code>(internal_id, patient_profile_id_internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_numeric_commerce_orders_internal_id_patient_profile__4a64 ON commerce.orders USING btree (internal_id, patient_profile_id_internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_numeric_commerce_orders_internal_id_user_id</code></td>
+<td>btree</td>
+<td><code>(internal_id, user_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_numeric_commerce_orders_internal_id_user_id ON commerce.orders USING btree (internal_id, user_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_scope_commerce_orders_user_id</code></td>
+<td>btree</td>
+<td><code>(id, user_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_scope_commerce_orders_user_id ON commerce.orders USING btree (id, user_id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON commerce.orders FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;checkout_id&quot;,&quot;checkout_id_internal_id&quot;,&quot;commerce&quot;,&quot;checkouts&quot;],[&quot;current_revision_id&quot;,&quot;current_revision_id_internal_id&quot;,&quot;commerce&quot;,&quot;order_revisions&quot;],[&quot;patient_profile_id&quot;,&quot;patient_profile_id_internal_id&quot;,&quot;clinical&quot;,&quot;patient_profiles&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>order_patient_money_guard</code></td>
+<td><code>CREATE TRIGGER order_patient_money_guard BEFORE UPDATE ON commerce.orders FOR EACH ROW EXECUTE FUNCTION commerce.guard_order_patient_and_money()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON commerce.orders FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON commerce.orders FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;checkout_id&quot;,&quot;checkout_id_internal_id&quot;,&quot;commerce&quot;,&quot;checkouts&quot;],[&quot;current_revision_id&quot;,&quot;current_revision_id_internal_id&quot;,&quot;commerce&quot;,&quot;order_revisions&quot;],[&quot;patient_profile_id&quot;,&quot;patient_profile_id_internal_id&quot;,&quot;clinical&quot;,&quot;patient_profiles&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

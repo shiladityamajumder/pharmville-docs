@@ -1,0 +1,96 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Customer Orders edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Orders-and-Fulfillment.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-ORD-01-01</code></td>
+<td><code>ORD-01</code></td>
+<td>WhatsApp/email delivery fails after order commit</td>
+<td>Order survives; failed message is tracked without another order</td>
+<td>Notifications retries; customer uses existing status</td>
+<td><code>TC-ORD-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ORD-02-01</code></td>
+<td><code>ORD-02</code></td>
+<td>Late event describes an earlier milestone</td>
+<td>Timeline does not regress or imply delivery from packing</td>
+<td>Order Operations rebuilds projection from authoritative facts</td>
+<td><code>TC-ORD-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ORD-03-01</code></td>
+<td><code>ORD-03</code></td>
+<td>Another customer’s order ID is requested</td>
+<td>No invoice URL or order existence leaked</td>
+<td>Customer selects own order; Security reviews suspicious access</td>
+<td><code>TC-ORD-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ORD-04-01</code></td>
+<td><code>ORD-04</code></td>
+<td>Pack-close and cancellation race</td>
+<td>At most one valid transition; no newly packed cancelled order</td>
+<td>Operations reloads state; support explains current eligibility</td>
+<td><code>TC-ORD-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ORD-05-01</code></td>
+<td><code>ORD-05</code></td>
+<td>Item is outside approved return eligibility</td>
+<td>Refusal reason; no refund or saleable-stock credit from request alone</td>
+<td>Support reviews dispute under approved return policy</td>
+<td><code>TC-ORD-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ORD-06-01</code></td>
+<td><code>ORD-06</code></td>
+<td>Provider refund is pending but UI refreshes</td>
+<td>Pending remains visible; no false completed payout</td>
+<td>Finance checks trusted result; customer waits on same reference</td>
+<td><code>TC-ORD-06-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ORD-07-01</code></td>
+<td><code>ORD-07</code></td>
+<td>Location stream stops or access expires</td>
+<td>Last update is identified; unauthorized access denied</td>
+<td>Dispatch checks rider; customer refreshes permitted view</td>
+<td><code>TC-ORD-07-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ORD-08-01</code></td>
+<td><code>ORD-08</code></td>
+<td>Unrelated user requests the code</td>
+<td>No OTP disclosure or challenge change</td>
+<td>Security investigates; customer uses authenticated order</td>
+<td><code>TC-ORD-08-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ORD-09-01</code></td>
+<td><code>ORD-09</code></td>
+<td>New address is outside service area</td>
+<td>Old accepted terms remain; no silent reroute or extra charge</td>
+<td>Product approves edit contract; Operations reviews request</td>
+<td><code>TC-ORD-09-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+</main></body></html>

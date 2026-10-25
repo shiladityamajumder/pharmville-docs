@@ -1,0 +1,463 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>delivery_location_updates · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>logistics.delivery_location_updates</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds delivery location updates records within the logistics domain (riders, shipments, tracking and delivery). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>logistics.delivery_location_updates</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Audit / History</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Delivery_Operations</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>13 columns; 12 PK/FK/UQ/CHECK/exclusion constraints; 11 named PostgreSQL 18 NOT NULL constraints; 4 indexes; 4 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>accuracy_m</code></td>
+<td><code>numeric(9,2)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores accuracy m for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>assignment_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to delivery assignments</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>logistics.delivery_assignments</code> via <code>fk_logistics_delivery_location_updates_assignment_id_de_dfbd</code></td>
+</tr>
+<tr>
+<td><code>assignment_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>logistics.delivery_assignments</code> via <code>fk_logistics_delivery_location_updates_assignment_id_de_1eb9</code></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>delivery_user_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_logistics_delivery_location_updates_delivery_user_id_users</code>; FK → <code>logistics.rider_shifts</code> via <code>fk_logistics_location_shift_rider</code></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>latitude</code></td>
+<td><code>numeric(10,7)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores latitude for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>longitude</code></td>
+<td><code>numeric(10,7)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores longitude for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>received_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Time of received</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>recorded_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td>—</td>
+<td>Time of recorded</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>shift_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to rider shifts</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>logistics.rider_shifts</code> via <code>fk_logistics_location_shift_rider</code></td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td><code>character varying(16)</code></td>
+<td>No</td>
+<td><code>'rider'::character varying</code></td>
+<td>Inferred: stores source for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the delivery location updates business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>logistics.delivery_location_updates</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_logistics_delivery_location_updates_assignment_id_de_1eb9</td>
+<td><code>assignment_id_internal_id</code></td>
+<td><a href="../../Tables/logistics/delivery_assignments.html"><code>logistics.delivery_assignments</code></a></td>
+<td><code>FOREIGN KEY (assignment_id_internal_id) REFERENCES logistics.delivery_assignments(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_delivery_location_updates_assignment_id_de_dfbd</td>
+<td><code>assignment_id</code></td>
+<td><a href="../../Tables/logistics/delivery_assignments.html"><code>logistics.delivery_assignments</code></a></td>
+<td><code>FOREIGN KEY (assignment_id) REFERENCES logistics.delivery_assignments(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_delivery_location_updates_delivery_user_id_users</td>
+<td><code>delivery_user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (delivery_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_location_shift_rider</td>
+<td><code>shift_id, delivery_user_id</code></td>
+<td><a href="../../Tables/logistics/rider_shifts.html"><code>logistics.rider_shifts</code></a></td>
+<td><code>FOREIGN KEY (shift_id, delivery_user_id) REFERENCES logistics.rider_shifts(id, rider_user_id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<p>No inbound FK is present in the validated catalog.</p>
+<h2><code>logistics.delivery_location_updates</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>assignment_id_internal_id</code></td>
+<td><code>logistics.delivery_assignments</code></td>
+<td><code>fk_logistics_delivery_location_updates_assignment_id_de_1eb9</code></td>
+</tr>
+<tr>
+<td><code>assignment_id</code></td>
+<td><code>logistics.delivery_assignments</code></td>
+<td><code>fk_logistics_delivery_location_updates_assignment_id_de_dfbd</code></td>
+</tr>
+<tr>
+<td><code>delivery_user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_logistics_delivery_location_updates_delivery_user_id_users</code></td>
+</tr>
+<tr>
+<td><code>shift_id, delivery_user_id</code></td>
+<td><code>logistics.rider_shifts</code></td>
+<td><code>fk_logistics_location_shift_rider</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_logistics_delivery_location_updates_accuracy_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (accuracy_m IS NULL OR accuracy_m &gt;= 0::numeric)</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_delivery_location_updates_finite_numeric_values</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((latitude IS NULL OR (latitude &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (longitude IS NULL OR (longitude &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))) AND (accuracy_m IS NULL OR (accuracy_m &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric]))))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_delivery_location_updates_latitude_range</code></td>
+<td>CHECK</td>
+<td><code>CHECK (latitude &gt;= '-90'::integer::numeric AND latitude &lt;= 90::numeric)</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_delivery_location_updates_longitude_range</code></td>
+<td>CHECK</td>
+<td><code>CHECK (longitude &gt;= '-180'::integer::numeric AND longitude &lt;= 180::numeric)</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_delivery_location_updates_numeric_pair_ass_f01e</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((assignment_id IS NULL) = (assignment_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_delivery_location_updates_source</code></td>
+<td>CHECK</td>
+<td><code>CHECK (source::text = ANY (ARRAY['rider'::text, 'carrier'::text]))</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_delivery_location_updates_assignment_id_de_1eb9</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (assignment_id_internal_id) REFERENCES logistics.delivery_assignments(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_delivery_location_updates_assignment_id_de_dfbd</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (assignment_id) REFERENCES logistics.delivery_assignments(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_delivery_location_updates_delivery_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (delivery_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_location_shift_rider</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (shift_id, delivery_user_id) REFERENCES logistics.rider_shifts(id, rider_user_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_logistics_delivery_location_updates</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_delivery_location_updates_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_assignment_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL assignment_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_assignment_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL assignment_id</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_delivery_user_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL delivery_user_id</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_latitude_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL latitude</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_longitude_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL longitude</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_received_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL received_at</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_recorded_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL recorded_at</code></td>
+</tr>
+<tr>
+<td><code>delivery_location_updates_source_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL source</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_logistics_location_assignment_time</code></td>
+<td>btree</td>
+<td><code>(assignment_id, recorded_at DESC)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_location_assignment_time ON logistics.delivery_location_updates USING btree (assignment_id, recorded_at DESC)</code></td>
+</tr>
+<tr>
+<td><code>ix_logistics_location_user_time</code></td>
+<td>btree</td>
+<td><code>(delivery_user_id, recorded_at DESC)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_location_user_time ON logistics.delivery_location_updates USING btree (delivery_user_id, recorded_at DESC)</code></td>
+</tr>
+<tr>
+<td><code>pk_logistics_delivery_location_updates</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_logistics_delivery_location_updates ON logistics.delivery_location_updates USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_delivery_location_updates_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_logistics_delivery_location_updates_id ON logistics.delivery_location_updates USING btree (id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON logistics.delivery_location_updates FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;assignment_id&quot;,&quot;assignment_id_internal_id&quot;,&quot;logistics&quot;,&quot;delivery_assignments&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>immutable_record_guard</code></td>
+<td><code>CREATE TRIGGER immutable_record_guard BEFORE DELETE OR UPDATE ON logistics.delivery_location_updates FOR EACH ROW EXECUTE FUNCTION platform.deny_mutation()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>location_guard</code></td>
+<td><code>CREATE TRIGGER location_guard BEFORE INSERT ON logistics.delivery_location_updates FOR EACH ROW EXECUTE FUNCTION logistics.guard_location()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON logistics.delivery_location_updates FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;assignment_id&quot;,&quot;assignment_id_internal_id&quot;,&quot;logistics&quot;,&quot;delivery_assignments&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

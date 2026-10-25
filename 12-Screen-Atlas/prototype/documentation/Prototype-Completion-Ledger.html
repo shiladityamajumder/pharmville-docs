@@ -1,0 +1,203 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Prototype Completion Ledger · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Prototype completion ledger</h1>
+<p><strong>Scope:</strong> reviewable local UX prototype only. This ledger distinguishes visible and exercised interactions from approved product rules and production implementation. The authoritative source still contains 110 draft feature IDs across 18 module groups and 14 technical workflows; the prototype's 13 guided journeys are a separate UX aid, not a replacement workflow inventory.</p>
+<h2>Coverage baseline</h2>
+<table>
+<thead>
+<tr>
+<th>Measure</th>
+<th style="text-align:right">Current state</th>
+<th>Evidence and boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Registered prototype screens</td>
+<td style="text-align:right">91</td>
+<td>Unique route/screen registry; +8 from the prior 83-screen baseline.</td>
+</tr>
+<tr>
+<td>Existing draft feature IDs mapped</td>
+<td style="text-align:right">110 / 110</td>
+<td>Static validation checks every source ID has at least one screen/state mapping. Mapping does not mean the feature is fully interactive.</td>
+</tr>
+<tr>
+<td>Existing module groups represented</td>
+<td style="text-align:right">18 / 18</td>
+<td>The same source module groupings are retained in screen metadata. See <a href="Feature-Coverage.html">Feature Coverage</a> for per-ID evidence.</td>
+</tr>
+<tr>
+<td>Scenario definitions</td>
+<td style="text-align:right">35</td>
+<td>A scenario's rendered label/state is not by itself a tested interaction.</td>
+</tr>
+<tr>
+<td>Screen/scenario render associations</td>
+<td style="text-align:right">779</td>
+<td>Full browser smoke visits across six viewport widths; no claim that all 779 associations have direct business-action assertions.</td>
+</tr>
+<tr>
+<td>Guided prototype journeys</td>
+<td style="text-align:right">13</td>
+<td>Customer onboarding/order/Rx/payment, store preparation, delivery, return, refund, warehouse receipt, procurement, stockout recovery, reverse logistics and support.</td>
+</tr>
+<tr>
+<td>Interactive action/form names</td>
+<td style="text-align:right">111</td>
+<td>Static registry-to-handler check; action names are not API contracts.</td>
+</tr>
+</tbody>
+</table>
+<p>Feature classifications are retained from the existing coverage inventory: <strong>70 screen-level</strong>, <strong>23 interaction/state</strong>, <strong>16 blocked by owner decisions</strong>, and <strong>1 backend-only</strong>. See <a href="Feature-Coverage.html">Feature Coverage</a>, <a href="UX-State-Coverage.html">UX State Coverage</a>, and <a href="Platform-and-Screen-Coverage.html">Platform Coverage</a> for the feature- and platform-level evidence. This deliberately does not collapse the classifications into a misleading “percent complete.”</p>
+<h2>Module-to-prototype traceability</h2>
+<p>The 18 existing module groups remain unchanged. Counts below are screen registry entries, not estimates of requirements completion. Shared tasks and proposed extensions map back to the existing module IDs where no approved module boundary exists.</p>
+<table>
+<thead>
+<tr>
+<th>Existing module group</th>
+<th style="text-align:right">Screens</th>
+<th>Primary prototype routes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer_Accounts</td>
+<td style="text-align:right">8</td>
+<td><code>customer/login</code>, <code>customer/profile</code>, <code>customer/addresses</code>, <code>customer/family</code>, <code>customer/privacy</code>, <code>customer/deletion</code>, <code>customer/help</code></td>
+</tr>
+<tr>
+<td>Product_Catalog</td>
+<td style="text-align:right">5</td>
+<td><code>customer/home</code>, <code>customer/categories</code>, <code>customer/search</code>, <code>customer/product</code>, <code>customer/alternatives</code></td>
+</tr>
+<tr>
+<td>Cart_Checkout</td>
+<td style="text-align:right">7</td>
+<td><code>customer/cart</code>, <code>customer/checkout-address</code>, <code>customer/checkout-patient</code>, <code>customer/checkout-summary</code>, <code>customer/payment</code>, recovery and result</td>
+</tr>
+<tr>
+<td>Prescription_Upload</td>
+<td style="text-align:right">3</td>
+<td>Customer prescription upload, status and revision</td>
+</tr>
+<tr>
+<td>Customer_Orders</td>
+<td style="text-align:right">9</td>
+<td>Order history/detail, cancellation, tracking, invoice, returns and refund status</td>
+</tr>
+<tr>
+<td>Admin_CMS</td>
+<td style="text-align:right">7</td>
+<td>Admin dashboard, staff, permissions, catalog, locations, content and settings</td>
+</tr>
+<tr>
+<td>Order_Operations</td>
+<td style="text-align:right">4</td>
+<td>Order queues/details, allocation, return eligibility and operational support</td>
+</tr>
+<tr>
+<td>Store_Operations</td>
+<td style="text-align:right">5</td>
+<td>Store queue, pick, pack, replenishment and transfer receipt</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td style="text-align:right">4</td>
+<td>Inventory overview, ledger, adjustment and source-import proposal</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td style="text-align:right">7</td>
+<td>Receiving, replenishment, dispatch, audit/count and return quarantine</td>
+</tr>
+<tr>
+<td>Pharmacist_Review</td>
+<td style="text-align:right">4</td>
+<td>Review queue, evidence, line decision and history</td>
+</tr>
+<tr>
+<td>Delivery_Operations</td>
+<td style="text-align:right">5</td>
+<td>Dispatch, assignment, failed delivery, rider management and reverse pickup</td>
+</tr>
+<tr>
+<td>Rider_App</td>
+<td style="text-align:right">8</td>
+<td>Rider sign-in/tasks, pickup, navigation, completion, failure/history and reverse pickup</td>
+</tr>
+<tr>
+<td>Finance_Payments</td>
+<td style="text-align:right">5</td>
+<td>Payments, invoice, refund, reconciliation and credit-note proposal</td>
+</tr>
+<tr>
+<td>Reporting</td>
+<td style="text-align:right">2</td>
+<td>Report selection/results/export</td>
+</tr>
+<tr>
+<td>Audit</td>
+<td style="text-align:right">1</td>
+<td>Audit search/export</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td style="text-align:right">3</td>
+<td>Event attempts, preferences and staff alerts</td>
+</tr>
+<tr>
+<td>Authentication_Access</td>
+<td style="text-align:right">4</td>
+<td>Shared staff sign-in/MFA, identity session and authorized workspace selector</td>
+</tr>
+</tbody>
+</table>
+<p>The full feature-ID-to-screen mapping remains in <a href="Feature-Coverage.html">Feature Coverage</a>; the screen registry and generated <a href="Complete-Screen-Matrix.html">Complete Screen Matrix</a> remain the operational indexes.</p>
+<h2>Newly connected prototype journeys</h2>
+<table>
+<thead>
+<tr>
+<th>Flow</th>
+<th>Connected state changes</th>
+<th>Status and limits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unified identity and workspace selection</td>
+<td>Staff password/MFA and customer/rider OTP adapters create one synthetic session; role grants determine available demo workspaces; selected elevated workspaces require a local second-factor step-up; logout revokes the local session.</td>
+<td>Demonstration of proposed architecture only. No real passwords, tokens, backend session, database, role approval or distributed revocation. See <a href="Role-Workspace-Matrix.html">Role-Workspace Matrix</a>.</td>
+</tr>
+<tr>
+<td>Stockout to store availability</td>
+<td>Store replenishment request → synthetic supplier/PO draft → local PO approval → linked warehouse receipt → transfer in transit → actual store receipt → indicative catalog availability.</td>
+<td>Exercised through forms in the extended browser regression (11 assertions total across the three new workflows). Procurement workspace, PO lifecycle and supplier records are proposals. No supplier contact, commercial terms, purchase payment or procurement authority is approved. Warehouse stock alone does not make store stock available.</td>
+</tr>
+<tr>
+<td>Return through reverse logistics</td>
+<td>Delivered item request → owner eligibility outcome with policy reference → dispatcher assignment → current rider custody → warehouse quarantine → separate Finance decision/refund lifecycle.</td>
+<td>Exercised through forms in the extended browser regression (11 assertions total across the three new workflows). Return eligibility/inspection policy remains pending. No eligibility criteria are invented, quarantine is not saleable stock, and Finance completion is not inferred from pickup.</td>
+</tr>
+<tr>
+<td>Customer support case</td>
+<td>Customer OTP → order-linked case → support assignment/status/history → shared synthetic notification event → customer-visible update.</td>
+<td>Exercised through forms in the extended browser regression (11 assertions total across the three new workflows). Local case lifecycle proposal only; D-020 and customer data projection still need owner approval. No external message is sent.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing product rules remain intact: P products require pharmacist review before payment/fulfillment; M/O-only baskets skip that review unless a separately documented rule applies. The extended journeys do not bypass payment, stock, custody, clinical or authorization gates.</p>
+<h2>Product scope and omissions</h2>
+<p>The existing <a href="../../01-Project/Capability-Scope.html">Capability Scope</a> remains the source for MVP, Phase 2, Future and decision-dependent classification. This prototype prioritizes the inherited customer commerce, prescription, store/warehouse, inventory, delivery, payment, admin, reporting and audit journeys. The procurement sequence is an illustrative Phase 2 depth proposal; it does not change existing warehouse scope. Diagnostics, appointments/teleconsultation, insurance, membership and marketplace expansion remain Future or Requires Decision because their presence in database tables does not establish product scope. No competitor feature list is treated as an approval source.</p>
+<h2>Gaps and pending decisions</h2>
+<ul>
+<li>The local data store is browser-only and centered on one active demo order. It does not model a persistent multi-customer order service or production concurrency.</li>
+<li>Authentication, JWT/session-cookie handling, MFA enrollment/recovery, refresh rotation, CSRF defense, rate limiting, lockout, session limits, service identities and real assignment-revocation propagation are not implemented.</li>
+<li>Exact step-up target list, freshness window and reuse rule need Security/IAM approval. The demo's Administration, Pharmacist and Finance prompts are labeled examples, not approved policy.</li>
+<li>Procurement owner, supplier onboarding, PO commercial fields, approval segregation and provider integration need product, finance and engineering decisions.</li>
+<li>Return window/eligibility/inspection, custody evidence, disposition authority and refund policy need the existing business owner approvals; the user must supply an explicit policy reference for the demo eligibility choice.</li>
+<li>Notification transport, customer consent, support data visibility and external service behavior remain simulated.</li>
+<li>Many scenario rows have render evidence only. Full accessibility research, real-device GPS/background behavior, real payment/provider contracts and production API/database tests are out of scope.</li>
+</ul>
+<p>No root project requirements, APIs, database schema, application code, or wireframe assets outside this directory were changed by this prototype work. The generated UI uses fictional records and has no real external network dependency.</p>
+<h2>Reproduce and verify</h2>
+<p>Run the commands in <a href="Validation-Results.html">Validation Results</a>. The current run must be treated as valid only when the written artifacts under <code>artifacts/</code> report success; historic counts below are not substitutes for execution. None of these prototype tests assert production policy approval or application implementation.</p>
+</main></body></html>

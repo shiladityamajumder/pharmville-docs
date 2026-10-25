@@ -1,0 +1,870 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>bins · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>warehouse.bins</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds bins records within the warehouse domain (stock balances, lots and transfers). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>warehouse.bins</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Master / Reference</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Warehouse</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>21 columns; 17 PK/FK/UQ/CHECK/exclusion constraints; 14 named PostgreSQL 18 NOT NULL constraints; 7 indexes; 4 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bin_type</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores bin type for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>capacity_json</code></td>
+<td><code>jsonb</code></td>
+<td>No</td>
+<td><code>'{}'::jsonb</code></td>
+<td>Structured capacity json information</td>
+<td>Retain a versioned payload or relevant details</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td><code>character varying(128)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores code for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_warehouse_bins_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>deleted_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Soft-deletion time when used</td>
+<td>Avoid treating hidden records as active</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>deleted_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_warehouse_bins_deleted_by_users</code></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>is_deleted</code></td>
+<td><code>boolean</code></td>
+<td>No</td>
+<td><code>false</code></td>
+<td>Yes/no flag for is deleted</td>
+<td>Control conditional business behavior</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>pick_sequence</code></td>
+<td><code>integer</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores pick sequence for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>rack_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to racks</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>warehouse.racks</code> via <code>fk_warehouse_bins_rack_id_racks</code></td>
+</tr>
+<tr>
+<td><code>rack_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>warehouse.racks</code> via <code>fk_warehouse_bins_rack_id_racks_numeric</code></td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td><code>'active'::character varying</code></td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_warehouse_bins_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>warehouse_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to warehouses</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>warehouse.warehouses</code> via <code>fk_warehouse_bins_warehouse_id_warehouses</code></td>
+</tr>
+<tr>
+<td><code>warehouse_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>warehouse.warehouses</code> via <code>fk_warehouse_bins_warehouse_id_warehouses_numeric</code></td>
+</tr>
+<tr>
+<td><code>zone_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to zones</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>warehouse.zones</code> via <code>fk_warehouse_bins_zone_id_zones</code></td>
+</tr>
+<tr>
+<td><code>zone_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>warehouse.zones</code> via <code>fk_warehouse_bins_zone_id_zones_numeric</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the bins business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Cart_Checkout, Order_Operations, Store_Operations, Inventory, Warehouse. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>warehouse.bins</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_warehouse_bins_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_warehouse_bins_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_warehouse_bins_rack_id_racks</td>
+<td><code>rack_id</code></td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><code>FOREIGN KEY (rack_id) REFERENCES warehouse.racks(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_warehouse_bins_rack_id_racks_numeric</td>
+<td><code>rack_id_internal_id</code></td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><code>FOREIGN KEY (rack_id_internal_id) REFERENCES warehouse.racks(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_warehouse_bins_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_warehouse_bins_warehouse_id_warehouses</td>
+<td><code>warehouse_id</code></td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td>fk_warehouse_bins_warehouse_id_warehouses_numeric</td>
+<td><code>warehouse_id_internal_id</code></td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td>fk_warehouse_bins_zone_id_zones</td>
+<td><code>zone_id</code></td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><code>FOREIGN KEY (zone_id) REFERENCES warehouse.zones(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td>fk_warehouse_bins_zone_id_zones_numeric</td>
+<td><code>zone_id_internal_id</code></td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><code>FOREIGN KEY (zone_id_internal_id) REFERENCES warehouse.zones(internal_id) ON DELETE CASCADE</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/fulfillment/pick_task_items.html"><code>fulfillment.pick_task_items</code></a></td>
+<td>fk_fulfillment_pick_task_items_bin_id_bins</td>
+<td><code>bin_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/fulfillment/pick_task_items.html"><code>fulfillment.pick_task_items</code></a></td>
+<td>fk_fulfillment_pick_task_items_bin_id_bins_numeric</td>
+<td><code>bin_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td>fk_warehouse_cycle_count_items_bin_id_bins</td>
+<td><code>bin_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td>fk_warehouse_cycle_count_items_bin_id_bins_numeric</td>
+<td><code>bin_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td>fk_warehouse_cycle_counts_bin_id_bins</td>
+<td><code>bin_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td>fk_warehouse_cycle_counts_bin_id_bins_numeric</td>
+<td><code>bin_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td>fk_warehouse_inventory_adjustment_items_bin_id_bins</td>
+<td><code>bin_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td>fk_warehouse_inventory_adjustment_items_bin_id_bins_numeric</td>
+<td><code>bin_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td>fk_warehouse_stock_balances_bin_id_bins</td>
+<td><code>bin_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td>fk_warehouse_stock_balances_bin_id_bins_numeric</td>
+<td><code>bin_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td>fk_warehouse_stock_holds_bin_id_bins</td>
+<td><code>bin_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td>fk_warehouse_stock_holds_bin_id_bins_numeric</td>
+<td><code>bin_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td>fk_warehouse_stock_ledger_bin_id_bins</td>
+<td><code>bin_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td>fk_warehouse_stock_ledger_bin_id_bins_numeric</td>
+<td><code>bin_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td>fk_warehouse_stock_reservations_bin_id_bins</td>
+<td><code>bin_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td>fk_warehouse_stock_reservations_bin_id_bins_numeric</td>
+<td><code>bin_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>warehouse.bins</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_warehouse_bins_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>deleted_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_warehouse_bins_deleted_by_users</code></td>
+</tr>
+<tr>
+<td><code>rack_id</code></td>
+<td><code>warehouse.racks</code></td>
+<td><code>fk_warehouse_bins_rack_id_racks</code></td>
+</tr>
+<tr>
+<td><code>rack_id_internal_id</code></td>
+<td><code>warehouse.racks</code></td>
+<td><code>fk_warehouse_bins_rack_id_racks_numeric</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_warehouse_bins_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>warehouse_id</code></td>
+<td><code>warehouse.warehouses</code></td>
+<td><code>fk_warehouse_bins_warehouse_id_warehouses</code></td>
+</tr>
+<tr>
+<td><code>warehouse_id_internal_id</code></td>
+<td><code>warehouse.warehouses</code></td>
+<td><code>fk_warehouse_bins_warehouse_id_warehouses_numeric</code></td>
+</tr>
+<tr>
+<td><code>zone_id</code></td>
+<td><code>warehouse.zones</code></td>
+<td><code>fk_warehouse_bins_zone_id_zones</code></td>
+</tr>
+<tr>
+<td><code>zone_id_internal_id</code></td>
+<td><code>warehouse.zones</code></td>
+<td><code>fk_warehouse_bins_zone_id_zones_numeric</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_warehouse_bins_numeric_pair_rack_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((rack_id IS NULL) = (rack_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_warehouse_bins_numeric_pair_warehouse_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((warehouse_id IS NULL) = (warehouse_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_warehouse_bins_numeric_pair_zone_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((zone_id IS NULL) = (zone_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_warehouse_bins_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_warehouse_bins_stable_code_nonblank_trimmed</code></td>
+<td>CHECK</td>
+<td><code>CHECK (length(btrim(code::text)) &gt; 0 AND code::text = btrim(code::text))</code></td>
+</tr>
+<tr>
+<td><code>fk_warehouse_bins_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_warehouse_bins_deleted_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_warehouse_bins_rack_id_racks</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (rack_id) REFERENCES warehouse.racks(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_warehouse_bins_rack_id_racks_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (rack_id_internal_id) REFERENCES warehouse.racks(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_warehouse_bins_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_warehouse_bins_warehouse_id_warehouses</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (warehouse_id) REFERENCES warehouse.warehouses(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>fk_warehouse_bins_warehouse_id_warehouses_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (warehouse_id_internal_id) REFERENCES warehouse.warehouses(internal_id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>fk_warehouse_bins_zone_id_zones</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (zone_id) REFERENCES warehouse.zones(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>fk_warehouse_bins_zone_id_zones_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (zone_id_internal_id) REFERENCES warehouse.zones(internal_id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>pk_warehouse_bins</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_warehouse_bins_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>warehouse_bin</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (warehouse_id, code)</code></td>
+</tr>
+<tr>
+<td><code>bins_bin_type_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL bin_type</code></td>
+</tr>
+<tr>
+<td><code>bins_capacity_json_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL capacity_json</code></td>
+</tr>
+<tr>
+<td><code>bins_code_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL code</code></td>
+</tr>
+<tr>
+<td><code>bins_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>bins_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>bins_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>bins_is_deleted_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL is_deleted</code></td>
+</tr>
+<tr>
+<td><code>bins_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>bins_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+<tr>
+<td><code>bins_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+<tr>
+<td><code>bins_warehouse_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL warehouse_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>bins_warehouse_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL warehouse_id</code></td>
+</tr>
+<tr>
+<td><code>bins_zone_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL zone_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>bins_zone_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL zone_id</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_warehouse_bins_rack</code></td>
+<td>btree</td>
+<td><code>(rack_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_warehouse_bins_rack ON warehouse.bins USING btree (rack_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_warehouse_bins_status</code></td>
+<td>btree</td>
+<td><code>(status)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_warehouse_bins_status ON warehouse.bins USING btree (status)</code></td>
+</tr>
+<tr>
+<td><code>ix_warehouse_bins_warehouse</code></td>
+<td>btree</td>
+<td><code>(warehouse_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_warehouse_bins_warehouse ON warehouse.bins USING btree (warehouse_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_warehouse_bins_zone</code></td>
+<td>btree</td>
+<td><code>(zone_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_warehouse_bins_zone ON warehouse.bins USING btree (zone_id)</code></td>
+</tr>
+<tr>
+<td><code>pk_warehouse_bins</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_warehouse_bins ON warehouse.bins USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_warehouse_bins_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_warehouse_bins_id ON warehouse.bins USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>warehouse_bin</code></td>
+<td>btree</td>
+<td><code>(warehouse_id, code)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX warehouse_bin ON warehouse.bins USING btree (warehouse_id, code)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON warehouse.bins FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;rack_id&quot;,&quot;rack_id_internal_id&quot;,&quot;warehouse&quot;,&quot;racks&quot;],[&quot;warehouse_id&quot;,&quot;warehouse_id_internal_id&quot;,&quot;warehouse&quot;,&quot;warehouses&quot;],[&quot;zone_id&quot;,&quot;zone_id_internal_id&quot;,&quot;warehouse&quot;,&quot;zones&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>stable_code_guard</code></td>
+<td><code>CREATE TRIGGER stable_code_guard BEFORE INSERT OR DELETE OR UPDATE ON warehouse.bins FOR EACH ROW EXECUTE FUNCTION platform.guard_stable_code('code', '[&quot;warehouse_id&quot;]')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON warehouse.bins FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON warehouse.bins FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;rack_id&quot;,&quot;rack_id_internal_id&quot;,&quot;warehouse&quot;,&quot;racks&quot;],[&quot;warehouse_id&quot;,&quot;warehouse_id_internal_id&quot;,&quot;warehouse&quot;,&quot;warehouses&quot;],[&quot;zone_id&quot;,&quot;zone_id_internal_id&quot;,&quot;warehouse&quot;,&quot;zones&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+<h2>Master-data planning</h2>
+<p><strong>Status: Proposed maintenance design; Unapproved; no seed or migration modified.</strong> <a href="../../Master-Data-Inventory.html">Central inventory</a> · <a href="../../../05-APIs/Planning-Decisions.html">planning decisions</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Definition</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schema/table</td>
+<td><code>warehouse.bins</code></td>
+</tr>
+<tr>
+<td>Category</td>
+<td>Master / Reference — Persistent bin locations for exact stock/picking</td>
+</tr>
+<tr>
+<td>Proposed owner / maintenance role</td>
+<td>Warehouse / Warehouse supervisor</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Warehouse-specific via warehouse_id.</td>
+</tr>
+<tr>
+<td>Referencing tables</td>
+<td><code>fulfillment.pick_task_items</code>, <code>warehouse.cycle_count_items</code>, <code>warehouse.cycle_counts</code>, <code>warehouse.inventory_adjustment_items</code>, <code>warehouse.stock_balances</code>, <code>warehouse.stock_holds</code>, <code>warehouse.stock_ledger</code>, <code>warehouse.stock_reservations</code></td>
+</tr>
+<tr>
+<td>Features</td>
+<td><code>ADM-01</code>, <code>CAT-04</code>, <code>CHK-03</code>, <code>CHK-08</code>, <code>FIN-01</code>, <code>INV-01</code>, <code>INV-03</code>, <code>INV-04</code>, <code>INV-05</code>, <code>INV-07</code>, <code>OMS-03</code>, <code>OMS-04</code>, <code>REP-03</code>, <code>RID-02</code>, <code>STO-02</code>, <code>WH-02</code></td>
+</tr>
+<tr>
+<td>API consumers</td>
+<td><a href="../../../03-Modules/Product_Catalog/APIs.html">API-014</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-032</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-041</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-042</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-045</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-046</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-047</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-050</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-051</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-052</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-053</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-054</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-055</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-058</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-071</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-075</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-084</a></td>
+</tr>
+</tbody>
+</table>
+<h3>Expected initial records</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Description</th>
+<th>Status</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not allocated</td>
+<td>No approved initial record</td>
+<td>Verified real records and identifiers must come from the responsible business owner; the schema/page contains no seed-row evidence. Never create synthetic live parties/products or claim rows exist.</td>
+<td>Open</td>
+<td>Checked-in table schema only; owner evidence required.</td>
+</tr>
+</tbody>
+</table>
+<p>Required nondefault business attributes to obtain: <code>bin_type</code>, <code>code</code>, <code>warehouse_id</code>, <code>zone_id</code>.</p>
+<h3>Lifecycle and seed requirements</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed lifecycle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deployment or operational creation</td>
+<td>Operationally curated/imported after verification; no production seed identities or fabricated product rows.</td>
+</tr>
+<tr>
+<td>Create/update permissions</td>
+<td>Warehouse supervisor through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority.</td>
+</tr>
+<tr>
+<td>Activation/deactivation</td>
+<td>Use approved inactive/closed status from the table CHECK/owner policy; do not invent unsupported status values.</td>
+</tr>
+<tr>
+<td>Deletion</td>
+<td>Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission.</td>
+</tr>
+<tr>
+<td>Uniqueness / stable codes</td>
+<td>UNIQUE: UNIQUE (id); UNIQUE: UNIQUE (warehouse_id, code); CREATE UNIQUE INDEX uq_warehouse_bins_id ON warehouse.bins USING btree (id); CREATE UNIQUE INDEX warehouse_bin ON warehouse.bins USING btree (warehouse_id, code)</td>
+</tr>
+<tr>
+<td>Foreign-key dependencies</td>
+<td><code>warehouse.racks</code>, <code>warehouse.warehouses</code>, <code>warehouse.zones</code></td>
+</tr>
+<tr>
+<td>Initial load order</td>
+<td>Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness.</td>
+</tr>
+<tr>
+<td>Seed status</td>
+<td>Open; an empty migration/schema is not a usable approved business seed. Obtain the named owner dataset before enabling dependent journeys.</td>
+</tr>
+<tr>
+<td>Pending decisions</td>
+<td>D-024 ownership/lifecycle approval; D-001 phase scope and responsible steward evidence.</td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

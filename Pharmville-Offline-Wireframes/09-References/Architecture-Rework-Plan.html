@@ -1,0 +1,107 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Architecture Rework Plan · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Architecture rework execution ledger</h1>
+<p><strong>Status: Documentation rework complete; business/runtime approvals remain open.</strong> Baseline planning commit: <code>730d284ba087de956e0e496165e6eb65a70fc2b1</code>. The working tree was clean. The supplied database has separate nested Git history, preserved before consolidation. The 46 protected wireframe files (1,062,435 bytes) have an independent path/mode/content hash baseline; no task writes are permitted beneath that directory.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Required outcome</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inventory</td>
+<td>Git, wireframe, API and database baselines; source archive</td>
+<td>Complete</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>Apply V0001–V0030 in an isolated PostgreSQL instance; extract final DDL; independently restore and compare all catalog dimensions</td>
+<td>Complete; zero differences across 23 dimensions</td>
+</tr>
+<tr>
+<td>Database documentation</td>
+<td>Reconcile every table/column/object and regenerate canonical references and diagrams</td>
+<td>Complete before module moves; all 266 table pages and supporting objects reconciled</td>
+</tr>
+<tr>
+<td>Module architecture</td>
+<td>Retain 18 ownership domains; move canonical business/design/API documents; retain wireframe link compatibility</td>
+<td>Complete; 18 canonical modules, 70 compatibility paths</td>
+</tr>
+<tr>
+<td>Planning</td>
+<td>Trace requirements → module → workflow → API → table → test → development task; explicit scope and owner decisions</td>
+<td>Complete planning update; 110 features; owner approvals remain open</td>
+</tr>
+<tr>
+<td>Validation</td>
+<td>SQL fresh-install/catalog parity; documentation/OpenAPI; protected-byte verification; final diff</td>
+<td>Complete; all applicable validators passed; no protected changes or commit</td>
+</tr>
+</tbody>
+</table>
+<p>The target database directory contains only <code>pharmville_schema.sql</code>. Database evidence, prerequisites and validation tooling live in the planning/engineering areas. No existing user database, runtime credentials, regulatory approvals or application implementation are used or invented. Historical migrations are reconstruction inputs only, not the final deliverable.</p>
+<h2>Database and source preservation evidence</h2>
+<p>The schema installs on fresh PostgreSQL 18.6 without historical tooling. Source-chain versus extracted SQL and a third independent clean-cluster rehearsal both report zero differences across all 23 catalog dimensions; the independent rehearsal verified all 266 tables empty. Historical V0022 initially exhausted the private cluster’s default lock allocation; its transaction rolled back, the private setting was increased, and reconstruction completed. No existing user database was accessed.</p>
+<p>The original <code>heathcare_db</code> nested Git checkout is intact at <code>../pharmville-source-archive/2026-10-24-730d284/original-heathcare_db</code>; its separately hash-verified copy remains at the adjacent <code>heathcare_db</code> archive path. Final <code>pharmville-database/</code> contains SQL only. All previous narrative evidence is retained under Historical; no production seed data or application code was added.</p>
+<h2>Planning result and remaining approval gates</h2>
+<p>18 canonical modules; 110 stable features; 14 workflows; all 107 existing operations preserved; 97 documentation-complete proposals (90.65%), 10 incomplete, 0 approved/implemented. All 44 masters retain maintenance/record planning: 11 explicit lists, 33 owner datasets Open. <a href="../01-Project/Capability-Scope.html">Scope</a>, <a href="Sources-and-Decisions.html">decisions</a> and <a href="Engineering-Audit.html">engineering audit</a> name the remaining provider/security/clinical/finance/product gates. These are not falsely marked complete by this rework.</p>
+<h2>Verification results</h2>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Executed result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SQL source replay → standalone fresh install</td>
+<td>PASS; zero structural differences across 23 catalog dimensions</td>
+</tr>
+<tr>
+<td>Separate clean cluster, capability creation and no-data check</td>
+<td>PASS; all 266 tables empty; <a href="Database-Fresh-Install-Result.json">record</a></td>
+</tr>
+<tr>
+<td>Database documentation and source manifest</td>
+<td>PASS; exact 266-table field/constraint/index/trigger parity and checksum verification</td>
+</tr>
+<tr>
+<td>OpenAPI 3.1 and JSON Schema examples</td>
+<td>PASS; 1,828 validations; 3,606 column uses; 300 DTO annotations; zero errors</td>
+</tr>
+<tr>
+<td>API structural validator, strict</td>
+<td>PASS; 107 operations; 97 complete-proposed and 10 semantically incomplete retained</td>
+</tr>
+<tr>
+<td>ERD structure</td>
+<td>PASS; 42 diagrams and all 1,461 physical FK labels/catalog rows</td>
+</tr>
+<tr>
+<td>Blueprint inventory and protected bytes</td>
+<td>PASS; 18 modules, 110 features, 107 routes, 266 owners, 44 masters; 46 wireframe files unchanged</td>
+</tr>
+<tr>
+<td>Negative validator regression</td>
+<td>PASS; malformed links/headings/tables/fences/Mermaid rejected; temporary fixture removed</td>
+</tr>
+<tr>
+<td>SQL/catalog manifest tamper regression</td>
+<td>PASS; SQL/catalog drift, unexpected files and missing sources rejected</td>
+</tr>
+<tr>
+<td>Markdown and actual diagram rendering</td>
+<td>PASS; 679 Markdown pages, all relative links, 97 Mermaid diagrams parsed/rendered</td>
+</tr>
+</tbody>
+</table>
+<p>Source namespace inspection found exactly the 24 managed namespaces plus PostgreSQL’s public schema, with no unmanaged public tables. PostgreSQL creates 5,844 internal FK triggers in addition to 879 documented user triggers; internal triggers are reproduced by the 1,461 declared constraints. Implicit extension/table types are retained through extension and table DDL, not counted as application-defined types.</p>
+<h2>Final acceptance evidence</h2>
+<p><a href="Documentation-Validation-Result.json">Documentation validation</a>, <a href="Blueprint-Validation-Result.json">blueprint and protected-byte validation</a>, <a href="API-Contract-Validation-Result.json">API formal validation</a>, <a href="Database-Parity-Result.json">database parity</a>, <a href="Database-Fresh-Install-Result.json">independent empty installation</a> and <a href="Source-Archive-Verification.json">both private source archives</a> record the executed results. Source archives match the baseline with zero path/type/mode/content differences, including nested Git history.</p>
+<p>All applicable repository validators and negative-regression checks passed. The final diff was inspected and whitespace checks passed. Only planning documents, canonical SQL and documentation-generation/validation/configuration tooling changed; package dependencies were unchanged. No application implementation, existing database changes, commit, push or history rewrite occurred. The task-created PostgreSQL server was stopped after verification; private disposable evidence remains available for audit.</p>
+<h2>Incomplete work and owner gates</h2>
+<p>No reconstruction, catalog-parity, relocation, protected-file or documentation-validation blocker remains. Ten existing contracts remain intentionally incomplete: API-004, API-015, API-051, API-066, API-075, API-076, API-079, API-080, API-089 and API-090. Their concrete gaps and accountable owners are in the API coverage/decision registers. Thirty-three master datasets await real owner records; all 44 masters retain lifecycle planning. Business policies, runtime memberships, provider contracts, future-domain ownership and application execution remain unapproved/unverified as explicitly documented. These are development/release gates, not hidden completed work.</p>
+</main></body></html>

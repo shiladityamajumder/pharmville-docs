@@ -1,0 +1,876 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Features and Modules · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Feature inventory</h1>
+<p><strong>Scope status:</strong> 110 feature IDs are recorded as draft requirements. No signed product approval source is present in this workspace. Priorities are retained as draft.</p>
+<table>
+<thead>
+<tr>
+<th>Feature ID</th>
+<th>Module</th>
+<th>Draft priority</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACC-01</code></td>
+<td>Customer_Accounts</td>
+<td>Must (draft)</td>
+<td>Sign up and log in with mobile OTP (WhatsApp first, SMS fallback)</td>
+</tr>
+<tr>
+<td><code>ACC-02</code></td>
+<td>Customer_Accounts</td>
+<td>Must (draft)</td>
+<td>Profile: name, email, phone</td>
+</tr>
+<tr>
+<td><code>ACC-03</code></td>
+<td>Customer_Accounts</td>
+<td>Must (draft)</td>
+<td>Saved addresses with map pin; serviceability checked when the address is entered</td>
+</tr>
+<tr>
+<td><code>ACC-04</code></td>
+<td>Customer_Accounts</td>
+<td>Must (draft)</td>
+<td>Family profiles for dependents (name, age, relation)</td>
+</tr>
+<tr>
+<td><code>ACC-05</code></td>
+<td>Customer_Accounts</td>
+<td>Must (draft)</td>
+<td>Privacy notice and consent at signup</td>
+</tr>
+<tr>
+<td><code>ACC-06</code></td>
+<td>Customer_Accounts</td>
+<td>Should (draft)</td>
+<td>Account deletion request</td>
+</tr>
+<tr>
+<td><code>ACC-07</code></td>
+<td>Customer_Accounts</td>
+<td>Should (draft)</td>
+<td>Wishlist</td>
+</tr>
+<tr>
+<td><code>CAT-01</code></td>
+<td>Product_Catalog</td>
+<td>Must (draft)</td>
+<td>Browse by category and sub-category</td>
+</tr>
+<tr>
+<td><code>CAT-02</code></td>
+<td>Product_Catalog</td>
+<td>Must (draft)</td>
+<td>Product page: brand, manufacturer, composition, pack size, MRP, price, images, &quot;Prescription required&quot; label</td>
+</tr>
+<tr>
+<td><code>CAT-03</code></td>
+<td>Product_Catalog</td>
+<td>Must (draft)</td>
+<td>Search by name, brand and composition, with typo tolerance and autosuggest</td>
+</tr>
+<tr>
+<td><code>CAT-04</code></td>
+<td>Product_Catalog</td>
+<td>Must (draft)</td>
+<td>Availability for the customer's pin code (in stock / out of stock)</td>
+</tr>
+<tr>
+<td><code>CAT-05</code></td>
+<td>Product_Catalog</td>
+<td>Should (draft)</td>
+<td>Alternative medicines: same composition, strength and dosage form, ranked by a configurable rule</td>
+</tr>
+<tr>
+<td><code>CAT-06</code></td>
+<td>Product_Catalog</td>
+<td>Must (draft)</td>
+<td>Placeholder image when a product has none</td>
+</tr>
+<tr>
+<td><code>CHK-01</code></td>
+<td>Cart_Checkout</td>
+<td>Must (draft)</td>
+<td>Cart saved across devices for logged-in customers</td>
+</tr>
+<tr>
+<td><code>CHK-02</code></td>
+<td>Cart_Checkout</td>
+<td>Must (draft)</td>
+<td>Checkout: address, patient (self or family), payment method, delivery fee and estimated time shown before paying</td>
+</tr>
+<tr>
+<td><code>CHK-03</code></td>
+<td>Cart_Checkout</td>
+<td>Must (draft)</td>
+<td>Online payment via Cashfree: UPI, cards, net banking</td>
+</tr>
+<tr>
+<td><code>CHK-04</code></td>
+<td>Cart_Checkout</td>
+<td>Must (draft)</td>
+<td>Cash on delivery, with a maximum order value and a block after repeated refusals</td>
+</tr>
+<tr>
+<td><code>CHK-05</code></td>
+<td>Cart_Checkout</td>
+<td>Must (draft)</td>
+<td>Minimum order value and delivery fee applied from settings</td>
+</tr>
+<tr>
+<td><code>CHK-06</code></td>
+<td>Cart_Checkout</td>
+<td>Must (draft)</td>
+<td>Price or stock change detected before payment; customer confirms</td>
+</tr>
+<tr>
+<td><code>CHK-07</code></td>
+<td>Cart_Checkout</td>
+<td>Must (draft)</td>
+<td>No duplicate orders or charges (double tap, refresh, closed browser after payment)</td>
+</tr>
+<tr>
+<td><code>CHK-08</code></td>
+<td>Cart_Checkout</td>
+<td>Must (draft)</td>
+<td>Stock reserved during checkout, released automatically if payment does not finish</td>
+</tr>
+<tr>
+<td><code>RX-01</code></td>
+<td>Prescription_Upload</td>
+<td>Must (draft)</td>
+<td>Upload one or more prescriptions (JPG, PNG, PDF) at checkout</td>
+</tr>
+<tr>
+<td><code>RX-02</code></td>
+<td>Prescription_Upload</td>
+<td>Should (draft)</td>
+<td>Upload within 24 hours after ordering; auto-cancel after that</td>
+</tr>
+<tr>
+<td><code>RX-03</code></td>
+<td>Prescription_Upload</td>
+<td>Should (draft)</td>
+<td>Reuse a saved, still-valid prescription</td>
+</tr>
+<tr>
+<td><code>RX-04</code></td>
+<td>Prescription_Upload</td>
+<td>Must (draft)</td>
+<td>Link each prescription to the patient (self or family member)</td>
+</tr>
+<tr>
+<td><code>RX-05</code></td>
+<td>Prescription_Upload</td>
+<td>Must (draft)</td>
+<td>See the pharmacist's decision and reason; re-upload after rejection</td>
+</tr>
+<tr>
+<td><code>ORD-01</code></td>
+<td>Customer_Orders</td>
+<td>Must (draft)</td>
+<td>Order confirmation on screen, WhatsApp and email</td>
+</tr>
+<tr>
+<td><code>ORD-02</code></td>
+<td>Customer_Orders</td>
+<td>Must (draft)</td>
+<td>Status timeline (placed → packed → out for delivery → delivered)</td>
+</tr>
+<tr>
+<td><code>ORD-03</code></td>
+<td>Customer_Orders</td>
+<td>Must (draft)</td>
+<td>Order history with GST invoice download</td>
+</tr>
+<tr>
+<td><code>ORD-04</code></td>
+<td>Customer_Orders</td>
+<td>Must (draft)</td>
+<td>Cancel before the order is packed</td>
+</tr>
+<tr>
+<td><code>ORD-05</code></td>
+<td>Customer_Orders</td>
+<td>Should (draft)</td>
+<td>Return request within the return window</td>
+</tr>
+<tr>
+<td><code>ORD-06</code></td>
+<td>Customer_Orders</td>
+<td>Must (draft)</td>
+<td>Refund status for cancelled and returned orders</td>
+</tr>
+<tr>
+<td><code>ORD-07</code></td>
+<td>Customer_Orders</td>
+<td>Must (draft)</td>
+<td>Live rider location on a map, estimated arrival, masked call button</td>
+</tr>
+<tr>
+<td><code>ORD-08</code></td>
+<td>Customer_Orders</td>
+<td>Must (draft)</td>
+<td>Delivery OTP shown to the customer</td>
+</tr>
+<tr>
+<td><code>ORD-09</code></td>
+<td>Customer_Orders</td>
+<td>Could (draft)</td>
+<td>Change items or address after placing an order</td>
+</tr>
+<tr>
+<td><code>ADM-01</code></td>
+<td>Admin_CMS</td>
+<td>Must (draft)</td>
+<td>Dashboard per role: orders by status, pending prescriptions, alerts, deliveries in progress</td>
+</tr>
+<tr>
+<td><code>ADM-02</code></td>
+<td>Admin_CMS</td>
+<td>Must (draft)</td>
+<td>Staff users: invite, assign role and location, deactivate, log out sessions</td>
+</tr>
+<tr>
+<td><code>ADM-03</code></td>
+<td>Admin_CMS</td>
+<td>Must (draft)</td>
+<td>Roles and permissions for 16 roles, limited to own store or warehouse</td>
+</tr>
+<tr>
+<td><code>ADM-04</code></td>
+<td>Admin_CMS</td>
+<td>Must (draft)</td>
+<td>CMS: home banners, FAQs, policy pages, with draft and publish</td>
+</tr>
+<tr>
+<td><code>ADM-05</code></td>
+<td>Admin_CMS</td>
+<td>Must (draft)</td>
+<td>System settings (PRD section 8)</td>
+</tr>
+<tr>
+<td><code>ADM-06</code></td>
+<td>Admin_CMS</td>
+<td>Must (draft)</td>
+<td>Catalogue admin: products, categories, brands, salt master, prices, GST and HSN</td>
+</tr>
+<tr>
+<td><code>ADM-07</code></td>
+<td>Admin_CMS</td>
+<td>Must (draft)</td>
+<td>Bulk product import from Excel, with error report</td>
+</tr>
+<tr>
+<td><code>ADM-08</code></td>
+<td>Admin_CMS</td>
+<td>Must (draft)</td>
+<td>Store and warehouse master: address, hours, GSTIN, service areas</td>
+</tr>
+<tr>
+<td><code>ADM-09</code></td>
+<td>Admin_CMS</td>
+<td>Should (draft)</td>
+<td>Offer settings: start and end dates, maximum discount, first-order offer</td>
+</tr>
+<tr>
+<td><code>OMS-01</code></td>
+<td>Order_Operations</td>
+<td>Must (draft)</td>
+<td>Order list with filters (status, location, date, payment, Rx) and search by order number or phone</td>
+</tr>
+<tr>
+<td><code>OMS-02</code></td>
+<td>Order_Operations</td>
+<td>Must (draft)</td>
+<td>Order detail: items, batches, prescription, payment, delivery, full history</td>
+</tr>
+<tr>
+<td><code>OMS-03</code></td>
+<td>Order_Operations</td>
+<td>Must (draft)</td>
+<td>Automatic routing to the nearest open store with every item; warehouse as fallback</td>
+</tr>
+<tr>
+<td><code>OMS-04</code></td>
+<td>Order_Operations</td>
+<td>Must (draft)</td>
+<td>Reassign an order to another location, with a reason</td>
+</tr>
+<tr>
+<td><code>OMS-05</code></td>
+<td>Order_Operations</td>
+<td>Must (draft)</td>
+<td>Cancel, partly fulfil, raise return, add internal note</td>
+</tr>
+<tr>
+<td><code>OMS-06</code></td>
+<td>Order_Operations</td>
+<td>Must (draft)</td>
+<td>Attention queue: payment pending, stuck orders, failed deliveries</td>
+</tr>
+<tr>
+<td><code>OMS-07</code></td>
+<td>Order_Operations</td>
+<td>Could (draft)</td>
+<td>Assisted order entry for phone orders</td>
+</tr>
+<tr>
+<td><code>STO-01</code></td>
+<td>Store_Operations</td>
+<td>Must (draft)</td>
+<td>Incoming order queue for my store, with sound alert</td>
+</tr>
+<tr>
+<td><code>STO-02</code></td>
+<td>Store_Operations</td>
+<td>Must (draft)</td>
+<td>Accept order, pick list, mark packed, hand over to rider</td>
+</tr>
+<tr>
+<td><code>STO-03</code></td>
+<td>Store_Operations</td>
+<td>Must (draft)</td>
+<td>Raise replenishment request (normal or urgent)</td>
+</tr>
+<tr>
+<td><code>STO-04</code></td>
+<td>Store_Operations</td>
+<td>Must (draft)</td>
+<td>Confirm receipt of a transfer; record shortages</td>
+</tr>
+<tr>
+<td><code>STO-05</code></td>
+<td>Store_Operations</td>
+<td>Must (draft)</td>
+<td>My store's stock, with low-stock and near-expiry alerts</td>
+</tr>
+<tr>
+<td><code>INV-01</code></td>
+<td>Inventory</td>
+<td>Must (draft)</td>
+<td>Stock per location and batch, with manufacturing and expiry dates</td>
+</tr>
+<tr>
+<td><code>INV-02</code></td>
+<td>Inventory</td>
+<td>Must (draft)</td>
+<td>Stock ledger: every movement recorded; stock is the sum of the ledger</td>
+</tr>
+<tr>
+<td><code>INV-03</code></td>
+<td>Inventory</td>
+<td>Must (draft)</td>
+<td>Allocate nearest-expiry batch first; block batches below minimum shelf life</td>
+</tr>
+<tr>
+<td><code>INV-04</code></td>
+<td>Inventory</td>
+<td>Must (draft)</td>
+<td>Stock adjustments with reason; manager approval above a threshold</td>
+</tr>
+<tr>
+<td><code>INV-05</code></td>
+<td>Inventory</td>
+<td>Must (draft)</td>
+<td>Low-stock and near-expiry alerts</td>
+</tr>
+<tr>
+<td><code>INV-06</code></td>
+<td>Inventory</td>
+<td>Must (draft)</td>
+<td>Opening stock import per location</td>
+</tr>
+<tr>
+<td><code>INV-07</code></td>
+<td>Inventory</td>
+<td>Must (draft)</td>
+<td>Stock sync with Techsmith</td>
+</tr>
+<tr>
+<td><code>WH-01</code></td>
+<td>Warehouse</td>
+<td>Must (draft)</td>
+<td>Receive stock: batch, manufacturing and expiry dates, quantity, supplier invoice</td>
+</tr>
+<tr>
+<td><code>WH-02</code></td>
+<td>Warehouse</td>
+<td>Must (draft)</td>
+<td>Replenishment queue: approve, dispatch with note, stock &quot;in transit&quot;</td>
+</tr>
+<tr>
+<td><code>WH-03</code></td>
+<td>Warehouse</td>
+<td>Must (draft)</td>
+<td>Urgent runs, up to two extra a day</td>
+</tr>
+<tr>
+<td><code>WH-04</code></td>
+<td>Warehouse</td>
+<td>Must (draft)</td>
+<td>Pick, pack and dispatch fallback online orders</td>
+</tr>
+<tr>
+<td><code>WH-05</code></td>
+<td>Warehouse</td>
+<td>Could (draft)</td>
+<td>Basic stock audit</td>
+</tr>
+<tr>
+<td><code>PHM-01</code></td>
+<td>Pharmacist_Review</td>
+<td>Must (draft)</td>
+<td>Review queue, oldest first, with waiting time</td>
+</tr>
+<tr>
+<td><code>PHM-02</code></td>
+<td>Pharmacist_Review</td>
+<td>Must (draft)</td>
+<td>Side-by-side view: zoomable prescription and order items</td>
+</tr>
+<tr>
+<td><code>PHM-03</code></td>
+<td>Pharmacist_Review</td>
+<td>Must (draft)</td>
+<td>Approve all, approve some, or reject with a reason</td>
+</tr>
+<tr>
+<td><code>PHM-04</code></td>
+<td>Pharmacist_Review</td>
+<td>Should (draft)</td>
+<td>Confirm a chosen alternative matches the prescription</td>
+</tr>
+<tr>
+<td><code>PHM-05</code></td>
+<td>Pharmacist_Review</td>
+<td>Must (draft)</td>
+<td>Pharmacist name, registration number and time on every decision</td>
+</tr>
+<tr>
+<td><code>DLV-01</code></td>
+<td>Delivery_Operations</td>
+<td>Must (draft)</td>
+<td>Live map of riders (available, on delivery, offline) and orders ready for pickup</td>
+</tr>
+<tr>
+<td><code>DLV-02</code></td>
+<td>Delivery_Operations</td>
+<td>Must (draft)</td>
+<td>Suggest the nearest available rider; staff confirm or choose another</td>
+</tr>
+<tr>
+<td><code>DLV-03</code></td>
+<td>Delivery_Operations</td>
+<td>Must (draft)</td>
+<td>Failed-delivery queue: reattempt, reschedule or return to store</td>
+</tr>
+<tr>
+<td><code>DLV-04</code></td>
+<td>Delivery_Operations</td>
+<td>Must (draft)</td>
+<td>COD handover: cash collected vs deposited per rider per day</td>
+</tr>
+<tr>
+<td><code>DLV-05</code></td>
+<td>Delivery_Operations</td>
+<td>Must (draft)</td>
+<td>Rider management: onboard, assign location, shifts</td>
+</tr>
+<tr>
+<td><code>RID-01</code></td>
+<td>Rider_App</td>
+<td>Must (draft)</td>
+<td>OTP login; on duty, off duty and break</td>
+</tr>
+<tr>
+<td><code>RID-02</code></td>
+<td>Rider_App</td>
+<td>Must (draft)</td>
+<td>Task list; accept; open Google Maps to navigate; mark picked up</td>
+</tr>
+<tr>
+<td><code>RID-03</code></td>
+<td>Rider_App</td>
+<td>Must (draft)</td>
+<td>Background location: every 5–10 s on delivery, 15–30 s idle</td>
+</tr>
+<tr>
+<td><code>RID-04</code></td>
+<td>Rider_App</td>
+<td>Must (draft)</td>
+<td>Complete delivery with customer OTP and photo; record COD collected</td>
+</tr>
+<tr>
+<td><code>RID-05</code></td>
+<td>Rider_App</td>
+<td>Should (draft)</td>
+<td>Door checks for prescription medicines</td>
+</tr>
+<tr>
+<td><code>RID-06</code></td>
+<td>Rider_App</td>
+<td>Must (draft)</td>
+<td>Failed attempt with a reason from a fixed list</td>
+</tr>
+<tr>
+<td><code>RID-07</code></td>
+<td>Rider_App</td>
+<td>Should (draft)</td>
+<td>Daily deliveries and incentive earned</td>
+</tr>
+<tr>
+<td><code>FIN-01</code></td>
+<td>Finance_Payments</td>
+<td>Must (draft)</td>
+<td>Payment records from Cashfree webhooks and COD collections</td>
+</tr>
+<tr>
+<td><code>FIN-02</code></td>
+<td>Finance_Payments</td>
+<td>Must (draft)</td>
+<td>GST invoice per order, from the right GSTIN</td>
+</tr>
+<tr>
+<td><code>FIN-03</code></td>
+<td>Finance_Payments</td>
+<td>Must (draft)</td>
+<td>Automatic refunds; manual refunds need approval above a set amount</td>
+</tr>
+<tr>
+<td><code>FIN-04</code></td>
+<td>Finance_Payments</td>
+<td>Should (draft)</td>
+<td>COD refunds by bank transfer or UPI</td>
+</tr>
+<tr>
+<td><code>FIN-05</code></td>
+<td>Finance_Payments</td>
+<td>Must (draft)</td>
+<td>Daily reconciliation: Cashfree settlements vs orders</td>
+</tr>
+<tr>
+<td><code>FIN-06</code></td>
+<td>Finance_Payments</td>
+<td>Must (draft)</td>
+<td>COD reconciliation: collected vs deposited</td>
+</tr>
+<tr>
+<td><code>FIN-07</code></td>
+<td>Finance_Payments</td>
+<td>Should (draft)</td>
+<td>Credit notes for refunds and returns</td>
+</tr>
+<tr>
+<td><code>REP-01</code></td>
+<td>Reporting</td>
+<td>Must (draft)</td>
+<td>Sales and orders, by date, store and product</td>
+</tr>
+<tr>
+<td><code>REP-02</code></td>
+<td>Reporting</td>
+<td>Must (draft)</td>
+<td>GST report for filing</td>
+</tr>
+<tr>
+<td><code>REP-03</code></td>
+<td>Reporting</td>
+<td>Must (draft)</td>
+<td>Stock, low stock and near-expiry</td>
+</tr>
+<tr>
+<td><code>REP-04</code></td>
+<td>Reporting</td>
+<td>Must (draft)</td>
+<td>COD, rider collections and deliveries per rider</td>
+</tr>
+<tr>
+<td><code>REP-05</code></td>
+<td>Reporting</td>
+<td>Should (draft)</td>
+<td>Refunds, cancellations and failed deliveries</td>
+</tr>
+<tr>
+<td><code>REP-06</code></td>
+<td>Reporting</td>
+<td>Should (draft)</td>
+<td>Replenishment transfers</td>
+</tr>
+<tr>
+<td><code>REP-07</code></td>
+<td>Reporting</td>
+<td>Must (draft)</td>
+<td>Excel export for every report</td>
+</tr>
+<tr>
+<td><code>AUD-01</code></td>
+<td>Audit</td>
+<td>Must (draft)</td>
+<td>Log logins, changes, stock movements and prescription views</td>
+</tr>
+<tr>
+<td><code>AUD-02</code></td>
+<td>Audit</td>
+<td>Must (draft)</td>
+<td>Search and export the audit log; read-only for everyone</td>
+</tr>
+<tr>
+<td><code>AUTH-01</code></td>
+<td>Authentication_Access</td>
+<td>Must (draft)</td>
+<td>Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager</td>
+</tr>
+<tr>
+<td><code>AUTH-02</code></td>
+<td>Authentication_Access</td>
+<td>Must (draft)</td>
+<td>Lockout rules, session limits, one session per staff account</td>
+</tr>
+<tr>
+<td><code>AUTH-03</code></td>
+<td>Authentication_Access</td>
+<td>Must (draft)</td>
+<td>OTP rate limits per number and IP</td>
+</tr>
+<tr>
+<td><code>AUTH-04</code></td>
+<td>Authentication_Access</td>
+<td>Must (draft)</td>
+<td>Permissions checked on the server for every request</td>
+</tr>
+<tr>
+<td><code>NOT-01</code></td>
+<td>Notifications</td>
+<td>Must (draft)</td>
+<td>One notification service: templates, WhatsApp first, SMS fallback, email</td>
+</tr>
+<tr>
+<td><code>NOT-02</code></td>
+<td>Notifications</td>
+<td>Must (draft)</td>
+<td>Delivery log with retries</td>
+</tr>
+<tr>
+<td><code>NOT-03</code></td>
+<td>Notifications</td>
+<td>Must (draft)</td>
+<td>Rider push notifications (FCM)</td>
+</tr>
+<tr>
+<td><code>NOT-04</code></td>
+<td>Notifications</td>
+<td>Must (draft)</td>
+<td>Staff alerts in the admin panel</td>
+</tr>
+<tr>
+<td><code>NOT-05</code></td>
+<td>Notifications</td>
+<td>Could (draft)</td>
+<td>Customer browser push notifications</td>
+</tr>
+</tbody>
+</table>
+<h2>Module inventory</h2>
+<p><strong>18 module groupings</strong> derived from the 110 inherited feature IDs (not a newly signed launch scope). Database schemas are cross-product and do not each imply a Phase 1 module.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Features</th>
+<th>HLD</th>
+<th>LLD</th>
+<th>API contracts</th>
+<th>DB mapping</th>
+<th>Test plan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer_Accounts</td>
+<td>7</td>
+<td><a href="../03-Modules/Customer_Accounts/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#customer-accounts">DB</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Product_Catalog</td>
+<td>6</td>
+<td><a href="../03-Modules/Product_Catalog/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#product-catalog">DB</a></td>
+<td><a href="../03-Modules/Product_Catalog/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Cart_Checkout</td>
+<td>8</td>
+<td><a href="../03-Modules/Cart_Checkout/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#cart-checkout">DB</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Prescription_Upload</td>
+<td>5</td>
+<td><a href="../03-Modules/Prescription_Upload/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#prescription-upload">DB</a></td>
+<td><a href="../03-Modules/Prescription_Upload/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Customer_Orders</td>
+<td>9</td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#customer-orders">DB</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Admin_CMS</td>
+<td>9</td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#admin-cms">DB</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Order_Operations</td>
+<td>7</td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#order-operations">DB</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Store_Operations</td>
+<td>5</td>
+<td><a href="../03-Modules/Store_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#store-operations">DB</a></td>
+<td><a href="../03-Modules/Store_Operations/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>7</td>
+<td><a href="../03-Modules/Inventory/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Inventory/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#inventory">DB</a></td>
+<td><a href="../03-Modules/Inventory/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td>5</td>
+<td><a href="../03-Modules/Warehouse/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Warehouse/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#warehouse">DB</a></td>
+<td><a href="../03-Modules/Warehouse/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Pharmacist_Review</td>
+<td>5</td>
+<td><a href="../03-Modules/Pharmacist_Review/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#pharmacist-review">DB</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Delivery_Operations</td>
+<td>5</td>
+<td><a href="../03-Modules/Delivery_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#delivery-operations">DB</a></td>
+<td><a href="../03-Modules/Delivery_Operations/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Rider_App</td>
+<td>7</td>
+<td><a href="../03-Modules/Rider_App/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#rider-app">DB</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Finance_Payments</td>
+<td>7</td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#finance-payments">DB</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Reporting</td>
+<td>7</td>
+<td><a href="../03-Modules/Reporting/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Reporting/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#reporting">DB</a></td>
+<td><a href="../03-Modules/Reporting/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Audit</td>
+<td>2</td>
+<td><a href="../03-Modules/Audit/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Audit/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Audit/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#audit">DB</a></td>
+<td><a href="../03-Modules/Audit/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Authentication_Access</td>
+<td>4</td>
+<td><a href="../03-Modules/Authentication_Access/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#authentication-access">DB</a></td>
+<td><a href="../03-Modules/Authentication_Access/Edge-Cases.html">Tests</a></td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>5</td>
+<td><a href="../03-Modules/Notifications/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Notifications/APIs.html">Contracts</a></td>
+<td><a href="../04-Database/Module-Mapping.html#notifications">DB</a></td>
+<td><a href="../03-Modules/Notifications/Edge-Cases.html">Tests</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phase note:</strong> Warehouse core tasks appear as Must in one inherited v0.1 feature list but as Phase 2/stretch in later secondary narrative. Rider Android phase timing also requires signoff; see open decisions.</p>
+<h2>Module design links</h2>
+<ul>
+<li><a href="../03-Modules/Admin_CMS/README.html">Admin CMS</a></li>
+<li><a href="../03-Modules/Audit/README.html">Audit</a></li>
+<li><a href="../03-Modules/Authentication_Access/README.html">Authentication Access</a></li>
+<li><a href="../03-Modules/Cart_Checkout/README.html">Cart Checkout</a></li>
+<li><a href="../03-Modules/Customer_Accounts/README.html">Customer Accounts</a></li>
+<li><a href="../03-Modules/Customer_Orders/README.html">Customer Orders</a></li>
+<li><a href="../03-Modules/Delivery_Operations/README.html">Delivery Operations</a></li>
+<li><a href="../03-Modules/Finance_Payments/README.html">Finance Payments</a></li>
+<li><a href="../03-Modules/Inventory/README.html">Inventory</a></li>
+<li><a href="../03-Modules/Notifications/README.html">Notifications</a></li>
+<li><a href="../03-Modules/Order_Operations/README.html">Order Operations</a></li>
+<li><a href="../03-Modules/Pharmacist_Review/README.html">Pharmacist Review</a></li>
+<li><a href="../03-Modules/Prescription_Upload/README.html">Prescription Upload</a></li>
+<li><a href="../03-Modules/Product_Catalog/README.html">Product Catalog</a></li>
+<li><a href="../03-Modules/Reporting/README.html">Reporting</a></li>
+<li><a href="../03-Modules/Rider_App/README.html">Rider App</a></li>
+<li><a href="../03-Modules/Store_Operations/README.html">Store Operations</a></li>
+<li><a href="../03-Modules/Warehouse/README.html">Warehouse</a></li>
+</ul>
+</main></body></html>

@@ -1,0 +1,258 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>State and Recovery Contracts · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>State, ownership and recovery contracts</h1>
+<p><strong>Status:</strong> Proposed application contracts derived from the existing journey and supplied database catalog. Only the explicitly identified SQL transitions below are confirmed local-source behavior. No application test has run. The supplied source is selected for documentation; <a href="../09-References/Sources-and-Decisions.html#decisions-that-block-implementation">D-015</a> retains target-ledger/runtime-parity checks, and D-024 requires review of each command’s exact fields and runtime grants.</p>
+<h2>Command ownership and transaction boundary</h2>
+<p>A feature owner is accountable for the user outcome. The command owner validates and performs an action. The data owner controls writes and invariants. A consumer reads a filtered result or requests an owner command; sharing a schema or rendering a screen grants no direct write authority.</p>
+<table>
+<thead>
+<tr>
+<th>Feature/surface owner</th>
+<th>Command and proposed data owner</th>
+<th>Consumers and limits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer Accounts</td>
+<td>Authentication Access owns OTP/session mechanics; Customer Accounts owns profiles, addresses, dependent associations, consent choices and wishlist</td>
+<td>Checkout consumes owned address/patient results; staff invitations do not bypass identity policy</td>
+</tr>
+<tr>
+<td>Product Catalog</td>
+<td>Catalog owns approved product/classification/publication; Finance approves tax meaning; pricing write responsibility needs D-024 review</td>
+<td>Admin edits through Catalog, not unrestricted table access; search is a derived read model</td>
+</tr>
+<tr>
+<td>Cart Checkout</td>
+<td>Checkout owns cart, quote/checkout intent; Order Operations owns the resulting order/revision aggregate</td>
+<td>Inventory owns holds; Finance owns money; neither browser nor Checkout invents those facts</td>
+</tr>
+<tr>
+<td>Prescription Upload</td>
+<td>Intake owns patient/order/file linkage; platform file service owns private object upload/scan/grants</td>
+<td>Pharmacy consumes safe scoped evidence; support cannot expose raw files or approve them</td>
+</tr>
+<tr>
+<td>Pharmacist Review</td>
+<td>Authorized review command owns clinical line decisions and immutable reviewer evidence</td>
+<td>Order/fulfillment consume decisions tied to exact patient, SKU, quantity, evidence and revision</td>
+</tr>
+<tr>
+<td>Customer Orders / Order Operations</td>
+<td>Operations owns order revisions, routing, cancellation/return orchestration and customer projections</td>
+<td>Customer APIs request owner commands; projection writes never overwrite money, clinical or delivery facts</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>Inventory owns lots, balances, holds, reservations, movement ledger and approved adjustments</td>
+<td>Store/Warehouse submit evidenced movements; POS observations are validated inputs, not arbitrary balance replacement</td>
+</tr>
+<tr>
+<td>Store Operations / Warehouse</td>
+<td>Scoped fulfillment owns pick/pack/package tasks; Warehouse owns receiving/transfer workflow</td>
+<td>Inventory applies stock effects; procurement invoice and finance postings remain separate owner commands</td>
+</tr>
+<tr>
+<td>Delivery Operations / Rider App</td>
+<td>Delivery owns assignment, custody, attempts, OTP validation and location stream; rider app is a client</td>
+<td>Finance owns COD money; a rider cannot approve dispensing or settle a bank balance</td>
+</tr>
+<tr>
+<td>Finance Payments</td>
+<td>Finance owns payment/refund/reconciliation records, invoices, credits and approved accounting postings</td>
+<td>Order progression consumes trusted outcomes; administrator/support cannot directly set paid/refunded</td>
+</tr>
+<tr>
+<td>Admin CMS</td>
+<td>Admin owns CMS/settings/location-management commands within approved scope</td>
+<td>Identity, Catalog, clinical and Finance owners retain their rules and approval authority</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>Notifications owns message/attempt/endpoints; domain owners write their committed event</td>
+<td>Sending/retrying a message never repeats the source order, stock or money command</td>
+</tr>
+<tr>
+<td>Reporting</td>
+<td>Reporting owns report definitions/runs and scoped export jobs</td>
+<td>Domain data is read through approved views/interfaces; no correction through report queries</td>
+</tr>
+<tr>
+<td>Audit</td>
+<td>Trusted event writer owns append-only audit evidence; authorized auditors read/export</td>
+<td>No business UI role gets update/delete rights to historical events</td>
+</tr>
+</tbody>
+</table>
+<p>These are implementation assignments for review, not evidence that SQL runtime grants already permit all writes. The <a href="../04-Database/Module-Mapping.html">database module map</a> supplies candidate tables; each operation review must name its insert/update fields, read dependencies, actual restricted role, guards and history/outbox rows.</p>
+<h2>Atomic command and external effect</h2>
+<ol>
+<li>Resolve trusted identity, permission, object/patient/location scope and required policy version. Pre-login and signed provider callbacks use their own trust paths, not an invented existing session.</li>
+<li>Validate operation-specific fields and the current accepted revision. Lock the relevant aggregate/stock rows or perform an equivalent checked version update; apply a deterministic lock order for multi-row holds.</li>
+<li>Persist the owner’s state change, idempotency result and required audit/outbox facts in the same local transaction. A rejected command or pre-commit crash leaves no partial business mutation. A denial can have a separate safe security event.</li>
+<li>Commit before returning a successful effect or delivering an event. Never hold a database transaction open across provider, object-store or messaging network calls.</li>
+<li>A worker invokes external effects using the reviewed provider idempotency contract. An uncertain financial result becomes reconciliation work; blind charge/refund retries are forbidden.</li>
+<li>Record the trusted external result in a new transaction and publish its committed outcome. Deduplicate incoming messages using source plus durable event identity. Out-of-order evidence cannot roll a trusted success backward.</li>
+</ol>
+<p><code>Idempotency-Key</code> binds actor/service, action, target and a canonical request fingerprint. Same key/body replays the stored result; a different body is a conflict with no new effect. Pending commands return the existing reference/status. D-024 must specify persistence and retention for each key; this page does not invent a retention duration.</p>
+<p>Reassignment is a coordination problem: do not mutate the site identity on an existing fulfillment record that SQL makes immutable. Operations must define how old work is safely closed, holds are released/replaced and new work is created. Cross-owner recovery uses explicit steps and compensating records; no distributed atomic transaction is claimed.</p>
+<h2>Order and clinical progression</h2>
+<p>The states in this table are business milestones, not a proposed single database enum. <code>commerce.orders.status</code> and subsystem status values remain distinct; see the <a href="../04-Database/Tables/commerce/orders.html">order catalog</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Current milestone</th>
+<th>Permitted next action and evidence</th>
+<th>Invalid action and recovery</th>
+<th>Test evidence design</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Request received with P lines</td>
+<td>Wait for safe prescription/patient match and authorized current per-line decisions</td>
+<td>Missing/wrong-patient evidence cannot become approved; request correction</td>
+<td>TC-RX-04-DENY, TC-PHM-02-DENY</td>
+</tr>
+<tr>
+<td>P review pending</td>
+<td>Approve current lines, reject/request correction, or prepare permitted revision</td>
+<td>Another patient/revision/unauthorized reviewer cannot approve; preserve history and refresh</td>
+<td>TC-PHM-03-DENY, TC-PHM-05-DENY</td>
+</tr>
+<tr>
+<td>Revised basket offered</td>
+<td>Customer accepts exact contents/amount or chooses correction/cancellation</td>
+<td>Old acceptance cannot pay a changed total; show comparison and wait</td>
+<td>TC-CHK-06-DENY, TC-OMS-05-DENY</td>
+</tr>
+<tr>
+<td>M/O-only or current P approval</td>
+<td>Obtain licensed fresh-stock hold and choose eligible payment</td>
+<td>No universal Rx gate for M/O; unknown classification still blocks</td>
+<td>TC-CAT-02-DENY, TC-CHK-02-OK</td>
+</tr>
+<tr>
+<td>Money uncertain</td>
+<td>Reconcile trusted provider result against current order/hold</td>
+<td>Browser return, screenshot or repeated Pay is not proof; keep pending</td>
+<td>TC-CHK-03-DENY, TC-FIN-01-DENY</td>
+</tr>
+<tr>
+<td>Ready for preparation</td>
+<td>Valid accepted revision, current clinical/site/stock gates</td>
+<td>Changed evidence invalidates progression; stop and resolve</td>
+<td>TC-STO-02-DENY, TC-WH-04-DENY</td>
+</tr>
+<tr>
+<td>Before packed</td>
+<td>Customer cancellation can compete with packing under draft policy</td>
+<td>At most one valid current transition; after packed use approved exception path</td>
+<td>TC-ORD-04-DENY</td>
+</tr>
+<tr>
+<td>Delivered</td>
+<td>Permit eligible return request; retain delivery history</td>
+<td>A return/refund is not deletion or reversal of delivery evidence</td>
+<td>TC-ORD-05-DENY, TC-FIN-07-DENY</td>
+</tr>
+</tbody>
+</table>
+<p>Deferred prescription upload RX-02 conflicts with the detailed review-before-payment journey. It stays blocked under D-004/D-006 until Product, Finance and Pharmacy decide the deadline, money treatment, hold behavior and automatic-cancellation consequences.</p>
+<h2>Reservation, payment and refund progression</h2>
+<table>
+<thead>
+<tr>
+<th>Record</th>
+<th>Allowed application progression</th>
+<th>Invalid transition / interrupted-work recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reservation</td>
+<td>Eligible current stock → active hold → committed fulfillment stock, or unused hold → released/expired under approved policy</td>
+<td>Expired/released hold cannot become committed without a new validated hold. Duplicate release must not add stock twice. A payment/expiry race checks current version and durable result. TC-CHK-08-DENY, TC-INV-02-DENY</td>
+</tr>
+<tr>
+<td>Payment attempt/intent</td>
+<td>Accepted amount → pending provider interaction → trusted successful, failed or unresolved evidence</td>
+<td>Timeout cannot become failure/success by assumption. Late trusted success is recorded even if fulfillment cannot resume; reconcile and apply D-004 compensation. TC-CHK-03-DENY, TC-FIN-01-DENY</td>
+</tr>
+<tr>
+<td>Refund</td>
+<td>Eligible request → required approval → provider submission → trusted completion/failure or pending reconciliation</td>
+<td>No duplicate instruction or payout beyond remaining refundable paid value. Unknown result stays pending; failed retry requires provider evidence/idempotency. TC-FIN-03-DENY, TC-ORD-06-DENY</td>
+</tr>
+<tr>
+<td>Reconciliation item/run</td>
+<td>Evidence imported → matched or exception → investigated → approved resolution</td>
+<td>Missing provider report or cash difference cannot be force-closed. Replayed evidence cannot duplicate posting. TC-FIN-05-DENY, TC-FIN-06-DENY</td>
+</tr>
+</tbody>
+</table>
+<p>The <a href="../04-Database/Tables/warehouse/stock_reservations.html">reservation</a>, <a href="../04-Database/Tables/payment/payment_intents.html">payment</a>, <a href="../04-Database/Tables/payment/refunds.html">refund</a> and <a href="../04-Database/Tables/payment/reconciliation_items.html">reconciliation</a> catalogs contain the available field/status constraints.</p>
+<p>Vocabulary above describes intent; exact enum mapping, refund approvals and transition implementations remain D-024. No unsupported payment status names are prescribed as database values.</p>
+<h2>Confirmed local fulfillment transitions</h2>
+<p>Inspection of the available V0030 SQL confirms <code>fulfillment.guard_authorized_fulfillment</code>: a record starts <code>created</code> and retains its order, site, seller and revision identity. Its legal transitions are:</p>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; created
+    created --&gt; allocated
+    allocated --&gt; picking
+    picking --&gt; picked
+    picked --&gt; packing
+    packing --&gt; packed
+    packed --&gt; handed_over
+    created --&gt; cancelled
+    allocated --&gt; cancelled
+    picking --&gt; cancelled
+    picked --&gt; cancelled
+    packing --&gt; cancelled
+</code></pre>
+<p>There is no <code>packed → cancelled</code> or <code>created → packed</code> edge in that local guard. Business cancellation eligibility and fulfillment enum names are different concepts; Operations must coordinate related records through the approved command. Verify the same guard on the target database before deployment.</p>
+<p>V0028/V0030 task guards permit <code>created → assigned/in_progress/cancelled</code>, <code>assigned → in_progress/cancelled</code>, and <code>in_progress → completed/cancelled</code>. V0030 additionally rejects empty/incomplete pick completion and pack completion without completed package evidence.</p>
+<p>Packages may start <code>created</code> or <code>packed</code>; an existing <code>created</code> package can become <code>packed</code> or <code>cancelled</code>. Packed evidence is immutable in the inspected guard.</p>
+<p>The V0030 dispatch guard checks the order-scoped completed package, authoritative captured payment for the full accepted revision or approved shipment-scoped COD, exact committed package lots and eligible licensed location. This is local-source evidence, not a fresh SQL execution or production approval. See <a href="../04-Database/Migrations.html">baseline/checksums</a>.</p>
+<h2>Delivery and offline recovery</h2>
+<p>Assignment → accepted pickup → in transit/out for delivery → evidenced delivery or recorded failed attempt is an application design. The <a href="../04-Database/Tables/logistics/shipments.html">shipment catalog</a> lists valid stored values; listing an enum is not proof every pairwise transition is legal.</p>
+<p>Failed delivery follows approved reattempt/reschedule/return-to-origin policy and keeps parcel custody and COD facts separately accountable.</p>
+<p>An offline device must label queued work unconfirmed. On reconnect, the delivery command rechecks actor, current assignment, record version, server-side OTP validity and required evidence before accepting an effect. Same command replay returns the saved result; stale reassigned work is denied and routed to dispatch.</p>
+<p>Queue encryption, persistence, ordering, credential expiry and exact offline UX remain D-011/D-024 design tasks, not an asserted implemented capability. See TC-RID-04-DENY, TC-DLV-03-DENY and TC-RID-03-DENY.</p>
+<h2>Outage and recovery checks</h2>
+<table>
+<thead>
+<tr>
+<th>Interruption</th>
+<th>Authoritative result</th>
+<th>Resume owner and assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Before database commit</td>
+<td>No partial domain effect; no published success event</td>
+<td>Domain owner retries validated intent; check rollback including hold/money/history</td>
+</tr>
+<tr>
+<td>After commit, before response</td>
+<td>Existing result persists</td>
+<td>Client/worker looks up/replays same key; check one order, movement or refund</td>
+</tr>
+<tr>
+<td>Worker stops after external request</td>
+<td>External result may be unknown</td>
+<td>Finance/provider adapter reconciles before another money instruction</td>
+</tr>
+<tr>
+<td>Notification or search fails</td>
+<td>Source transaction remains valid</td>
+<td>Notifications/Search repair their derived output, never replay the source mutation</td>
+</tr>
+<tr>
+<td>Restore or projection rebuild</td>
+<td>Restored ledger and committed evidence decide status</td>
+<td>DevOps/DBA and domain owners reconcile provider side effects and replay safe events before reopening writes</td>
+</tr>
+</tbody>
+</table>
+<p><a href="Testing.html">Testing</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">API contracts requiring review</a> · <a href="../06-Workflows/README.html">technical workflows</a> · <a href="../00-Business-Guide/README.html">Business Guide</a></p>
+</main></body></html>

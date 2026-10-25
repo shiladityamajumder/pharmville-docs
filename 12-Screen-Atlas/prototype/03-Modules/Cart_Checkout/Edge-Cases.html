@@ -1,0 +1,111 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Cart Checkout edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Cart-and-Checkout.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-CHK-01-01</code></td>
+<td><code>CHK-01</code></td>
+<td>Two devices edit the same old cart version</td>
+<td>One edit wins; stale device reloads without overwriting accepted changes</td>
+<td>Customer reconciles desired quantities</td>
+<td><code>TC-CHK-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CHK-02-01</code></td>
+<td><code>CHK-02</code></td>
+<td>P basket selects an unauthorized patient</td>
+<td>No accepted checkout/patient association</td>
+<td>Customer selects permitted patient/address</td>
+<td><code>TC-CHK-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CHK-03-01</code></td>
+<td><code>CHK-03</code></td>
+<td>Browser redirects to success without provider evidence</td>
+<td>Payment remains unconfirmed; no dispatch authorization</td>
+<td>Finance checks provider status under D-004/D-016</td>
+<td><code>TC-CHK-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CHK-04-01</code></td>
+<td><code>CHK-04</code></td>
+<td>COD policy is absent or order exceeds configured cap</td>
+<td>COD is not approved; no collected-cash record</td>
+<td>Customer chooses eligible payment; Finance approves policy</td>
+<td><code>TC-CHK-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CHK-05-01</code></td>
+<td><code>CHK-05</code></td>
+<td>Basket falls below approved minimum after item removal</td>
+<td>Summary requires correction/reacceptance; no stale total charged</td>
+<td>Customer changes basket; Product approves configuration</td>
+<td><code>TC-CHK-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CHK-06-01</code></td>
+<td><code>CHK-06</code></td>
+<td>Price changes after quote</td>
+<td>Old version cannot authorize new amount or silent item removal</td>
+<td>Customer accepts current revision or cancels</td>
+<td><code>TC-CHK-06-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CHK-07-01</code></td>
+<td><code>CHK-07</code></td>
+<td>Double tap or timeout after checkout commit</td>
+<td>One order per intent; different body with same key is a conflict</td>
+<td>Customer reopens existing status; Finance checks unknown money</td>
+<td><code>TC-CHK-07-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-CHK-08-01</code></td>
+<td><code>CHK-08</code></td>
+<td>Expiry worker races with payment completion</td>
+<td>One legal hold outcome; no duplicate release or restored committed stock</td>
+<td>Inventory and Finance reconcile late success; duration awaits D-009</td>
+<td><code>TC-CHK-08-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+<h2>Additional safety and recovery tests</h2>
+<p>Concrete interruption/race assertions supplement the feature table; detailed expected results are in the <a href="LLD.html#critical-recovery-scenarios">LLD</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Scenario</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CHK-03</code></td>
+<td>Provider captured payment; browser confirmation is lost</td>
+<td><code>TC-CHK-03-01</code></td>
+</tr>
+<tr>
+<td><code>CHK-08</code></td>
+<td>Unused active reservation reaches its approved expires_at; expiry job runs twice</td>
+<td><code>TC-CHK-08-01</code></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

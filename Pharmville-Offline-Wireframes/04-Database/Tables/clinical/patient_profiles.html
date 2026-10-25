@@ -1,0 +1,816 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>patient_profiles · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>clinical.patient_profiles</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds patient profiles records within the clinical domain (prescriptions and pharmacist decisions). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>clinical.patient_profiles</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Master / Reference</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Prescription_Upload</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>18 columns; 11 PK/FK/UQ/CHECK/exclusion constraints; 7 named PostgreSQL 18 NOT NULL constraints; 6 indexes; 3 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abha_address_encrypted</code></td>
+<td><code>bytea</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores abha address encrypted for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>abha_number_hash</code></td>
+<td><code>character varying(128)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores abha number hash for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>blood_group</code></td>
+<td><code>character varying(8)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores blood group for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_clinical_patient_profiles_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>deleted_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Soft-deletion time when used</td>
+<td>Avoid treating hidden records as active</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>deleted_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_clinical_patient_profiles_deleted_by_users</code></td>
+</tr>
+<tr>
+<td><code>emergency_contact</code></td>
+<td><code>jsonb</code></td>
+<td>No</td>
+<td><code>'{}'::jsonb</code></td>
+<td>Structured emergency contact information</td>
+<td>Retain a versioned payload or relevant details</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>family_member_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to family members</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>customer.family_members</code> via <code>fk_clinical_patient_profiles_family_member_id_family_members</code></td>
+</tr>
+<tr>
+<td><code>family_member_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>customer.family_members</code> via <code>fk_clinical_patient_profiles_family_member_id_family_me_da24</code></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>is_deleted</code></td>
+<td><code>boolean</code></td>
+<td>No</td>
+<td><code>false</code></td>
+<td>Yes/no flag for is deleted</td>
+<td>Control conditional business behavior</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>medical_record_number</code></td>
+<td><code>character varying(64)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores medical record number for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_clinical_patient_profiles_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_clinical_patient_profiles_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the patient profiles business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>clinical.patient_profiles</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_clinical_patient_profiles_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_patient_profiles_deleted_by_users</td>
+<td><code>deleted_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_patient_profiles_family_member_id_family_me_da24</td>
+<td><code>family_member_id_internal_id</code></td>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td><code>FOREIGN KEY (family_member_id_internal_id) REFERENCES customer.family_members(internal_id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td>fk_clinical_patient_profiles_family_member_id_family_members</td>
+<td><code>family_member_id</code></td>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td><code>FOREIGN KEY (family_member_id) REFERENCES customer.family_members(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td>fk_clinical_patient_profiles_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_patient_profiles_user_id_users</td>
+<td><code>user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td>fk_appointment_appointments_patient_profile_id_patient__c088</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td>fk_appointment_appointments_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td>fk_clinical_care_episodes_patient_profile_id_patient_pr_7679</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td>fk_clinical_care_episodes_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td>fk_clinical_consultations_patient_profile_id_patient_pr_496c</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td>fk_clinical_consultations_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td>fk_clinical_observations_patient_profile_id_patient_pro_995e</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td>fk_clinical_observations_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>fk_clinical_order_reviews_patient_profile_id_patient_pr_b642</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>fk_clinical_order_reviews_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td>fk_clinical_patient_allergies_patient_profile_id_patien_7dc7</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td>fk_clinical_patient_allergies_patient_profile_id_patien_acc9</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td>fk_clinical_patient_conditions_patient_profile_id_patie_982f</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td>fk_clinical_patient_conditions_patient_profile_id_patie_c663</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td>fk_clinical_patient_medications_patient_profile_id_pati_2854</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td>fk_clinical_patient_medications_patient_profile_id_pati_3f4f</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>fk_clinical_prescriptions_patient_profile_id_patient_pr_5a89</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>fk_clinical_prescriptions_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>fk_commerce_orders_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>fk_commerce_orders_patient_profile_id_patient_profiles_numeric</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/adverse_event_reports.html"><code>compliance.adverse_event_reports</code></a></td>
+<td>fk_compliance_adverse_event_reports_patient_profile_id__4b0b</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/compliance/adverse_event_reports.html"><code>compliance.adverse_event_reports</code></a></td>
+<td>fk_compliance_adverse_event_reports_patient_profile_id__6d1c</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+<td>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_0689</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+<td>fk_diagnostics_diagnostic_orders_patient_profile_id_pat_4a11</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/claims.html"><code>insurance.claims</code></a></td>
+<td>fk_insurance_claims_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/claims.html"><code>insurance.claims</code></a></td>
+<td>fk_insurance_claims_patient_profile_id_patient_profiles_numeric</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policies.html"><code>insurance.policies</code></a></td>
+<td>fk_insurance_policies_patient_profile_id_patient_profil_0c08</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policies.html"><code>insurance.policies</code></a></td>
+<td>fk_insurance_policies_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policy_members.html"><code>insurance.policy_members</code></a></td>
+<td>fk_insurance_policy_members_patient_profile_id_patient__bcd9</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/insurance/policy_members.html"><code>insurance.policy_members</code></a></td>
+<td>fk_insurance_policy_members_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><code>id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>clinical.patient_profiles</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_clinical_patient_profiles_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>deleted_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_clinical_patient_profiles_deleted_by_users</code></td>
+</tr>
+<tr>
+<td><code>family_member_id_internal_id</code></td>
+<td><code>customer.family_members</code></td>
+<td><code>fk_clinical_patient_profiles_family_member_id_family_me_da24</code></td>
+</tr>
+<tr>
+<td><code>family_member_id</code></td>
+<td><code>customer.family_members</code></td>
+<td><code>fk_clinical_patient_profiles_family_member_id_family_members</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_clinical_patient_profiles_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_clinical_patient_profiles_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_clinical_patient_profiles_exactly_one_patient_owner</code></td>
+<td>CHECK</td>
+<td><code>CHECK (num_nonnulls(user_id, family_member_id) = 1)</code></td>
+</tr>
+<tr>
+<td><code>ck_clinical_patient_profiles_numeric_pair_family_member_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((family_member_id IS NULL) = (family_member_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_clinical_patient_profiles_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_patient_profiles_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_patient_profiles_deleted_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (deleted_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_patient_profiles_family_member_id_family_me_da24</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (family_member_id_internal_id) REFERENCES customer.family_members(internal_id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_patient_profiles_family_member_id_family_members</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (family_member_id) REFERENCES customer.family_members(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_patient_profiles_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_patient_profiles_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>pk_clinical_patient_profiles</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_patient_profiles_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>patient_profiles_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>patient_profiles_emergency_contact_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL emergency_contact</code></td>
+</tr>
+<tr>
+<td><code>patient_profiles_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>patient_profiles_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>patient_profiles_is_deleted_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL is_deleted</code></td>
+</tr>
+<tr>
+<td><code>patient_profiles_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>patient_profiles_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_clinical_patient_profiles_family_member_id</code></td>
+<td>btree</td>
+<td><code>(family_member_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_clinical_patient_profiles_family_member_id ON clinical.patient_profiles USING btree (family_member_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_clinical_patient_profiles_user_id</code></td>
+<td>btree</td>
+<td><code>(user_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_clinical_patient_profiles_user_id ON clinical.patient_profiles USING btree (user_id)</code></td>
+</tr>
+<tr>
+<td><code>pk_clinical_patient_profiles</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_clinical_patient_profiles ON clinical.patient_profiles USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_patient_family_active</code></td>
+<td>btree</td>
+<td><code>(family_member_id)</code></td>
+<td>family_member_id IS NOT NULL AND is_deleted = false</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_clinical_patient_family_active ON clinical.patient_profiles USING btree (family_member_id) WHERE family_member_id IS NOT NULL AND is_deleted = false</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_patient_profiles_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_clinical_patient_profiles_id ON clinical.patient_profiles USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_patient_user_active</code></td>
+<td>btree</td>
+<td><code>(user_id)</code></td>
+<td>user_id IS NOT NULL AND is_deleted = false</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_clinical_patient_user_active ON clinical.patient_profiles USING btree (user_id) WHERE user_id IS NOT NULL AND is_deleted = false</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON clinical.patient_profiles FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;family_member_id&quot;,&quot;family_member_id_internal_id&quot;,&quot;customer&quot;,&quot;family_members&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON clinical.patient_profiles FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON clinical.patient_profiles FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;family_member_id&quot;,&quot;family_member_id_internal_id&quot;,&quot;customer&quot;,&quot;family_members&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+<h2>Master-data planning</h2>
+<p><strong>Status: Proposed maintenance design; Unapproved; no seed or migration modified.</strong> <a href="../../Master-Data-Inventory.html">Central inventory</a> · <a href="../../../05-APIs/Planning-Decisions.html">planning decisions</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Definition</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schema/table</td>
+<td><code>clinical.patient_profiles</code></td>
+</tr>
+<tr>
+<td>Category</td>
+<td>Master / Reference — Stable protected patient identity, not clinical event history</td>
+</tr>
+<tr>
+<td>Proposed owner / maintenance role</td>
+<td>Prescription_Upload / Intake and Privacy owner</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>User/patient-specific protected party master.</td>
+</tr>
+<tr>
+<td>Referencing tables</td>
+<td><code>appointment.appointments</code>, <code>clinical.care_episodes</code>, <code>clinical.consultations</code>, <code>clinical.observations</code>, <code>clinical.order_reviews</code>, <code>clinical.patient_allergies</code>, <code>clinical.patient_conditions</code>, <code>clinical.patient_medications</code>, <code>clinical.prescriptions</code>, <code>commerce.orders</code>, <code>compliance.adverse_event_reports</code>, <code>diagnostics.diagnostic_orders</code>, <code>insurance.claims</code>, <code>insurance.policies</code>, <code>insurance.policy_members</code></td>
+</tr>
+<tr>
+<td>Features</td>
+<td><code>ACC-04</code>, <code>ADM-01</code>, <code>CHK-02</code>, <code>CHK-03</code>, <code>CHK-05</code>, <code>CHK-06</code>, <code>CHK-07</code>, <code>CHK-08</code>, <code>FIN-01</code>, <code>FIN-02</code>, <code>FIN-03</code>, <code>INV-01</code>, <code>INV-03</code>, <code>NOT-01</code>, <code>NOT-02</code>, <code>OMS-01</code>, <code>OMS-02</code>, <code>OMS-03</code>, <code>OMS-04</code>, <code>OMS-05</code>, <code>ORD-02</code>, <code>ORD-03</code>, <code>ORD-04</code>, <code>ORD-05</code>, <code>ORD-06</code>, <code>ORD-07</code>, <code>PHM-01</code>, <code>PHM-02</code>, <code>PHM-03</code>, <code>PHM-05</code>, <code>REP-01</code>, <code>REP-02</code>, <code>RID-02</code>, <code>RID-04</code>, <code>RX-04</code>, <code>RX-05</code>, <code>STO-02</code>, <code>WH-04</code></td>
+</tr>
+<tr>
+<td>API consumers</td>
+<td><a href="../../../03-Modules/Customer_Accounts/APIs.html">API-007</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">API-008</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-020</a>, <a href="../../../03-Modules/Cart_Checkout/APIs.html">API-021</a>, <a href="../../../03-Modules/Prescription_Upload/APIs.html">API-024</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-025</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-026</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-027</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-028</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-029</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-030</a>, <a href="../../../03-Modules/Customer_Orders/APIs.html">API-031</a>, <a href="../../../03-Modules/Admin_CMS/APIs.html">API-032</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-039</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-040</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-041</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-042</a>, <a href="../../../03-Modules/Order_Operations/APIs.html">API-043</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-045</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-046</a>, <a href="../../../03-Modules/Store_Operations/APIs.html">API-047</a>, <a href="../../../03-Modules/Inventory/APIs.html">API-052</a>, <a href="../../../03-Modules/Warehouse/APIs.html">API-059</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-060</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-061</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-062</a>, <a href="../../../03-Modules/Pharmacist_Review/APIs.html">API-063</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-071</a>, <a href="../../../03-Modules/Rider_App/APIs.html">API-073</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-075</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-076</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-077</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-078</a>, <a href="../../../03-Modules/Finance_Payments/APIs.html">API-081</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-082</a>, <a href="../../../03-Modules/Reporting/APIs.html">API-083</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-094</a>, <a href="../../../03-Modules/Notifications/APIs.html">API-095</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-003</a>, <a href="../../../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-004</a></td>
+</tr>
+</tbody>
+</table>
+<h3>Expected initial records</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Description</th>
+<th>Status</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not allocated</td>
+<td>No approved initial record</td>
+<td>Verified real records and identifiers must come from the responsible business owner; the schema/page contains no seed-row evidence. Never create synthetic live parties/products or claim rows exist.</td>
+<td>Open</td>
+<td>Checked-in table schema only; owner evidence required.</td>
+</tr>
+</tbody>
+</table>
+<p>Required nondefault business attributes to obtain: .</p>
+<h3>Lifecycle and seed requirements</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed lifecycle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deployment or operational creation</td>
+<td>Operationally curated/imported after verification; no production seed identities or fabricated product rows.</td>
+</tr>
+<tr>
+<td>Create/update permissions</td>
+<td>Intake and Privacy owner through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority.</td>
+</tr>
+<tr>
+<td>Activation/deactivation</td>
+<td>No is_active/status column. Soft-delete through is_deleted only after privacy/reference review; retain historical FK targets.</td>
+</tr>
+<tr>
+<td>Deletion</td>
+<td>Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission.</td>
+</tr>
+<tr>
+<td>Uniqueness / stable codes</td>
+<td>UNIQUE: UNIQUE (id); CREATE UNIQUE INDEX uq_clinical_patient_family_active ON clinical.patient_profiles USING btree (family_member_id) WHERE family_member_id IS NOT NULL AND is_deleted = false; CREATE UNIQUE INDEX uq_clinical_patient_profiles_id ON clinical.patient_profiles USING btree (id); CREATE UNIQUE INDEX uq_clinical_patient_user_active ON clinical.patient_profiles USING btree (user_id) WHERE user_id IS NOT NULL AND is_deleted = false</td>
+</tr>
+<tr>
+<td>Foreign-key dependencies</td>
+<td><code>customer.family_members</code></td>
+</tr>
+<tr>
+<td>Initial load order</td>
+<td>Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness.</td>
+</tr>
+<tr>
+<td>Seed status</td>
+<td>Open; an empty migration/schema is not a usable approved business seed. Obtain the named owner dataset before enabling dependent journeys.</td>
+</tr>
+<tr>
+<td>Pending decisions</td>
+<td>D-024 ownership/lifecycle approval; D-006/D-019 clinical/catalog source validation.</td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

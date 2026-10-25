@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 008 Rider Assignment and POD · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-008 — Rider Assignment and POD</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Dispatcher or rider, Delivery and Customer. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>A scoped dispatcher confirms an eligible rider for a ready parcel; competing assignments cannot both become current.</li>
+<li>Assigned rider accepts and records pickup only after current fulfillment/payment/clinical/stock gates pass.</li>
+<li>Location updates identify capture time and active assignment. Enforce approved privacy/cadence/retention; GPS never proves delivery.</li>
+<li>Completion checks current rider/assignment, server-side customer OTP and approved photo proof. Record actual COD through Finance rather than inferring cash settlement.</li>
+<li>Offline actions are unconfirmed until replay is validated; incorrect proof, reassignment or a failed attempt leaves a visible dispatch exception.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Delivery owns assignment, proof, custody and attempts. Rider is a scoped client; Finance separately owns collected COD.</p>
+<p>Candidate existing tables: <code>logistics.shipments</code>, <code>logistics.delivery_assignments</code>, <code>logistics.delivery_otp_challenges</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_location_updates</code>, <code>payment.cod_collections</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: API-064/API-065 and API-070–API-074. <a href="../03-Modules/Delivery_Operations/APIs.html">Delivery Operations</a> · <a href="../03-Modules/Rider_App/APIs.html">Rider App</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Dispatcher or rider
+  participant O as Delivery
+  participant S as Customer
+  participant D as PostgreSQL
+  C-&gt;&gt;O: Confirm eligible assignment and pickup
+  O-&gt;&gt;D: Guard current task and custody
+  O--&gt;&gt;S: Permitted tracking and delivery OTP view
+  C-&gt;&gt;O: Submit OTP, proof and actual COD
+  O-&gt;&gt;D: Validate proof and current assignment
+  alt Valid proof and commit
+    O--&gt;&gt;S: Delivered status
+  else Invalid proof or stale offline command
+    O--&gt;&gt;C: Not completed, retry or contact dispatch
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-DLV-02-DENY</code>, <code>TC-RID-02-DENY</code>, <code>TC-RID-04-DENY</code>, <code>TC-RID-03-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

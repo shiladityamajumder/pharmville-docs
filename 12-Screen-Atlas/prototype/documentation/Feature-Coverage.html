@@ -1,0 +1,683 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Feature Coverage · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Feature coverage</h1>
+<p>Every source feature is mapped below from the authoritative <a href="../../01-Project/Features-and-Modules.html">feature inventory</a>. All 110 remain inherited drafts. “Covered” means a real local view/control/state demonstrates the UX, not that business policy or production implementation is approved. A blocked feature has a meaningful explanation/proposal surface, not claimed completed functionality.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>UX classification</th>
+<th>Implemented screen/state evidence</th>
+<th>Screen links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACC-01</code></td>
+<td>Covered by interaction/state</td>
+<td>Request/verify/resend and fallback use one synthetic code, with incorrect/expired/rate-limited states.</td>
+<td><a href="../index.html#/customer/login">SCR-CUS-001</a>, <a href="../index.html#/customer/otp">SCR-CUS-002</a></td>
+</tr>
+<tr>
+<td><code>ACC-02</code></td>
+<td>Covered by screen</td>
+<td>Profile form validates name/email; replacement existing email/mobile waits for proof while preserving verified contacts.</td>
+<td><a href="../index.html#/customer/profile">SCR-CUS-003</a></td>
+</tr>
+<tr>
+<td><code>ACC-03</code></td>
+<td>Covered by screen</td>
+<td>Address/map-pin form checks synthetic serviceability and saves/selects owned destinations.</td>
+<td><a href="../index.html#/customer/addresses">SCR-CUS-004</a>, <a href="../index.html#/customer/checkout-address">SCR-CUS-015</a></td>
+</tr>
+<tr>
+<td><code>ACC-04</code></td>
+<td>Covered by screen</td>
+<td>Dependent form requires authorization; checkout binds one patient.</td>
+<td><a href="../index.html#/customer/family">SCR-CUS-005</a>, <a href="../index.html#/customer/checkout-patient">SCR-CUS-016</a></td>
+</tr>
+<tr>
+<td><code>ACC-05</code></td>
+<td>Covered by interaction/state</td>
+<td>Explicit versioned acknowledgement and optional channel choices are saved.</td>
+<td><a href="../index.html#/customer/login">SCR-CUS-001</a>, <a href="../index.html#/customer/privacy">SCR-CUS-006</a></td>
+</tr>
+<tr>
+<td><code>ACC-06</code></td>
+<td>Covered by interaction/state</td>
+<td>Deletion becomes a privacy review request; no clinical or financial evidence is erased.</td>
+<td><a href="../index.html#/customer/deletion">SCR-CUS-007</a></td>
+</tr>
+<tr>
+<td><code>ACC-07</code></td>
+<td>Covered by screen</td>
+<td>Wishlist adds/removes duplicate-safe product references.</td>
+<td><a href="../index.html#/customer/wishlist">SCR-CUS-008</a>, <a href="../index.html#/customer/product">SCR-CUS-012</a></td>
+</tr>
+<tr>
+<td><code>CAT-01</code></td>
+<td>Covered by screen</td>
+<td>Browse categories, check destination and discover exact synthetic products. Filter published catalog categories and clearly handle empty results.</td>
+<td><a href="../index.html#/customer/home">SCR-CUS-009</a>, <a href="../index.html#/customer/categories">SCR-CUS-010</a></td>
+</tr>
+<tr>
+<td><code>CAT-02</code></td>
+<td>Covered by screen</td>
+<td>Exact product, pack and classification with a safe image placeholder.</td>
+<td><a href="../index.html#/customer/product">SCR-CUS-012</a></td>
+</tr>
+<tr>
+<td><code>CAT-03</code></td>
+<td>Covered by screen</td>
+<td>Query filters name/brand/composition; no-match suggestions can replace query.</td>
+<td><a href="../index.html#/customer/search">SCR-CUS-011</a></td>
+</tr>
+<tr>
+<td><code>CAT-04</code></td>
+<td>Covered by screen</td>
+<td>Browse categories, check destination and discover exact synthetic products. Exact product, pack and classification with a safe image placeholder.</td>
+<td><a href="../index.html#/customer/home">SCR-CUS-009</a>, <a href="../index.html#/customer/product">SCR-CUS-012</a></td>
+</tr>
+<tr>
+<td><code>CAT-05</code></td>
+<td>Covered by screen</td>
+<td>Exact synthetic composition/strength/form candidates require explicit choice and fresh P review.</td>
+<td><a href="../index.html#/customer/alternatives">SCR-CUS-013</a></td>
+</tr>
+<tr>
+<td><code>CAT-06</code></td>
+<td>Covered by screen</td>
+<td>Browse categories, check destination and discover exact synthetic products. Exact product, pack and classification with a safe image placeholder.</td>
+<td><a href="../index.html#/customer/home">SCR-CUS-009</a>, <a href="../index.html#/customer/product">SCR-CUS-012</a></td>
+</tr>
+<tr>
+<td><code>CHK-01</code></td>
+<td>Covered by screen</td>
+<td>Quantity changes, persistent browser basket and explicit stock/price warnings.</td>
+<td><a href="../index.html#/customer/cart">SCR-CUS-014</a></td>
+</tr>
+<tr>
+<td><code>CHK-02</code></td>
+<td>Covered by screen</td>
+<td>Only an owned, serviceable address can advance checkout. Select self or an authorized owned dependent for one-patient review.</td>
+<td><a href="../index.html#/customer/checkout-address">SCR-CUS-015</a>, <a href="../index.html#/customer/checkout-patient">SCR-CUS-016</a>, <a href="../index.html#/customer/checkout-summary">SCR-CUS-017</a></td>
+</tr>
+<tr>
+<td><code>CHK-03</code></td>
+<td>Covered by interaction/state</td>
+<td>One payment attempt follows current clinical, quote and stock gates. Distinguish decline, pending money, COD acceptance and verified success.</td>
+<td><a href="../index.html#/customer/payment">SCR-CUS-021</a>, <a href="../index.html#/customer/payment-result">SCR-CUS-022</a></td>
+</tr>
+<tr>
+<td><code>CHK-04</code></td>
+<td>Covered by interaction/state</td>
+<td>One payment attempt follows current clinical, quote and stock gates.</td>
+<td><a href="../index.html#/customer/payment">SCR-CUS-021</a></td>
+</tr>
+<tr>
+<td><code>CHK-05</code></td>
+<td>Covered by screen</td>
+<td>Quantity changes, persistent browser basket and explicit stock/price warnings. Accept destination, patient and total before review/stock/payment gates.</td>
+<td><a href="../index.html#/customer/cart">SCR-CUS-014</a>, <a href="../index.html#/customer/checkout-summary">SCR-CUS-017</a></td>
+</tr>
+<tr>
+<td><code>CHK-06</code></td>
+<td>Covered by interaction/state</td>
+<td>Quantity changes, persistent browser basket and explicit stock/price warnings. Accept destination, patient and total before review/stock/payment gates.</td>
+<td><a href="../index.html#/customer/cart">SCR-CUS-014</a>, <a href="../index.html#/customer/checkout-summary">SCR-CUS-017</a>, <a href="../index.html#/customer/revised-order">SCR-CUS-020</a></td>
+</tr>
+<tr>
+<td><code>CHK-07</code></td>
+<td>Covered by interaction/state</td>
+<td>Repeated Pay returns the same payment attempt; paid/pending attempts cannot create another charge.</td>
+<td><a href="../index.html#/customer/checkout-summary">SCR-CUS-017</a>, <a href="../index.html#/customer/payment">SCR-CUS-021</a>, <a href="../index.html#/customer/payment-result">SCR-CUS-022</a>, <a href="../index.html#/customer/payment-recovery">SCR-CUS-023</a></td>
+</tr>
+<tr>
+<td><code>CHK-08</code></td>
+<td>Covered by interaction/state</td>
+<td>Current eligible site stock is held; expiry scenario releases unused hold and recovery does not fabricate supply.</td>
+<td><a href="../index.html#/customer/checkout-summary">SCR-CUS-017</a>, <a href="../index.html#/customer/payment">SCR-CUS-021</a>, <a href="../index.html#/customer/payment-recovery">SCR-CUS-023</a></td>
+</tr>
+<tr>
+<td><code>RX-01</code></td>
+<td>Covered by screen</td>
+<td>Comma-separated fictional JPG/PNG/PDF filenames simulate multiple evidence files; no file is read or uploaded.</td>
+<td><a href="../index.html#/customer/prescription-upload">SCR-CUS-018</a></td>
+</tr>
+<tr>
+<td><code>RX-02</code></td>
+<td>Blocked by an open decision</td>
+<td>D-004/D-006: post-order deferred upload conflicts with review-before-payment. Control explains the block; no timer is invented.</td>
+<td><a href="../index.html#/customer/prescription-upload">SCR-CUS-018</a></td>
+</tr>
+<tr>
+<td><code>RX-03</code></td>
+<td>Covered by interaction/state</td>
+<td>Saved evidence is matched to the patient and sent for fresh review; no old approval is inherited.</td>
+<td><a href="../index.html#/customer/prescription-upload">SCR-CUS-018</a></td>
+</tr>
+<tr>
+<td><code>RX-04</code></td>
+<td>Covered by interaction/state</td>
+<td>Manage owned dependents and select one patient per prescription order. Select self or an authorized owned dependent for one-patient review.</td>
+<td><a href="../index.html#/customer/family">SCR-CUS-005</a>, <a href="../index.html#/customer/checkout-patient">SCR-CUS-016</a>, <a href="../index.html#/customer/prescription-upload">SCR-CUS-018</a>, <a href="../index.html#/customer/prescription-status">SCR-CUS-019</a></td>
+</tr>
+<tr>
+<td><code>RX-05</code></td>
+<td>Covered by interaction/state</td>
+<td>Customer decision projection with rejection/reupload and partial-revision paths. Explicitly accept a pharmacist/stock revision without approving rejected lines.</td>
+<td><a href="../index.html#/customer/prescription-status">SCR-CUS-019</a>, <a href="../index.html#/customer/revised-order">SCR-CUS-020</a></td>
+</tr>
+<tr>
+<td><code>ORD-01</code></td>
+<td>Covered by interaction/state</td>
+<td>Distinguish decline, pending money, COD acceptance and verified success. Owned order history with independent state projections.</td>
+<td><a href="../index.html#/customer/payment-result">SCR-CUS-022</a>, <a href="../index.html#/customer/orders">SCR-CUS-024</a>, <a href="../index.html#/customer/order-detail">SCR-CUS-025</a></td>
+</tr>
+<tr>
+<td><code>ORD-02</code></td>
+<td>Covered by interaction/state</td>
+<td>Owned order history with independent state projections. Read current accepted order, timeline and eligible aftercare actions.</td>
+<td><a href="../index.html#/customer/orders">SCR-CUS-024</a>, <a href="../index.html#/customer/order-detail">SCR-CUS-025</a>, <a href="../index.html#/customer/tracking">SCR-CUS-026</a></td>
+</tr>
+<tr>
+<td><code>ORD-03</code></td>
+<td>Covered by screen</td>
+<td>Owned order history with independent state projections. Read current accepted order, timeline and eligible aftercare actions.</td>
+<td><a href="../index.html#/customer/orders">SCR-CUS-024</a>, <a href="../index.html#/customer/order-detail">SCR-CUS-025</a>, <a href="../index.html#/customer/invoice">SCR-CUS-030</a></td>
+</tr>
+<tr>
+<td><code>ORD-04</code></td>
+<td>Covered by screen</td>
+<td>Before-packed cancellation uses a confirmation dialog and rechecks the latest milestone.</td>
+<td><a href="../index.html#/customer/order-detail">SCR-CUS-025</a>, <a href="../index.html#/customer/cancellation">SCR-CUS-027</a></td>
+</tr>
+<tr>
+<td><code>ORD-05</code></td>
+<td>Covered by screen</td>
+<td>Delivered item/quantity/reason creates an eligibility-review request without stock or refund credit.</td>
+<td><a href="../index.html#/customer/order-detail">SCR-CUS-025</a>, <a href="../index.html#/customer/return">SCR-CUS-028</a>, <a href="../index.html#/staff/returns">SCR-RET-001</a>, <a href="../index.html#/customer/help">SCR-CUS-HELP-001</a></td>
+</tr>
+<tr>
+<td><code>ORD-06</code></td>
+<td>Covered by interaction/state</td>
+<td>Read current accepted order, timeline and eligible aftercare actions. Current pre-packed cancellation gate with explicit confirmation and race handling.</td>
+<td><a href="../index.html#/customer/order-detail">SCR-CUS-025</a>, <a href="../index.html#/customer/cancellation">SCR-CUS-027</a>, <a href="../index.html#/customer/return">SCR-CUS-028</a>, <a href="../index.html#/customer/refund">SCR-CUS-029</a>, <a href="../index.html#/staff/returns">SCR-RET-001</a></td>
+</tr>
+<tr>
+<td><code>ORD-07</code></td>
+<td>Covered by screen</td>
+<td>Schematic tracking and masked-call simulation use the current assignment; no real route/call occurs.</td>
+<td><a href="../index.html#/customer/tracking">SCR-CUS-026</a></td>
+</tr>
+<tr>
+<td><code>ORD-08</code></td>
+<td>Covered by screen</td>
+<td>Schematic private map, current delivery state and scoped handover code.</td>
+<td><a href="../index.html#/customer/tracking">SCR-CUS-026</a></td>
+</tr>
+<tr>
+<td><code>ORD-09</code></td>
+<td>Blocked by an open decision</td>
+<td>D-010/D-024: post-order edits need accepted-revision, stock, clinical and price contracts. Existing order is preserved.</td>
+<td><a href="../index.html#/customer/order-detail">SCR-CUS-025</a></td>
+</tr>
+<tr>
+<td><code>ADM-01</code></td>
+<td>Covered by screen</td>
+<td>Role-scoped operational overview and actionable alerts.</td>
+<td><a href="../index.html#/staff/dashboard">SCR-ADM-001</a></td>
+</tr>
+<tr>
+<td><code>ADM-02</code></td>
+<td>Covered by screen</td>
+<td>Invite, assign and deactivate scoped staff; revocation remains a demo.</td>
+<td><a href="../index.html#/staff/staff">SCR-ADM-002</a></td>
+</tr>
+<tr>
+<td><code>ADM-03</code></td>
+<td>Blocked by an open decision</td>
+<td>D-003/D-022: signed role/location grants remain unapproved. The matrix and denied states illustrate access; role changes are review requests.</td>
+<td><a href="../index.html#/staff/permissions">SCR-ADM-003</a></td>
+</tr>
+<tr>
+<td><code>ADM-04</code></td>
+<td>Covered by screen</td>
+<td>Edit a draft, preview its version and publish with conflict handling.</td>
+<td><a href="../index.html#/staff/cms">SCR-ADM-004</a></td>
+</tr>
+<tr>
+<td><code>ADM-05</code></td>
+<td>Covered by screen</td>
+<td>Propose future-basket settings and an offer; activation awaits owner approvals.</td>
+<td><a href="../index.html#/staff/settings">SCR-ADM-005</a></td>
+</tr>
+<tr>
+<td><code>ADM-06</code></td>
+<td>Covered by screen</td>
+<td>Inspect products, save unapproved master drafts, validate CSV rows and review errors.</td>
+<td><a href="../index.html#/staff/catalog">SCR-ADM-006</a></td>
+</tr>
+<tr>
+<td><code>ADM-07</code></td>
+<td>Covered by screen</td>
+<td>Paste CSV tabular fixture; row validation, preview and duplicate-safe apply simulate spreadsheet import. Native XLSX parsing is not implemented.</td>
+<td><a href="../index.html#/staff/catalog">SCR-ADM-006</a></td>
+</tr>
+<tr>
+<td><code>ADM-08</code></td>
+<td>Covered by screen</td>
+<td>Record fictional address, service area and opening-hour proposals; license gates remain explicit.</td>
+<td><a href="../index.html#/staff/locations">SCR-ADM-007</a></td>
+</tr>
+<tr>
+<td><code>ADM-09</code></td>
+<td>Blocked by an open decision</td>
+<td>D-004/D-012: offer controls validate a proposal only; no unapproved discount activates.</td>
+<td><a href="../index.html#/staff/settings">SCR-ADM-005</a></td>
+</tr>
+<tr>
+<td><code>OMS-01</code></td>
+<td>Covered by screen</td>
+<td>Search the shared order and filter current exceptions.</td>
+<td><a href="../index.html#/staff/orders">SCR-OMS-001</a></td>
+</tr>
+<tr>
+<td><code>OMS-02</code></td>
+<td>Covered by screen</td>
+<td>Read current shared facts, add notes and request accepted revisions, cancellation or return.</td>
+<td><a href="../index.html#/staff/order-detail">SCR-OMS-002</a></td>
+</tr>
+<tr>
+<td><code>OMS-03</code></td>
+<td>Covered by screen</td>
+<td>Inspect eligible stock before a single-site assignment; reassignment requires a reason.</td>
+<td><a href="../index.html#/staff/allocation">SCR-OMS-003</a></td>
+</tr>
+<tr>
+<td><code>OMS-04</code></td>
+<td>Covered by screen</td>
+<td>Inspect eligible stock before a single-site assignment; reassignment requires a reason.</td>
+<td><a href="../index.html#/staff/allocation">SCR-OMS-003</a></td>
+</tr>
+<tr>
+<td><code>OMS-05</code></td>
+<td>Covered by screen</td>
+<td>Read current shared facts, add notes and request accepted revisions, cancellation or return.</td>
+<td><a href="../index.html#/staff/order-detail">SCR-OMS-002</a></td>
+</tr>
+<tr>
+<td><code>OMS-06</code></td>
+<td>Covered by screen</td>
+<td>Search the shared order and filter current exceptions.</td>
+<td><a href="../index.html#/staff/orders">SCR-OMS-001</a></td>
+</tr>
+<tr>
+<td><code>OMS-07</code></td>
+<td>Blocked by an open decision</td>
+<td>D-001/D-024: assisted ordering is a request/validation concept; customer consent and command contracts remain undecided.</td>
+<td><a href="../index.html#/staff/assisted-order">SCR-OMS-004</a></td>
+</tr>
+<tr>
+<td><code>STO-01</code></td>
+<td>Covered by screen</td>
+<td>Location-scoped incoming orders, alert fallback and explicit acceptance.</td>
+<td><a href="../index.html#/store/queue">SCR-STO-001</a></td>
+</tr>
+<tr>
+<td><code>STO-02</code></td>
+<td>Covered by screen</td>
+<td>Location-scoped incoming orders, alert fallback and explicit acceptance. Pick exact product, eligible batch and quantity; shortages block packing.</td>
+<td><a href="../index.html#/store/queue">SCR-STO-001</a>, <a href="../index.html#/store/pick">SCR-STO-002</a>, <a href="../index.html#/store/pack">SCR-STO-003</a></td>
+</tr>
+<tr>
+<td><code>STO-03</code></td>
+<td>Covered by screen</td>
+<td>Batch stock, low-quantity visibility and idempotent normal/urgent replenishment request.</td>
+<td><a href="../index.html#/store/replenishment">SCR-STO-004</a></td>
+</tr>
+<tr>
+<td><code>STO-04</code></td>
+<td>Covered by screen</td>
+<td>Count actual accepted stock, preserve shortage evidence and credit once.</td>
+<td><a href="../index.html#/store/receipt">SCR-STO-005</a></td>
+</tr>
+<tr>
+<td><code>STO-05</code></td>
+<td>Covered by screen</td>
+<td>Batch stock, low-quantity visibility and idempotent normal/urgent replenishment request.</td>
+<td><a href="../index.html#/store/replenishment">SCR-STO-004</a></td>
+</tr>
+<tr>
+<td><code>INV-01</code></td>
+<td>Covered by screen</td>
+<td>Inspect eligible, blocked, expired and stale lots with actionable inventory alerts.</td>
+<td><a href="../index.html#/staff/inventory">SCR-INV-001</a></td>
+</tr>
+<tr>
+<td><code>INV-02</code></td>
+<td>Covered by interaction/state</td>
+<td>Append-only demo movements connect packing, receipt, transfer and reasoned adjustment to balances.</td>
+<td><a href="../index.html#/staff/ledger">SCR-INV-002</a></td>
+</tr>
+<tr>
+<td><code>INV-03</code></td>
+<td>Covered by interaction/state</td>
+<td>Inspect eligible, blocked, expired and stale lots with actionable inventory alerts.</td>
+<td><a href="../index.html#/staff/inventory">SCR-INV-001</a></td>
+</tr>
+<tr>
+<td><code>INV-04</code></td>
+<td>Covered by screen</td>
+<td>Reasoned adjustment requires illustrative manager approval; cross-location or duplicate commands are denied.</td>
+<td><a href="../index.html#/staff/adjustment">SCR-INV-003</a></td>
+</tr>
+<tr>
+<td><code>INV-05</code></td>
+<td>Covered by screen</td>
+<td>Inspect eligible, blocked, expired and stale lots with actionable inventory alerts.</td>
+<td><a href="../index.html#/staff/inventory">SCR-INV-001</a></td>
+</tr>
+<tr>
+<td><code>INV-06</code></td>
+<td>Covered by screen</td>
+<td>Validate local CSV and simulate ordered stock observations without a real adapter.</td>
+<td><a href="../index.html#/staff/inventory-integration">SCR-INV-004</a></td>
+</tr>
+<tr>
+<td><code>INV-07</code></td>
+<td>Blocked by an open decision</td>
+<td>D-005/D-016: local fresh/stale/replayed observation fixtures do not implement an authoritative Techsmith adapter.</td>
+<td><a href="../index.html#/staff/inventory-integration">SCR-INV-004</a></td>
+</tr>
+<tr>
+<td><code>WH-01</code></td>
+<td>Covered by screen</td>
+<td>Capture supplier invoice, batch dates, accepted quantity and quality evidence with replay protection. Review fictional supplier references and submit unverified supplier proposals.</td>
+<td><a href="../index.html#/warehouse/receiving">SCR-WH-001</a>, <a href="../index.html#/procurement/suppliers">SCR-PRO-001</a>, <a href="../index.html#/procurement/orders">SCR-PRO-002</a></td>
+</tr>
+<tr>
+<td><code>WH-02</code></td>
+<td>Covered by screen</td>
+<td>Review store request and capacity exception without inventing approved run limits. Pick an eligible source batch, deduct source once and preserve in-transit destination stock.</td>
+<td><a href="../index.html#/warehouse/replenishment">SCR-WH-002</a>, <a href="../index.html#/warehouse/dispatch">SCR-WH-003</a>, <a href="../index.html#/procurement/orders">SCR-PRO-002</a></td>
+</tr>
+<tr>
+<td><code>WH-03</code></td>
+<td>Blocked by an open decision</td>
+<td>D-002: urgent-run requests retain capacity approval pending; the inherited two-extra-runs figure is not enforced as approved.</td>
+<td><a href="../index.html#/warehouse/replenishment">SCR-WH-002</a>, <a href="../index.html#/warehouse/dispatch">SCR-WH-003</a></td>
+</tr>
+<tr>
+<td><code>WH-04</code></td>
+<td>Blocked by an open decision</td>
+<td>D-002/D-006/D-010: fallback review can be requested, but warehouse dispensing needs licensed-site and scope approval.</td>
+<td><a href="../index.html#/warehouse/audit">SCR-WH-004</a></td>
+</tr>
+<tr>
+<td><code>WH-05</code></td>
+<td>Covered by screen</td>
+<td>Count evidence without overwriting inventory and explicitly block unapproved fallback dispensing. Receive the assigned return parcel and keep disposition quarantined pending an approved inventory policy.</td>
+<td><a href="../index.html#/warehouse/audit">SCR-WH-004</a>, <a href="../index.html#/warehouse/returns">SCR-RET-004</a></td>
+</tr>
+<tr>
+<td><code>PHM-01</code></td>
+<td>Covered by screen</td>
+<td>Scoped oldest-first review queue with waiting state and correction route.</td>
+<td><a href="../index.html#/pharmacy/queue">SCR-PHM-001</a></td>
+</tr>
+<tr>
+<td><code>PHM-02</code></td>
+<td>Covered by screen</td>
+<td>Side-by-side synthetic evidence, patient, exact P lines and alternative-review limitation.</td>
+<td><a href="../index.html#/pharmacy/review">SCR-PHM-002</a></td>
+</tr>
+<tr>
+<td><code>PHM-03</code></td>
+<td>Covered by screen</td>
+<td>Each P line receives a synthetic reviewer choice and rejection reason; partial outcome waits for customer acceptance.</td>
+<td><a href="../index.html#/pharmacy/decision">SCR-PHM-003</a></td>
+</tr>
+<tr>
+<td><code>PHM-04</code></td>
+<td>Covered by interaction/state</td>
+<td>Side-by-side synthetic evidence, patient, exact P lines and alternative-review limitation. Explicit exact-line approval/rejection with reviewer identity, version and customer acceptance gate.</td>
+<td><a href="../index.html#/pharmacy/review">SCR-PHM-002</a>, <a href="../index.html#/pharmacy/decision">SCR-PHM-003</a></td>
+</tr>
+<tr>
+<td><code>PHM-05</code></td>
+<td>Covered by interaction/state</td>
+<td>Explicit exact-line approval/rejection with reviewer identity, version and customer acceptance gate. Decision identity, registration, timestamp, line outcomes and revision binding.</td>
+<td><a href="../index.html#/pharmacy/decision">SCR-PHM-003</a>, <a href="../index.html#/pharmacy/history">SCR-PHM-004</a></td>
+</tr>
+<tr>
+<td><code>DLV-01</code></td>
+<td>Covered by screen</td>
+<td>Ready parcels, synthetic rider positions, offline telemetry and separate COD handover view.</td>
+<td><a href="../index.html#/delivery/dashboard">SCR-DLV-001</a></td>
+</tr>
+<tr>
+<td><code>DLV-02</code></td>
+<td>Covered by screen</td>
+<td>Suggested eligible rider with explicit confirmation and assignment-version guard.</td>
+<td><a href="../index.html#/delivery/assignment">SCR-DLV-002</a></td>
+</tr>
+<tr>
+<td><code>DLV-03</code></td>
+<td>Covered by screen</td>
+<td>Reasoned reattempt, reschedule or return while preserving custody and cash facts. Assign a rider only after an explicit eligible outcome; parcel custody is tracked separately from the original delivery.</td>
+<td><a href="../index.html#/delivery/failures">SCR-DLV-003</a>, <a href="../index.html#/delivery/returns">SCR-RET-002</a></td>
+</tr>
+<tr>
+<td><code>DLV-04</code></td>
+<td>Covered by screen</td>
+<td>Ready parcels, synthetic rider positions, offline telemetry and separate COD handover view. Location-bound onboarding/shift edits and unresolved collected-vs-deposited cash differences.</td>
+<td><a href="../index.html#/delivery/dashboard">SCR-DLV-001</a>, <a href="../index.html#/delivery/riders">SCR-DLV-004</a></td>
+</tr>
+<tr>
+<td><code>DLV-05</code></td>
+<td>Covered by screen</td>
+<td>Suggested eligible rider with explicit confirmation and assignment-version guard. Location-bound onboarding/shift edits and unresolved collected-vs-deposited cash differences.</td>
+<td><a href="../index.html#/delivery/assignment">SCR-DLV-002</a>, <a href="../index.html#/delivery/riders">SCR-DLV-004</a>, <a href="../index.html#/delivery/returns">SCR-RET-002</a></td>
+</tr>
+<tr>
+<td><code>RID-01</code></td>
+<td>Covered by screen</td>
+<td>Synthetic OTP login with rider identity and revoked-access gate. Explicit availability and only current-rider tasks with accept/reject action.</td>
+<td><a href="../index.html#/rider/login">SCR-RID-001</a>, <a href="../index.html#/rider/tasks">SCR-RID-002</a></td>
+</tr>
+<tr>
+<td><code>RID-02</code></td>
+<td>Covered by screen</td>
+<td>Explicit availability and only current-rider tasks with accept/reject action. Current assignment, ready package and store handoff must precede rider custody.</td>
+<td><a href="../index.html#/rider/tasks">SCR-RID-002</a>, <a href="../index.html#/rider/pickup">SCR-RID-003</a>, <a href="../index.html#/rider/navigation">SCR-RID-004</a>, <a href="../index.html#/rider/returns">SCR-RET-003</a></td>
+</tr>
+<tr>
+<td><code>RID-03</code></td>
+<td>Blocked by an open decision</td>
+<td>D-011/D-021: schematic locations demonstrate freshness only; real background cadence, tracking and retention are disabled.</td>
+<td><a href="../index.html#/rider/navigation">SCR-RID-004</a></td>
+</tr>
+<tr>
+<td><code>RID-04</code></td>
+<td>Covered by screen</td>
+<td>Validate current assignment, synthetic OTP/proof and actual COD; offline state stays unconfirmed. Scoped daily completed/failed history; incentive calculation visibly awaits policy.</td>
+<td><a href="../index.html#/rider/completion">SCR-RID-005</a>, <a href="../index.html#/rider/history">SCR-RID-007</a></td>
+</tr>
+<tr>
+<td><code>RID-05</code></td>
+<td>Blocked by an open decision</td>
+<td>D-006/D-011: doorstep clinical checks cannot replace pharmacist review; approved SOP is missing.</td>
+<td><a href="../index.html#/rider/completion">SCR-RID-005</a></td>
+</tr>
+<tr>
+<td><code>RID-06</code></td>
+<td>Covered by screen</td>
+<td>Approved illustrative reason selection, accountable custody and a clear blocked incentive calculation. Show the signed-in rider their current reverse pickup and confirm physical custody with a synthetic reference.</td>
+<td><a href="../index.html#/rider/failure">SCR-RID-006</a>, <a href="../index.html#/rider/returns">SCR-RET-003</a></td>
+</tr>
+<tr>
+<td><code>RID-07</code></td>
+<td>Blocked by an open decision</td>
+<td>D-007/D-008: scoped delivery counts exist, but earnings/formula/payout stay unavailable rather than inventing amounts.</td>
+<td><a href="../index.html#/rider/failure">SCR-RID-006</a>, <a href="../index.html#/rider/history">SCR-RID-007</a></td>
+</tr>
+<tr>
+<td><code>FIN-01</code></td>
+<td>Covered by interaction/state</td>
+<td>Reconcile a captured/lost response without a new order or charge. Read trusted fixture outcomes for the existing reference without creating another charge.</td>
+<td><a href="../index.html#/customer/payment-recovery">SCR-CUS-023</a>, <a href="../index.html#/staff/payments">SCR-FIN-001</a></td>
+</tr>
+<tr>
+<td><code>FIN-02</code></td>
+<td>Blocked by an open decision</td>
+<td>D-008/D-012: only a sample order document is downloadable; GSTIN, tax splits and legal invoice issuance are not approved.</td>
+<td><a href="../index.html#/customer/invoice">SCR-CUS-030</a>, <a href="../index.html#/staff/invoice">SCR-FIN-002</a></td>
+</tr>
+<tr>
+<td><code>FIN-03</code></td>
+<td>Covered by screen</td>
+<td>Pending intents reserve refundable amount, approvals remain separate, and replay cannot duplicate payout.</td>
+<td><a href="../index.html#/staff/refunds">SCR-FIN-003</a></td>
+</tr>
+<tr>
+<td><code>FIN-04</code></td>
+<td>Blocked by an open decision</td>
+<td>D-004/D-007: verified COD destination is an explicit synthetic fixture; the real proof/transfer contract is unresolved.</td>
+<td><a href="../index.html#/staff/refunds">SCR-FIN-003</a></td>
+</tr>
+<tr>
+<td><code>FIN-05</code></td>
+<td>Covered by screen</td>
+<td>Provider reference/amount/currency comparison preserves a mismatch as an exception.</td>
+<td><a href="../index.html#/staff/reconciliation">SCR-FIN-004</a></td>
+</tr>
+<tr>
+<td><code>FIN-06</code></td>
+<td>Covered by screen</td>
+<td>Actual collection and deposit retain an unresolved shortage; delivery is not rewritten.</td>
+<td><a href="../index.html#/staff/reconciliation">SCR-FIN-004</a></td>
+</tr>
+<tr>
+<td><code>FIN-07</code></td>
+<td>Blocked by an open decision</td>
+<td>D-008/D-012: credit-note proposal retains invoice/refund links without issuing a tax credit or posting a journal.</td>
+<td><a href="../index.html#/staff/credit-note">SCR-FIN-005</a></td>
+</tr>
+<tr>
+<td><code>REP-01</code></td>
+<td>Covered by screen</td>
+<td>Choose a scoped operational report and generate a synthetic result. Review scoped result rows, failed generation and revoked download states.</td>
+<td><a href="../index.html#/staff/reports">SCR-REP-001</a>, <a href="../index.html#/staff/report-results">SCR-REP-002</a></td>
+</tr>
+<tr>
+<td><code>REP-02</code></td>
+<td>Blocked by an open decision</td>
+<td>D-012: draft GST report is labelled not filing-ready; approved tax definitions are unavailable.</td>
+<td><a href="../index.html#/staff/reports">SCR-REP-001</a>, <a href="../index.html#/staff/report-results">SCR-REP-002</a></td>
+</tr>
+<tr>
+<td><code>REP-03</code></td>
+<td>Covered by screen</td>
+<td>Choose a scoped operational report and generate a synthetic result. Review scoped result rows, failed generation and revoked download states.</td>
+<td><a href="../index.html#/staff/reports">SCR-REP-001</a>, <a href="../index.html#/staff/report-results">SCR-REP-002</a></td>
+</tr>
+<tr>
+<td><code>REP-04</code></td>
+<td>Covered by screen</td>
+<td>Choose a scoped operational report and generate a synthetic result. Review scoped result rows, failed generation and revoked download states.</td>
+<td><a href="../index.html#/staff/reports">SCR-REP-001</a>, <a href="../index.html#/staff/report-results">SCR-REP-002</a></td>
+</tr>
+<tr>
+<td><code>REP-05</code></td>
+<td>Covered by screen</td>
+<td>Choose a scoped operational report and generate a synthetic result. Review scoped result rows, failed generation and revoked download states.</td>
+<td><a href="../index.html#/staff/reports">SCR-REP-001</a>, <a href="../index.html#/staff/report-results">SCR-REP-002</a></td>
+</tr>
+<tr>
+<td><code>REP-06</code></td>
+<td>Covered by screen</td>
+<td>Choose a scoped operational report and generate a synthetic result. Review scoped result rows, failed generation and revoked download states.</td>
+<td><a href="../index.html#/staff/reports">SCR-REP-001</a>, <a href="../index.html#/staff/report-results">SCR-REP-002</a></td>
+</tr>
+<tr>
+<td><code>REP-07</code></td>
+<td>Covered by screen</td>
+<td>Filters produce a scoped run; prepare/download rechecks access and creates an Excel-readable TSV, not native XLSX.</td>
+<td><a href="../index.html#/staff/report-results">SCR-REP-002</a></td>
+</tr>
+<tr>
+<td><code>AUD-01</code></td>
+<td>Covered by screen</td>
+<td>Filter immutable local evidence without edit/delete controls.</td>
+<td><a href="../index.html#/staff/audit">SCR-AUD-001</a></td>
+</tr>
+<tr>
+<td><code>AUD-02</code></td>
+<td>Covered by screen</td>
+<td>Filter immutable local evidence without edit/delete controls.</td>
+<td><a href="../index.html#/staff/audit">SCR-AUD-001</a></td>
+</tr>
+<tr>
+<td><code>AUTH-01</code></td>
+<td>Covered by screen</td>
+<td>Staff password step creates a pre-session challenge; correct demo authenticator is required for sign-in.</td>
+<td><a href="../index.html#/access/login">SCR-ACC-001</a>, <a href="../index.html#/access/mfa">SCR-ACC-002</a></td>
+</tr>
+<tr>
+<td><code>AUTH-02</code></td>
+<td>Covered by screen</td>
+<td>Revoke hides protected forms until the demo MFA flow completes again.</td>
+<td><a href="../index.html#/access/mfa">SCR-ACC-002</a>, <a href="../index.html#/access/sessions">SCR-ACC-003</a></td>
+</tr>
+<tr>
+<td><code>AUTH-03</code></td>
+<td>Covered by screen</td>
+<td>Explicit OTP rate-limit and expiry fixtures show the denial/recovery, without guessed production durations.</td>
+<td><a href="../index.html#/customer/login">SCR-CUS-001</a>, <a href="../index.html#/customer/otp">SCR-CUS-002</a>, <a href="../index.html#/access/login">SCR-ACC-001</a>, <a href="../index.html#/access/sessions">SCR-ACC-003</a></td>
+</tr>
+<tr>
+<td><code>AUTH-04</code></td>
+<td>Backend-only, with no direct screen</td>
+<td>Server-side authorization is backend-only; role/scenario/session denial demonstrates the visible effect. There is no security backend.</td>
+<td><a href="../index.html#/access/sessions">SCR-ACC-003</a>, <a href="../index.html#/access/workspaces">SCR-ACC-004</a></td>
+</tr>
+<tr>
+<td><code>NOT-01</code></td>
+<td>Covered by interaction/state</td>
+<td>Inspect minimal event content, retry delivery and acknowledge scoped staff alerts. Choose local channel preferences and simulate allowed/denied endpoints.</td>
+<td><a href="../index.html#/staff/notifications">SCR-NOT-001</a>, <a href="../index.html#/staff/notification-preferences">SCR-NOT-002</a></td>
+</tr>
+<tr>
+<td><code>NOT-02</code></td>
+<td>Covered by interaction/state</td>
+<td>Inspect minimal event content, retry delivery and acknowledge scoped staff alerts.</td>
+<td><a href="../index.html#/staff/notifications">SCR-NOT-001</a></td>
+</tr>
+<tr>
+<td><code>NOT-03</code></td>
+<td>Covered by interaction/state</td>
+<td>Choose local channel preferences and simulate allowed/denied endpoints.</td>
+<td><a href="../index.html#/staff/notification-preferences">SCR-NOT-002</a></td>
+</tr>
+<tr>
+<td><code>NOT-04</code></td>
+<td>Covered by interaction/state</td>
+<td>Inspect minimal event content, retry delivery and acknowledge scoped staff alerts. Record a minimal local inquiry and route uncertainty to the responsible owner.</td>
+<td><a href="../index.html#/staff/notifications">SCR-NOT-001</a>, <a href="../index.html#/staff/support">SCR-SUP-001</a></td>
+</tr>
+<tr>
+<td><code>NOT-05</code></td>
+<td>Blocked by an open decision</td>
+<td>Optional draft scope: browser push choices are local consent simulations; no actual push subscription is created.</td>
+<td><a href="../index.html#/staff/notification-preferences">SCR-NOT-002</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Coverage boundaries</h2>
+<ul>
+<li>Covered by interaction/state: 23</li>
+<li>Covered by screen: 70</li>
+<li>Blocked by an open decision: 16</li>
+<li>Backend-only, with no direct screen: 1</li>
+</ul>
+<p>No feature is assigned a future phase merely from its database table. Warehouse/rider/optional launch questions remain the original owner decisions. CSV import and TSV export are explicit prototype format approximations; native Excel file parsing/creation is not claimed. Local code simulates idempotency and safety gates for review; it does not implement production authentication, medical eligibility or payment processing.</p>
+</main></body></html>

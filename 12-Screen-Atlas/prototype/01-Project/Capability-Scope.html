@@ -1,0 +1,152 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Capability Scope · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Capability scope and product decisions</h1>
+<p><strong>Phase labels are architecture/product planning recommendations, not new business approvals.</strong> Existing approved decisions and all 110 inherited feature IDs remain intact. No competitor capability is added solely because another platform offers it. Requirements retain their existing draft priority and require the named owner signoffs.</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Planning phase</th>
+<th>Evidence / boundary</th>
+<th>Decision gates</th>
+<th>Accountable domain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication, accounts, patient/address/consent</td>
+<td>MVP</td>
+<td>Inherited ACC/AUTH requirements; role, proof, retention policies open</td>
+<td>D-003/D-013/D-023</td>
+<td>Authentication / Customer Accounts</td>
+</tr>
+<tr>
+<td>Catalog/search/category/product detail and P/M/O</td>
+<td>MVP</td>
+<td>Inherited CAT and checkout features; import contract incomplete</td>
+<td>D-019/D-024</td>
+<td>Product Catalog</td>
+</tr>
+<tr>
+<td>Cart/quote/checkout and order history/cancellation</td>
+<td>MVP</td>
+<td>Inherited CHK/ORD/OPS; accepted revisions and one-site guard</td>
+<td>D-004/D-010</td>
+<td>Checkout / Order Management</td>
+</tr>
+<tr>
+<td>Prescription upload and exact P-line pharmacist review</td>
+<td>MVP</td>
+<td>Inherited RX/PHR, conditional on P; M/O-only skip</td>
+<td>D-004/D-006/D-013</td>
+<td>Prescription Management / Pharmacist Review</td>
+</tr>
+<tr>
+<td>Lot/expiry/ledger/holds and approved stock correction</td>
+<td>MVP</td>
+<td>Inherited INV and SQL reservation invariants</td>
+<td>D-005/D-009</td>
+<td>Inventory</td>
+</tr>
+<tr>
+<td>Store picking/packing and custody handoff</td>
+<td>MVP</td>
+<td>Inherited STO; exact license/clinical/stock/payment guards</td>
+<td>D-002/D-006/D-009</td>
+<td>Store Operations</td>
+</tr>
+<tr>
+<td>Warehouse receiving/transfer and Noida fallback extent</td>
+<td>Requires Decision</td>
+<td>Inherited WH operational need; launch depth unresolved</td>
+<td>D-002/D-010</td>
+<td>Warehouse / Operations</td>
+</tr>
+<tr>
+<td>Online payments, COD, refunds, invoices, reconciliation</td>
+<td>MVP</td>
+<td>Inherited FIN/CHK/ORD; 4 payment contracts remain incomplete</td>
+<td>D-004/D-007/D-008/D-012/D-016</td>
+<td>Payments / Finance</td>
+</tr>
+<tr>
+<td>Delivery assignment and mandatory OTP plus photo POD</td>
+<td>MVP</td>
+<td>Inherited DLV/RID; failed-attempt action mapping incomplete</td>
+<td>D-010/D-011/D-021</td>
+<td>Delivery / Rider Operations</td>
+</tr>
+<tr>
+<td>Transactional notifications and delivery retries</td>
+<td>MVP</td>
+<td>Inherited NTF; provider and consent contracts need approval</td>
+<td>D-013/D-014/D-016</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td>Admin/CMS, role controls, reports, audit, Excel export</td>
+<td>MVP</td>
+<td>Inherited ADM/REP/AUD; masters/permissions unapproved</td>
+<td>D-003/D-012/D-013/D-024</td>
+<td>Admin / Reporting / Audit</td>
+</tr>
+<tr>
+<td>Customer support triage/ticket ownership</td>
+<td>Requires Decision</td>
+<td>WF-013 plus support schema; no approved additional support API inventory</td>
+<td>D-020/D-027</td>
+<td>Support lead / Product</td>
+</tr>
+<tr>
+<td>Rider Android implementation and release ownership</td>
+<td>Requires Decision</td>
+<td>Inherited rider app; framework/store ownership not approved</td>
+<td>D-021</td>
+<td>Product / Engineering</td>
+</tr>
+<tr>
+<td>Opening stock/catalog bulk import and POS adapter</td>
+<td>Requires Decision</td>
+<td>Existing INV/CAT features; precise formats/recovery absent</td>
+<td>D-005/D-019/D-024</td>
+<td>Inventory / Catalog / POS owner</td>
+</tr>
+<tr>
+<td>Advanced procurement automation and replenishment</td>
+<td>Phase 2</td>
+<td>Proposed depth beyond minimal received/transfer workflows; retain existing tables</td>
+<td>D-002/D-027</td>
+<td>Warehouse / Procurement lead</td>
+</tr>
+<tr>
+<td>Diagnostics bookings/reports and appointments/teleconsultation</td>
+<td>Future</td>
+<td>Existing DB domains; no launch feature/API approval inferred</td>
+<td>D-001/D-018/D-027</td>
+<td>Product / Clinical and Diagnostics leads</td>
+</tr>
+<tr>
+<td>Membership, insurance and marketplace expansion</td>
+<td>Future</td>
+<td>Existing schema only; commercial/provider models unapproved</td>
+<td>D-018/D-027</td>
+<td>Product / Finance / partner-domain owners</td>
+</tr>
+<tr>
+<td>Split shipments, automatic substitution or new clinical rules</td>
+<td>Requires Decision</td>
+<td>No scope expansion authorized; current single-site/no-silent-change rules retained</td>
+<td>D-006/D-010</td>
+<td>Product / Pharmacy / Operations</td>
+</tr>
+</tbody>
+</table>
+<h2>Preserved product rules</h2>
+<ul>
+<li><strong>P:</strong> prescription-required, with exact patient/evidence/revision-bound pharmacist review. <strong>M:</strong> medicine without mandatory review. <strong>O:</strong> other products without mandatory review. M/O-only orders skip that review unless an independently documented rule applies; unknown classification blocks progression.</li>
+<li>Revised products, quantities, price or substitution require explicit customer acceptance. No silent substitution, P-line removal, split fulfillment or invented clinical validation rule.</li>
+<li>One eligible site serves an order; stock/lot, active location-specific licensing, clinical approval, authoritative payment or approved COD, preparation and custody are independent progression gates.</li>
+<li>RID-04 retains mandatory OTP <strong>and photo</strong> proof. REP-07 exports Excel <code>.xlsx</code>. Owned invoice responses retain the PDF representation as well as JSON.</li>
+</ul>
+<h2>Missing journeys and proposals</h2>
+<p>The existing <a href="../05-APIs/Journey-API-Gaps.html">16 candidate command groups</a> cover missing user-journey support without inflating the preserved 107 operations. They remain Proposed / Unapproved / outside the denominator. Account proof, imports, POS reconciliation, payment/provider wire contracts, staff MFA and delivery failure progression remain named contract gaps rather than generic completion claims.</p>
+<p><a href="../09-References/Sources-and-Decisions.html">Decision register</a> remains authoritative. <a href="../02-Architecture/Module-Boundaries.html">Module boundaries</a> explain domain ownership; physical future tables are retained without speculative schemas, sample data, APIs or regulatory approvals.</p>
+</main></body></html>

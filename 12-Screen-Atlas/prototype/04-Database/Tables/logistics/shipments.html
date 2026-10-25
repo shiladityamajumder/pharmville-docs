@@ -1,0 +1,1046 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>shipments · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>logistics.shipments</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds shipments records within the logistics domain (riders, shipments, tracking and delivery). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>logistics.shipments</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Transactional</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Delivery_Operations</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>31 columns; 33 PK/FK/UQ/CHECK/exclusion constraints; 15 named PostgreSQL 18 NOT NULL constraints; 8 indexes; 5 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>carrier_account_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to carrier accounts</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>logistics.carrier_accounts</code> via <code>fk_logistics_shipments_carrier_account_id_carrier_accounts</code></td>
+</tr>
+<tr>
+<td><code>carrier_account_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>logistics.carrier_accounts</code> via <code>fk_logistics_shipments_carrier_account_id_carrier_accou_456d</code></td>
+</tr>
+<tr>
+<td><code>carrier_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to carriers</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>logistics.carriers</code> via <code>fk_logistics_shipments_carrier_id_carriers</code></td>
+</tr>
+<tr>
+<td><code>carrier_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>logistics.carriers</code> via <code>fk_logistics_shipments_carrier_id_carriers_numeric</code></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_logistics_shipments_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>delivered_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of delivered</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>delivery_slot_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to delivery slots</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>logistics.delivery_slots</code> via <code>fk_logistics_shipments_delivery_slot_id_delivery_slots</code></td>
+</tr>
+<tr>
+<td><code>delivery_slot_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>logistics.delivery_slots</code> via <code>fk_logistics_shipments_delivery_slot_id_delivery_slots_numeric</code></td>
+</tr>
+<tr>
+<td><code>destination_snapshot</code></td>
+<td><code>jsonb</code></td>
+<td>No</td>
+<td>—</td>
+<td>Structured destination snapshot information</td>
+<td>Retain a versioned payload or relevant details</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>dispatched_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of dispatched</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>estimated_delivery_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of estimated delivery</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>order_group_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to order groups</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.order_groups</code> via <code>fk_logistics_shipments_group_order</code>; FK → <code>commerce.order_groups</code> via <code>fk_logistics_shipments_order_group_id_order_groups</code></td>
+</tr>
+<tr>
+<td><code>order_group_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>commerce.order_groups</code> via <code>fk_logistics_shipments_group_order_numeric</code>; FK → <code>commerce.order_groups</code> via <code>fk_logistics_shipments_order_group_id_order_groups_numeric</code></td>
+</tr>
+<tr>
+<td><code>order_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to order groups</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.order_groups</code> via <code>fk_logistics_shipments_group_order</code>; FK → <code>commerce.orders</code> via <code>fk_logistics_shipments_order_id_orders</code>; FK → <code>commerce.order_revisions</code> via <code>fk_logistics_shipments_revision_scope</code></td>
+</tr>
+<tr>
+<td><code>order_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>commerce.order_groups</code> via <code>fk_logistics_shipments_group_order_numeric</code>; FK → <code>commerce.orders</code> via <code>fk_logistics_shipments_order_id_orders_numeric</code>; FK → <code>commerce.order_revisions</code> via <code>fk_logistics_shipments_revision_scope_numeric</code></td>
+</tr>
+<tr>
+<td><code>order_revision_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to order revisions</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.order_revisions</code> via <code>fk_logistics_shipments_revision_scope</code></td>
+</tr>
+<tr>
+<td><code>order_revision_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>commerce.order_revisions</code> via <code>fk_logistics_shipments_revision_scope_numeric</code></td>
+</tr>
+<tr>
+<td><code>package_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to packages</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>fulfillment.packages</code> via <code>fk_logistics_shipments_package_id_packages</code></td>
+</tr>
+<tr>
+<td><code>package_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>fulfillment.packages</code> via <code>fk_logistics_shipments_package_id_packages_numeric</code></td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>service_type</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores service type for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>shipment_number</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores shipment number for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>shipping_label_file_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to file objects</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>platform.file_objects</code> via <code>fk_logistics_shipments_shipping_label_file_id_file_objects</code></td>
+</tr>
+<tr>
+<td><code>shipping_label_file_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>platform.file_objects</code> via <code>fk_logistics_shipments_shipping_label_file_id_file_obje_c402</code></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(16)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>tracking_number</code></td>
+<td><code>character varying(128)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores tracking number for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_logistics_shipments_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the shipments business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>logistics.shipments</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_logistics_shipments_carrier_account_id_carrier_accou_456d</td>
+<td><code>carrier_account_id_internal_id</code></td>
+<td><a href="../../Tables/logistics/carrier_accounts.html"><code>logistics.carrier_accounts</code></a></td>
+<td><code>FOREIGN KEY (carrier_account_id_internal_id) REFERENCES logistics.carrier_accounts(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_carrier_account_id_carrier_accounts</td>
+<td><code>carrier_account_id</code></td>
+<td><a href="../../Tables/logistics/carrier_accounts.html"><code>logistics.carrier_accounts</code></a></td>
+<td><code>FOREIGN KEY (carrier_account_id) REFERENCES logistics.carrier_accounts(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_carrier_id_carriers</td>
+<td><code>carrier_id</code></td>
+<td><a href="../../Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td><code>FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_carrier_id_carriers_numeric</td>
+<td><code>carrier_id_internal_id</code></td>
+<td><a href="../../Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td><code>FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_delivery_slot_id_delivery_slots</td>
+<td><code>delivery_slot_id</code></td>
+<td><a href="../../Tables/logistics/delivery_slots.html"><code>logistics.delivery_slots</code></a></td>
+<td><code>FOREIGN KEY (delivery_slot_id) REFERENCES logistics.delivery_slots(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_delivery_slot_id_delivery_slots_numeric</td>
+<td><code>delivery_slot_id_internal_id</code></td>
+<td><a href="../../Tables/logistics/delivery_slots.html"><code>logistics.delivery_slots</code></a></td>
+<td><code>FOREIGN KEY (delivery_slot_id_internal_id) REFERENCES logistics.delivery_slots(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_group_order</td>
+<td><code>order_group_id, order_id</code></td>
+<td><a href="../../Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+<td><code>FOREIGN KEY (order_group_id, order_id) REFERENCES commerce.order_groups(id, order_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_group_order_numeric</td>
+<td><code>order_group_id_internal_id, order_id_internal_id</code></td>
+<td><a href="../../Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+<td><code>FOREIGN KEY (order_group_id_internal_id, order_id_internal_id) REFERENCES commerce.order_groups(internal_id, order_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_order_group_id_order_groups</td>
+<td><code>order_group_id</code></td>
+<td><a href="../../Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+<td><code>FOREIGN KEY (order_group_id) REFERENCES commerce.order_groups(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_order_group_id_order_groups_numeric</td>
+<td><code>order_group_id_internal_id</code></td>
+<td><a href="../../Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+<td><code>FOREIGN KEY (order_group_id_internal_id) REFERENCES commerce.order_groups(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_package_id_packages</td>
+<td><code>package_id</code></td>
+<td><a href="../../Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td><code>FOREIGN KEY (package_id) REFERENCES fulfillment.packages(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_package_id_packages_numeric</td>
+<td><code>package_id_internal_id</code></td>
+<td><a href="../../Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td><code>FOREIGN KEY (package_id_internal_id) REFERENCES fulfillment.packages(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_revision_scope</td>
+<td><code>order_revision_id, order_id</code></td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><code>FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_revision_scope_numeric</td>
+<td><code>order_revision_id_internal_id, order_id_internal_id</code></td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><code>FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_shipping_label_file_id_file_obje_c402</td>
+<td><code>shipping_label_file_id_internal_id</code></td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><code>FOREIGN KEY (shipping_label_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_shipping_label_file_id_file_objects</td>
+<td><code>shipping_label_file_id</code></td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><code>FOREIGN KEY (shipping_label_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/logistics/delivery_assignments.html"><code>logistics.delivery_assignments</code></a></td>
+<td>fk_logistics_delivery_assignments_shipment_id_shipments</td>
+<td><code>shipment_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_assignments.html"><code>logistics.delivery_assignments</code></a></td>
+<td>fk_logistics_delivery_assignments_shipment_id_shipments_numeric</td>
+<td><code>shipment_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_attempts.html"><code>logistics.delivery_attempts</code></a></td>
+<td>fk_logistics_delivery_attempts_shipment_id_shipments</td>
+<td><code>shipment_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_attempts.html"><code>logistics.delivery_attempts</code></a></td>
+<td>fk_logistics_delivery_attempts_shipment_id_shipments_numeric</td>
+<td><code>shipment_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_otp_challenges.html"><code>logistics.delivery_otp_challenges</code></a></td>
+<td>fk_logistics_delivery_otp_challenges_shipment_id_shipme_04c6</td>
+<td><code>shipment_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/delivery_otp_challenges.html"><code>logistics.delivery_otp_challenges</code></a></td>
+<td>fk_logistics_delivery_otp_challenges_shipment_id_shipments</td>
+<td><code>shipment_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/ndr_cases.html"><code>logistics.ndr_cases</code></a></td>
+<td>fk_logistics_ndr_cases_shipment_id_shipments</td>
+<td><code>shipment_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/ndr_cases.html"><code>logistics.ndr_cases</code></a></td>
+<td>fk_logistics_ndr_cases_shipment_id_shipments_numeric</td>
+<td><code>shipment_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/shipment_events.html"><code>logistics.shipment_events</code></a></td>
+<td>fk_logistics_shipment_events_shipment_id_shipments</td>
+<td><code>shipment_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/logistics/shipment_events.html"><code>logistics.shipment_events</code></a></td>
+<td>fk_logistics_shipment_events_shipment_id_shipments_numeric</td>
+<td><code>shipment_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td>fk_payment_cod_collections_shipment_id_shipments</td>
+<td><code>shipment_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td>fk_payment_cod_collections_shipment_id_shipments_numeric</td>
+<td><code>shipment_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>logistics.shipments</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>carrier_account_id_internal_id</code></td>
+<td><code>logistics.carrier_accounts</code></td>
+<td><code>fk_logistics_shipments_carrier_account_id_carrier_accou_456d</code></td>
+</tr>
+<tr>
+<td><code>carrier_account_id</code></td>
+<td><code>logistics.carrier_accounts</code></td>
+<td><code>fk_logistics_shipments_carrier_account_id_carrier_accounts</code></td>
+</tr>
+<tr>
+<td><code>carrier_id</code></td>
+<td><code>logistics.carriers</code></td>
+<td><code>fk_logistics_shipments_carrier_id_carriers</code></td>
+</tr>
+<tr>
+<td><code>carrier_id_internal_id</code></td>
+<td><code>logistics.carriers</code></td>
+<td><code>fk_logistics_shipments_carrier_id_carriers_numeric</code></td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_logistics_shipments_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>delivery_slot_id</code></td>
+<td><code>logistics.delivery_slots</code></td>
+<td><code>fk_logistics_shipments_delivery_slot_id_delivery_slots</code></td>
+</tr>
+<tr>
+<td><code>delivery_slot_id_internal_id</code></td>
+<td><code>logistics.delivery_slots</code></td>
+<td><code>fk_logistics_shipments_delivery_slot_id_delivery_slots_numeric</code></td>
+</tr>
+<tr>
+<td><code>order_group_id, order_id</code></td>
+<td><code>commerce.order_groups</code></td>
+<td><code>fk_logistics_shipments_group_order</code></td>
+</tr>
+<tr>
+<td><code>order_group_id_internal_id, order_id_internal_id</code></td>
+<td><code>commerce.order_groups</code></td>
+<td><code>fk_logistics_shipments_group_order_numeric</code></td>
+</tr>
+<tr>
+<td><code>order_group_id</code></td>
+<td><code>commerce.order_groups</code></td>
+<td><code>fk_logistics_shipments_order_group_id_order_groups</code></td>
+</tr>
+<tr>
+<td><code>order_group_id_internal_id</code></td>
+<td><code>commerce.order_groups</code></td>
+<td><code>fk_logistics_shipments_order_group_id_order_groups_numeric</code></td>
+</tr>
+<tr>
+<td><code>order_id</code></td>
+<td><code>commerce.orders</code></td>
+<td><code>fk_logistics_shipments_order_id_orders</code></td>
+</tr>
+<tr>
+<td><code>order_id_internal_id</code></td>
+<td><code>commerce.orders</code></td>
+<td><code>fk_logistics_shipments_order_id_orders_numeric</code></td>
+</tr>
+<tr>
+<td><code>package_id</code></td>
+<td><code>fulfillment.packages</code></td>
+<td><code>fk_logistics_shipments_package_id_packages</code></td>
+</tr>
+<tr>
+<td><code>package_id_internal_id</code></td>
+<td><code>fulfillment.packages</code></td>
+<td><code>fk_logistics_shipments_package_id_packages_numeric</code></td>
+</tr>
+<tr>
+<td><code>order_revision_id, order_id</code></td>
+<td><code>commerce.order_revisions</code></td>
+<td><code>fk_logistics_shipments_revision_scope</code></td>
+</tr>
+<tr>
+<td><code>order_revision_id_internal_id, order_id_internal_id</code></td>
+<td><code>commerce.order_revisions</code></td>
+<td><code>fk_logistics_shipments_revision_scope_numeric</code></td>
+</tr>
+<tr>
+<td><code>shipping_label_file_id_internal_id</code></td>
+<td><code>platform.file_objects</code></td>
+<td><code>fk_logistics_shipments_shipping_label_file_id_file_obje_c402</code></td>
+</tr>
+<tr>
+<td><code>shipping_label_file_id</code></td>
+<td><code>platform.file_objects</code></td>
+<td><code>fk_logistics_shipments_shipping_label_file_id_file_objects</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_logistics_shipments_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_logistics_shipments_numeric_pair_carrier_account_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((carrier_account_id IS NULL) = (carrier_account_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipments_numeric_pair_carrier_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((carrier_id IS NULL) = (carrier_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipments_numeric_pair_delivery_slot_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((delivery_slot_id IS NULL) = (delivery_slot_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipments_numeric_pair_order_group_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((order_group_id IS NULL) = (order_group_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipments_numeric_pair_order_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((order_id IS NULL) = (order_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipments_numeric_pair_order_revision_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((order_revision_id IS NULL) = (order_revision_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipments_numeric_pair_package_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((package_id IS NULL) = (package_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipments_numeric_pair_shipping_label_file_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((shipping_label_file_id IS NULL) = (shipping_label_file_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipments_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipments_shipmentstatus</code></td>
+<td>CHECK</td>
+<td><code>CHECK (status::text = ANY (ARRAY['created'::text, 'label_created'::text, 'pickup_scheduled'::text, 'picked_up'::text, 'in_transit'::text, 'out_for_delivery'::text, 'delivered'::text, 'delivery_failed'::text, 'rto_initiated'::text, 'rto_delivered'::text, 'cancelled'::text]))</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_carrier_account_id_carrier_accou_456d</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (carrier_account_id_internal_id) REFERENCES logistics.carrier_accounts(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_carrier_account_id_carrier_accounts</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (carrier_account_id) REFERENCES logistics.carrier_accounts(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_carrier_id_carriers</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_carrier_id_carriers_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_delivery_slot_id_delivery_slots</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (delivery_slot_id) REFERENCES logistics.delivery_slots(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_delivery_slot_id_delivery_slots_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (delivery_slot_id_internal_id) REFERENCES logistics.delivery_slots(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_group_order</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_group_id, order_id) REFERENCES commerce.order_groups(id, order_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_group_order_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_group_id_internal_id, order_id_internal_id) REFERENCES commerce.order_groups(internal_id, order_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_order_group_id_order_groups</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_group_id) REFERENCES commerce.order_groups(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_order_group_id_order_groups_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_group_id_internal_id) REFERENCES commerce.order_groups(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_order_id_orders</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_order_id_orders_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_package_id_packages</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (package_id) REFERENCES fulfillment.packages(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_package_id_packages_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (package_id_internal_id) REFERENCES fulfillment.packages(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_revision_scope</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_revision_id, order_id) REFERENCES commerce.order_revisions(id, order_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_revision_scope_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_revision_id_internal_id, order_id_internal_id) REFERENCES commerce.order_revisions(internal_id, order_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_shipping_label_file_id_file_obje_c402</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (shipping_label_file_id_internal_id) REFERENCES platform.file_objects(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_shipping_label_file_id_file_objects</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (shipping_label_file_id) REFERENCES platform.file_objects(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipments_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_logistics_shipments</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>shipment_number</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (shipment_number)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_shipments_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>shipments_carrier_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL carrier_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>shipments_carrier_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL carrier_id</code></td>
+</tr>
+<tr>
+<td><code>shipments_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>shipments_destination_snapshot_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL destination_snapshot</code></td>
+</tr>
+<tr>
+<td><code>shipments_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>shipments_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>shipments_order_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL order_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>shipments_order_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL order_id</code></td>
+</tr>
+<tr>
+<td><code>shipments_package_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL package_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>shipments_package_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL package_id</code></td>
+</tr>
+<tr>
+<td><code>shipments_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>shipments_service_type_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL service_type</code></td>
+</tr>
+<tr>
+<td><code>shipments_shipment_number_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL shipment_number</code></td>
+</tr>
+<tr>
+<td><code>shipments_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+<tr>
+<td><code>shipments_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_logistics_shipments_carrier</code></td>
+<td>btree</td>
+<td><code>(carrier_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_shipments_carrier ON logistics.shipments USING btree (carrier_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_logistics_shipments_order</code></td>
+<td>btree</td>
+<td><code>(order_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_shipments_order ON logistics.shipments USING btree (order_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_logistics_shipments_package</code></td>
+<td>btree</td>
+<td><code>(package_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_shipments_package ON logistics.shipments USING btree (package_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_logistics_shipments_status</code></td>
+<td>btree</td>
+<td><code>(status)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_shipments_status ON logistics.shipments USING btree (status)</code></td>
+</tr>
+<tr>
+<td><code>pk_logistics_shipments</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_logistics_shipments ON logistics.shipments USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>shipment_number</code></td>
+<td>btree</td>
+<td><code>(shipment_number)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX shipment_number ON logistics.shipments USING btree (shipment_number)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_shipments_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_logistics_shipments_id ON logistics.shipments USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_shipments_tracking_present</code></td>
+<td>btree</td>
+<td><code>(carrier_id, tracking_number)</code></td>
+<td>tracking_number IS NOT NULL</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_logistics_shipments_tracking_present ON logistics.shipments USING btree (carrier_id, tracking_number) WHERE tracking_number IS NOT NULL</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON logistics.shipments FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;carrier_account_id&quot;,&quot;carrier_account_id_internal_id&quot;,&quot;logistics&quot;,&quot;carrier_accounts&quot;],[&quot;carrier_id&quot;,&quot;carrier_id_internal_id&quot;,&quot;logistics&quot;,&quot;carriers&quot;],[&quot;delivery_slot_id&quot;,&quot;delivery_slot_id_internal_id&quot;,&quot;logistics&quot;,&quot;delivery_slots&quot;],[&quot;order_group_id&quot;,&quot;order_group_id_internal_id&quot;,&quot;commerce&quot;,&quot;order_groups&quot;],[&quot;order_id&quot;,&quot;order_id_internal_id&quot;,&quot;commerce&quot;,&quot;orders&quot;],[&quot;order_revision_id&quot;,&quot;order_revision_id_internal_id&quot;,&quot;commerce&quot;,&quot;order_revisions&quot;],[&quot;package_id&quot;,&quot;package_id_internal_id&quot;,&quot;fulfillment&quot;,&quot;packages&quot;],[&quot;shipping_label_file_id&quot;,&quot;shipping_label_file_id_internal_id&quot;,&quot;platform&quot;,&quot;file_objects&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>ab_authorized_dispatch</code></td>
+<td><code>CREATE TRIGGER ab_authorized_dispatch BEFORE INSERT OR UPDATE ON logistics.shipments FOR EACH ROW EXECUTE FUNCTION logistics.guard_authorized_dispatch()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>shipment_dispatch_guard</code></td>
+<td><code>CREATE TRIGGER shipment_dispatch_guard BEFORE INSERT OR UPDATE ON logistics.shipments FOR EACH ROW EXECUTE FUNCTION logistics.guard_shipment_dispatch()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON logistics.shipments FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON logistics.shipments FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;carrier_account_id&quot;,&quot;carrier_account_id_internal_id&quot;,&quot;logistics&quot;,&quot;carrier_accounts&quot;],[&quot;carrier_id&quot;,&quot;carrier_id_internal_id&quot;,&quot;logistics&quot;,&quot;carriers&quot;],[&quot;delivery_slot_id&quot;,&quot;delivery_slot_id_internal_id&quot;,&quot;logistics&quot;,&quot;delivery_slots&quot;],[&quot;order_group_id&quot;,&quot;order_group_id_internal_id&quot;,&quot;commerce&quot;,&quot;order_groups&quot;],[&quot;order_id&quot;,&quot;order_id_internal_id&quot;,&quot;commerce&quot;,&quot;orders&quot;],[&quot;order_revision_id&quot;,&quot;order_revision_id_internal_id&quot;,&quot;commerce&quot;,&quot;order_revisions&quot;],[&quot;package_id&quot;,&quot;package_id_internal_id&quot;,&quot;fulfillment&quot;,&quot;packages&quot;],[&quot;shipping_label_file_id&quot;,&quot;shipping_label_file_id_internal_id&quot;,&quot;platform&quot;,&quot;file_objects&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

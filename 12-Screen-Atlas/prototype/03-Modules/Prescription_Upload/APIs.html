@@ -1,0 +1,1772 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>APIs · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Prescription Upload API contracts</h1>
+<p><strong>Proposed technical blueprint · Unapproved · Not Implemented.</strong> Contract completeness is independent of approval and runtime evidence. <a href="../../05-APIs/API-Contract-Coverage.html">Coverage</a> · <a href="../../05-APIs/openapi.yaml">OpenAPI 3.1</a> · <a href="../../05-APIs/Planning-Decisions.html">decisions</a> · <a href="../../05-APIs/API-Conventions.html">DTO conventions</a>. Every CT scenario is Designed / NOT RUN.</p>
+<p>&lt;a id=&quot;prescription-upload-api-contracts&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-022--post-v1prescriptionsupload-intents&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-023--post-v1prescriptionsdocumentsconfirm&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-024--post-v1ordersorder_idprescriptions&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-2&quot;&gt;&lt;/a&gt;</p>
+<h2>Operation index</h2>
+<table>
+<thead>
+<tr>
+<th>API ID</th>
+<th>Method/path</th>
+<th>Purpose</th>
+<th>Documentation status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-022</td>
+<td><code>POST /v1/prescriptions/upload-intents</code></td>
+<td>Create a private prescription file upload capability.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-023</td>
+<td><code>POST /v1/prescriptions/documents/confirm</code></td>
+<td>Confirm uploaded prescription bytes and schedule malware scanning.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-024</td>
+<td><code>POST /v1/orders/{order_id}/prescriptions</code></td>
+<td>Attach safe private prescription documents to exact owned P order lines.</td>
+<td>Complete proposed</td>
+</tr>
+</tbody>
+</table>
+<h2>Feature-to-operation coverage</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Requirement</th>
+<th>Operation coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RX-01</td>
+<td>Upload one or more prescriptions (JPG, PNG, PDF) at checkout</td>
+<td>API-022, API-023</td>
+</tr>
+<tr>
+<td>RX-02</td>
+<td>Upload within 24 hours after ordering; auto-cancel after that</td>
+<td>No direct operation; see <a href="../../05-APIs/Journey-API-Gaps.html">journey/API gaps</a>. Existing requirement retained; no invented CRUD completion.</td>
+</tr>
+<tr>
+<td>RX-03</td>
+<td>Reuse a saved, still-valid prescription</td>
+<td>No direct operation; see <a href="../../05-APIs/Journey-API-Gaps.html">journey/API gaps</a>. Existing requirement retained; no invented CRUD completion.</td>
+</tr>
+<tr>
+<td>RX-04</td>
+<td>Link each prescription to the patient (self or family member)</td>
+<td>API-024</td>
+</tr>
+<tr>
+<td>RX-05</td>
+<td>See the pharmacist's decision and reason; re-upload after rejection</td>
+<td>No direct operation; see <a href="../../05-APIs/Journey-API-Gaps.html">journey/API gaps</a>. Existing requirement retained; no invented CRUD completion.</td>
+</tr>
+</tbody>
+</table>
+<h2>API-022 — POST <code>/v1/prescriptions/upload-intents</code></h2>
+<p><strong>Create a private prescription file upload capability.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Create a private prescription file upload capability</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Prescription_Upload via platform file service</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>RX-01</code>; <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/prescriptions/upload-intents</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>prescription-upload.manage.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>JPEG/PNG/PDF, proposed 10 MiB ceiling. File owner is current customer; access private and public_url null. Issue one scoped PUT capability with content type/length/expiry; upload bytes go to object storage, not this JSON API.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-022_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>PrescriptionUploadIntentRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fileName</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=255</td>
+<td>Proposed client filename; server normalizes and never uses it as a storage path.</td>
+</tr>
+<tr>
+<td><code>contentType</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;image/jpeg&quot;, &quot;image/png&quot;, &quot;application/pdf&quot;]</td>
+<td>Public DTO value from platform.file_objects.content_type. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>expectedSizeBytes</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1; maximum=10485760</td>
+<td>Proposed 10 MiB application ceiling; storage object and bytes must match; D-024 approval.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;fileName&quot;: &quot;prescription-example.pdf&quot;,
+  &quot;contentType&quot;: &quot;application/pdf&quot;,
+  &quot;expectedSizeBytes&quot;: 348220
+}
+</code></pre>
+<p>File bytes: one private object-store PUT using uploadUrl, exact Content-Type and expected byte count; then API-023 confirms actual metadata. This operation accepts metadata only. Allowed file types and ceiling are listed above. Signed URL grants upload only and expires under file-service policy.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>201</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>PrescriptionUploadIntentData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uploadSessionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>platform.file_upload_sessions.id.</td>
+</tr>
+<tr>
+<td><code>fileId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>platform.file_objects.id.</td>
+</tr>
+<tr>
+<td><code>uploadUrl</code></td>
+<td>string (uri)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uri&quot;</td>
+<td>Proposed short-lived private upload capability; storage protocol/headers require D-024 approval.</td>
+</tr>
+<tr>
+<td><code>expiresAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>platform.file_upload_sessions.expires_at.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;pending_upload&quot;]</td>
+<td>platform.file_objects.status at creation.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;uploadSessionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;fileId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;uploadUrl&quot;: &quot;https://private-objects.example.invalid/upload/one-use-capability&quot;,
+    &quot;expiresAt&quot;: &quot;2026-10-24T10:40:00Z&quot;,
+    &quot;status&quot;: &quot;pending_upload&quot;
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-022.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks prescription-upload.manage.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for create a private prescription file upload capability. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>JPEG/PNG/PDF, proposed 10 MiB ceiling. File owner is current customer; access private and public_url null. Issue one scoped PUT capability with content type/length/expiry; upload bytes go to object storage, not this JSON API.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Never mint a public Rx URL. A failed signing call leaves a pending session that can be safely replayed or expired.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Never mint a public Rx URL. A failed signing call leaves a pending session that can be safely replayed or expired.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-022 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared body/path/query field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>Read</td>
+<td><code>access_type</code>, <code>classification</code>, <code>content_type</code>, <code>expected_size_bytes</code>, <code>id</code>, <code>is_deleted</code>, <code>malware_scan_status</code>, <code>original_filename</code>, <code>owner_id</code>, <code>owner_type</code>, <code>row_version</code>, <code>sha256</code>, <code>size_bytes</code>, <code>status</code></td>
+<td>Platform file service projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td>Read</td>
+<td><code>expires_at</code>, <code>file_object_id</code>, <code>id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Platform file service projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>Create/update evidence</td>
+<td><code>owner_type</code>, <code>owner_id</code>, <code>access_type</code>, <code>classification</code>, <code>storage_provider</code>, <code>bucket</code>, <code>object_key</code>, <code>original_filename</code>, <code>content_type</code>, <code>expected_size_bytes</code>, <code>status</code>, <code>malware_scan_status</code>, <code>uploaded_by_user_id</code></td>
+<td>Platform file service owns these writes; Prescription_Upload via platform file service must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td>Create/update evidence</td>
+<td><code>file_object_id</code>, <code>requested_by_user_id</code>, <code>scope</code>, <code>idempotency_key</code>, <code>expires_at</code>, <code>status</code>, <code>upload_method</code></td>
+<td>Platform file service owns these writes; Prescription_Upload via platform file service must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.fileName</td>
+<td>platform.file_objects.original_filename</td>
+</tr>
+<tr>
+<td>request.contentType</td>
+<td>platform.file_objects.content_type</td>
+</tr>
+<tr>
+<td>request.expectedSizeBytes</td>
+<td>platform.file_objects.expected_size_bytes</td>
+</tr>
+<tr>
+<td>data.uploadSessionId</td>
+<td>platform.file_upload_sessions.id</td>
+</tr>
+<tr>
+<td>data.fileId</td>
+<td>platform.file_objects.id</td>
+</tr>
+<tr>
+<td>data.uploadUrl</td>
+<td>API-only private expiring object-store PUT capability; do not persist or log cleartext capability.</td>
+</tr>
+<tr>
+<td>data.expiresAt</td>
+<td>platform.file_upload_sessions.expires_at</td>
+</tr>
+<tr>
+<td>data.status</td>
+<td>platform.file_objects.status</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>JPEG/PNG/PDF, proposed 10 MiB ceiling. File owner is current customer; access private and public_url null. Issue one scoped PUT capability with content type/length/expiry; upload bytes go to object storage, not this JSON API.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-022 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Never mint a public Rx URL. A failed signing call leaves a pending session that can be safely replayed or expired.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-022-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for create a private prescription file upload capability.</td>
+<td>HTTP 201; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-022-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-022-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-022-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove prescription-upload.manage.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-022-RULE</code></td>
+<td>JPEG/PNG/PDF, proposed 10 MiB ceiling. File owner is current customer; access private and public_url null. Issue one scoped PUT capability with content type/length/expiry; upload bytes go to object storage, not this JSON API.</td>
+<td>Never mint a public Rx URL. A failed signing call leaves a pending session that can be safely replayed or expired.</td>
+</tr>
+<tr>
+<td><code>CT-API-022-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-022-CONCURRENCY</code></td>
+<td>Race two create a private prescription file upload capability. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-022-STATE</code></td>
+<td>Apply command after Never mint a public Rx URL. A failed signing call leaves a pending session that can be safely replayed or expired.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-022-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Never mint a public Rx URL. A failed signing call leaves a pending session that can be safely replayed or expired.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-RX-01-OK</code>, <code>TC-RX-01-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-023 — POST <code>/v1/prescriptions/documents/confirm</code></h2>
+<p><strong>Confirm uploaded prescription bytes and schedule malware scanning.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Confirm uploaded prescription bytes and schedule malware scanning</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Prescription_Upload</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>RX-01</code>; <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/prescriptions/documents/confirm</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>prescription-upload.manage.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Server verifies object key/version, declared bytes, sniffed MIME and digest outside DB locks, then checks current owned session before recording uploaded/scanning. available requires a clean scan and final size/hash.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-023_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>PrescriptionUploadConfirmRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uploadSessionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public upload session UUID owned by the authenticated customer.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;uploadSessionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;
+}
+</code></pre>
+<p>File upload: Not Applicable to this JSON operation. Referenced file UUIDs must resolve to owned/authorized private objects; validate size/type, complete storage metadata and clean scan before use. Never accept a caller-controlled storage path/public URL.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>202</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>PrescriptionUploadConfirmData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fileId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from platform.file_objects.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;uploaded&quot;, &quot;scanning&quot;, &quot;available&quot;, &quot;quarantined&quot;, &quot;rejected&quot;]</td>
+<td>Current platform.file_objects.status; no clean scan is implied by HTTP acceptance.</td>
+</tr>
+<tr>
+<td><code>malwareScanStatus</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;pending&quot;, &quot;scanning&quot;, &quot;clean&quot;, &quot;infected&quot;, &quot;failed&quot;]</td>
+<td>Current platform.file_objects.malware_scan_status.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;fileId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;status&quot;: &quot;uploaded&quot;,
+    &quot;malwareScanStatus&quot;: &quot;pending&quot;
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-023.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks prescription-upload.manage.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for confirm uploaded prescription bytes and schedule malware scanning. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Server verifies object key/version, declared bytes, sniffed MIME and digest outside DB locks, then checks current owned session before recording uploaded/scanning. available requires a clean scan and final size/hash.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Incomplete object remains unavailable; infected/quarantined file cannot be attached. Retry confirmation for the same upload session.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Incomplete object remains unavailable; infected/quarantined file cannot be attached. Retry confirmation for the same upload session.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-023 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared body/path/query field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>Read</td>
+<td><code>access_type</code>, <code>classification</code>, <code>id</code>, <code>is_deleted</code>, <code>malware_scan_status</code>, <code>owner_id</code>, <code>owner_type</code>, <code>row_version</code>, <code>sha256</code>, <code>size_bytes</code>, <code>status</code></td>
+<td>Platform file service projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td>Read</td>
+<td><code>expires_at</code>, <code>file_object_id</code>, <code>id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Platform file service projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>Create/update evidence</td>
+<td><code>size_bytes</code>, <code>sha256</code>, <code>etag</code>, <code>storage_version_id</code>, <code>status</code>, <code>malware_scan_status</code></td>
+<td>Platform file service owns these writes; Prescription_Upload must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_upload_sessions.html"><code>platform.file_upload_sessions</code></a></td>
+<td>Create/update evidence</td>
+<td><code>status</code>, <code>completed_at</code></td>
+<td>Platform file service owns these writes; Prescription_Upload must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.uploadSessionId</td>
+<td>platform.file_upload_sessions.id</td>
+</tr>
+<tr>
+<td>data.fileId</td>
+<td>platform.file_objects.id</td>
+</tr>
+<tr>
+<td>data.status</td>
+<td>platform.file_objects.status</td>
+</tr>
+<tr>
+<td>data.malwareScanStatus</td>
+<td>platform.file_objects.malware_scan_status</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Server verifies object key/version, declared bytes, sniffed MIME and digest outside DB locks, then checks current owned session before recording uploaded/scanning. available requires a clean scan and final size/hash.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-023 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Incomplete object remains unavailable; infected/quarantined file cannot be attached. Retry confirmation for the same upload session.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-023-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for confirm uploaded prescription bytes and schedule malware scanning.</td>
+<td>HTTP 202; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-023-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-023-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-023-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove prescription-upload.manage.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-023-RULE</code></td>
+<td>Server verifies object key/version, declared bytes, sniffed MIME and digest outside DB locks, then checks current owned session before recording uploaded/scanning. available requires a clean scan and final size/hash.</td>
+<td>Incomplete object remains unavailable; infected/quarantined file cannot be attached. Retry confirmation for the same upload session.</td>
+</tr>
+<tr>
+<td><code>CT-API-023-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-023-CONCURRENCY</code></td>
+<td>Race two confirm uploaded prescription bytes and schedule malware scanning. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-023-STATE</code></td>
+<td>Apply command after Incomplete object remains unavailable; infected/quarantined file cannot be attached. Retry confirmation for the same upload session.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-023-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Incomplete object remains unavailable; infected/quarantined file cannot be attached. Retry confirmation for the same upload session.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-RX-01-OK</code>, <code>TC-RX-01-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-024 — POST <code>/v1/orders/{order_id}/prescriptions</code></h2>
+<p><strong>Attach safe private prescription documents to exact owned P order lines.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Attach safe private prescription documents to exact owned P order lines</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Prescription_Upload</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>RX-04</code>; <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/orders/{order_id}/prescriptions</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>prescription-upload.manage.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Patient must match order and owned association; every selected item belongs to order and is P. Every file available/clean/private with valid access. Retain document version; supersede stale review evidence, never approve automatically.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-024_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>PrescriptionAttachRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>patientId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public clinical.patient_profiles.id; ownership and dependent link are checked server-side.</td>
+</tr>
+<tr>
+<td><code>fileIds</code></td>
+<td>array&lt;string (uuid)&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=1</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>orderItemIds</code></td>
+<td>array&lt;string (uuid)&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=1</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>expectedOrderVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Expected commerce.orders.row_version.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;patientId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+  &quot;fileIds&quot;: [
+    &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;
+  ],
+  &quot;orderItemIds&quot;: [
+    &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;
+  ],
+  &quot;expectedOrderVersion&quot;: 1
+}
+</code></pre>
+<p>File upload: Not Applicable to this JSON operation. Referenced file UUIDs must resolve to owned/authorized private objects; validate size/type, complete storage metadata and clean scan before use. Never accept a caller-controlled storage path/public URL.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>201</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>PrescriptionAttachData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from commerce.orders.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>prescriptionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public clinical.prescriptions.id.</td>
+</tr>
+<tr>
+<td><code>patientId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from clinical.patient_profiles.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>linkedOrderItemIds</code></td>
+<td>array&lt;string (uuid)&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>prescriptionStatus</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;uploaded&quot;]</td>
+<td>clinical.prescriptions.status; upload does not imply pharmacist approval.</td>
+</tr>
+<tr>
+<td><code>orderVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Public DTO value from commerce.orders.row_version. Ownership and current-state checks apply before use.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;prescriptionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;patientId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;linkedOrderItemIds&quot;: [
+      &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;
+    ],
+    &quot;prescriptionStatus&quot;: &quot;uploaded&quot;,
+    &quot;orderVersion&quot;: 1
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-024.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks prescription-upload.manage.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for attach safe private prescription documents to exact owned p order lines. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Patient must match order and owned association; every selected item belongs to order and is P. Every file available/clean/private with valid access. Retain document version; supersede stale review evidence, never approve automatically.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Wrong patient or dirty file leaves no attachment/review. Changed accepted revision invalidates prior line decisions.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>STALE_VERSION</code></td>
+<td>An expected aggregate/row version no longer matches current committed state.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the current attach safe private prescription documents to exact owned p order lines. context and re-evaluate; no partial mutation.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Wrong patient or dirty file leaves no attachment/review. Changed accepted revision invalidates prior line decisions.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-024 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;STALE_VERSION&quot;,
+    &quot;message&quot;: &quot;An expected aggregate/row version no longer matches current committed state.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>prescription_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td>Read</td>
+<td><code>family_member_id</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>user_id</code></td>
+<td>Prescription_Upload / Intake projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>Read</td>
+<td><code>customer_user_id</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>Customer_Accounts projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>Read</td>
+<td><code>access_type</code>, <code>classification</code>, <code>id</code>, <code>is_deleted</code>, <code>malware_scan_status</code>, <code>owner_id</code>, <code>owner_type</code>, <code>row_version</code>, <code>sha256</code>, <code>size_bytes</code>, <code>status</code></td>
+<td>Platform file service projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>Create/update evidence</td>
+<td><code>patient_profile_id</code>, <code>uploaded_by_user_id</code>, <code>source</code>, <code>status</code></td>
+<td>Prescription_Upload / Intake owns these writes; Prescription_Upload must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td>Create/update evidence</td>
+<td><code>prescription_id</code>, <code>file_object_id</code>, <code>version_number</code>, <code>redaction_status</code></td>
+<td>Prescription_Upload / Intake owns these writes; Prescription_Upload must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>Create/update evidence</td>
+<td><code>prescription_id</code></td>
+<td>Order_Operations owns these writes; Prescription_Upload must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>Create/update evidence</td>
+<td><code>order_id</code>, <code>patient_profile_id</code>, <code>prescription_id</code>, <code>prescription_document_id</code>, <code>requested_at</code>, <code>status</code>, <code>review_version</code></td>
+<td>Pharmacist_Review owns these writes; Prescription_Upload must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>Create/update evidence</td>
+<td><code>review_id</code>, <code>order_id</code>, <code>order_item_id</code>, <code>prescription_id</code>, <code>decision</code></td>
+<td>Pharmacist_Review owns these writes; Prescription_Upload must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.patientId</td>
+<td>clinical.patient_profiles.id</td>
+</tr>
+<tr>
+<td>request.fileIds[]</td>
+<td>platform.file_objects.id</td>
+</tr>
+<tr>
+<td>request.orderItemIds[]</td>
+<td>commerce.order_items.id</td>
+</tr>
+<tr>
+<td>request.expectedOrderVersion</td>
+<td>commerce.orders.row_version</td>
+</tr>
+<tr>
+<td>data.orderId</td>
+<td>commerce.orders.id</td>
+</tr>
+<tr>
+<td>data.prescriptionId</td>
+<td>clinical.prescriptions.id</td>
+</tr>
+<tr>
+<td>data.patientId</td>
+<td>clinical.patient_profiles.id</td>
+</tr>
+<tr>
+<td>data.linkedOrderItemIds[]</td>
+<td>commerce.order_items.id</td>
+</tr>
+<tr>
+<td>data.prescriptionStatus</td>
+<td>clinical.prescriptions.status</td>
+</tr>
+<tr>
+<td>data.orderVersion</td>
+<td>commerce.orders.row_version</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Intake owns prescription/documents; Order Operations and Pharmacy expose narrow linking/review-creation commands on one proposed local transaction. Only Order Operations increments order version; otherwise return unchanged orderVersion. Re-upload supersedes review via Pharmacy, retaining history. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Patient must match order and owned association; every selected item belongs to order and is P. Every file available/clean/private with valid access. Retain document version; supersede stale review evidence, never approve automatically.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-024 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Wrong patient or dirty file leaves no attachment/review. Changed accepted revision invalidates prior line decisions.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-024-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for attach safe private prescription documents to exact owned p order lines.</td>
+<td>HTTP 201; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-024-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-024-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-024-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove prescription-upload.manage.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-024-RULE</code></td>
+<td>Patient must match order and owned association; every selected item belongs to order and is P. Every file available/clean/private with valid access. Retain document version; supersede stale review evidence, never approve automatically.</td>
+<td>Wrong patient or dirty file leaves no attachment/review. Changed accepted revision invalidates prior line decisions.</td>
+</tr>
+<tr>
+<td><code>CT-API-024-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-024-CONCURRENCY</code></td>
+<td>Race two attach safe private prescription documents to exact owned p order lines. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-024-STATE</code></td>
+<td>Apply command after Wrong patient or dirty file leaves no attachment/review. Changed accepted revision invalidates prior line decisions.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-024-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Wrong patient or dirty file leaves no attachment/review. Changed accepted revision invalidates prior line decisions.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-RX-04-OK</code>, <code>TC-RX-04-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+</main></body></html>

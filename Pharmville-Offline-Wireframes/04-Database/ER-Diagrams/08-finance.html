@@ -1,0 +1,351 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>08 finance · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Finance ER diagrams</h1>
+<h2>What this part of the database stores</h2>
+<p>The <code>finance</code> schema stores invoices, ledgers, and settlements. The names and structural relationships below come from the checked-out database catalog snapshot; business-purpose summaries marked inferred are not product-owner approval.</p>
+<h2>Main tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Recorded purpose</th>
+<th>Table definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../Tables/finance/accounts.html"><code>accounts</code></a></td>
+<td>Holds accounts records within the finance domain (invoicing, ledgers and settlement). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/finance/accounts.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/finance/credit_notes.html"><code>credit_notes</code></a></td>
+<td>Holds credit notes records within the finance domain (invoicing, ledgers and settlement). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/finance/credit_notes.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/finance/invoice_items.html"><code>invoice_items</code></a></td>
+<td>Holds invoice items records within the finance domain (invoicing, ledgers and settlement). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/finance/invoice_items.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/finance/invoices.html"><code>invoices</code></a></td>
+<td>Holds invoices records within the finance domain (invoicing, ledgers and settlement). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/finance/invoices.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/finance/journal_entries.html"><code>journal_entries</code></a></td>
+<td>Holds journal entries records within the finance domain (invoicing, ledgers and settlement). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/finance/journal_entries.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/finance/journal_lines.html"><code>journal_lines</code></a></td>
+<td>Holds journal lines records within the finance domain (invoicing, ledgers and settlement). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/finance/journal_lines.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/finance/settlement_items.html"><code>settlement_items</code></a></td>
+<td>Holds settlement items records within the finance domain (invoicing, ledgers and settlement). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/finance/settlement_items.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/finance/settlement_runs.html"><code>settlement_runs</code></a></td>
+<td>Holds settlement runs records within the finance domain (invoicing, ledgers and settlement). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/finance/settlement_runs.html">Table contract</a></td>
+</tr>
+</tbody>
+</table>
+<h2>ER diagrams</h2>
+<p>These diagrams show declared PostgreSQL foreign keys from focused source tables. Entity fields include primary keys, unique keys, and FK columns; exact data types remain in the linked table contracts. <code>PK</code>, <code>FK</code>, and <code>UK</code> mark key roles. Relationship cardinality comes from FK nullability and unique constraints/indexes in the recorded catalog.</p>
+<p>&lt;a id=&quot;diagram-01&quot;&gt;&lt;/a&gt;</p>
+<h3>Diagram 01 — credit_notes, invoices, settlement_runs, invoice_items, settlement_items, accounts, journal_entries, journal_lines</h3>
+<p>This focused view contains every declared FK owned by the listed focus tables. Referenced tables outside that set appear as context. Parallel FK constraints are distinguished by their stable IDs; search those IDs in the <a href="Relationship-Catalog/finance.html">relationship catalog</a> for exact columns and actions.</p>
+<pre><code class="language-mermaid">erDiagram
+    commerce__order_groups {
+        uuid created_by FK
+        integer group_number UK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid order_id FK, UK
+        bigint order_id_internal_id FK, UK
+        uuid seller_id FK
+        bigint seller_id_internal_id FK
+        uuid updated_by FK
+        uuid warehouse_id FK
+        bigint warehouse_id_internal_id FK
+    }
+    commerce__order_items {
+        varchar commerce_class_snapshot FK
+        uuid created_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid order_group_id FK
+        bigint order_group_id_internal_id FK
+        uuid order_id FK, UK
+        bigint order_id_internal_id FK, UK
+        uuid prescription_id FK
+        bigint prescription_id_internal_id FK
+        uuid product_id FK
+        bigint product_id_internal_id FK
+        uuid seller_id FK
+        bigint seller_id_internal_id FK
+        uuid updated_by FK
+        uuid variant_id FK
+        bigint variant_id_internal_id FK
+    }
+    commerce__orders {
+        uuid checkout_id FK
+        bigint checkout_id_internal_id FK
+        uuid created_by FK
+        uuid current_revision_id FK
+        bigint current_revision_id_internal_id FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        varchar order_number UK
+        uuid patient_profile_id FK, UK
+        bigint patient_profile_id_internal_id FK, UK
+        uuid updated_by FK
+        uuid user_id FK, UK
+    }
+    finance__accounts {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid parent_account_id FK
+        bigint parent_account_id_internal_id FK
+        uuid updated_by FK
+    }
+    finance__credit_notes {
+        uuid created_by FK
+        varchar credit_note_number UK
+        uuid document_file_id FK
+        bigint document_file_id_internal_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid invoice_id FK
+        bigint invoice_id_internal_id FK
+        uuid refund_id FK
+        bigint refund_id_internal_id FK
+        uuid updated_by FK
+    }
+    finance__invoice_items {
+        uuid created_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid invoice_id FK
+        bigint invoice_id_internal_id FK
+        uuid order_item_id FK
+        bigint order_item_id_internal_id FK
+        uuid updated_by FK
+    }
+    finance__invoices {
+        uuid created_by FK
+        uuid document_file_id FK
+        bigint document_file_id_internal_id FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        varchar invoice_number UK
+        uuid order_id FK
+        bigint order_id_internal_id FK
+        uuid seller_id FK
+        bigint seller_id_internal_id FK
+        uuid updated_by FK
+    }
+    finance__journal_entries {
+        uuid created_by FK
+        varchar entry_number UK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid reversed_entry_id FK
+        bigint reversed_entry_id_internal_id FK
+        uuid updated_by FK
+    }
+    finance__journal_lines {
+        uuid account_id FK
+        bigint account_id_internal_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid journal_entry_id FK
+        bigint journal_entry_id_internal_id FK
+    }
+    finance__settlement_items {
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid order_group_id FK
+        bigint order_group_id_internal_id FK
+        uuid order_id FK
+        bigint order_id_internal_id FK
+        uuid settlement_run_id FK
+        bigint settlement_run_id_internal_id FK
+    }
+    finance__settlement_runs {
+        uuid created_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        varchar run_number UK
+        uuid seller_id FK
+        bigint seller_id_internal_id FK
+        uuid updated_by FK
+    }
+    identity__users {
+        uuid created_by FK
+        varchar email_normalized UK
+        uuid id PK, FK, UK
+        uuid updated_by FK
+    }
+    marketplace__sellers {
+        uuid commission_plan_id FK
+        bigint commission_plan_id_internal_id FK
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid organization_id FK
+        bigint organization_id_internal_id FK
+        uuid updated_by FK
+    }
+    payment__refunds {
+        uuid created_by FK
+        uuid id FK, UK
+        varchar idempotency_key UK
+        bigint internal_id PK, FK, UK
+        uuid order_id FK
+        bigint order_id_internal_id FK
+        uuid order_revision_id FK, UK
+        bigint order_revision_id_internal_id FK, UK
+        uuid payment_transaction_id FK
+        bigint payment_transaction_id_internal_id FK
+        varchar reason_code FK
+        bigint reason_code_id FK
+        varchar refund_number UK
+        uuid return_id FK
+        bigint return_id_internal_id FK
+        uuid updated_by FK
+    }
+    platform__file_objects {
+        varchar bucket UK
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        varchar object_key UK
+        uuid updated_by FK
+        uuid uploaded_by_user_id FK
+    }
+    identity__users o|--o{ finance__credit_notes : &quot;FK-0548 FK-0555&quot;
+    platform__file_objects o|--o{ finance__credit_notes : &quot;FK-0549 FK-0550&quot;
+    finance__invoices ||--o{ finance__credit_notes : &quot;FK-0551 FK-0552&quot;
+    payment__refunds o|--o{ finance__credit_notes : &quot;FK-0553 FK-0554&quot;
+    identity__users o|--o{ finance__invoices : &quot;FK-0562 FK-0569&quot;
+    platform__file_objects o|--o{ finance__invoices : &quot;FK-0563 FK-0564&quot;
+    commerce__orders ||--o{ finance__invoices : &quot;FK-0565 FK-0566&quot;
+    marketplace__sellers o|--o{ finance__invoices : &quot;FK-0567 FK-0568&quot;
+    identity__users o|--o{ finance__settlement_runs : &quot;FK-0584 FK-0587&quot;
+    marketplace__sellers ||--o{ finance__settlement_runs : &quot;FK-0585 FK-0586&quot;
+    identity__users o|--o{ finance__invoice_items : &quot;FK-0556 FK-0561&quot;
+    finance__invoices ||--o{ finance__invoice_items : &quot;FK-0557 FK-0558&quot;
+    commerce__order_items o|--o{ finance__invoice_items : &quot;FK-0559 FK-0560&quot;
+    commerce__order_groups o|--o{ finance__settlement_items : &quot;FK-0578 FK-0579&quot;
+    commerce__orders ||--o{ finance__settlement_items : &quot;FK-0580 FK-0581&quot;
+    finance__settlement_runs ||--o{ finance__settlement_items : &quot;FK-0582 FK-0583&quot;
+    identity__users o|--o{ finance__accounts : &quot;FK-0543 FK-0544 FK-0547&quot;
+    finance__accounts o|--o{ finance__accounts : &quot;FK-0545 FK-0546&quot;
+    identity__users o|--o{ finance__journal_entries : &quot;FK-0570 FK-0573&quot;
+    finance__journal_entries o|--o{ finance__journal_entries : &quot;FK-0571 FK-0572&quot;
+    finance__accounts ||--o{ finance__journal_lines : &quot;FK-0574 FK-0575&quot;
+    finance__journal_entries ||--o{ finance__journal_lines : &quot;FK-0576 FK-0577&quot;
+</code></pre>
+<p><strong>Entity name mapping</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mermaid name</th>
+<th>PostgreSQL table</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>commerce__order_groups</code></td>
+<td><a href="../Tables/commerce/order_groups.html"><code>commerce.order_groups</code></a></td>
+</tr>
+<tr>
+<td><code>commerce__order_items</code></td>
+<td><a href="../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+</tr>
+<tr>
+<td><code>commerce__orders</code></td>
+<td><a href="../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+</tr>
+<tr>
+<td><code>finance__accounts</code></td>
+<td><a href="../Tables/finance/accounts.html"><code>finance.accounts</code></a></td>
+</tr>
+<tr>
+<td><code>finance__credit_notes</code></td>
+<td><a href="../Tables/finance/credit_notes.html"><code>finance.credit_notes</code></a></td>
+</tr>
+<tr>
+<td><code>finance__invoice_items</code></td>
+<td><a href="../Tables/finance/invoice_items.html"><code>finance.invoice_items</code></a></td>
+</tr>
+<tr>
+<td><code>finance__invoices</code></td>
+<td><a href="../Tables/finance/invoices.html"><code>finance.invoices</code></a></td>
+</tr>
+<tr>
+<td><code>finance__journal_entries</code></td>
+<td><a href="../Tables/finance/journal_entries.html"><code>finance.journal_entries</code></a></td>
+</tr>
+<tr>
+<td><code>finance__journal_lines</code></td>
+<td><a href="../Tables/finance/journal_lines.html"><code>finance.journal_lines</code></a></td>
+</tr>
+<tr>
+<td><code>finance__settlement_items</code></td>
+<td><a href="../Tables/finance/settlement_items.html"><code>finance.settlement_items</code></a></td>
+</tr>
+<tr>
+<td><code>finance__settlement_runs</code></td>
+<td><a href="../Tables/finance/settlement_runs.html"><code>finance.settlement_runs</code></a></td>
+</tr>
+<tr>
+<td><code>identity__users</code></td>
+<td><a href="../Tables/identity/users.html"><code>identity.users</code></a></td>
+</tr>
+<tr>
+<td><code>marketplace__sellers</code></td>
+<td><a href="../Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a></td>
+</tr>
+<tr>
+<td><code>payment__refunds</code></td>
+<td><a href="../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+</tr>
+<tr>
+<td><code>platform__file_objects</code></td>
+<td><a href="../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Coverage: 8 focus tables, 15 entities, 45 FK constraints (45 unique IDs).</p>
+<h2>How the tables connect</h2>
+<ul>
+<li><strong>finance.accounts → identity.users:</strong> <code>created_by</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>finance.accounts → identity.users:</strong> <code>deleted_by</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>finance.accounts → finance.accounts:</strong> <code>parent_account_id</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE SET NULL</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>finance.accounts → finance.accounts:</strong> <code>parent_account_id_internal_id</code> references <code>internal_id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE SET NULL</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>finance.accounts → identity.users:</strong> <code>updated_by</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>finance.credit_notes → identity.users:</strong> <code>created_by</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+</ul>
+<p>Paired public UUID and internal BIGINT foreign keys are real separate constraints. Diagrams use relationship IDs to keep those links readable; each underlying constraint is listed separately in the catalog. The application must keep paired identifiers consistent under the database's numeric-key guards. A relationship does not itself grant read or write permission.</p>
+<h2>Important database rules</h2>
+<ul>
+<li>The database primary key strategy uses an internal numeric key for most domain rows while retaining public UUID aliases; <code>identity.users</code> retains a UUID primary key. The table diagram labels expose the exact keys for each entity.</li>
+<li>A nullable FK permits a child row without that association; it does not make the referenced parent optional when a value is present.</li>
+<li>Composite FKs remain composite in the relationship catalog. Their scope columns must not be dropped when reading the diagram.</li>
+<li>A many-to-many association uses its actual junction table where one exists; no direct association is inferred.</li>
+<li>Authorization, tenant/site scoping, and service write ownership are separate contracts. See the linked database rules and module designs.</li>
+</ul>
+<h2>What happens during normal operations</h2>
+<p>See <a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a> for the reviewed workflows that touch this schema. The workflows describe business sequencing; these ERDs describe enforced database references.</p>
+<h2>Related documents</h2>
+<p><a href="../Schema-Overview.html">Schema overview</a> · <a href="../Database-Rules.html">Database rules</a> · <a href="../Models-and-Parity.html">Model and parity notes</a> · <a href="../Migrations.html">Migration evidence</a> · <a href="Relationship-Catalog.html">Full relationship catalog</a> · <a href="Logical-References.html">Non-FK reference review</a> · <a href="../Tables/finance/README.html">Table index</a> · <a href="../../03-Modules/Finance_Payments/HLD.html">Finance_Payments HLD</a> · <a href="../../03-Modules/Finance_Payments/LLD.html">Finance_Payments LLD</a> · <a href="../../03-Modules/Reporting/HLD.html">Reporting HLD</a> · <a href="../../03-Modules/Reporting/LLD.html">Reporting LLD</a> · <a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a> · <a href="../../06-Workflows/WF-009-COD-Collection.html">WF-009</a> · <a href="../../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a> · <a href="../../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a></p>
+</main></body></html>

@@ -1,0 +1,1061 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Journey API Gaps · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Journey-to-API gaps and candidate commands</h1>
+<p><strong>Discovery backlog, not added operations.</strong> The 107 inherited operations remain. Unified Identity adds 15 explicit proposals to the current 122-operation inventory. Of the 16 historical candidates below, JAPI-11 is promoted as proposed API-108 (with API-111 read support); 15 remain outside the operation inventory. These candidates are traceable route sketches requiring owner review; unpromoted candidates are not complete OpenAPI contracts and do not enter the numerator/denominator; none is approved or implemented. Where the modular monolith can use an internal owner command, a new HTTP route may be unnecessary. This avoids inventing CRUD or promoting future schemas into launch scope. <a href="../01-Project/Features-and-Modules.html">Feature inventory</a> · <a href="../06-Workflows/README.html">workflow index</a> · <a href="API-Contract-Coverage.html">coverage</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Existing feature</th>
+<th>Candidate transport</th>
+<th>Proposed owner</th>
+<th>Journey/source</th>
+<th>Required behavior / draft DTO</th>
+<th>Why not yet promoted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JAPI-01</td>
+<td>CHK-04</td>
+<td>POST /v1/checkouts/{checkout_id}/cod-authorization</td>
+<td>Finance_Payments with Checkout</td>
+<td>S13/S16; WF-009</td>
+<td>Select eligible COD under approved cap/refusal policy; request checkout/version, response approved/pending/rejected authorization reference and derived amount.</td>
+<td>payment.cod_collections requires shipment_id; no order-stage COD authorization persistence is documented. D-007 must choose compatible staging or separately proposed schema; API-080 reconciliation is not authorization.</td>
+</tr>
+<tr>
+<td>JAPI-02</td>
+<td>CHK-03, FIN-01</td>
+<td>GET /v1/me/payments/intents/{payment_intent_id}</td>
+<td>Finance_Payments</td>
+<td>S15; WF-005</td>
+<td>Customer polls an owned payment intent/attempt outcome after uncertain initiation; PaymentData and nextAction, no provider secrets.</td>
+<td>Document authoritative reconciliation/continuation ownership with D-016; API-077 is staff-only and cannot serve customer polling.</td>
+</tr>
+<tr>
+<td>JAPI-03</td>
+<td>RX-01, PHM-02</td>
+<td>GET /v1/prescriptions/files/{file_id}/access</td>
+<td>Prescription_Upload / platform file owner</td>
+<td>S07/S09; WF-004</td>
+<td>Request a purpose-bound short-lived private document read grant; validate patient/order/reviewer and clean scan, append file/prescription access evidence.</td>
+<td>Raw Rx content is absent from JSON read DTOs intentionally; grant TTL/clinical purpose/privacy D-006/D-013. No public URL.</td>
+</tr>
+<tr>
+<td>JAPI-04</td>
+<td>RID-04</td>
+<td>POST /v1/staff/delivery/shipments/{shipment_id}/recipient-challenges</td>
+<td>Delivery_Operations</td>
+<td>S25; WF-008</td>
+<td>Create/resend server-side delivery OTP bound to current assignment/shipment/customer; return opaque challenge ID/expiry without secret.</td>
+<td>Who triggers recipient challenge, abuse/retry and delivery channel D-003/D-011; delivery_otp_challenges exists but API-073 only consumes it.</td>
+</tr>
+<tr>
+<td>JAPI-05</td>
+<td>DLV-02</td>
+<td>POST /v1/staff/delivery/shipments/{shipment_id}/assignments</td>
+<td>Delivery_Operations</td>
+<td>S23; WF-008</td>
+<td>Create first current assignment for a ready shipment, body riderId + shipmentVersion, AssignmentData response.</td>
+<td>Existing task-based API-065 can reassign a task but cannot identify an unassigned shipment. Validate dispatch-ready gates and current-assignment uniqueness; D-024.</td>
+</tr>
+<tr>
+<td>JAPI-06</td>
+<td>ORD-05, STO-04</td>
+<td>POST /v1/staff/returns/{return_id}/inspections</td>
+<td>Order_Operations / Warehouse / Inventory</td>
+<td>S30; WF-010</td>
+<td>Record received/inspected return items and disposition evidence; body item IDs, quantities, condition and accepted version; return inspection/pending disposition.</td>
+<td>Actual return receipt/disposition policy D-006/D-010 and compatible audit/evidence placement; never auto-restock unsafe medicine or auto-refund.</td>
+</tr>
+<tr>
+<td>JAPI-07</td>
+<td>FIN-04</td>
+<td>POST /v1/me/refund-destinations/verification-intents</td>
+<td>Finance_Payments / Identity</td>
+<td>S31; WF-010</td>
+<td>Begin approved proof of a COD refund destination and expose a masked verification reference only.</td>
+<td>No verified destination record/proof model is documented; provider/security/Finance approval D-004/D-007/D-016. No bank schema or proof invented.</td>
+</tr>
+<tr>
+<td>JAPI-08</td>
+<td>INV-03, STO-02</td>
+<td>POST /v1/internal/inventory/reservations/{reservation_id}/commit</td>
+<td>Inventory</td>
+<td>S20–S23; WF-007</td>
+<td>Convert exact active held quantities into committed fulfillment stock using order/revision/package evidence and versions.</td>
+<td>The database supports committed state but API-052/053 only reserve/release. Need exact balance/ledger/package commit contract and expiry race D-009/D-024; narrow internal module command may satisfy this without an HTTP route.</td>
+</tr>
+<tr>
+<td>JAPI-09</td>
+<td>REP-07, AUD-02</td>
+<td>GET /v1/admin/reports/runs/{run_id}</td>
+<td>Reporting / Audit</td>
+<td>WF-012</td>
+<td>Poll authorized export run and obtain separately reauthorized private download grant when succeeded.</td>
+<td>API-086/088 returns a queued run; status/download transport is absent. report_runs/file_access_grants exist; D-013 retention/TTL and permissions.</td>
+</tr>
+<tr>
+<td>JAPI-10</td>
+<td>ADM-06</td>
+<td>PATCH /v1/admin/catalog/categories/{category_id}</td>
+<td>Product_Catalog</td>
+<td>WF-002; catalog admin LLD</td>
+<td>Manage an approved versioned category through Catalog owner; references Master-Data-Inventory taxonomy records.</td>
+<td>ADM-06 also needs brands/salts/prices master workflows; choose reviewed task endpoints or restricted back-office process, no arbitrary master-table CRUD. Medicine/tax sources D-006/D-012/D-019.</td>
+</tr>
+<tr>
+<td>JAPI-11</td>
+<td>ADM-03</td>
+<td>PUT /v1/admin/roles/{role_id}/permissions</td>
+<td>Authentication_Access</td>
+<td>WF-001; staff-admin LLD</td>
+<td>Propose an auditable reviewed role-permission mapping; no self escalation; use expected roleVersion and allowed permission UUIDs.</td>
+<td>Promoted as complete-proposed API-108 plus read API-111 under D-028, with no self-edit/delegation escalation, If-Match and idempotency. D-003/D-024/D-028 approval and initial grant matrix remain open.</td>
+</tr>
+<tr>
+<td>JAPI-12</td>
+<td>ADM-08</td>
+<td>PATCH /v1/admin/locations/{location_id}/operating-configuration</td>
+<td>Admin_CMS via Organization owner</td>
+<td>S17; WF-006</td>
+<td>Manage approved hours/service areas/activation with expected version; show eligibility separately from is_active.</td>
+<td>Hours/service-area structures and location-specific license management interface require D-006/D-009/D-024. organization.locations has no dedicated operating-hours column; warehouse operating_hours/geo_metadata scope must be agreed.</td>
+</tr>
+<tr>
+<td>JAPI-13</td>
+<td>NOT-04</td>
+<td>POST /v1/admin/notifications/messages/{message_id}/retry</td>
+<td>Notifications</td>
+<td>WF-012; notification edge cases</td>
+<td>Retry an eligible failed notification through the message owner using version and reason; source order/money action must never repeat.</td>
+<td>Retry authorization and provider deduplication D-014/D-016; API-097 lists alerts only. May be an internal worker command rather than a public endpoint.</td>
+</tr>
+<tr>
+<td>JAPI-14</td>
+<td>STO-04, WH-02</td>
+<td>POST /v1/staff/warehouse/transfers</td>
+<td>Warehouse</td>
+<td>WF-014</td>
+<td>Create approved source/destination transfer request and line quantities before API-058 dispatch/API-049 receipt.</td>
+<td>Existing routes have no creation command. D-002 transfer/replenishment source selection and approvals; requisition API-048 alone does not create stock_transfers.</td>
+</tr>
+<tr>
+<td>JAPI-15</td>
+<td>ACC-02</td>
+<td>PATCH /v1/me/profile-completion</td>
+<td>Customer_Accounts</td>
+<td>S05; WF-001</td>
+<td>Create first demographic profile from a real required firstName after verified OTP identity.</td>
+<td>Could be an explicitly defined create-if-missing branch of API-004 rather than a new route; do not insert a fabricated first_name. Profile completion/version convention D-003/D-024; contact proof remains D-023.</td>
+</tr>
+<tr>
+<td>JAPI-16</td>
+<td>RID-04</td>
+<td>POST /v1/rider/tasks/{task_id}/proof-upload-intents</td>
+<td>Delivery_Operations / platform file service</td>
+<td>S25; WF-008</td>
+<td>Create one task-bound private JPEG/PNG photo upload capability, body assignmentVersion/fileName/contentType/expectedSizeBytes; response uploadSessionId/fileId/uploadUrl/expiresAt.</td>
+<td>RID-04 requires photo proof, but API-022 is prescription-specific and must not be reused with the wrong file classification. Choose a narrow task upload or approved shared file API; D-011 size/privacy/retention. API-073 consumption remains fully specified.</td>
+</tr>
+</tbody>
+</table>
+<h2>Feature coverage check across all 110 IDs</h2>
+<p>A feature can be supported by another module or worker/policy without needing its own HTTP endpoint. A route mention is not complete user-journey coverage. The following register distinguishes actual operation links from those remaining workflow/policy gaps.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Owner module</th>
+<th>Requirement</th>
+<th>Related operations across modules</th>
+<th>Candidate/remaining scope</th>
+<th>Planning interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACC-01</code></td>
+<td>Customer_Accounts</td>
+<td>Sign up and log in with mobile OTP (WhatsApp first, SMS fallback)</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-001</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-002</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ACC-02</code></td>
+<td>Customer_Accounts</td>
+<td>Profile: name, email, phone</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-003</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-004</a></td>
+<td>JAPI-15</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>ACC-03</code></td>
+<td>Customer_Accounts</td>
+<td>Saved addresses with map pin; serviceability checked when the address is entered</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-005</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-006</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-001</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-002</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ACC-04</code></td>
+<td>Customer_Accounts</td>
+<td>Family profiles for dependents (name, age, relation)</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-007</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-008</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-003</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-004</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ACC-05</code></td>
+<td>Customer_Accounts</td>
+<td>Privacy notice and consent at signup</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-009</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-005</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ACC-06</code></td>
+<td>Customer_Accounts</td>
+<td>Account deletion request</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-007</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-006</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ACC-07</code></td>
+<td>Customer_Accounts</td>
+<td>Wishlist</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-008</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-009</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-010</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CAT-01</code></td>
+<td>Product_Catalog</td>
+<td>Browse by category and sub-category</td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-010</a>, <a href="../03-Modules/Product_Catalog/APIs.html">API-011</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CAT-02</code></td>
+<td>Product_Catalog</td>
+<td>Product page: brand, manufacturer, composition, pack size, MRP, price, images, &quot;Prescription required&quot; label</td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-012</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CAT-03</code></td>
+<td>Product_Catalog</td>
+<td>Search by name, brand and composition, with typo tolerance and autosuggest</td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-013</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CAT-04</code></td>
+<td>Product_Catalog</td>
+<td>Availability for the customer's pin code (in stock / out of stock)</td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-014</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CAT-05</code></td>
+<td>Product_Catalog</td>
+<td>Alternative medicines: same composition, strength and dosage form, ranked by a configurable rule</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>CAT-06</code></td>
+<td>Product_Catalog</td>
+<td>Placeholder image when a product has none</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>CHK-01</code></td>
+<td>Cart_Checkout</td>
+<td>Cart saved across devices for logged-in customers</td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-018</a>, <a href="../03-Modules/Cart_Checkout/APIs.html">API-019</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CHK-02</code></td>
+<td>Cart_Checkout</td>
+<td>Checkout: address, patient (self or family), payment method, delivery fee and estimated time shown before paying</td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-020</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CHK-03</code></td>
+<td>Cart_Checkout</td>
+<td>Online payment via Cashfree: UPI, cards, net banking</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-075</a>, <a href="../03-Modules/Finance_Payments/APIs.html">API-076</a></td>
+<td>JAPI-02</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>CHK-04</code></td>
+<td>Cart_Checkout</td>
+<td>Cash on delivery, with a maximum order value and a block after repeated refusals</td>
+<td>No direct operation</td>
+<td>JAPI-01</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>CHK-05</code></td>
+<td>Cart_Checkout</td>
+<td>Minimum order value and delivery fee applied from settings</td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-020</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CHK-06</code></td>
+<td>Cart_Checkout</td>
+<td>Price or stock change detected before payment; customer confirms</td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-020</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CHK-07</code></td>
+<td>Cart_Checkout</td>
+<td>No duplicate orders or charges (double tap, refresh, closed browser after payment)</td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-021</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>CHK-08</code></td>
+<td>Cart_Checkout</td>
+<td>Stock reserved during checkout, released automatically if payment does not finish</td>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-021</a>, <a href="../03-Modules/Inventory/APIs.html">API-052</a>, <a href="../03-Modules/Inventory/APIs.html">API-053</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>RX-01</code></td>
+<td>Prescription_Upload</td>
+<td>Upload one or more prescriptions (JPG, PNG, PDF) at checkout</td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-022</a>, <a href="../03-Modules/Prescription_Upload/APIs.html">API-023</a></td>
+<td>JAPI-03</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>RX-02</code></td>
+<td>Prescription_Upload</td>
+<td>Upload within 24 hours after ordering; auto-cancel after that</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>RX-03</code></td>
+<td>Prescription_Upload</td>
+<td>Reuse a saved, still-valid prescription</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>RX-04</code></td>
+<td>Prescription_Upload</td>
+<td>Link each prescription to the patient (self or family member)</td>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-024</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>RX-05</code></td>
+<td>Prescription_Upload</td>
+<td>See the pharmacist's decision and reason; re-upload after rejection</td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-062</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ORD-01</code></td>
+<td>Customer_Orders</td>
+<td>Order confirmation on screen, WhatsApp and email</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>ORD-02</code></td>
+<td>Customer_Orders</td>
+<td>Status timeline (placed → packed → out for delivery → delivered)</td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-025</a>, <a href="../03-Modules/Customer_Orders/APIs.html">API-026</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ORD-03</code></td>
+<td>Customer_Orders</td>
+<td>Order history with GST invoice download</td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-029</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ORD-04</code></td>
+<td>Customer_Orders</td>
+<td>Cancel before the order is packed</td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-027</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ORD-05</code></td>
+<td>Customer_Orders</td>
+<td>Return request within the return window</td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-028</a></td>
+<td>JAPI-06</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ORD-06</code></td>
+<td>Customer_Orders</td>
+<td>Refund status for cancelled and returned orders</td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-030</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ORD-07</code></td>
+<td>Customer_Orders</td>
+<td>Live rider location on a map, estimated arrival, masked call button</td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-031</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ORD-08</code></td>
+<td>Customer_Orders</td>
+<td>Delivery OTP shown to the customer</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>ORD-09</code></td>
+<td>Customer_Orders</td>
+<td>Change items or address after placing an order</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>ADM-01</code></td>
+<td>Admin_CMS</td>
+<td>Dashboard per role: orders by status, pending prescriptions, alerts, deliveries in progress</td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-032</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ADM-02</code></td>
+<td>Admin_CMS</td>
+<td>Staff users: invite, assign role and location, deactivate, log out sessions</td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-033</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-034</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ADM-03</code></td>
+<td>Admin_CMS</td>
+<td>Roles and permissions for 16 roles, limited to own store or warehouse</td>
+<td>No direct operation</td>
+<td>JAPI-11</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>ADM-04</code></td>
+<td>Admin_CMS</td>
+<td>CMS: home banners, FAQs, policy pages, with draft and publish</td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-037</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ADM-05</code></td>
+<td>Admin_CMS</td>
+<td>System settings (PRD section 8)</td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-035</a>, <a href="../03-Modules/Admin_CMS/APIs.html">API-036</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ADM-06</code></td>
+<td>Admin_CMS</td>
+<td>Catalogue admin: products, categories, brands, salt master, prices, GST and HSN</td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-016</a>, <a href="../03-Modules/Product_Catalog/APIs.html">API-017</a></td>
+<td>JAPI-10</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ADM-07</code></td>
+<td>Admin_CMS</td>
+<td>Bulk product import from Excel, with error report</td>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-015</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>ADM-08</code></td>
+<td>Admin_CMS</td>
+<td>Store and warehouse master: address, hours, GSTIN, service areas</td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-038</a></td>
+<td>JAPI-12</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>ADM-09</code></td>
+<td>Admin_CMS</td>
+<td>Offer settings: start and end dates, maximum discount, first-order offer</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>OMS-01</code></td>
+<td>Order_Operations</td>
+<td>Order list with filters (status, location, date, payment, Rx) and search by order number or phone</td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-039</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>OMS-02</code></td>
+<td>Order_Operations</td>
+<td>Order detail: items, batches, prescription, payment, delivery, full history</td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-040</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>OMS-03</code></td>
+<td>Order_Operations</td>
+<td>Automatic routing to the nearest open store with every item; warehouse as fallback</td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-041</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>OMS-04</code></td>
+<td>Order_Operations</td>
+<td>Reassign an order to another location, with a reason</td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-042</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>OMS-05</code></td>
+<td>Order_Operations</td>
+<td>Cancel, partly fulfil, raise return, add internal note</td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-043</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>OMS-06</code></td>
+<td>Order_Operations</td>
+<td>Attention queue: payment pending, stuck orders, failed deliveries</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>OMS-07</code></td>
+<td>Order_Operations</td>
+<td>Assisted order entry for phone orders</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>STO-01</code></td>
+<td>Store_Operations</td>
+<td>Incoming order queue for my store, with sound alert</td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-044</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>STO-02</code></td>
+<td>Store_Operations</td>
+<td>Accept order, pick list, mark packed, hand over to rider</td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-045</a>, <a href="../03-Modules/Store_Operations/APIs.html">API-046</a>, <a href="../03-Modules/Store_Operations/APIs.html">API-047</a></td>
+<td>JAPI-08</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>STO-03</code></td>
+<td>Store_Operations</td>
+<td>Raise replenishment request (normal or urgent)</td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-048</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>STO-04</code></td>
+<td>Store_Operations</td>
+<td>Confirm receipt of a transfer; record shortages</td>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-049</a></td>
+<td>JAPI-06, JAPI-14</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>STO-05</code></td>
+<td>Store_Operations</td>
+<td>My store's stock, with low-stock and near-expiry alerts</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>INV-01</code></td>
+<td>Inventory</td>
+<td>Stock per location and batch, with manufacturing and expiry dates</td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-050</a>, <a href="../03-Modules/Inventory/APIs.html">API-052</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>INV-02</code></td>
+<td>Inventory</td>
+<td>Stock ledger: every movement recorded; stock is the sum of the ledger</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>INV-03</code></td>
+<td>Inventory</td>
+<td>Allocate nearest-expiry batch first; block batches below minimum shelf life</td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-052</a></td>
+<td>JAPI-08</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>INV-04</code></td>
+<td>Inventory</td>
+<td>Stock adjustments with reason; manager approval above a threshold</td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-054</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>INV-05</code></td>
+<td>Inventory</td>
+<td>Low-stock and near-expiry alerts</td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-055</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>INV-06</code></td>
+<td>Inventory</td>
+<td>Opening stock import per location</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>INV-07</code></td>
+<td>Inventory</td>
+<td>Stock sync with Techsmith</td>
+<td><a href="../03-Modules/Inventory/APIs.html">API-051</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>WH-01</code></td>
+<td>Warehouse</td>
+<td>Receive stock: batch, manufacturing and expiry dates, quantity, supplier invoice</td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-056</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>WH-02</code></td>
+<td>Warehouse</td>
+<td>Replenishment queue: approve, dispatch with note, stock &quot;in transit&quot;</td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-057</a>, <a href="../03-Modules/Warehouse/APIs.html">API-058</a></td>
+<td>JAPI-14</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>WH-03</code></td>
+<td>Warehouse</td>
+<td>Urgent runs, up to two extra a day</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>WH-04</code></td>
+<td>Warehouse</td>
+<td>Pick, pack and dispatch fallback online orders</td>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-059</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>WH-05</code></td>
+<td>Warehouse</td>
+<td>Basic stock audit</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>PHM-01</code></td>
+<td>Pharmacist_Review</td>
+<td>Review queue, oldest first, with waiting time</td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-060</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>PHM-02</code></td>
+<td>Pharmacist_Review</td>
+<td>Side-by-side view: zoomable prescription and order items</td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-061</a></td>
+<td>JAPI-03</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>PHM-03</code></td>
+<td>Pharmacist_Review</td>
+<td>Approve all, approve some, or reject with a reason</td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-062</a>, <a href="../03-Modules/Pharmacist_Review/APIs.html">API-063</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>PHM-04</code></td>
+<td>Pharmacist_Review</td>
+<td>Confirm a chosen alternative matches the prescription</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>PHM-05</code></td>
+<td>Pharmacist_Review</td>
+<td>Pharmacist name, registration number and time on every decision</td>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-062</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>DLV-01</code></td>
+<td>Delivery_Operations</td>
+<td>Live map of riders (available, on delivery, offline) and orders ready for pickup</td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-064</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>DLV-02</code></td>
+<td>Delivery_Operations</td>
+<td>Suggest the nearest available rider; staff confirm or choose another</td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-065</a></td>
+<td>JAPI-05</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>DLV-03</code></td>
+<td>Delivery_Operations</td>
+<td>Failed-delivery queue: reattempt, reschedule or return to store</td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-066</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>DLV-04</code></td>
+<td>Delivery_Operations</td>
+<td>COD handover: cash collected vs deposited per rider per day</td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-067</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>DLV-05</code></td>
+<td>Delivery_Operations</td>
+<td>Rider management: onboard, assign location, shifts</td>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-068</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>RID-01</code></td>
+<td>Rider_App</td>
+<td>OTP login; on duty, off duty and break</td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-069</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>RID-02</code></td>
+<td>Rider_App</td>
+<td>Task list; accept; open Google Maps to navigate; mark picked up</td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-070</a>, <a href="../03-Modules/Rider_App/APIs.html">API-071</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>RID-03</code></td>
+<td>Rider_App</td>
+<td>Background location: every 5–10 s on delivery, 15–30 s idle</td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-072</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>RID-04</code></td>
+<td>Rider_App</td>
+<td>Complete delivery with customer OTP and photo; record COD collected</td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-073</a></td>
+<td>JAPI-04, JAPI-16</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>RID-05</code></td>
+<td>Rider_App</td>
+<td>Door checks for prescription medicines</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>RID-06</code></td>
+<td>Rider_App</td>
+<td>Failed attempt with a reason from a fixed list</td>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-074</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>RID-07</code></td>
+<td>Rider_App</td>
+<td>Daily deliveries and incentive earned</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>FIN-01</code></td>
+<td>Finance_Payments</td>
+<td>Payment records from Cashfree webhooks and COD collections</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-075</a>, <a href="../03-Modules/Finance_Payments/APIs.html">API-076</a>, <a href="../03-Modules/Finance_Payments/APIs.html">API-077</a></td>
+<td>JAPI-02</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>FIN-02</code></td>
+<td>Finance_Payments</td>
+<td>GST invoice per order, from the right GSTIN</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-081</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>FIN-03</code></td>
+<td>Finance_Payments</td>
+<td>Automatic refunds; manual refunds need approval above a set amount</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-078</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>FIN-04</code></td>
+<td>Finance_Payments</td>
+<td>COD refunds by bank transfer or UPI</td>
+<td>No direct operation</td>
+<td>JAPI-07</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>FIN-05</code></td>
+<td>Finance_Payments</td>
+<td>Daily reconciliation: Cashfree settlements vs orders</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-079</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>FIN-06</code></td>
+<td>Finance_Payments</td>
+<td>COD reconciliation: collected vs deposited</td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-080</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>FIN-07</code></td>
+<td>Finance_Payments</td>
+<td>Credit notes for refunds and returns</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>REP-01</code></td>
+<td>Reporting</td>
+<td>Sales and orders, by date, store and product</td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-082</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>REP-02</code></td>
+<td>Reporting</td>
+<td>GST report for filing</td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-083</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>REP-03</code></td>
+<td>Reporting</td>
+<td>Stock, low stock and near-expiry</td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-084</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>REP-04</code></td>
+<td>Reporting</td>
+<td>COD, rider collections and deliveries per rider</td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-085</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>REP-05</code></td>
+<td>Reporting</td>
+<td>Refunds, cancellations and failed deliveries</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>REP-06</code></td>
+<td>Reporting</td>
+<td>Replenishment transfers</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+<tr>
+<td><code>REP-07</code></td>
+<td>Reporting</td>
+<td>Excel export for every report</td>
+<td><a href="../03-Modules/Reporting/APIs.html">API-086</a></td>
+<td>JAPI-09</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>AUD-01</code></td>
+<td>Audit</td>
+<td>Log logins, changes, stock movements and prescription views</td>
+<td><a href="../03-Modules/Audit/APIs.html">API-087</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>AUD-02</code></td>
+<td>Audit</td>
+<td>Search and export the audit log; read-only for everyone</td>
+<td><a href="../03-Modules/Audit/APIs.html">API-088</a></td>
+<td>JAPI-09</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>AUTH-01</code></td>
+<td>Authentication_Access</td>
+<td>Password + authenticator 2FA for Super Admin, Central Admin, Finance Manager</td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-089</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-090</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>AUTH-02</code></td>
+<td>Authentication_Access</td>
+<td>Lockout rules, session limits, one session per staff account</td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-089</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-090</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-091</a>, <a href="../03-Modules/Authentication_Access/APIs.html">API-092</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Incomplete contract dependency</td>
+</tr>
+<tr>
+<td><code>AUTH-03</code></td>
+<td>Authentication_Access</td>
+<td>OTP rate limits per number and IP</td>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-001</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">API-002</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>AUTH-04</code></td>
+<td>Authentication_Access</td>
+<td>Permissions checked on the server for every request</td>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-093</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>NOT-01</code></td>
+<td>Notifications</td>
+<td>One notification service: templates, WhatsApp first, SMS fallback, email</td>
+<td><a href="../03-Modules/Notifications/APIs.html">API-094</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>NOT-02</code></td>
+<td>Notifications</td>
+<td>Delivery log with retries</td>
+<td><a href="../03-Modules/Notifications/APIs.html">API-095</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>NOT-03</code></td>
+<td>Notifications</td>
+<td>Rider push notifications (FCM)</td>
+<td><a href="../03-Modules/Notifications/APIs.html">API-096</a></td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>NOT-04</code></td>
+<td>Notifications</td>
+<td>Staff alerts in the admin panel</td>
+<td><a href="../03-Modules/Notifications/APIs.html">API-097</a></td>
+<td>JAPI-13</td>
+<td>Complete proposal(s), approval still open</td>
+</tr>
+<tr>
+<td><code>NOT-05</code></td>
+<td>Notifications</td>
+<td>Customer browser push notifications</td>
+<td>No direct operation</td>
+<td>Covered by owner workflow/policy or requires scope review; no additional endpoint assumed.</td>
+<td>Workflow/command gap remains</td>
+</tr>
+</tbody>
+</table>
+<h2>Scope and clinical invariants</h2>
+<p>All seven nonempty P/M/O basket combinations retain the documented rule: only combinations containing P require per-line pharmacist review; M/O-only orders skip it. Unknown/unapproved classification blocks checkout. Patient/evidence/revision changes invalidate affected P approval and require explicit revised-basket acceptance, new stock and money revalidation. RX-02 deferred upload remains blocked under D-004/D-006; this pass does not invent its 24-hour deadline behavior or allow review bypass.</p>
+<p>WF-013 support-ticket integration and future appointment/insurance/diagnostic/marketplace/membership tables do not justify new launch APIs without D-001/D-018/D-020 approval. Invoice download uses content negotiation on API-029/API-081 (Accept: application/pdf), reusing authenticated private-file access without adding a second invoice route.</p>
+</main></body></html>

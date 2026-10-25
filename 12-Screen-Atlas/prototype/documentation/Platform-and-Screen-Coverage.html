@@ -1,0 +1,838 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Platform and Screen Coverage · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Platform and screen coverage</h1>
+<p>Generated from registry routes and the successful explicit-experience browser run. “Verified (normal layout)” means the actual experience-prefixed route rendered without document overflow at its intended size. It does not claim every action or exception was operated. The original full suite separately checks six viewport widths. Staff workspaces are Website only; Rider is Mobile only. Shared renderers are not treated as verification evidence.</p>
+<table>
+<thead>
+<tr>
+<th>Screen ID</th>
+<th>Screen</th>
+<th>Mobile App</th>
+<th>Website</th>
+<th>States</th>
+<th>Journeys</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SCR-CUS-001</td>
+<td>Sign in with your mobile</td>
+<td><a href="../index.html#/mobile/customer/login">Sign in with your mobile</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/login">Sign in with your mobile</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, otp-delivery, otp-fallback, rate-limit</td>
+<td>signup, support</td>
+<td>mobile: EXP-057, website: EXP-096</td>
+</tr>
+<tr>
+<td>SCR-CUS-002</td>
+<td>Verify your code</td>
+<td><a href="../index.html#/mobile/customer/otp">Verify your code</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/otp">Verify your code</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, otp-wrong, otp-expired, otp-delivery, otp-fallback, rate-limit, duplicate</td>
+<td>signup, support</td>
+<td>mobile: EXP-058, website: EXP-097</td>
+</tr>
+<tr>
+<td>SCR-CUS-003</td>
+<td>My profile</td>
+<td><a href="../index.html#/mobile/customer/profile">My profile</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/profile">My profile</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, conflict, permission</td>
+<td>signup</td>
+<td>mobile: EXP-059, website: EXP-098</td>
+</tr>
+<tr>
+<td>SCR-CUS-004</td>
+<td>Saved delivery addresses</td>
+<td><a href="../index.html#/mobile/customer/addresses">Saved delivery addresses</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/addresses">Saved delivery addresses</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, empty, invalid-address, permission</td>
+<td>Independent task</td>
+<td>mobile: EXP-060, website: EXP-099</td>
+</tr>
+<tr>
+<td>SCR-CUS-005</td>
+<td>Family and patient profiles</td>
+<td><a href="../index.html#/mobile/customer/family">Family and patient profiles</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/family">Family and patient profiles</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, empty, permission</td>
+<td>Independent task</td>
+<td>mobile: EXP-061, website: EXP-100</td>
+</tr>
+<tr>
+<td>SCR-CUS-006</td>
+<td>Privacy notice and consent</td>
+<td><a href="../index.html#/mobile/customer/privacy">Privacy notice and consent</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/privacy">Privacy notice and consent</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, conflict</td>
+<td>Independent task</td>
+<td>mobile: EXP-062, website: EXP-101</td>
+</tr>
+<tr>
+<td>SCR-CUS-007</td>
+<td>Request account deletion</td>
+<td><a href="../index.html#/mobile/customer/deletion">Request account deletion</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/deletion">Request account deletion</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, duplicate</td>
+<td>Independent task</td>
+<td>mobile: EXP-063, website: EXP-102</td>
+</tr>
+<tr>
+<td>SCR-CUS-008</td>
+<td>My wishlist</td>
+<td><a href="../index.html#/mobile/customer/wishlist">My wishlist</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/wishlist">My wishlist</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, out-of-stock, duplicate, session</td>
+<td>Independent task</td>
+<td>mobile: EXP-064, website: EXP-103</td>
+</tr>
+<tr>
+<td>SCR-CUS-009</td>
+<td>Pharmville shop</td>
+<td><a href="../index.html#/mobile/customer/home">Pharmville shop</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/home">Pharmville shop</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, out-of-stock</td>
+<td>order, prescription, payment</td>
+<td>mobile: EXP-065, website: EXP-104</td>
+</tr>
+<tr>
+<td>SCR-CUS-010</td>
+<td>Categories and subcategories</td>
+<td><a href="../index.html#/mobile/customer/categories">Categories and subcategories</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/categories">Categories and subcategories</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, out-of-stock</td>
+<td>Independent task</td>
+<td>mobile: EXP-066, website: EXP-105</td>
+</tr>
+<tr>
+<td>SCR-CUS-011</td>
+<td>Search results and suggestions</td>
+<td><a href="../index.html#/mobile/customer/search">Search results and suggestions</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/search">Search results and suggestions</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, out-of-stock</td>
+<td>replenishment</td>
+<td>mobile: EXP-067, website: EXP-106</td>
+</tr>
+<tr>
+<td>SCR-CUS-012</td>
+<td>Product details</td>
+<td><a href="../index.html#/mobile/customer/product">Product details</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/product">Product details</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, out-of-stock, permission</td>
+<td>Independent task</td>
+<td>mobile: EXP-068, website: EXP-107</td>
+</tr>
+<tr>
+<td>SCR-CUS-013</td>
+<td>Compare exact alternatives</td>
+<td><a href="../index.html#/mobile/customer/alternatives">Compare exact alternatives</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/alternatives">Compare exact alternatives</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, out-of-stock, prescription-rejected</td>
+<td>Independent task</td>
+<td>mobile: EXP-069, website: EXP-108</td>
+</tr>
+<tr>
+<td>SCR-CUS-014</td>
+<td>Your cart</td>
+<td><a href="../index.html#/mobile/customer/cart">Your cart</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/cart">Your cart</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, out-of-stock, conflict, price-change, session</td>
+<td>order, prescription, payment</td>
+<td>mobile: EXP-070, website: EXP-109</td>
+</tr>
+<tr>
+<td>SCR-CUS-015</td>
+<td>Checkout · delivery address</td>
+<td><a href="../index.html#/mobile/customer/checkout-address">Checkout · delivery address</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/checkout-address">Checkout · delivery address</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, empty, invalid-address, permission</td>
+<td>order, prescription, payment</td>
+<td>mobile: EXP-071, website: EXP-110</td>
+</tr>
+<tr>
+<td>SCR-CUS-016</td>
+<td>Checkout · choose patient</td>
+<td><a href="../index.html#/mobile/customer/checkout-patient">Checkout · choose patient</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/checkout-patient">Checkout · choose patient</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, permission</td>
+<td>prescription</td>
+<td>mobile: EXP-072, website: EXP-111</td>
+</tr>
+<tr>
+<td>SCR-CUS-017</td>
+<td>Checkout · accept current summary</td>
+<td><a href="../index.html#/mobile/customer/checkout-summary">Checkout · accept current summary</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/checkout-summary">Checkout · accept current summary</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, price-change, out-of-stock, duplicate, stock-expired, invalid-address, conflict</td>
+<td>order, prescription, payment</td>
+<td>mobile: EXP-073, website: EXP-112</td>
+</tr>
+<tr>
+<td>SCR-CUS-018</td>
+<td>Prescription upload</td>
+<td><a href="../index.html#/mobile/customer/prescription-upload">Prescription upload</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/prescription-upload">Prescription upload</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, prescription-missing, unreadable, permission</td>
+<td>prescription</td>
+<td>mobile: EXP-074, website: EXP-113</td>
+</tr>
+<tr>
+<td>SCR-CUS-019</td>
+<td>Pharmacist review status</td>
+<td><a href="../index.html#/mobile/customer/prescription-status">Pharmacist review status</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/prescription-status">Pharmacist review status</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, prescription-rejected, prescription-partial, prescription-missing, unreadable</td>
+<td>prescription</td>
+<td>mobile: EXP-075, website: EXP-114</td>
+</tr>
+<tr>
+<td>SCR-CUS-020</td>
+<td>Accept a revised order</td>
+<td><a href="../index.html#/mobile/customer/revised-order">Accept a revised order</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/revised-order">Accept a revised order</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, prescription-partial, price-change, conflict</td>
+<td>Independent task</td>
+<td>mobile: EXP-076, website: EXP-115</td>
+</tr>
+<tr>
+<td>SCR-CUS-021</td>
+<td>Choose a payment method</td>
+<td><a href="../index.html#/mobile/customer/payment">Choose a payment method</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/payment">Choose a payment method</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, payment-declined, payment-pending, confirmation-lost, duplicate, stock-expired, out-of-stock</td>
+<td>order, prescription, payment</td>
+<td>mobile: EXP-077, website: EXP-116</td>
+</tr>
+<tr>
+<td>SCR-CUS-022</td>
+<td>Payment and order result</td>
+<td><a href="../index.html#/mobile/customer/payment-result">Payment and order result</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/payment-result">Payment and order result</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, network, payment-declined, payment-pending, confirmation-lost, duplicate</td>
+<td>order, prescription, payment</td>
+<td>mobile: EXP-078, website: EXP-117</td>
+</tr>
+<tr>
+<td>SCR-CUS-023</td>
+<td>Recover existing payment</td>
+<td><a href="../index.html#/mobile/customer/payment-recovery">Recover existing payment</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/payment-recovery">Recover existing payment</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, network, payment-pending, confirmation-lost, stock-expired, duplicate</td>
+<td>payment</td>
+<td>mobile: EXP-079, website: EXP-118</td>
+</tr>
+<tr>
+<td>SCR-CUS-024</td>
+<td>My orders</td>
+<td><a href="../index.html#/mobile/customer/orders">My orders</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/orders">My orders</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, out-of-stock, session, permission</td>
+<td>return</td>
+<td>mobile: EXP-080, website: EXP-119</td>
+</tr>
+<tr>
+<td>SCR-CUS-025</td>
+<td>Order details and confirmation</td>
+<td><a href="../index.html#/mobile/customer/order-detail">Order details and confirmation</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/order-detail">Order details and confirmation</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, permission, confirmation-lost, conflict</td>
+<td>Independent task</td>
+<td>mobile: EXP-081, website: EXP-120</td>
+</tr>
+<tr>
+<td>SCR-CUS-026</td>
+<td>Delivery tracking and handover code</td>
+<td><a href="../index.html#/mobile/customer/tracking">Delivery tracking and handover code</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/tracking">Delivery tracking and handover code</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, network, permission, session</td>
+<td>order, prescription, deliver</td>
+<td>mobile: EXP-082, website: EXP-121</td>
+</tr>
+<tr>
+<td>SCR-CUS-027</td>
+<td>Request cancellation</td>
+<td><a href="../index.html#/mobile/customer/cancellation">Request cancellation</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/cancellation">Request cancellation</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, conflict, duplicate</td>
+<td>Independent task</td>
+<td>mobile: EXP-083, website: EXP-122</td>
+</tr>
+<tr>
+<td>SCR-CUS-028</td>
+<td>Return or quality complaint</td>
+<td><a href="../index.html#/mobile/customer/return">Return or quality complaint</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/return">Return or quality complaint</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, validation, network, session, validation, duplicate</td>
+<td>return, reverse</td>
+<td>mobile: EXP-084, website: EXP-123</td>
+</tr>
+<tr>
+<td>SCR-CUS-029</td>
+<td>Refund progress</td>
+<td><a href="../index.html#/mobile/customer/refund">Refund progress</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/refund">Refund progress</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, network, refund-delayed, session</td>
+<td>return, refund, reverse</td>
+<td>mobile: EXP-085, website: EXP-124</td>
+</tr>
+<tr>
+<td>SCR-CUS-030</td>
+<td>Invoice and billing evidence</td>
+<td><a href="../index.html#/mobile/customer/invoice">Invoice and billing evidence</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/invoice">Invoice and billing evidence</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, network, permission, session</td>
+<td>Independent task</td>
+<td>mobile: EXP-086, website: EXP-125</td>
+</tr>
+<tr>
+<td>SCR-ADM-001</td>
+<td>Role and location dashboard</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/dashboard">Role and location dashboard</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session</td>
+<td>Independent task</td>
+<td>website: EXP-126</td>
+</tr>
+<tr>
+<td>SCR-ADM-002</td>
+<td>Staff invitations and session revocation</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/staff">Staff invitations and session revocation</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate</td>
+<td>Independent task</td>
+<td>website: EXP-127</td>
+</tr>
+<tr>
+<td>SCR-ADM-003</td>
+<td>Roles and permissions</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/permissions">Roles and permissions</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation</td>
+<td>Independent task</td>
+<td>website: EXP-128</td>
+</tr>
+<tr>
+<td>SCR-ADM-004</td>
+<td>CMS draft and publication</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/cms">CMS draft and publication</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, conflict, duplicate</td>
+<td>Independent task</td>
+<td>website: EXP-129</td>
+</tr>
+<tr>
+<td>SCR-ADM-005</td>
+<td>System settings and offer proposals</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/settings">System settings and offer proposals</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, conflict</td>
+<td>Independent task</td>
+<td>website: EXP-130</td>
+</tr>
+<tr>
+<td>SCR-ADM-006</td>
+<td>Product masters and bulk import</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/catalog">Product masters and bulk import</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, conflict</td>
+<td>Independent task</td>
+<td>website: EXP-131</td>
+</tr>
+<tr>
+<td>SCR-ADM-007</td>
+<td>Store and warehouse masters</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/locations">Store and warehouse masters</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation</td>
+<td>Independent task</td>
+<td>website: EXP-132</td>
+</tr>
+<tr>
+<td>SCR-OMS-001</td>
+<td>Order and attention queue</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/orders">Order and attention queue</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, payment-pending, confirmation-lost</td>
+<td>Independent task</td>
+<td>website: EXP-133</td>
+</tr>
+<tr>
+<td>SCR-OMS-002</td>
+<td>Order detail, revision and recovery</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/order-detail">Order detail, revision and recovery</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, conflict, duplicate, payment-pending</td>
+<td>Independent task</td>
+<td>website: EXP-134</td>
+</tr>
+<tr>
+<td>SCR-OMS-003</td>
+<td>Licensed allocation and reassignment</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/allocation">Licensed allocation and reassignment</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, conflict, duplicate, stale-stock, stock-expired, out-of-stock</td>
+<td>Independent task</td>
+<td>website: EXP-135</td>
+</tr>
+<tr>
+<td>SCR-OMS-004</td>
+<td>Assisted phone-order intake — blocked contract</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/assisted-order">Assisted phone-order intake — blocked contract</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation</td>
+<td>Independent task</td>
+<td>website: EXP-136</td>
+</tr>
+<tr>
+<td>SCR-INV-001</td>
+<td>Batch stock and FEFO eligibility</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/inventory">Batch stock and FEFO eligibility</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, stale-stock, stock-expired, out-of-stock</td>
+<td>procurement, replenishment</td>
+<td>website: EXP-137</td>
+</tr>
+<tr>
+<td>SCR-INV-002</td>
+<td>Read-only stock movement ledger</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/ledger">Read-only stock movement ledger</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, duplicate</td>
+<td>Independent task</td>
+<td>website: EXP-138</td>
+</tr>
+<tr>
+<td>SCR-INV-003</td>
+<td>Stock adjustment and manager review</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/adjustment">Stock adjustment and manager review</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, conflict</td>
+<td>Independent task</td>
+<td>website: EXP-139</td>
+</tr>
+<tr>
+<td>SCR-INV-004</td>
+<td>Opening stock import and Techsmith sync</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/inventory-integration">Opening stock import and Techsmith sync</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, stale-stock, provider-error</td>
+<td>Independent task</td>
+<td>website: EXP-140</td>
+</tr>
+<tr>
+<td>SCR-FIN-001</td>
+<td>Payment records and uncertain outcome recovery</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/payments">Payment records and uncertain outcome recovery</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, payment-pending, confirmation-lost, duplicate, provider-error</td>
+<td>Independent task</td>
+<td>website: EXP-141</td>
+</tr>
+<tr>
+<td>SCR-FIN-002</td>
+<td>Invoice evidence and blocked tax setup</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/invoice">Invoice evidence and blocked tax setup</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, provider-error, duplicate</td>
+<td>Independent task</td>
+<td>website: EXP-142</td>
+</tr>
+<tr>
+<td>SCR-FIN-003</td>
+<td>Refund request, approval and tracking</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/refunds">Refund request, approval and tracking</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, refund-delayed, provider-error</td>
+<td>refund, reverse</td>
+<td>website: EXP-143</td>
+</tr>
+<tr>
+<td>SCR-FIN-004</td>
+<td>Settlement and COD reconciliation</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/reconciliation">Settlement and COD reconciliation</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate, cod-shortage, provider-error, short-receipt</td>
+<td>Independent task</td>
+<td>website: EXP-144</td>
+</tr>
+<tr>
+<td>SCR-FIN-005</td>
+<td>Credit-note proposal and original invoice</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/credit-note">Credit-note proposal and original invoice</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, duplicate</td>
+<td>Independent task</td>
+<td>website: EXP-145</td>
+</tr>
+<tr>
+<td>SCR-REP-001</td>
+<td>Report selection and filters</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/reports">Report selection and filters</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, report-failed, stale-stock</td>
+<td>Independent task</td>
+<td>website: EXP-146</td>
+</tr>
+<tr>
+<td>SCR-REP-002</td>
+<td>Report results and export job</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/report-results">Report results and export job</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, report-failed, access-revoked, cod-shortage, short-receipt, stale-stock</td>
+<td>Independent task</td>
+<td>website: EXP-147</td>
+</tr>
+<tr>
+<td>SCR-AUD-001</td>
+<td>Read-only audit search and export</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/audit">Read-only audit search and export</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, access-revoked</td>
+<td>Independent task</td>
+<td>website: EXP-148</td>
+</tr>
+<tr>
+<td>SCR-NOT-001</td>
+<td>Notification attempts and staff alerts</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/notifications">Notification attempts and staff alerts</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, duplicate, provider-error, confirmation-lost</td>
+<td>Independent task</td>
+<td>website: EXP-149</td>
+</tr>
+<tr>
+<td>SCR-NOT-002</td>
+<td>Channel preferences and optional push simulation</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/notification-preferences">Channel preferences and optional push simulation</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, access-revoked, provider-error</td>
+<td>Independent task</td>
+<td>website: EXP-150</td>
+</tr>
+<tr>
+<td>SCR-SUP-001</td>
+<td>Identity-aware support triage</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/support">Identity-aware support triage</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, validation, payment-pending, confirmation-lost</td>
+<td>support</td>
+<td>website: EXP-151</td>
+</tr>
+<tr>
+<td>SCR-PHM-001</td>
+<td>Prescription review queue</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/pharmacy/queue">Prescription review queue</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, prescription-missing, unreadable</td>
+<td>prescription</td>
+<td>website: EXP-152</td>
+</tr>
+<tr>
+<td>SCR-PHM-002</td>
+<td>Compare prescription and order</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/pharmacy/review">Compare prescription and order</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, prescription-missing, unreadable, prescription-rejected</td>
+<td>prescription</td>
+<td>website: EXP-153</td>
+</tr>
+<tr>
+<td>SCR-PHM-003</td>
+<td>Record pharmacist decisions</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/pharmacy/decision">Record pharmacist decisions</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, prescription-missing, unreadable, prescription-rejected, prescription-partial</td>
+<td>prescription</td>
+<td>website: EXP-154</td>
+</tr>
+<tr>
+<td>SCR-PHM-004</td>
+<td>Pharmacist decision history</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/pharmacy/history">Pharmacist decision history</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict</td>
+<td>Independent task</td>
+<td>website: EXP-155</td>
+</tr>
+<tr>
+<td>SCR-STO-001</td>
+<td>My store incoming orders</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/store/queue">My store incoming orders</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, out-of-stock, stale-stock</td>
+<td>prepare</td>
+<td>website: EXP-156</td>
+</tr>
+<tr>
+<td>SCR-STO-002</td>
+<td>Exact batch pick list</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/store/pick">Exact batch pick list</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, out-of-stock, stale-stock, prescription-rejected</td>
+<td>prepare</td>
+<td>website: EXP-157</td>
+</tr>
+<tr>
+<td>SCR-STO-003</td>
+<td>Packing and custody handoff</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/store/pack">Packing and custody handoff</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, stale-stock, prescription-rejected, prescription-partial, rider-unavailable</td>
+<td>prepare, deliver</td>
+<td>website: EXP-158</td>
+</tr>
+<tr>
+<td>SCR-STO-004</td>
+<td>Store stock and replenishment</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/store/replenishment">Store stock and replenishment</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, out-of-stock, stale-stock</td>
+<td>replenishment</td>
+<td>website: EXP-159</td>
+</tr>
+<tr>
+<td>SCR-STO-005</td>
+<td>Receive warehouse transfer</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/store/receipt">Receive warehouse transfer</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, short-receipt, stock-expired</td>
+<td>receiving, procurement, replenishment</td>
+<td>website: EXP-160</td>
+</tr>
+<tr>
+<td>SCR-WH-001</td>
+<td>Supplier receiving</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/warehouse/receiving">Supplier receiving</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, short-receipt, stock-expired</td>
+<td>receiving, procurement, replenishment</td>
+<td>website: EXP-161</td>
+</tr>
+<tr>
+<td>SCR-WH-002</td>
+<td>Replenishment and urgent-run queue</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/warehouse/replenishment">Replenishment and urgent-run queue</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict</td>
+<td>receiving, procurement</td>
+<td>website: EXP-162</td>
+</tr>
+<tr>
+<td>SCR-WH-003</td>
+<td>Warehouse transfer dispatch</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/warehouse/dispatch">Warehouse transfer dispatch</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, out-of-stock</td>
+<td>receiving, procurement, replenishment</td>
+<td>website: EXP-163</td>
+</tr>
+<tr>
+<td>SCR-WH-004</td>
+<td>Warehouse counts and fallback orders</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/warehouse/audit">Warehouse counts and fallback orders</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, stale-stock</td>
+<td>Independent task</td>
+<td>website: EXP-164</td>
+</tr>
+<tr>
+<td>SCR-DLV-001</td>
+<td>Delivery dispatch dashboard</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/delivery/dashboard">Delivery dispatch dashboard</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, offline, rider-unavailable, cod-shortage</td>
+<td>Independent task</td>
+<td>website: EXP-165</td>
+</tr>
+<tr>
+<td>SCR-DLV-002</td>
+<td>Confirm rider assignment</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/delivery/assignment">Confirm rider assignment</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, rider-unavailable</td>
+<td>deliver</td>
+<td>website: EXP-166</td>
+</tr>
+<tr>
+<td>SCR-DLV-003</td>
+<td>Failed delivery resolution</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/delivery/failures">Failed delivery resolution</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, delivery-failed</td>
+<td>Independent task</td>
+<td>website: EXP-167</td>
+</tr>
+<tr>
+<td>SCR-DLV-004</td>
+<td>Rider management and COD handover</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/delivery/riders">Rider management and COD handover</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, rider-unavailable, cod-shortage</td>
+<td>Independent task</td>
+<td>website: EXP-168</td>
+</tr>
+<tr>
+<td>SCR-RID-001</td>
+<td>Rider OTP sign in</td>
+<td><a href="../index.html#/mobile/rider/login">Rider OTP sign in</a> — Implemented and verified (normal layout)</td>
+<td>Not applicable</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, otp-wrong</td>
+<td>deliver, reverse</td>
+<td>mobile: EXP-087</td>
+</tr>
+<tr>
+<td>SCR-RID-002</td>
+<td>Duty and assigned tasks</td>
+<td><a href="../index.html#/mobile/rider/tasks">Duty and assigned tasks</a> — Implemented and verified (normal layout)</td>
+<td>Not applicable</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, rider-unavailable</td>
+<td>deliver</td>
+<td>mobile: EXP-088</td>
+</tr>
+<tr>
+<td>SCR-RID-003</td>
+<td>Rider pickup checklist</td>
+<td><a href="../index.html#/mobile/rider/pickup">Rider pickup checklist</a> — Implemented and verified (normal layout)</td>
+<td>Not applicable</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, stock-expired, stale-stock</td>
+<td>deliver</td>
+<td>mobile: EXP-089</td>
+</tr>
+<tr>
+<td>SCR-RID-004</td>
+<td>Navigation and last-known location</td>
+<td><a href="../index.html#/mobile/rider/navigation">Navigation and last-known location</a> — Implemented and verified (normal layout)</td>
+<td>Not applicable</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, offline</td>
+<td>Independent task</td>
+<td>mobile: EXP-090</td>
+</tr>
+<tr>
+<td>SCR-RID-005</td>
+<td>Doorstep proof and completion</td>
+<td><a href="../index.html#/mobile/rider/completion">Doorstep proof and completion</a> — Implemented and verified (normal layout)</td>
+<td>Not applicable</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, otp-wrong, offline, cod-shortage</td>
+<td>deliver</td>
+<td>mobile: EXP-091</td>
+</tr>
+<tr>
+<td>SCR-RID-006</td>
+<td>Failed attempt and rider history</td>
+<td><a href="../index.html#/mobile/rider/failure">Failed attempt and rider history</a> — Implemented and verified (normal layout)</td>
+<td>Not applicable</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict, delivery-failed</td>
+<td>Independent task</td>
+<td>mobile: EXP-092</td>
+</tr>
+<tr>
+<td>SCR-RID-007</td>
+<td>Daily deliveries and earnings status</td>
+<td><a href="../index.html#/mobile/rider/history">Daily deliveries and earnings status</a> — Implemented and verified (normal layout)</td>
+<td>Not applicable</td>
+<td>normal, loading, empty, validation, network, permission, session, duplicate, conflict</td>
+<td>Independent task</td>
+<td>mobile: EXP-093</td>
+</tr>
+<tr>
+<td>SCR-ACC-001</td>
+<td>Unified staff identity sign-in</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/access/login">Unified staff identity sign-in</a> — Implemented and verified (normal layout)</td>
+<td>normal, validation, permission, session, conflict</td>
+<td>Independent task</td>
+<td>website: EXP-169</td>
+</tr>
+<tr>
+<td>SCR-ACC-002</td>
+<td>Privileged authenticator challenge</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/access/mfa">Privileged authenticator challenge</a> — Implemented and verified (normal layout)</td>
+<td>normal, validation, otp-wrong, otp-expired, rate-limit</td>
+<td>Independent task</td>
+<td>website: EXP-170</td>
+</tr>
+<tr>
+<td>SCR-ACC-003</td>
+<td>Identity session and access checks</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/access/sessions">Identity session and access checks</a> — Implemented and verified (normal layout)</td>
+<td>normal, validation, permission, session, conflict</td>
+<td>Independent task</td>
+<td>website: EXP-171</td>
+</tr>
+<tr>
+<td>SCR-ACC-004</td>
+<td>Authorized workspace selection</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/access/workspaces">Authorized workspace selection</a> — Implemented and verified (normal layout)</td>
+<td>normal, validation, permission, session, conflict</td>
+<td>Independent task</td>
+<td>website: EXP-172</td>
+</tr>
+<tr>
+<td>SCR-PRO-001</td>
+<td>Supplier directory and proposals</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/procurement/suppliers">Supplier directory and proposals</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td>Independent task</td>
+<td>website: EXP-173</td>
+</tr>
+<tr>
+<td>SCR-PRO-002</td>
+<td>Replenishment demand and purchase orders</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/procurement/orders">Replenishment demand and purchase orders</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td>procurement, replenishment</td>
+<td>website: EXP-174</td>
+</tr>
+<tr>
+<td>SCR-RET-001</td>
+<td>Return eligibility and owner review queue</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/staff/returns">Return eligibility and owner review queue</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td>reverse</td>
+<td>website: EXP-175</td>
+</tr>
+<tr>
+<td>SCR-RET-002</td>
+<td>Reverse pickup dispatch</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/delivery/returns">Reverse pickup dispatch</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td>reverse</td>
+<td>website: EXP-176</td>
+</tr>
+<tr>
+<td>SCR-RET-003</td>
+<td>Rider return pickup task</td>
+<td><a href="../index.html#/mobile/rider/returns">Rider return pickup task</a> — Implemented and verified (normal layout)</td>
+<td>Not applicable</td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td>reverse</td>
+<td>mobile: EXP-094</td>
+</tr>
+<tr>
+<td>SCR-RET-004</td>
+<td>Returned item receipt and inspection</td>
+<td>Not applicable</td>
+<td><a href="../index.html#/website/warehouse/returns">Returned item receipt and inspection</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td>reverse</td>
+<td>website: EXP-177</td>
+</tr>
+<tr>
+<td>SCR-CUS-HELP-001</td>
+<td>Customer help and case history</td>
+<td><a href="../index.html#/mobile/customer/help">Customer help and case history</a> — Implemented and verified (normal layout)</td>
+<td><a href="../index.html#/website/customer/help">Customer help and case history</a> — Implemented and verified (normal layout)</td>
+<td>normal, loading, empty, network, permission, session, duplicate, conflict</td>
+<td>support</td>
+<td>mobile: EXP-095, website: EXP-178</td>
+</tr>
+</tbody>
+</table>
+<p>All 110 draft feature IDs remain mapped in <a href="Feature-Coverage.html">Feature Coverage</a>; 16 remain blocked by owner decisions and AUTH-04 is backend-only, with no direct UI implementation. A blocked policy is not approved by rendering its explanatory screen.</p>
+</main></body></html>

@@ -1,0 +1,526 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>LLD · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Delivery Operations LLD</h1>
+<p>&lt;!-- ERD-NAV-START --&gt;</p>
+<h2>Database relationships</h2>
+<p><a href="../../04-Database/ER-Diagrams/12-logistics.html"><code>logistics</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/16-organization.html"><code>organization</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/Relationship-Catalog.html">FK catalog</a></p>
+<p>These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See <a href="../../04-Database/Migrations.html">migration evidence</a> for the supplied source and deployment verification limits.</p>
+<p>&lt;!-- ERD-NAV-END --&gt;</p>
+<p><a href="../../00-Business-Guide/Delivery-and-Rider-App.html">Business flow</a> · <a href="../../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a></p>
+<h2>Delivery planning, route and proof — implementation acceptance</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Proposed conditions for engineering handoff; never imply QA passed.</strong></p>
+</blockquote>
+<h3>Draft features</h3>
+<ul>
+<li><strong>DLV-01 / REQ-074:</strong> Live map of riders (available, on delivery, offline) and orders ready for pickup (Must (draft)).</li>
+<li><strong>DLV-02 / REQ-075:</strong> Suggest the nearest available rider; staff confirm or choose another (Must (draft)).</li>
+<li><strong>DLV-03 / REQ-076:</strong> Failed-delivery queue: reattempt, reschedule or return to store (Must (draft)).</li>
+<li><strong>DLV-04 / REQ-077:</strong> COD handover: cash collected vs deposited per rider per day (Must (draft)).</li>
+<li><strong>DLV-05 / REQ-078:</strong> Rider management: onboard, assign location, shifts (Must (draft)).</li>
+</ul>
+<h3>Required release checks</h3>
+<ul>
+<li>Authorised happy path persists exactly the intended state.</li>
+<li>Invalid, cross-account and cross-location requests leave authoritative rows unchanged.</li>
+<li>Concurrent duplicate requests do not create duplicate money, stock or order effects.</li>
+<li>File, prescription and patient data are not exposed to unauthorised roles.</li>
+<li>Recoverable provider failure exposes a pending/retryable state; never claims success.</li>
+<li>Audit/trace data contains public references, not credentials or sensitive document contents.</li>
+</ul>
+<p><strong>Module test scenarios</strong></p>
+<h2>Delivery Management — HTTP API responsibilities</h2>
+<p>All routes below are <strong>Proposed REST v1 contracts</strong>. The database repository does not implement them. Public UUIDs identify resources; staff scope and patient/order ownership are checked at each handler, not inferred from URL paths.</p>
+<ul>
+<li><code>API-064</code> <code>GET /v1/staff/delivery/tasks</code> — Track scoped delivery queue</li>
+<li><code>API-065</code> <code>POST /v1/staff/delivery/tasks/{task_id}/assign</code> — Assign authorized rider</li>
+<li><code>API-066</code> <code>POST /v1/staff/delivery/tasks/{task_id}/resolution</code> — Resolve failed attempt</li>
+<li><code>API-067</code> <code>GET /v1/staff/delivery/cod-handover</code> — Review COD by rider</li>
+<li><code>API-068</code> <code>POST /v1/staff/delivery/riders</code> — Onboard rider with shift/location</li>
+</ul>
+<h3>Cross-cutting request contract</h3>
+<p>Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. <code>401</code> indicates no valid session; <code>403/404</code> denied scope; <code>409</code> conflict; <code>422</code> business validation; <code>503</code> unknown upstream outcome. Read <a href="../../05-APIs/README.html">api conventions</a> before implementing the endpoint.</p>
+<p><strong>Business gate:</strong> A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.</p>
+<h2>Delivery Management — business logic and invariants</h2>
+<p><strong>Rule origin:</strong> the documented draft requirements and database migration guards. Distinguish a <strong>confirmed database guard</strong> from a <strong>proposed API orchestration</strong> and <strong>open numeric policy</strong>.</p>
+<h3>Core procedure</h3>
+<ol>
+<li>Authenticate the actor and resolve server-owned tenant/location/patient permission.</li>
+<li>Re-read the relevant product, order, document, stock or ledger state from the owning tables.</li>
+<li>Reject incomplete or stale input; validate the latest accepted revision and current classification where relevant.</li>
+<li>Apply the module invariant: <strong>A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</strong></li>
+<li>In a transaction, persist the minimal authoritative rows, version and audit outcome; publish notifications after commit.</li>
+<li>Return a scoped read model; expose only approved information to the caller.</li>
+</ol>
+<h3>Features implemented by this rule set</h3>
+<p><code>DLV-01</code>, <code>DLV-02</code>, <code>DLV-03</code>, <code>DLV-04</code>, <code>DLV-05</code> (see full requirement descriptions).</p>
+<h3>Pseudocode — command boundary</h3>
+<pre><code class="language-text">context := verify_session_and_resource_scope(request)
+current := load_owned_aggregate_for_update(context, resource_id)
+assert expected_version_matches(current)
+assert domain_policy_allows_action(current, request)
+result := transition_atomically(current, validated_request)
+write_audit_and_outbox_in_same_transaction(result)
+return filter_for_actor(result, context)
+</code></pre>
+<p>Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund limits) must be policy data agreed by business owners, never hard-coded assumptions. On conflict, expose an actionable <code>409</code> and reload state. On an external provider timeout, keep the result pending rather than guessing success.</p>
+<h2>Delivery Management — internal components</h2>
+<p><strong>Status:</strong> Proposed NestJS modular-monolith design informed by the decided stack in the master decisions checklist. This is proposed application design; the validated standalone SQL is structure, not an implemented API.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Responsibility</th>
+<th>Failure boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTP controller / DTO validator</td>
+<td>Accept typed requests for delivery management, reject malformed payloads</td>
+<td><code>400/422</code>, no database change</td>
+</tr>
+<tr>
+<td>Use-case service</td>
+<td>Execute: Assign rider; manage failed attempts; reconcile COD handoff</td>
+<td>Explicit domain errors, no invented outcomes</td>
+</tr>
+<tr>
+<td>Policy/authorization service</td>
+<td>Enforce user role, object ownership, business eligibility</td>
+<td><code>403/404</code> and audit denied attempt</td>
+</tr>
+<tr>
+<td>Domain repository</td>
+<td>Execute scoped PostgreSQL reads/writes within a transaction</td>
+<td>Retry only on safe concurrency errors</td>
+</tr>
+<tr>
+<td>Outbox / integration adapter</td>
+<td>Publish committed changes toward other modules or third parties</td>
+<td>Durable retry and dead-letter review if adopted</td>
+</tr>
+</tbody>
+</table>
+<h3>Boundaries</h3>
+<p>A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied <code>actor_user_id</code>.</p>
+<p>Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and <a href="../../02-Architecture/System-HLD.html">architecture overview</a>.</p>
+<h2>Delivery Management — existing database usage</h2>
+<p><strong>Confirmed database:</strong> 24 PostgreSQL schemas; schema authority the canonical standalone SQL. The tables below exist, but <strong>a schema-domain association does not automatically mean this module owns every row or has write rights</strong>. The database repository is not an HTTP service.</p>
+<ul>
+<li><code>logistics.delivery_assignments</code> — columns · contracts</li>
+<li><code>logistics.delivery_attempts</code> — columns · contracts</li>
+<li><code>logistics.delivery_failure_reasons</code> — columns · contracts</li>
+<li><code>logistics.delivery_location_updates</code> — columns · contracts</li>
+<li><code>logistics.delivery_otp_challenges</code> — columns · contracts</li>
+<li><code>logistics.delivery_routes</code> — columns · contracts</li>
+<li><code>logistics.delivery_slots</code> — columns · contracts</li>
+<li><code>logistics.rider_shifts</code> — columns · contracts</li>
+</ul>
+<h3>Ownership, transactions and change control</h3>
+<p>Proposed owning service: <code>Delivery_Operations</code>. Main read concerns: rider assignment, live fleet, delivery exceptions and cod handover. Writes must be restricted by the actual foreign keys, CHECKs, unique contracts, crosswalks, policy and trigger guards. Use one transaction per domain state transition, use an outbox for reliable cross-module publication, and make any external retry idempotent.</p>
+<p><strong>Safety:</strong> A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</p>
+<p>Internal ID strategy: <code>identity.users.id</code> is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related <a href="../../04-Database/Migrations.html">migration strategy</a>.</p>
+<h2>Delivery Management — dependencies and ownership</h2>
+<p><strong>Underlying schemas:</strong> <code>logistics</code>, <code>fulfillment</code>, <code>organization</code>. These schemas are shared data domains; shared reads are not automatic write rights. Candidate collaborator modules are inferred from overlapping schema use:</p>
+<ul>
+<li>Admin_CMS</li>
+<li>Authentication_Access</li>
+<li>Customer_Orders</li>
+<li>Order_Operations</li>
+<li>Rider_App</li>
+<li>Store_Operations</li>
+<li>Warehouse</li>
+</ul>
+<h3>Communication rules</h3>
+<p>Use the owning service interface for business changes rather than making uncontrolled cross-module writes. In the chosen modular-monolith style, synchronous application calls can remain in-process. BullMQ/Redis jobs serve slow notifications and integrations after commit; they should not become the source of order, payment, stock or clinical truth.</p>
+<p>Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.</p>
+<p><strong>Data-access contract:</strong> A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.. Related: <a href="../../02-Architecture/Module-Dependencies.html">module dependencies</a> and <a href="../../04-Database/Module-Mapping.html">database usage</a>.</p>
+<h2>Delivery Management — domain objects and DTO boundaries</h2>
+<p><strong>Proposed objects, not new database tables.</strong> A domain object is a service-level business concept; a DTO is a validated data transfer object (API input/output). Do not confuse them with the archived historical ORM models.</p>
+<table>
+<thead>
+<tr>
+<th>Proposed object</th>
+<th>Source of truth / evidence</th>
+<th>Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Delivery_OperationsCommand</code></td>
+<td>Authenticated HTTP request and expected version</td>
+<td>Includes actor context, idempotency key and validated business input</td>
+</tr>
+<tr>
+<td><code>Delivery_OperationsAggregate</code></td>
+<td>Domain rows listed in Database Usage</td>
+<td>Represents the current authoritative business facts</td>
+</tr>
+<tr>
+<td><code>Delivery_OperationsPolicy</code></td>
+<td>Approved master/role records and product rules</td>
+<td>A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</td>
+</tr>
+<tr>
+<td><code>Delivery_OperationsReadModel</code></td>
+<td>Role-filtered current state</td>
+<td>Removes protected fields and translates internal statuses</td>
+</tr>
+<tr>
+<td><code>Delivery_OperationsEvent</code></td>
+<td>Committed state transition and audit ID</td>
+<td>Events carry references and versions, not clinical documents</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Existing representative tables:</strong> <code>logistics.delivery_assignments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_failure_reasons</code>, <code>logistics.delivery_location_updates</code>, <code>logistics.delivery_otp_challenges</code>, <code>logistics.delivery_routes</code>, <code>logistics.delivery_slots</code>, <code>logistics.rider_shifts</code>.</p>
+<p>Internal BIGINT primary keys are never used as authorization credentials, and original UUID public references must remain stable. Any DTO field not directly supported by a confirmed column must be labelled proposed until the API team approves the mapping. See <a href="../../04-Database/Module-Mapping.html">database usage</a>.</p>
+<h2>Delivery Management — failure handling</h2>
+<p><strong>Primary rule:</strong> A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</p>
+<ul>
+<li><strong>Missing or invalid input:</strong> respond with a field-specific problem code; do not leak sensitive data and do not write partial state.</li>
+<li><strong>Unauthorized object or location:</strong> return <code>403</code> or privacy-safe <code>404</code>; record the attempted privileged action.</li>
+<li><strong>Duplicate submission:</strong> return the persisted result when key + payload match; reject key reuse with different payload.</li>
+<li><strong>Stale/concurrent change:</strong> database version/FK/CHECK guard must resolve a single winner; caller reloads latest projection.</li>
+<li><strong>Partial external failure:</strong> leave the aggregate pending, never mark payment/stock/delivery success by assumption. Retry verified idempotent adapter calls; otherwise reconcile manually.</li>
+<li><strong>Safety or compliance policy unknown:</strong> fail closed. Route staff to an exception queue and customer to a non-misleading status.</li>
+</ul>
+<p>Use structured problem codes, request ID, retryability category and operator runbook reference. Sensitive Rx, financial tokens, OTPs and location traces must not be placed into logs. See <a href="../../05-APIs/README.html#standard-problem-response-behavior">error responses</a> and <a href="../../07-Engineering/Release-and-Incident-Handling.html">incident triage</a>.</p>
+<h2>Delivery planning, route and proof — proposed interfaces and DTOs</h2>
+<p><strong>Business context:</strong> Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence.</p>
+<p><strong>Controller contract:</strong> validate identity and scope before accepting a command; never expose internal BIGINT IDs. Typed inputs should carry allowed public identifiers, operation-specific fields, expected record version and a unique idempotency key on mutations.</p>
+<p><strong>Use-case interface:</strong> <code>execute(trustedContext, validatedRequest) -&gt; acceptedResult | domainError</code>. This is pseudocode for a boundary, <strong>not generated application code</strong>.</p>
+<p><strong>Repository interface:</strong> require a database transaction handle, parameterised SQL/ORM queries, and a stored accepted transition. Return public UUIDs or approved opaque references only.</p>
+<p><strong>Error DTO proposal:</strong></p>
+<pre><code class="language-json">{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;STATE_CONFLICT&quot;,
+    &quot;message&quot;: &quot;Refresh the record and try again&quot;,
+    &quot;request_id&quot;: &quot;...&quot;
+  }
+}
+</code></pre>
+<p>Do not expose SQL errors, provider secrets or prescription contents.</p>
+<p><strong>Existing table candidates:</strong> <code>logistics.shipments</code>, <code>logistics.delivery_assignments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_slots</code>, <code>logistics.ndr_cases</code>.</p>
+<p><strong>Per-operation request and response examples:</strong> API contract index. No generic DTO in this document overrides module-specific validation.</p>
+<h2>Delivery planning, route and proof — internal architecture</h2>
+<p><strong>Status: Proposed application design.</strong> The database repo does not contain a NestJS HTTP implementation.</p>
+<h3>Business behavior</h3>
+<p>Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence.</p>
+<h3>Components</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Responsibility</th>
+<th>Data affected</th>
+<th>Failure outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Delivery_OperationsController</code> (proposed)</td>
+<td>Validate DTO and request context</td>
+<td>Public API request only</td>
+<td>400/401/403 without partial mutation</td>
+</tr>
+<tr>
+<td><code>Delivery_OperationsUseCase</code> (proposed)</td>
+<td>Enforce module business invariant</td>
+<td><code>logistics.shipments</code>, <code>logistics.delivery_assignments</code>, <code>logistics.delivery_attempts</code></td>
+<td>Domain status, do not guess provider truth</td>
+</tr>
+<tr>
+<td><code>Delivery_OperationsRepository</code> (proposed)</td>
+<td>Scoped SQL transaction and concurrency guard</td>
+<td>Exact migrated tables</td>
+<td>Roll back on conflict or constraint error</td>
+</tr>
+<tr>
+<td><code>Delivery_OperationsIntegrationAdapter</code> (only when needed)</td>
+<td>Map external IO and reconcile delivery</td>
+<td>Outbox/inbox or verified provider record</td>
+<td>Retries outside DB lock</td>
+</tr>
+</tbody>
+</table>
+<h3>Transaction and retry sequence</h3>
+<ol>
+<li>read packed shipment and destination consent.</li>
+<li>choose serviceable delivery method.</li>
+<li>assign authorised rider/carrier.</li>
+<li>record handoff, attempts and proof state.</li>
+<li>reconcile failed/non-delivery reasons.</li>
+</ol>
+<h3>Existing tables (candidate responsibilities)</h3>
+<ul>
+<li><code>logistics.shipments</code> — candidate entity; verify the exact operation and field set in the implementation review.</li>
+<li><code>logistics.delivery_assignments</code> — candidate entity; verify the exact operation and field set in the implementation review.</li>
+<li><code>logistics.delivery_attempts</code> — candidate entity; verify the exact operation and field set in the implementation review.</li>
+<li><code>logistics.delivery_slots</code> — candidate entity; verify the exact operation and field set in the implementation review.</li>
+<li><code>logistics.ndr_cases</code> — candidate entity; verify the exact operation and field set in the implementation review.</li>
+</ul>
+<h3>Related</h3>
+<p>HLD · States · Permissions</p>
+<h2>Delivery planning, route and proof — observability</h2>
+<p><strong>Proposed runtime design:</strong> Structured logs record correlation ID, module, operation, outcome code and elapsed time. Replace identifiers with approved pseudonymous references. No raw OTP, prescription text, secrets, payment credentials, addresses or GPS coordinates in logs.</p>
+<p><strong>Candidate counters:</strong> <code>delivery_operations_command_total{outcome}</code>, <code>delivery_operations_denied_total{reason}</code>, and <code>delivery_operations_provider_pending_total</code> when an external provider is involved. Names are proposed and require monitoring owner review.</p>
+<p><strong>Actionable alerts:</strong> persistent command rejection spikes, outbox backlog, stale integrations or reconciliation mismatches; thresholds are open questions, not fabricated service-level objectives.</p>
+<p><strong>Monitoring design</strong></p>
+<h2>Delivery Management — permission model</h2>
+<p><strong>Actors:</strong> Delivery/Ops Manager.</p>
+<p><strong>Proposed service scope:</strong> <code>staff_delivery</code>. Roles are application concepts; existing PostgreSQL NOLOGIN capability roles form a separate lower-level authorization layer.</p>
+<table>
+<thead>
+<tr>
+<th>Operation class</th>
+<th>Required entitlement</th>
+<th>Enforcement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read own/scoped data</td>
+<td>Authenticated identity + object or location ownership</td>
+<td>Controller + service + database guard where provided</td>
+</tr>
+<tr>
+<td>Create / edit</td>
+<td>Explicit module action grant, approved master and domain status</td>
+<td>Policy decision before transaction</td>
+</tr>
+<tr>
+<td>Override / refund / pharmacist action</td>
+<td>Specialized staff permission and documented approval reason</td>
+<td>Distinct privilege, immutable audit evidence</td>
+</tr>
+<tr>
+<td>Export / sensitive view</td>
+<td>Purpose-limited role, retention and access logging</td>
+<td>Recheck at download/stream time</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Core constraint:</strong> A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status. A customer cannot infer another customer's resource existence.</p>
+<p>Do not connect app runtime through migration-owner credentials. Consult <a href="../../07-Engineering/Security.html">roles and permissions</a>.</p>
+<h2>Delivery Management — functional requirements</h2>
+<p><strong>Source:</strong> the documented draft requirements.</p>
+<p><strong>Status:</strong> Draft requirements, not proof of final business acceptance. 🔴/🟡/🟢 priorities have been normalized as Must/Should/Could without changing their meaning.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Priority in v0.1</th>
+<th>Statement</th>
+<th>Dependency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DLV-01</code></td>
+<td>Must (draft)</td>
+<td>Live map of riders (available, on delivery, offline) and orders ready for pickup</td>
+<td>Not stated</td>
+</tr>
+<tr>
+<td><code>DLV-02</code></td>
+<td>Must (draft)</td>
+<td>Suggest the nearest available rider; staff confirm or choose another</td>
+<td>Q19, rider availability rules</td>
+</tr>
+<tr>
+<td><code>DLV-03</code></td>
+<td>Must (draft)</td>
+<td>Failed-delivery queue: reattempt, reschedule or return to store</td>
+<td>Q27</td>
+</tr>
+<tr>
+<td><code>DLV-04</code></td>
+<td>Must (draft)</td>
+<td>COD handover: cash collected vs deposited per rider per day</td>
+<td>COD workflow (Q12)</td>
+</tr>
+<tr>
+<td><code>DLV-05</code></td>
+<td>Must (draft)</td>
+<td>Rider management: onboard, assign location, shifts</td>
+<td>Rider list</td>
+</tr>
+</tbody>
+</table>
+<h3>Interactions and acceptance basis</h3>
+<p>The user performs: Assign rider; manage failed attempts; reconcile COD handoff. Server-side enforcement must preserve this invariant: <strong>A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</strong></p>
+<p>A feature becomes implementation-ready only after its inputs (especially any dependency listed above), permissions, workflow outcome, API body and database transaction are resolved. Confirm business thresholds before coding: a field existing in SQL is not proof that its value was approved.</p>
+<p>See requirement coverage and test IDs.</p>
+<h2>Delivery planning, route and proof — request sequence</h2>
+<p><strong>Proposed design</strong>, not a diagram of deployed services. Business-specific steps appear in Internal Architecture.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant A as Dispatcher
+  participant O as Delivery
+  participant D as PostgreSQL
+  A-&gt;&gt;O: Assign eligible rider to ready parcel
+  O-&gt;&gt;D: Compare task version and rider eligibility
+  alt Gate fails or current version conflicts
+    O--&gt;&gt;A: Leave ready and unassigned or refresh
+  else Gate satisfied
+    O-&gt;&gt;D: Commit one current assignment
+    D--&gt;&gt;O: Committed evidence
+    O--&gt;&gt;A: Assigned rider task
+  end
+</code></pre>
+<h2>Delivery Management — service design</h2>
+<p><strong>Proposed NestJS module:</strong> <code>Delivery_OperationsModule</code> with a controller, application service, authorization policy, repository and adapters. The supplied database code is a schema/validation library; no running HTTP controller was found in Archive 2.</p>
+<h3>Candidate service methods</h3>
+<ul>
+<li><code>API-064: track_scoped_delivery_queue(actor_context, validated_command, expected_version) -&gt; Result</code></li>
+<li><code>API-065: assign_authorized_rider(actor_context, validated_command, expected_version) -&gt; Result</code></li>
+<li><code>API-066: resolve_failed_attempt(actor_context, validated_command, expected_version) -&gt; Result</code></li>
+<li><code>API-067: review_cod_by_rider(actor_context, validated_command, expected_version) -&gt; Result</code></li>
+<li><code>API-068: onboard_rider_with_shift/location(actor_context, validated_command, expected_version) -&gt; Result</code></li>
+</ul>
+<h3>Transaction and integration contract</h3>
+<p>For each mutation: authenticate actor, validate inputs, read affected rows with a lock/version check, verify policy, update the minimum relevant rows and immutable audit/outbox in one transaction. A remote gateway, storage or GPS call should be performed outside the locked transaction and reconciled on callback/timeout. Use PostgreSQL to reject invalid writes even if application validation is bypassed.</p>
+<p><strong>Module invariant:</strong> A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</p>
+<p><strong>Timeouts/retries:</strong> configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff.</p>
+<p><strong>Telemetry:</strong> actor pseudonym, request ID, action, state transition latency, retries and failure category; redact protected clinical and payment contents. See <a href="../../04-Database/Module-Mapping.html">database usage</a> and Monitoring.</p>
+<h2>Delivery Management — state and transition policy</h2>
+<p><strong>Status:</strong> State boundaries are derived from the unified order journey and existing SQL CHECK/trigger contracts; the following is a service design, not a claim that a single enum exists.</p>
+<pre><code class="language-mermaid">flowchart TD
+  A[&quot;Assign eligible rider to ready parcel&quot;] --&gt; B{&quot;Eligible rider and ready parcel?&quot;}
+  B --&gt;|No| C[&quot;Leave ready and unassigned or refresh&quot;]
+  B --&gt;|Yes| D[&quot;Commit one current assignment&quot;]
+  D --&gt; E[&quot;Assigned rider task&quot;]
+</code></pre>
+<p><strong>Module-specific invariant:</strong> A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</p>
+<p>Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with <code>409</code>. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence.</p>
+<p>When an order changes, keep clinical, payment, inventory, fulfillment and delivery statuses separate, then derive one safe user-visible projection.</p>
+<p>This flow shows command gates, not an entity enum. Legal entity transitions and recovery are specified in <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state contracts</a>; the table catalog supplies actual stored values.</p>
+<h2>Delivery Management — verification and acceptance</h2>
+<p><strong>Candidate test IDs</strong> derived one-to-one from the v0.1 feature IDs. They are test-design work items, not claims that the tests have been implemented. Database-level tests reported in the source do not replace HTTP and browser tests.</p>
+<table>
+<thead>
+<tr>
+<th>Stable test ID</th>
+<th>Behavior</th>
+<th>Expected result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TC-DLV-01-OK</code></td>
+<td>Live map of riders (available, on delivery, offline) and orders ready for pickup</td>
+<td>Dispatch map distinguishes available/on-task/offline riders and ready parcels</td>
+</tr>
+<tr>
+<td><code>TC-DLV-01-DENY</code></td>
+<td>Rider telemetry stops</td>
+<td>Last update/offline indicated; no fictitious live location; Dispatcher contacts rider and reviews assignment</td>
+</tr>
+<tr>
+<td><code>TC-DLV-02-OK</code></td>
+<td>Suggest the nearest available rider; staff confirm or choose another</td>
+<td>Staff confirms one eligible rider assignment</td>
+</tr>
+<tr>
+<td><code>TC-DLV-02-DENY</code></td>
+<td>Two dispatchers assign the same ready task</td>
+<td>Single current assignment; stale write conflicts; Dispatcher refreshes and communicates accepted task</td>
+</tr>
+<tr>
+<td><code>TC-DLV-03-OK</code></td>
+<td>Failed-delivery queue: reattempt, reschedule or return to store</td>
+<td>Failure resolution records permitted reattempt/reschedule/return</td>
+</tr>
+<tr>
+<td><code>TC-DLV-03-DENY</code></td>
+<td>Resolution is submitted after reassignment</td>
+<td>Stale resolution denied; parcel remains with current accountable task; Dispatch checks current assignment and reason</td>
+</tr>
+<tr>
+<td><code>TC-DLV-04-OK</code></td>
+<td>COD handover: cash collected vs deposited per rider per day</td>
+<td>Cash view compares recorded collection and handover per rider/period</td>
+</tr>
+<tr>
+<td><code>TC-DLV-04-DENY</code></td>
+<td>Handover is less than collection</td>
+<td>Unresolved cash difference remains, no forced clear; Finance/Operations investigates evidence with rider</td>
+</tr>
+<tr>
+<td><code>TC-DLV-05-OK</code></td>
+<td>Rider management: onboard, assign location, shifts</td>
+<td>Onboarding and shifts bind rider to permitted location</td>
+</tr>
+<tr>
+<td><code>TC-DLV-05-DENY</code></td>
+<td>Off-duty or deactivated rider is assigned</td>
+<td>Assignment refused without rewriting rider eligibility; Manager corrects approved shift/access</td>
+</tr>
+</tbody>
+</table>
+<h3>Cross-module contract tests</h3>
+<ul>
+<li>Verify authenticated customer/staff/location ownership using actual restricted runtime roles.</li>
+<li>Verify concurrency and duplicate idempotency behavior against an isolated PostgreSQL database installed from the canonical SQL.</li>
+<li>Verify safe retry when callbacks or files arrive late or malformed.</li>
+<li>Verify audit and notification records are based on committed state and contain no confidential payloads.</li>
+<li>Verify this invariant: <strong>A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</strong></li>
+</ul>
+<p>Coverage state: <strong>Designed, not executed for the proposed application</strong>. Link individual results to the associated test ID and requirement before go-live. Read <a href="../../07-Engineering/Testing.html">test strategy</a>.</p>
+<h2>Delivery Management — validation checkpoints</h2>
+<table>
+<thead>
+<tr>
+<th>Boundary</th>
+<th>Required validation</th>
+<th>Rejection outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input</td>
+<td>Required fields, type, size, allowed format and business master codes</td>
+<td><code>400/422</code>; no write</td>
+</tr>
+<tr>
+<td>Actor</td>
+<td>Session validity, role, location, customer/patient/parcel ownership</td>
+<td><code>401/403/404</code>; audit</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>Accepted order revision or row version matches, if state-changing</td>
+<td><code>409</code>; fetch current state</td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</td>
+<td>Explicit blocked/pending/error status</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>FK, PK, UNIQUE, CHECK, trigger and RLS outcome</td>
+<td>Safe conflict/business error; rollback</td>
+</tr>
+<tr>
+<td>Integration</td>
+<td>Authenticated provider/callback, idempotency key and settled evidence</td>
+<td>Keep pending; reconciliation task</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Requirements:</strong> <code>DLV-01</code>, <code>DLV-02</code>, <code>DLV-03</code>, <code>DLV-04</code>, <code>DLV-05</code>. Never trust browser-supplied patient, clinical decision, backend actor context, price or available quantity. Refer to Testing for negative tests.</p>
+<h2>Delivery Management — operational workflows</h2>
+<p><strong>Entry points:</strong> Assign rider; manage failed attempts; reconcile COD handoff.</p>
+<p><strong>User group:</strong> Delivery/Ops Manager. The following source-defined order journey stages identify primary ownership; supporting modules also participate without necessarily owning the stage.</p>
+<ul>
+<li>S23 — Assign the rider and hand over the parcel</li>
+<li>S26 — Finish delivery and provide documents</li>
+<li>S27 — Handle a failed delivery</li>
+</ul>
+<h3>Shared processing rules</h3>
+<p>The requested action is first validated against user scope, current state and approved business master data. Read required evidence from real migrated tables; change only data this module owns; publish a safe event or notify the next module after commit.</p>
+<p><strong>Alternative paths:</strong> missing required input keeps the process actionable; a stale or duplicate request is deduplicated; another actor's update returns a version conflict; external unavailability produces a pending/blocked state. Prescriptions, inventory, payments and logistics never independently set the whole order to delivered.</p>
+<p><strong>Module-specific rule:</strong> A rider assignment must be scope-checked, reschedulable on failure and linked to parcel evidence. COD handover requires separate daily reconciliation, regardless of delivery-completed status.</p>
+<p>See <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state transitions</a> and <a href="../../00-Business-Guide/Pharmville-Complete-Business-Flow.html">unified order</a>.</p>
+</main></body></html>

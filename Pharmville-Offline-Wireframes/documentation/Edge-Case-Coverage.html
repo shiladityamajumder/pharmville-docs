@@ -1,0 +1,263 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Case Coverage · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Edge-case coverage</h1>
+<p>Scenario IDs are stable across related views. Product screens offer relevant situations through What if something goes wrong? with plain-language explanations; Review tools retains technical scenario selection. Loading, empty, session and permission states explain unavailable actions. Network loss retains the current task and blocks unsuccessful mutations. Specialized scenarios alter the domain view and/or its submitted outcome. Choosing a condition does not silently supply an approval. See <a href="UX-State-Coverage.html">per-platform verification</a> for the distinction between implemented conditions and tested behavior.</p>
+<p>The <a href="Screen-Inventory.html">screen inventory</a> lists every exact screen/state association. Links below open a representative supported screen per workspace, keeping the scenario view compact.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario ID / name</th>
+<th>Start and trigger</th>
+<th>Visible result and recovery</th>
+<th>Supported workspace examples</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SCN-BASE-001 / Normal</td>
+<td>Current demo information. Trigger: Use the screen’s normal action</td>
+<td>Show the recorded next step. Next: Continue the role handoff</td>
+<td><a href="../index.html#/customer/login">customer</a>, <a href="../index.html#/staff/dashboard">admin</a>, <a href="../index.html#/staff/orders">orders</a>, <a href="../index.html#/staff/inventory">inventory</a>, <a href="../index.html#/staff/payments">finance</a>, <a href="../index.html#/staff/reports">reporting</a>, <a href="../index.html#/staff/audit">audit</a>, <a href="../index.html#/staff/notifications">notifications</a>, <a href="../index.html#/staff/support">support</a>, <a href="../index.html#/pharmacy/queue">pharmacy</a>, <a href="../index.html#/store/queue">store</a>, <a href="../index.html#/warehouse/receiving">warehouse</a>, <a href="../index.html#/delivery/dashboard">delivery</a>, <a href="../index.html#/rider/login">rider</a>, <a href="../index.html#/access/login">access</a>, <a href="../index.html#/procurement/suppliers">procurement</a>, <a href="../index.html#/staff/returns">returns</a> (91 screens)</td>
+<td><a href="../../07-Engineering/Testing.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-SYS-001 / Loading</td>
+<td>Current data is not yet available. Trigger: Open or refresh this view</td>
+<td>Show a loading state without claiming completion. Next: Finish simulated loading to return to current data</td>
+<td><a href="../index.html#/customer/login?scenario=loading">customer</a>, <a href="../index.html#/staff/dashboard?scenario=loading">admin</a>, <a href="../index.html#/staff/orders?scenario=loading">orders</a>, <a href="../index.html#/staff/inventory?scenario=loading">inventory</a>, <a href="../index.html#/staff/payments?scenario=loading">finance</a>, <a href="../index.html#/staff/reports?scenario=loading">reporting</a>, <a href="../index.html#/staff/audit?scenario=loading">audit</a>, <a href="../index.html#/staff/notifications?scenario=loading">notifications</a>, <a href="../index.html#/staff/support?scenario=loading">support</a>, <a href="../index.html#/pharmacy/queue?scenario=loading">pharmacy</a>, <a href="../index.html#/store/queue?scenario=loading">store</a>, <a href="../index.html#/warehouse/receiving?scenario=loading">warehouse</a>, <a href="../index.html#/delivery/dashboard?scenario=loading">delivery</a>, <a href="../index.html#/rider/login?scenario=loading">rider</a>, <a href="../index.html#/procurement/suppliers?scenario=loading">procurement</a>, <a href="../index.html#/staff/returns?scenario=loading">returns</a> (87 screens)</td>
+<td><a href="../../07-Engineering/State-and-Recovery-Contracts.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-INPUT-001 / Invalid or missing information</td>
+<td>A form is incomplete or has invalid values. Trigger: Submit the form</td>
+<td>Show a specific correction without a partial business change. Next: Correct fields and submit again</td>
+<td><a href="../index.html#/customer/login?scenario=validation">customer</a>, <a href="../index.html#/staff/staff?scenario=validation">admin</a>, <a href="../index.html#/staff/order-detail?scenario=validation">orders</a>, <a href="../index.html#/staff/adjustment?scenario=validation">inventory</a>, <a href="../index.html#/staff/refunds?scenario=validation">finance</a>, <a href="../index.html#/staff/reports?scenario=validation">reporting</a>, <a href="../index.html#/staff/audit?scenario=validation">audit</a>, <a href="../index.html#/staff/support?scenario=validation">support</a>, <a href="../index.html#/pharmacy/queue?scenario=validation">pharmacy</a>, <a href="../index.html#/store/queue?scenario=validation">store</a>, <a href="../index.html#/warehouse/receiving?scenario=validation">warehouse</a>, <a href="../index.html#/delivery/dashboard?scenario=validation">delivery</a>, <a href="../index.html#/rider/login?scenario=validation">rider</a>, <a href="../index.html#/access/login?scenario=validation">access</a> (62 screens)</td>
+<td><a href="../../05-APIs/README.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-SYS-003 / Network unavailable</td>
+<td>The requested view or command cannot reach its simulated service. Trigger: Load or submit</td>
+<td>No invented success; committed facts remain intact. Next: Retry the view after simulated recovery</td>
+<td><a href="../index.html#/customer/login?scenario=network">customer</a>, <a href="../index.html#/staff/dashboard?scenario=network">admin</a>, <a href="../index.html#/staff/orders?scenario=network">orders</a>, <a href="../index.html#/staff/inventory?scenario=network">inventory</a>, <a href="../index.html#/staff/payments?scenario=network">finance</a>, <a href="../index.html#/staff/reports?scenario=network">reporting</a>, <a href="../index.html#/staff/audit?scenario=network">audit</a>, <a href="../index.html#/staff/notifications?scenario=network">notifications</a>, <a href="../index.html#/staff/support?scenario=network">support</a>, <a href="../index.html#/pharmacy/queue?scenario=network">pharmacy</a>, <a href="../index.html#/store/queue?scenario=network">store</a>, <a href="../index.html#/warehouse/receiving?scenario=network">warehouse</a>, <a href="../index.html#/delivery/dashboard?scenario=network">delivery</a>, <a href="../index.html#/rider/login?scenario=network">rider</a>, <a href="../index.html#/procurement/suppliers?scenario=network">procurement</a>, <a href="../index.html#/staff/returns?scenario=network">returns</a> (87 screens)</td>
+<td><a href="../../07-Engineering/State-and-Recovery-Contracts.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-SEC-002 / Session expired</td>
+<td>A demo credential is no longer valid. Trigger: Use a protected screen</td>
+<td>No protected action is accepted. Next: Return to the appropriate demo sign-in</td>
+<td><a href="../index.html#/customer/login?scenario=session">customer</a>, <a href="../index.html#/staff/dashboard?scenario=session">admin</a>, <a href="../index.html#/staff/orders?scenario=session">orders</a>, <a href="../index.html#/staff/inventory?scenario=session">inventory</a>, <a href="../index.html#/staff/payments?scenario=session">finance</a>, <a href="../index.html#/staff/reports?scenario=session">reporting</a>, <a href="../index.html#/staff/audit?scenario=session">audit</a>, <a href="../index.html#/staff/notifications?scenario=session">notifications</a>, <a href="../index.html#/staff/support?scenario=session">support</a>, <a href="../index.html#/pharmacy/queue?scenario=session">pharmacy</a>, <a href="../index.html#/store/queue?scenario=session">store</a>, <a href="../index.html#/warehouse/receiving?scenario=session">warehouse</a>, <a href="../index.html#/delivery/dashboard?scenario=session">delivery</a>, <a href="../index.html#/rider/login?scenario=session">rider</a>, <a href="../index.html#/access/login?scenario=session">access</a>, <a href="../index.html#/procurement/suppliers?scenario=session">procurement</a>, <a href="../index.html#/staff/returns?scenario=session">returns</a> (83 screens)</td>
+<td><a href="../../03-Modules/Authentication_Access/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-OTP-003 / OTP delivery failure</td>
+<td>A challenge was requested. Trigger: The delivery adapter fails</td>
+<td>Delivery remains failed; no message is actually sent. Next: Retry or select the illustrative fallback scenario</td>
+<td><a href="../index.html#/customer/login?scenario=otp-delivery">customer</a> (2 screens)</td>
+<td><a href="../../03-Modules/Customer_Accounts/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-OTP-004 / WhatsApp to SMS fallback</td>
+<td>The primary delivery channel failed. Trigger: Request a code under the demo fallback</td>
+<td>Show one challenge and SMS delivery simulation. Next: Verify the demo code; thresholds remain undecided</td>
+<td><a href="../index.html#/customer/login?scenario=otp-fallback">customer</a> (2 screens)</td>
+<td><a href="../../03-Modules/Customer_Accounts/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-OTP-005 / Rate limited</td>
+<td>The configured illustrative abuse limit is reached. Trigger: Request or verify code</td>
+<td>Show a rate-limited state without revealing account existence. Next: Return to normal after illustrative recovery; no production timer implied</td>
+<td><a href="../index.html#/customer/login?scenario=rate-limit">customer</a>, <a href="../index.html#/access/mfa?scenario=rate-limit">access</a> (3 screens)</td>
+<td><a href="../../03-Modules/Authentication_Access/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-OTP-001 / Incorrect OTP</td>
+<td>A challenge exists. Trigger: Enter an incorrect code</td>
+<td>Do not create a session or complete delivery. Next: Retry the permitted demo proof</td>
+<td><a href="../index.html#/customer/otp?scenario=otp-wrong">customer</a>, <a href="../index.html#/rider/login?scenario=otp-wrong">rider</a>, <a href="../index.html#/access/mfa?scenario=otp-wrong">access</a> (4 screens)</td>
+<td><a href="../../03-Modules/Customer_Accounts/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-OTP-002 / Expired OTP</td>
+<td>The demo challenge is expired. Trigger: Verify the displayed demo code</td>
+<td>Reject expired proof without a session. Next: Request a new challenge</td>
+<td><a href="../index.html#/customer/otp?scenario=otp-expired">customer</a>, <a href="../index.html#/access/mfa?scenario=otp-expired">access</a> (2 screens)</td>
+<td><a href="../../03-Modules/Customer_Accounts/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-RACE-001 / Repeated action</td>
+<td>A matching operation was already submitted. Trigger: Submit the same intent again</td>
+<td>Reuse its recorded reference; no second stock, charge or refund effect. Next: Inspect the existing result</td>
+<td><a href="../index.html#/customer/otp?scenario=duplicate">customer</a>, <a href="../index.html#/staff/staff?scenario=duplicate">admin</a>, <a href="../index.html#/staff/order-detail?scenario=duplicate">orders</a>, <a href="../index.html#/staff/ledger?scenario=duplicate">inventory</a>, <a href="../index.html#/staff/payments?scenario=duplicate">finance</a>, <a href="../index.html#/staff/notifications?scenario=duplicate">notifications</a>, <a href="../index.html#/pharmacy/queue?scenario=duplicate">pharmacy</a>, <a href="../index.html#/store/queue?scenario=duplicate">store</a>, <a href="../index.html#/warehouse/receiving?scenario=duplicate">warehouse</a>, <a href="../index.html#/delivery/dashboard?scenario=duplicate">delivery</a>, <a href="../index.html#/rider/login?scenario=duplicate">rider</a>, <a href="../index.html#/procurement/suppliers?scenario=duplicate">procurement</a>, <a href="../index.html#/staff/returns?scenario=duplicate">returns</a> (54 screens)</td>
+<td><a href="../../07-Engineering/State-and-Recovery-Contracts.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-RACE-002 / Concurrent change</td>
+<td>Another role changed the record version. Trigger: Submit the old screen</td>
+<td>Do not overwrite the accepted result. Next: Reload and review the current version</td>
+<td><a href="../index.html#/customer/profile?scenario=conflict">customer</a>, <a href="../index.html#/staff/cms?scenario=conflict">admin</a>, <a href="../index.html#/staff/order-detail?scenario=conflict">orders</a>, <a href="../index.html#/staff/adjustment?scenario=conflict">inventory</a>, <a href="../index.html#/pharmacy/queue?scenario=conflict">pharmacy</a>, <a href="../index.html#/store/queue?scenario=conflict">store</a>, <a href="../index.html#/warehouse/receiving?scenario=conflict">warehouse</a>, <a href="../index.html#/delivery/dashboard?scenario=conflict">delivery</a>, <a href="../index.html#/rider/login?scenario=conflict">rider</a>, <a href="../index.html#/access/login?scenario=conflict">access</a>, <a href="../index.html#/procurement/suppliers?scenario=conflict">procurement</a>, <a href="../index.html#/staff/returns?scenario=conflict">returns</a> (47 screens)</td>
+<td><a href="../../07-Engineering/State-and-Recovery-Contracts.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-SEC-001 / Permission denied</td>
+<td>Current actor lacks action or location permission. Trigger: Open the protected action</td>
+<td>Deny access and preserve the business record. Next: Select the permitted illustrative role or return to normal</td>
+<td><a href="../index.html#/customer/profile?scenario=permission">customer</a>, <a href="../index.html#/staff/dashboard?scenario=permission">admin</a>, <a href="../index.html#/staff/orders?scenario=permission">orders</a>, <a href="../index.html#/staff/inventory?scenario=permission">inventory</a>, <a href="../index.html#/staff/payments?scenario=permission">finance</a>, <a href="../index.html#/staff/reports?scenario=permission">reporting</a>, <a href="../index.html#/staff/audit?scenario=permission">audit</a>, <a href="../index.html#/staff/notifications?scenario=permission">notifications</a>, <a href="../index.html#/staff/support?scenario=permission">support</a>, <a href="../index.html#/pharmacy/queue?scenario=permission">pharmacy</a>, <a href="../index.html#/store/queue?scenario=permission">store</a>, <a href="../index.html#/warehouse/receiving?scenario=permission">warehouse</a>, <a href="../index.html#/delivery/dashboard?scenario=permission">delivery</a>, <a href="../index.html#/rider/login?scenario=permission">rider</a>, <a href="../index.html#/access/login?scenario=permission">access</a>, <a href="../index.html#/procurement/suppliers?scenario=permission">procurement</a>, <a href="../index.html#/staff/returns?scenario=permission">returns</a> (71 screens)</td>
+<td><a href="../../07-Engineering/Security.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-SYS-002 / Empty result</td>
+<td>This scoped view has no matching records. Trigger: Open the view or apply filters</td>
+<td>Explain the absence of records and a useful next action. Next: Return to normal or clear the filter</td>
+<td><a href="../index.html#/customer/addresses?scenario=empty">customer</a>, <a href="../index.html#/staff/dashboard?scenario=empty">admin</a>, <a href="../index.html#/staff/orders?scenario=empty">orders</a>, <a href="../index.html#/staff/inventory?scenario=empty">inventory</a>, <a href="../index.html#/staff/payments?scenario=empty">finance</a>, <a href="../index.html#/staff/reports?scenario=empty">reporting</a>, <a href="../index.html#/staff/audit?scenario=empty">audit</a>, <a href="../index.html#/staff/notifications?scenario=empty">notifications</a>, <a href="../index.html#/staff/support?scenario=empty">support</a>, <a href="../index.html#/pharmacy/queue?scenario=empty">pharmacy</a>, <a href="../index.html#/store/queue?scenario=empty">store</a>, <a href="../index.html#/warehouse/receiving?scenario=empty">warehouse</a>, <a href="../index.html#/delivery/dashboard?scenario=empty">delivery</a>, <a href="../index.html#/rider/login?scenario=empty">rider</a>, <a href="../index.html#/procurement/suppliers?scenario=empty">procurement</a>, <a href="../index.html#/staff/returns?scenario=empty">returns</a> (68 screens)</td>
+<td><a href="../../07-Engineering/Testing.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-ADDR-001 / Address not serviceable</td>
+<td>The selected destination is unsupported or incomplete. Trigger: Check delivery availability</td>
+<td>Block checkout for that destination. Next: Choose a valid synthetic address</td>
+<td><a href="../index.html#/customer/addresses?scenario=invalid-address">customer</a> (3 screens)</td>
+<td><a href="../../03-Modules/Customer_Accounts/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-STK-001 / Stock unavailable</td>
+<td>Displayed stock cannot cover the accepted basket. Trigger: Check or hold stock</td>
+<td>No oversell or false supply promise. Next: Revise basket or ask Operations for eligible supply</td>
+<td><a href="../index.html#/customer/wishlist?scenario=out-of-stock">customer</a>, <a href="../index.html#/staff/allocation?scenario=out-of-stock">orders</a>, <a href="../index.html#/staff/inventory?scenario=out-of-stock">inventory</a>, <a href="../index.html#/store/queue?scenario=out-of-stock">store</a>, <a href="../index.html#/warehouse/dispatch?scenario=out-of-stock">warehouse</a> (16 screens)</td>
+<td><a href="../../03-Modules/Inventory/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-RX-001 / Prescription rejected</td>
+<td>P lines require current permitted review. Trigger: Record an illustrative rejection with reason</td>
+<td>Affected P lines cannot progress or silently disappear. Next: Re-upload or accept a permitted revised basket</td>
+<td><a href="../index.html#/customer/alternatives?scenario=prescription-rejected">customer</a>, <a href="../index.html#/pharmacy/review?scenario=prescription-rejected">pharmacy</a>, <a href="../index.html#/store/pick?scenario=prescription-rejected">store</a> (6 screens)</td>
+<td><a href="../../03-Modules/Pharmacist_Review/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-CHK-001 / Price changed</td>
+<td>The accepted summary differs from a fresh quote. Trigger: Review checkout</td>
+<td>Show the revised total for explicit acceptance. Next: Accept current terms or leave checkout</td>
+<td><a href="../index.html#/customer/cart?scenario=price-change">customer</a> (3 screens)</td>
+<td><a href="../../03-Modules/Cart_Checkout/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-STK-002 / Expired or blocked batch</td>
+<td>Held/picked batch is no longer eligible. Trigger: Reserve, pick or pack</td>
+<td>Stop unsafe progression; preserve money evidence. Next: Inventory/Pharmacy resolve eligible supply</td>
+<td><a href="../index.html#/customer/checkout-summary?scenario=stock-expired">customer</a>, <a href="../index.html#/staff/allocation?scenario=stock-expired">orders</a>, <a href="../index.html#/staff/inventory?scenario=stock-expired">inventory</a>, <a href="../index.html#/store/pick?scenario=stock-expired">store</a>, <a href="../index.html#/warehouse/receiving?scenario=stock-expired">warehouse</a>, <a href="../index.html#/rider/pickup?scenario=stock-expired">rider</a> (13 screens)</td>
+<td><a href="../../03-Modules/Inventory/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-RX-003 / Missing prescription</td>
+<td>A P basket lacks usable evidence. Trigger: Open review or submit checkout</td>
+<td>Keep P lines waiting; no medical auto-approval. Next: Customer supplies private demo evidence</td>
+<td><a href="../index.html#/customer/prescription-upload?scenario=prescription-missing">customer</a>, <a href="../index.html#/pharmacy/queue?scenario=prescription-missing">pharmacy</a> (5 screens)</td>
+<td><a href="../../03-Modules/Prescription_Upload/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-RX-004 / Unreadable upload</td>
+<td>A file cannot supply usable evidence. Trigger: Confirm upload or review</td>
+<td>Request correction; keep evidence unusable. Next: Select a fictional replacement; no real file is uploaded</td>
+<td><a href="../index.html#/customer/prescription-upload?scenario=unreadable">customer</a>, <a href="../index.html#/pharmacy/queue?scenario=unreadable">pharmacy</a> (5 screens)</td>
+<td><a href="../../03-Modules/Prescription_Upload/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-RX-002 / Partly approved prescription</td>
+<td>A mixed basket has eligible and rejected lines. Trigger: Record per-line demo outcomes</td>
+<td>Offer an explicit revision, preserving eligible M/O. Next: Customer accepts changed basket before payment</td>
+<td><a href="../index.html#/customer/prescription-status?scenario=prescription-partial">customer</a>, <a href="../index.html#/pharmacy/decision?scenario=prescription-partial">pharmacy</a>, <a href="../index.html#/store/pack?scenario=prescription-partial">store</a> (4 screens)</td>
+<td><a href="../../03-Modules/Pharmacist_Review/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-PAY-001 / Payment declined</td>
+<td>A valid held order enters demo payment. Trigger: Simulate provider attempt</td>
+<td>Show failed payment without fulfillment authorization. Next: Retry a new allowed attempt after outcome is known</td>
+<td><a href="../index.html#/customer/payment?scenario=payment-declined">customer</a> (2 screens)</td>
+<td><a href="../../03-Modules/Cart_Checkout/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-PAY-002 / Payment pending</td>
+<td>The provider result is uncertain. Trigger: Submit or check payment</td>
+<td>Keep the existing attempt pending; no immediate second charge. Next: Check the trusted demo record</td>
+<td><a href="../index.html#/customer/payment?scenario=payment-pending">customer</a>, <a href="../index.html#/staff/orders?scenario=payment-pending">orders</a>, <a href="../index.html#/staff/payments?scenario=payment-pending">finance</a>, <a href="../index.html#/staff/support?scenario=payment-pending">support</a> (7 screens)</td>
+<td><a href="../../03-Modules/Finance_Payments/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-PAY-003 / Paid, confirmation lost</td>
+<td>The provider captured the demo amount but the response was lost. Trigger: Return to the order or recovery screen</td>
+<td>Show checking payment with the same reference. Next: Reconcile provider evidence; recheck stock before progression</td>
+<td><a href="../index.html#/customer/payment?scenario=confirmation-lost">customer</a>, <a href="../index.html#/staff/orders?scenario=confirmation-lost">orders</a>, <a href="../index.html#/staff/payments?scenario=confirmation-lost">finance</a>, <a href="../index.html#/staff/notifications?scenario=confirmation-lost">notifications</a>, <a href="../index.html#/staff/support?scenario=confirmation-lost">support</a> (8 screens)</td>
+<td><a href="../../03-Modules/Cart_Checkout/LLD.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-FIN-002 / Refund result delayed</td>
+<td>A permitted refund instruction has no trusted completion. Trigger: Submit or inspect refund</td>
+<td>Keep pending with its reference; no duplicate payout. Next: Finance reconciles the same provider instruction</td>
+<td><a href="../index.html#/customer/refund?scenario=refund-delayed">customer</a>, <a href="../index.html#/staff/refunds?scenario=refund-delayed">finance</a> (2 screens)</td>
+<td><a href="../../03-Modules/Finance_Payments/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-STK-003 / Stock feed stale</td>
+<td>We can’t confirm the available stock right now. Trigger: Attempt a reservation or inspect feed</td>
+<td>Block new holds until approved evidence is current. Next: Refresh the stock information before trying again</td>
+<td><a href="../index.html#/staff/allocation?scenario=stale-stock">orders</a>, <a href="../index.html#/staff/inventory?scenario=stale-stock">inventory</a>, <a href="../index.html#/staff/reports?scenario=stale-stock">reporting</a>, <a href="../index.html#/store/queue?scenario=stale-stock">store</a>, <a href="../index.html#/warehouse/audit?scenario=stale-stock">warehouse</a>, <a href="../index.html#/rider/pickup?scenario=stale-stock">rider</a> (11 screens)</td>
+<td><a href="../../03-Modules/Inventory/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-EXT-001 / External adapter unavailable</td>
+<td>The required provider evidence cannot be obtained. Trigger: Send or reconcile the local demonstration</td>
+<td>Leave the operation pending/failed as appropriate. Next: Review the existing reference after adapter recovery</td>
+<td><a href="../index.html#/staff/inventory-integration?scenario=provider-error">inventory</a>, <a href="../index.html#/staff/payments?scenario=provider-error">finance</a>, <a href="../index.html#/staff/notifications?scenario=provider-error">notifications</a> (7 screens)</td>
+<td><a href="../../07-Engineering/State-and-Recovery-Contracts.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-FIN-001 / COD handover shortage</td>
+<td>Actual rider collection exceeds deposit. Trigger: Compare collected and deposited cash</td>
+<td>Keep both actual amounts and an open cash exception. Next: Finance investigates; do not force-clear the difference</td>
+<td><a href="../index.html#/staff/reconciliation?scenario=cod-shortage">finance</a>, <a href="../index.html#/staff/report-results?scenario=cod-shortage">reporting</a>, <a href="../index.html#/delivery/dashboard?scenario=cod-shortage">delivery</a>, <a href="../index.html#/rider/completion?scenario=cod-shortage">rider</a> (5 screens)</td>
+<td><a href="../../03-Modules/Finance_Payments/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-WH-001 / Short receipt</td>
+<td>A transfer or supplier delivery is incomplete. Trigger: Record actual received quantity</td>
+<td>Credit accepted quantity only and retain shortage. Next: Receiving/Inventory investigate the missing stock</td>
+<td><a href="../index.html#/staff/reconciliation?scenario=short-receipt">finance</a>, <a href="../index.html#/staff/report-results?scenario=short-receipt">reporting</a>, <a href="../index.html#/store/receipt?scenario=short-receipt">store</a>, <a href="../index.html#/warehouse/receiving?scenario=short-receipt">warehouse</a> (4 screens)</td>
+<td><a href="../../03-Modules/Warehouse/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-REP-001 / Report generation failed</td>
+<td>A report job cannot produce complete data. Trigger: Generate report</td>
+<td>Show failure, not incomplete totals presented as final. Next: Retry the same scoped run after recovery</td>
+<td><a href="../index.html#/staff/reports?scenario=report-failed">reporting</a> (2 screens)</td>
+<td><a href="../../03-Modules/Reporting/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-REP-002 / Access revoked before download</td>
+<td>A report exists but role/location access changed. Trigger: Download the export</td>
+<td>Deny protected download and keep it private. Next: Security reviews current access</td>
+<td><a href="../index.html#/staff/report-results?scenario=access-revoked">reporting</a>, <a href="../index.html#/staff/audit?scenario=access-revoked">audit</a>, <a href="../index.html#/staff/notification-preferences?scenario=access-revoked">notifications</a> (3 screens)</td>
+<td><a href="../../03-Modules/Reporting/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-DLV-001 / No eligible rider</td>
+<td>Ready parcel has no available assigned rider. Trigger: Open assignment suggestions</td>
+<td>Parcel remains ready and unassigned. Next: Dispatcher waits or chooses an eligible rider</td>
+<td><a href="../index.html#/store/pack?scenario=rider-unavailable">store</a>, <a href="../index.html#/delivery/dashboard?scenario=rider-unavailable">delivery</a>, <a href="../index.html#/rider/tasks?scenario=rider-unavailable">rider</a> (5 screens)</td>
+<td><a href="../../03-Modules/Delivery_Operations/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-RID-001 / Rider offline</td>
+<td>Current device has no connection. Trigger: Submit pickup or delivery evidence</td>
+<td>Label the action unconfirmed; no false completion. Next: Reconnect and validate current assignment/version/proof</td>
+<td><a href="../index.html#/delivery/dashboard?scenario=offline">delivery</a>, <a href="../index.html#/rider/navigation?scenario=offline">rider</a> (3 screens)</td>
+<td><a href="../../03-Modules/Rider_App/Edge-Cases.html">Source</a></td>
+</tr>
+<tr>
+<td>SCN-DLV-002 / Failed delivery</td>
+<td>A rider cannot complete the doorstep attempt. Trigger: Record the approved failure reason</td>
+<td>Keep parcel custody and actual COD accountable. Next: Reattempt, reschedule or return under the illustrative path</td>
+<td><a href="../index.html#/delivery/failures?scenario=delivery-failed">delivery</a>, <a href="../index.html#/rider/failure?scenario=delivery-failed">rider</a> (2 screens)</td>
+<td><a href="../../03-Modules/Delivery_Operations/Edge-Cases.html">Source</a></td>
+</tr>
+</tbody>
+</table>
+<p>35 distinct scenario definitions across 779 screen/scenario combinations. This is UX simulation coverage, not application test coverage. The original <a href="../../03-Modules/README.html">module edge cases</a> and <a href="../../09-References/Sources-and-Decisions.html">decisions</a> remain authoritative for policy.</p>
+</main></body></html>

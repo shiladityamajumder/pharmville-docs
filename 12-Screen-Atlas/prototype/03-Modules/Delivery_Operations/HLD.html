@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HLD · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Delivery Operations HLD</h1>
+<p>&lt;!-- ERD-NAV-START --&gt;</p>
+<h2>Database relationships</h2>
+<p><a href="../../04-Database/ER-Diagrams/12-logistics.html"><code>logistics</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/16-organization.html"><code>organization</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/Relationship-Catalog.html">FK catalog</a></p>
+<p>These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See <a href="../../04-Database/Migrations.html">migration evidence</a> for the supplied source and deployment verification limits.</p>
+<p>&lt;!-- ERD-NAV-END --&gt;</p>
+<p><a href="../../00-Business-Guide/Delivery-and-Rider-App.html">Business flow</a> · <a href="../../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a></p>
+<h2>MOD-012: Delivery planning, route and proof — HLD</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.</p>
+</blockquote>
+<p><strong>Business responsibility:</strong> Delivery planning, route and proof. Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence.</p>
+<p><strong>System responsibility:</strong> The <code>Delivery_Operations</code> NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are <strong>not</strong> proof of exclusive write ownership.</p>
+<h3>Major operations</h3>
+<ul>
+<li>Live map of riders (available, on delivery, offline) and orders ready for pickup (<code>DLV-01</code>)</li>
+<li>Suggest the nearest available rider; staff confirm or choose another (<code>DLV-02</code>)</li>
+<li>Failed-delivery queue: reattempt, reschedule or return to store (<code>DLV-03</code>)</li>
+<li>COD handover: cash collected vs deposited per rider per day (<code>DLV-04</code>)</li>
+<li>Rider management: onboard, assign location, shifts (<code>DLV-05</code>)</li>
+</ul>
+<h3>Dependencies and trust boundaries</h3>
+<ul>
+<li>Database candidates: <code>logistics.shipments</code>, <code>logistics.delivery_assignments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_slots</code>, <code>logistics.ndr_cases</code>.</li>
+<li>Role, patient, store and order scope resolved from trusted access context, not JSON body.</li>
+<li>External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.</li>
+<li>Use local transactions for authoritative state; publish external side effects only after commit.</li>
+</ul>
+<p><strong>Technical design:</strong> <a href="LLD.html">Module LLD</a> · <a href="../../05-APIs/README.html">API index</a> · <a href="../../07-Engineering/Testing.html">Tests</a></p>
+<h3>Risk</h3>
+<p>Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.</p>
+<h2>MOD-012 — Delivery planning, route and proof</h2>
+<p><strong>Source classification:</strong> 5 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.</p>
+<p><strong>Purpose:</strong> Order handoff to courier requires authorised assignment; failed attempts retain reason and evidence.</p>
+<p><strong>Feature coverage</strong></p>
+<ul>
+<li><strong>DLV-01 / REQ-074:</strong> Live map of riders (available, on delivery, offline) and orders ready for pickup (Must (draft)).</li>
+<li><strong>DLV-02 / REQ-075:</strong> Suggest the nearest available rider; staff confirm or choose another (Must (draft)).</li>
+<li><strong>DLV-03 / REQ-076:</strong> Failed-delivery queue: reattempt, reschedule or return to store (Must (draft)).</li>
+<li><strong>DLV-04 / REQ-077:</strong> COD handover: cash collected vs deposited per rider per day (Must (draft)).</li>
+<li><strong>DLV-05 / REQ-078:</strong> Rider management: onboard, assign location, shifts (Must (draft)).</li>
+</ul>
+<h3>Developer navigation</h3>
+<ul>
+<li><a href="HLD.html">Module HLD</a></li>
+<li><a href="LLD.html">Module LLD</a></li>
+<li>Internal architecture</li>
+<li><a href="APIs.html">API contracts</a></li>
+<li><a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li><a href="../../07-Engineering/Testing.html">Testing</a></li>
+<li><a href="../../08-Development-Plan/Implementation-Plan.html">Implementation plan</a></li>
+</ul>
+<p><strong>Dependencies:</strong> all cross-module references require ownership and permission checks; see master dependency register.</p>
+</main></body></html>

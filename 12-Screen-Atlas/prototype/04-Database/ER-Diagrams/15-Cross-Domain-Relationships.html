@@ -1,0 +1,733 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>15 Cross Domain Relationships · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Cross-domain relationships</h1>
+<h2>What this view shows</h2>
+<p>This page summarizes foreign keys whose child and parent tables belong to different schemas. It does not draw workflow-only connections as database FKs. The catalog snapshot contains <strong>894 cross-schema FKs across 92 ordered schema pairs</strong>; every exact constraint is in the <a href="Relationship-Catalog.html">relationship catalog</a>.</p>
+<h2>Business-level cross-domain map</h2>
+<pre><code class="language-mermaid">flowchart LR
+  appointment[&quot;Appointments and scheduling&quot;]
+  catalog[&quot;Products, medicines, and classification&quot;]
+  clinical[&quot;Prescriptions and pharmacist decisions&quot;]
+  commerce[&quot;Carts, checkout, orders, and returns&quot;]
+  compliance[&quot;Regulatory records and retention actions&quot;]
+  customer[&quot;Customer profiles and addresses&quot;]
+  diagnostics[&quot;Tests and laboratory services&quot;]
+  finance[&quot;Invoices, ledgers, and settlements&quot;]
+  fulfillment[&quot;Picking, packing, and shipment preparation&quot;]
+  identity[&quot;Accounts, sessions, and permissions&quot;]
+  insurance[&quot;Policies and claims&quot;]
+  logistics[&quot;Riders, shipments, and delivery&quot;]
+  marketplace[&quot;Sellers and listings&quot;]
+  membership[&quot;Benefits and loyalty&quot;]
+  notification[&quot;Templates, messages, and delivery attempts&quot;]
+  organization[&quot;Operating companies, sites, and licenses&quot;]
+  payment[&quot;Payment attempts, confirmation, and refunds&quot;]
+  platform[&quot;Configuration, files, audit, events, and reports&quot;]
+  pricing[&quot;Prices, taxes, and promotions&quot;]
+  procurement[&quot;Suppliers, purchase orders, and receiving&quot;]
+  risk[&quot;Risk rules, cases, and signals&quot;]
+  search[&quot;Search indexes and query signals&quot;]
+  support[&quot;Customer support cases&quot;]
+  warehouse[&quot;Stock balances, lots, and transfers&quot;]
+  commerce --&gt;|FK reference| catalog
+  commerce --&gt;|FK reference| customer
+  commerce --&gt;|FK reference| clinical
+  commerce --&gt;|FK reference| warehouse
+  commerce --&gt;|FK reference| marketplace
+  commerce --&gt;|FK reference| identity
+  commerce --&gt;|FK reference| pricing
+  payment --&gt;|FK reference| commerce
+  payment --&gt;|FK reference| identity
+  finance --&gt;|FK reference| commerce
+  finance --&gt;|FK reference| payment
+  finance --&gt;|FK reference| marketplace
+  fulfillment --&gt;|FK reference| commerce
+  fulfillment --&gt;|FK reference| warehouse
+  logistics --&gt;|FK reference| commerce
+  logistics --&gt;|FK reference| fulfillment
+  logistics --&gt;|FK reference| warehouse
+  clinical --&gt;|FK reference| commerce
+  clinical --&gt;|FK reference| catalog
+  clinical --&gt;|FK reference| customer
+  appointment --&gt;|FK reference| clinical
+  diagnostics --&gt;|FK reference| clinical
+  procurement --&gt;|FK reference| catalog
+  procurement --&gt;|FK reference| warehouse
+  warehouse --&gt;|FK reference| procurement
+  warehouse --&gt;|FK reference| catalog
+  pricing --&gt;|FK reference| catalog
+  marketplace --&gt;|FK reference| organization
+  notification --&gt;|FK reference| platform
+  support --&gt;|FK reference| commerce
+  support --&gt;|FK reference| appointment
+  risk --&gt;|FK reference| identity
+  platform --&gt;|FK reference| identity
+  customer --&gt;|FK reference| identity
+</code></pre>
+<p>The arrows point from a child schema to its referenced parent schema. They show only representative connections to keep the map readable. Each label points to the corresponding schema-level catalog; all <strong>92</strong> cross-schema pairs, not just the representative map arrows, are listed below.</p>
+<h2>Complete schema-pair index</h2>
+<table>
+<thead>
+<tr>
+<th>Child schema → parent schema</th>
+<th style="text-align:right">FK count</th>
+<th>Example FK columns and constraints</th>
+<th>Business reason</th>
+<th>Full details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>appointment</code> → <code>clinical</code></td>
+<td style="text-align:right">6</td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code> (fk_appointment_appointments_patient_profile_id_patient__c088)&lt;br&gt;<code>patient_profile_id</code> → <code>id</code> (fk_appointment_appointments_patient_profile_id_patient_profiles)&lt;br&gt;<code>practitioner_profile_id</code> → <code>id</code> (fk_appointment_appointments_practitioner_profile_id_pra_450f)</td>
+<td>The appointments and scheduling records reference prescriptions and pharmacist decisions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/appointment.html">appointment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>appointment</code> → <code>identity</code></td>
+<td style="text-align:right">19</td>
+<td><code>created_by</code> → <code>id</code> (fk_appointment_appointment_slots_created_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_appointment_appointment_slots_updated_by_users)&lt;br&gt;<code>actor_user_id</code> → <code>id</code> (fk_appointment_appointment_status_history_actor_user_id_users)</td>
+<td>The appointments and scheduling records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/appointment.html">appointment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>appointment</code> → <code>organization</code></td>
+<td style="text-align:right">4</td>
+<td><code>location_id_internal_id</code> → <code>internal_id</code> (fk_appointment_practitioner_services_location_id_locati_e2b2)&lt;br&gt;<code>location_id</code> → <code>id</code> (fk_appointment_practitioner_services_location_id_locations)&lt;br&gt;<code>organization_id</code> → <code>id</code> (fk_appointment_practitioner_services_organization_id_or_328c)</td>
+<td>The appointments and scheduling records reference operating companies, sites, and licenses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/appointment.html">appointment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>appointment</code> → <code>platform</code></td>
+<td style="text-align:right">2</td>
+<td><code>recording_file_id</code> → <code>id</code> (fk_appointment_teleconsultation_sessions_recording_file_7410)&lt;br&gt;<code>recording_file_id_internal_id</code> → <code>internal_id</code> (fk_appointment_teleconsultation_sessions_recording_file_885a)</td>
+<td>The appointments and scheduling records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/appointment.html">appointment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>catalog</code> → <code>identity</code></td>
+<td style="text-align:right">50</td>
+<td><code>created_by</code> → <code>id</code> (fk_catalog_brands_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_catalog_brands_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_catalog_brands_updated_by_users)</td>
+<td>The products, medicines, and classification records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/catalog.html">catalog FK catalog</a></td>
+</tr>
+<tr>
+<td><code>catalog</code> → <code>organization</code></td>
+<td style="text-align:right">4</td>
+<td><code>owner_organization_id</code> → <code>id</code> (fk_catalog_brands_owner_organization_id_organizations)&lt;br&gt;<code>owner_organization_id_internal_id</code> → <code>internal_id</code> (fk_catalog_brands_owner_organization_id_organizations_numeric)&lt;br&gt;<code>organization_id</code> → <code>id</code> (fk_catalog_manufacturers_organization_id_organizations)</td>
+<td>The products, medicines, and classification records reference operating companies, sites, and licenses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/catalog.html">catalog FK catalog</a></td>
+</tr>
+<tr>
+<td><code>catalog</code> → <code>platform</code></td>
+<td style="text-align:right">4</td>
+<td><code>logo_file_id</code> → <code>id</code> (fk_catalog_brands_logo_file_id_file_objects)&lt;br&gt;<code>logo_file_id_internal_id</code> → <code>internal_id</code> (fk_catalog_brands_logo_file_id_file_objects_numeric)&lt;br&gt;<code>file_object_id</code> → <code>id</code> (fk_catalog_product_media_file_object_id_file_objects)</td>
+<td>The products, medicines, and classification records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/catalog.html">catalog FK catalog</a></td>
+</tr>
+<tr>
+<td><code>clinical</code> → <code>appointment</code></td>
+<td style="text-align:right">2</td>
+<td><code>appointment_id</code> → <code>id</code> (fk_clinical_consultations_appointment_id_appointments)&lt;br&gt;<code>appointment_id_internal_id</code> → <code>internal_id</code> (fk_clinical_consultations_appointment_id_appointments_numeric)</td>
+<td>The prescriptions and pharmacist decisions records reference appointments and scheduling keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/clinical.html">clinical FK catalog</a></td>
+</tr>
+<tr>
+<td><code>clinical</code> → <code>catalog</code></td>
+<td style="text-align:right">4</td>
+<td><code>product_id</code> → <code>id</code> (fk_clinical_patient_medications_product_id_products)&lt;br&gt;<code>product_id_internal_id</code> → <code>internal_id</code> (fk_clinical_patient_medications_product_id_products_numeric)&lt;br&gt;<code>product_id</code> → <code>id</code> (fk_clinical_prescription_items_product_id_products)</td>
+<td>The prescriptions and pharmacist decisions records reference products, medicines, and classification keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/clinical.html">clinical FK catalog</a></td>
+</tr>
+<tr>
+<td><code>clinical</code> → <code>commerce</code></td>
+<td style="text-align:right">6</td>
+<td><code>order_item_id, order_id</code> → <code>id, order_id</code> (fk_clinical_review_items_item_order)&lt;br&gt;<code>order_item_id_internal_id, order_id_internal_id</code> → <code>internal_id, order_id_internal_id</code> (fk_clinical_review_items_item_order_numeric)&lt;br&gt;<code>order_id</code> → <code>id</code> (fk_clinical_order_reviews_order_id_orders)</td>
+<td>The prescriptions and pharmacist decisions records reference carts, checkout, orders, and returns keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/clinical.html">clinical FK catalog</a></td>
+</tr>
+<tr>
+<td><code>clinical</code> → <code>customer</code></td>
+<td style="text-align:right">2</td>
+<td><code>family_member_id_internal_id</code> → <code>internal_id</code> (fk_clinical_patient_profiles_family_member_id_family_me_da24)&lt;br&gt;<code>family_member_id</code> → <code>id</code> (fk_clinical_patient_profiles_family_member_id_family_members)</td>
+<td>The prescriptions and pharmacist decisions records reference customer profiles and addresses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/clinical.html">clinical FK catalog</a></td>
+</tr>
+<tr>
+<td><code>clinical</code> → <code>identity</code></td>
+<td style="text-align:right">43</td>
+<td><code>created_by</code> → <code>id</code> (fk_clinical_care_episodes_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_clinical_care_episodes_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_clinical_care_episodes_updated_by_users)</td>
+<td>The prescriptions and pharmacist decisions records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/clinical.html">clinical FK catalog</a></td>
+</tr>
+<tr>
+<td><code>clinical</code> → <code>organization</code></td>
+<td style="text-align:right">4</td>
+<td><code>location_id_internal_id</code> → <code>internal_id</code> (fk_clinical_practitioner_organizations_location_id_loca_a76c)&lt;br&gt;<code>location_id</code> → <code>id</code> (fk_clinical_practitioner_organizations_location_id_locations)&lt;br&gt;<code>organization_id_internal_id</code> → <code>internal_id</code> (fk_clinical_practitioner_organizations_organization_id__4223)</td>
+<td>The prescriptions and pharmacist decisions records reference operating companies, sites, and licenses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/clinical.html">clinical FK catalog</a></td>
+</tr>
+<tr>
+<td><code>clinical</code> → <code>platform</code></td>
+<td style="text-align:right">2</td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code> (fk_clinical_prescription_documents_file_object_id_file__7c34)&lt;br&gt;<code>file_object_id</code> → <code>id</code> (fk_clinical_prescription_documents_file_object_id_file_objects)</td>
+<td>The prescriptions and pharmacist decisions records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/clinical.html">clinical FK catalog</a></td>
+</tr>
+<tr>
+<td><code>commerce</code> → <code>catalog</code></td>
+<td style="text-align:right">9</td>
+<td><code>product_id</code> → <code>id</code> (fk_commerce_cart_items_product_id_products)&lt;br&gt;<code>product_id_internal_id</code> → <code>internal_id</code> (fk_commerce_cart_items_product_id_products_numeric)&lt;br&gt;<code>variant_id</code> → <code>id</code> (fk_commerce_cart_items_variant_id_product_variants)</td>
+<td>The carts, checkout, orders, and returns records reference products, medicines, and classification keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/commerce.html">commerce FK catalog</a></td>
+</tr>
+<tr>
+<td><code>commerce</code> → <code>clinical</code></td>
+<td style="text-align:right">6</td>
+<td><code>prescription_id</code> → <code>id</code> (fk_commerce_cart_items_prescription_id_prescriptions)&lt;br&gt;<code>prescription_id_internal_id</code> → <code>internal_id</code> (fk_commerce_cart_items_prescription_id_prescriptions_numeric)&lt;br&gt;<code>prescription_id</code> → <code>id</code> (fk_commerce_order_items_prescription_id_prescriptions)</td>
+<td>The carts, checkout, orders, and returns records reference prescriptions and pharmacist decisions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/commerce.html">commerce FK catalog</a></td>
+</tr>
+<tr>
+<td><code>commerce</code> → <code>customer</code></td>
+<td style="text-align:right">2</td>
+<td><code>address_id</code> → <code>id</code> (fk_commerce_checkouts_address_id_addresses)&lt;br&gt;<code>address_id_internal_id</code> → <code>internal_id</code> (fk_commerce_checkouts_address_id_addresses_numeric)</td>
+<td>The carts, checkout, orders, and returns records reference customer profiles and addresses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/commerce.html">commerce FK catalog</a></td>
+</tr>
+<tr>
+<td><code>commerce</code> → <code>identity</code></td>
+<td style="text-align:right">38</td>
+<td><code>created_by</code> → <code>id</code> (fk_commerce_cancellation_items_created_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_commerce_cancellation_items_updated_by_users)&lt;br&gt;<code>created_by_user_id</code> → <code>id</code> (fk_commerce_cancellation_reason_codes_created_by_user_id_users)</td>
+<td>The carts, checkout, orders, and returns records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/commerce.html">commerce FK catalog</a></td>
+</tr>
+<tr>
+<td><code>commerce</code> → <code>marketplace</code></td>
+<td style="text-align:right">8</td>
+<td><code>seller_id</code> → <code>id</code> (fk_commerce_cart_items_seller_id_sellers)&lt;br&gt;<code>seller_id_internal_id</code> → <code>internal_id</code> (fk_commerce_cart_items_seller_id_sellers_numeric)&lt;br&gt;<code>seller_id</code> → <code>id</code> (fk_commerce_order_allocations_seller_id_sellers)</td>
+<td>The carts, checkout, orders, and returns records reference sellers and listings keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/commerce.html">commerce FK catalog</a></td>
+</tr>
+<tr>
+<td><code>commerce</code> → <code>pricing</code></td>
+<td style="text-align:right">2</td>
+<td><code>promotion_id</code> → <code>id</code> (fk_commerce_order_discounts_promotion_id_promotions)&lt;br&gt;<code>promotion_id_internal_id</code> → <code>internal_id</code> (fk_commerce_order_discounts_promotion_id_promotions_numeric)</td>
+<td>The carts, checkout, orders, and returns records reference prices, taxes, and promotions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/commerce.html">commerce FK catalog</a></td>
+</tr>
+<tr>
+<td><code>commerce</code> → <code>warehouse</code></td>
+<td style="text-align:right">8</td>
+<td><code>reservation_id_internal_id</code> → <code>internal_id</code> (fk_commerce_order_allocations_reservation_id_stock_rese_0af9)&lt;br&gt;<code>reservation_id</code> → <code>id</code> (fk_commerce_order_allocations_reservation_id_stock_reservations)&lt;br&gt;<code>reservation_id, order_item_id</code> → <code>id, order_item_id</code> (fk_commerce_order_allocations_reservation_item)</td>
+<td>The carts, checkout, orders, and returns records reference stock balances, lots, and transfers keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/commerce.html">commerce FK catalog</a></td>
+</tr>
+<tr>
+<td><code>compliance</code> → <code>catalog</code></td>
+<td style="text-align:right">4</td>
+<td><code>product_id</code> → <code>id</code> (fk_compliance_adverse_event_reports_product_id_products)&lt;br&gt;<code>product_id_internal_id</code> → <code>internal_id</code> (fk_compliance_adverse_event_reports_product_id_products_numeric)&lt;br&gt;<code>product_id</code> → <code>id</code> (fk_compliance_product_recalls_product_id_products)</td>
+<td>The regulatory records and retention actions records reference products, medicines, and classification keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/compliance.html">compliance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>compliance</code> → <code>clinical</code></td>
+<td style="text-align:right">4</td>
+<td><code>patient_profile_id</code> → <code>id</code> (fk_compliance_adverse_event_reports_patient_profile_id__4b0b)&lt;br&gt;<code>patient_profile_id_internal_id</code> → <code>internal_id</code> (fk_compliance_adverse_event_reports_patient_profile_id__6d1c)&lt;br&gt;<code>prescription_id_internal_id</code> → <code>internal_id</code> (fk_compliance_adverse_event_reports_prescription_id_pre_401a)</td>
+<td>The regulatory records and retention actions records reference prescriptions and pharmacist decisions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/compliance.html">compliance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>compliance</code> → <code>identity</code></td>
+<td style="text-align:right">19</td>
+<td><code>created_by</code> → <code>id</code> (fk_compliance_adverse_event_reports_created_by_users)&lt;br&gt;<code>reported_by_user_id</code> → <code>id</code> (fk_compliance_adverse_event_reports_reported_by_user_id_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_compliance_adverse_event_reports_updated_by_users)</td>
+<td>The regulatory records and retention actions records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/compliance.html">compliance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>compliance</code> → <code>organization</code></td>
+<td style="text-align:right">4</td>
+<td><code>location_id_internal_id</code> → <code>internal_id</code> (fk_compliance_regulatory_registrations_location_id_loca_65e3)&lt;br&gt;<code>location_id</code> → <code>id</code> (fk_compliance_regulatory_registrations_location_id_locations)&lt;br&gt;<code>organization_id</code> → <code>id</code> (fk_compliance_regulatory_registrations_organization_id__7f52)</td>
+<td>The regulatory records and retention actions records reference operating companies, sites, and licenses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/compliance.html">compliance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>compliance</code> → <code>platform</code></td>
+<td style="text-align:right">4</td>
+<td><code>file_object_id</code> → <code>id</code> (fk_compliance_evidence_file_object_id_file_objects)&lt;br&gt;<code>file_object_id_internal_id</code> → <code>internal_id</code> (fk_compliance_evidence_file_object_id_file_objects_numeric)&lt;br&gt;<code>document_file_id_internal_id</code> → <code>internal_id</code> (fk_compliance_regulatory_registrations_document_file_id_1e84)</td>
+<td>The regulatory records and retention actions records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/compliance.html">compliance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>compliance</code> → <code>warehouse</code></td>
+<td style="text-align:right">2</td>
+<td><code>lot_id</code> → <code>id</code> (fk_compliance_recall_lots_lot_id_inventory_lots)&lt;br&gt;<code>lot_id_internal_id</code> → <code>internal_id</code> (fk_compliance_recall_lots_lot_id_inventory_lots_numeric)</td>
+<td>The regulatory records and retention actions records reference stock balances, lots, and transfers keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/compliance.html">compliance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>customer</code> → <code>catalog</code></td>
+<td style="text-align:right">2</td>
+<td><code>product_id</code> → <code>id</code> (fk_customer_wishlist_items_product_id_products)&lt;br&gt;<code>product_id_internal_id</code> → <code>internal_id</code> (fk_customer_wishlist_items_product_id_products_numeric)</td>
+<td>The customer profiles and addresses records reference products, medicines, and classification keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/customer.html">customer FK catalog</a></td>
+</tr>
+<tr>
+<td><code>customer</code> → <code>identity</code></td>
+<td style="text-align:right">28</td>
+<td><code>created_by</code> → <code>id</code> (fk_customer_addresses_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_customer_addresses_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_customer_addresses_updated_by_users)</td>
+<td>The customer profiles and addresses records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/customer.html">customer FK catalog</a></td>
+</tr>
+<tr>
+<td><code>customer</code> → <code>platform</code></td>
+<td style="text-align:right">2</td>
+<td><code>avatar_file_id</code> → <code>id</code> (fk_customer_profiles_avatar_file_id_file_objects)&lt;br&gt;<code>avatar_file_id_internal_id</code> → <code>internal_id</code> (fk_customer_profiles_avatar_file_id_file_objects_numeric)</td>
+<td>The customer profiles and addresses records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/customer.html">customer FK catalog</a></td>
+</tr>
+<tr>
+<td><code>diagnostics</code> → <code>clinical</code></td>
+<td style="text-align:right">2</td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code> (fk_diagnostics_diagnostic_orders_patient_profile_id_pat_0689)&lt;br&gt;<code>patient_profile_id</code> → <code>id</code> (fk_diagnostics_diagnostic_orders_patient_profile_id_pat_4a11)</td>
+<td>The tests and laboratory services records reference prescriptions and pharmacist decisions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/diagnostics.html">diagnostics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>diagnostics</code> → <code>customer</code></td>
+<td style="text-align:right">2</td>
+<td><code>address_id</code> → <code>id</code> (fk_diagnostics_diagnostic_orders_address_id_addresses)&lt;br&gt;<code>address_id_internal_id</code> → <code>internal_id</code> (fk_diagnostics_diagnostic_orders_address_id_addresses_numeric)</td>
+<td>The tests and laboratory services records reference customer profiles and addresses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/diagnostics.html">diagnostics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>diagnostics</code> → <code>identity</code></td>
+<td style="text-align:right">33</td>
+<td><code>created_by</code> → <code>id</code> (fk_diagnostics_diagnostic_order_items_created_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_diagnostics_diagnostic_order_items_updated_by_users)&lt;br&gt;<code>created_by</code> → <code>id</code> (fk_diagnostics_diagnostic_orders_created_by_users)</td>
+<td>The tests and laboratory services records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/diagnostics.html">diagnostics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>diagnostics</code> → <code>organization</code></td>
+<td style="text-align:right">4</td>
+<td><code>location_id</code> → <code>id</code> (fk_diagnostics_lab_locations_location_id_locations)&lt;br&gt;<code>location_id_internal_id</code> → <code>internal_id</code> (fk_diagnostics_lab_locations_location_id_locations_numeric)&lt;br&gt;<code>organization_id_internal_id</code> → <code>internal_id</code> (fk_diagnostics_lab_providers_organization_id_organizati_15a2)</td>
+<td>The tests and laboratory services records reference operating companies, sites, and licenses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/diagnostics.html">diagnostics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>diagnostics</code> → <code>platform</code></td>
+<td style="text-align:right">2</td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code> (fk_diagnostics_diagnostic_reports_file_object_id_file_o_e8a0)&lt;br&gt;<code>file_object_id</code> → <code>id</code> (fk_diagnostics_diagnostic_reports_file_object_id_file_objects)</td>
+<td>The tests and laboratory services records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/diagnostics.html">diagnostics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>finance</code> → <code>commerce</code></td>
+<td style="text-align:right">8</td>
+<td><code>order_item_id</code> → <code>id</code> (fk_finance_invoice_items_order_item_id_order_items)&lt;br&gt;<code>order_item_id_internal_id</code> → <code>internal_id</code> (fk_finance_invoice_items_order_item_id_order_items_numeric)&lt;br&gt;<code>order_id</code> → <code>id</code> (fk_finance_invoices_order_id_orders)</td>
+<td>The invoices, ledgers, and settlements records reference carts, checkout, orders, and returns keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/finance.html">finance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>finance</code> → <code>identity</code></td>
+<td style="text-align:right">13</td>
+<td><code>created_by</code> → <code>id</code> (fk_finance_accounts_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_finance_accounts_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_finance_accounts_updated_by_users)</td>
+<td>The invoices, ledgers, and settlements records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/finance.html">finance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>finance</code> → <code>marketplace</code></td>
+<td style="text-align:right">4</td>
+<td><code>seller_id</code> → <code>id</code> (fk_finance_invoices_seller_id_sellers)&lt;br&gt;<code>seller_id_internal_id</code> → <code>internal_id</code> (fk_finance_invoices_seller_id_sellers_numeric)&lt;br&gt;<code>seller_id</code> → <code>id</code> (fk_finance_settlement_runs_seller_id_sellers)</td>
+<td>The invoices, ledgers, and settlements records reference sellers and listings keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/finance.html">finance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>finance</code> → <code>payment</code></td>
+<td style="text-align:right">2</td>
+<td><code>refund_id</code> → <code>id</code> (fk_finance_credit_notes_refund_id_refunds)&lt;br&gt;<code>refund_id_internal_id</code> → <code>internal_id</code> (fk_finance_credit_notes_refund_id_refunds_numeric)</td>
+<td>The invoices, ledgers, and settlements records reference payment attempts, confirmation, and refunds keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/finance.html">finance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>finance</code> → <code>platform</code></td>
+<td style="text-align:right">4</td>
+<td><code>document_file_id</code> → <code>id</code> (fk_finance_credit_notes_document_file_id_file_objects)&lt;br&gt;<code>document_file_id_internal_id</code> → <code>internal_id</code> (fk_finance_credit_notes_document_file_id_file_objects_numeric)&lt;br&gt;<code>document_file_id</code> → <code>id</code> (fk_finance_invoices_document_file_id_file_objects)</td>
+<td>The invoices, ledgers, and settlements records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/finance.html">finance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>fulfillment</code> → <code>commerce</code></td>
+<td style="text-align:right">12</td>
+<td><code>order_item_id</code> → <code>id</code> (fk_fulfillment_fulfillment_order_items_order_item_id_or_9354)&lt;br&gt;<code>order_item_id_internal_id</code> → <code>internal_id</code> (fk_fulfillment_fulfillment_order_items_order_item_id_or_caeb)&lt;br&gt;<code>order_group_id_internal_id</code> → <code>internal_id</code> (fk_fulfillment_fulfillment_orders_order_group_id_order__b1eb)</td>
+<td>The picking, packing, and shipment preparation records reference carts, checkout, orders, and returns keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/fulfillment.html">fulfillment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>fulfillment</code> → <code>identity</code></td>
+<td style="text-align:right">22</td>
+<td><code>actor_user_id</code> → <code>id</code> (fk_fulfillment_fulfillment_events_actor_user_id_users)&lt;br&gt;<code>created_by</code> → <code>id</code> (fk_fulfillment_fulfillment_order_items_created_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_fulfillment_fulfillment_order_items_updated_by_users)</td>
+<td>The picking, packing, and shipment preparation records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/fulfillment.html">fulfillment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>fulfillment</code> → <code>marketplace</code></td>
+<td style="text-align:right">2</td>
+<td><code>seller_id</code> → <code>id</code> (fk_fulfillment_fulfillment_orders_seller_id_sellers)&lt;br&gt;<code>seller_id_internal_id</code> → <code>internal_id</code> (fk_fulfillment_fulfillment_orders_seller_id_sellers_numeric)</td>
+<td>The picking, packing, and shipment preparation records reference sellers and listings keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/fulfillment.html">fulfillment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>fulfillment</code> → <code>warehouse</code></td>
+<td style="text-align:right">10</td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code> (fk_fulfillment_fulfillment_orders_warehouse_id_warehous_f861)&lt;br&gt;<code>warehouse_id</code> → <code>id</code> (fk_fulfillment_fulfillment_orders_warehouse_id_warehouses)&lt;br&gt;<code>lot_id</code> → <code>id</code> (fk_fulfillment_package_items_lot_id_inventory_lots)</td>
+<td>The picking, packing, and shipment preparation records reference stock balances, lots, and transfers keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/fulfillment.html">fulfillment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>identity</code> → <code>platform</code></td>
+<td style="text-align:right">2</td>
+<td><code>avatar_file_id</code> → <code>id</code> (fk_identity_user_profiles_avatar_file_id_file_objects)&lt;br&gt;<code>avatar_file_id_internal_id</code> → <code>internal_id</code> (fk_identity_user_profiles_avatar_file_id_file_objects_numeric)</td>
+<td>The accounts, sessions, and permissions records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/identity.html">identity FK catalog</a></td>
+</tr>
+<tr>
+<td><code>insurance</code> → <code>clinical</code></td>
+<td style="text-align:right">6</td>
+<td><code>patient_profile_id</code> → <code>id</code> (fk_insurance_claims_patient_profile_id_patient_profiles)&lt;br&gt;<code>patient_profile_id_internal_id</code> → <code>internal_id</code> (fk_insurance_claims_patient_profile_id_patient_profiles_numeric)&lt;br&gt;<code>patient_profile_id_internal_id</code> → <code>internal_id</code> (fk_insurance_policies_patient_profile_id_patient_profil_0c08)</td>
+<td>The policies and claims records reference prescriptions and pharmacist decisions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/insurance.html">insurance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>insurance</code> → <code>identity</code></td>
+<td style="text-align:right">16</td>
+<td><code>created_by</code> → <code>id</code> (fk_insurance_claim_documents_created_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_insurance_claim_documents_updated_by_users)&lt;br&gt;<code>created_by</code> → <code>id</code> (fk_insurance_claims_created_by_users)</td>
+<td>The policies and claims records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/insurance.html">insurance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>insurance</code> → <code>organization</code></td>
+<td style="text-align:right">4</td>
+<td><code>organization_id</code> → <code>id</code> (fk_insurance_insurers_organization_id_organizations)&lt;br&gt;<code>organization_id_internal_id</code> → <code>internal_id</code> (fk_insurance_insurers_organization_id_organizations_numeric)&lt;br&gt;<code>organization_id</code> → <code>id</code> (fk_insurance_tpas_organization_id_organizations)</td>
+<td>The policies and claims records reference operating companies, sites, and licenses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/insurance.html">insurance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>insurance</code> → <code>platform</code></td>
+<td style="text-align:right">2</td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code> (fk_insurance_claim_documents_file_object_id_file_object_2e7f)&lt;br&gt;<code>file_object_id</code> → <code>id</code> (fk_insurance_claim_documents_file_object_id_file_objects)</td>
+<td>The policies and claims records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/insurance.html">insurance FK catalog</a></td>
+</tr>
+<tr>
+<td><code>logistics</code> → <code>commerce</code></td>
+<td style="text-align:right">10</td>
+<td><code>return_id</code> → <code>id</code> (fk_logistics_reverse_shipments_return_id_returns)&lt;br&gt;<code>return_id_internal_id</code> → <code>internal_id</code> (fk_logistics_reverse_shipments_return_id_returns_numeric)&lt;br&gt;<code>order_group_id, order_id</code> → <code>id, order_id</code> (fk_logistics_shipments_group_order)</td>
+<td>The riders, shipments, and delivery records reference carts, checkout, orders, and returns keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/logistics.html">logistics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>logistics</code> → <code>fulfillment</code></td>
+<td style="text-align:right">2</td>
+<td><code>package_id</code> → <code>id</code> (fk_logistics_shipments_package_id_packages)&lt;br&gt;<code>package_id_internal_id</code> → <code>internal_id</code> (fk_logistics_shipments_package_id_packages_numeric)</td>
+<td>The riders, shipments, and delivery records reference picking, packing, and shipment preparation keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/logistics.html">logistics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>logistics</code> → <code>identity</code></td>
+<td style="text-align:right">31</td>
+<td><code>created_by</code> → <code>id</code> (fk_logistics_carrier_accounts_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_logistics_carrier_accounts_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_logistics_carrier_accounts_updated_by_users)</td>
+<td>The riders, shipments, and delivery records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/logistics.html">logistics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>logistics</code> → <code>platform</code></td>
+<td style="text-align:right">4</td>
+<td><code>proof_file_id_internal_id</code> → <code>internal_id</code> (fk_logistics_delivery_attempts_proof_file_id_file_objec_b2c0)&lt;br&gt;<code>proof_file_id</code> → <code>id</code> (fk_logistics_delivery_attempts_proof_file_id_file_objects)&lt;br&gt;<code>shipping_label_file_id_internal_id</code> → <code>internal_id</code> (fk_logistics_shipments_shipping_label_file_id_file_obje_c402)</td>
+<td>The riders, shipments, and delivery records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/logistics.html">logistics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>logistics</code> → <code>warehouse</code></td>
+<td style="text-align:right">4</td>
+<td><code>warehouse_id</code> → <code>id</code> (fk_logistics_delivery_routes_warehouse_id_warehouses)&lt;br&gt;<code>warehouse_id_internal_id</code> → <code>internal_id</code> (fk_logistics_delivery_routes_warehouse_id_warehouses_numeric)&lt;br&gt;<code>warehouse_id</code> → <code>id</code> (fk_logistics_delivery_slots_warehouse_id_warehouses)</td>
+<td>The riders, shipments, and delivery records reference stock balances, lots, and transfers keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/logistics.html">logistics FK catalog</a></td>
+</tr>
+<tr>
+<td><code>marketplace</code> → <code>catalog</code></td>
+<td style="text-align:right">4</td>
+<td><code>product_id_internal_id</code> → <code>internal_id</code> (fk_marketplace_seller_product_listings_product_id_produ_4e59)&lt;br&gt;<code>product_id</code> → <code>id</code> (fk_marketplace_seller_product_listings_product_id_products)&lt;br&gt;<code>variant_id</code> → <code>id</code> (fk_marketplace_seller_product_listings_variant_id_produ_4a78)</td>
+<td>The sellers and listings records reference products, medicines, and classification keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/marketplace.html">marketplace FK catalog</a></td>
+</tr>
+<tr>
+<td><code>marketplace</code> → <code>commerce</code></td>
+<td style="text-align:right">2</td>
+<td><code>order_id, user_id</code> → <code>id, user_id</code> (fk_domain_marketplace_seller_ratings_order_id)&lt;br&gt;<code>order_id_internal_id, user_id</code> → <code>internal_id, user_id</code> (fk_domain_marketplace_seller_ratings_order_id_numeric)</td>
+<td>The sellers and listings records reference carts, checkout, orders, and returns keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/marketplace.html">marketplace FK catalog</a></td>
+</tr>
+<tr>
+<td><code>marketplace</code> → <code>identity</code></td>
+<td style="text-align:right">17</td>
+<td><code>created_by</code> → <code>id</code> (fk_marketplace_commission_plans_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_marketplace_commission_plans_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_marketplace_commission_plans_updated_by_users)</td>
+<td>The sellers and listings records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/marketplace.html">marketplace FK catalog</a></td>
+</tr>
+<tr>
+<td><code>marketplace</code> → <code>organization</code></td>
+<td style="text-align:right">6</td>
+<td><code>license_id</code> → <code>id</code> (fk_marketplace_seller_locations_license_id_licenses)&lt;br&gt;<code>license_id_internal_id</code> → <code>internal_id</code> (fk_marketplace_seller_locations_license_id_licenses_numeric)&lt;br&gt;<code>location_id</code> → <code>id</code> (fk_marketplace_seller_locations_location_id_locations)</td>
+<td>The sellers and listings records reference operating companies, sites, and licenses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/marketplace.html">marketplace FK catalog</a></td>
+</tr>
+<tr>
+<td><code>marketplace</code> → <code>warehouse</code></td>
+<td style="text-align:right">2</td>
+<td><code>warehouse_id</code> → <code>id</code> (fk_marketplace_seller_locations_warehouse_id_warehouses)&lt;br&gt;<code>warehouse_id_internal_id</code> → <code>internal_id</code> (fk_marketplace_seller_locations_warehouse_id_warehouses_numeric)</td>
+<td>The sellers and listings records reference stock balances, lots, and transfers keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/marketplace.html">marketplace FK catalog</a></td>
+</tr>
+<tr>
+<td><code>membership</code> → <code>identity</code></td>
+<td style="text-align:right">12</td>
+<td><code>created_by</code> → <code>id</code> (fk_membership_loyalty_accounts_created_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_membership_loyalty_accounts_updated_by_users)&lt;br&gt;<code>user_id</code> → <code>id</code> (fk_membership_loyalty_accounts_user_id_users)</td>
+<td>The benefits and loyalty records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/membership.html">membership FK catalog</a></td>
+</tr>
+<tr>
+<td><code>membership</code> → <code>payment</code></td>
+<td style="text-align:right">2</td>
+<td><code>payment_method_id</code> → <code>id</code> (fk_membership_subscriptions_payment_method_id_customer__142d)&lt;br&gt;<code>payment_method_id_internal_id</code> → <code>internal_id</code> (fk_membership_subscriptions_payment_method_id_customer__d281)</td>
+<td>The benefits and loyalty records reference payment attempts, confirmation, and refunds keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/membership.html">membership FK catalog</a></td>
+</tr>
+<tr>
+<td><code>notification</code> → <code>identity</code></td>
+<td style="text-align:right">28</td>
+<td><code>created_by</code> → <code>id</code> (fk_notification_device_endpoints_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_notification_device_endpoints_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_notification_device_endpoints_updated_by_users)</td>
+<td>The templates, messages, and delivery attempts records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/notification.html">notification FK catalog</a></td>
+</tr>
+<tr>
+<td><code>notification</code> → <code>platform</code></td>
+<td style="text-align:right">4</td>
+<td><code>image_file_id_internal_id</code> → <code>internal_id</code> (fk_notification_in_app_notifications_image_file_id_file_ce63)&lt;br&gt;<code>image_file_id</code> → <code>id</code> (fk_notification_in_app_notifications_image_file_id_file_objects)&lt;br&gt;<code>file_object_id_internal_id</code> → <code>internal_id</code> (fk_notification_message_attachments_file_object_id_file_0d0a)</td>
+<td>The templates, messages, and delivery attempts records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/notification.html">notification FK catalog</a></td>
+</tr>
+<tr>
+<td><code>organization</code> → <code>identity</code></td>
+<td style="text-align:right">19</td>
+<td><code>created_by</code> → <code>id</code> (fk_organization_bank_accounts_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_organization_bank_accounts_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_organization_bank_accounts_updated_by_users)</td>
+<td>The operating companies, sites, and licenses records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/organization.html">organization FK catalog</a></td>
+</tr>
+<tr>
+<td><code>organization</code> → <code>platform</code></td>
+<td style="text-align:right">2</td>
+<td><code>document_file_id</code> → <code>id</code> (fk_organization_licenses_document_file_id_file_objects)&lt;br&gt;<code>document_file_id_internal_id</code> → <code>internal_id</code> (fk_organization_licenses_document_file_id_file_objects_numeric)</td>
+<td>The operating companies, sites, and licenses records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/organization.html">organization FK catalog</a></td>
+</tr>
+<tr>
+<td><code>payment</code> → <code>commerce</code></td>
+<td style="text-align:right">18</td>
+<td><code>order_id</code> → <code>id</code> (fk_payment_chargebacks_order_id_orders)&lt;br&gt;<code>order_id_internal_id</code> → <code>internal_id</code> (fk_payment_chargebacks_order_id_orders_numeric)&lt;br&gt;<code>order_id</code> → <code>id</code> (fk_payment_cod_collections_order_id_orders)</td>
+<td>The payment attempts, confirmation, and refunds records reference carts, checkout, orders, and returns keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/payment.html">payment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>payment</code> → <code>identity</code></td>
+<td style="text-align:right">26</td>
+<td><code>created_by</code> → <code>id</code> (fk_payment_chargebacks_created_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_payment_chargebacks_updated_by_users)&lt;br&gt;<code>collected_by_user_id</code> → <code>id</code> (fk_payment_cod_collections_collected_by_user_id_users)</td>
+<td>The payment attempts, confirmation, and refunds records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/payment.html">payment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>payment</code> → <code>logistics</code></td>
+<td style="text-align:right">2</td>
+<td><code>shipment_id</code> → <code>id</code> (fk_payment_cod_collections_shipment_id_shipments)&lt;br&gt;<code>shipment_id_internal_id</code> → <code>internal_id</code> (fk_payment_cod_collections_shipment_id_shipments_numeric)</td>
+<td>The payment attempts, confirmation, and refunds records reference riders, shipments, and delivery keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/payment.html">payment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>payment</code> → <code>platform</code></td>
+<td style="text-align:right">2</td>
+<td><code>source_file_id_internal_id</code> → <code>internal_id</code> (fk_payment_reconciliation_runs_source_file_id_file_obje_5a14)&lt;br&gt;<code>source_file_id</code> → <code>id</code> (fk_payment_reconciliation_runs_source_file_id_file_objects)</td>
+<td>The payment attempts, confirmation, and refunds records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/payment.html">payment FK catalog</a></td>
+</tr>
+<tr>
+<td><code>platform</code> → <code>identity</code></td>
+<td style="text-align:right">44</td>
+<td><code>created_by</code> → <code>id</code> (fk_platform_application_settings_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_platform_application_settings_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_platform_application_settings_updated_by_users)</td>
+<td>The configuration, files, audit, events, and reports records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/platform.html">platform FK catalog</a></td>
+</tr>
+<tr>
+<td><code>pricing</code> → <code>catalog</code></td>
+<td style="text-align:right">4</td>
+<td><code>product_id</code> → <code>id</code> (fk_pricing_product_prices_product_id_products)&lt;br&gt;<code>product_id_internal_id</code> → <code>internal_id</code> (fk_pricing_product_prices_product_id_products_numeric)&lt;br&gt;<code>variant_id</code> → <code>id</code> (fk_pricing_product_prices_variant_id_product_variants)</td>
+<td>The prices, taxes, and promotions records reference products, medicines, and classification keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/pricing.html">pricing FK catalog</a></td>
+</tr>
+<tr>
+<td><code>pricing</code> → <code>commerce</code></td>
+<td style="text-align:right">2</td>
+<td><code>order_id, user_id</code> → <code>id, user_id</code> (fk_domain_pricing_promotion_redemptions_order_id)&lt;br&gt;<code>order_id_internal_id, user_id</code> → <code>internal_id, user_id</code> (fk_domain_pricing_promotion_redemptions_order_id_numeric)</td>
+<td>The prices, taxes, and promotions records reference carts, checkout, orders, and returns keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/pricing.html">pricing FK catalog</a></td>
+</tr>
+<tr>
+<td><code>pricing</code> → <code>identity</code></td>
+<td style="text-align:right">19</td>
+<td><code>assigned_user_id</code> → <code>id</code> (fk_pricing_coupon_codes_assigned_user_id_users)&lt;br&gt;<code>created_by</code> → <code>id</code> (fk_pricing_coupon_codes_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_pricing_coupon_codes_deleted_by_users)</td>
+<td>The prices, taxes, and promotions records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/pricing.html">pricing FK catalog</a></td>
+</tr>
+<tr>
+<td><code>pricing</code> → <code>marketplace</code></td>
+<td style="text-align:right">2</td>
+<td><code>seller_id</code> → <code>id</code> (fk_domain_pricing_price_books_seller_id)&lt;br&gt;<code>seller_id_internal_id</code> → <code>internal_id</code> (fk_domain_pricing_price_books_seller_id_numeric)</td>
+<td>The prices, taxes, and promotions records reference sellers and listings keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/pricing.html">pricing FK catalog</a></td>
+</tr>
+<tr>
+<td><code>pricing</code> → <code>warehouse</code></td>
+<td style="text-align:right">2</td>
+<td><code>warehouse_id</code> → <code>id</code> (fk_pricing_price_books_warehouse_id_warehouses)&lt;br&gt;<code>warehouse_id_internal_id</code> → <code>internal_id</code> (fk_pricing_price_books_warehouse_id_warehouses_numeric)</td>
+<td>The prices, taxes, and promotions records reference stock balances, lots, and transfers keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/pricing.html">pricing FK catalog</a></td>
+</tr>
+<tr>
+<td><code>procurement</code> → <code>catalog</code></td>
+<td style="text-align:right">12</td>
+<td><code>product_id</code> → <code>id</code> (fk_procurement_purchase_order_items_product_id_products)&lt;br&gt;<code>product_id_internal_id</code> → <code>internal_id</code> (fk_procurement_purchase_order_items_product_id_products_numeric)&lt;br&gt;<code>variant_id_internal_id</code> → <code>internal_id</code> (fk_procurement_purchase_order_items_variant_id_product__7c24)</td>
+<td>The suppliers, purchase orders, and receiving records reference products, medicines, and classification keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/procurement.html">procurement FK catalog</a></td>
+</tr>
+<tr>
+<td><code>procurement</code> → <code>identity</code></td>
+<td style="text-align:right">33</td>
+<td><code>created_by</code> → <code>id</code> (fk_procurement_goods_receipt_items_created_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_procurement_goods_receipt_items_updated_by_users)&lt;br&gt;<code>checked_by_user_id</code> → <code>id</code> (fk_procurement_goods_receipt_quality_checks_checked_by__6713)</td>
+<td>The suppliers, purchase orders, and receiving records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/procurement.html">procurement FK catalog</a></td>
+</tr>
+<tr>
+<td><code>procurement</code> → <code>organization</code></td>
+<td style="text-align:right">2</td>
+<td><code>organization_id</code> → <code>id</code> (fk_procurement_suppliers_organization_id_organizations)&lt;br&gt;<code>organization_id_internal_id</code> → <code>internal_id</code> (fk_procurement_suppliers_organization_id_organizations_numeric)</td>
+<td>The suppliers, purchase orders, and receiving records reference operating companies, sites, and licenses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/procurement.html">procurement FK catalog</a></td>
+</tr>
+<tr>
+<td><code>procurement</code> → <code>platform</code></td>
+<td style="text-align:right">4</td>
+<td><code>document_file_id_internal_id</code> → <code>internal_id</code> (fk_procurement_supplier_invoices_document_file_id_file__3eb3)&lt;br&gt;<code>document_file_id</code> → <code>id</code> (fk_procurement_supplier_invoices_document_file_id_file_objects)&lt;br&gt;<code>document_file_id_internal_id</code> → <code>internal_id</code> (fk_procurement_supplier_licenses_document_file_id_file__c5bf)</td>
+<td>The suppliers, purchase orders, and receiving records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/procurement.html">procurement FK catalog</a></td>
+</tr>
+<tr>
+<td><code>procurement</code> → <code>warehouse</code></td>
+<td style="text-align:right">10</td>
+<td><code>warehouse_id</code> → <code>id</code> (fk_procurement_goods_receipts_warehouse_id_warehouses)&lt;br&gt;<code>warehouse_id_internal_id</code> → <code>internal_id</code> (fk_procurement_goods_receipts_warehouse_id_warehouses_numeric)&lt;br&gt;<code>warehouse_id</code> → <code>id</code> (fk_procurement_purchase_orders_warehouse_id_warehouses)</td>
+<td>The suppliers, purchase orders, and receiving records reference stock balances, lots, and transfers keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/procurement.html">procurement FK catalog</a></td>
+</tr>
+<tr>
+<td><code>risk</code> → <code>identity</code></td>
+<td style="text-align:right">10</td>
+<td><code>user_id</code> → <code>id</code> (fk_risk_assessments_user_id_users)&lt;br&gt;<code>created_by</code> → <code>id</code> (fk_risk_blocklists_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_risk_blocklists_deleted_by_users)</td>
+<td>The risk rules, cases, and signals records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/risk.html">risk FK catalog</a></td>
+</tr>
+<tr>
+<td><code>search</code> → <code>identity</code></td>
+<td style="text-align:right">11</td>
+<td><code>created_by</code> → <code>id</code> (fk_search_documents_created_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_search_documents_updated_by_users)&lt;br&gt;<code>created_by</code> → <code>id</code> (fk_search_indexing_jobs_created_by_users)</td>
+<td>The search indexes and query signals records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/search.html">search FK catalog</a></td>
+</tr>
+<tr>
+<td><code>support</code> → <code>appointment</code></td>
+<td style="text-align:right">2</td>
+<td><code>appointment_id</code> → <code>id</code> (fk_support_tickets_appointment_id_appointments)&lt;br&gt;<code>appointment_id_internal_id</code> → <code>internal_id</code> (fk_support_tickets_appointment_id_appointments_numeric)</td>
+<td>The customer support cases records reference appointments and scheduling keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/support.html">support FK catalog</a></td>
+</tr>
+<tr>
+<td><code>support</code> → <code>commerce</code></td>
+<td style="text-align:right">2</td>
+<td><code>order_id</code> → <code>id</code> (fk_support_tickets_order_id_orders)&lt;br&gt;<code>order_id_internal_id</code> → <code>internal_id</code> (fk_support_tickets_order_id_orders_numeric)</td>
+<td>The customer support cases records reference carts, checkout, orders, and returns keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/support.html">support FK catalog</a></td>
+</tr>
+<tr>
+<td><code>support</code> → <code>diagnostics</code></td>
+<td style="text-align:right">2</td>
+<td><code>diagnostic_order_id_internal_id</code> → <code>internal_id</code> (fk_support_tickets_diagnostic_order_id_diagnostic_order_e812)&lt;br&gt;<code>diagnostic_order_id</code> → <code>id</code> (fk_support_tickets_diagnostic_order_id_diagnostic_orders)</td>
+<td>The customer support cases records reference tests and laboratory services keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/support.html">support FK catalog</a></td>
+</tr>
+<tr>
+<td><code>support</code> → <code>identity</code></td>
+<td style="text-align:right">20</td>
+<td><code>created_by</code> → <code>id</code> (fk_support_sla_policies_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_support_sla_policies_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_support_sla_policies_updated_by_users)</td>
+<td>The customer support cases records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/support.html">support FK catalog</a></td>
+</tr>
+<tr>
+<td><code>support</code> → <code>platform</code></td>
+<td style="text-align:right">2</td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code> (fk_support_ticket_attachments_file_object_id_file_objec_8e8b)&lt;br&gt;<code>file_object_id</code> → <code>id</code> (fk_support_ticket_attachments_file_object_id_file_objects)</td>
+<td>The customer support cases records reference configuration, files, audit, events, and reports keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/support.html">support FK catalog</a></td>
+</tr>
+<tr>
+<td><code>warehouse</code> → <code>catalog</code></td>
+<td style="text-align:right">8</td>
+<td><code>product_id</code> → <code>id</code> (fk_warehouse_inventory_lots_product_id_products)&lt;br&gt;<code>product_id_internal_id</code> → <code>internal_id</code> (fk_warehouse_inventory_lots_product_id_products_numeric)&lt;br&gt;<code>variant_id</code> → <code>id</code> (fk_warehouse_inventory_lots_variant_id_product_variants)</td>
+<td>The stock balances, lots, and transfers records reference products, medicines, and classification keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/warehouse.html">warehouse FK catalog</a></td>
+</tr>
+<tr>
+<td><code>warehouse</code> → <code>commerce</code></td>
+<td style="text-align:right">4</td>
+<td><code>order_item_id, order_id</code> → <code>id, order_id</code> (fk_warehouse_stock_reservations_item_order)&lt;br&gt;<code>order_item_id_internal_id, order_id_internal_id</code> → <code>internal_id, order_id_internal_id</code> (fk_warehouse_stock_reservations_item_order_numeric)&lt;br&gt;<code>order_revision_id, order_id</code> → <code>id, order_id</code> (fk_warehouse_stock_reservations_revision_scope)</td>
+<td>The stock balances, lots, and transfers records reference carts, checkout, orders, and returns keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/warehouse.html">warehouse FK catalog</a></td>
+</tr>
+<tr>
+<td><code>warehouse</code> → <code>identity</code></td>
+<td style="text-align:right">48</td>
+<td><code>created_by</code> → <code>id</code> (fk_warehouse_aisles_created_by_users)&lt;br&gt;<code>deleted_by</code> → <code>id</code> (fk_warehouse_aisles_deleted_by_users)&lt;br&gt;<code>updated_by</code> → <code>id</code> (fk_warehouse_aisles_updated_by_users)</td>
+<td>The stock balances, lots, and transfers records reference accounts, sessions, and permissions keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/warehouse.html">warehouse FK catalog</a></td>
+</tr>
+<tr>
+<td><code>warehouse</code> → <code>organization</code></td>
+<td style="text-align:right">4</td>
+<td><code>location_id</code> → <code>id</code> (fk_warehouse_warehouses_location_id_locations)&lt;br&gt;<code>location_id_internal_id</code> → <code>internal_id</code> (fk_warehouse_warehouses_location_id_locations_numeric)&lt;br&gt;<code>organization_id</code> → <code>id</code> (fk_warehouse_warehouses_organization_id_organizations)</td>
+<td>The stock balances, lots, and transfers records reference operating companies, sites, and licenses keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/warehouse.html">warehouse FK catalog</a></td>
+</tr>
+<tr>
+<td><code>warehouse</code> → <code>procurement</code></td>
+<td style="text-align:right">6</td>
+<td><code>goods_receipt_item_id</code> → <code>id</code> (fk_warehouse_inventory_lots_goods_receipt_item_id_goods_b158)&lt;br&gt;<code>goods_receipt_item_id_internal_id</code> → <code>internal_id</code> (fk_warehouse_inventory_lots_goods_receipt_item_id_goods_b952)&lt;br&gt;<code>supplier_id</code> → <code>id</code> (fk_warehouse_inventory_lots_supplier_id_suppliers)</td>
+<td>The stock balances, lots, and transfers records reference suppliers, purchase orders, and receiving keys to preserve the recorded domain links.</td>
+<td><a href="Relationship-Catalog/warehouse.html">warehouse FK catalog</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Common business paths</h2>
+<ul>
+<li><strong>Checkout and orders:</strong> <code>commerce</code> has declared references to <code>catalog</code>, <code>customer</code>, <code>clinical</code>, <code>warehouse</code>, <code>marketplace</code>, <code>identity</code>, and <code>pricing</code>. The exact parent tables and keys are listed under the <code>commerce</code> catalog; the order workflow may cross other domains through intermediate records rather than a direct FK.</li>
+<li><strong>Money:</strong> <code>payment</code> and <code>finance</code> reference commerce records; <code>finance</code> also has recorded references to payment and marketplace. A payment attempt, invoice, settlement, and delivered parcel remain separate facts.</li>
+<li><strong>Physical fulfillment:</strong> <code>fulfillment</code> references commerce and warehouse records; <code>logistics</code> references fulfillment, commerce, warehouse, identity, and platform records. Do not infer that a shipment is a direct child of an order unless the exact FK row states it.</li>
+<li><strong>Supply:</strong> <code>procurement</code> references catalog and warehouse records; warehouse records also refer back to procurement where declared. Actual joins use the recorded source/target columns in the catalog.</li>
+<li><strong>Clinical review:</strong> <code>clinical</code> has FKs to commerce, catalog, customer, organization, platform, and identity. Patient ownership and access rules remain separate from these referential constraints.</li>
+</ul>
+<p>For sensitive domains, a foreign key guarantees referential integrity only. It does not authorize staff, customers, riders, or reporting services to read the referenced data.</p>
+</main></body></html>

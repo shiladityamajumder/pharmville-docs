@@ -1,0 +1,426 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Product Catalog database contract</h1>
+<p><strong>Structure validated; business write assignment Proposed.</strong> Catalog/classification and discovery; tax meaning remains Finance-owned and search is derived. Read access or a contract surface does not confer write ownership. Exact operation transactions/DTO columns are in <a href="APIs.html">APIs</a>; shared audit/outbox/idempotency writes are owner-coordinated infrastructure.</p>
+<h2>Proposed owned tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Classification</th>
+<th>Write-owner approval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_attributes.html"><code>catalog.product_attributes</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_classification_history.html"><code>catalog.product_classification_history</code></a></td>
+<td>Audit / History</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_content.html"><code>catalog.product_content</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_identifiers.html"><code>catalog.product_identifiers</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_media.html"><code>catalog.product_media</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_regulatory.html"><code>catalog.product_regulatory</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_relationships.html"><code>catalog.product_relationships</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_salts.html"><code>catalog.product_salts</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/salts.html"><code>catalog.salts</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/substitution_group_products.html"><code>catalog.substitution_group_products</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/substitution_groups.html"><code>catalog.substitution_groups</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/units_of_measure.html"><code>catalog.units_of_measure</code></a></td>
+<td>Master / Reference</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/pricing_evaluations.html"><code>pricing.pricing_evaluations</code></a></td>
+<td>Derived / Operational</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td>Audit / History</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/documents.html"><code>search.documents</code></a></td>
+<td>Derived / Operational</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/indexing_jobs.html"><code>search.indexing_jobs</code></a></td>
+<td>Derived / Operational</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/query_events.html"><code>search.query_events</code></a></td>
+<td>Audit / History</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/redirects.html"><code>search.redirects</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/synonyms.html"><code>search.synonyms</code></a></td>
+<td>Configuration</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+</tbody>
+</table>
+<h2>Contract reads and writes</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Exact read columns</th>
+<th>Exact proposed write columns</th>
+<th>Proposed data owner</th>
+<th>API IDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>name</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-011, API-012, API-013, API-014, API-016, API-017</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td><code>display_order</code>, <code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>level</code>, <code>name</code>, <code>parent_id</code>, <code>row_version</code>, <code>slug</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-010, API-011, API-012, API-013, API-014, API-016, API-017</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-011, API-012, API-013, API-014, API-016, API-017</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-017</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>name</code>, <code>organization_id</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-012, API-017</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_classification_history.html"><code>catalog.product_classification_history</code></a></td>
+<td><code>id</code>, <code>new_class</code>, <code>old_class</code>, <code>product_id</code>, <code>reason_code</code></td>
+<td><code>approved_at</code>, <code>approved_by_user_id</code>, <code>decision_note</code>, <code>new_class</code>, <code>old_class</code>, <code>product_id</code>, <code>reason_code</code>, <code>version</code></td>
+<td>Product_Catalog</td>
+<td>API-016</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_content.html"><code>catalog.product_content</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>locale</code>, <code>product_id</code>, <code>row_version</code>, <code>title</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-012</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_salts.html"><code>catalog.product_salts</code></a></td>
+<td><code>id</code>, <code>product_id</code>, <code>row_version</code>, <code>salt_id</code>, <code>strength</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-012, API-013</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><code>brand_id</code>, <code>category_id</code>, <code>commerce_class</code>, <code>commerce_class_approved_at</code>, <code>commerce_class_version</code>, <code>display_name</code>, <code>dosage_form_id</code>, <code>id</code>, <code>is_deleted</code>, <code>manufacturer_id</code>, <code>name</code>, <code>pack_size_display</code>, <code>prescription_required</code>, <code>published_at</code>, <code>row_version</code>, <code>status</code>, <code>strength_display</code></td>
+<td><code>commerce_class</code>, <code>commerce_class_approved_at</code>, <code>commerce_class_approved_by_user_id</code>, <code>commerce_class_version</code>, <code>prescription_required</code>, <code>published_at</code>, <code>status</code></td>
+<td>Product_Catalog</td>
+<td>API-011, API-012, API-013, API-014, API-015, API-016, API-017</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/salts.html"><code>catalog.salts</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-012, API-013</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/serviceability_rules.html"><code>logistics.serviceability_rules</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Delivery_Operations</td>
+<td>API-014</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>expires_at</code>, <code>id</code>, <code>is_deleted</code>, <code>location_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>verification_status</code></td>
+<td>None</td>
+<td>Admin_CMS</td>
+<td>API-014</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>organization_id</code>, <code>postal_code</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Admin_CMS</td>
+<td>API-014</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><code>access_type</code>, <code>classification</code>, <code>id</code>, <code>is_deleted</code>, <code>malware_scan_status</code>, <code>owner_id</code>, <code>owner_type</code>, <code>row_version</code>, <code>sha256</code>, <code>size_bytes</code>, <code>status</code></td>
+<td>None</td>
+<td>Shared platform file service — engineering owner; no clinical write grant</td>
+<td>API-015</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/scheduled_jobs.html"><code>platform.scheduled_jobs</code></a></td>
+<td>None</td>
+<td><code>job_key</code>, <code>job_type</code>, <code>next_run_at</code>, <code>payload</code>, <code>status</code></td>
+<td>Shared platform runtime — engineering owner</td>
+<td>API-015</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>status</code>, <code>valid_from</code>, <code>valid_until</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-012</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>id</code>, <code>price_book_id</code>, <code>product_id</code>, <code>row_version</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-012, API-015, API-017</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>None</td>
+<td>Finance_Payments</td>
+<td>API-017</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/documents.html"><code>search.documents</code></a></td>
+<td><code>id</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-013</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/synonyms.html"><code>search.synonyms</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-013</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>batch_number</code>, <code>expires_at</code>, <code>id</code>, <code>product_id</code>, <code>quality_status</code>, <code>recall_status</code>, <code>row_version</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Inventory</td>
+<td>API-014</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>damaged_qty</code>, <code>id</code>, <code>inventory_observed_at</code>, <code>inventory_source</code>, <code>lot_id</code>, <code>on_hand_qty</code>, <code>quarantined_qty</code>, <code>reserved_qty</code>, <code>row_version</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Inventory</td>
+<td>API-014</td>
+</tr>
+</tbody>
+</table>
+<h2>Master and transaction dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Controlled table</th>
+<th>Classification</th>
+<th>Lifecycle and initial data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_content.html"><code>catalog.product_content</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_salts.html"><code>catalog.product_salts</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/salts.html"><code>catalog.salts</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/serviceability_rules.html"><code>logistics.serviceability_rules</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/synonyms.html"><code>search.synonyms</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+</tbody>
+</table>
+<p>Every mutation must enter the authoritative owner command with explicit scope/version, apply only that command’s invariant, and commit aggregate/audit/outbox together. External provider/file/message effects occur after commit; idempotency and recovery are per endpoint. Shared-table audit/outbox infrastructure does not acquire domain ownership. Physical SQL guards are recorded on each linked table page; application authorization remains additional.</p>
+</main></body></html>

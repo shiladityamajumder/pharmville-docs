@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HLD · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Finance Payments HLD</h1>
+<p>&lt;!-- ERD-NAV-START --&gt;</p>
+<h2>Database relationships</h2>
+<p><a href="../../04-Database/ER-Diagrams/17-payment.html"><code>payment</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/08-finance.html"><code>finance</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/04-commerce.html"><code>commerce</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/Relationship-Catalog.html">FK catalog</a></p>
+<p>These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See <a href="../../04-Database/Migrations.html">migration evidence</a> for the supplied source and deployment verification limits.</p>
+<p>&lt;!-- ERD-NAV-END --&gt;</p>
+<p><a href="../../00-Business-Guide/Finance-and-Reconciliation.html">Business flow</a> · <a href="../../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a></p>
+<h2>MOD-014: Payment truth, refunds and invoice evidence — HLD</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.</p>
+</blockquote>
+<p><strong>Business responsibility:</strong> Payment truth, refunds and invoice evidence. Unknown provider outcomes stay pending; external callbacks cannot double-apply money.</p>
+<p><strong>System responsibility:</strong> The <code>Finance_Payments</code> NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are <strong>not</strong> proof of exclusive write ownership.</p>
+<h3>Major operations</h3>
+<ul>
+<li>Payment records from Cashfree webhooks and COD collections (<code>FIN-01</code>)</li>
+<li>GST invoice per order, from the right GSTIN (<code>FIN-02</code>)</li>
+<li>Automatic refunds; manual refunds need approval above a set amount (<code>FIN-03</code>)</li>
+<li>COD refunds by bank transfer or UPI (<code>FIN-04</code>)</li>
+<li>Daily reconciliation: Cashfree settlements vs orders (<code>FIN-05</code>)</li>
+<li>COD reconciliation: collected vs deposited (<code>FIN-06</code>)</li>
+<li>Credit notes for refunds and returns (<code>FIN-07</code>)</li>
+</ul>
+<h3>Dependencies and trust boundaries</h3>
+<ul>
+<li>Database candidates: <code>payment.payment_intents</code>, <code>payment.payment_attempts</code>, <code>payment.payment_webhooks</code>, <code>payment.refunds</code>, <code>finance.invoices</code>.</li>
+<li>Role, patient, store and order scope resolved from trusted access context, not JSON body.</li>
+<li>External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.</li>
+<li>Use local transactions for authoritative state; publish external side effects only after commit.</li>
+</ul>
+<p><strong>Technical design:</strong> <a href="LLD.html">Module LLD</a> · <a href="../../05-APIs/README.html">API index</a> · <a href="../../07-Engineering/Testing.html">Tests</a></p>
+<h3>Risk</h3>
+<p>Unknown provider outcomes stay pending; external callbacks cannot double-apply money. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.</p>
+<h2>MOD-014 — Payment truth, refunds and invoice evidence</h2>
+<p><strong>Source classification:</strong> 7 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.</p>
+<p><strong>Purpose:</strong> Unknown provider outcomes stay pending; external callbacks cannot double-apply money.</p>
+<p><strong>Feature coverage</strong></p>
+<ul>
+<li><strong>FIN-01 / REQ-086:</strong> Payment records from Cashfree webhooks and COD collections (Must (draft)).</li>
+<li><strong>FIN-02 / REQ-087:</strong> GST invoice per order, from the right GSTIN (Must (draft)).</li>
+<li><strong>FIN-03 / REQ-088:</strong> Automatic refunds; manual refunds need approval above a set amount (Must (draft)).</li>
+<li><strong>FIN-04 / REQ-089:</strong> COD refunds by bank transfer or UPI (Should (draft)).</li>
+<li><strong>FIN-05 / REQ-090:</strong> Daily reconciliation: Cashfree settlements vs orders (Must (draft)).</li>
+<li><strong>FIN-06 / REQ-091:</strong> COD reconciliation: collected vs deposited (Must (draft)).</li>
+<li><strong>FIN-07 / REQ-092:</strong> Credit notes for refunds and returns (Should (draft)).</li>
+</ul>
+<h3>Developer navigation</h3>
+<ul>
+<li><a href="HLD.html">Module HLD</a></li>
+<li><a href="LLD.html">Module LLD</a></li>
+<li>Internal architecture</li>
+<li><a href="APIs.html">API contracts</a></li>
+<li><a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li><a href="../../07-Engineering/Testing.html">Testing</a></li>
+<li><a href="../../08-Development-Plan/Implementation-Plan.html">Implementation plan</a></li>
+</ul>
+<p><strong>Dependencies:</strong> all cross-module references require ownership and permission checks; see master dependency register.</p>
+</main></body></html>

@@ -1,0 +1,62 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin and Operations · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Administration and operations</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.</p>
+</blockquote>
+<h2>What is this process?</h2>
+<p>Administration maintains people, locations, content and settings. Administrator access alone does not approve prescriptions, refunds or legal policies.</p>
+<h2>Who is involved?</h2>
+<p>Administrators, location managers, catalog/content editors, Security, Operations, Pharmacy and Finance.</p>
+<h2>How does it normally work?</h2>
+<ol>
+<li>Staff open role/location dashboards with relevant queues, pending prescriptions and alerts.</li>
+<li>Permitted managers invite staff, assign approved roles/locations and deactivate or revoke access. Roles are not blanket authority for every action.</li>
+<li>Catalog editors maintain products, categories, brands, composition, prices and approved tax references. Bulk imports provide row error reports.</li>
+<li>Location staff maintain addresses, hours and service areas. License/tax data need responsible professional approval before supporting real orders.</li>
+<li>Editors draft and publish banners, FAQs and policy pages with version history. Restricted settings and offers activate only after required Product/Finance/Pharmacy approvals.</li>
+</ol>
+<h2>What happens next?</h2>
+<p>Published content supports discovery. Approved settings govern eligible actions; accepted orders keep their terms unless the approved revision process changes them.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<h3>A user tries to grant themselves authority</h3>
+<p>Incorrect configuration or misuse cannot bypass server permission checks. Pharmville denies self-authorized privilege changes and retains evidence. Security/authorized management reviews access; no clinical or money permission is acquired by UI manipulation.</p>
+<h3>An import has invalid data</h3>
+<p>Missing identifiers or unsupported codes produce specific row errors and an explicit accepted/rejected result. Catalog/Finance correct and resubmit; invalid rows are not silently published. Exact whole-file/partial import behavior remains a contract decision.</p>
+<h3>Two editors publish conflicting drafts</h3>
+<p>Concurrent editing requires the stale editor to reload or resolve. One accepted version and its history remain; customers do not see a mixture. The editor owns correction.</p>
+<h3>A site/setting changes during active work</h3>
+<p>Closure or a new fee can conflict with orders. Operations reviews affected tasks using approved reassignment/revision; accepted baskets are not silently repriced. Customers see an explained action/delay if their order is affected.</p>
+<h3>A deactivated user keeps an old credential</h3>
+<p>Cached access must obey the approved revocation policy on protected requests. The staff member sees access/sign-in failure; Security verifies enforcement. Restricted work cannot continue merely because an old screen is open.</p>
+<h2>What does the user see?</h2>
+<p>Staff see scoped dashboards, permitted controls, import row errors and draft/published versions. Customers see only published content and accepted order terms.</p>
+<h2>What still needs approval?</h2>
+<p>D-001/D-002 (scope), D-003/D-022 (permissions), D-006/D-012 (clinical/tax data), D-019 (catalog). The <a href="../09-References/Sources-and-Decisions.html#open-decisions">decision register</a> names owners and blocked actions.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../02-Architecture/System-HLD.html">System HLD</a> · <a href="../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development tasks</a></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Architecture</th>
+<th>Implementation</th>
+<th>API</th>
+<th>Data</th>
+<th>Edge cases and tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Admin CMS</td>
+<td><a href="../03-Modules/Admin_CMS/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#admin-cms">Mapping</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Cases</a></td>
+</tr>
+</tbody>
+</table>
+<p>Technical workflows: <a href="../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a> · <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a> · <a href="../06-Workflows/WF-013-Customer-Support-Triage.html">WF-013</a>.</p>
+<p>Feature references: <code>ADM-01</code>, <code>ADM-02</code>, <code>ADM-03</code>, <code>ADM-04</code>, <code>ADM-05</code>, <code>ADM-06</code>, <code>ADM-07</code>, <code>ADM-08</code>, <code>ADM-09</code>.</p>
+<p><a href="README.html">Business Guide</a> · <a href="Pharmville-Complete-Business-Flow.html">Complete journey</a></p>
+</main></body></html>

@@ -1,0 +1,264 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Security · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Security and healthcare data handling</h1>
+<h2>Immutable evidence and privileged audit views</h2>
+<p>Record who performed the action, when, which authorized site/resource/revision was targeted, outcome and reason, and a correlation/provider event ID when applicable. Required events: login attempts, role/permission changes, product class/publish, Rx view and decision, order revision/customer consent, stock move/hold, license rejection, payment/refund/COD reconciliation, rider OTP result, export/download and incident override.</p>
+<p>The database contains <code>platform.audit_logs</code>, related compliance and file-access event tables, and trigger-based guards; application events must preserve their expected schema contract. Never log raw clinical files, OTP values, secrets, full payment tokens or unnecessary rider GPS trails.</p>
+<p>An audit record must not be silently updated to make a correction; add a new compensating event.</p>
+<p>Auditors need read-only, scoped, purpose-based export and access logging. Retention and deletion exceptions are unresolved and require legal signoff. See Audit Module and Runbook.</p>
+<h2>Customer, staff and rider authentication</h2>
+<p><strong>Customer:</strong> request OTP to verified number, enforce per-phone/IP rate limits, validate single-use short-lived challenge, issue short access plus rotating refresh session, store login history and allow safe device revocation. UI should not reveal whether a number exists before verification.</p>
+<p><strong>Routine staff and rider:</strong> inherited planning proposed OTP for both. Rider phone OTP remains unchanged. D-028 explicitly proposes password + authenticator as the routine staff default; this change is unapproved under D-003, and the canonical role/workspace matrix records that status. Scope, role and current shift remain server checks.</p>
+<p><strong>Privileged Super Admin/Central Admin/Finance Manager:</strong> checklist specifies password + authenticator TOTP with different session/lockout protections, despite an earlier blanket OTP-only statement. Do not silently implement both schemes without D-003 signoff.</p>
+<p>The documented policy mentions 15-minute access, 30-day refresh, 8-hour staff sessions, 2-hour admin sessions, staff one-active-session rule and escalating lockouts. Reconcile which session limits apply to mobile/rider use before coding. Never store OTP plaintext, disclose auth status in logs or let a valid token bypass ownership tests. See API Auth and User Roles.</p>
+<h2>Compliance and legal signoff boundaries</h2>
+<p>Source checklists request retail drug licenses per store, warehouse license checks where relevant, registered pharmacists, product Schedule classification, lawful prescribing/dispensing, invoice/HSN/GST handling, DLT/MSG91 sender/template approval, customer privacy/consent, deletion and retention, grievance contact, refund/return policy and terms.</p>
+<p>These are project requirements for owner/legal/pharmacist review, <strong>not a legal opinion or independently verified legal mandate</strong>.</p>
+<p>Keep a signoff artifact per operating location, master classification, controlled product category, pharmacy decision policy, identity notice, approved SMS/WhatsApp template, GST invoice rules, COD/refund policy and prescription retention. A database license row or GSTIN field is not evidence of current legal validity.</p>
+<p>Record approving professional, date, effective version, applicable territory and escalation if withdrawn.</p>
+<p>No fixed retention period, patient right exception, Schedule regulation, GST tax rate or compliance score is invented here. Production must wait for written review and testable operating procedures. See Decisions, Data Lifecycle and Release Plan.</p>
+<h2>India healthcare-commerce compliance review — approval needed</h2>
+<p>The platform appears intended for Indian pharmacies, but <strong>no legal finding, license certificate, regulator review or data protection impact assessment is included in the uploads</strong>. Specialist counsel and a qualified pharmacy operations reviewer must decide which current laws, prescription handling rules, billing obligations, medical record retention/deletion limits, consent texts and license/site restrictions apply to actual launch territories and products.</p>
+<p>Before release, obtain written decisions on P-classified medicine sale gates, professional signoff, prescription authenticity/eligibility, tax invoicing, protected data requests, marketing communication consent, age/family accounts, retention and legal holds, and access to personal health records.</p>
+<p>Do not set legal retention periods or claim certified compliance based on the current DB schema.</p>
+<p><strong>Engineering fail-closed requirement:</strong> unknown product classification, site license, inventory authority or legal access policy must block the sensitive action rather than assume permission.</p>
+<h2>Healthcare-specific application safeguards</h2>
+<p>Software P/M/O category is a client business classification, not independent medical/legal permission to sell a specific product. Clinical review is applied only to current P lines in the cart, each against the exact patient, item, quantity and prescription version.</p>
+<p>M/O lines do not enter pharmacist review. Unknown class, missing patient, unapproved prescription or changed accepted revision blocks affected fulfillment.</p>
+<p>Require restricted pharmacist workbench access, access logs, file scanning, reason-coded approvals and re-review after relevant patient/SKU/Rx changes. A store/warehouse also needs current site-specific license and approved stock freshness policy; the database's synthetic test policies are not production legal licenses.</p>
+<p>Schedule categories, telemedicine rules, prescription validity, cold-chain, retention, pharmacist registration and supply restrictions require a specialist legal/pharmacy review. The client checklist says Schedule X is not sold in Phase 1 but further scope is not independently certified. See Clinical Rules, Open Decisions.</p>
+<h2>Proposed role-to-module access matrix</h2>
+<p><strong>Not an approved grant list.</strong> Names are business roles inferred from inherited user journeys and database schemas. The exact <code>identity.roles</code>/user_roles/role_permissions seeded values and live runtime grants must be reviewed separately. Do not grant these based on this table alone.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Potential actors</th>
+<th>Authorization invariant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer_Accounts</td>
+<td>Customer; delegated family account under approved consent</td>
+<td>Customer sees own account only; family permission explicit</td>
+</tr>
+<tr>
+<td>Product_Catalog</td>
+<td>Public/customer browse; catalog manager publishes</td>
+<td>Anonymous published reads only; staff can modify after approval</td>
+</tr>
+<tr>
+<td>Cart_Checkout</td>
+<td>Customer</td>
+<td>Only own cart and patient/address scope; server calculates price</td>
+</tr>
+<tr>
+<td>Prescription_Upload</td>
+<td>Customer/patient; pharmacist permitted reviewer</td>
+<td>Private object grants + scan/consent, never public URL</td>
+</tr>
+<tr>
+<td>Customer_Orders</td>
+<td>Customer; service operator</td>
+<td>Customer own order; staff scoped by support/store permissions</td>
+</tr>
+<tr>
+<td>Admin_CMS</td>
+<td>Platform admin; catalog/content manager</td>
+<td>Explicit privileged write; site/organization scope</td>
+</tr>
+<tr>
+<td>Order_Operations</td>
+<td>Order operator; authorized store dispatcher</td>
+<td>Org/site/order queue permission; no unilateral clinical override</td>
+</tr>
+<tr>
+<td>Store_Operations</td>
+<td>Store picker/packer; authorized supervisor</td>
+<td>Only assigned site/task and eligible lot</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>Inventory operator; scoped system integration</td>
+<td>Store/site scoped write; trusted POS correlation; no stale observation</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td>Warehouse supervisor; receiving staff</td>
+<td>Source/destination warehouse and lot access</td>
+</tr>
+<tr>
+<td>Pharmacist_Review</td>
+<td>Qualified pharmacist with approved site role</td>
+<td>Prescriptions and decisions limited to patient, line and licensed location</td>
+</tr>
+<tr>
+<td>Delivery_Operations</td>
+<td>Dispatcher; operations manager</td>
+<td>Only authorized shipment and route assignment</td>
+</tr>
+<tr>
+<td>Rider_App</td>
+<td>Assigned rider</td>
+<td>Only assigned shipment, limited address; cannot mark arbitrary delivery</td>
+</tr>
+<tr>
+<td>Finance_Payments</td>
+<td>Customer payment intent; finance officer; verified gateway adapter</td>
+<td>Provider callbacks signature/replay checked; staff refunds separately approved</td>
+</tr>
+<tr>
+<td>Reporting</td>
+<td>Authorized report viewer/exporter</td>
+<td>Rows and exports scoped to role/organization</td>
+</tr>
+<tr>
+<td>Audit</td>
+<td>Auditor/security reviewer</td>
+<td>Read-only restricted evidence; investigators need accountable access</td>
+</tr>
+<tr>
+<td>Authentication_Access</td>
+<td>Customer/staff/rider/identity administrator</td>
+<td>Sessions and roles managed through trusted, audited authority</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>Customer preferences; staff template manager; integration worker</td>
+<td>Consented channels; send after commit only</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Database evidence:</strong> the final snapshot contains four restricted capability groups and three RLS policies; actual service DB credentials and privilege grants need a target-runtime validation.</p>
+<p>Existing row-level policies</p>
+<h2>Role and object-level authorization</h2>
+<p>Role-based access control (RBAC) grants only actions relevant to a staff/customer role; object-level authorization further verifies that the exact record belongs to that actor's patient, store, assigned rider task or finance scope.</p>
+<table>
+<thead>
+<tr>
+<th>Role category</th>
+<th>Permitted examples</th>
+<th>Explicit denial</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer</td>
+<td>Own cart/order/address/dependent patient and own invoice</td>
+<td>Other customers' prescriptions/orders</td>
+</tr>
+<tr>
+<td>Store or warehouse staff</td>
+<td>Assigned site queue, stocked batches, pick/pack with approval gates</td>
+<td>Other site inventory or pharmacist decisions</td>
+</tr>
+<tr>
+<td>Pharmacist</td>
+<td>Authorized P-line review and private Rx read with access log</td>
+<td>M/O clinical decisions, unrelated patient evidence</td>
+</tr>
+<tr>
+<td>Ops/delivery</td>
+<td>Eligible site/rider assignment and delivery exceptions</td>
+<td>Unilateral refund, P-line approval</td>
+</tr>
+<tr>
+<td>Finance</td>
+<td>Assigned settlement/refund/COD tasks and scoped finance reports</td>
+<td>Raw Rx documents or unapproved high-value overrides</td>
+</tr>
+<tr>
+<td>Catalog/CMS</td>
+<td>Draft/import/publish through explicit approval</td>
+<td>Unapproved P/M/O class or hidden policy changes</td>
+</tr>
+<tr>
+<td>Auditor/support</td>
+<td>Read-limited cases and compliant exports</td>
+<td>Mutating immutable history or arbitrary finance access</td>
+</tr>
+<tr>
+<td>Workers</td>
+<td>Narrow provider/webhook/notification/report capabilities</td>
+<td>Migration owner / unrestricted SQL</td>
+</tr>
+</tbody>
+</table>
+<p>Current DB roles are separate NOLOGIN runtime capabilities and have only selective RLS. Build a reviewed explicit <code>(role, action, resource_scope)</code> matrix with owner decision D-003 before production; never authorize solely from an internal integer ID. See Source Role List.</p>
+<h2>Pharmville security controls and trust</h2>
+<p>The source master checklist calls for JWT/OTP/MFA, least privilege, at-rest encryption with AWS KMS for RDS/S3/ElastiCache, HTTPS/TLS, API rate limiting, secrets management and independent audit. Database migrations V0025/V0029 establish restricted NOLOGIN roles, selected RLS policies and future routine default denial. Production deployment evidence, WAF policy and legal retention remain incomplete.</p>
+<p>Defend the most important assets: prescriptions and patient identities, store/warehouse stock and inventory movement, gateway/COD/refund financial facts, rider GPS/OTP traces, sensitive exports, staff role grants and signing secrets. Enforce user and location scopes in application <em>and</em> within approved DB capabilities where possible.</p>
+<p>Never accept browser-provided actor context or use migration-owner credentials at runtime.</p>
+<p>Production gate: threat-model signoff, cloud IAM review, provider secret/signature validation, clinical-file scanning/private access, breach/incident runbooks, rate-limit tests and role-based penetration tests. A SQL table alone is not a security control. Related Threat Model, Healthcare Data and Audit Logging.</p>
+<h2>Sensitive records and private file handling</h2>
+<p>Protect patient identifiers, prescriptions, clinical documents, account sessions, payment references, invoices, staff credentials, rider location traces, ID/export documents and provider secrets. Use TLS and KMS-managed encryption for AWS data stores as selected; secrets must come from a controlled secret manager rather than <code>.env</code> committed to Git.</p>
+<p>Prescriptions and reports live in private object storage; the database records metadata and access evidence. On upload: authenticate, verify allowed size/format, create short-lived scoped upload intent, scan, validate ownership and mark available only after trusted checks.</p>
+<p>On download: recheck actor and patient/order authorization <strong>at read time</strong>, issue short-lived URL and audit clinical access. Do not embed Rx content in messages, jobs, logs or support exports.</p>
+<p>Tokenize or mask provider references and phone/GPS details in telemetry. Retention, lawful holds, deletion and customer consent need legal approval; do not guess fixed duration. See Healthcare Handling and Database Privacy.</p>
+<h2>Priority security threat model</h2>
+<table>
+<thead>
+<tr>
+<th>Threat</th>
+<th>Most important entry point</th>
+<th>Proposed mitigation / negative test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IDOR cross-patient or store access</td>
+<td>Predictable UUID resource paths, filters</td>
+<td>Server-side ownership check and DB scope, <code>403/404</code></td>
+</tr>
+<tr>
+<td>Unauthorized P approval</td>
+<td>Pharmacy workbench impersonation</td>
+<td>Verified licensed role, exact Rx version and audit</td>
+</tr>
+<tr>
+<td>Unapproved dispatch</td>
+<td>Picking endpoint or stock override</td>
+<td>Database license, line, lot and finance gates</td>
+</tr>
+<tr>
+<td>Webhook spoof/replay</td>
+<td>Cashfree callback</td>
+<td>Signature/raw payload, event dedupe and reconciliation</td>
+</tr>
+<tr>
+<td>Duplicate charge/refund</td>
+<td>Retry/timeout</td>
+<td>Scoped idempotency + authoritative ledger</td>
+</tr>
+<tr>
+<td>Stale stock oversell</td>
+<td>POS lag, race</td>
+<td>Fresh observations, lock and reservation guard</td>
+</tr>
+<tr>
+<td>Rx/document exfiltration</td>
+<td>Signed URL or report export</td>
+<td>Short TTL, access recheck, private storage and purpose logs</td>
+</tr>
+<tr>
+<td>OTP/login brute force</td>
+<td>Public auth endpoints</td>
+<td>Rate limits, escalating delay/alerts and session revocation</td>
+</tr>
+<tr>
+<td>Insider privilege escalation</td>
+<td>Staff role edit, migration owner</td>
+<td>No self-grant, separation of duties, runtime NOLOGIN roles</td>
+</tr>
+</tbody>
+</table>
+<p>Test abuse against a synthetic staging database. Do not consider a passed local SQL test equivalent to a deployed WAF, token lifecycle or penetration test. See Security Testing.</p>
+<h2>Trust boundaries and database capability design</h2>
+<p><strong>Recorded implemented DB protection:</strong> four restricted NOLOGIN PostgreSQL capability groups (<code>pharmville_customer_api</code>, <code>pharmville_staff_api</code>, <code>pharmville_reporting_worker</code>, <code>pharmville_integration_worker</code>) and three row-level security policies in the final catalog. The migration owner is privileged and must <strong>never</strong> be an application runtime account.</p>
+<p><strong>Application design gate:</strong> NestJS authenticates and scopes a request, checks roles, patient and site memberships, and uses a restricted DB role. An arbitrary browser actor ID or transaction setting must not be accepted as trusted context. Unknown seller/provider/service kinds must be denied.</p>
+<p><strong>Patient/documents:</strong> files are private, signed access is short-lived, permissions rechecked on download, and access events recorded. Do not place prescription bytes or medical details in telemetry.</p>
+<p><strong>Payments:</strong> accept provider callbacks only after signature, replay and amount/reference validation; settle ledgers once. Keep COD and online payment accounting separate.</p>
+<p><strong>Audit:</strong> record who, action, resource, time, allowed/denied outcome and correlation ID, with minimal protected data. Do not claim the current SQL-only controls by themselves provide a compliant healthcare application.</p>
+<p>Exact RLS policies · database security</p>
+<h2>Unified identity and workspace access</h2>
+<p><strong>Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.</strong> <a href="../03-Modules/Authentication_Access/Unified-Identity-Architecture.html">Unified Identity policy</a> is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. <a href="../01-Project/User-Roles.html">Role/workspace matrix</a> defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.</p>
+</main></body></html>

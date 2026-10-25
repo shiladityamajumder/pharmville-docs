@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Reporting edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Reporting-and-Audit.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-REP-01-01</code></td>
+<td><code>REP-01</code></td>
+<td>Store filter requests unauthorized location</td>
+<td>No out-of-scope totals or order detail</td>
+<td>Reporting/Security reviews entitlement</td>
+<td><code>TC-REP-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-REP-02-01</code></td>
+<td><code>REP-02</code></td>
+<td>Underlying tax classification is unapproved</td>
+<td>Report not described as filing-ready; unresolved data flagged</td>
+<td>Finance/CA approves definitions and corrections</td>
+<td><code>TC-REP-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-REP-03-01</code></td>
+<td><code>REP-03</code></td>
+<td>Report is generated from stale observation</td>
+<td>Data time/staleness visible; report not used as reservation authority</td>
+<td>Inventory restores evidence; Reporting reruns</td>
+<td><code>TC-REP-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-REP-04-01</code></td>
+<td><code>REP-04</code></td>
+<td>Delivered parcel has unresolved COD shortage</td>
+<td>Delivery is not counted as deposited cash</td>
+<td>Finance resolves discrepancy; report preserves separate facts</td>
+<td><code>TC-REP-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-REP-05-01</code></td>
+<td><code>REP-05</code></td>
+<td>Pending refund is counted as completed payout</td>
+<td>Pending and completed separated, no false financial closure</td>
+<td>Finance/Reporting corrects definitions and reruns</td>
+<td><code>TC-REP-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-REP-06-01</code></td>
+<td><code>REP-06</code></td>
+<td>Dispatched transfer lacks destination acknowledgment</td>
+<td>Not reported as fully received</td>
+<td>Warehouse/Store investigates receipt</td>
+<td><code>TC-REP-06-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-REP-07-01</code></td>
+<td><code>REP-07</code></td>
+<td>User loses role while export runs</td>
+<td>Download denied despite earlier job authorization</td>
+<td>Security reviews access; Reporting expires/recreates authorized export</td>
+<td><code>TC-REP-07-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+</main></body></html>

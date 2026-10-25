@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Notifications business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Communications / Platform. Notification messages and attempts; source domains own business events and customer support remains a separate scope decision.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Consume committed domain outbox events; deduplicate delivery intent without repeating source business commands.</li>
+<li>Choose approved template/version, recipient and allowed channel based on current consent and operational context.</li>
+<li>Dispatch through the configured provider and persist attempt/outcome; authenticate callback evidence before changing delivery state.</li>
+<li>Retry recoverable delivery failures within approved policy; provider outage cannot roll back a committed order or payment.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NOT-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-NOT-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>NOT-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-NOT-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>NOT-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-NOT-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>NOT-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-NOT-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>NOT-05</code></td>
+<td>Could (draft)</td>
+<td><a href="LLD.html">TC-NOT-05-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../../06-Workflows/WF-013-Customer-Support-Triage.html">WF-013</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Notifications-and-Support.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-005; D-010; D-024.</p>
+</main></body></html>

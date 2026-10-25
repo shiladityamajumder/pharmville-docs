@@ -1,0 +1,1459 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>warehouse · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Warehouse foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>warehouse</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-1318</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1319</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1320</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1321</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1322</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1323</td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td><code>zone_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1324</td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td><code>zone_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1325</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1326</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1327</td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><code>rack_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1328</td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><code>rack_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1329</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1330</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1331</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1332</td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><code>zone_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1333</td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><code>zone_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1334</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td><code>bin_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1335</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td><code>bin_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1336</td>
+<td><a href="../../Tables/warehouse/stock_movement_reason_codes.html"><code>warehouse.stock_movement_reason_codes</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td><code>reason_code_id, reason_code</code> → <code>id, code</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1337</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1338</td>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td><code>cycle_count_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1339</td>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td><code>cycle_count_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1340</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td><code>lot_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1341</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td><code>lot_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1342</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_count_items.html"><code>warehouse.cycle_count_items</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1343</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td><code>assigned_to_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1344</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td><code>bin_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1345</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td><code>bin_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1346</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1347</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1348</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1349</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/cycle_counts.html"><code>warehouse.cycle_counts</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1350</td>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td><code>adjustment_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1351</td>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td><code>adjustment_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1352</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td><code>bin_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1353</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td><code>bin_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1354</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1355</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td><code>lot_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1356</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td><code>lot_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1357</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustment_items.html"><code>warehouse.inventory_adjustment_items</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1358</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td><code>approved_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1359</td>
+<td><a href="../../Tables/warehouse/stock_movement_reason_codes.html"><code>warehouse.stock_movement_reason_codes</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td><code>reason_code_id, reason_code</code> → <code>id, code</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1360</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1361</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td><code>requested_by_user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1362</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1363</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1364</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_adjustments.html"><code>warehouse.inventory_adjustments</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1365</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1366</td>
+<td><a href="../../Tables/procurement/goods_receipt_items.html"><code>procurement.goods_receipt_items</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>goods_receipt_item_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1367</td>
+<td><a href="../../Tables/procurement/goods_receipt_items.html"><code>procurement.goods_receipt_items</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>goods_receipt_item_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1368</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>product_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1369</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>product_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1370</td>
+<td><a href="../../Tables/procurement/suppliers.html"><code>procurement.suppliers</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>supplier_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1371</td>
+<td><a href="../../Tables/procurement/suppliers.html"><code>procurement.suppliers</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>supplier_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1372</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1373</td>
+<td><a href="../../Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>variant_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1374</td>
+<td><a href="../../Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>variant_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1375</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1376</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1377</td>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><code>aisle_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1378</td>
+<td><a href="../../Tables/warehouse/aisles.html"><code>warehouse.aisles</code></a></td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><code>aisle_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1379</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1380</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1381</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1382</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1383</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/racks.html"><code>warehouse.racks</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1384</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1385</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1386</td>
+<td><a href="../../Tables/procurement/suppliers.html"><code>procurement.suppliers</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>preferred_supplier_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1387</td>
+<td><a href="../../Tables/procurement/suppliers.html"><code>procurement.suppliers</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>preferred_supplier_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1388</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>product_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1389</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>product_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1390</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1391</td>
+<td><a href="../../Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>variant_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1392</td>
+<td><a href="../../Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>variant_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1393</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1394</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1395</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>bin_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1396</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>bin_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1397</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1398</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>inventory_observed_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1399</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>lot_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1400</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>lot_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1401</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1402</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1403</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1404</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>bin_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1405</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>bin_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1406</td>
+<td><a href="../../Tables/warehouse/stock_movement_reason_codes.html"><code>warehouse.stock_movement_reason_codes</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>reason_code_id, reason_code</code> → <code>id, code</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1407</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1408</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>lot_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1409</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>lot_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1410</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>released_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1411</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1412</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1413</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_holds.html"><code>warehouse.stock_holds</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1414</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td><code>actor_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1415</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td><code>bin_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1416</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td><code>bin_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1417</td>
+<td><a href="../../Tables/warehouse/stock_movement_reason_codes.html"><code>warehouse.stock_movement_reason_codes</code></a></td>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td><code>reason_code_id, reason_code</code> → <code>id, code</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1418</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td><code>lot_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1419</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td><code>lot_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1420</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1421</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_ledger.html"><code>warehouse.stock_ledger</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-01">24-warehouse.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1422</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_movement_reason_codes.html"><code>warehouse.stock_movement_reason_codes</code></a></td>
+<td><code>created_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-03">24-warehouse.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1423</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_movement_reason_codes.html"><code>warehouse.stock_movement_reason_codes</code></a></td>
+<td><code>updated_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-03">24-warehouse.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1424</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>bin_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1425</td>
+<td><a href="../../Tables/warehouse/bins.html"><code>warehouse.bins</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>bin_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1426</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1427</td>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>order_item_id, order_id</code> → <code>id, order_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1428</td>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>order_item_id_internal_id, order_id_internal_id</code> → <code>internal_id, order_id_internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1429</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>lot_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1430</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>lot_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1431</td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>order_revision_id, order_id</code> → <code>id, order_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1432</td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>order_revision_id_internal_id, order_id_internal_id</code> → <code>internal_id, order_id_internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1433</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1434</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1435</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1436</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1437</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td><code>lot_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1438</td>
+<td><a href="../../Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td><code>lot_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1439</td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td><code>transfer_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1440</td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td><code>transfer_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1441</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1442</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><code>approved_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1443</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1444</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><code>destination_warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1445</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><code>destination_warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1446</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><code>requested_by_user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1447</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><code>source_warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1448</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><code>source_warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1449</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1450</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-03">24-warehouse.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1451</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-03">24-warehouse.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1452</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>location_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-03">24-warehouse.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1453</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>location_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-03">24-warehouse.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1454</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>organization_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-03">24-warehouse.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1455</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>organization_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-03">24-warehouse.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1456</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-03">24-warehouse.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-1457</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1458</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1459</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1460</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><code>warehouse_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1461</td>
+<td><a href="../../Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><a href="../../Tables/warehouse/zones.html"><code>warehouse.zones</code></a></td>
+<td><code>warehouse_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../24-warehouse.html#diagram-02">24-warehouse.md#diagram-02</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

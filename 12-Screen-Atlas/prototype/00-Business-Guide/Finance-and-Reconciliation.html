@@ -1,0 +1,60 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Finance and Reconciliation · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Finance and reconciliation</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.</p>
+</blockquote>
+<h2>What is this process?</h2>
+<p>Reconciliation compares orders, payments, refunds, provider settlements and physical cash. Differences remain visible until explained, rather than changing a sale to force totals to match.</p>
+<h2>Who is involved?</h2>
+<p>Finance staff/approvers, riders, cash receiving staff, Operations, support and provider/bank integration owners.</p>
+<h2>How does it normally work?</h2>
+<ol>
+<li>Finance obtains trusted payment/refund and settlement evidence for the relevant period.</li>
+<li>Pharmville compares references, amounts and currencies. Timing differences and unmatched records become investigation items.</li>
+<li>COD checks compare amount due, actual rider collection and cash handed over/deposited per rider and period.</li>
+<li>Staff investigate using order, payment, delivery and cash evidence. Corrections require reasons and the appropriate approval.</li>
+<li>Journals, settlements, invoices and credit notes retain history. A repeated check must not post the same correction twice. Customers see only their own payment/refund outcome.</li>
+</ol>
+<h2>What happens next?</h2>
+<p>Differences lead to a specific provider inquiry, refund, cash investigation or approved accounting correction. <a href="Reporting-and-Audit.html">Reporting and audit</a> retain evidence.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<h3>Settlement differs from the order</h3>
+<p>Fees, timing, missing items or wrong references may explain it. Finance sees an exception with original amounts, checks bank/provider evidence and records approved resolution. Pharmville does not fabricate payment to close it.</p>
+<h3>The rider deposits less than collection</h3>
+<p>Counting errors or missing cash leave both actual amounts and an unresolved balance visible. Finance/Operations investigate with the rider. Delivery history remains intact and the shortage is not automatically cleared.</p>
+<h3>A job or settlement file repeats</h3>
+<p>A restart/provider retry reuses existing evidence and must not duplicate settlement, credit or journal posting. Finance reviews conflicting replacements; the same run remains identifiable.</p>
+<h3>Evidence or correction authority is missing</h3>
+<p>An outage leaves the period pending/unreconciled, while an unauthorized correction is denied. The integration owner retrieves evidence or a Finance approver reviews the adjustment. Money/history remain unchanged until the permitted action succeeds.</p>
+<h2>What does the user see?</h2>
+<p>Finance sees matched items, original amounts and open differences by period/rider. Customers see their own money/refund status without internal or unrelated financial data.</p>
+<h2>What still needs approval?</h2>
+<p>D-004 (provider results), D-007 (cash accountability), D-008/D-012 (accounting), D-016 (evidence). The <a href="../09-References/Sources-and-Decisions.html#open-decisions">decision register</a> names owners and blocked actions.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../02-Architecture/System-HLD.html">System HLD</a> · <a href="../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development tasks</a></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Architecture</th>
+<th>Implementation</th>
+<th>API</th>
+<th>Data</th>
+<th>Edge cases and tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Finance Payments</td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#finance-payments">Mapping</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Cases</a></td>
+</tr>
+</tbody>
+</table>
+<p>Technical workflows: <a href="../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a> · <a href="../06-Workflows/WF-009-COD-Collection.html">WF-009</a> · <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a> · <a href="../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a>.</p>
+<p>Feature references: <code>FIN-01</code>, <code>FIN-02</code>, <code>FIN-03</code>, <code>FIN-04</code>, <code>FIN-05</code>, <code>FIN-06</code>, <code>FIN-07</code>.</p>
+<p><a href="README.html">Business Guide</a> · <a href="Pharmville-Complete-Business-Flow.html">Complete journey</a></p>
+</main></body></html>

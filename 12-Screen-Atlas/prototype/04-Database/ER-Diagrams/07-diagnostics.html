@@ -1,0 +1,506 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>07 diagnostics · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Diagnostics ER diagrams</h1>
+<h2>What this part of the database stores</h2>
+<p>The <code>diagnostics</code> schema stores tests and laboratory services. The names and structural relationships below come from the checked-out database catalog snapshot; business-purpose summaries marked inferred are not product-owner approval.</p>
+<h2>Main tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Recorded purpose</th>
+<th>Table definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../Tables/diagnostics/diagnostic_order_items.html"><code>diagnostic_order_items</code></a></td>
+<td>Holds diagnostic order items records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/diagnostic_order_items.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/diagnostic_orders.html"><code>diagnostic_orders</code></a></td>
+<td>Holds diagnostic orders records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/diagnostic_orders.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/diagnostic_reports.html"><code>diagnostic_reports</code></a></td>
+<td>Holds diagnostic reports records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/diagnostic_reports.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/diagnostic_result_values.html"><code>diagnostic_result_values</code></a></td>
+<td>Holds diagnostic result values records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/diagnostic_result_values.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/lab_locations.html"><code>lab_locations</code></a></td>
+<td>Holds lab locations records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/lab_locations.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/lab_offerings.html"><code>lab_offerings</code></a></td>
+<td>Holds lab offerings records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/lab_offerings.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/lab_providers.html"><code>lab_providers</code></a></td>
+<td>Holds lab providers records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/lab_providers.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/sample_collections.html"><code>sample_collections</code></a></td>
+<td>Holds sample collections records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/sample_collections.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/sample_events.html"><code>sample_events</code></a></td>
+<td>Holds sample events records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/sample_events.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/samples.html"><code>samples</code></a></td>
+<td>Holds samples records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/samples.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/test_definitions.html"><code>test_definitions</code></a></td>
+<td>Holds test definitions records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/test_definitions.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/test_package_items.html"><code>test_package_items</code></a></td>
+<td>Holds test package items records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/test_package_items.html">Table contract</a></td>
+</tr>
+<tr>
+<td><a href="../Tables/diagnostics/test_packages.html"><code>test_packages</code></a></td>
+<td>Holds test packages records within the diagnostics domain (tests and laboratory services). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning)</td>
+<td><a href="../Tables/diagnostics/test_packages.html">Table contract</a></td>
+</tr>
+</tbody>
+</table>
+<h2>ER diagrams</h2>
+<p>These diagrams show declared PostgreSQL foreign keys from focused source tables. Entity fields include primary keys, unique keys, and FK columns; exact data types remain in the linked table contracts. <code>PK</code>, <code>FK</code>, and <code>UK</code> mark key roles. Relationship cardinality comes from FK nullability and unique constraints/indexes in the recorded catalog.</p>
+<p>&lt;a id=&quot;diagram-01&quot;&gt;&lt;/a&gt;</p>
+<h3>Diagram 01 — diagnostic_order_items, lab_offerings, test_package_items, test_definitions, test_packages, diagnostic_orders, sample_collections, samples</h3>
+<p>This focused view contains every declared FK owned by the listed focus tables. Referenced tables outside that set appear as context. Parallel FK constraints are distinguished by their stable IDs; search those IDs in the <a href="Relationship-Catalog/diagnostics.html">relationship catalog</a> for exact columns and actions.</p>
+<pre><code class="language-mermaid">erDiagram
+    clinical__patient_profiles {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid family_member_id FK
+        bigint family_member_id_internal_id FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+        uuid user_id FK
+    }
+    customer__addresses {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+        uuid user_id FK, UK
+    }
+    diagnostics__diagnostic_order_items {
+        uuid created_by FK
+        uuid diagnostic_order_id FK
+        bigint diagnostic_order_id_internal_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid offering_id FK
+        bigint offering_id_internal_id FK
+        uuid test_definition_id FK
+        bigint test_definition_id_internal_id FK
+        uuid test_package_id FK
+        bigint test_package_id_internal_id FK
+        uuid updated_by FK
+    }
+    diagnostics__diagnostic_orders {
+        uuid address_id FK
+        bigint address_id_internal_id FK
+        uuid created_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid lab_location_id FK
+        bigint lab_location_id_internal_id FK
+        varchar order_number UK
+        uuid patient_profile_id FK
+        bigint patient_profile_id_internal_id FK
+        uuid updated_by FK
+        uuid user_id FK
+    }
+    diagnostics__lab_locations {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid lab_provider_id FK, UK
+        bigint lab_provider_id_internal_id FK
+        uuid location_id FK, UK
+        bigint location_id_internal_id FK
+        uuid updated_by FK
+    }
+    diagnostics__lab_offerings {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid lab_location_id FK, UK
+        bigint lab_location_id_internal_id FK
+        uuid test_definition_id FK, UK
+        bigint test_definition_id_internal_id FK
+        uuid test_package_id FK, UK
+        bigint test_package_id_internal_id FK
+        uuid updated_by FK
+    }
+    diagnostics__sample_collections {
+        uuid collector_user_id FK
+        uuid created_by FK
+        uuid diagnostic_order_id FK
+        bigint diagnostic_order_id_internal_id FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+    }
+    diagnostics__samples {
+        varchar barcode UK
+        uuid collection_id FK
+        bigint collection_id_internal_id FK
+        uuid created_by FK
+        uuid diagnostic_order_id FK
+        bigint diagnostic_order_id_internal_id FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+    }
+    diagnostics__test_definitions {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+    }
+    diagnostics__test_package_items {
+        uuid created_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid package_id FK, UK
+        bigint package_id_internal_id FK
+        uuid test_definition_id FK, UK
+        bigint test_definition_id_internal_id FK
+        uuid updated_by FK
+    }
+    diagnostics__test_packages {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+    }
+    identity__users {
+        uuid created_by FK
+        varchar email_normalized UK
+        uuid id PK, FK, UK
+        uuid updated_by FK
+    }
+    identity__users o|--o{ diagnostics__diagnostic_order_items : &quot;FK-0464 FK-0473&quot;
+    diagnostics__diagnostic_orders ||--o{ diagnostics__diagnostic_order_items : &quot;FK-0465 FK-0466&quot;
+    diagnostics__lab_offerings o|--o{ diagnostics__diagnostic_order_items : &quot;FK-0467 FK-0468&quot;
+    diagnostics__test_definitions o|--o{ diagnostics__diagnostic_order_items : &quot;FK-0469 FK-0470&quot;
+    diagnostics__test_packages o|--o{ diagnostics__diagnostic_order_items : &quot;FK-0471 FK-0472&quot;
+    identity__users o|--o{ diagnostics__lab_offerings : &quot;FK-0503 FK-0504 FK-0511&quot;
+    diagnostics__lab_locations ||--o{ diagnostics__lab_offerings : &quot;FK-0505 FK-0506&quot;
+    diagnostics__test_definitions o|--o{ diagnostics__lab_offerings : &quot;FK-0507 FK-0508&quot;
+    diagnostics__test_packages o|--o{ diagnostics__lab_offerings : &quot;FK-0509 FK-0510&quot;
+    identity__users o|--o{ diagnostics__test_package_items : &quot;FK-0534 FK-0539&quot;
+    diagnostics__test_packages ||--o{ diagnostics__test_package_items : &quot;FK-0535 FK-0536&quot;
+    diagnostics__test_definitions ||--o{ diagnostics__test_package_items : &quot;FK-0537 FK-0538&quot;
+    identity__users o|--o{ diagnostics__test_definitions : &quot;FK-0531 FK-0532 FK-0533&quot;
+    identity__users o|--o{ diagnostics__test_packages : &quot;FK-0540 FK-0541 FK-0542&quot;
+    customer__addresses o|--o{ diagnostics__diagnostic_orders : &quot;FK-0474 FK-0475&quot;
+    identity__users o|--o{ diagnostics__diagnostic_orders : &quot;FK-0476 FK-0481&quot;
+    diagnostics__lab_locations ||--o{ diagnostics__diagnostic_orders : &quot;FK-0477 FK-0478&quot;
+    clinical__patient_profiles ||--o{ diagnostics__diagnostic_orders : &quot;FK-0479 FK-0480&quot;
+    identity__users ||--o{ diagnostics__diagnostic_orders : &quot;FK-0482&quot;
+    identity__users o|--o{ diagnostics__sample_collections : &quot;FK-0517 FK-0518 FK-0521&quot;
+    diagnostics__diagnostic_orders ||--o{ diagnostics__sample_collections : &quot;FK-0519 FK-0520&quot;
+    diagnostics__sample_collections o|--o{ diagnostics__samples : &quot;FK-0525 FK-0526&quot;
+    identity__users o|--o{ diagnostics__samples : &quot;FK-0527 FK-0530&quot;
+    diagnostics__diagnostic_orders ||--o{ diagnostics__samples : &quot;FK-0528 FK-0529&quot;
+</code></pre>
+<p><strong>Entity name mapping</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mermaid name</th>
+<th>PostgreSQL table</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clinical__patient_profiles</code></td>
+<td><a href="../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+</tr>
+<tr>
+<td><code>customer__addresses</code></td>
+<td><a href="../Tables/customer/addresses.html"><code>customer.addresses</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__diagnostic_order_items</code></td>
+<td><a href="../Tables/diagnostics/diagnostic_order_items.html"><code>diagnostics.diagnostic_order_items</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__diagnostic_orders</code></td>
+<td><a href="../Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__lab_locations</code></td>
+<td><a href="../Tables/diagnostics/lab_locations.html"><code>diagnostics.lab_locations</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__lab_offerings</code></td>
+<td><a href="../Tables/diagnostics/lab_offerings.html"><code>diagnostics.lab_offerings</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__sample_collections</code></td>
+<td><a href="../Tables/diagnostics/sample_collections.html"><code>diagnostics.sample_collections</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__samples</code></td>
+<td><a href="../Tables/diagnostics/samples.html"><code>diagnostics.samples</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__test_definitions</code></td>
+<td><a href="../Tables/diagnostics/test_definitions.html"><code>diagnostics.test_definitions</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__test_package_items</code></td>
+<td><a href="../Tables/diagnostics/test_package_items.html"><code>diagnostics.test_package_items</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__test_packages</code></td>
+<td><a href="../Tables/diagnostics/test_packages.html"><code>diagnostics.test_packages</code></a></td>
+</tr>
+<tr>
+<td><code>identity__users</code></td>
+<td><a href="../Tables/identity/users.html"><code>identity.users</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Coverage: 8 focus tables, 12 entities, 51 FK constraints (51 unique IDs).</p>
+<p>&lt;a id=&quot;diagram-02&quot;&gt;&lt;/a&gt;</p>
+<h3>Diagram 02 — diagnostic_reports, diagnostic_result_values, lab_providers, lab_locations, sample_events</h3>
+<p>This focused view contains every declared FK owned by the listed focus tables. Referenced tables outside that set appear as context. Parallel FK constraints are distinguished by their stable IDs; search those IDs in the <a href="Relationship-Catalog/diagnostics.html">relationship catalog</a> for exact columns and actions.</p>
+<pre><code class="language-mermaid">erDiagram
+    diagnostics__diagnostic_orders {
+        uuid address_id FK
+        bigint address_id_internal_id FK
+        uuid created_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid lab_location_id FK
+        bigint lab_location_id_internal_id FK
+        varchar order_number UK
+        uuid patient_profile_id FK
+        bigint patient_profile_id_internal_id FK
+        uuid updated_by FK
+        uuid user_id FK
+    }
+    diagnostics__diagnostic_reports {
+        uuid created_by FK
+        uuid diagnostic_order_id FK, UK
+        bigint diagnostic_order_id_internal_id FK
+        uuid file_object_id FK
+        bigint file_object_id_internal_id FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+        uuid verified_by_user_id FK
+        integer version_no UK
+    }
+    diagnostics__diagnostic_result_values {
+        uuid created_by FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid report_id FK
+        bigint report_id_internal_id FK
+        uuid test_definition_id FK
+        bigint test_definition_id_internal_id FK
+        uuid updated_by FK
+    }
+    diagnostics__lab_locations {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid lab_provider_id FK, UK
+        bigint lab_provider_id_internal_id FK
+        uuid location_id FK, UK
+        bigint location_id_internal_id FK
+        uuid updated_by FK
+    }
+    diagnostics__lab_providers {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid organization_id FK
+        bigint organization_id_internal_id FK
+        uuid updated_by FK
+    }
+    diagnostics__sample_events {
+        uuid actor_user_id FK
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid sample_id FK
+        bigint sample_id_internal_id FK
+    }
+    diagnostics__samples {
+        varchar barcode UK
+        uuid collection_id FK
+        bigint collection_id_internal_id FK
+        uuid created_by FK
+        uuid diagnostic_order_id FK
+        bigint diagnostic_order_id_internal_id FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+    }
+    diagnostics__test_definitions {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+    }
+    identity__users {
+        uuid created_by FK
+        varchar email_normalized UK
+        uuid id PK, FK, UK
+        uuid updated_by FK
+    }
+    organization__locations {
+        varchar code UK
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid organization_id FK, UK
+        bigint organization_id_internal_id FK
+        uuid updated_by FK
+    }
+    organization__organizations {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+    }
+    platform__file_objects {
+        varchar bucket UK
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        varchar object_key UK
+        uuid updated_by FK
+        uuid uploaded_by_user_id FK
+    }
+    identity__users o|--o{ diagnostics__diagnostic_reports : &quot;FK-0483 FK-0488 FK-0489&quot;
+    diagnostics__diagnostic_orders ||--o{ diagnostics__diagnostic_reports : &quot;FK-0484 FK-0485&quot;
+    platform__file_objects o|--o{ diagnostics__diagnostic_reports : &quot;FK-0486 FK-0487&quot;
+    identity__users o|--o{ diagnostics__diagnostic_result_values : &quot;FK-0490 FK-0495&quot;
+    diagnostics__diagnostic_reports ||--o{ diagnostics__diagnostic_result_values : &quot;FK-0491 FK-0492&quot;
+    diagnostics__test_definitions o|--o{ diagnostics__diagnostic_result_values : &quot;FK-0493 FK-0494&quot;
+    identity__users o|--o{ diagnostics__lab_providers : &quot;FK-0512 FK-0513 FK-0516&quot;
+    organization__organizations ||--o{ diagnostics__lab_providers : &quot;FK-0514 FK-0515&quot;
+    identity__users o|--o{ diagnostics__lab_locations : &quot;FK-0496 FK-0497 FK-0502&quot;
+    diagnostics__lab_providers ||--o{ diagnostics__lab_locations : &quot;FK-0498 FK-0499&quot;
+    organization__locations ||--o{ diagnostics__lab_locations : &quot;FK-0500 FK-0501&quot;
+    identity__users o|--o{ diagnostics__sample_events : &quot;FK-0522&quot;
+    diagnostics__samples ||--o{ diagnostics__sample_events : &quot;FK-0523 FK-0524&quot;
+</code></pre>
+<p><strong>Entity name mapping</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mermaid name</th>
+<th>PostgreSQL table</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>diagnostics__diagnostic_orders</code></td>
+<td><a href="../Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__diagnostic_reports</code></td>
+<td><a href="../Tables/diagnostics/diagnostic_reports.html"><code>diagnostics.diagnostic_reports</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__diagnostic_result_values</code></td>
+<td><a href="../Tables/diagnostics/diagnostic_result_values.html"><code>diagnostics.diagnostic_result_values</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__lab_locations</code></td>
+<td><a href="../Tables/diagnostics/lab_locations.html"><code>diagnostics.lab_locations</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__lab_providers</code></td>
+<td><a href="../Tables/diagnostics/lab_providers.html"><code>diagnostics.lab_providers</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__sample_events</code></td>
+<td><a href="../Tables/diagnostics/sample_events.html"><code>diagnostics.sample_events</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__samples</code></td>
+<td><a href="../Tables/diagnostics/samples.html"><code>diagnostics.samples</code></a></td>
+</tr>
+<tr>
+<td><code>diagnostics__test_definitions</code></td>
+<td><a href="../Tables/diagnostics/test_definitions.html"><code>diagnostics.test_definitions</code></a></td>
+</tr>
+<tr>
+<td><code>identity__users</code></td>
+<td><a href="../Tables/identity/users.html"><code>identity.users</code></a></td>
+</tr>
+<tr>
+<td><code>organization__locations</code></td>
+<td><a href="../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+</tr>
+<tr>
+<td><code>organization__organizations</code></td>
+<td><a href="../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+</tr>
+<tr>
+<td><code>platform__file_objects</code></td>
+<td><a href="../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Coverage: 5 focus tables, 12 entities, 28 FK constraints (28 unique IDs).</p>
+<h2>How the tables connect</h2>
+<ul>
+<li><strong>diagnostics.diagnostic_order_items → identity.users:</strong> <code>created_by</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>diagnostics.diagnostic_order_items → diagnostics.diagnostic_orders:</strong> <code>diagnostic_order_id</code> references <code>id</code>; Each child must reference exactly one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE CASCADE</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>diagnostics.diagnostic_order_items → diagnostics.diagnostic_orders:</strong> <code>diagnostic_order_id_internal_id</code> references <code>internal_id</code>; Each child must reference exactly one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE CASCADE</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>diagnostics.diagnostic_order_items → diagnostics.lab_offerings:</strong> <code>offering_id_internal_id</code> references <code>internal_id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE SET NULL</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>diagnostics.diagnostic_order_items → diagnostics.lab_offerings:</strong> <code>offering_id</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE SET NULL</code>. This keeps the child record tied to an existing parent key.</li>
+<li><strong>diagnostics.diagnostic_order_items → diagnostics.test_definitions:</strong> <code>test_definition_id</code> references <code>id</code>; Each child may reference zero or one parent; each parent may have zero or more child row(s). The database applies <code>ON DELETE RESTRICT</code>. This keeps the child record tied to an existing parent key.</li>
+</ul>
+<p>Paired public UUID and internal BIGINT foreign keys are real separate constraints. Diagrams use relationship IDs to keep those links readable; each underlying constraint is listed separately in the catalog. The application must keep paired identifiers consistent under the database's numeric-key guards. A relationship does not itself grant read or write permission.</p>
+<h2>Important database rules</h2>
+<ul>
+<li>The database primary key strategy uses an internal numeric key for most domain rows while retaining public UUID aliases; <code>identity.users</code> retains a UUID primary key. The table diagram labels expose the exact keys for each entity.</li>
+<li>A nullable FK permits a child row without that association; it does not make the referenced parent optional when a value is present.</li>
+<li>Composite FKs remain composite in the relationship catalog. Their scope columns must not be dropped when reading the diagram.</li>
+<li>A many-to-many association uses its actual junction table where one exists; no direct association is inferred.</li>
+<li>Authorization, tenant/site scoping, and service write ownership are separate contracts. See the linked database rules and module designs.</li>
+</ul>
+<h2>What happens during normal operations</h2>
+<p>See <a href="../../06-Workflows/WF-013-Customer-Support-Triage.html">WF-013</a> for the reviewed workflows that touch this schema. The workflows describe business sequencing; these ERDs describe enforced database references.</p>
+<h2>Related documents</h2>
+<p><a href="../Schema-Overview.html">Schema overview</a> · <a href="../Database-Rules.html">Database rules</a> · <a href="../Models-and-Parity.html">Model and parity notes</a> · <a href="../Migrations.html">Migration evidence</a> · <a href="Relationship-Catalog.html">Full relationship catalog</a> · <a href="Logical-References.html">Non-FK reference review</a> · <a href="../Tables/diagnostics/README.html">Table index</a> · <a href="../../06-Workflows/WF-013-Customer-Support-Triage.html">WF-013</a></p>
+</main></body></html>

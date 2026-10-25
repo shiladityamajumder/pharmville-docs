@@ -1,0 +1,445 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>shipment_events · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>logistics.shipment_events</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds shipment events records within the logistics domain (riders, shipments, tracking and delivery). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>logistics.shipment_events</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Audit / History</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Delivery_Operations</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>14 columns; 8 PK/FK/UQ/CHECK/exclusion constraints; 9 named PostgreSQL 18 NOT NULL constraints; 5 indexes; 3 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>carrier_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to carriers</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>logistics.carriers</code> via <code>fk_logistics_shipment_events_carrier_id_carriers</code></td>
+</tr>
+<tr>
+<td><code>carrier_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>logistics.carriers</code> via <code>fk_logistics_shipment_events_carrier_id_carriers_numeric</code></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>text</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores description for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>event_code</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Code for event</td>
+<td>Link to controlled business classification or an external reference</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>event_time</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores event time for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td><code>character varying(255)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores location for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>provider_event_id</code></td>
+<td><code>character varying(255)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Identifier associated with provider event</td>
+<td>Link the event or entity to its subject; verify constraints</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>raw_payload</code></td>
+<td><code>jsonb</code></td>
+<td>No</td>
+<td><code>'{}'::jsonb</code></td>
+<td>Structured raw payload information</td>
+<td>Retain a versioned payload or relevant details</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>shipment_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to shipments</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>logistics.shipments</code> via <code>fk_logistics_shipment_events_shipment_id_shipments</code></td>
+</tr>
+<tr>
+<td><code>shipment_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>logistics.shipments</code> via <code>fk_logistics_shipment_events_shipment_id_shipments_numeric</code></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the shipment events business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>logistics.shipment_events</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_logistics_shipment_events_carrier_id_carriers</td>
+<td><code>carrier_id</code></td>
+<td><a href="../../Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td><code>FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipment_events_carrier_id_carriers_numeric</td>
+<td><code>carrier_id_internal_id</code></td>
+<td><a href="../../Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td><code>FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipment_events_shipment_id_shipments</td>
+<td><code>shipment_id</code></td>
+<td><a href="../../Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td><code>FOREIGN KEY (shipment_id) REFERENCES logistics.shipments(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td>fk_logistics_shipment_events_shipment_id_shipments_numeric</td>
+<td><code>shipment_id_internal_id</code></td>
+<td><a href="../../Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td><code>FOREIGN KEY (shipment_id_internal_id) REFERENCES logistics.shipments(internal_id) ON DELETE CASCADE</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<p>No inbound FK is present in the validated catalog.</p>
+<h2><code>logistics.shipment_events</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>carrier_id</code></td>
+<td><code>logistics.carriers</code></td>
+<td><code>fk_logistics_shipment_events_carrier_id_carriers</code></td>
+</tr>
+<tr>
+<td><code>carrier_id_internal_id</code></td>
+<td><code>logistics.carriers</code></td>
+<td><code>fk_logistics_shipment_events_carrier_id_carriers_numeric</code></td>
+</tr>
+<tr>
+<td><code>shipment_id</code></td>
+<td><code>logistics.shipments</code></td>
+<td><code>fk_logistics_shipment_events_shipment_id_shipments</code></td>
+</tr>
+<tr>
+<td><code>shipment_id_internal_id</code></td>
+<td><code>logistics.shipments</code></td>
+<td><code>fk_logistics_shipment_events_shipment_id_shipments_numeric</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_logistics_shipment_events_numeric_pair_carrier_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((carrier_id IS NULL) = (carrier_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_shipment_events_numeric_pair_shipment_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((shipment_id IS NULL) = (shipment_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipment_events_carrier_id_carriers</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipment_events_carrier_id_carriers_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipment_events_shipment_id_shipments</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (shipment_id) REFERENCES logistics.shipments(id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_shipment_events_shipment_id_shipments_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (shipment_id_internal_id) REFERENCES logistics.shipments(internal_id) ON DELETE CASCADE</code></td>
+</tr>
+<tr>
+<td><code>pk_logistics_shipment_events</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_shipment_events_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>shipment_events_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>shipment_events_event_code_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL event_code</code></td>
+</tr>
+<tr>
+<td><code>shipment_events_event_time_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL event_time</code></td>
+</tr>
+<tr>
+<td><code>shipment_events_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>shipment_events_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>shipment_events_raw_payload_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL raw_payload</code></td>
+</tr>
+<tr>
+<td><code>shipment_events_shipment_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL shipment_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>shipment_events_shipment_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL shipment_id</code></td>
+</tr>
+<tr>
+<td><code>shipment_events_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_logistics_shipment_events_shipment_time</code></td>
+<td>btree</td>
+<td><code>(shipment_id, event_time)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_shipment_events_shipment_time ON logistics.shipment_events USING btree (shipment_id, event_time)</code></td>
+</tr>
+<tr>
+<td><code>ix_logistics_shipment_events_status</code></td>
+<td>btree</td>
+<td><code>(status)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_shipment_events_status ON logistics.shipment_events USING btree (status)</code></td>
+</tr>
+<tr>
+<td><code>pk_logistics_shipment_events</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_logistics_shipment_events ON logistics.shipment_events USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_shipment_events_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_logistics_shipment_events_id ON logistics.shipment_events USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_shipment_events_provider_present</code></td>
+<td>btree</td>
+<td><code>(carrier_id, provider_event_id)</code></td>
+<td>carrier_id IS NOT NULL AND provider_event_id IS NOT NULL</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_logistics_shipment_events_provider_present ON logistics.shipment_events USING btree (carrier_id, provider_event_id) WHERE carrier_id IS NOT NULL AND provider_event_id IS NOT NULL</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON logistics.shipment_events FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;carrier_id&quot;,&quot;carrier_id_internal_id&quot;,&quot;logistics&quot;,&quot;carriers&quot;],[&quot;shipment_id&quot;,&quot;shipment_id_internal_id&quot;,&quot;logistics&quot;,&quot;shipments&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>immutable_record_guard</code></td>
+<td><code>CREATE TRIGGER immutable_record_guard BEFORE DELETE OR UPDATE ON logistics.shipment_events FOR EACH ROW EXECUTE FUNCTION platform.deny_mutation()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON logistics.shipment_events FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;carrier_id&quot;,&quot;carrier_id_internal_id&quot;,&quot;logistics&quot;,&quot;carriers&quot;],[&quot;shipment_id&quot;,&quot;shipment_id_internal_id&quot;,&quot;logistics&quot;,&quot;shipments&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

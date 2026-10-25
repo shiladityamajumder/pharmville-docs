@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Authentication and Authorization · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>API authentication and authorization</h1>
+<p><strong>Status: Proposed Pharmville contract; policy decisions D-003 and D-023 remain open.</strong> No Pharmville HTTP implementation was found. The authentication service response envelope is separately verified in <a href="Standard-Responses.html">Standard responses</a>; its routes are not evidence that Pharmville routes are implemented.</p>
+<h2>Trust types</h2>
+<table>
+<thead>
+<tr>
+<th>Caller</th>
+<th>Credential</th>
+<th>Server checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public customer OTP or login</td>
+<td>No existing access token; purpose-bound OTP/MFA challenge where applicable</td>
+<td>Challenge purpose, expiry, attempt limit, replay state, rate limits, and account state</td>
+</tr>
+<tr>
+<td>Customer <code>/v1/me/*</code></td>
+<td>Bearer access JWT (cookie alternative requires D-003 approval)</td>
+<td>Authenticated subject owns resource; dependent patient association and consent where applicable</td>
+</tr>
+<tr>
+<td>Staff, admin, pharmacist, finance</td>
+<td>Bearer access JWT or approved secure session cookie</td>
+<td>Explicit permission, active role, organization and location scope; clinical/finance-specific qualifications</td>
+</tr>
+<tr>
+<td>Rider</td>
+<td>Shared Identity session; Rider phone OTP retained</td>
+<td>Active shift and current task assignment; location and proof access limited to assigned work</td>
+</tr>
+<tr>
+<td>Internal service</td>
+<td>Service identity with narrowly scoped capability</td>
+<td>Trusted workload identity, capability allowlist and private network boundary; never a caller-supplied actor ID</td>
+</tr>
+<tr>
+<td>Payment provider webhook</td>
+<td>Provider signature over the exact raw request bytes, event identity and provider-approved replay controls</td>
+<td>Signature/timestamp policy from D-016; correlate and validate payment, order, amount and currency before effect</td>
+</tr>
+</tbody>
+</table>
+<p>Authentication and authorization are separate. Apply object-level policy before reading protected fields and again before issuing file/report download links. Return privacy-safe 404 where resource existence must be hidden. Never trust a user, patient, staff actor, location, warehouse, reviewer, rider, or role ID supplied as proof of authority.</p>
+<h2>Session and proof rules</h2>
+<p>D-003 must approve credential paths, MFA policy, token/session lifetimes, effective OTP limits, lockout, refresh rotation, revocation and recovery. Existing database defaults do not approve runtime security policy. Public proof endpoints must not require an active bearer token.</p>
+<p>Refresh must require the approved refresh credential, not an access token or user ID. Cookie transport requires Secure, HttpOnly, SameSite policy and CSRF protection for state-changing requests. D-023 requires purpose-bound proof before replacing a verified contact and preservation of the prior verified destination until the replacement is proven.</p>
+<h2>Header policy</h2>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Authorization: Bearer &lt;token&gt;</code></td>
+<td>Protected JWT endpoints unless cookie or service identity is explicitly selected</td>
+</tr>
+<tr>
+<td><code>Content-Type: application/json</code></td>
+<td>JSON request bodies; uploads use the declared upload protocol</td>
+</tr>
+<tr>
+<td><code>Accept: application/json</code></td>
+<td>JSON API callers; file endpoints request the file media type</td>
+</tr>
+<tr>
+<td><code>Idempotency-Key</code></td>
+<td>State-changing commands with retry ambiguity; required for money, inventory, checkout and other duplicate-sensitive effects</td>
+</tr>
+<tr>
+<td><code>If-Match</code></td>
+<td>Only where the operation specifies an ETag precondition; mismatch returns 412</td>
+</tr>
+<tr>
+<td><code>X-Request-ID</code>, <code>X-Correlation-ID</code></td>
+<td>Optional caller tracing values; validate length/format and generate safe values when absent</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>Exact names and canonicalization are blocked on provider evidence D-016; do not infer them</td>
+</tr>
+</tbody>
+</table>
+<p>The reference authentication service returns <code>X-Request-ID</code> and <code>X-Correlation-ID</code> when values exist in request context. For proposed Pharmville JSON responses, return the same headers when available and also include their values in the standard envelope. <code>Location</code>, <code>ETag</code>, <code>Retry-After</code>, and cache headers are operation-specific.</p>
+<p>Sensitive, private, financial, and clinical responses use <code>Cache-Control: no-store</code> unless a reviewed policy says otherwise.</p>
+<h2>Unified identity and workspace access</h2>
+<p><strong>Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.</strong> <a href="../03-Modules/Authentication_Access/Unified-Identity-Architecture.html">Unified Identity policy</a> is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. <a href="../01-Project/User-Roles.html">Role/workspace matrix</a> defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.</p>
+<h2>Unified access failures and recovery</h2>
+<p>For protected human business operations, an expired/revoked session returns 401; a stale context generation returns 401 <code>AUTH_CONTEXT_STALE</code> and permits recovery only through API-100 then current-credential refresh (or fresh authentication). Missing/forbidden business workspace or action returns 403 without protected data; target-specific checks may use privacy-safe 404. Context activation's stale If-Match returns 412, and missing required precondition returns 428. Step-up never grants a missing assignment. Unavailable authoritative session/grant/scope policy returns 503 with no positive-cache or JWT-role fallback. These codes use the existing ErrorEnvelope; each operation's specific business errors remain in its contract. Public proofs do not require bearer credentials; service identities and provider signatures retain their separate policies.</p>
+</main></body></html>

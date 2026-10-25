@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Order Operations edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Orders-and-Fulfillment.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-OMS-01-01</code></td>
+<td><code>OMS-01</code></td>
+<td>Phone search is used outside location scope</td>
+<td>No out-of-scope order disclosure</td>
+<td>Operations uses authorized filter; Security checks scope</td>
+<td><code>TC-OMS-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-OMS-02-01</code></td>
+<td><code>OMS-02</code></td>
+<td>Supporting payment read fails</td>
+<td>Missing evidence is explicit, not a fabricated paid summary</td>
+<td>Finance checks payment; Operations waits on gate</td>
+<td><code>TC-OMS-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-OMS-03-01</code></td>
+<td><code>OMS-03</code></td>
+<td>Nearest site lacks approved stock/license</td>
+<td>Ineligible site skipped; no silent split</td>
+<td>Operations evaluates permitted alternative or customer revision</td>
+<td><code>TC-OMS-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-OMS-04-01</code></td>
+<td><code>OMS-04</code></td>
+<td>Two allocators reassign the same revision</td>
+<td>Single assignment wins; no duplicate active site holds</td>
+<td>Operations refreshes and reconciles handoff before picking</td>
+<td><code>TC-OMS-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-OMS-05-01</code></td>
+<td><code>OMS-05</code></td>
+<td>Staff removes a paid P line without customer acceptance</td>
+<td>No silent changed basket or unauthorized financial reversal</td>
+<td>Operations requests accepted revision; Finance handles compensation</td>
+<td><code>TC-OMS-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-OMS-06-01</code></td>
+<td><code>OMS-06</code></td>
+<td>Worker restart loses an in-memory alert</td>
+<td>Durable current exception remains recoverable</td>
+<td>Operations resumes from stored facts, not lost UI state</td>
+<td><code>TC-OMS-06-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-OMS-07-01</code></td>
+<td><code>OMS-07</code></td>
+<td>Staff guesses patient or payment approval for phone order</td>
+<td>No fabricated consent, clinical approval or paid state</td>
+<td>Product/Security approves assisted-order contract</td>
+<td><code>TC-OMS-07-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+</main></body></html>

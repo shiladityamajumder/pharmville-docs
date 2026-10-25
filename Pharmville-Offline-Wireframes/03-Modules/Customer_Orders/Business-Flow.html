@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Customer Orders business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Customer commerce surface. Customer order projections and command facade; no independent authoritative order, payment or clinical tables.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Read only owned orders and the composed clinical/payment/fulfillment/delivery timeline.</li>
+<li>Request pre-pack cancellation or a return through Order Management; the customer surface cannot directly write another owner’s truth.</li>
+<li>Download only the owned invoice, using JSON or the existing application/pdf representation; payment/refund status comes from Payments.</li>
+<li>Show authorized delivery projection, OTP and masked contact only within current ownership and privacy rules.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ORD-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ORD-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ORD-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ORD-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ORD-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ORD-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ORD-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ORD-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ORD-05</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-ORD-05-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ORD-06</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ORD-06-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ORD-07</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ORD-07-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ORD-08</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ORD-08-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ORD-09</code></td>
+<td>Could (draft)</td>
+<td><a href="LLD.html">TC-ORD-09-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>, <a href="../../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Orders-and-Fulfillment.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-004; D-010; D-011; D-024.</p>
+</main></body></html>

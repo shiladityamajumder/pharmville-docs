@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Prescription Upload edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Prescription-and-Pharmacy.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-RX-01-01</code></td>
+<td><code>RX-01</code></td>
+<td>Upload is interrupted or malware check fails</td>
+<td>File cannot become usable prescription evidence</td>
+<td>Customer retries/replaces upload; file owner investigates</td>
+<td><code>TC-RX-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RX-02-01</code></td>
+<td><code>RX-02</code></td>
+<td>Deadline job runs with no approved policy</td>
+<td>No invented 24-hour cancellation or refund behavior</td>
+<td>Product, Pharmacy and Finance settle conflicting journey before enabling</td>
+<td><code>TC-RX-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RX-03-01</code></td>
+<td><code>RX-03</code></td>
+<td>Previously saved prescription is no longer valid</td>
+<td>Reuse denied; no inherited approval for changed evidence</td>
+<td>Customer uploads valid evidence; Pharmacy reviews</td>
+<td><code>TC-RX-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RX-04-01</code></td>
+<td><code>RX-04</code></td>
+<td>Wrong patient prescription ID is submitted</td>
+<td>No wrong-patient linkage; safe denial</td>
+<td>Customer corrects evidence; Pharmacy checks match</td>
+<td><code>TC-RX-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RX-05-01</code></td>
+<td><code>RX-05</code></td>
+<td>Rejected file is resubmitted as if still approved</td>
+<td>Earlier decision retained; new evidence requires current decision</td>
+<td>Customer corrects file; authorized pharmacist reviews again</td>
+<td><code>TC-RX-05-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+</main></body></html>

@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Admin business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Administration / Operations. CMS/settings and operating organization/location management; domain owners retain controlled master semantics.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Resolve privileged role, permission and organization/location scope for each master/configuration action.</li>
+<li>Validate versioned master changes through the owning Catalog, Identity, Finance or Pharmacy command; Admin is a management surface.</li>
+<li>Publish authorized CMS/settings changes with audit/outbox and retain history; deactivation cannot invalidate existing transactional evidence.</li>
+<li>Retain referenced masters and enforce explicit uniqueness/foreign-key rules; proposed initial datasets require owner approval.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ADM-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ADM-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ADM-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ADM-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ADM-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ADM-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ADM-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ADM-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ADM-05</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ADM-05-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ADM-06</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ADM-06-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ADM-07</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ADM-07-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ADM-08</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-ADM-08-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>ADM-09</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-ADM-09-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a>, <a href="../../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Admin-and-Operations.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-001; D-003; D-012; D-024.</p>
+</main></body></html>

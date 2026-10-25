@@ -1,0 +1,870 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>order_reviews · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>clinical.order_reviews</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds order reviews records within the clinical domain (prescriptions and pharmacist decisions). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>clinical.order_reviews</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Transactional</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Pharmacist_Review</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>22 columns; 30 PK/FK/UQ/CHECK/exclusion constraints; 16 named PostgreSQL 18 NOT NULL constraints; 9 indexes; 5 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>assigned_to_user_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_clinical_order_reviews_assigned_to_user_id_users</code></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>order_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to orders</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.orders</code> via <code>fk_clinical_order_reviews_order_id_orders</code>; FK → <code>commerce.orders</code> via <code>fk_clinical_order_reviews_order_patient</code></td>
+</tr>
+<tr>
+<td><code>order_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>commerce.orders</code> via <code>fk_clinical_order_reviews_order_id_orders_numeric</code>; FK → <code>commerce.orders</code> via <code>fk_clinical_order_reviews_order_patient_numeric</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to patient profiles</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.orders</code> via <code>fk_clinical_order_reviews_order_patient</code>; FK → <code>clinical.patient_profiles</code> via <code>fk_clinical_order_reviews_patient_profile_id_patient_profiles</code>; FK → <code>clinical.prescriptions</code> via <code>fk_clinical_order_reviews_rx_patient</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>commerce.orders</code> via <code>fk_clinical_order_reviews_order_patient_numeric</code>; FK → <code>clinical.patient_profiles</code> via <code>fk_clinical_order_reviews_patient_profile_id_patient_pr_b642</code>; FK → <code>clinical.prescriptions</code> via <code>fk_clinical_order_reviews_rx_patient_numeric</code></td>
+</tr>
+<tr>
+<td><code>prescription_document_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to prescription documents</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>clinical.prescription_documents</code> via <code>fk_clinical_order_reviews_document_rx</code>; FK → <code>clinical.prescription_documents</code> via <code>fk_clinical_order_reviews_prescription_document_id_pres_1fab</code></td>
+</tr>
+<tr>
+<td><code>prescription_document_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>clinical.prescription_documents</code> via <code>fk_clinical_order_reviews_document_rx_numeric</code>; FK → <code>clinical.prescription_documents</code> via <code>fk_clinical_order_reviews_prescription_document_id_pres_f5a7</code></td>
+</tr>
+<tr>
+<td><code>prescription_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to prescription documents</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>clinical.prescription_documents</code> via <code>fk_clinical_order_reviews_document_rx</code>; FK → <code>clinical.prescriptions</code> via <code>fk_clinical_order_reviews_prescription_id_prescriptions</code>; FK → <code>clinical.prescriptions</code> via <code>fk_clinical_order_reviews_rx_patient</code></td>
+</tr>
+<tr>
+<td><code>prescription_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>clinical.prescription_documents</code> via <code>fk_clinical_order_reviews_document_rx_numeric</code>; FK → <code>clinical.prescriptions</code> via <code>fk_clinical_order_reviews_prescription_id_prescriptions_numeric</code>; FK → <code>clinical.prescriptions</code> via <code>fk_clinical_order_reviews_rx_patient_numeric</code></td>
+</tr>
+<tr>
+<td><code>reason_code</code></td>
+<td><code>character varying(64)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to review reason codes</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>clinical.review_reason_codes</code> via <code>fk_clinical_order_reviews_controlled_reason</code>; Collation: default</td>
+</tr>
+<tr>
+<td><code>reason_code_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to review reason codes</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>clinical.review_reason_codes</code> via <code>fk_clinical_order_reviews_controlled_reason</code></td>
+</tr>
+<tr>
+<td><code>requested_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Time of requested</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>review_notes</code></td>
+<td><code>text</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores review notes for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>review_version</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores review version for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>reviewed_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of reviewed</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>reviewed_by_user_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_clinical_order_reviews_reviewed_by_user_id_users</code></td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(24)</code></td>
+<td>No</td>
+<td><code>'pending'::character varying</code></td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the order reviews business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Customer_Accounts, Prescription_Upload, Pharmacist_Review. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>clinical.order_reviews</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_clinical_order_reviews_assigned_to_user_id_users</td>
+<td><code>assigned_to_user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_controlled_reason</td>
+<td><code>reason_code_id, reason_code</code></td>
+<td><a href="../../Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a></td>
+<td><code>FOREIGN KEY (reason_code_id, reason_code) REFERENCES clinical.review_reason_codes(id, code) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_document_rx</td>
+<td><code>prescription_document_id, prescription_id</code></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>FOREIGN KEY (prescription_document_id, prescription_id) REFERENCES clinical.prescription_documents(id, prescription_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_document_rx_numeric</td>
+<td><code>prescription_document_id_internal_id, prescription_id_internal_id</code></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>FOREIGN KEY (prescription_document_id_internal_id, prescription_id_internal_id) REFERENCES clinical.prescription_documents(internal_id, prescription_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_order_id_orders</td>
+<td><code>order_id</code></td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_order_id_orders_numeric</td>
+<td><code>order_id_internal_id</code></td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_order_patient</td>
+<td><code>order_id, patient_profile_id</code></td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>FOREIGN KEY (order_id, patient_profile_id) REFERENCES commerce.orders(id, patient_profile_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_order_patient_numeric</td>
+<td><code>order_id_internal_id, patient_profile_id_internal_id</code></td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>FOREIGN KEY (order_id_internal_id, patient_profile_id_internal_id) REFERENCES commerce.orders(internal_id, patient_profile_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_patient_profile_id_patient_pr_b642</td>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_patient_profile_id_patient_profiles</td>
+<td><code>patient_profile_id</code></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_prescription_document_id_pres_1fab</td>
+<td><code>prescription_document_id</code></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>FOREIGN KEY (prescription_document_id) REFERENCES clinical.prescription_documents(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_prescription_document_id_pres_f5a7</td>
+<td><code>prescription_document_id_internal_id</code></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>FOREIGN KEY (prescription_document_id_internal_id) REFERENCES clinical.prescription_documents(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_prescription_id_prescriptions</td>
+<td><code>prescription_id</code></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_prescription_id_prescriptions_numeric</td>
+<td><code>prescription_id_internal_id</code></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_reviewed_by_user_id_users</td>
+<td><code>reviewed_by_user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (reviewed_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_rx_patient</td>
+<td><code>prescription_id, patient_profile_id</code></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>FOREIGN KEY (prescription_id, patient_profile_id) REFERENCES clinical.prescriptions(id, patient_profile_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_clinical_order_reviews_rx_patient_numeric</td>
+<td><code>prescription_id_internal_id, patient_profile_id_internal_id</code></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>FOREIGN KEY (prescription_id_internal_id, patient_profile_id_internal_id) REFERENCES clinical.prescriptions(internal_id, patient_profile_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>fk_clinical_review_items_review_order_rx</td>
+<td><code>review_id, order_id, prescription_id</code></td>
+<td><code>id, order_id, prescription_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>fk_clinical_review_items_review_order_rx_numeric</td>
+<td><code>review_id_internal_id, order_id_internal_id, prescription_id_internal_id</code></td>
+<td><code>internal_id, order_id_internal_id, prescription_id_internal_id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>clinical.order_reviews</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>assigned_to_user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_clinical_order_reviews_assigned_to_user_id_users</code></td>
+</tr>
+<tr>
+<td><code>reason_code_id, reason_code</code></td>
+<td><code>clinical.review_reason_codes</code></td>
+<td><code>fk_clinical_order_reviews_controlled_reason</code></td>
+</tr>
+<tr>
+<td><code>prescription_document_id, prescription_id</code></td>
+<td><code>clinical.prescription_documents</code></td>
+<td><code>fk_clinical_order_reviews_document_rx</code></td>
+</tr>
+<tr>
+<td><code>prescription_document_id_internal_id, prescription_id_internal_id</code></td>
+<td><code>clinical.prescription_documents</code></td>
+<td><code>fk_clinical_order_reviews_document_rx_numeric</code></td>
+</tr>
+<tr>
+<td><code>order_id</code></td>
+<td><code>commerce.orders</code></td>
+<td><code>fk_clinical_order_reviews_order_id_orders</code></td>
+</tr>
+<tr>
+<td><code>order_id_internal_id</code></td>
+<td><code>commerce.orders</code></td>
+<td><code>fk_clinical_order_reviews_order_id_orders_numeric</code></td>
+</tr>
+<tr>
+<td><code>order_id, patient_profile_id</code></td>
+<td><code>commerce.orders</code></td>
+<td><code>fk_clinical_order_reviews_order_patient</code></td>
+</tr>
+<tr>
+<td><code>order_id_internal_id, patient_profile_id_internal_id</code></td>
+<td><code>commerce.orders</code></td>
+<td><code>fk_clinical_order_reviews_order_patient_numeric</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id_internal_id</code></td>
+<td><code>clinical.patient_profiles</code></td>
+<td><code>fk_clinical_order_reviews_patient_profile_id_patient_pr_b642</code></td>
+</tr>
+<tr>
+<td><code>patient_profile_id</code></td>
+<td><code>clinical.patient_profiles</code></td>
+<td><code>fk_clinical_order_reviews_patient_profile_id_patient_profiles</code></td>
+</tr>
+<tr>
+<td><code>prescription_document_id</code></td>
+<td><code>clinical.prescription_documents</code></td>
+<td><code>fk_clinical_order_reviews_prescription_document_id_pres_1fab</code></td>
+</tr>
+<tr>
+<td><code>prescription_document_id_internal_id</code></td>
+<td><code>clinical.prescription_documents</code></td>
+<td><code>fk_clinical_order_reviews_prescription_document_id_pres_f5a7</code></td>
+</tr>
+<tr>
+<td><code>prescription_id</code></td>
+<td><code>clinical.prescriptions</code></td>
+<td><code>fk_clinical_order_reviews_prescription_id_prescriptions</code></td>
+</tr>
+<tr>
+<td><code>prescription_id_internal_id</code></td>
+<td><code>clinical.prescriptions</code></td>
+<td><code>fk_clinical_order_reviews_prescription_id_prescriptions_numeric</code></td>
+</tr>
+<tr>
+<td><code>reviewed_by_user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_clinical_order_reviews_reviewed_by_user_id_users</code></td>
+</tr>
+<tr>
+<td><code>prescription_id, patient_profile_id</code></td>
+<td><code>clinical.prescriptions</code></td>
+<td><code>fk_clinical_order_reviews_rx_patient</code></td>
+</tr>
+<tr>
+<td><code>prescription_id_internal_id, patient_profile_id_internal_id</code></td>
+<td><code>clinical.prescriptions</code></td>
+<td><code>fk_clinical_order_reviews_rx_patient_numeric</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_clinical_order_reviews_controlled_reason_pair</code></td>
+<td>CHECK</td>
+<td><code>CHECK (reason_code_id IS NULL OR reason_code IS NOT NULL)</code></td>
+</tr>
+<tr>
+<td><code>ck_clinical_order_reviews_numeric_pair_order_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((order_id IS NULL) = (order_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_clinical_order_reviews_numeric_pair_patient_profile_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((patient_profile_id IS NULL) = (patient_profile_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_clinical_order_reviews_numeric_pair_prescription_document_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((prescription_document_id IS NULL) = (prescription_document_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_clinical_order_reviews_numeric_pair_prescription_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((prescription_id IS NULL) = (prescription_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_clinical_order_reviews_orderreviewstatus</code></td>
+<td>CHECK</td>
+<td><code>CHECK (status::text = ANY (ARRAY['pending'::text, 'in_review'::text, 'action_required'::text, 'approved'::text, 'partially_approved'::text, 'rejected'::text, 'superseded'::text, 'cancelled'::text]))</code></td>
+</tr>
+<tr>
+<td><code>ck_clinical_order_reviews_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_clinical_order_reviews_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (review_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_assigned_to_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (assigned_to_user_id) REFERENCES identity.users(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_controlled_reason</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (reason_code_id, reason_code) REFERENCES clinical.review_reason_codes(id, code) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_document_rx</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_document_id, prescription_id) REFERENCES clinical.prescription_documents(id, prescription_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_document_rx_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_document_id_internal_id, prescription_id_internal_id) REFERENCES clinical.prescription_documents(internal_id, prescription_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_order_id_orders</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_id) REFERENCES commerce.orders(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_order_id_orders_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_id_internal_id) REFERENCES commerce.orders(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_order_patient</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_id, patient_profile_id) REFERENCES commerce.orders(id, patient_profile_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_order_patient_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (order_id_internal_id, patient_profile_id_internal_id) REFERENCES commerce.orders(internal_id, patient_profile_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_patient_profile_id_patient_pr_b642</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (patient_profile_id_internal_id) REFERENCES clinical.patient_profiles(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_patient_profile_id_patient_profiles</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (patient_profile_id) REFERENCES clinical.patient_profiles(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_prescription_document_id_pres_1fab</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_document_id) REFERENCES clinical.prescription_documents(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_prescription_document_id_pres_f5a7</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_document_id_internal_id) REFERENCES clinical.prescription_documents(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_prescription_id_prescriptions</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_id) REFERENCES clinical.prescriptions(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_prescription_id_prescriptions_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_id_internal_id) REFERENCES clinical.prescriptions(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_reviewed_by_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (reviewed_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_rx_patient</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_id, patient_profile_id) REFERENCES clinical.prescriptions(id, patient_profile_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_clinical_order_reviews_rx_patient_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (prescription_id_internal_id, patient_profile_id_internal_id) REFERENCES clinical.prescriptions(internal_id, patient_profile_id_internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_clinical_order_reviews</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_order_reviews_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_order_reviews_identity</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id, order_id, prescription_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_order_reviews_version</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (order_id, review_version)</code></td>
+</tr>
+<tr>
+<td><code>uq_numeric_clinical_order_reviews_internal_id_order_id__d676</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (internal_id, order_id_internal_id, prescription_id_internal_id)</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_order_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL order_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_order_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL order_id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_patient_profile_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL patient_profile_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_patient_profile_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL patient_profile_id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_prescription_document_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL prescription_document_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_prescription_document_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL prescription_document_id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_prescription_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL prescription_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_prescription_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL prescription_id</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_requested_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL requested_at</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_review_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL review_version</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+<tr>
+<td><code>order_reviews_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_clinical_order_reviews_patient_time</code></td>
+<td>btree</td>
+<td><code>(patient_profile_id, requested_at DESC)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_clinical_order_reviews_patient_time ON clinical.order_reviews USING btree (patient_profile_id, requested_at DESC)</code></td>
+</tr>
+<tr>
+<td><code>ix_clinical_order_reviews_prescription</code></td>
+<td>btree</td>
+<td><code>(prescription_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_clinical_order_reviews_prescription ON clinical.order_reviews USING btree (prescription_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_clinical_order_reviews_queue</code></td>
+<td>btree</td>
+<td><code>(status, requested_at, id)</code></td>
+<td>status::text = ANY (ARRAY['pending'::text, 'in_review'::text, 'action_required'::text])</td>
+<td>Read/join/filter access path; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_clinical_order_reviews_queue ON clinical.order_reviews USING btree (status, requested_at, id) WHERE status::text = ANY (ARRAY['pending'::text, 'in_review'::text, 'action_required'::text])</code></td>
+</tr>
+<tr>
+<td><code>pk_clinical_order_reviews</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_clinical_order_reviews ON clinical.order_reviews USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_order_reviews_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_clinical_order_reviews_id ON clinical.order_reviews USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_order_reviews_identity</code></td>
+<td>btree</td>
+<td><code>(id, order_id, prescription_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_clinical_order_reviews_identity ON clinical.order_reviews USING btree (id, order_id, prescription_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_order_reviews_one_open</code></td>
+<td>btree</td>
+<td><code>(order_id)</code></td>
+<td>status::text = ANY (ARRAY['pending'::text, 'in_review'::text, 'action_required'::text])</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; partial predicate limits indexed rows. Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_clinical_order_reviews_one_open ON clinical.order_reviews USING btree (order_id) WHERE status::text = ANY (ARRAY['pending'::text, 'in_review'::text, 'action_required'::text])</code></td>
+</tr>
+<tr>
+<td><code>uq_clinical_order_reviews_version</code></td>
+<td>btree</td>
+<td><code>(order_id, review_version)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_clinical_order_reviews_version ON clinical.order_reviews USING btree (order_id, review_version)</code></td>
+</tr>
+<tr>
+<td><code>uq_numeric_clinical_order_reviews_internal_id_order_id__d676</code></td>
+<td>btree</td>
+<td><code>(internal_id, order_id_internal_id, prescription_id_internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_numeric_clinical_order_reviews_internal_id_order_id__d676 ON clinical.order_reviews USING btree (internal_id, order_id_internal_id, prescription_id_internal_id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON clinical.order_reviews FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;order_id&quot;,&quot;order_id_internal_id&quot;,&quot;commerce&quot;,&quot;orders&quot;],[&quot;patient_profile_id&quot;,&quot;patient_profile_id_internal_id&quot;,&quot;clinical&quot;,&quot;patient_profiles&quot;],[&quot;prescription_document_id&quot;,&quot;prescription_document_id_internal_id&quot;,&quot;clinical&quot;,&quot;prescription_documents&quot;],[&quot;prescription_id&quot;,&quot;prescription_id_internal_id&quot;,&quot;clinical&quot;,&quot;prescriptions&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>controlled_reason</code></td>
+<td><code>CREATE TRIGGER controlled_reason BEFORE INSERT OR UPDATE ON clinical.order_reviews FOR EACH ROW EXECUTE FUNCTION platform.normalize_reason('clinical.review_reason_codes')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>order_review_guard</code></td>
+<td><code>CREATE TRIGGER order_review_guard BEFORE INSERT OR DELETE OR UPDATE ON clinical.order_reviews FOR EACH ROW EXECUTE FUNCTION clinical.guard_review()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON clinical.order_reviews FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON clinical.order_reviews FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;order_id&quot;,&quot;order_id_internal_id&quot;,&quot;commerce&quot;,&quot;orders&quot;],[&quot;patient_profile_id&quot;,&quot;patient_profile_id_internal_id&quot;,&quot;clinical&quot;,&quot;patient_profiles&quot;],[&quot;prescription_document_id&quot;,&quot;prescription_document_id_internal_id&quot;,&quot;clinical&quot;,&quot;prescription_documents&quot;],[&quot;prescription_id&quot;,&quot;prescription_id_internal_id&quot;,&quot;clinical&quot;,&quot;prescriptions&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

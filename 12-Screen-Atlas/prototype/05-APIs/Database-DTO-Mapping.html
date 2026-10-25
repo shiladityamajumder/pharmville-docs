@@ -1,0 +1,1169 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database DTO Mapping · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Database-first API DTO mapping</h1>
+<h2>Evidence and precedence</h2>
+<p>The <a href="../pharmville-database/pharmville_schema.sql">standalone SQL</a> is authoritative effective structure. The derived table catalog documents all 268 tables and exact fields/constraints/indexes/triggers; a private source-chain replay and independent SQL-only install agree across 23 catalog dimensions. See <a href="../04-Database/Reconciliation.html">reconciliation</a>.</p>
+<p>Structure is validated; application ownership, runtime permissions and API behavior remain proposed. No production records or provider payloads were inspected.</p>
+<p><code>04-Database/Module-Mapping.md</code> identifies candidate schema/module relationships and explicitly does not grant write ownership. <code>03-Modules/*/LLD.md</code> and <code>07-Engineering/State-and-Recovery-Contracts.md</code> define proposed command ownership and boundaries. Relevant <code>06-Workflows/</code> pages establish cross-module ordering.</p>
+<p>API DTO fields remain <strong>proposed</strong> until the owning module approves the mapping and runtime grants.</p>
+<h2>DTO mapping rules</h2>
+<ul>
+<li>A database <code>id</code> UUID may be represented by a public <code>...Id</code> only when the business use and object-level authorization justify it. Internal <code>internal_id</code> and every <code>*_internal_id</code> shadow key are never public DTO fields or authorization references.</li>
+<li>CamelCase request/response names are API names. They map explicitly to documented columns; they do not automatically mirror ORM/database rows. Fields derived from joins, calculations, signed tokens, or state projections are identified as derived and are not represented as persisted columns.</li>
+<li>Database <code>row_version</code> is not interchangeable with domain revision counters such as <code>review_version</code> or <code>revision_number</code>. Each precondition is named for its aggregate and source field.</li>
+<li>Nullability, precision, length, controlled status values, ownership foreign keys, and database checks constrain the proposed DTO. Application policy may be stricter, but it must not weaken a database constraint.</li>
+<li>Clinical files, OTP digests, password/refresh hashes, provider payloads/secrets, actor IDs, raw audit payloads, deleted flags and soft-delete actors are not exposed just because columns exist.</li>
+<li>A candidate table is not a write grant. The source file and exact field mapping are linked below; the owning service must approve writes, transaction boundaries, and outbox/audit behavior.</li>
+</ul>
+<h2>Operation-to-table evidence map</h2>
+<p>The table links below lead to the complete checked-in field/type/nullability/constraint definitions. “Candidate” means the operation may read or write through the owning module; it does not claim an implemented query or grant.</p>
+<table>
+<thead>
+<tr>
+<th>API references</th>
+<th>Proposed responsibility</th>
+<th>Relevant documented tables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-001–002</td>
+<td>Customer OTP challenge and session issuance</td>
+<td><a href="../04-Database/Tables/identity/otp_challenges.html">identity.otp_challenges</a>, <a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/login_attempts.html">identity.login_attempts</a></td>
+</tr>
+<tr>
+<td>API-003–004</td>
+<td>Customer profile read/update</td>
+<td><a href="../04-Database/Tables/customer/profiles.html">customer.profiles</a>, <a href="../04-Database/Tables/identity/users.html">identity.users</a></td>
+</tr>
+<tr>
+<td>API-005–006, ACC-ROUTE-001–002</td>
+<td>Customer address list/create/update/delete</td>
+<td><a href="../04-Database/Tables/customer/addresses.html">customer.addresses</a>, <a href="../04-Database/Tables/customer/profiles.html">customer.profiles</a>, <a href="../04-Database/Tables/commerce/checkouts.html">commerce.checkouts</a></td>
+</tr>
+<tr>
+<td>API-007–008, ACC-ROUTE-003–004</td>
+<td>Dependent relationship and patient linkage</td>
+<td><a href="../04-Database/Tables/customer/family_members.html">customer.family_members</a>, <a href="../04-Database/Tables/clinical/patient_profiles.html">clinical.patient_profiles</a>, <a href="../04-Database/Tables/commerce/orders.html">commerce.orders</a></td>
+</tr>
+<tr>
+<td>API-009, ACC-ROUTE-005</td>
+<td>Consent state/history</td>
+<td><a href="../04-Database/Tables/customer/consents.html">customer.consents</a>, <a href="../04-Database/Tables/customer/consent_events.html">customer.consent_events</a></td>
+</tr>
+<tr>
+<td>ACC-ROUTE-006–007</td>
+<td>Account deletion request/status</td>
+<td><a href="../04-Database/Tables/compliance/privacy_requests.html">compliance.privacy_requests</a>, <a href="../04-Database/Tables/identity/users.html">identity.users</a>; retention/legal-hold policy is not a DTO field</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-008–010</td>
+<td>Wishlist list/add/remove</td>
+<td><a href="../04-Database/Tables/customer/wishlists.html">customer.wishlists</a>, <a href="../04-Database/Tables/customer/wishlist_items.html">customer.wishlist_items</a>, <a href="../04-Database/Tables/catalog/products.html">catalog.products</a></td>
+</tr>
+<tr>
+<td>API-010</td>
+<td>Published category list</td>
+<td><a href="../04-Database/Tables/catalog/categories.html">catalog.categories</a></td>
+</tr>
+<tr>
+<td>API-011–012</td>
+<td>Published product list/detail and safe price display</td>
+<td><a href="../04-Database/Tables/catalog/products.html">catalog.products</a>, <a href="../04-Database/Tables/catalog/brands.html">catalog.brands</a>, <a href="../04-Database/Tables/catalog/product_variants.html">catalog.product_variants</a>, <a href="../04-Database/Tables/catalog/product_content.html">catalog.product_content</a>, <a href="../04-Database/Tables/catalog/product_media.html">catalog.product_media</a>, <a href="../04-Database/Tables/catalog/product_salts.html">catalog.product_salts</a>, <a href="../04-Database/Tables/catalog/salts.html">catalog.salts</a>, <a href="../04-Database/Tables/catalog/product_regulatory.html">catalog.product_regulatory</a>, <a href="../04-Database/Tables/pricing/product_prices.html">pricing.product_prices</a></td>
+</tr>
+<tr>
+<td>API-013</td>
+<td>Search and query telemetry</td>
+<td><a href="../04-Database/Tables/search/documents.html">search.documents</a>, <a href="../04-Database/Tables/search/query_events.html">search.query_events</a>, <a href="../04-Database/Tables/search/indexing_jobs.html">search.indexing_jobs</a></td>
+</tr>
+<tr>
+<td>API-014</td>
+<td>Advisory availability</td>
+<td><a href="../04-Database/Tables/warehouse/stock_balances.html">warehouse.stock_balances</a>, <a href="../04-Database/Tables/warehouse/inventory_lots.html">warehouse.inventory_lots</a>, <a href="../04-Database/Tables/catalog/products.html">catalog.products</a>; cached/read availability is not an authoritative reservation</td>
+</tr>
+<tr>
+<td>API-015</td>
+<td>Catalog import input and asynchronous acceptance</td>
+<td><a href="../04-Database/Tables/platform/file_objects.html">platform.file_objects</a>, <a href="../04-Database/Tables/platform/file_upload_sessions.html">platform.file_upload_sessions</a>, <a href="../04-Database/Tables/platform/file_scan_events.html">platform.file_scan_events</a>, <a href="../04-Database/Tables/catalog/products.html">catalog.products</a>, <a href="../04-Database/Tables/platform/outbox_events.html">platform.outbox_events</a>; <strong>no import-job/status table or status route is documented</strong>, so accepted-job persistence remains a schema/API gap</td>
+</tr>
+<tr>
+<td>API-016</td>
+<td>Approve product P/M/O commerce classification</td>
+<td><a href="../04-Database/Tables/catalog/products.html">catalog.products</a>, <a href="../04-Database/Tables/catalog/product_classification_history.html">catalog.product_classification_history</a>, <a href="../04-Database/Tables/platform/outbox_events.html">platform.outbox_events</a></td>
+</tr>
+<tr>
+<td>API-017</td>
+<td>Publish eligible product</td>
+<td><a href="../04-Database/Tables/catalog/products.html">catalog.products</a>, <a href="../04-Database/Tables/platform/outbox_events.html">platform.outbox_events</a>, <a href="../04-Database/Tables/search/indexing_jobs.html">search.indexing_jobs</a></td>
+</tr>
+<tr>
+<td>API-018–019</td>
+<td>Owned cart read/item mutation</td>
+<td><a href="../04-Database/Tables/commerce/carts.html">commerce.carts</a>, <a href="../04-Database/Tables/commerce/cart_items.html">commerce.cart_items</a>, <a href="../04-Database/Tables/catalog/products.html">catalog.products</a></td>
+</tr>
+<tr>
+<td>API-020</td>
+<td>Quote calculation from current cart/address/patient/catalog/price evidence</td>
+<td><a href="../04-Database/Tables/commerce/carts.html">commerce.carts</a>, <a href="../04-Database/Tables/commerce/cart_items.html">commerce.cart_items</a>, <a href="../04-Database/Tables/customer/addresses.html">customer.addresses</a>, <a href="../04-Database/Tables/catalog/products.html">catalog.products</a>, <a href="../04-Database/Tables/pricing/product_prices.html">pricing.product_prices</a>, <a href="../04-Database/Tables/pricing/tax_rules.html">pricing.tax_rules</a>, <a href="../04-Database/Tables/commerce/order_revisions.html">commerce.order_revisions</a></td>
+</tr>
+<tr>
+<td>API-021</td>
+<td>Checkout/order/revision creation</td>
+<td><a href="../04-Database/Tables/commerce/checkouts.html">commerce.checkouts</a>, <a href="../04-Database/Tables/commerce/orders.html">commerce.orders</a>, <a href="../04-Database/Tables/commerce/order_revisions.html">commerce.order_revisions</a>, <a href="../04-Database/Tables/commerce/order_items.html">commerce.order_items</a>, <a href="../04-Database/Tables/platform/idempotency_keys.html">platform.idempotency_keys</a></td>
+</tr>
+<tr>
+<td>API-022</td>
+<td>Create a private upload session and pending file object</td>
+<td><a href="../04-Database/Tables/platform/file_upload_sessions.html">platform.file_upload_sessions</a>: public <code>id</code>, <code>file_object_id</code>, <code>requested_by_user_id</code>, <code>scope</code>, <code>idempotency_key</code>, <code>status</code>, <code>expires_at</code>, <code>row_version</code>; <a href="../04-Database/Tables/platform/file_objects.html">platform.file_objects</a>: public <code>id</code>, <code>original_filename</code>, <code>content_type</code>, <code>expected_size_bytes</code>, <code>owner_type</code>, <code>owner_id</code>, <code>status</code>, <code>malware_scan_status</code>, <code>access_type</code>. <code>internal_id</code>, bucket/object key, encryption references, and storage credentials remain internal.</td>
+</tr>
+<tr>
+<td>API-023</td>
+<td>Confirm upload completion and report asynchronous scan state</td>
+<td><a href="../04-Database/Tables/platform/file_upload_sessions.html">platform.file_upload_sessions</a>: public session <code>id</code>, <code>status</code>, <code>completed_at</code>, <code>expires_at</code>; <a href="../04-Database/Tables/platform/file_objects.html">platform.file_objects</a>: public file <code>id</code>, <code>status</code>, <code>malware_scan_status</code>, <code>size_bytes</code>, <code>sha256</code>, <code>available_at</code>; <a href="../04-Database/Tables/platform/file_scan_events.html">platform.file_scan_events</a>: internal scan audit/state evidence only. A 202 response means scanning is pending; <code>available</code> is permitted only when the documented safe-metadata constraint holds (positive final size/hash and clean scan).</td>
+</tr>
+<tr>
+<td>API-024</td>
+<td>Associate clean private documents with the order patient and prescription-required order items</td>
+<td><a href="../04-Database/Tables/commerce/orders.html">commerce.orders</a>: public <code>id</code>, <code>row_version</code>; <a href="../04-Database/Tables/commerce/order_items.html">commerce.order_items</a>: public <code>id</code>, <code>order_id</code>, nullable <code>prescription_id</code>, product/class snapshots and status; <a href="../04-Database/Tables/clinical/patient_profiles.html">clinical.patient_profiles</a>: public <code>id</code> and ownership relationship; <a href="../04-Database/Tables/clinical/prescriptions.html">clinical.prescriptions</a>: public <code>id</code>, patient-profile reference, status and <code>row_version</code>; <a href="../04-Database/Tables/clinical/prescription_documents.html">clinical.prescription_documents</a>: public <code>id</code>, <code>prescription_id</code>, <code>file_object_id</code>, version; <a href="../04-Database/Tables/platform/file_objects.html">platform.file_objects</a>: public <code>id</code>, ownership/status/scan gate. Verify actual patient ownership and order-item association server-side.</td>
+</tr>
+<tr>
+<td>API-025–026</td>
+<td>Customer-owned order list/detail</td>
+<td><a href="../04-Database/Tables/commerce/orders.html">commerce.orders</a>, <a href="../04-Database/Tables/commerce/order_items.html">commerce.order_items</a>, <a href="../04-Database/Tables/commerce/order_status_history.html">commerce.order_status_history</a>, <a href="../04-Database/Tables/commerce/order_revisions.html">commerce.order_revisions</a></td>
+</tr>
+<tr>
+<td>API-027–028</td>
+<td>Cancellation and return request</td>
+<td><a href="../04-Database/Tables/commerce/cancellations.html">commerce.cancellations</a>, <a href="../04-Database/Tables/commerce/cancellation_items.html">commerce.cancellation_items</a>, <a href="../04-Database/Tables/commerce/returns.html">commerce.returns</a>, <a href="../04-Database/Tables/commerce/return_items.html">commerce.return_items</a>, <a href="../04-Database/Tables/commerce/orders.html">commerce.orders</a></td>
+</tr>
+<tr>
+<td>API-029</td>
+<td>Private invoice delivery</td>
+<td><a href="../04-Database/Tables/finance/invoices.html">finance.invoices</a>, <a href="../04-Database/Tables/finance/invoice_items.html">finance.invoice_items</a>, <a href="../04-Database/Tables/commerce/orders.html">commerce.orders</a>; the current proposed route returns a typed JSON invoice; optional PDF grants are tracked in Journey-API-Gaps.md, not an implicit public link</td>
+</tr>
+<tr>
+<td>API-030</td>
+<td>Customer refund outcome</td>
+<td><a href="../04-Database/Tables/payment/refunds.html">payment.refunds</a>, <a href="../04-Database/Tables/payment/payment_transactions.html">payment.payment_transactions</a>, <a href="../04-Database/Tables/payment/payment_intents.html">payment.payment_intents</a></td>
+</tr>
+<tr>
+<td>API-031</td>
+<td>Privacy-limited delivery tracking</td>
+<td><a href="../04-Database/Tables/logistics/shipments.html">logistics.shipments</a>, <a href="../04-Database/Tables/logistics/delivery_assignments.html">logistics.delivery_assignments</a>, <a href="../04-Database/Tables/logistics/shipment_events.html">logistics.shipment_events</a>; do not return rider coordinates outside current authorized scope</td>
+</tr>
+<tr>
+<td>API-032</td>
+<td>Scoped admin dashboard</td>
+<td><a href="../04-Database/Tables/platform/report_definitions.html">platform.report_definitions</a>, <a href="../04-Database/Tables/platform/report_runs.html">platform.report_runs</a>, and only the approved aggregate domain sources</td>
+</tr>
+<tr>
+<td>API-033–034</td>
+<td>Staff identity/role changes</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a></td>
+</tr>
+<tr>
+<td>API-035–036</td>
+<td>Approved application setting read/update</td>
+<td><a href="../04-Database/Tables/platform/application_settings.html">platform.application_settings</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a></td>
+</tr>
+<tr>
+<td>API-037</td>
+<td>CMS page publication</td>
+<td><a href="../04-Database/Tables/platform/cms_pages.html">platform.cms_pages</a>, <a href="../04-Database/Tables/platform/cms_page_versions.html">platform.cms_page_versions</a>, <a href="../04-Database/Tables/platform/outbox_events.html">platform.outbox_events</a></td>
+</tr>
+<tr>
+<td>API-038</td>
+<td>Location creation</td>
+<td><a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a></td>
+</tr>
+<tr>
+<td>API-039–043</td>
+<td>Admin order view, allocation, reassign, revision</td>
+<td><a href="../04-Database/Tables/commerce/orders.html">commerce.orders</a>, <a href="../04-Database/Tables/commerce/order_revisions.html">commerce.order_revisions</a>, <a href="../04-Database/Tables/commerce/order_allocations.html">commerce.order_allocations</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/licenses.html">organization.licenses</a>, <a href="../04-Database/Tables/fulfillment/fulfillment_orders.html">fulfillment.fulfillment_orders</a></td>
+</tr>
+<tr>
+<td>API-044–049</td>
+<td>Store queue, accept, pick, pack, replenish, transfer receipt</td>
+<td><a href="../04-Database/Tables/fulfillment/fulfillment_orders.html">fulfillment.fulfillment_orders</a>, <a href="../04-Database/Tables/fulfillment/pick_tasks.html">fulfillment.pick_tasks</a>, <a href="../04-Database/Tables/fulfillment/pack_tasks.html">fulfillment.pack_tasks</a>, <a href="../04-Database/Tables/fulfillment/packages.html">fulfillment.packages</a>, <a href="../04-Database/Tables/warehouse/stock_balances.html">warehouse.stock_balances</a>, <a href="../04-Database/Tables/warehouse/stock_transfers.html">warehouse.stock_transfers</a>, <a href="../04-Database/Tables/warehouse/stock_transfer_items.html">warehouse.stock_transfer_items</a></td>
+</tr>
+<tr>
+<td>API-050–055</td>
+<td>Inventory view, observation, reservation, release, adjustment, alerts</td>
+<td><a href="../04-Database/Tables/warehouse/stock_balances.html">warehouse.stock_balances</a>, <a href="../04-Database/Tables/warehouse/inventory_lots.html">warehouse.inventory_lots</a>, <a href="../04-Database/Tables/warehouse/stock_reservations.html">warehouse.stock_reservations</a>, <a href="../04-Database/Tables/warehouse/stock_holds.html">warehouse.stock_holds</a>, <a href="../04-Database/Tables/warehouse/stock_ledger.html">warehouse.stock_ledger</a>, <a href="../04-Database/Tables/warehouse/inventory_adjustments.html">warehouse.inventory_adjustments</a>, <a href="../04-Database/Tables/warehouse/inventory_adjustment_items.html">warehouse.inventory_adjustment_items</a></td>
+</tr>
+<tr>
+<td>API-056–059</td>
+<td>Goods receipt, replenishment, transfer dispatch, fallback order</td>
+<td><a href="../04-Database/Tables/procurement/goods_receipts.html">procurement.goods_receipts</a>, <a href="../04-Database/Tables/procurement/goods_receipt_items.html">procurement.goods_receipt_items</a>, <a href="../04-Database/Tables/procurement/goods_receipt_quality_checks.html">procurement.goods_receipt_quality_checks</a>, <a href="../04-Database/Tables/warehouse/stock_transfers.html">warehouse.stock_transfers</a>, <a href="../04-Database/Tables/warehouse/stock_transfer_items.html">warehouse.stock_transfer_items</a>, <a href="../04-Database/Tables/warehouse/stock_balances.html">warehouse.stock_balances</a></td>
+</tr>
+<tr>
+<td>API-060–063</td>
+<td>Review queue/detail/decision and accepted revision</td>
+<td><a href="../04-Database/Tables/clinical/order_reviews.html">clinical.order_reviews</a>, <a href="../04-Database/Tables/clinical/order_review_items.html">clinical.order_review_items</a>, <a href="../04-Database/Tables/clinical/prescriptions.html">clinical.prescriptions</a>, <a href="../04-Database/Tables/clinical/prescription_items.html">clinical.prescription_items</a>, <a href="../04-Database/Tables/commerce/orders.html">commerce.orders</a>, <a href="../04-Database/Tables/commerce/order_revisions.html">commerce.order_revisions</a></td>
+</tr>
+<tr>
+<td>API-064–068</td>
+<td>Dispatch task assignment/resolution/COD/rider admin</td>
+<td><a href="../04-Database/Tables/logistics/shipments.html">logistics.shipments</a>, <a href="../04-Database/Tables/logistics/delivery_assignments.html">logistics.delivery_assignments</a>, <a href="../04-Database/Tables/logistics/delivery_attempts.html">logistics.delivery_attempts</a>, <a href="../04-Database/Tables/payment/cod_collections.html">payment.cod_collections</a>, <a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a></td>
+</tr>
+<tr>
+<td>API-069–074</td>
+<td>Rider shift/tasks/pickup/location/completion/failure</td>
+<td><a href="../04-Database/Tables/logistics/rider_shifts.html">logistics.rider_shifts</a>, <a href="../04-Database/Tables/logistics/delivery_assignments.html">logistics.delivery_assignments</a>, <a href="../04-Database/Tables/logistics/delivery_location_updates.html">logistics.delivery_location_updates</a>, <a href="../04-Database/Tables/logistics/delivery_otp_challenges.html">logistics.delivery_otp_challenges</a>, <a href="../04-Database/Tables/logistics/delivery_attempts.html">logistics.delivery_attempts</a>, <a href="../04-Database/Tables/payment/cod_collections.html">payment.cod_collections</a></td>
+</tr>
+<tr>
+<td>API-075–081</td>
+<td>Payment intent/webhook/payment views/refund/settlement/COD/invoice</td>
+<td><a href="../04-Database/Tables/payment/payment_intents.html">payment.payment_intents</a>, <a href="../04-Database/Tables/payment/payment_attempts.html">payment.payment_attempts</a>, <a href="../04-Database/Tables/payment/payment_transactions.html">payment.payment_transactions</a>, <a href="../04-Database/Tables/payment/payment_webhooks.html">payment.payment_webhooks</a>, <a href="../04-Database/Tables/payment/refunds.html">payment.refunds</a>, <a href="../04-Database/Tables/payment/refund_allocations.html">payment.refund_allocations</a>, <a href="../04-Database/Tables/payment/reconciliation_runs.html">payment.reconciliation_runs</a>, <a href="../04-Database/Tables/payment/cod_collections.html">payment.cod_collections</a>, <a href="../04-Database/Tables/finance/invoices.html">finance.invoices</a></td>
+</tr>
+<tr>
+<td>API-082–086</td>
+<td>Sales/tax/stock/delivery reports and export</td>
+<td><a href="../04-Database/Tables/platform/report_definitions.html">platform.report_definitions</a>, <a href="../04-Database/Tables/platform/report_runs.html">platform.report_runs</a>, plus only the approved scoped source tables; export bytes are not report-run DB columns</td>
+</tr>
+<tr>
+<td>API-087–088</td>
+<td>Audit event search and audit export</td>
+<td><a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a>, <a href="../04-Database/Tables/platform/report_runs.html">platform.report_runs</a>, <a href="../04-Database/Tables/platform/file_access_events.html">platform.file_access_events</a></td>
+</tr>
+<tr>
+<td>API-089–093</td>
+<td>Staff login/MFA/refresh/revoke/permission read</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/mfa_factors.html">identity.mfa_factors</a>, <a href="../04-Database/Tables/identity/otp_challenges.html">identity.otp_challenges</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a></td>
+</tr>
+<tr>
+<td>API-094–097</td>
+<td>Internal notification job, delivery views, push tokens, alerts</td>
+<td><a href="../04-Database/Tables/notification/messages.html">notification.messages</a>, <a href="../04-Database/Tables/notification/message_attempts.html">notification.message_attempts</a>, <a href="../04-Database/Tables/notification/device_endpoints.html">notification.device_endpoints</a>, <a href="../04-Database/Tables/notification/provider_webhooks.html">notification.provider_webhooks</a>, <a href="../04-Database/Tables/platform/outbox_events.html">platform.outbox_events</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Field-level mappings for catalog read proposals</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Public DTO field</th>
+<th>Documented database mapping</th>
+<th>Type/nullability and constraint</th>
+<th>Boundary / unresolved behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-010</td>
+<td><code>categoryId</code>, <code>name</code>, <code>slug</code>, <code>parentCategoryId</code>, <code>level</code>, <code>displayOrder</code></td>
+<td><code>catalog.categories.id</code>, <code>name</code>, <code>slug</code>, <code>parent_id</code>, <code>level</code>, <code>display_order</code></td>
+<td>UUID; varchar(255); nullable parent UUID; nonnegative smallint/integer</td>
+<td>Public projection omits internal_id, metadata and actor fields; root/active publication filter needs owner confirmation</td>
+</tr>
+<tr>
+<td>API-011/013</td>
+<td><code>productId</code>, <code>name</code>, <code>displayName</code>, <code>categoryId</code>, <code>commerceClass</code>, <code>prescriptionRequired</code>, <code>packSizeDisplay</code>, <code>strengthDisplay</code></td>
+<td><code>catalog.products.id</code>, <code>name</code>, <code>display_name</code>, <code>category_id</code>, <code>commerce_class</code>, <code>prescription_required</code>, <code>pack_size_display</code>, <code>strength_display</code></td>
+<td>UUID; name/display name varchar(255); nullable class in P/M/O; nullable display strings varchar(128)</td>
+<td>Only published safe fields; class approval and brand join/filter rules remain D-024 review</td>
+</tr>
+<tr>
+<td>API-011/012</td>
+<td><code>brandName</code></td>
+<td><code>catalog.products.brand_id</code> → <code>catalog.brands.id/name</code></td>
+<td>Nullable public UUID relationship; brand name varchar(255) non-null</td>
+<td>Derived join projection; logo_file_id and organization ownership are not returned</td>
+</tr>
+<tr>
+<td>API-012</td>
+<td><code>manufacturerName</code>, <code>description</code>, <code>contentLocale</code>, <code>salts[].saltId/strength</code></td>
+<td><code>catalog.manufacturers.name</code>; <code>catalog.product_content.title/body/locale</code>; <code>catalog.product_salts.salt_id/strength</code></td>
+<td>Nullable manufacturer/name/title/strength; body text; locale varchar(16)</td>
+<td>Locale fallback, HTML/structured content filtering and linked salt label projection need owner approval</td>
+</tr>
+<tr>
+<td>API-012</td>
+<td><code>price.mrp</code>, <code>price.sellingPrice</code></td>
+<td><code>pricing.product_prices.mrp</code>, <code>selling_price</code></td>
+<td>numeric(14,2), nonnegative, selling_price &lt;= mrp</td>
+<td>Decimal strings on wire; select current authorized price book; no cost_price in public DTO</td>
+</tr>
+<tr>
+<td>API-012</td>
+<td><code>price.currency</code></td>
+<td>Derived from selected <code>pricing.price_books</code> context</td>
+<td>ISO currency string proposed</td>
+<td>Not a column on <code>pricing.product_prices</code>; price-book/currency choice needs D-024 approval</td>
+</tr>
+<tr>
+<td>API-014</td>
+<td><code>postalCode</code></td>
+<td>Public API-only CAT-04 input; serviceability/stock result derives from approved location and Inventory reads</td>
+<td>Proposed India PIN format <code>^[1-9][0-9]{5}$</code></td>
+<td>Format and service-area lookup need approval; no client warehouse scope</td>
+</tr>
+<tr>
+<td>API-014</td>
+<td><code>availability</code>, <code>observedAt</code></td>
+<td>Derived from <code>warehouse.stock_balances</code> quantities and observation timestamp, with eligible <code>warehouse.inventory_lots</code></td>
+<td>Status proposal; timestamp nullable when evidence absent</td>
+<td>Advisory only; quantity/lot/warehouse are not exposed and read does not reserve stock</td>
+</tr>
+</tbody>
+</table>
+<h2>Field-level mappings for critical operation schemas</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Public DTO field</th>
+<th>Documented database mapping</th>
+<th>Type/nullability and constraint</th>
+<th>Public-boundary decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-015</td>
+<td><code>fileId</code></td>
+<td><code>platform.file_objects.id</code> and <code>platform.file_upload_sessions.file_object_id</code></td>
+<td>Public UUID; upload-session ownership, expiry, status and scan evidence constrain use</td>
+<td>Client submits only the public completed upload object ID; no import-job persistence table/status route is present</td>
+</tr>
+<tr>
+<td>API-015</td>
+<td><code>importId</code>, <code>status</code></td>
+<td>No documented import table; proposed API-only UUID and <code>queued</code> state</td>
+<td>API-only accepted-command projection</td>
+<td>Cannot promise polling/completion or durable retry until D-024 selects a persisted import job/status resource</td>
+</tr>
+<tr>
+<td>API-016</td>
+<td><code>commerceClass</code>, <code>expectedRowVersion</code></td>
+<td><code>catalog.products.commerce_class</code>, <code>row_version</code></td>
+<td>Class nullable column with P/M/O check; positive bigint version</td>
+<td>Server derives <code>prescription_required</code>; actor/time are server-generated; class update and history write require owner transaction approval</td>
+</tr>
+<tr>
+<td>API-016</td>
+<td><code>prescriptionRequired</code>, <code>classificationVersion</code>, <code>rowVersion</code>, <code>approvedAt</code></td>
+<td><code>catalog.products.prescription_required</code>, <code>commerce_class_version</code>, <code>row_version</code>, <code>commerce_class_approved_at</code></td>
+<td>boolean; positive bigint versions; nullable database approval time</td>
+<td>Filtered response projection; approval identity is not returned</td>
+</tr>
+<tr>
+<td>API-017</td>
+<td><code>expectedRowVersion</code></td>
+<td><code>catalog.products.row_version</code></td>
+<td>positive bigint</td>
+<td>Optimistic precondition; publication status and timestamp are server-controlled</td>
+</tr>
+<tr>
+<td>API-017</td>
+<td><code>status</code>, <code>publishedAt</code>, <code>rowVersion</code></td>
+<td><code>catalog.products.status</code>, <code>published_at</code>, <code>row_version</code></td>
+<td>status check includes <code>active</code>; nullable timestamp column; positive bigint</td>
+<td>Public response reports committed state; outbox/index update behavior awaits owner approval</td>
+</tr>
+<tr>
+<td>API-019</td>
+<td><code>cartVersion</code>, <code>items[].productId</code>, <code>items[].quantity</code></td>
+<td><code>commerce.carts.row_version</code>; <code>commerce.cart_items.product_id</code>, <code>quantity</code></td>
+<td>Positive bigint; non-null UUID; numeric(12,3) positive</td>
+<td>Client cannot submit cart owner, unit price, seller, or actor; max 50 item proposal is not a database constraint</td>
+</tr>
+<tr>
+<td>API-019</td>
+<td><code>items[].unitPrice</code>, <code>currency</code>, <code>cartVersion</code></td>
+<td><code>commerce.cart_items.unit_price_snapshot</code>, <code>commerce.carts.currency</code>, <code>commerce.carts.row_version</code></td>
+<td>numeric(14,2) nonnegative; varchar(3); positive bigint</td>
+<td>Response price is snapshot-only; quote/check-out must revalidate current catalog price</td>
+</tr>
+<tr>
+<td>API-020</td>
+<td><code>cartId</code>, <code>cartVersion</code></td>
+<td><code>commerce.carts.id</code>, <code>commerce.carts.row_version</code></td>
+<td>UUID non-null; bigint non-null and positive</td>
+<td>Public ref and expected version; do not expose internal cart key</td>
+</tr>
+<tr>
+<td>API-020</td>
+<td><code>addressId</code></td>
+<td><code>customer.addresses.id</code> → <code>commerce.checkouts.address_id</code></td>
+<td>UUID non-null; address ownership is a separate policy check</td>
+<td>Public ref only; serviceability is computed/verified, not an address column</td>
+</tr>
+<tr>
+<td>API-020</td>
+<td><code>productId</code>, <code>quantity</code>, <code>unitPrice</code></td>
+<td><code>commerce.cart_items.product_id</code>, <code>quantity</code>, <code>unit_price_snapshot</code></td>
+<td>UUID non-null; numeric(12,3) positive; numeric(14,2) nonnegative</td>
+<td>Projected line DTO; price is read-only and revalidated</td>
+</tr>
+<tr>
+<td>API-020</td>
+<td><code>commerceClass</code></td>
+<td><code>catalog.products.commerce_class</code></td>
+<td>nullable <code>character(1)</code> in source catalog; allowed codes/policy must be confirmed from catalog rules</td>
+<td>Safe public projection only when product is published</td>
+</tr>
+<tr>
+<td>API-020</td>
+<td><code>subtotal</code>, <code>discountTotal</code>, <code>taxTotal</code>, <code>shippingTotal</code>, <code>otherChargesTotal</code>, <code>grandTotal</code>, <code>currency</code></td>
+<td><code>commerce.order_revisions</code> corresponding totals and currency</td>
+<td>numeric(16,2) non-null; nonnegative; <code>grand_total = subtotal - discount_total + tax_total + shipping_total + other_charges_total</code>; currency varchar(3) non-null</td>
+<td>Quote calculation output; not a quote-row persistence claim</td>
+</tr>
+<tr>
+<td>API-021</td>
+<td><code>checkoutId</code>, <code>checkoutStatus</code></td>
+<td><code>commerce.checkouts.id</code>, <code>status</code></td>
+<td>UUID; status varchar(16), constrained to open/validating/ready/completed/failed/expired</td>
+<td>Status is explicitly checkout status, separate from order/clinical/payment statuses</td>
+</tr>
+<tr>
+<td>API-021</td>
+<td><code>orderId</code>, <code>orderStatus</code></td>
+<td><code>commerce.orders.id</code>, <code>status</code>, <code>checkout_id</code></td>
+<td>UUID; order status check constraint; checkout association is on order side</td>
+<td>Separate business fact from checkout status</td>
+</tr>
+<tr>
+<td>API-021</td>
+<td><code>acceptedRevisionId</code>, <code>revisionNumber</code></td>
+<td><code>commerce.order_revisions.id</code>, <code>revision_number</code>, <code>status</code>, <code>accepted_at</code>, <code>accepted_by_user_id</code></td>
+<td>UUID; integer positive/unique per order; accepted state requires actor/time</td>
+<td>Revision number is not a row version</td>
+</tr>
+<tr>
+<td>API-052/053</td>
+<td><code>reservationId</code>, <code>reservationNumber</code>, <code>orderItemId</code>, <code>lotId</code>, <code>warehouseId</code>, <code>quantity</code>, <code>status</code>, <code>expiresAt</code>, <code>rowVersion</code></td>
+<td><code>warehouse.stock_reservations</code> corresponding columns</td>
+<td>One row per order item/lot; quantity numeric(16,3) positive; expiry &gt; created; status allowlist; row_version positive</td>
+<td>Return a list of reservation row DTOs; no aggregate parent ID or <code>site_id</code> column is documented</td>
+</tr>
+<tr>
+<td>API-053</td>
+<td><code>reasonCode</code></td>
+<td>No <code>reason_code</code> on <code>warehouse.stock_reservations</code>; candidate movement evidence is <code>warehouse.stock_ledger.reason_code</code></td>
+<td>Stock ledger has required <code>idempotency_key</code>, <code>reference_id</code>, <code>reference_type</code>, <code>movement_type</code>, quantity and nullable reason code</td>
+<td>Proposed reason belongs to the ledger effect only if that effect is approved; do not fabricate a reservation column</td>
+</tr>
+<tr>
+<td>API-062</td>
+<td><code>expectedReviewVersion</code>, <code>expectedLineVersion</code></td>
+<td><code>clinical.order_reviews.review_version</code>, <code>clinical.order_review_items.row_version</code></td>
+<td>Both positive integer/bigint concurrency tokens</td>
+<td>Keep aggregate and line concurrency separate</td>
+</tr>
+<tr>
+<td>API-062</td>
+<td><code>decision</code></td>
+<td><code>clinical.order_review_items.decision</code></td>
+<td>varchar(20), constrained to pending/approved/rejected/needs_new_rx</td>
+<td>Public actions map explicitly: approve→approved, reject→rejected, request_new_prescription→needs_new_rx</td>
+</tr>
+<tr>
+<td>API-062</td>
+<td><code>approvedQuantity</code></td>
+<td><code>clinical.order_review_items.approved_quantity</code></td>
+<td>nullable numeric(12,3), positive when present; required for approved decision</td>
+<td>Conditional request field; never infer approval quantity from requested quantity</td>
+</tr>
+<tr>
+<td>API-062</td>
+<td><code>reasonCode</code></td>
+<td><code>clinical.order_review_items.reason_code</code>, <code>reason_code_id</code></td>
+<td>varchar(64) nullable, controlled-pair check; required for rejected/needs_new_rx</td>
+<td>Public code is approved domain vocabulary, not an internal numeric key</td>
+</tr>
+<tr>
+<td>API-073</td>
+<td><code>assignmentVersion</code>, <code>otpChallengeId</code></td>
+<td><code>logistics.delivery_assignments.row_version</code>, <code>logistics.delivery_otp_challenges.id</code></td>
+<td>positive bigint; public UUID; challenge ties assignment and shipment</td>
+<td>Server verifies current assignment and challenge scope/expiry; OTP plaintext is not persisted</td>
+</tr>
+<tr>
+<td>API-073</td>
+<td><code>proofFileId</code></td>
+<td><code>logistics.delivery_attempts.proof_file_id</code> → <code>platform.file_objects.id</code></td>
+<td>nullable UUID with paired internal FK</td>
+<td>One file reference only; multiple proof files need a separate documented mapping</td>
+</tr>
+<tr>
+<td>API-073</td>
+<td><code>codCollected.amount</code></td>
+<td><code>payment.cod_collections.amount</code></td>
+<td>numeric(16,2) non-null, nonnegative</td>
+<td>Currency is derived from linked order/payment evidence; COD table has no currency column</td>
+</tr>
+<tr>
+<td>API-078</td>
+<td><code>paymentTransactionId</code></td>
+<td><code>payment.refunds.payment_transaction_id</code> → <code>payment.payment_transactions.id</code> → <code>payment.payment_transactions.payment_intent_id</code></td>
+<td>nullable UUID on refund; transaction requires a payment intent</td>
+<td>Refund DTO references the transaction because that is the documented refund relationship</td>
+</tr>
+<tr>
+<td>API-078</td>
+<td><code>amount</code>, <code>reasonCode</code>, <code>refundId</code>, <code>status</code></td>
+<td><code>payment.refunds.amount</code>, <code>reason_code</code>, <code>id</code>, <code>status</code></td>
+<td>positive numeric(16,2); reason varchar(64) non-null; UUID; status allowlist requested/approved/processing/succeeded/failed/cancelled</td>
+<td>Currency is derived through the intent and is not a refunds column; do not echo an invented stored status</td>
+</tr>
+</tbody>
+</table>
+<h2>Readiness and review</h2>
+<p>The exact field/type/nullability/constraint inventory remains in the linked table pages. Before implementation, each operation owner must replace candidate read/write mappings with approved table/column write sets, verify module grants/RLS, and bind those writes to failure/replay tests.</p>
+<p>The database docs are stronger evidence than the earlier API placeholder text; they still do not prove a Pharmville endpoint exists or that a proposed DTO is approved.</p>
+<h2>Operation-level planning refinement</h2>
+<p>The historical groups above are discovery evidence, not table grants. The complete proposed operation mapping now lives in the <a href="API-Database-Feature-Matrix.html">107-operation matrix</a>, and every owning API section lists exact columns, field derivation, write owner, transaction, audit/outbox and master dependencies. This refinement supersedes earlier statements that these mappings are all absent; approval and target runtime verification remain open. No new table/column is implied.</p>
+<table>
+<thead>
+<tr>
+<th>Documented dependency</th>
+<th>Evidence / access meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>catalog.brands</code></td>
+<td><a href="../04-Database/Tables/catalog/brands.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.categories</code></td>
+<td><a href="../04-Database/Tables/catalog/categories.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.commerce_classes</code></td>
+<td><a href="../04-Database/Tables/catalog/commerce_classes.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.dosage_forms</code></td>
+<td><a href="../04-Database/Tables/catalog/dosage_forms.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.manufacturers</code></td>
+<td><a href="../04-Database/Tables/catalog/manufacturers.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.product_classification_history</code></td>
+<td><a href="../04-Database/Tables/catalog/product_classification_history.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.product_content</code></td>
+<td><a href="../04-Database/Tables/catalog/product_content.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.product_identifiers</code></td>
+<td><a href="../04-Database/Tables/catalog/product_identifiers.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.product_salts</code></td>
+<td><a href="../04-Database/Tables/catalog/product_salts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.products</code></td>
+<td><a href="../04-Database/Tables/catalog/products.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>catalog.salts</code></td>
+<td><a href="../04-Database/Tables/catalog/salts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>clinical.order_review_items</code></td>
+<td><a href="../04-Database/Tables/clinical/order_review_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>clinical.order_reviews</code></td>
+<td><a href="../04-Database/Tables/clinical/order_reviews.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>clinical.patient_profiles</code></td>
+<td><a href="../04-Database/Tables/clinical/patient_profiles.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>clinical.practitioner_profiles</code></td>
+<td><a href="../04-Database/Tables/clinical/practitioner_profiles.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>clinical.prescription_documents</code></td>
+<td><a href="../04-Database/Tables/clinical/prescription_documents.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>clinical.prescription_items</code></td>
+<td><a href="../04-Database/Tables/clinical/prescription_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>clinical.prescriptions</code></td>
+<td><a href="../04-Database/Tables/clinical/prescriptions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>clinical.review_reason_codes</code></td>
+<td><a href="../04-Database/Tables/clinical/review_reason_codes.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.cancellation_items</code></td>
+<td><a href="../04-Database/Tables/commerce/cancellation_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.cancellation_reason_codes</code></td>
+<td><a href="../04-Database/Tables/commerce/cancellation_reason_codes.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.cancellations</code></td>
+<td><a href="../04-Database/Tables/commerce/cancellations.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.cart_items</code></td>
+<td><a href="../04-Database/Tables/commerce/cart_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.carts</code></td>
+<td><a href="../04-Database/Tables/commerce/carts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.checkouts</code></td>
+<td><a href="../04-Database/Tables/commerce/checkouts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.order_allocations</code></td>
+<td><a href="../04-Database/Tables/commerce/order_allocations.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.order_items</code></td>
+<td><a href="../04-Database/Tables/commerce/order_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.order_revisions</code></td>
+<td><a href="../04-Database/Tables/commerce/order_revisions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.order_status_history</code></td>
+<td><a href="../04-Database/Tables/commerce/order_status_history.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.orders</code></td>
+<td><a href="../04-Database/Tables/commerce/orders.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.return_items</code></td>
+<td><a href="../04-Database/Tables/commerce/return_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.return_reason_codes</code></td>
+<td><a href="../04-Database/Tables/commerce/return_reason_codes.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>commerce.returns</code></td>
+<td><a href="../04-Database/Tables/commerce/returns.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>compliance.legal_holds</code></td>
+<td><a href="../04-Database/Tables/compliance/legal_holds.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>compliance.privacy_requests</code></td>
+<td><a href="../04-Database/Tables/compliance/privacy_requests.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>customer.addresses</code></td>
+<td><a href="../04-Database/Tables/customer/addresses.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>customer.consent_events</code></td>
+<td><a href="../04-Database/Tables/customer/consent_events.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>customer.consents</code></td>
+<td><a href="../04-Database/Tables/customer/consents.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>customer.family_members</code></td>
+<td><a href="../04-Database/Tables/customer/family_members.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>customer.profiles</code></td>
+<td><a href="../04-Database/Tables/customer/profiles.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>customer.wishlist_items</code></td>
+<td><a href="../04-Database/Tables/customer/wishlist_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>customer.wishlists</code></td>
+<td><a href="../04-Database/Tables/customer/wishlists.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>finance.invoice_items</code></td>
+<td><a href="../04-Database/Tables/finance/invoice_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>finance.invoices</code></td>
+<td><a href="../04-Database/Tables/finance/invoices.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>fulfillment.fulfillment_events</code></td>
+<td><a href="../04-Database/Tables/fulfillment/fulfillment_events.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>fulfillment.fulfillment_orders</code></td>
+<td><a href="../04-Database/Tables/fulfillment/fulfillment_orders.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>fulfillment.pack_tasks</code></td>
+<td><a href="../04-Database/Tables/fulfillment/pack_tasks.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>fulfillment.package_items</code></td>
+<td><a href="../04-Database/Tables/fulfillment/package_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>fulfillment.packages</code></td>
+<td><a href="../04-Database/Tables/fulfillment/packages.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>fulfillment.pick_task_items</code></td>
+<td><a href="../04-Database/Tables/fulfillment/pick_task_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>fulfillment.pick_tasks</code></td>
+<td><a href="../04-Database/Tables/fulfillment/pick_tasks.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>identity.login_attempts</code></td>
+<td><a href="../04-Database/Tables/identity/login_attempts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>identity.mfa_factors</code></td>
+<td><a href="../04-Database/Tables/identity/mfa_factors.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>identity.otp_challenges</code></td>
+<td><a href="../04-Database/Tables/identity/otp_challenges.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>identity.permissions</code></td>
+<td><a href="../04-Database/Tables/identity/permissions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>identity.role_permissions</code></td>
+<td><a href="../04-Database/Tables/identity/role_permissions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>identity.roles</code></td>
+<td><a href="../04-Database/Tables/identity/roles.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>identity.sessions</code></td>
+<td><a href="../04-Database/Tables/identity/sessions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>identity.user_roles</code></td>
+<td><a href="../04-Database/Tables/identity/user_roles.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>identity.users</code></td>
+<td><a href="../04-Database/Tables/identity/users.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_assignments</code></td>
+<td><a href="../04-Database/Tables/logistics/delivery_assignments.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_attempts</code></td>
+<td><a href="../04-Database/Tables/logistics/delivery_attempts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_failure_reasons</code></td>
+<td><a href="../04-Database/Tables/logistics/delivery_failure_reasons.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_location_updates</code></td>
+<td><a href="../04-Database/Tables/logistics/delivery_location_updates.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.delivery_otp_challenges</code></td>
+<td><a href="../04-Database/Tables/logistics/delivery_otp_challenges.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.ndr_cases</code></td>
+<td><a href="../04-Database/Tables/logistics/ndr_cases.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.rider_shifts</code></td>
+<td><a href="../04-Database/Tables/logistics/rider_shifts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.serviceability_rules</code></td>
+<td><a href="../04-Database/Tables/logistics/serviceability_rules.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.shipment_events</code></td>
+<td><a href="../04-Database/Tables/logistics/shipment_events.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>logistics.shipments</code></td>
+<td><a href="../04-Database/Tables/logistics/shipments.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>notification.device_endpoints</code></td>
+<td><a href="../04-Database/Tables/notification/device_endpoints.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>notification.message_attempts</code></td>
+<td><a href="../04-Database/Tables/notification/message_attempts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>notification.messages</code></td>
+<td><a href="../04-Database/Tables/notification/messages.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>notification.provider_configurations</code></td>
+<td><a href="../04-Database/Tables/notification/provider_configurations.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>notification.suppressions</code></td>
+<td><a href="../04-Database/Tables/notification/suppressions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>notification.templates</code></td>
+<td><a href="../04-Database/Tables/notification/templates.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>notification.user_channel_preferences</code></td>
+<td><a href="../04-Database/Tables/notification/user_channel_preferences.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>organization.licenses</code></td>
+<td><a href="../04-Database/Tables/organization/licenses.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>organization.locations</code></td>
+<td><a href="../04-Database/Tables/organization/locations.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>organization.memberships</code></td>
+<td><a href="../04-Database/Tables/organization/memberships.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>organization.organizations</code></td>
+<td><a href="../04-Database/Tables/organization/organizations.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.cod_collections</code></td>
+<td><a href="../04-Database/Tables/payment/cod_collections.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.payment_attempts</code></td>
+<td><a href="../04-Database/Tables/payment/payment_attempts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.payment_intents</code></td>
+<td><a href="../04-Database/Tables/payment/payment_intents.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.payment_transactions</code></td>
+<td><a href="../04-Database/Tables/payment/payment_transactions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.payment_webhooks</code></td>
+<td><a href="../04-Database/Tables/payment/payment_webhooks.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.provider_accounts</code></td>
+<td><a href="../04-Database/Tables/payment/provider_accounts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.reconciliation_items</code></td>
+<td><a href="../04-Database/Tables/payment/reconciliation_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.reconciliation_runs</code></td>
+<td><a href="../04-Database/Tables/payment/reconciliation_runs.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.refund_allocations</code></td>
+<td><a href="../04-Database/Tables/payment/refund_allocations.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.refund_reason_codes</code></td>
+<td><a href="../04-Database/Tables/payment/refund_reason_codes.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>payment.refunds</code></td>
+<td><a href="../04-Database/Tables/payment/refunds.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.application_settings</code></td>
+<td><a href="../04-Database/Tables/platform/application_settings.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.audit_logs</code></td>
+<td><a href="../04-Database/Tables/platform/audit_logs.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.cms_page_versions</code></td>
+<td><a href="../04-Database/Tables/platform/cms_page_versions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.cms_pages</code></td>
+<td><a href="../04-Database/Tables/platform/cms_pages.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.file_access_grants</code></td>
+<td><a href="../04-Database/Tables/platform/file_access_grants.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.file_objects</code></td>
+<td><a href="../04-Database/Tables/platform/file_objects.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.file_upload_sessions</code></td>
+<td><a href="../04-Database/Tables/platform/file_upload_sessions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.idempotency_keys</code></td>
+<td><a href="../04-Database/Tables/platform/idempotency_keys.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.outbox_events</code></td>
+<td><a href="../04-Database/Tables/platform/outbox_events.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.report_definitions</code></td>
+<td><a href="../04-Database/Tables/platform/report_definitions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.report_runs</code></td>
+<td><a href="../04-Database/Tables/platform/report_runs.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>platform.scheduled_jobs</code></td>
+<td><a href="../04-Database/Tables/platform/scheduled_jobs.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>pricing.coupon_codes</code></td>
+<td><a href="../04-Database/Tables/pricing/coupon_codes.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>pricing.price_books</code></td>
+<td><a href="../04-Database/Tables/pricing/price_books.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>pricing.product_prices</code></td>
+<td><a href="../04-Database/Tables/pricing/product_prices.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>pricing.promotion_redemptions</code></td>
+<td><a href="../04-Database/Tables/pricing/promotion_redemptions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>pricing.promotion_versions</code></td>
+<td><a href="../04-Database/Tables/pricing/promotion_versions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>pricing.promotions</code></td>
+<td><a href="../04-Database/Tables/pricing/promotions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>pricing.tax_rules</code></td>
+<td><a href="../04-Database/Tables/pricing/tax_rules.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>procurement.goods_receipt_items</code></td>
+<td><a href="../04-Database/Tables/procurement/goods_receipt_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>procurement.goods_receipt_quality_checks</code></td>
+<td><a href="../04-Database/Tables/procurement/goods_receipt_quality_checks.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>procurement.goods_receipts</code></td>
+<td><a href="../04-Database/Tables/procurement/goods_receipts.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>procurement.purchase_order_items</code></td>
+<td><a href="../04-Database/Tables/procurement/purchase_order_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>procurement.purchase_orders</code></td>
+<td><a href="../04-Database/Tables/procurement/purchase_orders.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>procurement.purchase_requisition_items</code></td>
+<td><a href="../04-Database/Tables/procurement/purchase_requisition_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>procurement.purchase_requisitions</code></td>
+<td><a href="../04-Database/Tables/procurement/purchase_requisitions.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>procurement.supplier_invoices</code></td>
+<td><a href="../04-Database/Tables/procurement/supplier_invoices.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>procurement.suppliers</code></td>
+<td><a href="../04-Database/Tables/procurement/suppliers.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>search.documents</code></td>
+<td><a href="../04-Database/Tables/search/documents.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>search.synonyms</code></td>
+<td><a href="../04-Database/Tables/search/synonyms.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.inventory_adjustment_items</code></td>
+<td><a href="../04-Database/Tables/warehouse/inventory_adjustment_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.inventory_adjustments</code></td>
+<td><a href="../04-Database/Tables/warehouse/inventory_adjustments.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.inventory_lots</code></td>
+<td><a href="../04-Database/Tables/warehouse/inventory_lots.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.replenishment_rules</code></td>
+<td><a href="../04-Database/Tables/warehouse/replenishment_rules.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_balances</code></td>
+<td><a href="../04-Database/Tables/warehouse/stock_balances.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_holds</code></td>
+<td><a href="../04-Database/Tables/warehouse/stock_holds.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_movement_reason_codes</code></td>
+<td><a href="../04-Database/Tables/warehouse/stock_movement_reason_codes.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_reservations</code></td>
+<td><a href="../04-Database/Tables/warehouse/stock_reservations.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_transfer_items</code></td>
+<td><a href="../04-Database/Tables/warehouse/stock_transfer_items.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_transfers</code></td>
+<td><a href="../04-Database/Tables/warehouse/stock_transfers.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+<tr>
+<td><code>warehouse.warehouses</code></td>
+<td><a href="../04-Database/Tables/warehouse/warehouses.html">Exact schema</a>; read/write determined per operation, not schema membership.</td>
+</tr>
+</tbody>
+</table>
+<h2>Rework authority update</h2>
+<p>The <a href="../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../04-Database/Schema-Catalog.json">validated catalog</a> now provide the authoritative effective structure. Both agree across a source-chain replay and independent empty-schema installation. Earlier source-unavailable statements are historical and superseded. All operation table/column references are checked against that catalog; business write ownership, application DTO approval, restricted runtime login grants and provider contracts remain Proposed.</p>
+<h2>Unified authentication proposal mappings — D-028</h2>
+<p>Current exact operation/table/feature mappings, including API-001/002, API-033/034, API-089–093 and API-098–112, are centralized in <a href="API-Database-Feature-Matrix.html">API–Database–Feature matrix</a>; exact columns are repeated in each own contract.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Tables read / written through declared owners</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-001</td>
+<td><a href="../04-Database/Tables/identity/otp_challenges.html">identity.otp_challenges</a>, <a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a></td>
+</tr>
+<tr>
+<td>API-002</td>
+<td><a href="../04-Database/Tables/identity/otp_challenges.html">identity.otp_challenges</a>, <a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/customer/profiles.html">customer.profiles</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/identity/session_refresh_tokens.html">identity.session_refresh_tokens</a>, <a href="../04-Database/Tables/identity/login_attempts.html">identity.login_attempts</a></td>
+</tr>
+<tr>
+<td>API-033</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a></td>
+</tr>
+<tr>
+<td>API-034</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/session_refresh_tokens.html">identity.session_refresh_tokens</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a></td>
+</tr>
+<tr>
+<td>API-089</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/mfa_factors.html">identity.mfa_factors</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/identity/login_attempts.html">identity.login_attempts</a></td>
+</tr>
+<tr>
+<td>API-090</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/mfa_factors.html">identity.mfa_factors</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/identity/session_refresh_tokens.html">identity.session_refresh_tokens</a>, <a href="../04-Database/Tables/identity/login_attempts.html">identity.login_attempts</a></td>
+</tr>
+<tr>
+<td>API-091</td>
+<td><a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/identity/session_refresh_tokens.html">identity.session_refresh_tokens</a></td>
+</tr>
+<tr>
+<td>API-092</td>
+<td><a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/session_refresh_tokens.html">identity.session_refresh_tokens</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a></td>
+</tr>
+<tr>
+<td>API-093</td>
+<td><a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a></td>
+</tr>
+<tr>
+<td>API-098</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/identity/otp_challenges.html">identity.otp_challenges</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a></td>
+</tr>
+<tr>
+<td>API-099</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/identity/otp_challenges.html">identity.otp_challenges</a>, <a href="../04-Database/Tables/identity/mfa_factors.html">identity.mfa_factors</a>, <a href="../04-Database/Tables/identity/session_refresh_tokens.html">identity.session_refresh_tokens</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a>, <a href="../04-Database/Tables/identity/login_attempts.html">identity.login_attempts</a></td>
+</tr>
+<tr>
+<td>API-100</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a></td>
+</tr>
+<tr>
+<td>API-101</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a></td>
+</tr>
+<tr>
+<td>API-102</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a></td>
+</tr>
+<tr>
+<td>API-103</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/identity/mfa_factors.html">identity.mfa_factors</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a>, <a href="../04-Database/Tables/identity/login_attempts.html">identity.login_attempts</a></td>
+</tr>
+<tr>
+<td>API-104</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/identity/mfa_factors.html">identity.mfa_factors</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a>, <a href="../04-Database/Tables/identity/login_attempts.html">identity.login_attempts</a>, <a href="../04-Database/Tables/platform/outbox_events.html">platform.outbox_events</a></td>
+</tr>
+<tr>
+<td>API-105</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/identity/password_history.html">identity.password_history</a>, <a href="../04-Database/Tables/identity/session_refresh_tokens.html">identity.session_refresh_tokens</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a>, <a href="../04-Database/Tables/identity/login_attempts.html">identity.login_attempts</a>, <a href="../04-Database/Tables/platform/outbox_events.html">platform.outbox_events</a></td>
+</tr>
+<tr>
+<td>API-106</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/identity/otp_challenges.html">identity.otp_challenges</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a></td>
+</tr>
+<tr>
+<td>API-107</td>
+<td><a href="../04-Database/Tables/identity/authentication_challenges.html">identity.authentication_challenges</a>, <a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/otp_challenges.html">identity.otp_challenges</a>, <a href="../04-Database/Tables/identity/mfa_factors.html">identity.mfa_factors</a>, <a href="../04-Database/Tables/identity/password_history.html">identity.password_history</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/session_refresh_tokens.html">identity.session_refresh_tokens</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a>, <a href="../04-Database/Tables/identity/login_attempts.html">identity.login_attempts</a>, <a href="../04-Database/Tables/platform/outbox_events.html">platform.outbox_events</a></td>
+</tr>
+<tr>
+<td>API-108</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a></td>
+</tr>
+<tr>
+<td>API-111</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a></td>
+</tr>
+<tr>
+<td>API-109</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a></td>
+</tr>
+<tr>
+<td>API-112</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a></td>
+</tr>
+<tr>
+<td>API-110</td>
+<td><a href="../04-Database/Tables/identity/users.html">identity.users</a>, <a href="../04-Database/Tables/identity/sessions.html">identity.sessions</a>, <a href="../04-Database/Tables/identity/user_roles.html">identity.user_roles</a>, <a href="../04-Database/Tables/identity/roles.html">identity.roles</a>, <a href="../04-Database/Tables/identity/role_permissions.html">identity.role_permissions</a>, <a href="../04-Database/Tables/identity/permissions.html">identity.permissions</a>, <a href="../04-Database/Tables/organization/memberships.html">organization.memberships</a>, <a href="../04-Database/Tables/organization/locations.html">organization.locations</a>, <a href="../04-Database/Tables/organization/organizations.html">organization.organizations</a>, <a href="../04-Database/Tables/warehouse/warehouses.html">warehouse.warehouses</a>, <a href="../04-Database/Tables/platform/audit_logs.html">platform.audit_logs</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

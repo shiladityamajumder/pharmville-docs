@@ -1,0 +1,851 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>messages · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>notification.messages</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds messages records within the notification domain (templates, messages and delivery attempts). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>notification.messages</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Transactional</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Notifications</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>38 columns; 20 PK/FK/UQ/CHECK/exclusion constraints; 15 named PostgreSQL 18 NOT NULL constraints; 9 indexes; 3 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>attempt_count</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Inferred: stores attempt count for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>available_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Time of available</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td><code>character varying(16)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores channel for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>correlation_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Identifier associated with correlation</td>
+<td>Link the event or entity to its subject; verify constraints</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_notification_messages_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>delivered_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of delivered</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>destination_encrypted</code></td>
+<td><code>bytea</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores destination encrypted for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>destination_hash</code></td>
+<td><code>character varying(128)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores destination hash for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>expires_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Expiration time</td>
+<td>Determine validity windows</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>failed_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of failed</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>failure_reason</code></td>
+<td><code>text</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores failure reason for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>idempotency_key</code></td>
+<td><code>character varying(128)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores idempotency key for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>idempotency_scope</code></td>
+<td><code>character varying(128)</code></td>
+<td>No</td>
+<td><code>'global'::character varying</code></td>
+<td>Inferred: stores idempotency scope for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>locked_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of locked</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>locked_by</code></td>
+<td><code>character varying(128)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Actor associated with locked</td>
+<td>Record responsibility for the change</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>max_attempts</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td><code>5</code></td>
+<td>Inferred: stores max attempts for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>next_attempt_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of next attempt</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>notification_type</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td><code>'general'::character varying</code></td>
+<td>Inferred: stores notification type for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td><code>jsonb</code></td>
+<td>No</td>
+<td>—</td>
+<td>Structured payload information</td>
+<td>Retain a versioned payload or relevant details</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Inferred: stores priority for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>provider</code></td>
+<td><code>character varying(64)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores provider for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>provider_configuration_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to provider configurations</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>notification.provider_configurations</code> via <code>fk_notification_messages_provider_configuration_id_prov_3242</code></td>
+</tr>
+<tr>
+<td><code>provider_configuration_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>notification.provider_configurations</code> via <code>fk_notification_messages_provider_configuration_id_prov_3f94</code></td>
+</tr>
+<tr>
+<td><code>provider_message_id</code></td>
+<td><code>character varying(255)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Identifier associated with provider message</td>
+<td>Link the event or entity to its subject; verify constraints</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>rendered_body_encrypted</code></td>
+<td><code>bytea</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores rendered body encrypted for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>rendered_subject</code></td>
+<td><code>text</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores rendered subject for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>scheduled_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of scheduled</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>sent_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of sent</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(16)</code></td>
+<td>No</td>
+<td><code>'queued'::character varying</code></td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>template_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to templates</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>notification.templates</code> via <code>fk_notification_messages_template_id_templates</code></td>
+</tr>
+<tr>
+<td><code>template_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>notification.templates</code> via <code>fk_notification_messages_template_id_templates_numeric</code></td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_notification_messages_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_notification_messages_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the messages business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Rider_App, Notifications. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>notification.messages</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_notification_messages_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_notification_messages_provider_configuration_id_prov_3242</td>
+<td><code>provider_configuration_id</code></td>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td><code>FOREIGN KEY (provider_configuration_id) REFERENCES notification.provider_configurations(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_notification_messages_provider_configuration_id_prov_3f94</td>
+<td><code>provider_configuration_id_internal_id</code></td>
+<td><a href="../../Tables/notification/provider_configurations.html"><code>notification.provider_configurations</code></a></td>
+<td><code>FOREIGN KEY (provider_configuration_id_internal_id) REFERENCES notification.provider_configurations(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_notification_messages_template_id_templates</td>
+<td><code>template_id</code></td>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td><code>FOREIGN KEY (template_id) REFERENCES notification.templates(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_notification_messages_template_id_templates_numeric</td>
+<td><code>template_id_internal_id</code></td>
+<td><a href="../../Tables/notification/templates.html"><code>notification.templates</code></a></td>
+<td><code>FOREIGN KEY (template_id_internal_id) REFERENCES notification.templates(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_notification_messages_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_notification_messages_user_id_users</td>
+<td><code>user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE SET NULL</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td>fk_notification_message_attachments_message_id_messages</td>
+<td><code>message_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/message_attachments.html"><code>notification.message_attachments</code></a></td>
+<td>fk_notification_message_attachments_message_id_messages_numeric</td>
+<td><code>message_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/message_attempts.html"><code>notification.message_attempts</code></a></td>
+<td>fk_notification_message_attempts_message_id_messages</td>
+<td><code>message_id</code></td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><a href="../../Tables/notification/message_attempts.html"><code>notification.message_attempts</code></a></td>
+<td>fk_notification_message_attempts_message_id_messages_numeric</td>
+<td><code>message_id_internal_id</code></td>
+<td><code>internal_id</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>notification.messages</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_notification_messages_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>provider_configuration_id</code></td>
+<td><code>notification.provider_configurations</code></td>
+<td><code>fk_notification_messages_provider_configuration_id_prov_3242</code></td>
+</tr>
+<tr>
+<td><code>provider_configuration_id_internal_id</code></td>
+<td><code>notification.provider_configurations</code></td>
+<td><code>fk_notification_messages_provider_configuration_id_prov_3f94</code></td>
+</tr>
+<tr>
+<td><code>template_id</code></td>
+<td><code>notification.templates</code></td>
+<td><code>fk_notification_messages_template_id_templates</code></td>
+</tr>
+<tr>
+<td><code>template_id_internal_id</code></td>
+<td><code>notification.templates</code></td>
+<td><code>fk_notification_messages_template_id_templates_numeric</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_notification_messages_updated_by_users</code></td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_notification_messages_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_notification_messages_attempt_count_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (attempt_count &gt;= 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_notification_messages_destination_or_resolvable_user</code></td>
+<td>CHECK</td>
+<td><code>CHECK (destination_encrypted IS NOT NULL AND destination_hash IS NOT NULL OR (channel::text = ANY (ARRAY['push'::text, 'in_app'::text])) AND user_id IS NOT NULL)</code></td>
+</tr>
+<tr>
+<td><code>ck_notification_messages_expiry_after_created</code></td>
+<td>CHECK</td>
+<td><code>CHECK (expires_at IS NULL OR expires_at &gt; created_at)</code></td>
+</tr>
+<tr>
+<td><code>ck_notification_messages_max_attempts_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (max_attempts &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_notification_messages_notificationchannel</code></td>
+<td>CHECK</td>
+<td><code>CHECK (channel::text = ANY (ARRAY['email'::text, 'sms'::text, 'whatsapp'::text, 'push'::text, 'in_app'::text]))</code></td>
+</tr>
+<tr>
+<td><code>ck_notification_messages_notificationstatus</code></td>
+<td>CHECK</td>
+<td><code>CHECK (status::text = ANY (ARRAY['queued'::text, 'scheduled'::text, 'processing'::text, 'sent'::text, 'delivered'::text, 'failed'::text, 'cancelled'::text]))</code></td>
+</tr>
+<tr>
+<td><code>ck_notification_messages_numeric_pair_provider_configuration_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((provider_configuration_id IS NULL) = (provider_configuration_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_notification_messages_numeric_pair_template_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((template_id IS NULL) = (template_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_notification_messages_priority_range</code></td>
+<td>CHECK</td>
+<td><code>CHECK (priority &gt;= '-100'::integer AND priority &lt;= 100)</code></td>
+</tr>
+<tr>
+<td><code>ck_notification_messages_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>fk_notification_messages_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_notification_messages_provider_configuration_id_prov_3242</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (provider_configuration_id) REFERENCES notification.provider_configurations(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_notification_messages_provider_configuration_id_prov_3f94</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (provider_configuration_id_internal_id) REFERENCES notification.provider_configurations(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_notification_messages_template_id_templates</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (template_id) REFERENCES notification.templates(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_notification_messages_template_id_templates_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (template_id_internal_id) REFERENCES notification.templates(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_notification_messages_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_notification_messages_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>message_idempotency</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (idempotency_scope, idempotency_key)</code></td>
+</tr>
+<tr>
+<td><code>pk_notification_messages</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_notification_messages_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>messages_attempt_count_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL attempt_count</code></td>
+</tr>
+<tr>
+<td><code>messages_available_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL available_at</code></td>
+</tr>
+<tr>
+<td><code>messages_channel_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL channel</code></td>
+</tr>
+<tr>
+<td><code>messages_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>messages_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>messages_idempotency_key_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL idempotency_key</code></td>
+</tr>
+<tr>
+<td><code>messages_idempotency_scope_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL idempotency_scope</code></td>
+</tr>
+<tr>
+<td><code>messages_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>messages_max_attempts_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL max_attempts</code></td>
+</tr>
+<tr>
+<td><code>messages_notification_type_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL notification_type</code></td>
+</tr>
+<tr>
+<td><code>messages_payload_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL payload</code></td>
+</tr>
+<tr>
+<td><code>messages_priority_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL priority</code></td>
+</tr>
+<tr>
+<td><code>messages_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>messages_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+<tr>
+<td><code>messages_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_notification_messages_claim</code></td>
+<td>btree</td>
+<td><code>(status, available_at, next_attempt_at)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_notification_messages_claim ON notification.messages USING btree (status, available_at, next_attempt_at)</code></td>
+</tr>
+<tr>
+<td><code>ix_notification_messages_correlation</code></td>
+<td>btree</td>
+<td><code>(correlation_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_notification_messages_correlation ON notification.messages USING btree (correlation_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_notification_messages_provider_id</code></td>
+<td>btree</td>
+<td><code>(provider_message_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_notification_messages_provider_id ON notification.messages USING btree (provider_message_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_notification_messages_status_schedule</code></td>
+<td>btree</td>
+<td><code>(status, scheduled_at)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_notification_messages_status_schedule ON notification.messages USING btree (status, scheduled_at)</code></td>
+</tr>
+<tr>
+<td><code>ix_notification_messages_template</code></td>
+<td>btree</td>
+<td><code>(template_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_notification_messages_template ON notification.messages USING btree (template_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_notification_messages_user</code></td>
+<td>btree</td>
+<td><code>(user_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_notification_messages_user ON notification.messages USING btree (user_id)</code></td>
+</tr>
+<tr>
+<td><code>message_idempotency</code></td>
+<td>btree</td>
+<td><code>(idempotency_scope, idempotency_key)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX message_idempotency ON notification.messages USING btree (idempotency_scope, idempotency_key)</code></td>
+</tr>
+<tr>
+<td><code>pk_notification_messages</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_notification_messages ON notification.messages USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_notification_messages_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_notification_messages_id ON notification.messages USING btree (id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON notification.messages FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;provider_configuration_id&quot;,&quot;provider_configuration_id_internal_id&quot;,&quot;notification&quot;,&quot;provider_configurations&quot;],[&quot;template_id&quot;,&quot;template_id_internal_id&quot;,&quot;notification&quot;,&quot;templates&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON notification.messages FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON notification.messages FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;provider_configuration_id&quot;,&quot;provider_configuration_id_internal_id&quot;,&quot;notification&quot;,&quot;provider_configurations&quot;],[&quot;template_id&quot;,&quot;template_id_internal_id&quot;,&quot;notification&quot;,&quot;templates&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

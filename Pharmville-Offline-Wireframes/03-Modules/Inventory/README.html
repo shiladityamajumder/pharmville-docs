@@ -1,0 +1,101 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>README · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Inventory</h1>
+<p><strong>Stable module ID:</strong> <code>Inventory</code> · <strong>Proposed accountable role:</strong> Inventory control.</p>
+<h2>Module blueprint navigation</h2>
+<table>
+<thead>
+<tr>
+<th>Planning concern</th>
+<th>Canonical reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scope, requirements and business flow</td>
+<td><a href="Business-Flow.html">Business flow</a></td>
+</tr>
+<tr>
+<td>Components, boundaries and design</td>
+<td><a href="HLD.html">HLD</a> · <a href="LLD.html">LLD</a></td>
+</tr>
+<tr>
+<td>Operation contracts and DTOs</td>
+<td><a href="APIs.html">APIs</a></td>
+</tr>
+<tr>
+<td>Owned and consumed database objects</td>
+<td><a href="Database.html">Database</a></td>
+</tr>
+<tr>
+<td>State, permissions, recovery and tests</td>
+<td><a href="Operations.html">Operating contract</a> · <a href="Edge-Cases.html">edge cases</a></td>
+</tr>
+<tr>
+<td>Dependencies and owner decisions</td>
+<td><a href="Dependencies.html">Dependencies</a></td>
+</tr>
+</tbody>
+</table>
+<p><a href="../../00-Business-Guide/Inventory-and-Stock.html">Business flow</a> · <a href="../../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a></p>
+<h2>MOD-009 — Lot-aware inventory and reservation</h2>
+<p><strong>Source classification:</strong> 7 feature IDs from an inherited draft feature list; precise Phase 1 scope needs product-owner confirmation.</p>
+<p><strong>Purpose:</strong> A reservation must not create negative eligible stock and must not use expired/blocked lots.</p>
+<p><strong>Feature coverage</strong></p>
+<ul>
+<li><strong>INV-01 / REQ-057:</strong> Stock per location and batch, with manufacturing and expiry dates (Must (draft)).</li>
+<li><strong>INV-02 / REQ-058:</strong> Stock ledger: every movement recorded; stock is the sum of the ledger (Must (draft)).</li>
+<li><strong>INV-03 / REQ-059:</strong> Allocate nearest-expiry batch first; block batches below minimum shelf life (Must (draft)).</li>
+<li><strong>INV-04 / REQ-060:</strong> Stock adjustments with reason; manager approval above a threshold (Must (draft)).</li>
+<li><strong>INV-05 / REQ-061:</strong> Low-stock and near-expiry alerts (Must (draft)).</li>
+<li><strong>INV-06 / REQ-062:</strong> Opening stock import per location (Must (draft)).</li>
+<li><strong>INV-07 / REQ-063:</strong> Stock sync with Techsmith (Must (draft)).</li>
+</ul>
+<h3>Developer navigation</h3>
+<ul>
+<li>🏗️ <a href="HLD.html">Module HLD</a></li>
+<li>⚙️ <a href="LLD.html">Module LLD</a></li>
+<li>Internal architecture</li>
+<li>🔗 <a href="APIs.html">API contracts</a></li>
+<li>🗄️ <a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li>🧪 <a href="../../07-Engineering/Testing.html">Testing</a></li>
+<li>🗓️ <a href="../../08-Development-Plan/Implementation-Plan.html">Implementation plan</a></li>
+</ul>
+<p><strong>Dependencies:</strong> all cross-module references require ownership and permission checks; see master dependency register.</p>
+<h2>MOD-009: Lot-aware inventory and reservation — HLD</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Proposed modular-monolith service boundary. Feature scope is draft and has no signed product approval in this workspace.</p>
+</blockquote>
+<p><strong>Business responsibility:</strong> Lot-aware inventory and reservation. A reservation must not create negative eligible stock and must not use expired/blocked lots.</p>
+<p><strong>System responsibility:</strong> The <code>Inventory</code> NestJS module owns its policy and HTTP use-case interface. Shared PostgreSQL schemas are <strong>not</strong> proof of exclusive write ownership.</p>
+<h3>Major operations</h3>
+<ul>
+<li>Stock per location and batch, with manufacturing and expiry dates (<code>INV-01</code>)</li>
+<li>Stock ledger: every movement recorded; stock is the sum of the ledger (<code>INV-02</code>)</li>
+<li>Allocate nearest-expiry batch first; block batches below minimum shelf life (<code>INV-03</code>)</li>
+<li>Stock adjustments with reason; manager approval above a threshold (<code>INV-04</code>)</li>
+<li>Low-stock and near-expiry alerts (<code>INV-05</code>)</li>
+<li>Opening stock import per location (<code>INV-06</code>)</li>
+<li>Stock sync with Techsmith (<code>INV-07</code>)</li>
+</ul>
+<h3>Dependencies and trust boundaries</h3>
+<ul>
+<li>Database candidates: <code>warehouse.stock_balances</code>, <code>warehouse.stock_reservations</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_ledger</code>, <code>warehouse.stock_holds</code>.</li>
+<li>Role, patient, store and order scope resolved from trusted access context, not JSON body.</li>
+<li>External integrations are proposed and remain disabled until reviewed contracts and credentials are provided.</li>
+<li>Use local transactions for authoritative state; publish external side effects only after commit.</li>
+</ul>
+<p><strong>Technical design:</strong> <a href="LLD.html">Module LLD</a> · <a href="../../05-APIs/README.html">API index</a> · <a href="../../07-Engineering/Testing.html">Tests</a></p>
+<h3>Risk</h3>
+<p>A reservation must not create negative eligible stock and must not use expired/blocked lots. Open policies, cloud adapters, test fixtures and UI behavior must be signed off before go-live.</p>
+<h2>Related design and delivery references</h2>
+<ul>
+<li>🏗️ <a href="HLD.html">HLD</a></li>
+<li>⚙️ <a href="LLD.html">LLD</a></li>
+<li>🧪 <a href="Edge-Cases.html">Edge cases</a></li>
+<li>🔗 <a href="APIs.html">API contracts</a></li>
+<li>🗄️ <a href="../../04-Database/Module-Mapping.html">Database mapping</a></li>
+<li>🧪 <a href="../../07-Engineering/Testing.html">QA scenarios</a></li>
+<li>🗓️ <a href="../../08-Development-Plan/Implementation-Plan.html">Development tasks</a></li>
+<li>End-to-end flows: <a href="../../06-Workflows/README.html">workflows</a></li>
+</ul>
+</main></body></html>

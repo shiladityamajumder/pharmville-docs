@@ -1,0 +1,259 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>membership · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Membership foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>membership</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-0874</td>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td><a href="../../Tables/membership/benefit_usage.html"><code>membership.benefit_usage</code></a></td>
+<td><code>benefit_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0875</td>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td><a href="../../Tables/membership/benefit_usage.html"><code>membership.benefit_usage</code></a></td>
+<td><code>benefit_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0876</td>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td><a href="../../Tables/membership/benefit_usage.html"><code>membership.benefit_usage</code></a></td>
+<td><code>subscription_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0877</td>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td><a href="../../Tables/membership/benefit_usage.html"><code>membership.benefit_usage</code></a></td>
+<td><code>subscription_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0878</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0879</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0880</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..1 child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0881</td>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td><a href="../../Tables/membership/loyalty_ledger.html"><code>membership.loyalty_ledger</code></a></td>
+<td><code>loyalty_account_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0882</td>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td><a href="../../Tables/membership/loyalty_ledger.html"><code>membership.loyalty_ledger</code></a></td>
+<td><code>loyalty_account_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0883</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0884</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0885</td>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td><code>plan_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0886</td>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td><code>plan_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0887</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/plan_benefits.html"><code>membership.plan_benefits</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0888</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0889</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0890</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0891</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0892</td>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td><code>payment_method_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0893</td>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td><code>payment_method_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0894</td>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td><code>plan_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0895</td>
+<td><a href="../../Tables/membership/plans.html"><code>membership.plans</code></a></td>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td><code>plan_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0896</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0897</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/membership/subscriptions.html"><code>membership.subscriptions</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../14-membership.html#diagram-01">14-membership.md#diagram-01</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

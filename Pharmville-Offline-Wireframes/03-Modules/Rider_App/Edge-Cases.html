@@ -1,0 +1,103 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Rider App edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Delivery-and-Rider-App.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-RID-01-01</code></td>
+<td><code>RID-01</code></td>
+<td>Old session tries to start a revoked rider’s shift</td>
+<td>Protected shift denied; no availability activation</td>
+<td>Security/Dispatch resolves status</td>
+<td><code>TC-RID-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RID-02-01</code></td>
+<td><code>RID-02</code></td>
+<td>Other rider posts pickup</td>
+<td>No custody change or task disclosure</td>
+<td>Dispatch corrects assignment; authorized rider retries</td>
+<td><code>TC-RID-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RID-03-01</code></td>
+<td><code>RID-03</code></td>
+<td>Offline device uploads delayed coordinates</td>
+<td>Stale samples do not masquerade as live; access/retention policy applies</td>
+<td>Dispatch uses last-known state; Privacy approves cadence/retention</td>
+<td><code>TC-RID-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RID-04-01</code></td>
+<td><code>RID-04</code></td>
+<td>Wrong OTP or repeated offline completion</td>
+<td>No completion on invalid proof; replay cannot duplicate collection</td>
+<td>Rider retries approved proof or contacts Dispatch</td>
+<td><code>TC-RID-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RID-05-01</code></td>
+<td><code>RID-05</code></td>
+<td>Rider is asked to approve a prescription at doorstep</td>
+<td>No pharmacist decision fabricated by rider</td>
+<td>Pharmacy/Operations approves door-check SOP before enabling</td>
+<td><code>TC-RID-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RID-06-01</code></td>
+<td><code>RID-06</code></td>
+<td>Free-text unsupported failure reason is submitted</td>
+<td>No false completed delivery or invented reason code</td>
+<td>Rider selects approved reason; Dispatch decides next step</td>
+<td><code>TC-RID-06-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-RID-07-01</code></td>
+<td><code>RID-07</code></td>
+<td>Incentive configuration is missing or disputed</td>
+<td>No invented earnings total or payout</td>
+<td>Product/Finance approves incentive contract; rider sees pending availability</td>
+<td><code>TC-RID-07-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+<h2>Additional safety and recovery tests</h2>
+<p>Concrete interruption/race assertions supplement the feature table; detailed expected results are in the <a href="LLD.html#critical-recovery-scenarios">LLD</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Scenario</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RID-04</code></td>
+<td>Offline completion arrives after reassignment or OTP expiry</td>
+<td><code>TC-RID-04-01</code></td>
+</tr>
+<tr>
+<td><code>RID-04</code></td>
+<td>Current rider submits incorrect delivery OTP with a valid-looking photo</td>
+<td><code>TC-RID-04-02</code></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

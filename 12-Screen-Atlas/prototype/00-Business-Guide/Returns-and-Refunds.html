@@ -1,0 +1,76 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Returns and Refunds · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Cancellations, returns and refunds</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status:</strong> Intended behavior from the existing draft design; pending approvals are listed below. This is not evidence of a running product.</p>
+</blockquote>
+<h2>What is this process?</h2>
+<p>This process handles orders that cannot continue and delivered items that may qualify for return. Cancelling, accepting goods back and returning money are separate decisions.</p>
+<h2>Who is involved?</h2>
+<p>Customers, support, Operations, store receivers, Pharmacy, Finance approvers and the provider.</p>
+<h2>How does it normally work?</h2>
+<ol>
+<li>The customer requests cancellation or return with a reason. Draft customer cancellation is before packed; return window and eligible products await approval.</li>
+<li>Pharmville checks current item/order state. Operations accepts or refuses with a reason; a request is not itself return receipt or refund completion.</li>
+<li>An accepted cancellation stops eligible unfinished work. Inventory releases unused holds once; committed stock needs the approved compensating movement.</li>
+<li>An approved return is tracked back and inspected for actual item/quantity. Medicine is not automatically saleable when received.</li>
+<li>Finance checks paid value, previous refunds, approvals and destination, sends one refund instruction and tracks trusted results. The customer sees requested, review, pending, completed or refused; required credit notes follow approved policy.</li>
+</ol>
+<h2>What happens next?</h2>
+<p>Completed refunds enter <a href="Finance-and-Reconciliation.html">reconciliation</a>. Accepted goods enter inventory safety review; refusals remain explained support outcomes.</p>
+<h2>What can go wrong, and what does the system do?</h2>
+<h3>Cancellation races with packing</h3>
+<p>An old screen may show cancellation available after a worker packs. Only a valid current transition wins. The customer sees accepted or a current eligibility explanation; Operations/support considers remaining options. The order cannot be newly packed and cancelled by competing stale actions.</p>
+<h3>The item is outside policy or unsafe to resell</h3>
+<p>Window, item type, damage or unknown storage may prevent return or resale. Pharmville explains the decision and support route. Pharmacy/Product approve eligibility; receiving keeps unsafe goods out of saleable stock, independently of any refund decision.</p>
+<h3>Refund submission or callback repeats</h3>
+<p>A timeout can encourage resubmission. Finance reuses the instruction/result and checks cumulative refunded value. The customer sees one reference; no duplicate payout is made.</p>
+<h3>Money is delayed or COD has no verified destination</h3>
+<p>Provider uncertainty leaves refund pending, with a reference for Finance to investigate. COD may require an approved verified bank/UPI destination. The customer sees pending or awaiting details; no fixed arrival time or transfer to unverified details is promised.</p>
+<h2>What does the user see?</h2>
+<p>Customers see request eligibility, accepted/refused reason and separate refund progress/reference. Receiving and Finance staff see their own pending inspection or payout work.</p>
+<h2>What still needs approval?</h2>
+<p>D-004 (cancellation/refund), D-006/D-009 (medicine safety), D-008/D-012 (accounting), D-010 (partial outcomes). The <a href="../09-References/Sources-and-Decisions.html#open-decisions">decision register</a> names owners and blocked actions.</p>
+<h2>Related technical documentation</h2>
+<p><a href="../02-Architecture/System-HLD.html">System HLD</a> · <a href="../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="../08-Development-Plan/Implementation-Plan.html">development tasks</a></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Architecture</th>
+<th>Implementation</th>
+<th>API</th>
+<th>Data</th>
+<th>Edge cases and tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer Orders</td>
+<td><a href="../03-Modules/Customer_Orders/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#customer-orders">Mapping</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Cases</a></td>
+</tr>
+<tr>
+<td>Order Operations</td>
+<td><a href="../03-Modules/Order_Operations/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#order-operations">Mapping</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Cases</a></td>
+</tr>
+<tr>
+<td>Finance Payments</td>
+<td><a href="../03-Modules/Finance_Payments/HLD.html">HLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API</a></td>
+<td><a href="../04-Database/Module-Mapping.html#finance-payments">Mapping</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Cases</a></td>
+</tr>
+</tbody>
+</table>
+<p>Technical workflows: <a href="../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>.</p>
+<p>Feature references: <code>ORD-04</code>, <code>ORD-05</code>, <code>ORD-06</code>, <code>OMS-05</code>, <code>FIN-03</code>, <code>FIN-04</code>, <code>FIN-07</code>.</p>
+<p><a href="README.html">Business Guide</a> · <a href="Pharmville-Complete-Business-Flow.html">Complete journey</a></p>
+</main></body></html>

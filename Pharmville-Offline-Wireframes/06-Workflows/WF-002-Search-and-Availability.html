@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 002 Search and Availability · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-002 — Search and Availability</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Customer, Catalog and Inventory. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>Validate bounded search/category inputs against published products; browsing must not inherit a post-login-only requirement.</li>
+<li>Catalog resolves exact variants and approved P/M/O classification. Search results never authorize clinical substitution.</li>
+<li>For a delivery location, Inventory returns scoped availability with observation time and eligibility limits; a view is not a reservation.</li>
+<li>Return permitted product fields and distinguish no matches, unavailable search and unknown stock. Checkout revalidates before a hold.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Catalog owns published discovery; Inventory owns availability evidence. A read grants no stock mutation.</p>
+<p>Candidate existing tables: <code>catalog.products</code>, <code>catalog.product_variants</code>, <code>search.documents</code>, <code>warehouse.stock_balances</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: API-013/API-014; Inventory API-050. <a href="../03-Modules/Product_Catalog/APIs.html">Product Catalog</a> · <a href="../03-Modules/Inventory/APIs.html">Inventory</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Customer
+  participant O as Catalog
+  participant S as Inventory
+  participant D as PostgreSQL
+  C-&gt;&gt;O: Search published products for location
+  O-&gt;&gt;S: Read scoped stock evidence
+  alt Current approved evidence
+    S--&gt;&gt;O: Availability and observation time
+    O--&gt;&gt;C: Exact product results and availability
+  else Stale or unavailable source
+    O--&gt;&gt;C: Products with availability unconfirmed
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-CAT-03-DENY</code>, <code>TC-CAT-04-DENY</code>, <code>TC-CAT-05-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

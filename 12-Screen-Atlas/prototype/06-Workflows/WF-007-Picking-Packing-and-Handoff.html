@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 007 Picking Packing and Handoff · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-007 — Picking Packing and Handoff</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Location worker, Fulfillment and Inventory. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>Authorize worker/location and current task version. Load the assigned accepted revision and current P decisions, licensed site and exact reserved lots.</li>
+<li>Pick exact eligible products/batches and record actual quantities; a shortage blocks completion and goes to Operations, not an automatic substitution.</li>
+<li>Complete picking only with required quantities; complete packing only with nonempty authorized package evidence. Preserve actor/time and immutable work identity.</li>
+<li>Coordinate committed stock through Inventory and dispatch only with completed package, current clinical/license evidence and authoritative full money or approved shipment-scoped COD.</li>
+<li>Record custody handoff to the current assigned rider and publish progress after commit. Cancellation/packing races resolve against authoritative state.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Scoped Fulfillment/Store commands tasks and packages; Inventory owns reservation/ledger effects; Delivery owns custody.</p>
+<p>Candidate existing tables: <code>fulfillment.pick_tasks</code>, <code>fulfillment.pick_task_items</code>, <code>fulfillment.pack_tasks</code>, <code>fulfillment.packages</code>, <code>fulfillment.package_items</code>, <code>warehouse.stock_reservations</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: API-045/API-046/API-047; API-071 records permitted rider pickup. <a href="../03-Modules/Store_Operations/APIs.html">Store Operations</a> · <a href="../03-Modules/Inventory/APIs.html">Inventory</a> · <a href="../03-Modules/Rider_App/APIs.html">Rider App</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Location worker
+  participant O as Fulfillment
+  participant S as Inventory
+  participant D as PostgreSQL
+  C-&gt;&gt;O: Scan assigned pick and batch
+  O-&gt;&gt;D: Verify current review, site, task and exact lot
+  alt Mismatch or shortage
+    O--&gt;&gt;C: Stop and record discrepancy
+  else Complete eligible pick and pack
+    O-&gt;&gt;D: Save actual quantities and completed package
+    O-&gt;&gt;S: Commit exact reserved stock
+    O-&gt;&gt;D: Check money or approved COD before dispatch
+    O--&gt;&gt;C: Authorized handoff may proceed
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-STO-02-DENY</code>, <code>TC-ORD-04-DENY</code>, <code>TC-INV-03-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

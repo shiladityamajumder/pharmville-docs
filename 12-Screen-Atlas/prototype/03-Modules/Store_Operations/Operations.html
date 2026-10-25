@@ -1,0 +1,99 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Operations · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Store Operations operations and acceptance</h1>
+<h2>Workflow and state ownership</h2>
+<p>Store pick/pack and preparation tasks; Inventory commits stock and Delivery owns custody after handoff.</p>
+<p><a href="../../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a>. The <a href="LLD.html">LLD</a> holds module algorithms and transition cases; <a href="APIs.html">APIs</a> holds command-specific allowed/denied transitions. <a href="../../07-Engineering/State-and-Recovery-Contracts.html">Shared recovery contracts</a> define cross-owner compensation.</p>
+<h2>Authentication and authorization</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Authentication</th>
+<th>Roles / permission</th>
+<th>Command owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-044 GET <code>/v1/staff/store/orders</code></td>
+<td>Yes</td>
+<td>Store Staff; fulfillment.queue.read</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td>API-045 POST <code>/v1/staff/store/orders/{order_id}/accept</code></td>
+<td>Yes</td>
+<td>Store Supervisor / assigned Store Staff; fulfillment.accept</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td>API-046 POST <code>/v1/staff/store/picks/{pick_id}/scan</code></td>
+<td>Yes</td>
+<td>Assigned Store Picker; fulfillment.pick.scan</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td>API-047 POST <code>/v1/staff/store/packs/{pack_id}/close</code></td>
+<td>Yes</td>
+<td>Assigned Store Packer; fulfillment.pack.close</td>
+<td>Store_Operations</td>
+</tr>
+<tr>
+<td>API-048 POST <code>/v1/staff/store/replenishments</code></td>
+<td>Yes</td>
+<td>Store Supervisor; warehouse.replenishment.request</td>
+<td>Warehouse via Procurement requisition command</td>
+</tr>
+<tr>
+<td>API-049 POST <code>/v1/staff/store/transfers/{transfer_id}/receipt</code></td>
+<td>Yes</td>
+<td>Destination Store Receiver; warehouse.transfer.receive</td>
+<td>Warehouse</td>
+</tr>
+</tbody>
+</table>
+<p>Resource/patient/location checks and sensitive-field filtering are endpoint-specific in <a href="APIs.html">APIs</a>; roles never replace object authorization. For file/provider callbacks, use the documented capability/signature path. <a href="../../07-Engineering/Security.html">Security</a> applies alongside the exact retained SQL ACL/RLS policies.</p>
+<h2>Designed tests and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Normal case</th>
+<th>Denied / failure evidence</th>
+<th>Execution status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>STO-01</code></td>
+<td><a href="LLD.html">TC-STO-01-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>STO-02</code></td>
+<td><a href="LLD.html">TC-STO-02-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>STO-03</code></td>
+<td><a href="LLD.html">TC-STO-03-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>STO-04</code></td>
+<td><a href="LLD.html">TC-STO-04-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>STO-05</code></td>
+<td><a href="LLD.html">TC-STO-05-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<p>Each endpoint additionally defines validation, authentication, authorization, business-gate, duplicate-intent, stale-version/concurrency and recovery cases. No execution is claimed. <a href="../../07-Engineering/Testing.html">Testing strategy</a> separates schema parity from application acceptance; <a href="../../08-Development-Plan/Implementation-Plan.html">delivery tasks</a> preserve existing TASK IDs.</p>
+</main></body></html>

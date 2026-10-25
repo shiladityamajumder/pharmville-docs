@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 011 Inventory Reconciliation · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-011 — Inventory Reconciliation</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Inventory controller, Inventory and Stock source. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>Read approved source/location/time identity and deduplicate incoming observations. Old observations cannot overwrite newer authoritative evidence.</li>
+<li>Compare usable physical count, ledger/balance and external observations by batch/location, preserving each source value and discrepancy.</li>
+<li>For discrepancy, require reason, permitted controller and threshold-based manager approval under approved policy; never silently replace the movement history.</li>
+<li>Commit approved adjustment and linked evidence atomically, then update alerts. Missing/stale source blocks new reservations until valid evidence is restored.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Inventory owns observations, movement/adjustment evidence and reconciliation outcomes. External POS is an approved input source, never a privileged table writer.</p>
+<p>Candidate existing tables: <code>warehouse.stock_ledger</code>, <code>warehouse.stock_balances</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.inventory_adjustments</code>, <code>warehouse.inventory_adjustment_items</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: API-050/API-051/API-054/API-055; count/import commands still need feature-specific review. <a href="../03-Modules/Inventory/APIs.html">Inventory</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Inventory controller
+  participant O as Inventory
+  participant S as Stock source
+  participant D as PostgreSQL
+  S-&gt;&gt;O: Observation with location and source time
+  O-&gt;&gt;D: Deduplicate and retain authoritative evidence
+  C-&gt;&gt;O: Compare count with ledger
+  alt Mismatch
+    O--&gt;&gt;C: Reason and approval required
+    C-&gt;&gt;O: Submit approved adjustment
+    O-&gt;&gt;D: Commit explained movement once
+  else Evidence agrees
+    O--&gt;&gt;C: Matched scoped stock result
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-INV-02-DENY</code>, <code>TC-INV-04-DENY</code>, <code>TC-INV-06-DENY</code>, <code>TC-INV-07-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

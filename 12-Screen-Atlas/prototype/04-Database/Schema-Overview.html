@@ -1,0 +1,138 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Schema Overview · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Effective schema overview</h1>
+<p>&lt;!-- ERD-INDEX-LINK --&gt;
+See the <a href="ER-Diagrams/README.html">ER diagram index</a> for domain views and the complete foreign-key catalog.</p>
+<p>The <a href="../pharmville-database/pharmville_schema.sql">canonical SQL</a> and <a href="Schema-Catalog.json">derived catalog</a> describe the same validated effective structure. Counts are reconciliation results, not targets used to invent objects.</p>
+<table>
+<thead>
+<tr>
+<th>Schema</th>
+<th>Tables</th>
+<th>Purpose and relationships</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>appointment</td>
+<td>9</td>
+<td><a href="ER-Diagrams/01-appointment.html">ER reference</a></td>
+</tr>
+<tr>
+<td>catalog</td>
+<td>19</td>
+<td><a href="ER-Diagrams/02-catalog.html">ER reference</a></td>
+</tr>
+<tr>
+<td>clinical</td>
+<td>17</td>
+<td><a href="ER-Diagrams/03-clinical.html">ER reference</a></td>
+</tr>
+<tr>
+<td>commerce</td>
+<td>17</td>
+<td><a href="ER-Diagrams/04-commerce.html">ER reference</a></td>
+</tr>
+<tr>
+<td>compliance</td>
+<td>8</td>
+<td><a href="ER-Diagrams/05-compliance.html">ER reference</a></td>
+</tr>
+<tr>
+<td>customer</td>
+<td>8</td>
+<td><a href="ER-Diagrams/06-customer.html">ER reference</a></td>
+</tr>
+<tr>
+<td>diagnostics</td>
+<td>13</td>
+<td><a href="ER-Diagrams/07-diagnostics.html">ER reference</a></td>
+</tr>
+<tr>
+<td>finance</td>
+<td>8</td>
+<td><a href="ER-Diagrams/08-finance.html">ER reference</a></td>
+</tr>
+<tr>
+<td>fulfillment</td>
+<td>10</td>
+<td><a href="ER-Diagrams/09-fulfillment.html">ER reference</a></td>
+</tr>
+<tr>
+<td>identity</td>
+<td>16</td>
+<td><a href="ER-Diagrams/10-identity.html">ER reference</a></td>
+</tr>
+<tr>
+<td>insurance</td>
+<td>8</td>
+<td><a href="ER-Diagrams/11-insurance.html">ER reference</a></td>
+</tr>
+<tr>
+<td>logistics</td>
+<td>15</td>
+<td><a href="ER-Diagrams/12-logistics.html">ER reference</a></td>
+</tr>
+<tr>
+<td>marketplace</td>
+<td>7</td>
+<td><a href="ER-Diagrams/13-marketplace.html">ER reference</a></td>
+</tr>
+<tr>
+<td>membership</td>
+<td>6</td>
+<td><a href="ER-Diagrams/14-membership.html">ER reference</a></td>
+</tr>
+<tr>
+<td>notification</td>
+<td>10</td>
+<td><a href="ER-Diagrams/15-notification.html">ER reference</a></td>
+</tr>
+<tr>
+<td>organization</td>
+<td>6</td>
+<td><a href="ER-Diagrams/16-organization.html">ER reference</a></td>
+</tr>
+<tr>
+<td>payment</td>
+<td>13</td>
+<td><a href="ER-Diagrams/17-payment.html">ER reference</a></td>
+</tr>
+<tr>
+<td>platform</td>
+<td>21</td>
+<td><a href="ER-Diagrams/18-platform.html">ER reference</a></td>
+</tr>
+<tr>
+<td>pricing</td>
+<td>8</td>
+<td><a href="ER-Diagrams/19-pricing.html">ER reference</a></td>
+</tr>
+<tr>
+<td>procurement</td>
+<td>13</td>
+<td><a href="ER-Diagrams/20-procurement.html">ER reference</a></td>
+</tr>
+<tr>
+<td>risk</td>
+<td>5</td>
+<td><a href="ER-Diagrams/21-risk.html">ER reference</a></td>
+</tr>
+<tr>
+<td>search</td>
+<td>5</td>
+<td><a href="ER-Diagrams/22-search.html">ER reference</a></td>
+</tr>
+<tr>
+<td>support</td>
+<td>8</td>
+<td><a href="ER-Diagrams/23-support.html">ER reference</a></td>
+</tr>
+<tr>
+<td>warehouse</td>
+<td>18</td>
+<td><a href="ER-Diagrams/24-warehouse.html">ER reference</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Identity and consistency</h2>
+<p>Public UUIDs remain external identifiers; V0022 internal numeric keys and their compatibility crosswalks are retained. Foreign-key pairs are distinct physical constraints, not duplicated diagram mistakes. Types, defaults, nullable fields, optimistic row versions, append-only guards, workflow functions, RLS and runtime capabilities retain their effective definitions. No speculative future field was added to SQL. See <a href="Database-Rules.html">rules</a>, <a href="Database-Objects.html">all objects</a> and <a href="Reconciliation.html">reconciliation</a>.</p>
+</main></body></html>

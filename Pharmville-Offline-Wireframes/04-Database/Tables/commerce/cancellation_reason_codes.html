@@ -1,0 +1,520 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>cancellation_reason_codes · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>commerce.cancellation_reason_codes</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds cancellation reason codes records within the commerce domain (shopping cart, checkout, order and returns). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>commerce.cancellation_reason_codes</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Master / Reference</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Order_Operations</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>11 columns; 9 PK/FK/UQ/CHECK/exclusion constraints; 8 named PostgreSQL 18 NOT NULL constraints; 3 indexes; 4 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores code for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by_user_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_commerce_cancellation_reason_codes_created_by_user_id_users</code></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>text</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores description for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>display_name</code></td>
+<td><code>character varying(150)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores display name for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric primary key</td>
+<td>Uniquely identifies a master or newer table row</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>is_active</code></td>
+<td><code>boolean</code></td>
+<td>No</td>
+<td><code>true</code></td>
+<td>Yes/no flag for is active</td>
+<td>Control conditional business behavior</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>sort_order</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td><code>0</code></td>
+<td>Inferred: stores sort order for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by_user_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_commerce_cancellation_reason_codes_updated_by_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the cancellation reason codes business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Cart_Checkout, Customer_Orders, Order_Operations, Pharmacist_Review, Finance_Payments, Reporting. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>commerce.cancellation_reason_codes</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_commerce_cancellation_reason_codes_created_by_user_id_users</td>
+<td><code>created_by_user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_commerce_cancellation_reason_codes_updated_by_user_id_users</td>
+<td><code>updated_by_user_id</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<table>
+<thead>
+<tr>
+<th>Referencing table</th>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>Referenced columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../Tables/commerce/cancellations.html"><code>commerce.cancellations</code></a></td>
+<td>fk_commerce_cancellations_controlled_reason</td>
+<td><code>reason_code_id, reason_code</code></td>
+<td><code>id, code</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>commerce.cancellation_reason_codes</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_by_user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_commerce_cancellation_reason_codes_created_by_user_id_users</code></td>
+</tr>
+<tr>
+<td><code>updated_by_user_id</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_commerce_cancellation_reason_codes_updated_by_user_id_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_commerce_cancellation_reason_codes_canonical_code</code></td>
+<td>CHECK</td>
+<td><code>CHECK (code::text ~ '^[A-Z][A-Z0-9_]{0,63}$'::text)</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_cancellation_reason_codes_display_name_nonblank</code></td>
+<td>CHECK</td>
+<td><code>CHECK (length(btrim(display_name::text)) &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_cancellation_reason_codes_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>ck_commerce_cancellation_reason_codes_sort_order_nonnegative</code></td>
+<td>CHECK</td>
+<td><code>CHECK (sort_order &gt;= 0)</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_cancellation_reason_codes_created_by_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_commerce_cancellation_reason_codes_updated_by_user_id_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by_user_id) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_commerce_cancellation_reason_codes</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_commerce_cancellation_reason_codes_code</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (code)</code></td>
+</tr>
+<tr>
+<td><code>uq_commerce_cancellation_reason_codes_id_code</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id, code)</code></td>
+</tr>
+<tr>
+<td><code>cancellation_reason_codes_code_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL code</code></td>
+</tr>
+<tr>
+<td><code>cancellation_reason_codes_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>cancellation_reason_codes_display_name_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL display_name</code></td>
+</tr>
+<tr>
+<td><code>cancellation_reason_codes_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>cancellation_reason_codes_is_active_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL is_active</code></td>
+</tr>
+<tr>
+<td><code>cancellation_reason_codes_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>cancellation_reason_codes_sort_order_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL sort_order</code></td>
+</tr>
+<tr>
+<td><code>cancellation_reason_codes_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pk_commerce_cancellation_reason_codes</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_commerce_cancellation_reason_codes ON commerce.cancellation_reason_codes USING btree (id)</code></td>
+</tr>
+<tr>
+<td><code>uq_commerce_cancellation_reason_codes_code</code></td>
+<td>btree</td>
+<td><code>(code)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_commerce_cancellation_reason_codes_code ON commerce.cancellation_reason_codes USING btree (code)</code></td>
+</tr>
+<tr>
+<td><code>uq_commerce_cancellation_reason_codes_id_code</code></td>
+<td>btree</td>
+<td><code>(id, code)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_commerce_cancellation_reason_codes_id_code ON commerce.cancellation_reason_codes USING btree (id, code)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON commerce.cancellation_reason_codes FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'id', '')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>master_guard</code></td>
+<td><code>CREATE TRIGGER master_guard BEFORE INSERT OR DELETE OR UPDATE ON commerce.cancellation_reason_codes FOR EACH ROW EXECUTE FUNCTION platform.guard_master()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON commerce.cancellation_reason_codes FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON commerce.cancellation_reason_codes FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'id', '')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+<h2>Master-data planning</h2>
+<p><strong>Status: Proposed maintenance design; Unapproved; no seed or migration modified.</strong> <a href="../../Master-Data-Inventory.html">Central inventory</a> · <a href="../../../05-APIs/Planning-Decisions.html">planning decisions</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Definition</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schema/table</td>
+<td><code>commerce.cancellation_reason_codes</code></td>
+</tr>
+<tr>
+<td>Category</td>
+<td>Master / Reference — Controlled customer/operations cancellation reasons</td>
+</tr>
+<tr>
+<td>Proposed owner / maintenance role</td>
+<td>Order_Operations / Operations policy steward</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Global catalog/reference; scope still limits administrative maintenance.</td>
+</tr>
+<tr>
+<td>Referencing tables</td>
+<td><code>commerce.cancellations</code></td>
+</tr>
+<tr>
+<td>Features</td>
+<td><code>ORD-04</code></td>
+</tr>
+<tr>
+<td>API consumers</td>
+<td><a href="../../../03-Modules/Customer_Orders/APIs.html">API-027</a></td>
+</tr>
+</tbody>
+</table>
+<h3>Expected initial records</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Description</th>
+<th>Status</th>
+<th>Source</th>
+<th>Additional schema attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CUSTOMER_REQUEST</td>
+<td>Customer requested cancellation</td>
+<td>Operational reason/tag only; not a clinical, financial entitlement or automatic disposition rule.</td>
+<td>Proposed</td>
+<td>Existing reason-linked schema and relevant documented workflow</td>
+<td>display_name=Customer requested cancellation; is_active=true; sort_order=0</td>
+</tr>
+<tr>
+<td>ORDERED_IN_ERROR</td>
+<td>Ordered in error</td>
+<td>Operational reason/tag only; not a clinical, financial entitlement or automatic disposition rule.</td>
+<td>Proposed</td>
+<td>Existing reason-linked schema and relevant documented workflow</td>
+<td>display_name=Ordered in error; is_active=true; sort_order=1</td>
+</tr>
+</tbody>
+</table>
+<h3>Lifecycle and seed requirements</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed lifecycle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deployment or operational creation</td>
+<td>Deployment reference seed after approval, followed by controlled administration.</td>
+</tr>
+<tr>
+<td>Create/update permissions</td>
+<td>Operations policy steward through the owning domain command. Read access is separate; general Admin does not grant clinical/Finance write authority.</td>
+</tr>
+<tr>
+<td>Activation/deactivation</td>
+<td>Use is_active=false to retire from new selection; keep referenced history.</td>
+</tr>
+<tr>
+<td>Deletion</td>
+<td>Physical deletion denied for referenced records; respect the exact FK ON DELETE behavior, legal/clinical retention and stable-code guards. A cascading SQL possibility is not API permission.</td>
+</tr>
+<tr>
+<td>Uniqueness / stable codes</td>
+<td>UNIQUE: UNIQUE (code); UNIQUE: UNIQUE (id, code); CREATE UNIQUE INDEX uq_commerce_cancellation_reason_codes_code ON commerce.cancellation_reason_codes USING btree (code); CREATE UNIQUE INDEX uq_commerce_cancellation_reason_codes_id_code ON commerce.cancellation_reason_codes USING btree (id, code)</td>
+</tr>
+<tr>
+<td>Foreign-key dependencies</td>
+<td>No non-actor FK dependencies recorded.</td>
+</tr>
+<tr>
+<td>Initial load order</td>
+<td>Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness.</td>
+</tr>
+<tr>
+<td>Seed status</td>
+<td>Explicit rows above are Confirmed domain values or Proposed initial records, never observed production/seed data. No live row existence or seed execution was verified.</td>
+</tr>
+<tr>
+<td>Pending decisions</td>
+<td>D-024 ownership/lifecycle approval; D-001 phase scope and responsible steward evidence.</td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

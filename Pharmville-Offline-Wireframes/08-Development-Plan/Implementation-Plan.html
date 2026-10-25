@@ -1,0 +1,895 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Implementation Plan · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Implementation plan</h1>
+<h2>Definition of Done (DoD)</h2>
+<p>A feature is done only when its source ID and phase priority are recorded, business decision dependencies are approved, module owner and stage map exist, typed API contract is reviewed, matching existing SQL tables and transactional invariants are verified, and the implementation includes server-side permissions, validation, idempotency/concurrency and useful error/status states.</p>
+<p>Tests must cover happy/denied/concurrent/timeout/provider-retry paths, protect P/M/O and financial correctness, verify audit trace and demonstrate no protected data leakage. Frontend acceptance covers loading, empty, blocked, retry and accessible mobile states, not just screenshots.</p>
+<p>Provider integrations require actual sandbox signature/reconciliation proof before any production authorization.</p>
+<p>Review includes code quality, runbooks, deployment compatibility, rollback/forward-fix, monitoring, DB checksum integrity and approved pharmacy/finance/ops handoff. The source reports local database readiness only; the new application has no tested completion proof in this documentation checkout.</p>
+<p>See Acceptance Gates, First Sprint and Open Decisions.</p>
+<h2>Development roadmap without invented deadlines</h2>
+<p><strong>Step 0 — resolve kickoff blockers:</strong> sign off Phase 1 platform/module boundary, staff login policy, warehouse/rider scope, real catalog and stock import plan, POS authority and NestJS data-access ↔ standalone SQL contract parity. Maintain one product decision register rather than handling important changes only in chat.</p>
+<p><strong>Foundation:</strong> repository contracts, isolated standalone-schema installation, restricted runtime roles, NestJS modular infrastructure, OTP/MFA, public DTO conventions, private files, outbox and instrumentation.</p>
+<ul>
+<li><strong>Core commerce:</strong> customer/location accounts, catalog and controlled P/M/O classification, search, pricing, cart/checkout and durable one-order intent.</li>
+<li><strong>Medical gate:</strong> private document upload, pharmacist P-line review, revised basket acceptance.</li>
+<li><strong>Ops:</strong> site/license/POS stock, reservation, store/warehouse picking and packing, rider tasks.</li>
+<li><strong>Finance:</strong> Cashfree signed reconciliation, COD, invoice/refunds.</li>
+<li><strong>Cross-cutting:</strong> notifications, reporting, audit, security, load, restore and UAT.</li>
+</ul>
+<p>Phase 2/3/4 candidates are tracked separately, not treated as Phase 1 acceptance. Each handoff has module LLD, actual DB table contract, proposed API and test evidence. See Implementation Order and Open Decisions.</p>
+<h2>First-sprint implementation proposal</h2>
+<p><strong>No deadlines, team members or points assigned.</strong> Build only safe, testable foundations until critical business policies are signed.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Suggested owner role</th>
+<th>Activity</th>
+<th>Acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OPS-001</code></td>
+<td>DevOps</td>
+<td>Provision safe isolated PG15/18 DB and migration owner</td>
+<td>Check the checked-in migration file ledger and restore</td>
+</tr>
+<tr>
+<td><code>OPS-002</code></td>
+<td>Database</td>
+<td>Validate ORM/catalog parity on target engine</td>
+<td>0 unexplained catalog/ORM differences</td>
+</tr>
+<tr>
+<td><code>OPS-003</code></td>
+<td>Security</td>
+<td>Threat model and role-matrix signoff</td>
+<td>Cross-scope negative tests accepted</td>
+</tr>
+<tr>
+<td><code>OPS-004</code></td>
+<td>Product</td>
+<td>Approve Phase 1 and warehouse/rider scope</td>
+<td>Signed scope/phase decision</td>
+</tr>
+<tr>
+<td><code>OPS-005</code></td>
+<td>Finance/Pharmacy</td>
+<td>Approve payment, COD and licensed P-review rules</td>
+<td>Approved documented workflows and reasons</td>
+</tr>
+<tr>
+<td><code>OPS-006</code></td>
+<td>QA</td>
+<td>Prepare DB-backed concurrency and provider replay harness</td>
+<td>Reproducible test results</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parallelizable:</strong> platform conventions, API contract mocks, SQL verification, role matrix reviews and QA fixtures.</p>
+<p><strong>Sequential gates:</strong> verified schema → trusted authorization → eligible catalog/lot → checkout/clinical/payments → dispatch/reconciliation.</p>
+<p><strong>Entry criteria</strong></p>
+<h2>Suggested implementation order and parallel work</h2>
+<ol>
+<li><strong>Approval and architecture:</strong> settle D-001/D-002/D-003/D-015, choose rider technology, define interface/permission conventions and review the canonical SQL and catalog evidence.</li>
+<li><strong>Database setup:</strong> install canonical SQL into an isolated empty database; inspect runtime roles and application data-access parity, dry-run recoveries and seed only synthetic approved values.</li>
+<li><strong>Parallel foundations:</strong> identity/OTP, catalog/classification masters, customer/address/patient domain, S3 protected file pipeline, basic provider adapters and shared audit/outbox.</li>
+<li><strong>Order core:</strong> accepted quote/cart/checkouts/orders, one-order idempotency, conditional clinical P-line decisions/revised acceptance, payment state reconciliation and stock holds.</li>
+<li><strong>Operations:</strong> license/lot/POS freshness checks, one-site routing, pick/pack, basic replenishment/fallback warehouse, delivery rider assignment/OTP and COD handover.</li>
+<li><strong>Completion:</strong> invoicing, cancellations/returns/refunds, notification templates, reporting/exports, all negative/security scenarios and real provider sandbox UAT.</li>
+<li><strong>Release readiness:</strong> staging load/restore/HA security, signed professional SOP/policies, finance/operations training and verified approvals.</li>
+</ol>
+<p>No deadlines or person assignments are invented. Maintain stable task IDs in Work Breakdown and feature-level checks in Requirements Coverage.</p>
+<h2>Integration sequencing and contract handoff</h2>
+<p>Contract-first development should publish per-module OpenAPI DTOs, clearly versioned public UUID resources, role/location/patient authorization and error codes before frontend wiring. Mock adapters may support UI progress, but tag them as mocks and never claim live settlement/dispensing in demos.</p>
+<p>First integrate catalog → cart/quote → order creation with safe idempotency, followed by P-only Rx review/revision acceptance, stock reservation and payment. Add store/warehouse pick/pack after license, freshness and line guards are proven with real SQL; then rider/GPS/OTP and COD. Finally attach refunds, notifications, reporting and audit exports.</p>
+<p>Providers require independent adapters, signed webhook validation, reconnect/backfill/reconciliation and company-owned sandbox credentials. Cross-module events carry public references, versions and safe metadata; no raw prescription or bank details. Complete each integration only after timeout, duplicate and out-of-order tests pass.</p>
+<p>Use API contracts, Provider Dependencies and Deployment.</p>
+<h2>Planning dependency graph</h2>
+<pre><code class="language-mermaid">flowchart LR
+ DB[Standalone SQL and role policies] --&gt; AUTH[Identity/auth]
+ DB --&gt; CAT[Catalog / approved classification]
+ AUTH --&gt; CUST[Customer profiles + patient]
+ CAT --&gt; CART[Cart / quote]
+ CUST --&gt; CART
+ CART --&gt; RX[Conditional Rx review]
+ CART --&gt; STOCK[POS / license / inventory hold]
+ RX --&gt; STOCK
+ STOCK --&gt; PAY[Payment and COD truth]
+ PAY --&gt; PICK[Store/warehouse picking]
+ PICK --&gt; RIDER[Rider dispatch + OTP]
+ RIDER --&gt; REC[Reconciliation / audit / reporting]
+</code></pre>
+<p>The graph represents prerequisite domain evidence, not a mandatory serial sprint schedule. Catalog and identity tasks can run in parallel after SQL conventions. Private Rx storage and payment adapter setup can proceed in parallel while business rules are being signed off, but cannot be enabled before the corresponding safety/owner gates are approved.</p>
+<p>Basic warehouse transfers are needed in the current operational flow but Phase 1 vs Phase 2 ownership remains D-002. Hosted PG15, integration credentials and production content are external dependencies and can block release despite completed coding. See Roadmap.</p>
+<h2>Module delivery tasks</h2>
+<p>Existing TASK-001 through TASK-110 IDs are preserved. The <a href="../09-References/Coverage-and-Traceability.html">master register</a> owns requirement descriptions. Each task delivers that feature’s approved command/read model, typed API, scoped database access, visible outcomes and named tests; common D-024 review applies before implementation.</p>
+<p>Tasks are proposed and unassigned. Original generic TEST-&lt;feature&gt;-01/02/03 prompts are superseded by specific LLD/edge cases, not extra execution evidence.</p>
+<h3>Admin CMS</h3>
+<p>Resolve <a href="../03-Modules/Admin_CMS/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-036</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ADM-01</code></a></td>
+<td><code>TC-ADM-01-OK</code> and <code>TC-ADM-01-DENY</code> in <a href="../03-Modules/Admin_CMS/LLD.html">LLD</a> and <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-037</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ADM-02</code></a></td>
+<td><code>TC-ADM-02-OK</code> and <code>TC-ADM-02-DENY</code> in <a href="../03-Modules/Admin_CMS/LLD.html">LLD</a> and <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-038</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ADM-03</code></a></td>
+<td><code>TC-ADM-03-OK</code> and <code>TC-ADM-03-DENY</code> in <a href="../03-Modules/Admin_CMS/LLD.html">LLD</a> and <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-039</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ADM-04</code></a></td>
+<td><code>TC-ADM-04-OK</code> and <code>TC-ADM-04-DENY</code> in <a href="../03-Modules/Admin_CMS/LLD.html">LLD</a> and <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-040</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ADM-05</code></a></td>
+<td><code>TC-ADM-05-OK</code> and <code>TC-ADM-05-DENY</code> in <a href="../03-Modules/Admin_CMS/LLD.html">LLD</a> and <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-041</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ADM-06</code></a></td>
+<td><code>TC-ADM-06-OK</code> and <code>TC-ADM-06-DENY</code> in <a href="../03-Modules/Admin_CMS/LLD.html">LLD</a> and <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-042</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ADM-07</code></a></td>
+<td><code>TC-ADM-07-OK</code> and <code>TC-ADM-07-DENY</code> in <a href="../03-Modules/Admin_CMS/LLD.html">LLD</a> and <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-043</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ADM-08</code></a></td>
+<td><code>TC-ADM-08-OK</code> and <code>TC-ADM-08-DENY</code> in <a href="../03-Modules/Admin_CMS/LLD.html">LLD</a> and <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-044</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ADM-09</code></a></td>
+<td><code>TC-ADM-09-OK</code> and <code>TC-ADM-09-DENY</code> in <a href="../03-Modules/Admin_CMS/LLD.html">LLD</a> and <a href="../03-Modules/Admin_CMS/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Audit</h3>
+<p>Resolve <a href="../03-Modules/Audit/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-100</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>AUD-01</code></a></td>
+<td><code>TC-AUD-01-OK</code> and <code>TC-AUD-01-DENY</code> in <a href="../03-Modules/Audit/LLD.html">LLD</a> and <a href="../03-Modules/Audit/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-101</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>AUD-02</code></a></td>
+<td><code>TC-AUD-02-OK</code> and <code>TC-AUD-02-DENY</code> in <a href="../03-Modules/Audit/LLD.html">LLD</a> and <a href="../03-Modules/Audit/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication Access</h3>
+<p>Resolve <a href="../03-Modules/Authentication_Access/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-102</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>AUTH-01</code></a></td>
+<td><code>TC-AUTH-01-OK</code> and <code>TC-AUTH-01-DENY</code> in <a href="../03-Modules/Authentication_Access/LLD.html">LLD</a> and <a href="../03-Modules/Authentication_Access/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-103</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>AUTH-02</code></a></td>
+<td><code>TC-AUTH-02-OK</code> and <code>TC-AUTH-02-DENY</code> in <a href="../03-Modules/Authentication_Access/LLD.html">LLD</a> and <a href="../03-Modules/Authentication_Access/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-104</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>AUTH-03</code></a></td>
+<td><code>TC-AUTH-03-OK</code> and <code>TC-AUTH-03-DENY</code> in <a href="../03-Modules/Authentication_Access/LLD.html">LLD</a> and <a href="../03-Modules/Authentication_Access/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-105</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>AUTH-04</code></a></td>
+<td><code>TC-AUTH-04-OK</code> and <code>TC-AUTH-04-DENY</code> in <a href="../03-Modules/Authentication_Access/LLD.html">LLD</a> and <a href="../03-Modules/Authentication_Access/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Cart Checkout</h3>
+<p>Resolve <a href="../03-Modules/Cart_Checkout/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-014</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CHK-01</code></a></td>
+<td><code>TC-CHK-01-OK</code> and <code>TC-CHK-01-DENY</code> in <a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a> and <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-015</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CHK-02</code></a></td>
+<td><code>TC-CHK-02-OK</code> and <code>TC-CHK-02-DENY</code> in <a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a> and <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-016</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CHK-03</code></a></td>
+<td><code>TC-CHK-03-OK</code> and <code>TC-CHK-03-DENY</code> in <a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a> and <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-017</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CHK-04</code></a></td>
+<td><code>TC-CHK-04-OK</code> and <code>TC-CHK-04-DENY</code> in <a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a> and <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-018</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CHK-05</code></a></td>
+<td><code>TC-CHK-05-OK</code> and <code>TC-CHK-05-DENY</code> in <a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a> and <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-019</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CHK-06</code></a></td>
+<td><code>TC-CHK-06-OK</code> and <code>TC-CHK-06-DENY</code> in <a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a> and <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-020</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CHK-07</code></a></td>
+<td><code>TC-CHK-07-OK</code> and <code>TC-CHK-07-DENY</code> in <a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a> and <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-021</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CHK-08</code></a></td>
+<td><code>TC-CHK-08-OK</code> and <code>TC-CHK-08-DENY</code> in <a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a> and <a href="../03-Modules/Cart_Checkout/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Customer Accounts</h3>
+<p>Resolve <a href="../03-Modules/Customer_Accounts/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-001</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ACC-01</code></a></td>
+<td>existing numbered cases in <a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-002</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ACC-02</code></a></td>
+<td>existing numbered cases in <a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-003</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ACC-03</code></a></td>
+<td><code>TC-ACC-03-OK</code> and <code>TC-ACC-03-DENY</code> in <a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-004</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ACC-04</code></a></td>
+<td><code>TC-ACC-04-OK</code> and <code>TC-ACC-04-DENY</code> in <a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-005</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ACC-05</code></a></td>
+<td><code>TC-ACC-05-OK</code> and <code>TC-ACC-05-DENY</code> in <a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-006</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ACC-06</code></a></td>
+<td><code>TC-ACC-06-OK</code> and <code>TC-ACC-06-DENY</code> in <a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-007</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ACC-07</code></a></td>
+<td><code>TC-ACC-07-OK</code> and <code>TC-ACC-07-DENY</code> in <a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Accounts/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Customer Orders</h3>
+<p>Resolve <a href="../03-Modules/Customer_Orders/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-027</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ORD-01</code></a></td>
+<td><code>TC-ORD-01-OK</code> and <code>TC-ORD-01-DENY</code> in <a href="../03-Modules/Customer_Orders/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-028</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ORD-02</code></a></td>
+<td><code>TC-ORD-02-OK</code> and <code>TC-ORD-02-DENY</code> in <a href="../03-Modules/Customer_Orders/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-029</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ORD-03</code></a></td>
+<td><code>TC-ORD-03-OK</code> and <code>TC-ORD-03-DENY</code> in <a href="../03-Modules/Customer_Orders/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-030</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ORD-04</code></a></td>
+<td><code>TC-ORD-04-OK</code> and <code>TC-ORD-04-DENY</code> in <a href="../03-Modules/Customer_Orders/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-031</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ORD-05</code></a></td>
+<td><code>TC-ORD-05-OK</code> and <code>TC-ORD-05-DENY</code> in <a href="../03-Modules/Customer_Orders/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-032</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ORD-06</code></a></td>
+<td><code>TC-ORD-06-OK</code> and <code>TC-ORD-06-DENY</code> in <a href="../03-Modules/Customer_Orders/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-033</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ORD-07</code></a></td>
+<td><code>TC-ORD-07-OK</code> and <code>TC-ORD-07-DENY</code> in <a href="../03-Modules/Customer_Orders/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-034</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ORD-08</code></a></td>
+<td><code>TC-ORD-08-OK</code> and <code>TC-ORD-08-DENY</code> in <a href="../03-Modules/Customer_Orders/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-035</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>ORD-09</code></a></td>
+<td><code>TC-ORD-09-OK</code> and <code>TC-ORD-09-DENY</code> in <a href="../03-Modules/Customer_Orders/LLD.html">LLD</a> and <a href="../03-Modules/Customer_Orders/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Delivery Operations</h3>
+<p>Resolve <a href="../03-Modules/Delivery_Operations/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-074</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>DLV-01</code></a></td>
+<td><code>TC-DLV-01-OK</code> and <code>TC-DLV-01-DENY</code> in <a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-075</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>DLV-02</code></a></td>
+<td><code>TC-DLV-02-OK</code> and <code>TC-DLV-02-DENY</code> in <a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-076</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>DLV-03</code></a></td>
+<td><code>TC-DLV-03-OK</code> and <code>TC-DLV-03-DENY</code> in <a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-077</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>DLV-04</code></a></td>
+<td><code>TC-DLV-04-OK</code> and <code>TC-DLV-04-DENY</code> in <a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-078</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>DLV-05</code></a></td>
+<td><code>TC-DLV-05-OK</code> and <code>TC-DLV-05-DENY</code> in <a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Delivery_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Finance Payments</h3>
+<p>Resolve <a href="../03-Modules/Finance_Payments/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-086</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>FIN-01</code></a></td>
+<td><code>TC-FIN-01-OK</code> and <code>TC-FIN-01-DENY</code> in <a href="../03-Modules/Finance_Payments/LLD.html">LLD</a> and <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-087</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>FIN-02</code></a></td>
+<td><code>TC-FIN-02-OK</code> and <code>TC-FIN-02-DENY</code> in <a href="../03-Modules/Finance_Payments/LLD.html">LLD</a> and <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-088</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>FIN-03</code></a></td>
+<td><code>TC-FIN-03-OK</code> and <code>TC-FIN-03-DENY</code> in <a href="../03-Modules/Finance_Payments/LLD.html">LLD</a> and <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-089</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>FIN-04</code></a></td>
+<td><code>TC-FIN-04-OK</code> and <code>TC-FIN-04-DENY</code> in <a href="../03-Modules/Finance_Payments/LLD.html">LLD</a> and <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-090</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>FIN-05</code></a></td>
+<td><code>TC-FIN-05-OK</code> and <code>TC-FIN-05-DENY</code> in <a href="../03-Modules/Finance_Payments/LLD.html">LLD</a> and <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-091</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>FIN-06</code></a></td>
+<td><code>TC-FIN-06-OK</code> and <code>TC-FIN-06-DENY</code> in <a href="../03-Modules/Finance_Payments/LLD.html">LLD</a> and <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-092</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>FIN-07</code></a></td>
+<td><code>TC-FIN-07-OK</code> and <code>TC-FIN-07-DENY</code> in <a href="../03-Modules/Finance_Payments/LLD.html">LLD</a> and <a href="../03-Modules/Finance_Payments/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Inventory</h3>
+<p>Resolve <a href="../03-Modules/Inventory/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-057</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>INV-01</code></a></td>
+<td><code>TC-INV-01-OK</code> and <code>TC-INV-01-DENY</code> in <a href="../03-Modules/Inventory/LLD.html">LLD</a> and <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-058</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>INV-02</code></a></td>
+<td><code>TC-INV-02-OK</code> and <code>TC-INV-02-DENY</code> in <a href="../03-Modules/Inventory/LLD.html">LLD</a> and <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-059</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>INV-03</code></a></td>
+<td><code>TC-INV-03-OK</code> and <code>TC-INV-03-DENY</code> in <a href="../03-Modules/Inventory/LLD.html">LLD</a> and <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-060</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>INV-04</code></a></td>
+<td><code>TC-INV-04-OK</code> and <code>TC-INV-04-DENY</code> in <a href="../03-Modules/Inventory/LLD.html">LLD</a> and <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-061</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>INV-05</code></a></td>
+<td><code>TC-INV-05-OK</code> and <code>TC-INV-05-DENY</code> in <a href="../03-Modules/Inventory/LLD.html">LLD</a> and <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-062</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>INV-06</code></a></td>
+<td><code>TC-INV-06-OK</code> and <code>TC-INV-06-DENY</code> in <a href="../03-Modules/Inventory/LLD.html">LLD</a> and <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-063</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>INV-07</code></a></td>
+<td><code>TC-INV-07-OK</code> and <code>TC-INV-07-DENY</code> in <a href="../03-Modules/Inventory/LLD.html">LLD</a> and <a href="../03-Modules/Inventory/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Notifications</h3>
+<p>Resolve <a href="../03-Modules/Notifications/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-106</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>NOT-01</code></a></td>
+<td><code>TC-NOT-01-OK</code> and <code>TC-NOT-01-DENY</code> in <a href="../03-Modules/Notifications/LLD.html">LLD</a> and <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-107</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>NOT-02</code></a></td>
+<td><code>TC-NOT-02-OK</code> and <code>TC-NOT-02-DENY</code> in <a href="../03-Modules/Notifications/LLD.html">LLD</a> and <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-108</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>NOT-03</code></a></td>
+<td><code>TC-NOT-03-OK</code> and <code>TC-NOT-03-DENY</code> in <a href="../03-Modules/Notifications/LLD.html">LLD</a> and <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-109</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>NOT-04</code></a></td>
+<td><code>TC-NOT-04-OK</code> and <code>TC-NOT-04-DENY</code> in <a href="../03-Modules/Notifications/LLD.html">LLD</a> and <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-110</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>NOT-05</code></a></td>
+<td><code>TC-NOT-05-OK</code> and <code>TC-NOT-05-DENY</code> in <a href="../03-Modules/Notifications/LLD.html">LLD</a> and <a href="../03-Modules/Notifications/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Order Operations</h3>
+<p>Resolve <a href="../03-Modules/Order_Operations/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-045</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>OMS-01</code></a></td>
+<td><code>TC-OMS-01-OK</code> and <code>TC-OMS-01-DENY</code> in <a href="../03-Modules/Order_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-046</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>OMS-02</code></a></td>
+<td><code>TC-OMS-02-OK</code> and <code>TC-OMS-02-DENY</code> in <a href="../03-Modules/Order_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-047</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>OMS-03</code></a></td>
+<td><code>TC-OMS-03-OK</code> and <code>TC-OMS-03-DENY</code> in <a href="../03-Modules/Order_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-048</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>OMS-04</code></a></td>
+<td><code>TC-OMS-04-OK</code> and <code>TC-OMS-04-DENY</code> in <a href="../03-Modules/Order_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-049</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>OMS-05</code></a></td>
+<td><code>TC-OMS-05-OK</code> and <code>TC-OMS-05-DENY</code> in <a href="../03-Modules/Order_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-050</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>OMS-06</code></a></td>
+<td><code>TC-OMS-06-OK</code> and <code>TC-OMS-06-DENY</code> in <a href="../03-Modules/Order_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-051</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>OMS-07</code></a></td>
+<td><code>TC-OMS-07-OK</code> and <code>TC-OMS-07-DENY</code> in <a href="../03-Modules/Order_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Order_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Pharmacist Review</h3>
+<p>Resolve <a href="../03-Modules/Pharmacist_Review/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-069</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>PHM-01</code></a></td>
+<td><code>TC-PHM-01-OK</code> and <code>TC-PHM-01-DENY</code> in <a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a> and <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-070</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>PHM-02</code></a></td>
+<td><code>TC-PHM-02-OK</code> and <code>TC-PHM-02-DENY</code> in <a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a> and <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-071</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>PHM-03</code></a></td>
+<td><code>TC-PHM-03-OK</code> and <code>TC-PHM-03-DENY</code> in <a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a> and <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-072</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>PHM-04</code></a></td>
+<td><code>TC-PHM-04-OK</code> and <code>TC-PHM-04-DENY</code> in <a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a> and <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-073</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>PHM-05</code></a></td>
+<td><code>TC-PHM-05-OK</code> and <code>TC-PHM-05-DENY</code> in <a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a> and <a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Prescription Upload</h3>
+<p>Resolve <a href="../03-Modules/Prescription_Upload/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-022</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RX-01</code></a></td>
+<td><code>TC-RX-01-OK</code> and <code>TC-RX-01-DENY</code> in <a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a> and <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-023</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RX-02</code></a></td>
+<td><code>TC-RX-02-OK</code> and <code>TC-RX-02-DENY</code> in <a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a> and <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-024</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RX-03</code></a></td>
+<td><code>TC-RX-03-OK</code> and <code>TC-RX-03-DENY</code> in <a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a> and <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-025</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RX-04</code></a></td>
+<td><code>TC-RX-04-OK</code> and <code>TC-RX-04-DENY</code> in <a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a> and <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-026</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RX-05</code></a></td>
+<td><code>TC-RX-05-OK</code> and <code>TC-RX-05-DENY</code> in <a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a> and <a href="../03-Modules/Prescription_Upload/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Product Catalog</h3>
+<p>Resolve <a href="../03-Modules/Product_Catalog/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-008</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CAT-01</code></a></td>
+<td><code>TC-CAT-01-OK</code> and <code>TC-CAT-01-DENY</code> in <a href="../03-Modules/Product_Catalog/LLD.html">LLD</a> and <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-009</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CAT-02</code></a></td>
+<td><code>TC-CAT-02-OK</code> and <code>TC-CAT-02-DENY</code> in <a href="../03-Modules/Product_Catalog/LLD.html">LLD</a> and <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-010</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CAT-03</code></a></td>
+<td><code>TC-CAT-03-OK</code> and <code>TC-CAT-03-DENY</code> in <a href="../03-Modules/Product_Catalog/LLD.html">LLD</a> and <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-011</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CAT-04</code></a></td>
+<td><code>TC-CAT-04-OK</code> and <code>TC-CAT-04-DENY</code> in <a href="../03-Modules/Product_Catalog/LLD.html">LLD</a> and <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-012</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CAT-05</code></a></td>
+<td><code>TC-CAT-05-OK</code> and <code>TC-CAT-05-DENY</code> in <a href="../03-Modules/Product_Catalog/LLD.html">LLD</a> and <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-013</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>CAT-06</code></a></td>
+<td><code>TC-CAT-06-OK</code> and <code>TC-CAT-06-DENY</code> in <a href="../03-Modules/Product_Catalog/LLD.html">LLD</a> and <a href="../03-Modules/Product_Catalog/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Reporting</h3>
+<p>Resolve <a href="../03-Modules/Reporting/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-093</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>REP-01</code></a></td>
+<td><code>TC-REP-01-OK</code> and <code>TC-REP-01-DENY</code> in <a href="../03-Modules/Reporting/LLD.html">LLD</a> and <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-094</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>REP-02</code></a></td>
+<td><code>TC-REP-02-OK</code> and <code>TC-REP-02-DENY</code> in <a href="../03-Modules/Reporting/LLD.html">LLD</a> and <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-095</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>REP-03</code></a></td>
+<td><code>TC-REP-03-OK</code> and <code>TC-REP-03-DENY</code> in <a href="../03-Modules/Reporting/LLD.html">LLD</a> and <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-096</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>REP-04</code></a></td>
+<td><code>TC-REP-04-OK</code> and <code>TC-REP-04-DENY</code> in <a href="../03-Modules/Reporting/LLD.html">LLD</a> and <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-097</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>REP-05</code></a></td>
+<td><code>TC-REP-05-OK</code> and <code>TC-REP-05-DENY</code> in <a href="../03-Modules/Reporting/LLD.html">LLD</a> and <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-098</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>REP-06</code></a></td>
+<td><code>TC-REP-06-OK</code> and <code>TC-REP-06-DENY</code> in <a href="../03-Modules/Reporting/LLD.html">LLD</a> and <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-099</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>REP-07</code></a></td>
+<td><code>TC-REP-07-OK</code> and <code>TC-REP-07-DENY</code> in <a href="../03-Modules/Reporting/LLD.html">LLD</a> and <a href="../03-Modules/Reporting/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Rider App</h3>
+<p>Resolve <a href="../03-Modules/Rider_App/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-079</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RID-01</code></a></td>
+<td><code>TC-RID-01-OK</code> and <code>TC-RID-01-DENY</code> in <a href="../03-Modules/Rider_App/LLD.html">LLD</a> and <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-080</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RID-02</code></a></td>
+<td><code>TC-RID-02-OK</code> and <code>TC-RID-02-DENY</code> in <a href="../03-Modules/Rider_App/LLD.html">LLD</a> and <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-081</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RID-03</code></a></td>
+<td><code>TC-RID-03-OK</code> and <code>TC-RID-03-DENY</code> in <a href="../03-Modules/Rider_App/LLD.html">LLD</a> and <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-082</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RID-04</code></a></td>
+<td><code>TC-RID-04-OK</code> and <code>TC-RID-04-DENY</code> in <a href="../03-Modules/Rider_App/LLD.html">LLD</a> and <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-083</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RID-05</code></a></td>
+<td><code>TC-RID-05-OK</code> and <code>TC-RID-05-DENY</code> in <a href="../03-Modules/Rider_App/LLD.html">LLD</a> and <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-084</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RID-06</code></a></td>
+<td><code>TC-RID-06-OK</code> and <code>TC-RID-06-DENY</code> in <a href="../03-Modules/Rider_App/LLD.html">LLD</a> and <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-085</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>RID-07</code></a></td>
+<td><code>TC-RID-07-OK</code> and <code>TC-RID-07-DENY</code> in <a href="../03-Modules/Rider_App/LLD.html">LLD</a> and <a href="../03-Modules/Rider_App/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Store Operations</h3>
+<p>Resolve <a href="../03-Modules/Store_Operations/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-052</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>STO-01</code></a></td>
+<td><code>TC-STO-01-OK</code> and <code>TC-STO-01-DENY</code> in <a href="../03-Modules/Store_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-053</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>STO-02</code></a></td>
+<td><code>TC-STO-02-OK</code> and <code>TC-STO-02-DENY</code> in <a href="../03-Modules/Store_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-054</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>STO-03</code></a></td>
+<td><code>TC-STO-03-OK</code> and <code>TC-STO-03-DENY</code> in <a href="../03-Modules/Store_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-055</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>STO-04</code></a></td>
+<td><code>TC-STO-04-OK</code> and <code>TC-STO-04-DENY</code> in <a href="../03-Modules/Store_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-056</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>STO-05</code></a></td>
+<td><code>TC-STO-05-OK</code> and <code>TC-STO-05-DENY</code> in <a href="../03-Modules/Store_Operations/LLD.html">LLD</a> and <a href="../03-Modules/Store_Operations/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h3>Warehouse</h3>
+<p>Resolve <a href="../03-Modules/Warehouse/APIs.html">module API readiness</a>, <a href="../07-Engineering/State-and-Recovery-Contracts.html">write ownership</a> and applicable <a href="../09-References/Sources-and-Decisions.html">business approvals</a>. Review the exact persistence, transaction and recovery contract; attach actual results for these task gates.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Feature source</th>
+<th>Verification gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TASK-064</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>WH-01</code></a></td>
+<td><code>TC-WH-01-OK</code> and <code>TC-WH-01-DENY</code> in <a href="../03-Modules/Warehouse/LLD.html">LLD</a> and <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-065</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>WH-02</code></a></td>
+<td><code>TC-WH-02-OK</code> and <code>TC-WH-02-DENY</code> in <a href="../03-Modules/Warehouse/LLD.html">LLD</a> and <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-066</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>WH-03</code></a></td>
+<td><code>TC-WH-03-OK</code> and <code>TC-WH-03-DENY</code> in <a href="../03-Modules/Warehouse/LLD.html">LLD</a> and <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-067</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>WH-04</code></a></td>
+<td><code>TC-WH-04-OK</code> and <code>TC-WH-04-DENY</code> in <a href="../03-Modules/Warehouse/LLD.html">LLD</a> and <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+<tr>
+<td><code>TASK-068</code></td>
+<td><a href="../09-References/Coverage-and-Traceability.html"><code>WH-05</code></a></td>
+<td><code>TC-WH-05-OK</code> and <code>TC-WH-05-DENY</code> in <a href="../03-Modules/Warehouse/LLD.html">LLD</a> and <a href="../03-Modules/Warehouse/Edge-Cases.html">edge cases</a>, reviewed and executed against approved fixtures</td>
+</tr>
+</tbody>
+</table>
+<h2>Unified identity delivery slice — Proposed, not started</h2>
+<p>Under existing TASK-102–TASK-105 / AUTH-01–04, sequence: approve D-028 schema/context design and D-003 policy → implement shared challenge/proof/session/refresh commands → preserve legacy adapters → add current identity/workspaces/context/step-up → enrollment/password/recovery gates → live authorization integration for every protected module. ADM-03 assignment/permission administration delegates Identity commands, with no client-selected authority. Customer ACC-01 onboarding and Rider RID-01 OTP remain their existing business journeys.</p>
+<p>Acceptance evidence must include the designed cases in <a href="../03-Modules/Authentication_Access/APIs.html">Authentication contracts</a> and <a href="../03-Modules/Admin_CMS/APIs.html">Admin contracts</a>, plus primary-database revocation races, cross-scope failures and wireframe preservation. SQL rehearsal validates structure only; application/security/provider tests remain unexecuted. D-023 contact replacement and D-003 assisted authenticator-loss procedure remain release gates for those flows.</p>
+</main></body></html>

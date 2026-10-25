@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Order Management business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Order operations. Order aggregate, revisions and orchestration; consumers request commands rather than directly mutating order state.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Accept the current checkout intent and revision; preserve one order intent and distinct clinical, stock and payment facts.</li>
+<li>Select one eligible licensed fulfillment site using current safe stock evidence; do not split a launch order across sites.</li>
+<li>Orchestrate store preparation only when clinical, stock and payment/COD gates are satisfied.</li>
+<li>Handle rejection, correction, cancellation, return and refund through the responsible owners; revised baskets require explicit acceptance.</li>
+<li>Compose the customer-visible timeline from committed facts and publish durable events after commit.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OMS-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-OMS-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>OMS-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-OMS-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>OMS-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-OMS-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>OMS-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-OMS-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>OMS-05</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-OMS-05-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>OMS-06</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-OMS-06-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>OMS-07</code></td>
+<td>Could (draft)</td>
+<td><a href="LLD.html">TC-OMS-07-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../../06-Workflows/WF-007-Picking-Packing-and-Handoff.html">WF-007</a>, <a href="../../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Orders-and-Fulfillment.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-002; D-004; D-006; D-024.</p>
+</main></body></html>

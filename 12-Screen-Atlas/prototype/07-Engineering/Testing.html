@@ -1,0 +1,175 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Testing · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Testing strategy</h1>
+<h2>Recorded DB validation versus unexecuted application tests</h2>
+<p><strong>Recorded database evidence:</strong> isolated PostgreSQL server <code>180001</code>, {'tests': 108, 'failures': 0, 'errors': 0, 'skipped': 0} pytest summary (see source final acceptance report), 10-concurrent-checkout last-unit test, restore and schema parity checks. These historical reports are evidence supplied by the user, not a fresh execution of those tests.</p>
+<p><strong>Not executed here:</strong> Next.js/NestJS tests, real provider callbacks, hardware rider proof, production restore, hosted CI, PG15 matrix, penetration testing, signed UAT. The database repository does not contain an HTTP application.</p>
+<p><strong>Planned coverage:</strong> all 110 draft features have specific normal/adverse assertions in module LLD and Edge-Cases pages. Existing detailed ACC-01/ACC-02 test IDs remain authoritative. These are designed tests, not application execution evidence; mark every case NOT RUN until a harness, fixture/policy version and result are attached.</p>
+<p>Module test cases · DB schema/release policy</p>
+<h2>Migration and SQL validation plan</h2>
+<p>Use <code>npm run validate:database</code> and <code>python3 scripts/validate-database.py --fresh</code> against newly initialized private PostgreSQL 18.6 only. Verify full catalog parity, all 268 empty tables, constraints, crosswalks, capability roles, grants and RLS. Legacy ORM/runner tests are archived historical evidence. A future populated-database upgrade and earlier-engine compatibility need a separate approved test design.</p>
+<p>Exercise all existing PK/FK/UNIQUE/CHECK/index/trigger/RLS semantics through their canonical service operations.</p>
+<p>Priority races: ten parallel last-unit checkouts yield one allocation; concurrent revised consent vs pharmacist approval; conflicting inventory site holds; simultaneous refunds and webhook replay; stale staff pack commands after license expiry. For each, check exact state and immutable money/clinical/audit effects, not just HTTP status.</p>
+<p>The supplied report records local 108/108 tests pass and a catalog diff count of zero on PostgreSQL <code>180001</code>, but no new DB container is run in this documentation build. Verify hosted CI, real production-like restore and measured latency separately before release. See Source Acceptance.</p>
+<h2>End-to-end customer, staff and rider scenarios</h2>
+<p>Execute customer browse → cart → address/patient → Rx conditional branch → accepted quote → signed payment or eligible COD → single-site stock reservation → pick/pack → rider assignment → OTP proof → invoice/status. For P+M+O, reject one P line, confirm unchanged M/O remain, require explicit customer consent to new total before charge, then verify only approved P items can enter package.</p>
+<p>Also cover guest vs authenticated customer, expired OTP/session mid-checkout, refresh after order submit, store closed/no safe lot, no provider response, last-unit collision, manual reassignment, delivery refusal/reattempt, uncollected vs deposited COD, return/refund and customer support escalation. Test error copy and keyboard/mobile forms as well as side effects.</p>
+<p>Do not assume UI screenshot screens demonstrate backend readiness. Require traced API request IDs, database revisions and actor-scoped audit records for each successful/failed route. Rider Android build/distribution decision remains open; test plan should be upgraded after tech selection.</p>
+<h2>API and provider integration verification</h2>
+<p>Boot the proposed NestJS API against a disposable database installed from the canonical standalone SQL, with independently reviewed synthetic fixtures. Validate exact DTOs, object authorization, transactions, provider signatures, late/duplicate callbacks, outbox/inbox ordering and application-to-SQL contract parity. Public UUIDs remain separate from BIGINT crosswalk keys. These application/provider tests are designed, not executed by this rework.</p>
+<p>Cashfree sandbox tests must cover pending/failed/success, signature and raw-body validation, replay and reconciliation. Techsmith must demonstrate authoritative location-lot observation and loss/reconnect handling; simulate stale stock before allowing reservations.</p>
+<p>MSG91/SES should receive only approved redacted notification templates; Rx file adapter should scan, store privately and reauthorize access. Rider/GPS app must handle offline and duplicate OTP evidence.</p>
+<p>A sandbox success does not guarantee a production provider account or pharmacy policy; approvals and real operating SOP remain separate gates. See Provider Dependencies.</p>
+<h2>Performance and concurrency benchmarks</h2>
+<p>Measure representative catalogue/search reads, customer order list p95, prescription queue age, stock hold/update contention, settlement/webhook backlog, rider position ingest load, mass exports and API response under realistic input sizes. Measure PostgreSQL query plans, lock wait, deadlocks, buffer hits, worker lag and real user experience separately.</p>
+<p>The supplied database performance appendix records synthetic tests on 19 query shapes and a 50,000-row BIGINT/UUID comparison. It is useful engineering evidence, not a production demand forecast or proof of 99.9% service availability. Sizing and response targets in the checklists/HLD require owner review and independent staging load validation.</p>
+<p>Target failure tests include Cashfree slow status callback, Techsmith feed gap, Redis job backlog, Rx scan outage and last-unit checkout storm. Correctness must be preserved even when latency increases. No test should infer successful charge/delivery from a timeout or stale cache. See Scalability.</p>
+<h2>Proposed QA and test case register</h2>
+<p><strong>110 feature specifications</strong> across 18 modules plus 14 cross-module workflow plans. Generic TEST-&lt;feature&gt;-01/-02/-03 prompts are superseded by the corresponding TC-&lt;feature&gt;-OK/-DENY cases and the detailed numbered ACC-01/ACC-02 cases; they are not an additional executed suite.</p>
+<p>No application tests were run. The supplied DB repo separately records 108/108 PG18 database tests.</p>
+<ul>
+<li>Customer_Accounts</li>
+<li>Product_Catalog</li>
+<li>Cart_Checkout</li>
+<li>Prescription_Upload</li>
+<li>Customer_Orders</li>
+<li>Admin_CMS</li>
+<li>Order_Operations</li>
+<li>Store_Operations</li>
+<li>Inventory</li>
+<li>Warehouse</li>
+<li>Pharmacist_Review</li>
+<li>Delivery_Operations</li>
+<li>Rider_App</li>
+<li>Finance_Payments</li>
+<li>Reporting</li>
+<li>Audit</li>
+<li>Authentication_Access</li>
+<li>Notifications</li>
+</ul>
+<p>Evidence boundary</p>
+<h2>Security test approach</h2>
+<p>Run authenticated IDOR probes across customer/patient/order/Rx, unauthorized pharmacy decisions, staff cross-store operations, rider task/GPS snooping, refund threshold bypass and report/export leaks. Confirm sensitive file access requires download-time reauthorization and cannot be guessed from public UUID or long-lived object URL.</p>
+<p>Verify OTP session replay/lockout, privileged TOTP/rotation, logout invalidation, provider webhook spoof and duplicate event, API rate limiting, injection/HTML sanitization in CMS/search, SSRF/file upload type/malware checks and secret redaction. Exercise restricted DB capability roles and default denied SQL, not a migration-owner runtime connection.</p>
+<p>A passed local DB RLS suite supports defense-in-depth but does not prove the client/API/cloud are secure. Threat-model signoff, penetration testing in staging and legal privacy approval are production gates. See Threat Model.</p>
+<h2>Quality strategy and evidence levels</h2>
+<p>A database-only test is not a delivered customer journey. Test the stack in layers: domain/DTO unit tests, PostgreSQL schema and concurrency tests, API and provider sandbox integration tests, browser/rider end-to-end journeys, privacy/security tests, representative performance tests, owner UAT and operational recovery drills.</p>
+<p>The database acceptance report records 108 independently run PostgreSQL 18 local tests passed and zero SQL↔model parity differences, but no implemented NestJS endpoints, Cashfree adapter, production POS sync, rider app or deployed file-signing service. Therefore <strong>application test completion is zero proven by these files</strong>, not 108. Never inherit DB PASS as full-product readiness.</p>
+<p>Prioritize all seven nonempty P/M/O basket combinations; wrong-patient/version approval; mixed rejected P with customer consent; last unit contention; stale inventory; paid-but-out-of-stock recovery; duplicate payment/refund/COD callback; license expiration; unauthorized customer/staff/rider access; evidence-based delivery and private export download.</p>
+<p>Assign stable <code>TC-{feature ID}-OK/DENY</code> cases from LLD and attach actual run reports before calling a feature complete. See Acceptance Criteria, Coverage.</p>
+<h2>User acceptance testing (UAT)</h2>
+<p>Business owners should witness, not merely read about: all seven P/M/O basket types; exact pharmacist outcomes on multiple P lines; changed basket requiring consent; single-site stock and last-pack conflict; Cashfree pending and COD acceptance; manual store queue; warehouse transfer/fallback; rider GPS/OTP and failed delivery; refund and daily COD reconciliation; private file/export permission denial.</p>
+<p>Use the journey v3 source's 34 stages and documented exception cases as walkthroughs. The source LLD describes 31 acceptance tests, but their results are not present in this documentation bundle; don't count them as passed. Attach Jira ticket, test evidence, actor/location, order revision, provider event ID redacted, expected/actual result and named owner signoff.</p>
+<p>No go-live without approved clinical SOP and pharmacist/legal evidence, warehouse opening stock data, POS authority, tax/return policies, configured templates and production account ownership. See Acceptance Gates and Decisions.</p>
+<h2>Unit tests per domain</h2>
+<p>Use isolated unit tests for P/M/O classification selection, quote/version confirmation, checkout state guards, single-site routing policy, VAT/GST input validation (not legal correctness), lot expiry conditions, session policy, permission predicates, OTP retry windows, refund idempotency keys, event deduplication and customer-safe state projection.</p>
+<p>Mock I/O at service boundaries, not database behavior you should trust to PostgreSQL. A unit test for stock eligibility should cover unknown/expired observation and mixed P approval, but must be paired with a real database lock and foreign-key test. Finance unit tests need duplicate and out-of-order event cases; never make a fake provider result look like verified bank settlement.</p>
+<p>Module sections enumerate three scenario prompts per draft feature ID and cross-module negative controls. Concrete fixtures, actions and assertions remain D-024 work. Use fixture-only synthetic customers/prescriptions; don't import sensitive legal identity documents or production data.</p>
+<h2>Feature test navigation</h2>
+<p>The <a href="../09-References/Coverage-and-Traceability.html">master register</a> owns feature-to-document navigation. Normal assertions live in each LLD; adverse triggers, record effects and recovery owners live in its Edge-Cases page. Avoid copying those assertions into this shared strategy.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Normal/implementation tests</th>
+<th>Adverse cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Admin CMS (<code>ADM-01</code>, <code>ADM-02</code>, <code>ADM-03</code>, <code>ADM-04</code>, <code>ADM-05</code>, <code>ADM-06</code>, <code>ADM-07</code>, <code>ADM-08</code>, <code>ADM-09</code>)</td>
+<td><a href="../03-Modules/Admin_CMS/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Admin_CMS/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Audit (<code>AUD-01</code>, <code>AUD-02</code>)</td>
+<td><a href="../03-Modules/Audit/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Audit/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Authentication Access (<code>AUTH-01</code>, <code>AUTH-02</code>, <code>AUTH-03</code>, <code>AUTH-04</code>)</td>
+<td><a href="../03-Modules/Authentication_Access/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Authentication_Access/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Cart Checkout (<code>CHK-01</code>, <code>CHK-02</code>, <code>CHK-03</code>, <code>CHK-04</code>, <code>CHK-05</code>, <code>CHK-06</code>, <code>CHK-07</code>, <code>CHK-08</code>)</td>
+<td><a href="../03-Modules/Cart_Checkout/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Cart_Checkout/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Customer Accounts (<code>ACC-01</code>, <code>ACC-02</code>, <code>ACC-03</code>, <code>ACC-04</code>, <code>ACC-05</code>, <code>ACC-06</code>, <code>ACC-07</code>)</td>
+<td><a href="../03-Modules/Customer_Accounts/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Accounts/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Customer Orders (<code>ORD-01</code>, <code>ORD-02</code>, <code>ORD-03</code>, <code>ORD-04</code>, <code>ORD-05</code>, <code>ORD-06</code>, <code>ORD-07</code>, <code>ORD-08</code>, <code>ORD-09</code>)</td>
+<td><a href="../03-Modules/Customer_Orders/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Customer_Orders/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Delivery Operations (<code>DLV-01</code>, <code>DLV-02</code>, <code>DLV-03</code>, <code>DLV-04</code>, <code>DLV-05</code>)</td>
+<td><a href="../03-Modules/Delivery_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Delivery_Operations/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Finance Payments (<code>FIN-01</code>, <code>FIN-02</code>, <code>FIN-03</code>, <code>FIN-04</code>, <code>FIN-05</code>, <code>FIN-06</code>, <code>FIN-07</code>)</td>
+<td><a href="../03-Modules/Finance_Payments/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Finance_Payments/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Inventory (<code>INV-01</code>, <code>INV-02</code>, <code>INV-03</code>, <code>INV-04</code>, <code>INV-05</code>, <code>INV-06</code>, <code>INV-07</code>)</td>
+<td><a href="../03-Modules/Inventory/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Inventory/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Notifications (<code>NOT-01</code>, <code>NOT-02</code>, <code>NOT-03</code>, <code>NOT-04</code>, <code>NOT-05</code>)</td>
+<td><a href="../03-Modules/Notifications/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Notifications/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Order Operations (<code>OMS-01</code>, <code>OMS-02</code>, <code>OMS-03</code>, <code>OMS-04</code>, <code>OMS-05</code>, <code>OMS-06</code>, <code>OMS-07</code>)</td>
+<td><a href="../03-Modules/Order_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Order_Operations/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Pharmacist Review (<code>PHM-01</code>, <code>PHM-02</code>, <code>PHM-03</code>, <code>PHM-04</code>, <code>PHM-05</code>)</td>
+<td><a href="../03-Modules/Pharmacist_Review/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Pharmacist_Review/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Prescription Upload (<code>RX-01</code>, <code>RX-02</code>, <code>RX-03</code>, <code>RX-04</code>, <code>RX-05</code>)</td>
+<td><a href="../03-Modules/Prescription_Upload/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Prescription_Upload/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Product Catalog (<code>CAT-01</code>, <code>CAT-02</code>, <code>CAT-03</code>, <code>CAT-04</code>, <code>CAT-05</code>, <code>CAT-06</code>)</td>
+<td><a href="../03-Modules/Product_Catalog/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Product_Catalog/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Reporting (<code>REP-01</code>, <code>REP-02</code>, <code>REP-03</code>, <code>REP-04</code>, <code>REP-05</code>, <code>REP-06</code>, <code>REP-07</code>)</td>
+<td><a href="../03-Modules/Reporting/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Reporting/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Rider App (<code>RID-01</code>, <code>RID-02</code>, <code>RID-03</code>, <code>RID-04</code>, <code>RID-05</code>, <code>RID-06</code>, <code>RID-07</code>)</td>
+<td><a href="../03-Modules/Rider_App/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Rider_App/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Store Operations (<code>STO-01</code>, <code>STO-02</code>, <code>STO-03</code>, <code>STO-04</code>, <code>STO-05</code>)</td>
+<td><a href="../03-Modules/Store_Operations/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Store_Operations/Edge-Cases.html">Edge cases</a></td>
+</tr>
+<tr>
+<td>Warehouse (<code>WH-01</code>, <code>WH-02</code>, <code>WH-03</code>, <code>WH-04</code>, <code>WH-05</code>)</td>
+<td><a href="../03-Modules/Warehouse/LLD.html">LLD</a></td>
+<td><a href="../03-Modules/Warehouse/Edge-Cases.html">Edge cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Interrupted-workflow checks</h2>
+<p>Use <a href="State-and-Recovery-Contracts.html">state and recovery contracts</a> for commit/rollback, replay, stale-version and compensation expectations. Kill a worker before commit and after commit/before acknowledgment; verify one effect, recoverable queued work and honest customer status.</p>
+<p>Last-unit, review-versus-revision, cancellation-versus-packing, duplicate-refund and COD-shortage tests need real restricted-role database fixtures.</p>
+<h2>Unified Identity acceptance slice — Designed / NOT RUN</h2>
+<p>Use the endpoint-specific CT-API scenarios in <a href="../03-Modules/Authentication_Access/APIs.html">Authentication</a>, <a href="../03-Modules/Customer_Accounts/APIs.html">Customer adapters</a> and <a href="../03-Modules/Admin_CMS/APIs.html">Admin</a>, traced to AUTH-01–04, ACC-01/02 and ADM-02/03. Cover: uniform unknown-identifier responses; Customer/Rider OTP and required privileged MFA; multi-role/site selection without scope union; challenge/factor/refresh replay; context ETags and stale tabs; membership/role/account revocation under commit ordering; missing-workspace fallback; scoped offboarding without global identity suspension; conditional global authority for API-034 status; locked/suspended recovery and factor replacement without MFA bypass; first-profile dependency with no fabricated name. Verify audit redaction and provider fallback. Application/security/provider results remain unexecuted.</p>
+<p><a href="../09-References/Unified-Authentication-Validation.html">Current evidence</a> records only actual isolated SQL/constraint, schema/example and documentation validations. The absent optional formal OpenAPI validator is not reported as passed; historical meta-schema results do not cover D-028.</p>
+</main></body></html>

@@ -1,0 +1,719 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>payment · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Payment foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>payment</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-0977</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0978</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td><code>order_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0979</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td><code>order_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0980</td>
+<td><a href="../../Tables/payment/payment_transactions.html"><code>payment.payment_transactions</code></a></td>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td><code>payment_transaction_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0981</td>
+<td><a href="../../Tables/payment/payment_transactions.html"><code>payment.payment_transactions</code></a></td>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td><code>payment_transaction_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0982</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/chargebacks.html"><code>payment.chargebacks</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0983</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>collected_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0984</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0985</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>order_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0986</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>order_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0987</td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>order_revision_id, order_id</code> → <code>id, order_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0988</td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>order_revision_id_internal_id, order_id_internal_id</code> → <code>internal_id, order_id_internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0989</td>
+<td><a href="../../Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>shipment_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..1 child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0990</td>
+<td><a href="../../Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>shipment_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0991</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/cod_collections.html"><code>payment.cod_collections</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0992</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0993</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0994</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0995</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/customer_payment_methods.html"><code>payment.customer_payment_methods</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0996</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/payment_attempts.html"><code>payment.payment_attempts</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0997</td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><a href="../../Tables/payment/payment_attempts.html"><code>payment.payment_attempts</code></a></td>
+<td><code>payment_intent_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0998</td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><a href="../../Tables/payment/payment_attempts.html"><code>payment.payment_attempts</code></a></td>
+<td><code>payment_intent_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0999</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/payment_attempts.html"><code>payment.payment_attempts</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1000</td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><code>order_revision_id, order_id</code> → <code>id, order_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1001</td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><code>order_revision_id_internal_id, order_id_internal_id</code> → <code>internal_id, order_id_internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1002</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1003</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><code>order_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1004</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><code>order_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1005</td>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><code>provider_account_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1006</td>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><code>provider_account_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1007</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1008</td>
+<td><a href="../../Tables/payment/payment_attempts.html"><code>payment.payment_attempts</code></a></td>
+<td><a href="../../Tables/payment/payment_transactions.html"><code>payment.payment_transactions</code></a></td>
+<td><code>payment_attempt_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1009</td>
+<td><a href="../../Tables/payment/payment_attempts.html"><code>payment.payment_attempts</code></a></td>
+<td><a href="../../Tables/payment/payment_transactions.html"><code>payment.payment_transactions</code></a></td>
+<td><code>payment_attempt_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1010</td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><a href="../../Tables/payment/payment_transactions.html"><code>payment.payment_transactions</code></a></td>
+<td><code>payment_intent_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1011</td>
+<td><a href="../../Tables/payment/payment_intents.html"><code>payment.payment_intents</code></a></td>
+<td><a href="../../Tables/payment/payment_transactions.html"><code>payment.payment_transactions</code></a></td>
+<td><code>payment_intent_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1012</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/payment_webhooks.html"><code>payment.payment_webhooks</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1013</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/payment_webhooks.html"><code>payment.payment_webhooks</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1014</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1015</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1016</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1017</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_items.html"><code>payment.reconciliation_items</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1018</td>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_items.html"><code>payment.reconciliation_items</code></a></td>
+<td><code>run_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1019</td>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_items.html"><code>payment.reconciliation_items</code></a></td>
+<td><code>run_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1020</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_items.html"><code>payment.reconciliation_items</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1021</td>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td><code>account_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1022</td>
+<td><a href="../../Tables/payment/provider_accounts.html"><code>payment.provider_accounts</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td><code>account_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1023</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1024</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td><code>source_file_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1025</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td><code>source_file_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1026</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/reconciliation_runs.html"><code>payment.reconciliation_runs</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1027</td>
+<td><a href="../../Tables/payment/refund_reason_codes.html"><code>payment.refund_reason_codes</code></a></td>
+<td><a href="../../Tables/payment/refund_allocations.html"><code>payment.refund_allocations</code></a></td>
+<td><code>reason_code_id, reason_code</code> → <code>id, code</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1028</td>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td><a href="../../Tables/payment/refund_allocations.html"><code>payment.refund_allocations</code></a></td>
+<td><code>order_item_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1029</td>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td><a href="../../Tables/payment/refund_allocations.html"><code>payment.refund_allocations</code></a></td>
+<td><code>order_item_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1030</td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><a href="../../Tables/payment/refund_allocations.html"><code>payment.refund_allocations</code></a></td>
+<td><code>refund_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1031</td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><a href="../../Tables/payment/refund_allocations.html"><code>payment.refund_allocations</code></a></td>
+<td><code>refund_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1032</td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><a href="../../Tables/payment/refund_allocations.html"><code>payment.refund_allocations</code></a></td>
+<td><code>refund_id, order_revision_id</code> → <code>id, order_revision_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1033</td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><a href="../../Tables/payment/refund_allocations.html"><code>payment.refund_allocations</code></a></td>
+<td><code>refund_id_internal_id, order_revision_id_internal_id</code> → <code>internal_id, order_revision_id_internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-02">17-payment.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-1034</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/refund_reason_codes.html"><code>payment.refund_reason_codes</code></a></td>
+<td><code>created_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1035</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/refund_reason_codes.html"><code>payment.refund_reason_codes</code></a></td>
+<td><code>updated_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1036</td>
+<td><a href="../../Tables/payment/refund_reason_codes.html"><code>payment.refund_reason_codes</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>reason_code_id, reason_code</code> → <code>id, code</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1037</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1038</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>order_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1039</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>order_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1040</td>
+<td><a href="../../Tables/payment/payment_transactions.html"><code>payment.payment_transactions</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>payment_transaction_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1041</td>
+<td><a href="../../Tables/payment/payment_transactions.html"><code>payment.payment_transactions</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>payment_transaction_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1042</td>
+<td><a href="../../Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>return_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1043</td>
+<td><a href="../../Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>return_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1044</td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>order_revision_id, order_id</code> → <code>id, order_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1045</td>
+<td><a href="../../Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>order_revision_id_internal_id, order_id_internal_id</code> → <code>internal_id, order_id_internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1046</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../17-payment.html#diagram-01">17-payment.md#diagram-01</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

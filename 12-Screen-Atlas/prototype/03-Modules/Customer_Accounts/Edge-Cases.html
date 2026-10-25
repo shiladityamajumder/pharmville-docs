@@ -1,0 +1,163 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Customer Accounts edge cases</h1>
+<p>These cases define expected technical behavior for the proposed customer account contracts. Business policy values such as OTP expiry and deletion retention remain in <a href="../../09-References/Sources-and-Decisions.html">Sources and decisions</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Case ID</th>
+<th>Feature</th>
+<th>Scenario</th>
+<th>Expected behavior</th>
+<th>Data impact</th>
+<th>Recovery</th>
+<th>Test ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-ACC-01-01</code></td>
+<td><code>ACC-01</code></td>
+<td>Malformed phone number</td>
+<td>Reject before challenge creation; return field validation without account lookup disclosure.</td>
+<td>No identity or challenge change.</td>
+<td>Correct number and retry.</td>
+<td><code>TC-ACC-01-02</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-01-02</code></td>
+<td><code>ACC-01</code></td>
+<td>OTP delivery provider times out</td>
+<td>Keep delivery pending/failed; do not report delivery success. Apply configured fallback only once.</td>
+<td>Challenge is recorded with delivery outcome.</td>
+<td>Retry delivery using provider idempotency where available.</td>
+<td><code>TC-ACC-01-04</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-01-03</code></td>
+<td><code>ACC-01</code></td>
+<td>OTP expired, incorrect, consumed, or superseded</td>
+<td>Reject without session creation; return generic safe error.</td>
+<td>Challenge attempt/status updated; no session.</td>
+<td>Request a new challenge subject to configured limits.</td>
+<td><code>TC-ACC-01-03</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-01-04</code></td>
+<td><code>ACC-01</code></td>
+<td>Repeated requests or guesses from one phone/IP</td>
+<td>Enforce configured limits and return <code>429</code>; avoid account enumeration.</td>
+<td>Rate-limit/security event only.</td>
+<td>Retry after policy window; support can inspect redacted event IDs.</td>
+<td><code>TC-ACC-01-05</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-01-05</code></td>
+<td><code>ACC-01</code></td>
+<td>Two verification requests race on the same valid code</td>
+<td>At most one verification consumes the challenge and creates a session.</td>
+<td>One challenge consumption and one session maximum.</td>
+<td>Client uses the returned session or requests a new challenge.</td>
+<td><code>TC-ACC-01-05</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-02-01</code></td>
+<td><code>ACC-02</code></td>
+<td>Customer submits another user's ID or accesses another profile</td>
+<td>Derive owner from session; return <code>404</code> or <code>403</code> without confirming account existence.</td>
+<td>No change.</td>
+<td>Retry against own profile.</td>
+<td><code>TC-ACC-02-02</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-02-02</code></td>
+<td><code>ACC-02</code></td>
+<td>Email/phone conflicts with another account</td>
+<td>Return <code>409</code>; do not partially update profile or identity.</td>
+<td>Transaction rolls back.</td>
+<td>Use a verified contact that is not already assigned.</td>
+<td><code>TC-ACC-02-03</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-02-03</code></td>
+<td><code>ACC-02</code></td>
+<td>Contact changed but verification is incomplete</td>
+<td>Preserve the existing verified contact; verify the replacement with the D-023 proof contract before committing it.</td>
+<td>No verified identity change; pending-proof storage needs D-023.</td>
+<td>Complete verification or discard the pending change.</td>
+<td><code>TC-ACC-02-04</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-02-04</code></td>
+<td><code>ACC-02</code></td>
+<td>Two profile edits use the same row version</td>
+<td>First valid write succeeds; stale write returns <code>409</code>.</td>
+<td>No lost update.</td>
+<td>Reload profile and resubmit intended fields.</td>
+<td><code>TC-ACC-02-02</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-02-05</code></td>
+<td><code>ACC-02</code></td>
+<td>Partial PATCH omits an existing field</td>
+<td>Preserve omitted value; only explicit allowed <code>null</code> clears nullable fields.</td>
+<td>Only supplied columns change.</td>
+<td>Correct the request and retry.</td>
+<td><code>TC-ACC-02-01</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-03-01</code></td>
+<td><code>ACC-03</code></td>
+<td>Address belongs to a different customer</td>
+<td>Reject; composite ownership check prevents default-address linkage across users.</td>
+<td>No address/profile change.</td>
+<td>Select or create an address owned by caller.</td>
+<td><code>TC-ACC-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-03-02</code></td>
+<td><code>ACC-03</code></td>
+<td>Serviceability provider is unavailable</td>
+<td>Save valid address if the operation is address-only; mark serviceability unknown and prevent checkout from treating unknown as serviceable.</td>
+<td>Address may persist; no false serviceability result.</td>
+<td>Retry lookup when provider recovers.</td>
+<td><code>TC-ACC-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-04-01</code></td>
+<td><code>ACC-04</code></td>
+<td>Customer tries to attach another household's patient to an order</td>
+<td>Deny association before prescription/order processing.</td>
+<td>No patient or order association change.</td>
+<td>Select an owned patient or resolve access under approved policy.</td>
+<td><code>TC-ACC-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-05-01</code></td>
+<td><code>ACC-05</code></td>
+<td>Consent version is missing or stale</td>
+<td>Do not record consent to a different version; show current notice and capture explicit choice.</td>
+<td>No consent grant.</td>
+<td>Present current version and record a new explicit action.</td>
+<td><code>TC-ACC-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-06-01</code></td>
+<td><code>ACC-06</code></td>
+<td>Deletion requested while retention/legal hold applies</td>
+<td>Acknowledge request and route to review; do not delete held records or claim completion.</td>
+<td>Request state and audit event only.</td>
+<td>Complete after authorized retention review.</td>
+<td><code>TC-ACC-06-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-ACC-07-01</code></td>
+<td><code>ACC-07</code></td>
+<td>Wishlist item is submitted twice</td>
+<td>Enforce idempotent/unique item behavior; return current item state.</td>
+<td>One item per approved uniqueness rule.</td>
+<td>No user action required.</td>
+<td><code>TC-ACC-07-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<p>All tests are design cases and are not reported as executed. Cross-feature session and ownership requirements are in <a href="../../07-Engineering/Security.html">Security</a>.</p>
+</main></body></html>

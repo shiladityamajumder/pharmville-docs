@@ -1,0 +1,46 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Release and Incident Handling · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Release and incident handling</h1>
+<h2>Canary release plan — future activity</h2>
+<p><strong>Not deployed.</strong> Begin with small approved test cohorts or staff pilots after signed UAT and database/provider readiness. Compare accepted checkout and order truth, money/stock reconciliation, clinical safety denials and user-visible API failures against the established baseline. Numeric traffic and time windows require SRE/product approval, not invented defaults.</p>
+<p>Stop or roll back application traffic if mismatch, sensitive-data exposure, unsafe permission or pharmacy-review bypass is observed. Never delete clinical, audit or accounting records to reverse a failed canary.</p>
+<h2>Feature flags and rollout controls</h2>
+<p>Flags are proposed for noncritical rollout features: search suggestions, alternative-product discovery, experimental CMS content, notification channels, or rider UI options. Store owner, expiry date, rollout rules, and rollback action with each flag. Do not use client-side flags as an authorization control or to bypass safety guards.</p>
+<p>Unknown or stale flag evaluation should default to the approved safe behavior. Flag changes require audit events; cross-module features should use an explicit state-versioned rollout contract.</p>
+<h2>Controlled iteration and change management</h2>
+<p>Create a change request with source approval, impact on REQ/FEAT, HLD/LLD, API DTOs, DB migration, security, acceptance tests, rollout and rollback. Do not silently adjust sensitive business rules through configuration or a migration.</p>
+<p>Every approved change updates traceability IDs and affected documentation in the same review. Recheck compatibility of existing clients and replay queues after release.</p>
+<h2>Production monitoring plan</h2>
+<p><strong>Proposed signals:</strong> API latency and errors by module; DB pool saturation, deadlocks and slow queries; committed outbox backlog; payment unknown/duplicate outcome; licensed site stock staleness; denied clinical review; rider-proof discrepancy; backup recency, recovery drill age and privilege grants.</p>
+<p><strong>Privacy:</strong> logs and traces must not contain raw prescriptions, names, coordinates or payment secrets. Retain incident metadata in an approved restricted store with documented retention.</p>
+<p><strong>Alert assignment:</strong> propose operations owner for payment/stock, pharmacist for clinical review, and security lead for access/PII alerts. Actual staff and escalation contacts are not available.</p>
+<h2>Release strategy — proposed</h2>
+<ol>
+<li>Lock approved Phase 1 scope and hard safety rules.</li>
+<li>Produce immutable artifact builds and migration checksum review.</li>
+<li>Deploy compatible API code and apply only an independently approved schema release procedure via a controlled job.</li>
+<li>Execute database-backed concurrency, role-isolation, webhook replay, approved license/clinical and UAT scenarios in staging.</li>
+<li>Enable noncritical customer-facing features gradually with feature flags where supported; never flag off pharmacy/legal/authorization guards.</li>
+<li>Observe canary conversion <strong>and</strong> money/stock mismatch, clinical denials, request errors and privacy alerts.</li>
+<li>Roll back application code only if database compatibility allows. Prefer forward SQL repair and controlled compensations once authoritative ledger writes have occurred.</li>
+</ol>
+<p><strong>Status:</strong> release procedure proposal, not proof a canary, staging environment or deployment exists.</p>
+<h2>Controlled recovery and rollback</h2>
+<p>Freeze writes only under an approved incident action. For a bad application build, restore compatible code behind a feature flag; verify database ledger and provider state before replay. For already committed payments, refunds, stock movements or clinical decisions, prefer forward correction and compensating events with auditable reason codes rather than deleting records.</p>
+<p>The canonical standalone SQL and approved deployed schema identity are immutable release inputs; the empty-schema file is not an existing-database upgrade. A broken migration requires a reviewed forward-fix and restored snapshot only under DBA control. Record the decision owner, incident timestamp, business exposure, communication plan and evidence.</p>
+<h2>Runbook — suspected production incident</h2>
+<p><strong>Trigger:</strong> elevated 5xx, missing payments, stale inventory, unsafe P fulfillment, expired site license, private document exposure, GPS/OTP delivery discrepancy or unreconciled COD. Incident commander/roles require owner appointment before launch.</p>
+<ol>
+<li>Identify affected module, sample correlation IDs and verified business facts without inspecting raw Rx/credential contents.</li>
+<li>Freeze the unsafe path by feature flag or permission gate if possible; do not erase evidence or retry financial changes blindly.</li>
+<li>Inspect authoritative PostgreSQL order/clinical/payment/stock state, signed gateway status, POS observation timestamps and release/change ledger.</li>
+<li>Determine whether one accepted revision, refund, reservation or delivery record has already committed; dedupe any pending worker replay.</li>
+<li>Inform appropriate pharmacy/finance/ops owner, preserve audit and privileged access evidence, and prepare an approved compensating action.</li>
+<li>Restore service, verify safe gates, reconcile pending events and publish incident outcome with redacted records and follow-up test.</li>
+</ol>
+<p>Related Runbook: Unknown Payment/Stock and Backup and Recovery.</p>
+<h2>Runbook — payment or stock truth is unknown</h2>
+<p><strong>Payment:</strong> A timeout, browser success screen or duplicated callback is not money truth. Query/verify Cashfree using the provider's approved signed/authorized adapter, correlate <code>payment_intents</code>, <code>payment_attempts</code>, <code>payment_webhooks</code> and <code>payment_transactions</code>, dedupe provider IDs and reconcile settlements.</p>
+<p>Do not initiate another charge automatically; leave order pending while operations resolve. Refund only after approved accounting policy and idempotency guard.</p>
+<p><strong>Stock:</strong> When Techsmith observation is stale or a lot/site/license is ineligible, block new holds and picks. Reconcile exact SKU/location/lot, stock ledger, shelf-life and accepted order revision with authorized store staff. Never fulfill from cached product page availability.</p>
+<p>On conflict, release or compensate old hold atomically and present customer consent path if the quote changes.</p>
+<p>Record who approved the resolution and customer communication. A safe system may be temporarily unavailable; it must not silently dispense, charge or deliver based on guessed facts.</p>
+</main></body></html>

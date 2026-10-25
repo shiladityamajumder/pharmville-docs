@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dependencies · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Rider Operations dependencies and decisions</h1>
+<p><strong>Accountable role proposed:</strong> Rider operations / mobile client. Approval is not inferred from documentation completeness.</p>
+<h2>Domain dependencies</h2>
+<ul>
+<li>Admin_CMS. See <a href="Database.html">exact table/API mapping</a>.</li>
+<li>Delivery_Operations. See <a href="Database.html">exact table/API mapping</a>.</li>
+<li>Finance_Payments. See <a href="Database.html">exact table/API mapping</a>.</li>
+<li>Inventory. See <a href="Database.html">exact table/API mapping</a>.</li>
+<li>Order_Operations. See <a href="Database.html">exact table/API mapping</a>.</li>
+<li>Pharmacist_Review. See <a href="Database.html">exact table/API mapping</a>.</li>
+<li>Shared platform file service — engineering owner; no clinical write grant. See <a href="Database.html">exact table/API mapping</a>.</li>
+<li>Store_Operations. See <a href="Database.html">exact table/API mapping</a>.</li>
+</ul>
+<p>Rider client workflows; no independent direct table write ownership or clinical/finance authority.</p>
+<h2>Decision gates</h2>
+<p>D-008; D-010; D-021; D-024. See the <a href="../../09-References/Sources-and-Decisions.html">business decision register</a> and <a href="../../05-APIs/Planning-Decisions.html">API decision detail</a>. Future physical domains require D-027 ownership/scope review.</p>
+<table>
+<thead>
+<tr>
+<th>Planning item</th>
+<th>Current evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Surface operations</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Documentation-complete proposed</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Incomplete contracts</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Approved / implemented</td>
+<td>0 / 0</td>
+</tr>
+<tr>
+<td>Runtime/provider/application evidence</td>
+<td>Not executed; schema-only parity is independently validated</td>
+</tr>
+</tbody>
+</table>
+<p><a href="../../05-APIs/Journey-API-Gaps.html">Journey gaps</a> preserve proposed missing commands without expanding the 107-operation denominator. No provider, financial or clinical dependency is implicitly approved.</p>
+</main></body></html>

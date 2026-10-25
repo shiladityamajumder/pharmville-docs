@@ -1,0 +1,4410 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>APIs · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Customer Orders API contracts</h1>
+<p><strong>Proposed technical blueprint · Unapproved · Not Implemented.</strong> Contract completeness is independent of approval and runtime evidence. <a href="../../05-APIs/API-Contract-Coverage.html">Coverage</a> · <a href="../../05-APIs/openapi.yaml">OpenAPI 3.1</a> · <a href="../../05-APIs/Planning-Decisions.html">decisions</a> · <a href="../../05-APIs/API-Conventions.html">DTO conventions</a>. Every CT scenario is Designed / NOT RUN.</p>
+<p>&lt;a id=&quot;customer-orders-api-contracts&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-025--get-v1meorders&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-026--get-v1meordersorder_id&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-027--post-v1meordersorder_idcancel&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-028--post-v1meordersorder_idreturns&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-029--get-v1meordersorder_idinvoice&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-030--get-v1meordersorder_idrefunds&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-031--get-v1meordersorder_iddelivery&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-6&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-6&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-6&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-6&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-6&quot;&gt;&lt;/a&gt;</p>
+<h2>Operation index</h2>
+<table>
+<thead>
+<tr>
+<th>API ID</th>
+<th>Method/path</th>
+<th>Purpose</th>
+<th>Documentation status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-025</td>
+<td><code>GET /v1/me/orders</code></td>
+<td>List the customer order history with distinct business statuses.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-026</td>
+<td><code>GET /v1/me/orders/{order_id}</code></td>
+<td>Read one owned order and its accepted line projection.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-027</td>
+<td><code>POST /v1/me/orders/{order_id}/cancel</code></td>
+<td>Request cancellation before packing under the documented draft policy.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-028</td>
+<td><code>POST /v1/me/orders/{order_id}/returns</code></td>
+<td>Create an evidenced return request for eligible delivered quantities.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-029</td>
+<td><code>GET /v1/me/orders/{order_id}/invoice</code></td>
+<td>Read or download the owned issued invoice.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-030</td>
+<td><code>GET /v1/me/orders/{order_id}/refunds</code></td>
+<td>List refunds for one owned order.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-031</td>
+<td><code>GET /v1/me/orders/{order_id}/delivery</code></td>
+<td>Read shipment progress for one owned order.</td>
+<td>Complete proposed</td>
+</tr>
+</tbody>
+</table>
+<h2>Feature-to-operation coverage</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Requirement</th>
+<th>Operation coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ORD-01</td>
+<td>Order confirmation on screen, WhatsApp and email</td>
+<td>No direct operation; see <a href="../../05-APIs/Journey-API-Gaps.html">journey/API gaps</a>. Existing requirement retained; no invented CRUD completion.</td>
+</tr>
+<tr>
+<td>ORD-02</td>
+<td>Status timeline (placed → packed → out for delivery → delivered)</td>
+<td>API-025, API-026</td>
+</tr>
+<tr>
+<td>ORD-03</td>
+<td>Order history with GST invoice download</td>
+<td>API-029</td>
+</tr>
+<tr>
+<td>ORD-04</td>
+<td>Cancel before the order is packed</td>
+<td>API-027</td>
+</tr>
+<tr>
+<td>ORD-05</td>
+<td>Return request within the return window</td>
+<td>API-028</td>
+</tr>
+<tr>
+<td>ORD-06</td>
+<td>Refund status for cancelled and returned orders</td>
+<td>API-030</td>
+</tr>
+<tr>
+<td>ORD-07</td>
+<td>Live rider location on a map, estimated arrival, masked call button</td>
+<td>API-031</td>
+</tr>
+<tr>
+<td>ORD-08</td>
+<td>Delivery OTP shown to the customer</td>
+<td>No direct operation; see <a href="../../05-APIs/Journey-API-Gaps.html">journey/API gaps</a>. Existing requirement retained; no invented CRUD completion.</td>
+</tr>
+<tr>
+<td>ORD-09</td>
+<td>Change items or address after placing an order</td>
+<td>No direct operation; see <a href="../../05-APIs/Journey-API-Gaps.html">journey/API gaps</a>. Existing requirement retained; no invented CRUD completion.</td>
+</tr>
+</tbody>
+</table>
+<h2>API-025 — GET <code>/v1/me/orders</code></h2>
+<p><strong>List the customer order history with distinct business statuses.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>List the customer order history with distinct business statuses</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Customer_Orders</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ORD-02</code>; <a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/me/orders</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>customer-orders.read.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Filter user_id to JWT subject before sorting and pagination; no other customer count.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<h3>Query parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>limit</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>20</td>
+<td>minimum=1; maximum=100</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>cursor</td>
+<td>string</td>
+<td>Optional</td>
+<td>No</td>
+<td>None</td>
+<td>minLength=1; maxLength=2048</td>
+<td>Opaque integrity-protected continuation bound to actor, filters and fixed ordering.</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>Optional</td>
+<td>No</td>
+<td>None</td>
+<td>enum=[&quot;created&quot;, &quot;pending_payment&quot;, &quot;payment_confirmed&quot;, &quot;prescription_review&quot;, &quot;confirmed&quot;, &quot;allocated&quot;, &quot;processing&quot;, &quot;partially_fulfilled&quot;, &quot;fulfilled&quot;, &quot;cancelled&quot;, &quot;closed&quot;]; minLength=1; maxLength=19</td>
+<td>commerce.orders.status; character varying(19).</td>
+</tr>
+</tbody>
+</table>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>placed_at DESC, id ASC</code>. Pagination: cursor.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>OrderListData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orders</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=0; maxItems=100</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>orders[].orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.orders.id; uuid.</td>
+</tr>
+<tr>
+<td><code>orders[].orderNumber</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=64</td>
+<td>commerce.orders.order_number; character varying(64).</td>
+</tr>
+<tr>
+<td><code>orders[].status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;created&quot;, &quot;pending_payment&quot;, &quot;payment_confirmed&quot;, &quot;prescription_review&quot;, &quot;confirmed&quot;, &quot;allocated&quot;, &quot;processing&quot;, &quot;partially_fulfilled&quot;, &quot;fulfilled&quot;, &quot;cancelled&quot;, &quot;closed&quot;]; minLength=1; maxLength=19</td>
+<td>commerce.orders.status; character varying(19).</td>
+</tr>
+<tr>
+<td><code>orders[].paymentStatus</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>commerce.orders.payment_status; character varying(32).</td>
+</tr>
+<tr>
+<td><code>orders[].prescriptionStatus</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>commerce.orders.prescription_status; character varying(32).</td>
+</tr>
+<tr>
+<td><code>orders[].fulfillmentStatus</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>commerce.orders.fulfillment_status; character varying(32).</td>
+</tr>
+<tr>
+<td><code>orders[].grandTotal</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,14}(\.[0-9]{1,2})?$&quot;</td>
+<td>commerce.orders.grand_total; numeric(16,2).</td>
+</tr>
+<tr>
+<td><code>orders[].currency</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=3</td>
+<td>commerce.orders.currency; character varying(3).</td>
+</tr>
+<tr>
+<td><code>orders[].placedAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>commerce.orders.placed_at; timestamp with time zone.</td>
+</tr>
+<tr>
+<td><code>orders[].orderVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=0</td>
+<td>commerce.orders.row_version; bigint.</td>
+</tr>
+<tr>
+<td><code>orders[].currentRevisionId</code></td>
+<td>string/null (uuid)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.orders.current_revision_id; uuid.</td>
+</tr>
+</tbody>
+</table>
+<p>Pagination metadata: <code>nextCursor: string/null</code>, <code>hasNext: boolean</code>; opaque cursor is bound to principal, filters and fixed ordering. Empty list returns <code>[]</code> with hasNext false. No snapshot isolation is promised.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;orders&quot;: [
+      {
+        &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;orderNumber&quot;: &quot;PV-20261024-0001&quot;,
+        &quot;status&quot;: &quot;created&quot;,
+        &quot;paymentStatus&quot;: &quot;payment status&quot;,
+        &quot;prescriptionStatus&quot;: &quot;prescription status&quot;,
+        &quot;fulfillmentStatus&quot;: &quot;fulfillment status&quot;,
+        &quot;grandTotal&quot;: &quot;26.25&quot;,
+        &quot;currency&quot;: &quot;INR&quot;,
+        &quot;placedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+        &quot;orderVersion&quot;: 1,
+        &quot;currentRevisionId&quot;: null
+      }
+    ]
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: {
+      &quot;nextCursor&quot;: null,
+      &quot;hasNext&quot;: false
+    }
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-025.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks customer-orders.read.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-025 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>currency</code>, <code>current_revision_id</code>, <code>fulfillment_status</code>, <code>grand_total</code>, <code>id</code>, <code>order_number</code>, <code>patient_profile_id</code>, <code>payment_status</code>, <code>placed_at</code>, <code>prescription_status</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.orders[].orderId</td>
+<td>commerce.orders.id</td>
+</tr>
+<tr>
+<td>data.orders[].orderNumber</td>
+<td>commerce.orders.order_number</td>
+</tr>
+<tr>
+<td>data.orders[].status</td>
+<td>commerce.orders.status</td>
+</tr>
+<tr>
+<td>data.orders[].paymentStatus</td>
+<td>commerce.orders.payment_status</td>
+</tr>
+<tr>
+<td>data.orders[].prescriptionStatus</td>
+<td>commerce.orders.prescription_status</td>
+</tr>
+<tr>
+<td>data.orders[].fulfillmentStatus</td>
+<td>commerce.orders.fulfillment_status</td>
+</tr>
+<tr>
+<td>data.orders[].grandTotal</td>
+<td>commerce.orders.grand_total</td>
+</tr>
+<tr>
+<td>data.orders[].currency</td>
+<td>commerce.orders.currency</td>
+</tr>
+<tr>
+<td>data.orders[].placedAt</td>
+<td>commerce.orders.placed_at</td>
+</tr>
+<tr>
+<td>data.orders[].orderVersion</td>
+<td>commerce.orders.row_version</td>
+</tr>
+<tr>
+<td>data.orders[].currentRevisionId</td>
+<td>commerce.orders.current_revision_id</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Filter user_id to JWT subject before sorting and pagination; no other customer count.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>cursor; placed_at DESC, id ASC; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. An empty history is 200; an invalid cursor is 422 and can be restarted.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-025-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for list the customer order history with distinct business statuses.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-025-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-025-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-025-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove customer-orders.read.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-025-RULE</code></td>
+<td>Filter user_id to JWT subject before sorting and pagination; no other customer count.</td>
+<td>An empty history is 200; an invalid cursor is 422 and can be restarted.</td>
+</tr>
+<tr>
+<td><code>CT-API-025-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-025-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-025-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-025-RECOVERY</code></td>
+<td>Dependency timeout during list the customer order history with distinct business statuses.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ORD-02-OK</code>, <code>TC-ORD-02-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-026 — GET <code>/v1/me/orders/{order_id}</code></h2>
+<p><strong>Read one owned order and its accepted line projection.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Read one owned order and its accepted line projection</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Customer_Orders</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ORD-02</code>; <a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/me/orders/{order_id}</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>customer-orders.read.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Resolve current_revision_id; preserve distinct payment, fulfillment and Rx statuses. Do not return Rx bytes or staff clinical notes.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>not applicable for this singleton</code>. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>OrderDetailData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order</code></td>
+<td>object</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>order.orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.orders.id; uuid.</td>
+</tr>
+<tr>
+<td><code>order.orderNumber</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=64</td>
+<td>commerce.orders.order_number; character varying(64).</td>
+</tr>
+<tr>
+<td><code>order.status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;created&quot;, &quot;pending_payment&quot;, &quot;payment_confirmed&quot;, &quot;prescription_review&quot;, &quot;confirmed&quot;, &quot;allocated&quot;, &quot;processing&quot;, &quot;partially_fulfilled&quot;, &quot;fulfilled&quot;, &quot;cancelled&quot;, &quot;closed&quot;]; minLength=1; maxLength=19</td>
+<td>commerce.orders.status; character varying(19).</td>
+</tr>
+<tr>
+<td><code>order.paymentStatus</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>commerce.orders.payment_status; character varying(32).</td>
+</tr>
+<tr>
+<td><code>order.prescriptionStatus</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>commerce.orders.prescription_status; character varying(32).</td>
+</tr>
+<tr>
+<td><code>order.fulfillmentStatus</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>commerce.orders.fulfillment_status; character varying(32).</td>
+</tr>
+<tr>
+<td><code>order.grandTotal</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,14}(\.[0-9]{1,2})?$&quot;</td>
+<td>commerce.orders.grand_total; numeric(16,2).</td>
+</tr>
+<tr>
+<td><code>order.currency</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=3</td>
+<td>commerce.orders.currency; character varying(3).</td>
+</tr>
+<tr>
+<td><code>order.placedAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>commerce.orders.placed_at; timestamp with time zone.</td>
+</tr>
+<tr>
+<td><code>order.orderVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=0</td>
+<td>commerce.orders.row_version; bigint.</td>
+</tr>
+<tr>
+<td><code>order.currentRevisionId</code></td>
+<td>string/null (uuid)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.orders.current_revision_id; uuid.</td>
+</tr>
+<tr>
+<td><code>items</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=0; maxItems=100</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>items[].orderItemId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.order_items.id; uuid.</td>
+</tr>
+<tr>
+<td><code>items[].productId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.order_items.product_id; uuid.</td>
+</tr>
+<tr>
+<td><code>items[].quantity</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,9}(\.[0-9]{1,3})?$&quot;</td>
+<td>commerce.order_items.quantity; numeric(12,3).</td>
+</tr>
+<tr>
+<td><code>items[].unitPrice</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,12}(\.[0-9]{1,2})?$&quot;</td>
+<td>commerce.order_items.unit_price; numeric(14,2).</td>
+</tr>
+<tr>
+<td><code>items[].taxAmount</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,12}(\.[0-9]{1,2})?$&quot;</td>
+<td>commerce.order_items.tax_amount; numeric(14,2).</td>
+</tr>
+<tr>
+<td><code>items[].lineTotal</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,14}(\.[0-9]{1,2})?$&quot;</td>
+<td>commerce.order_items.line_total; numeric(16,2).</td>
+</tr>
+<tr>
+<td><code>items[].commerceClass</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=1</td>
+<td>commerce.order_items.commerce_class_snapshot; character varying(1).</td>
+</tr>
+<tr>
+<td><code>items[].status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>commerce.order_items.status; character varying(32). No closed CHECK enum in table evidence; response uses persisted owner status, not permission for arbitrary transitions.</td>
+</tr>
+<tr>
+<td><code>patientId</code></td>
+<td>string/null (uuid)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.orders.patient_profile_id; uuid.</td>
+</tr>
+<tr>
+<td><code>shippingAddress</code></td>
+<td>object</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>shippingAddress.recipientName</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=150</td>
+<td>Accepted immutable commerce.orders.shipping_address_snapshot.recipientName JSON key; do not read a subsequently edited address.</td>
+</tr>
+<tr>
+<td><code>shippingAddress.city</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=100</td>
+<td>Accepted immutable commerce.orders.shipping_address_snapshot.city JSON key; do not read a subsequently edited address.</td>
+</tr>
+<tr>
+<td><code>shippingAddress.postalCode</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=16</td>
+<td>Accepted immutable commerce.orders.shipping_address_snapshot.postalCode JSON key; do not read a subsequently edited address.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;order&quot;: {
+      &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+      &quot;orderNumber&quot;: &quot;PV-20261024-0001&quot;,
+      &quot;status&quot;: &quot;created&quot;,
+      &quot;paymentStatus&quot;: &quot;payment status&quot;,
+      &quot;prescriptionStatus&quot;: &quot;prescription status&quot;,
+      &quot;fulfillmentStatus&quot;: &quot;fulfillment status&quot;,
+      &quot;grandTotal&quot;: &quot;25.00&quot;,
+      &quot;currency&quot;: &quot;INR&quot;,
+      &quot;placedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+      &quot;orderVersion&quot;: 1,
+      &quot;currentRevisionId&quot;: null
+    },
+    &quot;items&quot;: [
+      {
+        &quot;orderItemId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;productId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;quantity&quot;: &quot;2.000&quot;,
+        &quot;unitPrice&quot;: &quot;12.50&quot;,
+        &quot;taxAmount&quot;: &quot;0.00&quot;,
+        &quot;lineTotal&quot;: &quot;25.00&quot;,
+        &quot;commerceClass&quot;: &quot;O&quot;,
+        &quot;status&quot;: &quot;requested&quot;
+      }
+    ],
+    &quot;patientId&quot;: null,
+    &quot;shippingAddress&quot;: {
+      &quot;recipientName&quot;: &quot;Asha Example&quot;,
+      &quot;city&quot;: &quot;Noida&quot;,
+      &quot;postalCode&quot;: &quot;201301&quot;
+    }
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-026.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks customer-orders.read.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for read one owned order and its accepted line projection. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-026 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>currency</code>, <code>current_revision_id</code>, <code>fulfillment_status</code>, <code>grand_total</code>, <code>id</code>, <code>internal_id</code>, <code>order_number</code>, <code>patient_profile_id</code>, <code>payment_status</code>, <code>placed_at</code>, <code>prescription_status</code>, <code>row_version</code>, <code>shipping_address_snapshot</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>Read</td>
+<td><code>commerce_class_snapshot</code>, <code>id</code>, <code>line_total</code>, <code>order_id</code>, <code>prescription_id</code>, <code>product_id</code>, <code>quantity</code>, <code>row_version</code>, <code>status</code>, <code>tax_amount</code>, <code>unit_price</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>status</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.order.orderId</td>
+<td>commerce.orders.id</td>
+</tr>
+<tr>
+<td>data.order.orderNumber</td>
+<td>commerce.orders.order_number</td>
+</tr>
+<tr>
+<td>data.order.status</td>
+<td>commerce.orders.status</td>
+</tr>
+<tr>
+<td>data.order.paymentStatus</td>
+<td>commerce.orders.payment_status</td>
+</tr>
+<tr>
+<td>data.order.prescriptionStatus</td>
+<td>commerce.orders.prescription_status</td>
+</tr>
+<tr>
+<td>data.order.fulfillmentStatus</td>
+<td>commerce.orders.fulfillment_status</td>
+</tr>
+<tr>
+<td>data.order.grandTotal</td>
+<td>commerce.orders.grand_total</td>
+</tr>
+<tr>
+<td>data.order.currency</td>
+<td>commerce.orders.currency</td>
+</tr>
+<tr>
+<td>data.order.placedAt</td>
+<td>commerce.orders.placed_at</td>
+</tr>
+<tr>
+<td>data.order.orderVersion</td>
+<td>commerce.orders.row_version</td>
+</tr>
+<tr>
+<td>data.order.currentRevisionId</td>
+<td>commerce.orders.current_revision_id</td>
+</tr>
+<tr>
+<td>data.items[].orderItemId</td>
+<td>commerce.order_items.id</td>
+</tr>
+<tr>
+<td>data.items[].productId</td>
+<td>commerce.order_items.product_id</td>
+</tr>
+<tr>
+<td>data.items[].quantity</td>
+<td>commerce.order_items.quantity</td>
+</tr>
+<tr>
+<td>data.items[].unitPrice</td>
+<td>commerce.order_items.unit_price</td>
+</tr>
+<tr>
+<td>data.items[].taxAmount</td>
+<td>commerce.order_items.tax_amount</td>
+</tr>
+<tr>
+<td>data.items[].lineTotal</td>
+<td>commerce.order_items.line_total</td>
+</tr>
+<tr>
+<td>data.items[].commerceClass</td>
+<td>commerce.order_items.commerce_class_snapshot</td>
+</tr>
+<tr>
+<td>data.items[].status</td>
+<td>commerce.order_items.status</td>
+</tr>
+<tr>
+<td>data.patientId</td>
+<td>commerce.orders.patient_profile_id</td>
+</tr>
+<tr>
+<td>data.shippingAddress.recipientName</td>
+<td>commerce.orders.shipping_address_snapshot</td>
+</tr>
+<tr>
+<td>data.shippingAddress.city</td>
+<td>commerce.orders.shipping_address_snapshot</td>
+</tr>
+<tr>
+<td>data.shippingAddress.postalCode</td>
+<td>commerce.orders.shipping_address_snapshot</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Resolve current_revision_id; preserve distinct payment, fulfillment and Rx statuses. Do not return Rx bytes or staff clinical notes.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. Foreign or absent order is 404; refresh to see a concurrent revision.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-026-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for read one owned order and its accepted line projection.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-026-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-026-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-026-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove customer-orders.read.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-026-RULE</code></td>
+<td>Resolve current_revision_id; preserve distinct payment, fulfillment and Rx statuses. Do not return Rx bytes or staff clinical notes.</td>
+<td>Foreign or absent order is 404; refresh to see a concurrent revision.</td>
+</tr>
+<tr>
+<td><code>CT-API-026-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-026-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-026-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-026-RECOVERY</code></td>
+<td>Dependency timeout during read one owned order and its accepted line projection.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ORD-02-OK</code>, <code>TC-ORD-02-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-027 — POST <code>/v1/me/orders/{order_id}/cancel</code></h2>
+<p><strong>Request cancellation before packing under the documented draft policy.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Request cancellation before packing under the documented draft policy</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Order_Operations</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ORD-04</code>; <a href="../../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/me/orders/{order_id}/cancel</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>customer-orders.manage.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Serialize order cancellation against pack completion. Only before-packed states can enter the cancellation orchestration; packed/handed_over is an exception, not a forced cancel. No direct payment or stock writes.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-027_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>CancellationRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>expectedOrderVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Expected current row_version; compare atomically.</td>
+</tr>
+<tr>
+<td><code>reasonCode</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=64</td>
+<td>commerce.cancellations.reason_code; character varying(64).</td>
+</tr>
+<tr>
+<td><code>reasonText</code></td>
+<td>string/null</td>
+<td>Optional</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=1000</td>
+<td>Optional safe customer explanation.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;expectedOrderVersion&quot;: 4,
+  &quot;reasonCode&quot;: &quot;CUSTOMER_REQUEST&quot;,
+  &quot;reasonText&quot;: &quot;Ordered in error&quot;
+}
+</code></pre>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>202</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>CancellationData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cancellationId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.cancellations.id; uuid.</td>
+</tr>
+<tr>
+<td><code>orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.cancellations.order_id; uuid.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>commerce.cancellations.status; character varying(32). No closed CHECK enum in table evidence; response uses persisted owner status, not permission for arbitrary transitions.</td>
+</tr>
+<tr>
+<td><code>resolvedAt</code></td>
+<td>string/null (date-time)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>commerce.cancellations.resolved_at; timestamp with time zone.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;cancellationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;status&quot;: &quot;requested&quot;,
+    &quot;resolvedAt&quot;: null
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-027.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks customer-orders.manage.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for request cancellation before packing under the documented draft policy. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Serialize order cancellation against pack completion. Only before-packed states can enter the cancellation orchestration; packed/handed_over is an exception, not a forced cancel. No direct payment or stock writes.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>If packing wins, return INVALID_STATE_TRANSITION and route to approved support path. Accepted cancellation separately requests Inventory release and Finance compensation; refund is not completed here.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>STALE_VERSION</code></td>
+<td>An expected aggregate/row version no longer matches current committed state.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the current request cancellation before packing under the documented draft policy. context and re-evaluate; no partial mutation.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>If packing wins, return INVALID_STATE_TRANSITION and route to approved support path. Accepted cancellation separately requests Inventory release and Finance compensation; refund is not completed here.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-027 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;STALE_VERSION&quot;,
+    &quot;message&quot;: &quot;An expected aggregate/row version no longer matches current committed state.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>prescription_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>row_version</code>, <code>status</code>, <code>warehouse_id</code></td>
+<td>Store_Operations / Fulfillment owner projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/cancellation_reason_codes.html"><code>commerce.cancellation_reason_codes</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/cancellations.html"><code>commerce.cancellations</code></a></td>
+<td>Create/update evidence</td>
+<td><code>order_id</code>, <code>reason_code</code>, <code>reason_text</code>, <code>requested_by_user_id</code>, <code>status</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/cancellation_items.html"><code>commerce.cancellation_items</code></a></td>
+<td>Create/update evidence</td>
+<td><code>cancellation_id</code>, <code>order_item_id</code>, <code>quantity</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Create/update evidence</td>
+<td><code>status</code>, <code>cancelled_at</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_status_history.html"><code>commerce.order_status_history</code></a></td>
+<td>Create/update evidence</td>
+<td><code>order_id</code>, <code>from_status</code>, <code>to_status</code>, <code>changed_at</code>, <code>changed_by_user_id</code>, <code>reason_code</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.expectedOrderVersion</td>
+<td>commerce.orders.row_version</td>
+</tr>
+<tr>
+<td>request.reasonCode</td>
+<td>commerce.cancellations.reason_code</td>
+</tr>
+<tr>
+<td>request.reasonText</td>
+<td>commerce.cancellations.reason_text</td>
+</tr>
+<tr>
+<td>data.cancellationId</td>
+<td>commerce.cancellations.id</td>
+</tr>
+<tr>
+<td>data.orderId</td>
+<td>commerce.cancellations.order_id</td>
+</tr>
+<tr>
+<td>data.status</td>
+<td>commerce.cancellations.status</td>
+</tr>
+<tr>
+<td>data.resolvedAt</td>
+<td>commerce.cancellations.resolved_at</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/commerce/cancellation_reason_codes.html"><code>commerce.cancellation_reason_codes</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a>, <a href="../../04-Database/Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Serialize order cancellation against pack completion. Only before-packed states can enter the cancellation orchestration; packed/handed_over is an exception, not a forced cancel. No direct payment or stock writes.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-027 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. If packing wins, return INVALID_STATE_TRANSITION and route to approved support path. Accepted cancellation separately requests Inventory release and Finance compensation; refund is not completed here.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-027-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for request cancellation before packing under the documented draft policy.</td>
+<td>HTTP 202; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-027-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-027-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-027-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove customer-orders.manage.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-027-RULE</code></td>
+<td>Serialize order cancellation against pack completion. Only before-packed states can enter the cancellation orchestration; packed/handed_over is an exception, not a forced cancel. No direct payment or stock writes.</td>
+<td>If packing wins, return INVALID_STATE_TRANSITION and route to approved support path. Accepted cancellation separately requests Inventory release and Finance compensation; refund is not completed here.</td>
+</tr>
+<tr>
+<td><code>CT-API-027-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-027-CONCURRENCY</code></td>
+<td>Race two request cancellation before packing under the documented draft policy. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-027-STATE</code></td>
+<td>Apply command after If packing wins, return INVALID_STATE_TRANSITION and route to approved support path. Accepted cancellation separately requests Inventory release and Finance compensation; refund is not completed here.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-027-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. If packing wins, return INVALID_STATE_TRANSITION and route to approved support path. Accepted cancellation separately requests Inventory release and Finance compensation; refund is not completed here.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ORD-04-OK</code>, <code>TC-ORD-04-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-028 — POST <code>/v1/me/orders/{order_id}/returns</code></h2>
+<p><strong>Create an evidenced return request for eligible delivered quantities.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Create an evidenced return request for eligible delivered quantities</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Order_Operations</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ORD-05</code>; <a href="../../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/me/orders/{order_id}/returns</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>customer-orders.manage.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Require delivered item quantities, configured returnable_until and applicable approved product return policy; subtract quantities already in accepted requests. A quality complaint does not make returned medicine saleable.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-028_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>ReturnRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>expectedOrderVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Expected current row_version; compare atomically.</td>
+</tr>
+<tr>
+<td><code>reasonCode</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=64</td>
+<td>commerce.returns.reason_code; character varying(64).</td>
+</tr>
+<tr>
+<td><code>items</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=1; maxItems=50</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>items[].orderItemId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from commerce.order_items.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>items[].quantity</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^(?=.*[1-9])[0-9]{1,13}(\.[0-9]{1,3})?$&quot;</td>
+<td>Positive decimal quantity, up to three fractional digits.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;expectedOrderVersion&quot;: 4,
+  &quot;reasonCode&quot;: &quot;CUSTOMER_REQUEST&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;orderItemId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+      &quot;quantity&quot;: &quot;2.000&quot;
+    }
+  ]
+}
+</code></pre>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>201</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>ReturnData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>returnId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.returns.id; uuid.</td>
+</tr>
+<tr>
+<td><code>returnNumber</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=64</td>
+<td>commerce.returns.return_number; character varying(64).</td>
+</tr>
+<tr>
+<td><code>orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.returns.order_id; uuid.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>commerce.returns.status; character varying(32). No closed CHECK enum in table evidence; response uses persisted owner status, not permission for arbitrary transitions.</td>
+</tr>
+<tr>
+<td><code>requestedAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>commerce.returns.requested_at; timestamp with time zone.</td>
+</tr>
+<tr>
+<td><code>pickupRequired</code></td>
+<td>boolean</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>commerce.returns.pickup_required; boolean.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;returnId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;returnNumber&quot;: &quot;return number&quot;,
+    &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;status&quot;: &quot;requested&quot;,
+    &quot;requestedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pickupRequired&quot;: true
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-028.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks customer-orders.manage.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for create an evidenced return request for eligible delivered quantities. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Require delivered item quantities, configured returnable_until and applicable approved product return policy; subtract quantities already in accepted requests. A quality complaint does not make returned medicine saleable.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Excess/expired/ineligible returns have no stock or refund effect. Receipt inspection and refund approval are later owner commands.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>STALE_VERSION</code></td>
+<td>An expected aggregate/row version no longer matches current committed state.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the current create an evidenced return request for eligible delivered quantities. context and re-evaluate; no partial mutation.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Excess/expired/ineligible returns have no stock or refund effect. Receipt inspection and refund approval are later owner commands.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-028 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;STALE_VERSION&quot;,
+    &quot;message&quot;: &quot;An expected aggregate/row version no longer matches current committed state.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>prescription_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>pickup_required</code>, <code>reason_code</code>, <code>reason_code_id</code>, <code>requested_at</code>, <code>return_number</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/return_items.html"><code>commerce.return_items</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_item_id</code>, <code>quantity</code>, <code>return_id</code>, <code>row_version</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/return_reason_codes.html"><code>commerce.return_reason_codes</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td>Create/update evidence</td>
+<td><code>order_id</code>, <code>user_id</code>, <code>reason_code</code>, <code>return_number</code>, <code>status</code>, <code>requested_at</code>, <code>pickup_required</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/return_items.html"><code>commerce.return_items</code></a></td>
+<td>Create/update evidence</td>
+<td><code>return_id</code>, <code>order_item_id</code>, <code>quantity</code>, <code>resolution</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.expectedOrderVersion</td>
+<td>commerce.orders.row_version</td>
+</tr>
+<tr>
+<td>request.reasonCode</td>
+<td>commerce.returns.reason_code</td>
+</tr>
+<tr>
+<td>request.items[].orderItemId</td>
+<td>commerce.order_items.id</td>
+</tr>
+<tr>
+<td>request.items[].quantity</td>
+<td>commerce.return_items.quantity</td>
+</tr>
+<tr>
+<td>data.returnId</td>
+<td>commerce.returns.id</td>
+</tr>
+<tr>
+<td>data.returnNumber</td>
+<td>commerce.returns.return_number</td>
+</tr>
+<tr>
+<td>data.orderId</td>
+<td>commerce.returns.order_id</td>
+</tr>
+<tr>
+<td>data.status</td>
+<td>commerce.returns.status</td>
+</tr>
+<tr>
+<td>data.requestedAt</td>
+<td>commerce.returns.requested_at</td>
+</tr>
+<tr>
+<td>data.pickupRequired</td>
+<td>commerce.returns.pickup_required</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/commerce/return_reason_codes.html"><code>commerce.return_reason_codes</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Require delivered item quantities, configured returnable_until and applicable approved product return policy; subtract quantities already in accepted requests. A quality complaint does not make returned medicine saleable.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-028 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Excess/expired/ineligible returns have no stock or refund effect. Receipt inspection and refund approval are later owner commands.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-028-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for create an evidenced return request for eligible delivered quantities.</td>
+<td>HTTP 201; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-028-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-028-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-028-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove customer-orders.manage.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-028-RULE</code></td>
+<td>Require delivered item quantities, configured returnable_until and applicable approved product return policy; subtract quantities already in accepted requests. A quality complaint does not make returned medicine saleable.</td>
+<td>Excess/expired/ineligible returns have no stock or refund effect. Receipt inspection and refund approval are later owner commands.</td>
+</tr>
+<tr>
+<td><code>CT-API-028-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-028-CONCURRENCY</code></td>
+<td>Race two create an evidenced return request for eligible delivered quantities. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-028-STATE</code></td>
+<td>Apply command after Excess/expired/ineligible returns have no stock or refund effect. Receipt inspection and refund approval are later owner commands.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-028-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Excess/expired/ineligible returns have no stock or refund effect. Receipt inspection and refund approval are later owner commands.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ORD-05-OK</code>, <code>TC-ORD-05-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-029 — GET <code>/v1/me/orders/{order_id}/invoice</code></h2>
+<p><strong>Read or download the owned issued invoice.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Read or download the owned issued invoice</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Finance_Payments</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ORD-03</code>; <a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/me/orders/{order_id}/invoice</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>customer-orders.read.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Invoice is immutable issued evidence; an unissued document returns 404. This JSON route exposes amounts and safe line detail, no public download URL. Accept application/json (default) for the structured DTO or application/pdf for attachment download of finance.invoices.document_file_id. Reauthorize customer/staff scope, available clean private file and invoice-purpose grant; stream the immutable stored PDF through the authenticated file service, never a caller URL or a public link.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>not applicable for this singleton</code>. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>PDF download variant: send <code>Accept: application/pdf</code>. HTTP 200 streams the immutable issued PDF bytes with <code>Content-Type: application/pdf</code> and <code>Content-Disposition: attachment; filename=&quot;invoice-DEMO-INV-0001.pdf&quot;</code> (sanitized server-generated filename). No JSON envelope or pagination applies to this variant. Authenticate before streaming and recheck invoice-purpose file grant; no public URL, redirects or range/partial-download support is proposed. Missing issued document is 404; unavailable storage is 503. The default JSON representation follows below.</p>
+<p>Data DTO: <code>InvoiceData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>invoiceId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>finance.invoices.id; uuid.</td>
+</tr>
+<tr>
+<td><code>invoiceNumber</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=64</td>
+<td>finance.invoices.invoice_number; character varying(64).</td>
+</tr>
+<tr>
+<td><code>orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>finance.invoices.order_id; uuid.</td>
+</tr>
+<tr>
+<td><code>issuedAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>finance.invoices.issued_at; timestamp with time zone.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>finance.invoices.status; character varying(32). No closed CHECK enum in table evidence; response uses persisted owner status, not permission for arbitrary transitions.</td>
+</tr>
+<tr>
+<td><code>subtotal</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,14}(\.[0-9]{1,2})?$&quot;</td>
+<td>finance.invoices.subtotal; numeric(16,2).</td>
+</tr>
+<tr>
+<td><code>taxTotal</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,14}(\.[0-9]{1,2})?$&quot;</td>
+<td>finance.invoices.tax_total; numeric(16,2).</td>
+</tr>
+<tr>
+<td><code>grandTotal</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,14}(\.[0-9]{1,2})?$&quot;</td>
+<td>finance.invoices.grand_total; numeric(16,2).</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=3</td>
+<td>finance.invoices.currency; character varying(3).</td>
+</tr>
+<tr>
+<td><code>items</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=0; maxItems=100</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>items[].description</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=255</td>
+<td>finance.invoice_items.description; character varying(255).</td>
+</tr>
+<tr>
+<td><code>items[].quantity</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,9}(\.[0-9]{1,3})?$&quot;</td>
+<td>finance.invoice_items.quantity; numeric(12,3).</td>
+</tr>
+<tr>
+<td><code>items[].unitPrice</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,12}(\.[0-9]{1,2})?$&quot;</td>
+<td>finance.invoice_items.unit_price; numeric(14,2).</td>
+</tr>
+<tr>
+<td><code>items[].hsnCode</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=32</td>
+<td>finance.invoice_items.hsn_code; character varying(32).</td>
+</tr>
+<tr>
+<td><code>items[].taxAmount</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,12}(\.[0-9]{1,2})?$&quot;</td>
+<td>finance.invoice_items.tax_amount; numeric(14,2).</td>
+</tr>
+<tr>
+<td><code>items[].lineTotal</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,14}(\.[0-9]{1,2})?$&quot;</td>
+<td>finance.invoice_items.line_total; numeric(16,2).</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;invoiceId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;invoiceNumber&quot;: &quot;DEMO-INV-0001&quot;,
+    &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;issuedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;status&quot;: &quot;issued&quot;,
+    &quot;subtotal&quot;: &quot;25.00&quot;,
+    &quot;taxTotal&quot;: &quot;0.00&quot;,
+    &quot;grandTotal&quot;: &quot;25.00&quot;,
+    &quot;currency&quot;: &quot;INR&quot;,
+    &quot;items&quot;: [
+      {
+        &quot;description&quot;: &quot;Synthetic planning example; not an approved clinical claim.&quot;,
+        &quot;quantity&quot;: &quot;2.000&quot;,
+        &quot;unitPrice&quot;: &quot;12.50&quot;,
+        &quot;hsnCode&quot;: null,
+        &quot;taxAmount&quot;: &quot;0.00&quot;,
+        &quot;lineTotal&quot;: &quot;25.00&quot;
+      }
+    ]
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-029.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks customer-orders.read.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for read or download the owned issued invoice. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-029 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/finance/invoices.html"><code>finance.invoices</code></a></td>
+<td>Read</td>
+<td><code>currency</code>, <code>document_file_id</code>, <code>grand_total</code>, <code>id</code>, <code>invoice_number</code>, <code>issued_at</code>, <code>order_id</code>, <code>row_version</code>, <code>status</code>, <code>subtotal</code>, <code>tax_total</code></td>
+<td>Finance_Payments projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/finance/invoice_items.html"><code>finance.invoice_items</code></a></td>
+<td>Read</td>
+<td><code>description</code>, <code>hsn_code</code>, <code>id</code>, <code>invoice_id</code>, <code>line_total</code>, <code>order_item_id</code>, <code>quantity</code>, <code>row_version</code>, <code>tax_amount</code>, <code>unit_price</code></td>
+<td>Finance_Payments projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>Read</td>
+<td><code>access_type</code>, <code>classification</code>, <code>id</code>, <code>is_deleted</code>, <code>malware_scan_status</code>, <code>owner_id</code>, <code>owner_type</code>, <code>row_version</code>, <code>sha256</code>, <code>size_bytes</code>, <code>status</code></td>
+<td>Platform file service projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_access_grants.html"><code>platform.file_access_grants</code></a></td>
+<td>Read</td>
+<td><code>expires_at</code>, <code>file_object_id</code>, <code>id</code>, <code>row_version</code></td>
+<td>Platform file service projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.invoiceId</td>
+<td>finance.invoices.id</td>
+</tr>
+<tr>
+<td>data.invoiceNumber</td>
+<td>finance.invoices.invoice_number</td>
+</tr>
+<tr>
+<td>data.orderId</td>
+<td>finance.invoices.order_id</td>
+</tr>
+<tr>
+<td>data.issuedAt</td>
+<td>finance.invoices.issued_at</td>
+</tr>
+<tr>
+<td>data.status</td>
+<td>finance.invoices.status</td>
+</tr>
+<tr>
+<td>data.subtotal</td>
+<td>finance.invoices.subtotal</td>
+</tr>
+<tr>
+<td>data.taxTotal</td>
+<td>finance.invoices.tax_total</td>
+</tr>
+<tr>
+<td>data.grandTotal</td>
+<td>finance.invoices.grand_total</td>
+</tr>
+<tr>
+<td>data.currency</td>
+<td>finance.invoices.currency</td>
+</tr>
+<tr>
+<td>data.items[].description</td>
+<td>finance.invoice_items.description</td>
+</tr>
+<tr>
+<td>data.items[].quantity</td>
+<td>finance.invoice_items.quantity</td>
+</tr>
+<tr>
+<td>data.items[].unitPrice</td>
+<td>finance.invoice_items.unit_price</td>
+</tr>
+<tr>
+<td>data.items[].hsnCode</td>
+<td>finance.invoice_items.hsn_code</td>
+</tr>
+<tr>
+<td>data.items[].taxAmount</td>
+<td>finance.invoice_items.tax_amount</td>
+</tr>
+<tr>
+<td>data.items[].lineTotal</td>
+<td>finance.invoice_items.line_total</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Invoice is immutable issued evidence; an unissued document returns 404. This JSON route exposes amounts and safe line detail, no public download URL. Accept application/json (default) for the structured DTO or application/pdf for attachment download of finance.invoices.document_file_id. Reauthorize customer/staff scope, available clean private file and invoice-purpose grant; stream the immutable stored PDF through the authenticated file service, never a caller URL or a public link.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. An order without an issued invoice is not given a fabricated invoice; retry after issuance.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-029-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for read or download the owned issued invoice.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-029-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-029-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-029-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove customer-orders.read.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-029-RULE</code></td>
+<td>Invoice is immutable issued evidence; an unissued document returns 404. This JSON route exposes amounts and safe line detail, no public download URL. Accept application/json (default) for the structured DTO or application/pdf for attachment download of finance.invoices.document_file_id. Reauthorize customer/staff scope, available clean private file and invoice-purpose grant; stream the immutable stored PDF through the authenticated file service, never a caller URL or a public link.</td>
+<td>An order without an issued invoice is not given a fabricated invoice; retry after issuance.</td>
+</tr>
+<tr>
+<td><code>CT-API-029-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-029-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-029-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-029-RECOVERY</code></td>
+<td>Dependency timeout during read or download the owned issued invoice.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ORD-03-OK</code>, <code>TC-ORD-03-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-030 — GET <code>/v1/me/orders/{order_id}/refunds</code></h2>
+<p><strong>List refunds for one owned order.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>List refunds for one owned order</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Finance_Payments</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ORD-06</code>; <a href="../../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/me/orders/{order_id}/refunds</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>customer-orders.read.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Show persisted refund status and amount independently of cancellation/return status; derive currency from order.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>limit</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>20</td>
+<td>minimum=1; maximum=100</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>0</td>
+<td>minimum=0; maximum=100000</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+</tbody>
+</table>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>created_at DESC, id ASC</code>. Pagination: offset.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>RefundListData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>refunds</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=0; maxItems=100</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>refunds[].refundId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>payment.refunds.id; uuid.</td>
+</tr>
+<tr>
+<td><code>refunds[].orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>payment.refunds.order_id; uuid.</td>
+</tr>
+<tr>
+<td><code>refunds[].amount</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,14}(\.[0-9]{1,2})?$&quot;</td>
+<td>payment.refunds.amount; numeric(16,2).</td>
+</tr>
+<tr>
+<td><code>refunds[].status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;requested&quot;, &quot;approved&quot;, &quot;processing&quot;, &quot;succeeded&quot;, &quot;failed&quot;, &quot;cancelled&quot;]; minLength=1; maxLength=16</td>
+<td>payment.refunds.status; character varying(16).</td>
+</tr>
+<tr>
+<td><code>refunds[].createdAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>payment.refunds.created_at; timestamp with time zone.</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=3</td>
+<td>commerce.orders.currency; character varying(3).</td>
+</tr>
+</tbody>
+</table>
+<p>Pagination metadata: <code>totalCount: integer ≥0</code>, <code>limit: integer 1–100</code>, <code>offset: integer 0–100000</code>, <code>hasNext: boolean</code>. Empty list returns <code>[]</code> with hasNext false. No snapshot isolation is promised.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;refunds&quot;: [
+      {
+        &quot;refundId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;amount&quot;: &quot;26.25&quot;,
+        &quot;status&quot;: &quot;requested&quot;,
+        &quot;createdAt&quot;: &quot;2026-10-24T10:30:00Z&quot;
+      }
+    ],
+    &quot;currency&quot;: &quot;INR&quot;
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: {
+      &quot;totalCount&quot;: 1,
+      &quot;limit&quot;: 20,
+      &quot;offset&quot;: 0,
+      &quot;hasNext&quot;: false
+    }
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-030.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks customer-orders.read.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for list refunds for one owned order. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-030 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>currency</code>, <code>current_revision_id</code>, <code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/payment/refunds.html"><code>payment.refunds</code></a></td>
+<td>Read</td>
+<td><code>amount</code>, <code>created_at</code>, <code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Finance_Payments projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.refunds[].refundId</td>
+<td>payment.refunds.id</td>
+</tr>
+<tr>
+<td>data.refunds[].orderId</td>
+<td>payment.refunds.order_id</td>
+</tr>
+<tr>
+<td>data.refunds[].amount</td>
+<td>payment.refunds.amount</td>
+</tr>
+<tr>
+<td>data.refunds[].status</td>
+<td>payment.refunds.status</td>
+</tr>
+<tr>
+<td>data.refunds[].createdAt</td>
+<td>payment.refunds.created_at</td>
+</tr>
+<tr>
+<td>data.currency</td>
+<td>commerce.orders.currency</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/payment/refund_reason_codes.html"><code>payment.refund_reason_codes</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Show persisted refund status and amount independently of cancellation/return status; derive currency from order.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>offset; created_at DESC, id ASC; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. Pending refund remains pending after provider timeout; never turn absence of callback into success.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-030-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for list refunds for one owned order.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-030-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-030-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-030-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove customer-orders.read.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-030-RULE</code></td>
+<td>Show persisted refund status and amount independently of cancellation/return status; derive currency from order.</td>
+<td>Pending refund remains pending after provider timeout; never turn absence of callback into success.</td>
+</tr>
+<tr>
+<td><code>CT-API-030-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-030-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-030-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-030-RECOVERY</code></td>
+<td>Dependency timeout during list refunds for one owned order.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ORD-06-OK</code>, <code>TC-ORD-06-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-031 — GET <code>/v1/me/orders/{order_id}/delivery</code></h2>
+<p><strong>Read shipment progress for one owned order.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Read shipment progress for one owned order</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Delivery_Operations</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ORD-07</code>; <a href="../../06-Workflows/WF-008-Rider-Assignment-and-POD.html">WF-008</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/me/orders/{order_id}/delivery</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>customer-orders.read.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Show safe promised/actual timestamps; omit rider live GPS, personal contact and internal route details.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>not applicable for this singleton</code>. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>OrderDeliveryData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>shipments</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=0; maxItems=100</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>shipments[].shipmentId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>logistics.shipments.id; uuid.</td>
+</tr>
+<tr>
+<td><code>shipments[].orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>logistics.shipments.order_id; uuid.</td>
+</tr>
+<tr>
+<td><code>shipments[].status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;created&quot;, &quot;label_created&quot;, &quot;pickup_scheduled&quot;, &quot;picked_up&quot;, &quot;in_transit&quot;, &quot;out_for_delivery&quot;, &quot;delivered&quot;, &quot;delivery_failed&quot;, &quot;rto_initiated&quot;, &quot;rto_delivered&quot;, &quot;cancelled&quot;]; minLength=1; maxLength=16</td>
+<td>logistics.shipments.status; character varying(16).</td>
+</tr>
+<tr>
+<td><code>shipments[].estimatedDeliveryAt</code></td>
+<td>string/null (date-time)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>logistics.shipments.estimated_delivery_at; timestamp with time zone.</td>
+</tr>
+<tr>
+<td><code>shipments[].dispatchedAt</code></td>
+<td>string/null (date-time)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>logistics.shipments.dispatched_at; timestamp with time zone.</td>
+</tr>
+<tr>
+<td><code>shipments[].deliveredAt</code></td>
+<td>string/null (date-time)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>logistics.shipments.delivered_at; timestamp with time zone.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;shipments&quot;: [
+      {
+        &quot;shipmentId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;status&quot;: &quot;created&quot;,
+        &quot;estimatedDeliveryAt&quot;: null,
+        &quot;dispatchedAt&quot;: null,
+        &quot;deliveredAt&quot;: null
+      }
+    ]
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-031.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks customer-orders.read.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for read shipment progress for one owned order. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-031 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/shipments.html"><code>logistics.shipments</code></a></td>
+<td>Read</td>
+<td><code>delivered_at</code>, <code>dispatched_at</code>, <code>estimated_delivery_at</code>, <code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Delivery_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.shipments[].shipmentId</td>
+<td>logistics.shipments.id</td>
+</tr>
+<tr>
+<td>data.shipments[].orderId</td>
+<td>logistics.shipments.order_id</td>
+</tr>
+<tr>
+<td>data.shipments[].status</td>
+<td>logistics.shipments.status</td>
+</tr>
+<tr>
+<td>data.shipments[].estimatedDeliveryAt</td>
+<td>logistics.shipments.estimated_delivery_at</td>
+</tr>
+<tr>
+<td>data.shipments[].dispatchedAt</td>
+<td>logistics.shipments.dispatched_at</td>
+</tr>
+<tr>
+<td>data.shipments[].deliveredAt</td>
+<td>logistics.shipments.delivered_at</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/logistics/carriers.html"><code>logistics.carriers</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Show safe promised/actual timestamps; omit rider live GPS, personal contact and internal route details.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. No assigned shipment returns shipments []; it is not a delivered state.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-031-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for read shipment progress for one owned order.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-031-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-031-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-031-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove customer-orders.read.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-031-RULE</code></td>
+<td>Show safe promised/actual timestamps; omit rider live GPS, personal contact and internal route details.</td>
+<td>No assigned shipment returns shipments []; it is not a delivered state.</td>
+</tr>
+<tr>
+<td><code>CT-API-031-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-031-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-031-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-031-RECOVERY</code></td>
+<td>Dependency timeout during read shipment progress for one owned order.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ORD-07-OK</code>, <code>TC-ORD-07-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+</main></body></html>

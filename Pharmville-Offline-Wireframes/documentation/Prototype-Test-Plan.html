@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Prototype Test Plan · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Prototype test plan</h1>
+<h2>What these checks establish</h2>
+<p>Browser tests execute the local HTML, CSS and JavaScript through actual forms, buttons, dialogs and routes using existing development-only Puppeteer and local Chrome. They validate prototype interaction and layout; no application, clinical, provider or production database acceptance is claimed.</p>
+<p>Start the <a href="How-to-Run.html">local preview</a>, then run from repository root:</p>
+<pre><code class="language-bash">node 10-Low-Fidelity-Wireframes/tools/generate-documentation.mjs
+node 10-Low-Fidelity-Wireframes/tests/browser.mjs
+node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs
+node 10-Low-Fidelity-Wireframes/tests/experience-flows.mjs
+node 10-Low-Fidelity-Wireframes/tests/domain-workflows.mjs
+node 10-Low-Fidelity-Wireframes/tests/extended-workflows.mjs
+node 10-Low-Fidelity-Wireframes/tools/generate-experience-coverage.mjs
+node 10-Low-Fidelity-Wireframes/tools/validate-prototype.mjs
+node scripts/validate-docs.mjs
+</code></pre>
+<p>The browser test reuses the repository’s existing <code>node_modules/puppeteer</code>; no runtime dependencies are needed for the prototype. Set <code>PUPPETEER_EXECUTABLE_PATH</code> if Chrome is not at its detected platform path. Browser automation requires local process permissions. The results and PNGs are written under ignored <code>10-Low-Fidelity-Wireframes/artifacts/</code>.</p>
+<h2>Automated checks</h2>
+<ol>
+<li><strong>BR-01 — Route smoke:</strong> load all registered screens and verify unique IDs/routes and rendered hash links.</li>
+<li><strong>BR-02 — Scenario rendering:</strong> load every declared applicable scenario and detect browser errors/external requests. A rendered scenario is not an interaction assertion.</li>
+<li><strong>BR-03 — Responsive sweep:</strong> visit all screens at 360 × 800, 390 × 844, 430 × 932, 768 × 1024, 1280 × 800 and 1440 × 900; compare document/viewport width and capture representative customer, pharmacy and rider screenshots. Separately switch the internal Mobile, Tablet and Desktop previews.</li>
+<li><strong>BR-04 — Core interactions and safeguards:</strong> submit incorrect/valid OTP, profile/email errors, search, cart and accepted checkout through their actual forms; test payment pending/recovery/idempotency, cancellation/refund, prescription review gates, exact batch pick/pack, rider proof/offline recovery, COD and stock receipt, access denial/MFA and report export.</li>
+<li><strong>BR-05 — Basic accessibility and navigation:</strong> check labels and duplicate IDs on each normal screen, route links, keyboard dialog dismissal, browser history and saved form recovery.</li>
+<li><strong>DW-01 — Shared-domain flow assertions:</strong> run the no-browser domain handlers for unified identity and workspace checks (including elevated step-up), out-of-stock procurement through store availability, return custody/quarantine and separate Finance review, and customer support lifecycle. This validates local state transitions, not an API, database transaction or production security policy.</li>
+<li><strong>EW-01 — Extended browser workflows:</strong> through actual screens and forms, exercise an unavailable product through PO proposal, linked receipt, transfer and destination availability; a return through owner eligibility, reverse rider custody, warehouse quarantine, Finance decision and refund status; and customer support request, staff resolution and customer-visible update. Results are written to ignored <code>artifacts/extended-workflow-results.json</code>.</li>
+</ol>
+<p>The <a href="Complete-Screen-Matrix.html">Complete Screen Matrix</a> maps each route to the test groups that exercise it. BR-02 is screen/state rendering coverage; only rows that list BR-04 have named direct interaction assertions for that route. Core journeys also cross roles, so assertions are not isolated to a single screen.</p>
+<h2>Manual review checklist</h2>
+<p>The <code>experience-flows.mjs</code> suite assigns stable <code>EXP-nnn</code> assertion IDs in its results file. It operates Choose Experience → Mobile/Website → Checkout, checks experience URLs and refresh, Back/Forward, actual shared cart quantity/price, unsupported platform/role combinations, and both shopping flows through captured-payment recovery and tracking.</p>
+<p>Account/address fixtures supply setup; shopping actions, payment, prescription upload, pharmacist rejection, store preparation, rider assignment/pickup and delivery failure use the existing UI handlers. Incorrect OTP checks include the contextual error, denied session and corrected retry.</p>
+<p>The suite separately checks every supported experience-prefixed route at its intended normal width. Normal route rendering is not treated as full interaction verification. The main browser regression also enters a proposed elevated workspace, supplies a second synthetic authenticator code and confirms the context activates only after that step.</p>
+<p>Fresh screenshots cover all 18 requested categories plus journey selection, stock shortage and refund pending. They are generated from the current run, with actual phone-width customer captures and desktop customer/staff captures. <code>generate-experience-coverage.mjs</code> requires a successful results file before recording verified platform/scenario rows.</p>
+<p>Its legacy <code>generate-ux-state-coverage.mjs</code> entry point delegates to the same generator, so it cannot restore the old generic verification claims.</p>
+<ul>
+<li>Use only the keyboard to select workspace/role/scenario, submit forms, open/cancel confirmation and follow cross-role links. Confirm labels, focus visibility and announced errors.</li>
+<li>Check that each failure explains what happened, who acts next and which record remains pending. Do not treat a scenario panel label as a completed business action.</li>
+<li>Review partial rejection, wrong-patient correction, expired batches, stale assignments and cash mismatch with the responsible product specialists.</li>
+<li>Confirm the responsive card reading order and mobile tap targets are useful to actual staff/riders. Automated overflow checks do not prove full usability or screen-reader conformance.</li>
+<li>Confirm synthetic filename, masked contact, placeholder maps and TSV/CSV approximations are clearly distinguished from future real integrations.</li>
+</ul>
+<h2>Evidence and gaps</h2>
+<p>Actual results are recorded after execution in the local browser-results JSON and <a href="Validation-Results.html">validation results</a>. Review screenshots and Git diff before accepting a pass. Production API/provider/security tests, real device GPS/background behavior, native Excel formats, clinical/legal approval and hosted GitHub Pages testing are outside this prototype.</p>
+<h2>Product UX behavioral checks</h2>
+<p>Run <code>node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs</code> after starting the server. It tests direct-URL role denial, explicit reviewer changes, removal of duplicate customer navigation, inline required-input errors, actual product filtering, preserved order state during preview changes, expired OTP rejection, duplicate checkout and concurrent pharmacy review.</p>
+<p>It captures 15 representative routes at 390 and 1440 px using a labelled prepared fixture. The original full suite now explicitly selects reviewer personas before each cross-workspace smoke visit; direct URL denial is tested independently.</p>
+</main></body></html>

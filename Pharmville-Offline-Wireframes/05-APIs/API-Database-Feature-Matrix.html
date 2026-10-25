@@ -1,0 +1,1239 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>API Database Feature Matrix · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>API, database and feature traceability</h1>
+<p><strong>Proposed / Unapproved / Not Implemented.</strong> Exact columns and DTO derivations are in each linked operation; this matrix gives the centralized table/feature view. Surface module differs from command/data owner where stated. Shared authentication consumes effective grants; no direct identity-table write is implied. <a href="API-Contract-Coverage.html">Coverage</a> · <a href="../07-Engineering/State-and-Recovery-Contracts.html">ownership</a> · <a href="../04-Database/Master-Data-Inventory.html">masters</a>.</p>
+<table>
+<thead>
+<tr>
+<th>API ID</th>
+<th>Endpoint</th>
+<th>Feature ID</th>
+<th>Module / command owner</th>
+<th>Tables Read</th>
+<th>Tables Written</th>
+<th>Master Dependencies</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-001</a></td>
+<td><code>POST /v1/auth/customer/otp/request</code></td>
+<td>ACC-01, AUTH-03</td>
+<td>Authentication_Access</td>
+<td><code>identity.otp_challenges</code>, <code>identity.users</code>, <code>identity.authentication_challenges</code></td>
+<td><code>identity.otp_challenges</code>, <code>identity.authentication_challenges</code></td>
+<td><code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-002</a></td>
+<td><code>POST /v1/auth/customer/otp/verify</code></td>
+<td>ACC-01, AUTH-03</td>
+<td>Authentication_Access</td>
+<td><code>identity.otp_challenges</code>, <code>identity.users</code>, <code>customer.profiles</code>, <code>identity.authentication_challenges</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code>, <code>identity.session_refresh_tokens</code></td>
+<td><code>identity.otp_challenges</code>, <code>identity.users</code>, <code>identity.sessions</code>, <code>identity.authentication_challenges</code>, <code>identity.session_refresh_tokens</code>, <code>identity.login_attempts</code></td>
+<td><code>customer.profiles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-003</a></td>
+<td><code>GET /v1/me</code></td>
+<td>ACC-02</td>
+<td>Customer_Accounts</td>
+<td><code>customer.profiles</code>, <code>identity.users</code></td>
+<td>None</td>
+<td><code>customer.profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-004</a></td>
+<td><code>PATCH /v1/me</code></td>
+<td>ACC-02</td>
+<td>Customer_Accounts</td>
+<td><code>customer.profiles</code>, <code>identity.users</code></td>
+<td><code>customer.profiles</code>, <code>identity.users</code></td>
+<td><code>customer.profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>incomplete / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-005</a></td>
+<td><code>GET /v1/me/addresses</code></td>
+<td>ACC-03</td>
+<td>Customer_Accounts</td>
+<td><code>customer.addresses</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-006</a></td>
+<td><code>POST /v1/me/addresses</code></td>
+<td>ACC-03</td>
+<td>Customer_Accounts</td>
+<td><code>customer.addresses</code>, <code>customer.profiles</code></td>
+<td><code>customer.addresses</code>, <code>customer.profiles</code></td>
+<td><code>customer.profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-007</a></td>
+<td><code>GET /v1/me/patients</code></td>
+<td>ACC-04</td>
+<td>Customer_Accounts</td>
+<td><code>customer.family_members</code>, <code>clinical.patient_profiles</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-008</a></td>
+<td><code>POST /v1/me/patients</code></td>
+<td>ACC-04</td>
+<td>Customer_Accounts</td>
+<td><code>customer.family_members</code>, <code>clinical.patient_profiles</code></td>
+<td><code>customer.family_members</code>, <code>clinical.patient_profiles</code></td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-009</a></td>
+<td><code>POST /v1/me/consents</code></td>
+<td>ACC-05</td>
+<td>Customer_Accounts</td>
+<td><code>customer.consents</code></td>
+<td><code>customer.consents</code>, <code>customer.consent_events</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-005</a></td>
+<td><code>GET /v1/me/consents</code></td>
+<td>ACC-05</td>
+<td>Customer_Accounts</td>
+<td><code>customer.consents</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-010</a></td>
+<td><code>GET /v1/catalog/categories</code></td>
+<td>CAT-01</td>
+<td>Product_Catalog</td>
+<td><code>catalog.categories</code></td>
+<td>None</td>
+<td><code>catalog.categories</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-011</a></td>
+<td><code>GET /v1/catalog/products</code></td>
+<td>CAT-01</td>
+<td>Product_Catalog</td>
+<td><code>catalog.products</code>, <code>catalog.commerce_classes</code>, <code>catalog.categories</code>, <code>catalog.brands</code></td>
+<td>None</td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.products</code>, <code>identity.users</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-012</a></td>
+<td><code>GET /v1/catalog/products/{product_id}</code></td>
+<td>CAT-02</td>
+<td>Product_Catalog</td>
+<td><code>catalog.products</code>, <code>catalog.commerce_classes</code>, <code>catalog.categories</code>, <code>catalog.brands</code>, <code>catalog.manufacturers</code>, <code>catalog.product_salts</code>, <code>catalog.salts</code>, <code>catalog.product_content</code>, <code>pricing.product_prices</code>, <code>pricing.price_books</code></td>
+<td>None</td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>catalog.salts</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-013</a></td>
+<td><code>GET /v1/catalog/search</code></td>
+<td>CAT-03</td>
+<td>Product_Catalog</td>
+<td><code>catalog.products</code>, <code>catalog.commerce_classes</code>, <code>catalog.categories</code>, <code>catalog.brands</code>, <code>catalog.product_salts</code>, <code>catalog.salts</code>, <code>search.documents</code>, <code>search.synonyms</code></td>
+<td>None</td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.products</code>, <code>catalog.salts</code>, <code>identity.users</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-014</a></td>
+<td><code>GET /v1/catalog/availability</code></td>
+<td>CAT-04</td>
+<td>Product_Catalog</td>
+<td><code>catalog.products</code>, <code>catalog.commerce_classes</code>, <code>catalog.categories</code>, <code>catalog.brands</code>, <code>warehouse.stock_balances</code>, <code>warehouse.inventory_lots</code>, <code>logistics.serviceability_rules</code>, <code>organization.locations</code>, <code>organization.licenses</code></td>
+<td>None</td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-015</a></td>
+<td><code>POST /v1/admin/catalog/imports</code></td>
+<td>ADM-07</td>
+<td>Product_Catalog</td>
+<td><code>platform.file_objects</code>, <code>catalog.products</code>, <code>pricing.product_prices</code></td>
+<td><code>platform.scheduled_jobs</code></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>incomplete / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-016</a></td>
+<td><code>POST /v1/admin/catalog/products/{product_id}/classification</code></td>
+<td>ADM-06</td>
+<td>Product_Catalog</td>
+<td><code>catalog.products</code>, <code>catalog.commerce_classes</code>, <code>catalog.categories</code>, <code>catalog.brands</code>, <code>catalog.product_classification_history</code></td>
+<td><code>catalog.products</code>, <code>catalog.product_classification_history</code></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-017</a></td>
+<td><code>POST /v1/admin/catalog/products/{product_id}/publish</code></td>
+<td>ADM-06</td>
+<td>Product_Catalog</td>
+<td><code>catalog.products</code>, <code>catalog.commerce_classes</code>, <code>catalog.categories</code>, <code>catalog.brands</code>, <code>catalog.manufacturers</code>, <code>catalog.dosage_forms</code>, <code>pricing.product_prices</code>, <code>pricing.tax_rules</code></td>
+<td><code>catalog.products</code></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-018</a></td>
+<td><code>GET /v1/me/cart</code></td>
+<td>CHK-01</td>
+<td>Cart_Checkout</td>
+<td><code>commerce.carts</code>, <code>commerce.cart_items</code>, <code>catalog.products</code></td>
+<td>None</td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-019</a></td>
+<td><code>PUT /v1/me/cart/items</code></td>
+<td>CHK-01</td>
+<td>Cart_Checkout</td>
+<td><code>commerce.carts</code>, <code>commerce.cart_items</code>, <code>catalog.products</code></td>
+<td><code>commerce.carts</code>, <code>commerce.cart_items</code></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-020</a></td>
+<td><code>POST /v1/checkouts/quotes</code></td>
+<td>CHK-02, CHK-05, CHK-06</td>
+<td>Cart_Checkout</td>
+<td><code>commerce.carts</code>, <code>commerce.cart_items</code>, <code>customer.addresses</code>, <code>clinical.patient_profiles</code>, <code>customer.family_members</code>, <code>catalog.products</code>, <code>catalog.commerce_classes</code>, <code>pricing.product_prices</code>, <code>pricing.price_books</code>, <code>pricing.tax_rules</code>, <code>logistics.serviceability_rules</code>, <code>platform.application_settings</code>, <code>pricing.promotions</code>, <code>pricing.promotion_versions</code>, <code>pricing.promotion_redemptions</code>, <code>pricing.coupon_codes</code></td>
+<td>None</td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>marketplace.sellers</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-021</a></td>
+<td><code>POST /v1/checkouts</code></td>
+<td>CHK-07, CHK-08</td>
+<td>Cart_Checkout</td>
+<td><code>commerce.carts</code>, <code>commerce.cart_items</code>, <code>customer.addresses</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code></td>
+<td><code>commerce.checkouts</code>, <code>commerce.orders</code>, <code>commerce.order_revisions</code>, <code>commerce.order_items</code>, <code>commerce.carts</code>, <code>commerce.order_status_history</code></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-022</a></td>
+<td><code>POST /v1/prescriptions/upload-intents</code></td>
+<td>RX-01</td>
+<td>Prescription_Upload via platform file service</td>
+<td><code>platform.file_objects</code>, <code>platform.file_upload_sessions</code></td>
+<td><code>platform.file_objects</code>, <code>platform.file_upload_sessions</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-023</a></td>
+<td><code>POST /v1/prescriptions/documents/confirm</code></td>
+<td>RX-01</td>
+<td>Prescription_Upload</td>
+<td><code>platform.file_objects</code>, <code>platform.file_upload_sessions</code></td>
+<td><code>platform.file_objects</code>, <code>platform.file_upload_sessions</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-024</a></td>
+<td><code>POST /v1/orders/{order_id}/prescriptions</code></td>
+<td>RX-04</td>
+<td>Prescription_Upload</td>
+<td><code>commerce.orders</code>, <code>commerce.order_items</code>, <code>clinical.patient_profiles</code>, <code>customer.family_members</code>, <code>platform.file_objects</code></td>
+<td><code>clinical.prescriptions</code>, <code>clinical.prescription_documents</code>, <code>commerce.order_items</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-025</a></td>
+<td><code>GET /v1/me/orders</code></td>
+<td>ORD-02</td>
+<td>Customer_Orders</td>
+<td><code>commerce.orders</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-026</a></td>
+<td><code>GET /v1/me/orders/{order_id}</code></td>
+<td>ORD-02</td>
+<td>Customer_Orders</td>
+<td><code>commerce.orders</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code></td>
+<td>None</td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-027</a></td>
+<td><code>POST /v1/me/orders/{order_id}/cancel</code></td>
+<td>ORD-04</td>
+<td>Order_Operations</td>
+<td><code>commerce.orders</code>, <code>commerce.order_items</code>, <code>fulfillment.fulfillment_orders</code>, <code>commerce.cancellation_reason_codes</code></td>
+<td><code>commerce.cancellations</code>, <code>commerce.cancellation_items</code>, <code>commerce.orders</code>, <code>commerce.order_status_history</code></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>commerce.cancellation_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-028</a></td>
+<td><code>POST /v1/me/orders/{order_id}/returns</code></td>
+<td>ORD-05</td>
+<td>Order_Operations</td>
+<td><code>commerce.orders</code>, <code>commerce.order_items</code>, <code>commerce.returns</code>, <code>commerce.return_items</code>, <code>commerce.return_reason_codes</code></td>
+<td><code>commerce.returns</code>, <code>commerce.return_items</code></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>commerce.return_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-029</a></td>
+<td><code>GET /v1/me/orders/{order_id}/invoice</code></td>
+<td>ORD-03</td>
+<td>Finance_Payments</td>
+<td><code>commerce.orders</code>, <code>finance.invoices</code>, <code>finance.invoice_items</code>, <code>platform.file_objects</code>, <code>platform.file_access_grants</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-030</a></td>
+<td><code>GET /v1/me/orders/{order_id}/refunds</code></td>
+<td>ORD-06</td>
+<td>Finance_Payments</td>
+<td><code>commerce.orders</code>, <code>payment.refunds</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>payment.refund_reason_codes</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-031</a></td>
+<td><code>GET /v1/me/orders/{order_id}/delivery</code></td>
+<td>ORD-07</td>
+<td>Delivery_Operations</td>
+<td><code>commerce.orders</code>, <code>logistics.shipments</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-032</a></td>
+<td><code>GET /v1/admin/dashboard</code></td>
+<td>ADM-01</td>
+<td>Admin_CMS</td>
+<td><code>commerce.orders</code>, <code>clinical.order_reviews</code>, <code>logistics.delivery_assignments</code>, <code>warehouse.stock_balances</code>, <code>logistics.shipments</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-033</a></td>
+<td><code>POST /v1/admin/staff</code></td>
+<td>ADM-02</td>
+<td>Authentication_Access with organization membership owner</td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.memberships</code></td>
+<td><code>identity.users</code>, <code>identity.user_roles</code>, <code>organization.memberships</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-034</a></td>
+<td><code>PATCH /v1/admin/staff/{staff_id}</code></td>
+<td>ADM-02</td>
+<td>Authentication_Access with organization membership owner</td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.user_roles</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>identity.sessions</code></td>
+<td><code>identity.users</code>, <code>identity.user_roles</code>, <code>organization.memberships</code>, <code>identity.sessions</code>, <code>identity.session_refresh_tokens</code>, <code>identity.authentication_challenges</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-035</a></td>
+<td><code>GET /v1/admin/settings</code></td>
+<td>ADM-05</td>
+<td>Admin_CMS</td>
+<td><code>platform.application_settings</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-036</a></td>
+<td><code>PATCH /v1/admin/settings</code></td>
+<td>ADM-05</td>
+<td>Admin_CMS</td>
+<td><code>platform.application_settings</code></td>
+<td><code>platform.application_settings</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-037</a></td>
+<td><code>POST /v1/admin/cms/pages/{page_id}/publish</code></td>
+<td>ADM-04</td>
+<td>Admin_CMS</td>
+<td><code>platform.cms_pages</code>, <code>platform.cms_page_versions</code></td>
+<td><code>platform.cms_pages</code>, <code>platform.cms_page_versions</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-038</a></td>
+<td><code>POST /v1/admin/locations</code></td>
+<td>ADM-08</td>
+<td>Admin_CMS</td>
+<td><code>organization.organizations</code>, <code>organization.locations</code></td>
+<td><code>organization.locations</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-039</a></td>
+<td><code>GET /v1/admin/orders</code></td>
+<td>OMS-01</td>
+<td>Order_Operations</td>
+<td><code>commerce.orders</code>, <code>commerce.order_allocations</code>, <code>warehouse.warehouses</code>, <code>organization.memberships</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-040</a></td>
+<td><code>GET /v1/admin/orders/{order_id}</code></td>
+<td>OMS-02</td>
+<td>Order_Operations</td>
+<td><code>commerce.orders</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>commerce.order_allocations</code>, <code>warehouse.warehouses</code></td>
+<td>None</td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-041</a></td>
+<td><code>POST /v1/admin/orders/{order_id}/allocate</code></td>
+<td>OMS-03</td>
+<td>Order_Operations</td>
+<td><code>commerce.orders</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>organization.locations</code>, <code>organization.licenses</code>, <code>warehouse.warehouses</code>, <code>warehouse.stock_balances</code>, <code>warehouse.inventory_lots</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>logistics.serviceability_rules</code></td>
+<td><code>commerce.order_allocations</code>, <code>commerce.orders</code>, <code>fulfillment.fulfillment_orders</code></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>marketplace.sellers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-042</a></td>
+<td><code>POST /v1/admin/orders/{order_id}/reassign</code></td>
+<td>OMS-04</td>
+<td>Order_Operations</td>
+<td><code>commerce.orders</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>organization.locations</code>, <code>organization.licenses</code>, <code>warehouse.warehouses</code>, <code>warehouse.stock_balances</code>, <code>warehouse.inventory_lots</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>logistics.serviceability_rules</code></td>
+<td><code>commerce.order_allocations</code>, <code>commerce.orders</code>, <code>fulfillment.fulfillment_orders</code>, <code>commerce.order_status_history</code></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>marketplace.sellers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-043</a></td>
+<td><code>POST /v1/admin/orders/{order_id}/revisions</code></td>
+<td>OMS-05</td>
+<td>Order_Operations</td>
+<td><code>commerce.orders</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>catalog.products</code>, <code>pricing.product_prices</code>, <code>pricing.tax_rules</code></td>
+<td><code>commerce.order_revisions</code></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-044</a></td>
+<td><code>GET /v1/staff/store/orders</code></td>
+<td>STO-01</td>
+<td>Store_Operations</td>
+<td><code>fulfillment.fulfillment_orders</code>, <code>warehouse.warehouses</code>, <code>organization.memberships</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-045</a></td>
+<td><code>POST /v1/staff/store/orders/{order_id}/accept</code></td>
+<td>STO-02</td>
+<td>Store_Operations</td>
+<td><code>fulfillment.fulfillment_orders</code>, <code>commerce.orders</code>, <code>commerce.order_revisions</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>organization.licenses</code>, <code>warehouse.stock_reservations</code></td>
+<td><code>fulfillment.fulfillment_orders</code>, <code>fulfillment.pick_tasks</code>, <code>fulfillment.pick_task_items</code>, <code>fulfillment.pack_tasks</code>, <code>fulfillment.fulfillment_events</code></td>
+<td><code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-046</a></td>
+<td><code>POST /v1/staff/store/picks/{pick_id}/scan</code></td>
+<td>STO-02</td>
+<td>Store_Operations</td>
+<td><code>fulfillment.fulfillment_orders</code>, <code>commerce.orders</code>, <code>commerce.order_revisions</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>organization.licenses</code>, <code>warehouse.stock_reservations</code>, <code>fulfillment.pick_tasks</code>, <code>fulfillment.pick_task_items</code>, <code>catalog.product_identifiers</code>, <code>warehouse.inventory_lots</code></td>
+<td><code>fulfillment.pick_task_items</code>, <code>fulfillment.pick_tasks</code>, <code>fulfillment.fulfillment_orders</code>, <code>fulfillment.fulfillment_events</code></td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-047</a></td>
+<td><code>POST /v1/staff/store/packs/{pack_id}/close</code></td>
+<td>STO-02</td>
+<td>Store_Operations</td>
+<td><code>fulfillment.fulfillment_orders</code>, <code>commerce.orders</code>, <code>commerce.order_revisions</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>organization.licenses</code>, <code>warehouse.stock_reservations</code>, <code>fulfillment.pick_tasks</code>, <code>fulfillment.pick_task_items</code>, <code>fulfillment.pack_tasks</code>, <code>fulfillment.packages</code>, <code>fulfillment.package_items</code>, <code>commerce.order_items</code></td>
+<td><code>fulfillment.pack_tasks</code>, <code>fulfillment.packages</code>, <code>fulfillment.package_items</code>, <code>fulfillment.fulfillment_orders</code>, <code>fulfillment.fulfillment_events</code></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-048</a></td>
+<td><code>POST /v1/staff/store/replenishments</code></td>
+<td>STO-03</td>
+<td>Warehouse via Procurement requisition command</td>
+<td><code>warehouse.warehouses</code>, <code>catalog.products</code>, <code>warehouse.replenishment_rules</code></td>
+<td><code>procurement.purchase_requisitions</code>, <code>procurement.purchase_requisition_items</code></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-049</a></td>
+<td><code>POST /v1/staff/store/transfers/{transfer_id}/receipt</code></td>
+<td>STO-04</td>
+<td>Warehouse</td>
+<td><code>warehouse.stock_transfers</code>, <code>warehouse.stock_transfer_items</code>, <code>warehouse.inventory_lots</code></td>
+<td><code>warehouse.stock_transfer_items</code>, <code>warehouse.stock_transfers</code></td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>procurement.suppliers</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-050</a></td>
+<td><code>GET /v1/staff/inventory</code></td>
+<td>INV-01</td>
+<td>Inventory</td>
+<td><code>warehouse.stock_balances</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.warehouses</code></td>
+<td>None</td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-051</a></td>
+<td><code>POST /v1/staff/inventory/observations</code></td>
+<td>INV-07</td>
+<td>Inventory</td>
+<td><code>warehouse.stock_balances</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.warehouses</code></td>
+<td><code>warehouse.stock_balances</code></td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>incomplete / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-052</a></td>
+<td><code>POST /v1/internal/inventory/reservations</code></td>
+<td>CHK-08, INV-01, INV-03</td>
+<td>Inventory</td>
+<td><code>commerce.orders</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code>, <code>catalog.products</code>, <code>warehouse.stock_balances</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_reservations</code>, <code>warehouse.stock_holds</code>, <code>warehouse.warehouses</code>, <code>organization.locations</code>, <code>organization.licenses</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code></td>
+<td><code>warehouse.stock_reservations</code>, <code>warehouse.stock_balances</code></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.stock_movement_reason_codes</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-053</a></td>
+<td><code>POST /v1/internal/inventory/reservations/{reservation_id}/release</code></td>
+<td>CHK-08</td>
+<td>Inventory</td>
+<td><code>warehouse.stock_reservations</code>, <code>warehouse.stock_balances</code>, <code>warehouse.stock_movement_reason_codes</code></td>
+<td><code>warehouse.stock_reservations</code>, <code>warehouse.stock_balances</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>warehouse.bins</code>, <code>warehouse.stock_movement_reason_codes</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-054</a></td>
+<td><code>POST /v1/staff/inventory/adjustments</code></td>
+<td>INV-04</td>
+<td>Inventory</td>
+<td><code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>warehouse.stock_movement_reason_codes</code></td>
+<td><code>warehouse.inventory_adjustments</code>, <code>warehouse.inventory_adjustment_items</code></td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.stock_movement_reason_codes</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-055</a></td>
+<td><code>GET /v1/staff/inventory/alerts</code></td>
+<td>INV-05</td>
+<td>Inventory</td>
+<td><code>warehouse.stock_balances</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.replenishment_rules</code></td>
+<td>None</td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-056</a></td>
+<td><code>POST /v1/staff/warehouse/receipts</code></td>
+<td>WH-01</td>
+<td>Warehouse via Procurement receiving owner</td>
+<td><code>procurement.purchase_orders</code>, <code>procurement.purchase_order_items</code>, <code>procurement.suppliers</code>, <code>procurement.supplier_invoices</code>, <code>warehouse.warehouses</code></td>
+<td><code>procurement.goods_receipts</code>, <code>procurement.goods_receipt_items</code>, <code>procurement.goods_receipt_quality_checks</code></td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-057</a></td>
+<td><code>GET /v1/staff/warehouse/replenishments</code></td>
+<td>WH-02</td>
+<td>Warehouse</td>
+<td><code>procurement.purchase_requisitions</code>, <code>procurement.purchase_requisition_items</code>, <code>warehouse.warehouses</code></td>
+<td>None</td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-058</a></td>
+<td><code>POST /v1/staff/warehouse/transfers/{transfer_id}/dispatch</code></td>
+<td>WH-02</td>
+<td>Warehouse</td>
+<td><code>warehouse.stock_transfers</code>, <code>warehouse.stock_transfer_items</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_balances</code>, <code>organization.licenses</code></td>
+<td><code>warehouse.stock_transfers</code>, <code>warehouse.stock_transfer_items</code></td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-059</a></td>
+<td><code>GET /v1/staff/warehouse/fallback-orders</code></td>
+<td>WH-04</td>
+<td>Warehouse</td>
+<td><code>commerce.orders</code>, <code>commerce.order_revisions</code>, <code>commerce.order_allocations</code>, <code>warehouse.warehouses</code>, <code>organization.locations</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-060</a></td>
+<td><code>GET /v1/pharmacy/reviews</code></td>
+<td>PHM-01</td>
+<td>Pharmacist_Review</td>
+<td><code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>organization.memberships</code>, <code>clinical.practitioner_profiles</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>clinical.practitioner_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-061</a></td>
+<td><code>GET /v1/pharmacy/reviews/{review_id}</code></td>
+<td>PHM-02</td>
+<td>Pharmacist_Review</td>
+<td><code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>clinical.prescription_documents</code>, <code>clinical.prescriptions</code>, <code>commerce.orders</code>, <code>commerce.order_revisions</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-062</a></td>
+<td><code>POST /v1/pharmacy/reviews/{review_id}/lines/{line_id}/decision</code></td>
+<td>PHM-03, PHM-05, RX-05</td>
+<td>Pharmacist_Review</td>
+<td><code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>clinical.prescriptions</code>, <code>clinical.prescription_items</code>, <code>clinical.prescription_documents</code>, <code>clinical.review_reason_codes</code>, <code>clinical.practitioner_profiles</code>, <code>commerce.orders</code>, <code>commerce.order_items</code>, <code>commerce.order_revisions</code></td>
+<td><code>clinical.order_review_items</code>, <code>clinical.order_reviews</code></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>clinical.practitioner_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-063</a></td>
+<td><code>POST /v1/me/orders/{order_id}/revisions/{revision_id}/accept</code></td>
+<td>PHM-03</td>
+<td>Order_Operations</td>
+<td><code>commerce.orders</code>, <code>commerce.order_revisions</code>, <code>commerce.order_items</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code></td>
+<td><code>commerce.order_revisions</code>, <code>commerce.orders</code>, <code>commerce.order_items</code>, <code>commerce.order_status_history</code></td>
+<td><code>catalog.commerce_classes</code>, <code>catalog.product_variants</code>, <code>catalog.products</code>, <code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-064</a></td>
+<td><code>GET /v1/staff/delivery/tasks</code></td>
+<td>DLV-01</td>
+<td>Delivery_Operations</td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>fulfillment.packages</code>, <code>organization.memberships</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-065</a></td>
+<td><code>POST /v1/staff/delivery/tasks/{task_id}/assign</code></td>
+<td>DLV-02</td>
+<td>Delivery_Operations</td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>logistics.rider_shifts</code>, <code>identity.user_roles</code>, <code>organization.memberships</code></td>
+<td><code>logistics.delivery_assignments</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-066</a></td>
+<td><code>POST /v1/staff/delivery/tasks/{task_id}/resolution</code></td>
+<td>DLV-03</td>
+<td>Delivery_Operations</td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.ndr_cases</code>, <code>logistics.delivery_failure_reasons</code></td>
+<td><code>logistics.ndr_cases</code>, <code>logistics.shipments</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>logistics.delivery_failure_reasons</code></td>
+<td>incomplete / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-067</a></td>
+<td><code>GET /v1/staff/delivery/cod-handover</code></td>
+<td>DLV-04</td>
+<td>Finance_Payments projection for Delivery_Operations</td>
+<td><code>payment.cod_collections</code>, <code>logistics.shipments</code>, <code>logistics.delivery_assignments</code>, <code>organization.memberships</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-068</a></td>
+<td><code>POST /v1/staff/delivery/riders</code></td>
+<td>DLV-05</td>
+<td>Authentication_Access with Delivery_Operations membership command</td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>organization.memberships</code>, <code>organization.locations</code></td>
+<td><code>organization.memberships</code>, <code>identity.user_roles</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-069</a></td>
+<td><code>POST /v1/rider/shifts</code></td>
+<td>RID-01</td>
+<td>Delivery_Operations</td>
+<td><code>logistics.rider_shifts</code>, <code>logistics.delivery_assignments</code></td>
+<td><code>logistics.rider_shifts</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-070</a></td>
+<td><code>GET /v1/rider/tasks</code></td>
+<td>RID-02</td>
+<td>Delivery_Operations</td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>logistics.rider_shifts</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-071</a></td>
+<td><code>POST /v1/rider/tasks/{task_id}/pickup</code></td>
+<td>RID-02</td>
+<td>Delivery_Operations with Fulfillment handoff command</td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>fulfillment.packages</code>, <code>fulfillment.fulfillment_orders</code>, <code>warehouse.stock_reservations</code>, <code>commerce.orders</code>, <code>commerce.order_revisions</code>, <code>payment.payment_intents</code>, <code>payment.cod_collections</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>organization.licenses</code></td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>logistics.shipment_events</code>, <code>fulfillment.fulfillment_orders</code></td>
+<td><code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>marketplace.sellers</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-072</a></td>
+<td><code>POST /v1/rider/tasks/{task_id}/location</code></td>
+<td>RID-03</td>
+<td>Delivery_Operations</td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.rider_shifts</code></td>
+<td><code>logistics.delivery_location_updates</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-073</a></td>
+<td><code>POST /v1/rider/tasks/{task_id}/complete</code></td>
+<td>RID-04</td>
+<td>Delivery_Operations with Finance COD command</td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>logistics.delivery_otp_challenges</code>, <code>logistics.delivery_attempts</code>, <code>platform.file_objects</code>, <code>platform.file_access_grants</code>, <code>payment.cod_collections</code>, <code>commerce.orders</code></td>
+<td><code>logistics.delivery_otp_challenges</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>payment.cod_collections</code></td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>logistics.delivery_failure_reasons</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-074</a></td>
+<td><code>POST /v1/rider/tasks/{task_id}/fail</code></td>
+<td>RID-06</td>
+<td>Delivery_Operations</td>
+<td><code>logistics.delivery_assignments</code>, <code>logistics.shipments</code>, <code>logistics.delivery_attempts</code>, <code>logistics.delivery_failure_reasons</code>, <code>platform.file_objects</code></td>
+<td><code>logistics.delivery_attempts</code>, <code>logistics.shipments</code>, <code>logistics.ndr_cases</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>logistics.delivery_failure_reasons</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-075</a></td>
+<td><code>POST /v1/payments/intents</code></td>
+<td>CHK-03, FIN-01</td>
+<td>Finance_Payments</td>
+<td><code>commerce.orders</code>, <code>commerce.order_revisions</code>, <code>clinical.order_reviews</code>, <code>clinical.order_review_items</code>, <code>warehouse.stock_reservations</code>, <code>payment.provider_accounts</code>, <code>payment.payment_intents</code></td>
+<td><code>payment.payment_intents</code>, <code>payment.payment_attempts</code></td>
+<td><code>clinical.patient_profiles</code>, <code>clinical.review_reason_codes</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>incomplete / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-076</a></td>
+<td><code>POST /v1/webhooks/cashfree</code></td>
+<td>FIN-01, CHK-03</td>
+<td>Finance_Payments</td>
+<td><code>payment.payment_webhooks</code>, <code>payment.payment_intents</code>, <code>payment.payment_transactions</code>, <code>commerce.orders</code>, <code>commerce.order_revisions</code></td>
+<td><code>payment.payment_webhooks</code>, <code>payment.payment_transactions</code>, <code>payment.payment_intents</code>, <code>payment.payment_attempts</code></td>
+<td><code>clinical.patient_profiles</code>, <code>identity.users</code></td>
+<td>incomplete / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-077</a></td>
+<td><code>GET /v1/admin/finance/payments</code></td>
+<td>FIN-01</td>
+<td>Finance_Payments</td>
+<td><code>payment.payment_intents</code>, <code>payment.payment_transactions</code>, <code>commerce.orders</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-078</a></td>
+<td><code>POST /v1/admin/finance/refunds</code></td>
+<td>FIN-03</td>
+<td>Finance_Payments</td>
+<td><code>payment.payment_transactions</code>, <code>payment.payment_intents</code>, <code>payment.refunds</code>, <code>payment.refund_allocations</code>, <code>payment.refund_reason_codes</code>, <code>commerce.orders</code>, <code>commerce.order_revisions</code></td>
+<td><code>payment.refunds</code>, <code>payment.refund_allocations</code></td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>payment.refund_reason_codes</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-079</a></td>
+<td><code>GET /v1/admin/finance/settlements</code></td>
+<td>FIN-05</td>
+<td>Finance_Payments</td>
+<td><code>payment.reconciliation_runs</code>, <code>payment.reconciliation_items</code>, <code>payment.provider_accounts</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>incomplete / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-080</a></td>
+<td><code>POST /v1/admin/finance/cod-reconciliation</code></td>
+<td>FIN-06</td>
+<td>Finance_Payments</td>
+<td><code>payment.cod_collections</code>, <code>payment.reconciliation_runs</code>, <code>platform.file_objects</code></td>
+<td><code>payment.reconciliation_runs</code>, <code>payment.reconciliation_items</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>incomplete / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-081</a></td>
+<td><code>GET /v1/admin/finance/invoices/{order_id}</code></td>
+<td>FIN-02</td>
+<td>Finance_Payments</td>
+<td><code>finance.invoices</code>, <code>finance.invoice_items</code>, <code>commerce.orders</code>, <code>platform.file_objects</code>, <code>platform.file_access_grants</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-082</a></td>
+<td><code>GET /v1/admin/reports/sales</code></td>
+<td>REP-01</td>
+<td>Reporting</td>
+<td><code>platform.report_definitions</code>, <code>finance.invoices</code>, <code>commerce.orders</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-083</a></td>
+<td><code>GET /v1/admin/reports/tax</code></td>
+<td>REP-02</td>
+<td>Reporting</td>
+<td><code>platform.report_definitions</code>, <code>finance.invoices</code>, <code>finance.invoice_items</code>, <code>commerce.orders</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>marketplace.sellers</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-084</a></td>
+<td><code>GET /v1/admin/reports/stock</code></td>
+<td>REP-03</td>
+<td>Reporting</td>
+<td><code>platform.report_definitions</code>, <code>warehouse.stock_balances</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.warehouses</code></td>
+<td>None</td>
+<td><code>catalog.product_variants</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>procurement.suppliers</code>, <code>warehouse.bins</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-085</a></td>
+<td><code>GET /v1/admin/reports/deliveries</code></td>
+<td>REP-04</td>
+<td>Reporting</td>
+<td><code>platform.report_definitions</code>, <code>logistics.shipments</code>, <code>fulfillment.packages</code>, <code>fulfillment.fulfillment_orders</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>logistics.carriers</code>, <code>marketplace.sellers</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-086</a></td>
+<td><code>POST /v1/admin/reports/exports</code></td>
+<td>REP-07</td>
+<td>Reporting</td>
+<td><code>platform.report_definitions</code>, <code>organization.memberships</code></td>
+<td><code>platform.report_runs</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code>, <code>organization.departments</code>, <code>organization.locations</code>, <code>organization.organizations</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Audit/APIs.html">API-087</a></td>
+<td><code>GET /v1/admin/audit/events</code></td>
+<td>AUD-01</td>
+<td>Audit</td>
+<td><code>platform.audit_logs</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Audit/APIs.html">API-088</a></td>
+<td><code>POST /v1/admin/audit/exports</code></td>
+<td>AUD-02</td>
+<td>Audit</td>
+<td><code>platform.audit_logs</code>, <code>platform.report_definitions</code></td>
+<td><code>platform.report_runs</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-089</a></td>
+<td><code>POST /v1/auth/staff/login</code></td>
+<td>AUTH-01, AUTH-02</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.mfa_factors</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.authentication_challenges</code></td>
+<td><code>identity.users</code>, <code>identity.login_attempts</code>, <code>identity.authentication_challenges</code></td>
+<td><code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-090</a></td>
+<td><code>POST /v1/auth/staff/mfa/verify</code></td>
+<td>AUTH-01, AUTH-02</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.mfa_factors</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.authentication_challenges</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code>, <code>identity.session_refresh_tokens</code></td>
+<td><code>identity.sessions</code>, <code>identity.users</code>, <code>identity.login_attempts</code>, <code>identity.authentication_challenges</code>, <code>identity.session_refresh_tokens</code>, <code>identity.mfa_factors</code></td>
+<td><code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-091</a></td>
+<td><code>POST /v1/auth/sessions/refresh</code></td>
+<td>AUTH-02</td>
+<td>Authentication_Access</td>
+<td><code>identity.sessions</code>, <code>identity.users</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code>, <code>identity.session_refresh_tokens</code></td>
+<td><code>identity.sessions</code>, <code>identity.session_refresh_tokens</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-092</a></td>
+<td><code>POST /v1/auth/sessions/revoke</code></td>
+<td>AUTH-02</td>
+<td>Authentication_Access</td>
+<td><code>identity.sessions</code></td>
+<td><code>identity.sessions</code>, <code>identity.session_refresh_tokens</code>, <code>identity.authentication_challenges</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-093</a></td>
+<td><code>GET /v1/auth/permissions</code></td>
+<td>AUTH-04</td>
+<td>Authentication_Access</td>
+<td><code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>identity.users</code>, <code>identity.sessions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Notifications/APIs.html">API-094</a></td>
+<td><code>POST /v1/internal/notifications/jobs</code></td>
+<td>NOT-01</td>
+<td>Notifications</td>
+<td><code>notification.templates</code>, <code>notification.user_channel_preferences</code>, <code>notification.suppressions</code>, <code>notification.provider_configurations</code>, <code>commerce.orders</code>, <code>platform.outbox_events</code></td>
+<td><code>notification.messages</code></td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Notifications/APIs.html">API-095</a></td>
+<td><code>GET /v1/admin/notifications/deliveries</code></td>
+<td>NOT-02</td>
+<td>Notifications</td>
+<td><code>notification.messages</code>, <code>notification.message_attempts</code>, <code>commerce.orders</code></td>
+<td>None</td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Notifications/APIs.html">API-096</a></td>
+<td><code>POST /v1/rider/push-tokens</code></td>
+<td>NOT-03</td>
+<td>Notifications</td>
+<td><code>notification.device_endpoints</code></td>
+<td><code>notification.device_endpoints</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Notifications/APIs.html">API-097</a></td>
+<td><code>GET /v1/admin/notifications/alerts</code></td>
+<td>NOT-04</td>
+<td>Notifications</td>
+<td><code>notification.messages</code>, <code>notification.message_attempts</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-001</a></td>
+<td><code>PATCH /v1/me/addresses/{addressId}</code></td>
+<td>ACC-03</td>
+<td>Customer_Accounts</td>
+<td><code>customer.addresses</code>, <code>customer.profiles</code>, <code>commerce.checkouts</code></td>
+<td><code>customer.addresses</code>, <code>customer.profiles</code></td>
+<td><code>customer.profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-002</a></td>
+<td><code>DELETE /v1/me/addresses/{addressId}</code></td>
+<td>ACC-03</td>
+<td>Customer_Accounts</td>
+<td><code>customer.addresses</code>, <code>customer.profiles</code>, <code>commerce.checkouts</code></td>
+<td><code>customer.addresses</code>, <code>customer.profiles</code></td>
+<td><code>customer.profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-007</a></td>
+<td><code>POST /v1/me/deletion-requests</code></td>
+<td>ACC-06</td>
+<td>Customer_Accounts via Privacy owner command</td>
+<td><code>identity.users</code>, <code>compliance.privacy_requests</code>, <code>compliance.legal_holds</code></td>
+<td><code>compliance.privacy_requests</code></td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-006</a></td>
+<td><code>GET /v1/me/deletion-requests/{requestId}</code></td>
+<td>ACC-06</td>
+<td>Customer_Accounts via Privacy read projection</td>
+<td><code>compliance.privacy_requests</code></td>
+<td>None</td>
+<td><code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-003</a></td>
+<td><code>PATCH /v1/me/patients/{patientId}</code></td>
+<td>ACC-04</td>
+<td>Customer_Accounts</td>
+<td><code>customer.family_members</code>, <code>clinical.patient_profiles</code>, <code>commerce.orders</code></td>
+<td><code>customer.family_members</code></td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-004</a></td>
+<td><code>DELETE /v1/me/patients/{patientId}</code></td>
+<td>ACC-04</td>
+<td>Customer_Accounts</td>
+<td><code>customer.family_members</code>, <code>clinical.patient_profiles</code>, <code>commerce.orders</code></td>
+<td><code>customer.family_members</code></td>
+<td><code>clinical.patient_profiles</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-008</a></td>
+<td><code>GET /v1/me/wishlist/items</code></td>
+<td>ACC-07</td>
+<td>Customer_Accounts</td>
+<td><code>customer.wishlists</code>, <code>customer.wishlist_items</code>, <code>catalog.products</code></td>
+<td>None</td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-009</a></td>
+<td><code>POST /v1/me/wishlist/items</code></td>
+<td>ACC-07</td>
+<td>Customer_Accounts</td>
+<td><code>customer.wishlists</code>, <code>customer.wishlist_items</code>, <code>catalog.products</code></td>
+<td><code>customer.wishlists</code>, <code>customer.wishlist_items</code></td>
+<td><code>catalog.brands</code>, <code>catalog.categories</code>, <code>catalog.commerce_classes</code>, <code>catalog.dosage_forms</code>, <code>catalog.manufacturers</code>, <code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-010</a></td>
+<td><code>DELETE /v1/me/wishlist/items/{itemId}</code></td>
+<td>ACC-07</td>
+<td>Customer_Accounts</td>
+<td><code>customer.wishlists</code>, <code>customer.wishlist_items</code></td>
+<td><code>customer.wishlist_items</code></td>
+<td><code>catalog.products</code>, <code>identity.permissions</code>, <code>identity.roles</code>, <code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-098</a></td>
+<td><code>POST /v1/auth/login/initiate</code></td>
+<td>ACC-01, AUTH-03</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.otp_challenges</code>, <code>platform.audit_logs</code></td>
+<td><code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-099</a></td>
+<td><code>POST /v1/auth/login/verify</code></td>
+<td>ACC-01, AUTH-01, AUTH-02, AUTH-03</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code>, <code>identity.authentication_challenges</code>, <code>identity.otp_challenges</code>, <code>identity.mfa_factors</code></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.otp_challenges</code>, <code>identity.sessions</code>, <code>identity.session_refresh_tokens</code>, <code>identity.mfa_factors</code>, <code>identity.users</code>, <code>platform.audit_logs</code>, <code>identity.login_attempts</code></td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-100</a></td>
+<td><code>GET /v1/auth/identity</code></td>
+<td>AUTH-02, AUTH-04, ACC-02</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>None</td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-101</a></td>
+<td><code>GET /v1/auth/workspaces</code></td>
+<td>AUTH-04, ADM-03</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>None</td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-102</a></td>
+<td><code>POST /v1/auth/context</code></td>
+<td>AUTH-04, AUTH-02</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td><code>identity.sessions</code>, <code>platform.audit_logs</code></td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-103</a></td>
+<td><code>POST /v1/auth/step-up</code></td>
+<td>AUTH-01, AUTH-02, AUTH-04</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code>, <code>identity.authentication_challenges</code>, <code>identity.mfa_factors</code></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.sessions</code>, <code>identity.mfa_factors</code>, <code>platform.audit_logs</code>, <code>identity.login_attempts</code>, <code>identity.users</code></td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-104</a></td>
+<td><code>POST /v1/auth/mfa/enrollment</code></td>
+<td>AUTH-01, AUTH-02</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code>, <code>identity.authentication_challenges</code>, <code>identity.mfa_factors</code></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.mfa_factors</code>, <code>identity.sessions</code>, <code>platform.audit_logs</code>, <code>identity.login_attempts</code>, <code>platform.outbox_events</code></td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-105</a></td>
+<td><code>POST /v1/auth/credentials/password</code></td>
+<td>AUTH-01, AUTH-02</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code>, <code>identity.password_history</code></td>
+<td><code>identity.users</code>, <code>identity.password_history</code>, <code>identity.sessions</code>, <code>identity.session_refresh_tokens</code>, <code>identity.authentication_challenges</code>, <code>platform.audit_logs</code>, <code>identity.login_attempts</code>, <code>platform.outbox_events</code></td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-106</a></td>
+<td><code>POST /v1/auth/recovery/request</code></td>
+<td>AUTH-02, AUTH-03</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.otp_challenges</code>, <code>platform.audit_logs</code></td>
+<td><code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-107</a></td>
+<td><code>POST /v1/auth/recovery/complete</code></td>
+<td>AUTH-01, AUTH-02, AUTH-03</td>
+<td>Authentication_Access</td>
+<td><code>identity.authentication_challenges</code>, <code>identity.users</code>, <code>identity.otp_challenges</code>, <code>identity.mfa_factors</code>, <code>identity.password_history</code></td>
+<td><code>identity.authentication_challenges</code>, <code>identity.otp_challenges</code>, <code>identity.mfa_factors</code>, <code>identity.users</code>, <code>identity.password_history</code>, <code>identity.sessions</code>, <code>identity.session_refresh_tokens</code>, <code>platform.audit_logs</code>, <code>identity.login_attempts</code>, <code>platform.outbox_events</code></td>
+<td><code>identity.users</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-108</a></td>
+<td><code>PUT /v1/admin/roles/{role_id}/permissions</code></td>
+<td>ADM-03, AUTH-04</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td><code>identity.role_permissions</code>, <code>identity.roles</code>, <code>platform.audit_logs</code></td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-111</a></td>
+<td><code>GET /v1/admin/roles/{role_id}/permissions</code></td>
+<td>ADM-03, AUTH-04</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>None</td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-109</a></td>
+<td><code>POST /v1/admin/users/{user_id}/role-assignments</code></td>
+<td>ADM-02, ADM-03, AUTH-04</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td><code>identity.user_roles</code>, <code>platform.audit_logs</code></td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-112</a></td>
+<td><code>GET /v1/admin/users/{user_id}/role-assignments</code></td>
+<td>ADM-03, AUTH-04</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>None</td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-110</a></td>
+<td><code>PATCH /v1/admin/role-assignments/{assignment_id}</code></td>
+<td>ADM-02, ADM-03, AUTH-02, AUTH-04</td>
+<td>Authentication_Access</td>
+<td><code>identity.users</code>, <code>identity.sessions</code>, <code>identity.user_roles</code>, <code>identity.roles</code>, <code>identity.role_permissions</code>, <code>identity.permissions</code>, <code>organization.memberships</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td><code>identity.user_roles</code>, <code>identity.sessions</code>, <code>platform.audit_logs</code></td>
+<td><code>identity.users</code>, <code>identity.roles</code>, <code>identity.permissions</code>, <code>organization.locations</code>, <code>organization.organizations</code>, <code>warehouse.warehouses</code></td>
+<td>complete-proposed / Unapproved / Not Implemented</td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>How to Run · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Local preview instructions</h1>
+<h2>Start</h2>
+<p>Use a recent Node.js installation (Node 24 is available in this workspace). Open a terminal in the <code>pharmville-docs</code> repository and run:</p>
+<pre><code class="language-bash">node 10-Low-Fidelity-Wireframes/server.mjs
+</code></pre>
+<p>Open <a href="http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/">http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/</a>. Keep that terminal running and stop it with Ctrl+C when finished. No <code>npm install</code>, build, provider account or database connection is needed for the prototype.</p>
+<p>If port 4173 is in use, PowerShell supports a different port:</p>
+<pre><code class="language-powershell">$env:PORT = '4174'
+node 10-Low-Fidelity-Wireframes/server.mjs
+</code></pre>
+<p>Then use <code>http://127.0.0.1:4174/10-Low-Fidelity-Wireframes/</code>. The server binds only to your machine. It serves relative local assets and documentation; it blocks hidden folders, node_modules and artifacts. Serve from the repository root so links back to the source documentation resolve.</p>
+<h2>Explore Pharmville</h2>
+<p>The root opens <strong>Choose how to explore Pharmville</strong>. Open these exact destinations:</p>
+<ul>
+<li><a href="http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/#/choose">Experience chooser</a></li>
+<li><a href="http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/#/mobile">Mobile App screen selector</a></li>
+<li><a href="http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/#/website">Website screen selector</a></li>
+<li><a href="http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/#/journeys">Complete journeys</a></li>
+</ul>
+<p>Mobile App offers Customer and Rider screens; Website offers Customer and staff workspaces. Search by task, or expand a group for the full inventory. A screen card explicitly selects its demonstration persona. Internal links retain the experience in the URL. Legacy links remain available through the secondary directory.</p>
+<p>On an app screen, <strong>Review tools</strong> opens a separate keyboard-accessible side panel. It contains the screen ID, feature IDs, current role, relevant scenarios, expected result, recovery guidance and requirement links. Choose a scenario in the panel to see its effect on the app screen.</p>
+<p>Close the panel to return to the product view. Use <strong>Continue as [role]</strong> at a guided handoff to change the simulated role while keeping the same order.</p>
+<p>To start a guided journey, choose whether to keep the current demo data or load its prepared fictional starting state. Replacing existing progress requires confirmation. Mobile, tablet and desktop previews apply responsive rules to the selected app frame, even inside a desktop browser.</p>
+<p><strong>Responsive</strong> follows the actual browser width; resizing the browser directly also changes that layout.</p>
+<p>Use browser Back/Forward or refresh. Direct examples are <a href="../index.html#/mobile/customer/checkout-summary">Mobile checkout</a> and <a href="../index.html#/website/customer/checkout-summary">Website checkout</a>. Choose <strong>Reset demo data</strong> in Review tools, then confirm in the dialog, to restore the fresh shopping state across roles. Escape cancels the reset.</p>
+<p>To quickly verify the change:</p>
+<ol>
+<li>Choose Mobile App, search for Checkout and open it. Refresh: the URL still contains <code>/mobile/</code>, with phone navigation and stacked content.</li>
+<li>Expand <strong>What if something goes wrong?</strong>, choose <strong>Load a valid fictional checkout</strong>, and confirm. Choose <strong>Payment is still pending</strong>. Open <strong>Check payment status</strong>; the same reference remains pending and no new payment form appears.</li>
+<li>Return to Choose experience, select Website, and open Cart. The same item and quantity remain. Open Checkout to see the wide table and side summary, then refresh and use Back/Forward.</li>
+<li>Open Journeys, start <strong>Order a prescription medicine</strong>, and choose the data option deliberately. Submit fictional evidence. <strong>Continue as Pharmacist</strong> explicitly changes the demonstration role and experience while preserving the order. Record a rejection reason, then choose Customer prescription status to see that reason.</li>
+</ol>
+<p>For a full fresh purchase, sign in with fictional phone <code>0000000000</code> and code <code>246810</code>, complete the profile, then Search → Product → Cart → Address → Patient → Summary → Payment → Order tracking. PIN <code>000000</code> is the serviceable address example. The on-screen failure controls are available without opening Review tools.</p>
+<p>Returning to normal preserves any actions already recorded; it does not undo a payment or recorded rejection.</p>
+<p>The browser stores only the demonstration state under <code>pharmville-wireframe-demo-v1</code>. Storage is shared between tabs on this origin, not between real devices. If storage is unavailable the app continues in memory and warns that refresh resets data. Use synthetic inputs; do not enter real contact, patient, payment or medical information.</p>
+<h2>Later static hosting</h2>
+<p>All app assets and hash routes use relative paths, so a GitHub Pages project path can host them later. This task does not publish or configure hosting. Documentation backlinks require the surrounding repository to be served. GitHub’s normal repository/Markdown interface does not run HTML/JavaScript; use the local URL above for interaction.</p>
+<h2>Roles and access</h2>
+<p>Use a screen card or the advanced <strong>Explore by user</strong> directory to explicitly enter a role's demonstration. Opening another workspace URL preserves the current persona and may show <strong>Access restricted</strong>. Open <strong>Review tools → Screen information</strong> to choose an illustrative role or select <strong>Use this workspace role</strong>.</p>
+<p>Guided cross-role handoffs switch only when you activate their continuation button. Staff Mobile URLs and Rider Website URLs explain the supported experience; they do not grant access.</p>
+<p>Run the commands in <a href="Prototype-Test-Plan.html">Prototype Test Plan</a> while the server is running. The experience suite writes fresh screenshots and named assertions to ignored <code>artifacts/experiences/</code>; existing product checks use <code>artifacts/product-ux/</code>.</p>
+</main></body></html>

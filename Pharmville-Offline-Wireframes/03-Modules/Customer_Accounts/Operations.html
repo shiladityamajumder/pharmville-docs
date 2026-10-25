@@ -1,0 +1,189 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Operations · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Customer Accounts operations and acceptance</h1>
+<h2>Workflow and state ownership</h2>
+<p>Profiles, addresses, family associations and consent; delegates credentials and sessions to Authentication.</p>
+<p><a href="../../06-Workflows/WF-001-Identity-and-Session.html">WF-001</a>, <a href="../../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>. The <a href="LLD.html">LLD</a> holds module algorithms and transition cases; <a href="APIs.html">APIs</a> holds command-specific allowed/denied transitions. <a href="../../07-Engineering/State-and-Recovery-Contracts.html">Shared recovery contracts</a> define cross-owner compensation.</p>
+<h2>Authentication and authorization</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Authentication</th>
+<th>Roles / permission</th>
+<th>Command owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-001 POST <code>/v1/auth/customer/otp/request</code></td>
+<td>No; endpoint-specific pre-login/provider trust</td>
+<td>Public; Public challenge issuance; no role grant</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td>API-002 POST <code>/v1/auth/customer/otp/verify</code></td>
+<td>No; endpoint-specific pre-login/provider trust</td>
+<td>Public; Valid customer-login proof; no existing access session</td>
+<td>Authentication_Access</td>
+</tr>
+<tr>
+<td>API-003 GET <code>/v1/me</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.read.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>API-004 PATCH <code>/v1/me</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>API-005 GET <code>/v1/me/addresses</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.read.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>API-006 POST <code>/v1/me/addresses</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>API-007 GET <code>/v1/me/patients</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.read.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>API-008 POST <code>/v1/me/patients</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>API-009 POST <code>/v1/me/consents</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-005 GET <code>/v1/me/consents</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.read.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-001 PATCH <code>/v1/me/addresses/{addressId}</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-002 DELETE <code>/v1/me/addresses/{addressId}</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-007 POST <code>/v1/me/deletion-requests</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts via Privacy owner command</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-006 GET <code>/v1/me/deletion-requests/{requestId}</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.read.own</td>
+<td>Customer_Accounts via Privacy read projection</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-003 PATCH <code>/v1/me/patients/{patientId}</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-004 DELETE <code>/v1/me/patients/{patientId}</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-008 GET <code>/v1/me/wishlist/items</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.read.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-009 POST <code>/v1/me/wishlist/items</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+<tr>
+<td>ACC-ROUTE-010 DELETE <code>/v1/me/wishlist/items/{itemId}</code></td>
+<td>Yes</td>
+<td>Customer; customer-accounts.manage.own</td>
+<td>Customer_Accounts</td>
+</tr>
+</tbody>
+</table>
+<p>Resource/patient/location checks and sensitive-field filtering are endpoint-specific in <a href="APIs.html">APIs</a>; roles never replace object authorization. For file/provider callbacks, use the documented capability/signature path. <a href="../../07-Engineering/Security.html">Security</a> applies alongside the exact retained SQL ACL/RLS policies.</p>
+<h2>Designed tests and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Normal case</th>
+<th>Denied / failure evidence</th>
+<th>Execution status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACC-01</code></td>
+<td><a href="LLD.html">TC-ACC-01-01</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ACC-02</code></td>
+<td><a href="LLD.html">TC-ACC-02-01</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ACC-03</code></td>
+<td><a href="LLD.html">TC-ACC-03-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ACC-04</code></td>
+<td><a href="LLD.html">TC-ACC-04-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ACC-05</code></td>
+<td><a href="LLD.html">TC-ACC-05-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ACC-06</code></td>
+<td><a href="LLD.html">TC-ACC-06-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>ACC-07</code></td>
+<td><a href="LLD.html">TC-ACC-07-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<p>Each endpoint additionally defines validation, authentication, authorization, business-gate, duplicate-intent, stale-version/concurrency and recovery cases. No execution is claimed. <a href="../../07-Engineering/Testing.html">Testing strategy</a> separates schema parity from application acceptance; <a href="../../08-Development-Plan/Implementation-Plan.html">delivery tasks</a> preserve existing TASK IDs.</p>
+</main></body></html>

@@ -1,0 +1,98 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Inventory edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Inventory-and-Stock.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-INV-01-01</code></td>
+<td><code>INV-01</code></td>
+<td>Same product has one expired and one eligible batch</td>
+<td>Only eligible batch contributes to orderable quantity</td>
+<td>Inventory/Pharmacy assesses blocked stock</td>
+<td><code>TC-INV-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-INV-02-01</code></td>
+<td><code>INV-02</code></td>
+<td>Movement reference is replayed</td>
+<td>No second ledger effect or unexplained balance overwrite</td>
+<td>Inventory reuses result and reconciles differences</td>
+<td><code>TC-INV-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-INV-03-01</code></td>
+<td><code>INV-03</code></td>
+<td>Earliest-expiry lot falls below approved shelf life</td>
+<td>Lot skipped/blocked; never selected merely because oldest</td>
+<td>Inventory chooses eligible lot; Pharmacy approves policy</td>
+<td><code>TC-INV-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-INV-04-01</code></td>
+<td><code>INV-04</code></td>
+<td>Large adjustment lacks required approval</td>
+<td>No unauthorized ledger/balance mutation</td>
+<td>Manager reviews evidence and approves/rejects</td>
+<td><code>TC-INV-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-INV-05-01</code></td>
+<td><code>INV-05</code></td>
+<td>Observation is stale when alert job runs</td>
+<td>Staleness shown; alerts cannot authorize stock holds</td>
+<td>Inventory restores feed and reevaluates thresholds</td>
+<td><code>TC-INV-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-INV-06-01</code></td>
+<td><code>INV-06</code></td>
+<td>Opening import is replayed after partial/lost acknowledgment</td>
+<td>No double opening balance; explicit accepted/rejected rows</td>
+<td>Inventory reconciles import identity and policy before retry</td>
+<td><code>TC-INV-06-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-INV-07-01</code></td>
+<td><code>INV-07</code></td>
+<td>Older or duplicate stock observation arrives</td>
+<td>No stale observation replacing newer authority or duplicate movement</td>
+<td>Integration owner replays ordered evidence and reconciles</td>
+<td><code>TC-INV-07-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+<h2>Additional safety and recovery tests</h2>
+<p>Concrete interruption/race assertions supplement the feature table; detailed expected results are in the <a href="LLD.html#critical-recovery-scenarios">LLD</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Scenario</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INV-01</code></td>
+<td>Two accepted orders concurrently request the last eligible pack at one site</td>
+<td><code>TC-INV-01-01</code></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

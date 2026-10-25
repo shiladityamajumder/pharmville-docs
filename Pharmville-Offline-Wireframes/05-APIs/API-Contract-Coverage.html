@@ -1,0 +1,1267 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>API Contract Coverage · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>API contract completeness ledger</h1>
+<p>The inherited baseline is <strong>107 operations</strong> (API-001–097 and ten ACC-ROUTE references), all preserved. D-028 adds <strong>15 explicitly proposed operations API-098–112</strong>, yielding <strong>122</strong>. All contracts remain <strong>Proposed / Unapproved / Not Implemented</strong>. Documentation completeness does not require prior approval; actual approval requires evidence under D-024. <a href="API-Database-Feature-Matrix.html">Operation traceability</a> · <a href="../04-Database/Master-Data-Inventory.html">master data</a> · <a href="Planning-Decisions.html">decisions</a> · <a href="Journey-API-Gaps.html">journey gaps</a>.</p>
+<h2>Baseline and final planning measure</h2>
+<table>
+<thead>
+<tr>
+<th>Measure</th>
+<th>Baseline</th>
+<th>Current proposal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inventoried operations</td>
+<td>107</td>
+<td>122 (107 preserved + 15 proposed)</td>
+</tr>
+<tr>
+<td>Documentation-complete proposed contracts</td>
+<td>0 / 107 (0%)</td>
+<td>114 / 122 (93.44%); original cohort 99 / 107 (92.52%)</td>
+</tr>
+<tr>
+<td>Remaining incomplete contracts</td>
+<td>107</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Approved complete contracts, evidenced signoff</td>
+<td>0 / 107 (0%)</td>
+<td>0 / 122 (0%)</td>
+</tr>
+<tr>
+<td>Verified implementations / executed application contract tests</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Baseline evidence was the inherited ledger and OpenAPI: 62 body operations, 24 typed request schemas, 16 request examples, 22 concrete success DTOs/examples. The current spec has typed request DTOs and examples for every body operation and concrete success DTOs/examples for all 119 JSON-success operations; the other three operations are bodyless DELETE 204 responses. Those structural numbers include incomplete conceptual contracts and are <strong>not</strong> the planning-completeness numerator.</p>
+<p>The unified-authentication rework started from <strong>97/107 complete proposed</strong>, with 0 approved. API-089/090 now have concrete durable proof/replay persistence designs, making the original cohort 99/107; 15 additional Identity proposals yield 114/122. The zero numerator in the historical baseline column predates that earlier contract-planning work.</p>
+<h2>Counting rule</h2>
+<p>A counted operation has its own identification/purpose/feature/workflow, explicit auth versus authorization, individually classified headers, path/query/body/file applicability and typed nested DTOs, request example (or explicit no body), success status/headers/example, relevant errors and recovery, exact read/write columns and DTO mapping, owner/transaction/audit/outbox/master dependencies, business/concurrency/retry/rate/timeout rules, and designed normal/adverse/replay/recovery tests. Its Markdown and OpenAPI agree. Shared envelope/schema reuse is allowed; generic data objects, candidate table lists or policy-only boilerplate do not qualify.</p>
+<p>Unknown external wire payload, missing persistence for a required contract concept, or an unresolved action-to-state mapping excludes the <strong>entire</strong> operation. A policy value awaiting owner approval can remain an explicit configurable dependency of a complete proposal; it must never be reported as approved. Every counted operation has <code>x-documentation-status: complete-proposed</code>, <code>x-approval-status: unapproved</code> and <code>x-implementation-status: not-implemented</code> in OpenAPI. Each CT scenario remains Designed / NOT RUN.</p>
+<h2>Coverage by module</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Existing operations</th>
+<th>Complete proposed</th>
+<th>Incomplete</th>
+<th>Approval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Admin_CMS</td>
+<td>12</td>
+<td>12</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Audit</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Authentication_Access</td>
+<td>15</td>
+<td>15</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Cart_Checkout</td>
+<td>4</td>
+<td>4</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Customer_Accounts</td>
+<td>19</td>
+<td>18</td>
+<td>1</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Customer_Orders</td>
+<td>7</td>
+<td>7</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Delivery_Operations</td>
+<td>5</td>
+<td>4</td>
+<td>1</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Finance_Payments</td>
+<td>7</td>
+<td>3</td>
+<td>4</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>6</td>
+<td>5</td>
+<td>1</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>4</td>
+<td>4</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Order_Operations</td>
+<td>5</td>
+<td>5</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Pharmacist_Review</td>
+<td>4</td>
+<td>4</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Prescription_Upload</td>
+<td>3</td>
+<td>3</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Product_Catalog</td>
+<td>8</td>
+<td>7</td>
+<td>1</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Reporting</td>
+<td>5</td>
+<td>5</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Rider_App</td>
+<td>6</td>
+<td>6</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Store_Operations</td>
+<td>6</td>
+<td>6</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td>4</td>
+<td>4</td>
+<td>0</td>
+<td>0 approved</td>
+</tr>
+</tbody>
+</table>
+<h2>Remaining incomplete operations</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Endpoint</th>
+<th>Concrete gap</th>
+<th>Decision owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-004</a></td>
+<td><code>PATCH /v1/me</code></td>
+<td>D-023: exact replacement proof DTO/storage is absent. Profile-only subset proposed, full route incomplete.</td>
+<td>Customer_Accounts; Security/provider/Finance where referenced</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-015</a></td>
+<td><code>POST /v1/admin/catalog/imports</code></td>
+<td>D-019/D-024: spreadsheet columns, row atomicity and durable import result/status model are not documented.</td>
+<td>Product_Catalog; Security/provider/Finance where referenced</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-051</a></td>
+<td><code>POST /v1/staff/inventory/observations</code></td>
+<td>D-005: source authentication, exact quantities-to-ledger reconciliation and atomic batch outcome are unspecified; timestamps alone are not sufficient evidence.</td>
+<td>Inventory; Security/provider/Finance where referenced</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-066</a></td>
+<td><code>POST /v1/staff/delivery/tasks/{task_id}/resolution</code></td>
+<td>D-010/D-011: reattempt limits, custody and precise action-to-status progression need approved policy.</td>
+<td>Delivery_Operations; Security/provider/Finance where referenced</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-075</a></td>
+<td><code>POST /v1/payments/intents</code></td>
+<td>D-004/D-016: exact continuation DTO, capture sequence and provider-supported replay contract require evidence.</td>
+<td>Finance_Payments; Security/provider/Finance where referenced</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-076</a></td>
+<td><code>POST /v1/webhooks/cashfree</code></td>
+<td>D-016: signature header names, wire schema, canonicalization and acknowledgment status are unknown. Conceptual DTO is explicitly not a provider wire contract.</td>
+<td>Finance_Payments; Security/provider/Finance where referenced</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-079</a></td>
+<td><code>GET /v1/admin/finance/settlements</code></td>
+<td>D-008/D-016: settle-vs-reconcile dataset definition and provider report layout need Finance approval.</td>
+<td>Finance_Payments; Security/provider/Finance where referenced</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-080</a></td>
+<td><code>POST /v1/admin/finance/cod-reconciliation</code></td>
+<td>D-007/D-008: exact handover/deposit evidence and independent approval model are missing.</td>
+<td>Finance_Payments; Security/provider/Finance where referenced</td>
+</tr>
+</tbody>
+</table>
+<h2>Operation-level ledger</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Method/path</th>
+<th>Request DTO</th>
+<th>Success DTO/status</th>
+<th>Planning</th>
+<th>Approval / implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-001</a></td>
+<td><code>POST /v1/auth/customer/otp/request</code></td>
+<td>CustomerOtpRequest</td>
+<td>OtpChallengeData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-002</a></td>
+<td><code>POST /v1/auth/customer/otp/verify</code></td>
+<td>CustomerOtpVerification</td>
+<td>SessionData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-003</a></td>
+<td><code>GET /v1/me</code></td>
+<td>No request body</td>
+<td>ProfileData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-004</a></td>
+<td><code>PATCH /v1/me</code></td>
+<td>CustomerProfileUpdate</td>
+<td>ProfileData / 200</td>
+<td>Incomplete</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-005</a></td>
+<td><code>GET /v1/me/addresses</code></td>
+<td>No request body</td>
+<td>AddressListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-006</a></td>
+<td><code>POST /v1/me/addresses</code></td>
+<td>CustomerAddressCreate</td>
+<td>CustomerAddressData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-007</a></td>
+<td><code>GET /v1/me/patients</code></td>
+<td>No request body</td>
+<td>PatientListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-008</a></td>
+<td><code>POST /v1/me/patients</code></td>
+<td>FamilyMemberCreate</td>
+<td>FamilyMemberData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">API-009</a></td>
+<td><code>POST /v1/me/consents</code></td>
+<td>ConsentCreate</td>
+<td>ConsentData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-005</a></td>
+<td><code>GET /v1/me/consents</code></td>
+<td>No request body</td>
+<td>ConsentListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-010</a></td>
+<td><code>GET /v1/catalog/categories</code></td>
+<td>No request body</td>
+<td>CatalogCategoryListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-011</a></td>
+<td><code>GET /v1/catalog/products</code></td>
+<td>No request body</td>
+<td>CatalogProductListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-012</a></td>
+<td><code>GET /v1/catalog/products/{product_id}</code></td>
+<td>No request body</td>
+<td>CatalogProductDetailData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-013</a></td>
+<td><code>GET /v1/catalog/search</code></td>
+<td>No request body</td>
+<td>CatalogSearchData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-014</a></td>
+<td><code>GET /v1/catalog/availability</code></td>
+<td>No request body</td>
+<td>CatalogAvailabilityData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-015</a></td>
+<td><code>POST /v1/admin/catalog/imports</code></td>
+<td>CatalogImportRequest</td>
+<td>CatalogImportAcceptedData / 202</td>
+<td>Incomplete</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-016</a></td>
+<td><code>POST /v1/admin/catalog/products/{product_id}/classification</code></td>
+<td>CatalogClassificationRequest</td>
+<td>CatalogClassificationData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Product_Catalog/APIs.html">API-017</a></td>
+<td><code>POST /v1/admin/catalog/products/{product_id}/publish</code></td>
+<td>CatalogPublishRequest</td>
+<td>CatalogPublishData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-018</a></td>
+<td><code>GET /v1/me/cart</code></td>
+<td>No request body</td>
+<td>CartItemsData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-019</a></td>
+<td><code>PUT /v1/me/cart/items</code></td>
+<td>CartItemsReplaceRequest</td>
+<td>CartItemsData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-020</a></td>
+<td><code>POST /v1/checkouts/quotes</code></td>
+<td>CheckoutQuoteRequest</td>
+<td>CheckoutQuoteData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Cart_Checkout/APIs.html">API-021</a></td>
+<td><code>POST /v1/checkouts</code></td>
+<td>CheckoutIntentRequest</td>
+<td>CheckoutIntentData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-022</a></td>
+<td><code>POST /v1/prescriptions/upload-intents</code></td>
+<td>PrescriptionUploadIntentRequest</td>
+<td>PrescriptionUploadIntentData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-023</a></td>
+<td><code>POST /v1/prescriptions/documents/confirm</code></td>
+<td>PrescriptionUploadConfirmRequest</td>
+<td>PrescriptionUploadConfirmData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Prescription_Upload/APIs.html">API-024</a></td>
+<td><code>POST /v1/orders/{order_id}/prescriptions</code></td>
+<td>PrescriptionAttachRequest</td>
+<td>PrescriptionAttachData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-025</a></td>
+<td><code>GET /v1/me/orders</code></td>
+<td>No request body</td>
+<td>OrderListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-026</a></td>
+<td><code>GET /v1/me/orders/{order_id}</code></td>
+<td>No request body</td>
+<td>OrderDetailData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-027</a></td>
+<td><code>POST /v1/me/orders/{order_id}/cancel</code></td>
+<td>CancellationRequest</td>
+<td>CancellationData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-028</a></td>
+<td><code>POST /v1/me/orders/{order_id}/returns</code></td>
+<td>ReturnRequest</td>
+<td>ReturnData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-029</a></td>
+<td><code>GET /v1/me/orders/{order_id}/invoice</code></td>
+<td>No request body</td>
+<td>InvoiceData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-030</a></td>
+<td><code>GET /v1/me/orders/{order_id}/refunds</code></td>
+<td>No request body</td>
+<td>RefundListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Orders/APIs.html">API-031</a></td>
+<td><code>GET /v1/me/orders/{order_id}/delivery</code></td>
+<td>No request body</td>
+<td>OrderDeliveryData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-032</a></td>
+<td><code>GET /v1/admin/dashboard</code></td>
+<td>No request body</td>
+<td>DashboardData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-033</a></td>
+<td><code>POST /v1/admin/staff</code></td>
+<td>StaffInviteRequest</td>
+<td>StaffData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-034</a></td>
+<td><code>PATCH /v1/admin/staff/{staff_id}</code></td>
+<td>StaffUpdateRequest</td>
+<td>StaffData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-035</a></td>
+<td><code>GET /v1/admin/settings</code></td>
+<td>No request body</td>
+<td>SettingsData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-036</a></td>
+<td><code>PATCH /v1/admin/settings</code></td>
+<td>SettingsUpdateRequest</td>
+<td>SettingsData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-037</a></td>
+<td><code>POST /v1/admin/cms/pages/{page_id}/publish</code></td>
+<td>CmsPublishRequest</td>
+<td>CmsPublishData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Admin_CMS/APIs.html">API-038</a></td>
+<td><code>POST /v1/admin/locations</code></td>
+<td>LocationCreateRequest</td>
+<td>LocationData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-039</a></td>
+<td><code>GET /v1/admin/orders</code></td>
+<td>No request body</td>
+<td>OrderListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-040</a></td>
+<td><code>GET /v1/admin/orders/{order_id}</code></td>
+<td>No request body</td>
+<td>OrderDetailData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-041</a></td>
+<td><code>POST /v1/admin/orders/{order_id}/allocate</code></td>
+<td>OrderAllocationRequest</td>
+<td>AllocationData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-042</a></td>
+<td><code>POST /v1/admin/orders/{order_id}/reassign</code></td>
+<td>OrderReassignmentRequest</td>
+<td>AllocationData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Order_Operations/APIs.html">API-043</a></td>
+<td><code>POST /v1/admin/orders/{order_id}/revisions</code></td>
+<td>OrderRevisionRequest</td>
+<td>OrderRevisionData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-044</a></td>
+<td><code>GET /v1/staff/store/orders</code></td>
+<td>No request body</td>
+<td>FulfillmentListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-045</a></td>
+<td><code>POST /v1/staff/store/orders/{order_id}/accept</code></td>
+<td>StoreAcceptRequest</td>
+<td>FulfillmentData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-046</a></td>
+<td><code>POST /v1/staff/store/picks/{pick_id}/scan</code></td>
+<td>PickScanRequest</td>
+<td>PickScanData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-047</a></td>
+<td><code>POST /v1/staff/store/packs/{pack_id}/close</code></td>
+<td>PackCloseRequest</td>
+<td>PackCloseData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-048</a></td>
+<td><code>POST /v1/staff/store/replenishments</code></td>
+<td>ReplenishmentRequest</td>
+<td>ReplenishmentData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Store_Operations/APIs.html">API-049</a></td>
+<td><code>POST /v1/staff/store/transfers/{transfer_id}/receipt</code></td>
+<td>TransferReceiptRequest</td>
+<td>TransferData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-050</a></td>
+<td><code>GET /v1/staff/inventory</code></td>
+<td>No request body</td>
+<td>StockListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-051</a></td>
+<td><code>POST /v1/staff/inventory/observations</code></td>
+<td>StockObservationRequest</td>
+<td>StockObservationData / 200</td>
+<td>Incomplete</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-052</a></td>
+<td><code>POST /v1/internal/inventory/reservations</code></td>
+<td>ReservationRequest</td>
+<td>ReservationData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-053</a></td>
+<td><code>POST /v1/internal/inventory/reservations/{reservation_id}/release</code></td>
+<td>ReservationReleaseRequest</td>
+<td>ReservationReleaseData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-054</a></td>
+<td><code>POST /v1/staff/inventory/adjustments</code></td>
+<td>AdjustmentRequest</td>
+<td>AdjustmentData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Inventory/APIs.html">API-055</a></td>
+<td><code>GET /v1/staff/inventory/alerts</code></td>
+<td>No request body</td>
+<td>InventoryAlertListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-056</a></td>
+<td><code>POST /v1/staff/warehouse/receipts</code></td>
+<td>GoodsReceiptRequest</td>
+<td>GoodsReceiptData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-057</a></td>
+<td><code>GET /v1/staff/warehouse/replenishments</code></td>
+<td>No request body</td>
+<td>ReplenishmentListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-058</a></td>
+<td><code>POST /v1/staff/warehouse/transfers/{transfer_id}/dispatch</code></td>
+<td>TransferDispatchRequest</td>
+<td>TransferData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Warehouse/APIs.html">API-059</a></td>
+<td><code>GET /v1/staff/warehouse/fallback-orders</code></td>
+<td>No request body</td>
+<td>OrderListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-060</a></td>
+<td><code>GET /v1/pharmacy/reviews</code></td>
+<td>No request body</td>
+<td>ReviewListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-061</a></td>
+<td><code>GET /v1/pharmacy/reviews/{review_id}</code></td>
+<td>No request body</td>
+<td>ReviewDetailData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-062</a></td>
+<td><code>POST /v1/pharmacy/reviews/{review_id}/lines/{line_id}/decision</code></td>
+<td>PharmacistDecisionRequest</td>
+<td>PharmacistDecisionData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Pharmacist_Review/APIs.html">API-063</a></td>
+<td><code>POST /v1/me/orders/{order_id}/revisions/{revision_id}/accept</code></td>
+<td>RevisionAcceptanceRequest</td>
+<td>OrderRevisionData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-064</a></td>
+<td><code>GET /v1/staff/delivery/tasks</code></td>
+<td>No request body</td>
+<td>TaskListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-065</a></td>
+<td><code>POST /v1/staff/delivery/tasks/{task_id}/assign</code></td>
+<td>AssignmentRequest</td>
+<td>AssignmentData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-066</a></td>
+<td><code>POST /v1/staff/delivery/tasks/{task_id}/resolution</code></td>
+<td>DeliveryResolutionRequest</td>
+<td>DeliveryResolutionData / 200</td>
+<td>Incomplete</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-067</a></td>
+<td><code>GET /v1/staff/delivery/cod-handover</code></td>
+<td>No request body</td>
+<td>CodListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Delivery_Operations/APIs.html">API-068</a></td>
+<td><code>POST /v1/staff/delivery/riders</code></td>
+<td>RiderOnboardingRequest</td>
+<td>StaffData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-069</a></td>
+<td><code>POST /v1/rider/shifts</code></td>
+<td>RiderShiftRequest</td>
+<td>RiderShiftData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-070</a></td>
+<td><code>GET /v1/rider/tasks</code></td>
+<td>No request body</td>
+<td>TaskListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-071</a></td>
+<td><code>POST /v1/rider/tasks/{task_id}/pickup</code></td>
+<td>PickupRequest</td>
+<td>AssignmentData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-072</a></td>
+<td><code>POST /v1/rider/tasks/{task_id}/location</code></td>
+<td>LocationUpdateRequest</td>
+<td>LocationUpdateData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-073</a></td>
+<td><code>POST /v1/rider/tasks/{task_id}/complete</code></td>
+<td>DeliveryCompletionRequest</td>
+<td>DeliveryCompletionData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Rider_App/APIs.html">API-074</a></td>
+<td><code>POST /v1/rider/tasks/{task_id}/fail</code></td>
+<td>DeliveryFailureRequest</td>
+<td>DeliveryFailureData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-075</a></td>
+<td><code>POST /v1/payments/intents</code></td>
+<td>PaymentIntentRequest</td>
+<td>PaymentIntentData / 202</td>
+<td>Incomplete</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-076</a></td>
+<td><code>POST /v1/webhooks/cashfree</code></td>
+<td>ProviderEventUnresolved</td>
+<td>ProviderAckUnresolved / 200</td>
+<td>Incomplete</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-077</a></td>
+<td><code>GET /v1/admin/finance/payments</code></td>
+<td>No request body</td>
+<td>PaymentListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-078</a></td>
+<td><code>POST /v1/admin/finance/refunds</code></td>
+<td>RefundInstructionRequest</td>
+<td>RefundInstructionData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-079</a></td>
+<td><code>GET /v1/admin/finance/settlements</code></td>
+<td>No request body</td>
+<td>SettlementListData / 200</td>
+<td>Incomplete</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-080</a></td>
+<td><code>POST /v1/admin/finance/cod-reconciliation</code></td>
+<td>CodReconciliationRequest</td>
+<td>ReconciliationRunData / 202</td>
+<td>Incomplete</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Finance_Payments/APIs.html">API-081</a></td>
+<td><code>GET /v1/admin/finance/invoices/{order_id}</code></td>
+<td>No request body</td>
+<td>InvoiceData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-082</a></td>
+<td><code>GET /v1/admin/reports/sales</code></td>
+<td>No request body</td>
+<td>SalesReportData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-083</a></td>
+<td><code>GET /v1/admin/reports/tax</code></td>
+<td>No request body</td>
+<td>TaxReportData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-084</a></td>
+<td><code>GET /v1/admin/reports/stock</code></td>
+<td>No request body</td>
+<td>StockReportData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-085</a></td>
+<td><code>GET /v1/admin/reports/deliveries</code></td>
+<td>No request body</td>
+<td>DeliveriesReportData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Reporting/APIs.html">API-086</a></td>
+<td><code>POST /v1/admin/reports/exports</code></td>
+<td>ReportExportRequest</td>
+<td>ReportRunData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Audit/APIs.html">API-087</a></td>
+<td><code>GET /v1/admin/audit/events</code></td>
+<td>No request body</td>
+<td>AuditListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Audit/APIs.html">API-088</a></td>
+<td><code>POST /v1/admin/audit/exports</code></td>
+<td>AuditExportRequest</td>
+<td>ReportRunData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-089</a></td>
+<td><code>POST /v1/auth/staff/login</code></td>
+<td>StaffLoginRequest</td>
+<td>StaffChallengeData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-090</a></td>
+<td><code>POST /v1/auth/staff/mfa/verify</code></td>
+<td>StaffMfaRequest</td>
+<td>SessionData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-091</a></td>
+<td><code>POST /v1/auth/sessions/refresh</code></td>
+<td>SessionRefreshRequest</td>
+<td>SessionData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-092</a></td>
+<td><code>POST /v1/auth/sessions/revoke</code></td>
+<td>SessionRevocationRequest</td>
+<td>SessionRevocationData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Authentication_Access/APIs.html">API-093</a></td>
+<td><code>GET /v1/auth/permissions</code></td>
+<td>No request body</td>
+<td>EffectivePermissionListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Notifications/APIs.html">API-094</a></td>
+<td><code>POST /v1/internal/notifications/jobs</code></td>
+<td>NotificationJobRequest</td>
+<td>NotificationData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Notifications/APIs.html">API-095</a></td>
+<td><code>GET /v1/admin/notifications/deliveries</code></td>
+<td>No request body</td>
+<td>NotificationListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Notifications/APIs.html">API-096</a></td>
+<td><code>POST /v1/rider/push-tokens</code></td>
+<td>PushTokenRequest</td>
+<td>PushEndpointData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Notifications/APIs.html">API-097</a></td>
+<td><code>GET /v1/admin/notifications/alerts</code></td>
+<td>No request body</td>
+<td>NotificationAlertListData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-001</a></td>
+<td><code>PATCH /v1/me/addresses/{addressId}</code></td>
+<td>CustomerAddressPatch</td>
+<td>CustomerAddressData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-002</a></td>
+<td><code>DELETE /v1/me/addresses/{addressId}</code></td>
+<td>No request body</td>
+<td>No response body / 204</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-007</a></td>
+<td><code>POST /v1/me/deletion-requests</code></td>
+<td>PrivacyDeletionRequest</td>
+<td>PrivacyRequestData / 202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-006</a></td>
+<td><code>GET /v1/me/deletion-requests/{requestId}</code></td>
+<td>No request body</td>
+<td>PrivacyRequestData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-003</a></td>
+<td><code>PATCH /v1/me/patients/{patientId}</code></td>
+<td>FamilyMemberPatch</td>
+<td>FamilyMemberData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-004</a></td>
+<td><code>DELETE /v1/me/patients/{patientId}</code></td>
+<td>No request body</td>
+<td>No response body / 204</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-008</a></td>
+<td><code>GET /v1/me/wishlist/items</code></td>
+<td>No request body</td>
+<td>WishlistData / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-009</a></td>
+<td><code>POST /v1/me/wishlist/items</code></td>
+<td>WishlistItemCreate</td>
+<td>WishlistItemData / 201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td><a href="../03-Modules/Customer_Accounts/APIs.html">ACC-ROUTE-010</a></td>
+<td><code>DELETE /v1/me/wishlist/items/{itemId}</code></td>
+<td>No request body</td>
+<td>No response body / 204</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Route</th>
+<th>Request</th>
+<th>Success</th>
+<th>Planning</th>
+<th>Approval / implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-098</td>
+<td><code>POST /v1/auth/login/initiate</code></td>
+<td>Typed operation DTO / example</td>
+<td>202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-099</td>
+<td><code>POST /v1/auth/login/verify</code></td>
+<td>Typed operation DTO / example</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-100</td>
+<td><code>GET /v1/auth/identity</code></td>
+<td>No request body</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-101</td>
+<td><code>GET /v1/auth/workspaces</code></td>
+<td>No request body</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-102</td>
+<td><code>POST /v1/auth/context</code></td>
+<td>Typed operation DTO / example</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-103</td>
+<td><code>POST /v1/auth/step-up</code></td>
+<td>Typed operation DTO / example</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-104</td>
+<td><code>POST /v1/auth/mfa/enrollment</code></td>
+<td>Typed operation DTO / example</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-105</td>
+<td><code>POST /v1/auth/credentials/password</code></td>
+<td>Typed operation DTO / example</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-106</td>
+<td><code>POST /v1/auth/recovery/request</code></td>
+<td>Typed operation DTO / example</td>
+<td>202</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-107</td>
+<td><code>POST /v1/auth/recovery/complete</code></td>
+<td>Typed operation DTO / example</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-108</td>
+<td><code>PUT /v1/admin/roles/{role_id}/permissions</code></td>
+<td>Typed operation DTO / example</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-109</td>
+<td><code>POST /v1/admin/users/{user_id}/role-assignments</code></td>
+<td>Typed operation DTO / example</td>
+<td>201</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-110</td>
+<td><code>PATCH /v1/admin/role-assignments/{assignment_id}</code></td>
+<td>Typed operation DTO / example</td>
+<td>200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Route</th>
+<th>Request</th>
+<th>Success</th>
+<th>Planning</th>
+<th>Approval / implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-111</td>
+<td><code>GET /v1/admin/roles/{role_id}/permissions</code></td>
+<td>No request body</td>
+<td>Typed role/assignment DTO / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+<tr>
+<td>API-112</td>
+<td><code>GET /v1/admin/users/{user_id}/role-assignments</code></td>
+<td>No request body</td>
+<td>Typed role/assignment DTO / 200</td>
+<td>Complete proposed</td>
+<td>Unapproved / Not Implemented</td>
+</tr>
+</tbody>
+</table>
+<h2>Validation interpretation</h2>
+<p><a href="Planning-Validation.html">Validation evidence</a> records actual commands, schema/example/link/column checks and limits. The repository API validator audits structural DTO coverage; it does not read every <code>x-documentation-status</code> blocker and cannot establish semantic planning completion or approval. A passing structural strict mode does not promote the eight explicit exclusions above. Provider-specific signature/acknowledgment evidence, provider/runtime behavior and live application tests remain unverified; isolated schema parity is verified.</p>
+</main></body></html>

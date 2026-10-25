@@ -1,0 +1,1129 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>clinical · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Clinical foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>clinical</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-0155</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0156</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0157</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0158</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td><code>patient_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0159</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0160</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>appointment_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0161</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>appointment_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0162</td>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>care_episode_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0163</td>
+<td><a href="../../Tables/clinical/care_episodes.html"><code>clinical.care_episodes</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>care_episode_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0164</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0165</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>doctor_user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0166</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0167</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>patient_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0168</td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>practitioner_profile_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0169</td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>practitioner_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0170</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0171</td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><a href="../../Tables/clinical/diagnoses.html"><code>clinical.diagnoses</code></a></td>
+<td><code>consultation_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0172</td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><a href="../../Tables/clinical/diagnoses.html"><code>clinical.diagnoses</code></a></td>
+<td><code>consultation_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0173</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/diagnoses.html"><code>clinical.diagnoses</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0174</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/diagnoses.html"><code>clinical.diagnoses</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0175</td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td><code>consultation_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0176</td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td><code>consultation_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0177</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0178</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0179</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td><code>patient_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0180</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/observations.html"><code>clinical.observations</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0181</td>
+<td><a href="../../Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a></td>
+<td><a href="../../Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td><code>reason_code_id, reason_code</code> → <code>id, code</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-03">03-clinical.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-0182</td>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td><a href="../../Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td><code>order_item_id, order_id</code> → <code>id, order_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-03">03-clinical.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-0183</td>
+<td><a href="../../Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td><a href="../../Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td><code>order_item_id_internal_id, order_id_internal_id</code> → <code>internal_id, order_id_internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-03">03-clinical.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-0184</td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><a href="../../Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td><code>review_id, order_id, prescription_id</code> → <code>id, order_id, prescription_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-03">03-clinical.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-0185</td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><a href="../../Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td><code>review_id_internal_id, order_id_internal_id, prescription_id_internal_id</code> → <code>internal_id, order_id_internal_id, prescription_id_internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-03">03-clinical.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-0186</td>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td><a href="../../Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td><code>prescription_item_id, prescription_id</code> → <code>id, prescription_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-03">03-clinical.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-0187</td>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td><a href="../../Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td><code>prescription_item_id_internal_id, prescription_id_internal_id</code> → <code>internal_id, prescription_id_internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-03">03-clinical.md#diagram-03</a></td>
+</tr>
+<tr>
+<td>FK-0188</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>assigned_to_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0189</td>
+<td><a href="../../Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>reason_code_id, reason_code</code> → <code>id, code</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0190</td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>prescription_document_id, prescription_id</code> → <code>id, prescription_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0191</td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>prescription_document_id_internal_id, prescription_id_internal_id</code> → <code>internal_id, prescription_id_internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0192</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>order_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0193</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>order_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0194</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>order_id, patient_profile_id</code> → <code>id, patient_profile_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0195</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>order_id_internal_id, patient_profile_id_internal_id</code> → <code>internal_id, patient_profile_id_internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0196</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0197</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>patient_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0198</td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>prescription_document_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0199</td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>prescription_document_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0200</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>prescription_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0201</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>prescription_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0202</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>reviewed_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0203</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>prescription_id, patient_profile_id</code> → <code>id, patient_profile_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0204</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>prescription_id_internal_id, patient_profile_id_internal_id</code> → <code>internal_id, patient_profile_id_internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0205</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0206</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0207</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td><code>patient_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0208</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0209</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_allergies.html"><code>clinical.patient_allergies</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0210</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0211</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0212</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td><code>patient_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0213</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0214</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_conditions.html"><code>clinical.patient_conditions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0215</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0216</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0217</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td><code>patient_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0218</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0219</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td><code>product_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0220</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td><code>product_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0221</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_medications.html"><code>clinical.patient_medications</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0222</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0223</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0224</td>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>family_member_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0225</td>
+<td><a href="../../Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>family_member_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0226</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0227</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0228</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0229</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td><code>location_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0230</td>
+<td><a href="../../Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td><code>location_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0231</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td><code>organization_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0232</td>
+<td><a href="../../Tables/organization/organizations.html"><code>organization.organizations</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td><code>organization_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0233</td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td><code>practitioner_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0234</td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td><code>practitioner_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0235</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_organizations.html"><code>clinical.practitioner_organizations</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0236</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0237</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0238</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0239</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0240</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescription_access_logs.html"><code>clinical.prescription_access_logs</code></a></td>
+<td><code>actor_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0241</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/prescription_access_logs.html"><code>clinical.prescription_access_logs</code></a></td>
+<td><code>prescription_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0242</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/prescription_access_logs.html"><code>clinical.prescription_access_logs</code></a></td>
+<td><code>prescription_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0243</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0244</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0245</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>file_object_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..1 child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0246</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>prescription_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0247</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>prescription_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0248</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0249</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0250</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td><code>prescription_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0251</td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td><code>prescription_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0252</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td><code>product_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0253</td>
+<td><a href="../../Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td><code>product_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0254</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-02">03-clinical.md#diagram-02</a></td>
+</tr>
+<tr>
+<td>FK-0255</td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>consultation_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0256</td>
+<td><a href="../../Tables/clinical/consultations.html"><code>clinical.consultations</code></a></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>consultation_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0257</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0258</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>patient_profile_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0259</td>
+<td><a href="../../Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>patient_profile_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0260</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>prescriber_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0261</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>reviewed_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0262</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0263</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td><code>uploaded_by_user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0264</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a></td>
+<td><code>created_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-0265</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a></td>
+<td><code>updated_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../03-clinical.html#diagram-01">03-clinical.md#diagram-01</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

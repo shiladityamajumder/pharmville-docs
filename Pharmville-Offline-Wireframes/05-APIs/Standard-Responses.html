@@ -1,0 +1,109 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Standard Responses · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Standard API responses</h1>
+<p><strong>Verified reference behavior:</strong> the sibling <code>healthcare-auth-service</code> response implementation is defined by <code>app/common/response.py</code>, <code>app/common/schemas.py</code>, <code>app/api/exception_handlers.py</code>, <code>app/core/middleware.py</code>, and covered by <code>tests/unit/test_core_and_common.py</code>.</p>
+<p>Its <code>docs/API.md</code> is the consumer-facing reference. <strong>Pharmville adoption remains proposed pending D-024; this evidence does not establish a Pharmville route implementation.</strong></p>
+<h2>Canonical JSON envelope</h2>
+<p>The reference service serializes exactly four required top-level properties. Its transport model rejects unknown envelope properties and recursively converts snake_case keys to camelCase at the JSON boundary.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;resourceId&quot;: &quot;018f47b2-7ed0-7a12-8ab2-48df9d439e61&quot;
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0c50f15a-373f-42d3-b1ae-3d90a415cd91&quot;,
+    &quot;correlationId&quot;: &quot;9182b204-cb82-4ddc-a49d-b07743388ed6&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;RESOURCE_CONFLICT&quot;,
+    &quot;message&quot;: &quot;The operation conflicts with existing data.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0c50f15a-7ed0-7a12-8ab2-48df9d439e61&quot;,
+    &quot;correlationId&quot;: &quot;9182b204-cb82-4ddc-a49d-b07743388ed6&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<p>Envelope invariants and serialization facts:</p>
+<ul>
+<li><code>success</code>, <code>data</code>, <code>error</code>, and <code>meta</code> are always present. Success sets <code>error</code> to null; failure sets <code>data</code> to null.</li>
+<li><code>error</code> is an object with required nonblank <code>code</code> and <code>message</code>, and nullable <code>details</code>. In the reference Pydantic model, <code>details</code> accepts arbitrary JSON-compatible values; API contracts should constrain it to safe, documented shapes.</li>
+<li><code>meta</code> has required <code>requestId</code>, <code>correlationId</code>, <code>apiVersion</code>, <code>timestamp</code>, and <code>pagination</code>. The two identifiers may be null in the response model; the reference middleware normally generates UUIDs and defaults correlation ID to request ID. <code>apiVersion</code> is a nonblank string, normally <code>v1</code>.</li>
+<li><code>timestamp</code> is generated from timezone-aware UTC time. Public examples use UTC RFC 3339 with <code>Z</code>.</li>
+<li>The response helper preserves nulls and recursively camelizes object keys, including keys inside <code>details</code> and <code>data</code>.</li>
+<li>The reference middleware adds <code>X-Request-ID</code>, <code>X-Correlation-ID</code>, and <code>X-API-Version</code> response headers. The first two are also added by the response helper when values exist. <code>Cache-Control: no-store</code> is set by the error response helper; security middleware may add further headers. These reference behaviors are not proof of Pharmville middleware behavior.</li>
+</ul>
+<p>For proposed Pharmville JSON operations, keep this envelope and define a concrete, operation-specific <code>data</code> schema. Do not use the envelope schema by itself as an endpoint's complete success response. D-024 must approve adoption and identify any existing clients before changing an already-consumed Pharmville contract. No Pharmville runtime route was found.</p>
+<h2>Pagination variants</h2>
+<p>The reference authentication service implements only offset pagination. Its <code>meta.pagination</code> shape is:</p>
+<pre><code class="language-json">{
+  &quot;totalCount&quot;: 42,
+  &quot;limit&quot;: 20,
+  &quot;offset&quot;: 0,
+  &quot;hasNext&quot;: true
+}
+</code></pre>
+<p>Cursor pagination is a separate Pharmville proposal, not implemented behavior from the reference service:</p>
+<pre><code class="language-json">{
+  &quot;nextCursor&quot;: &quot;opaque-cursor-value&quot;,
+  &quot;hasNext&quot;: true
+}
+</code></pre>
+<p>Use exactly one variant per operation. The OpenAPI <code>ResponseMeta.pagination</code> union represents offset metadata, cursor metadata, or null. See <a href="Pagination-and-Filtering.html">pagination and filtering</a> for operation selection and proposed request limits.</p>
+<h2>HTTP response variants</h2>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JSON success</td>
+<td>Canonical envelope with operation-specific <code>data</code>; choose the semantic status such as 200, 201, or 202.</td>
+</tr>
+<tr>
+<td>Idempotent replay</td>
+<td>Return the same status and stable result as the original accepted command; a replay header is only used if adopted by the implementation.</td>
+</tr>
+<tr>
+<td>204 No Content</td>
+<td>No body and no JSON content type. The reference <code>APIResponse.success</code> rejects 204; a bodyless response must be returned directly by the route.</td>
+</tr>
+<tr>
+<td>304 Not Modified</td>
+<td>No body; only for a conditional read with a valid cache validator.</td>
+</tr>
+<tr>
+<td>File/stream response</td>
+<td>Raw declared media type and documented disposition/range behavior; not the JSON envelope.</td>
+</tr>
+<tr>
+<td>Provider webhook acknowledgement</td>
+<td>Exact provider status/body is governed by the verified provider contract. Cashfree wire details remain blocked by D-016.</td>
+</tr>
+</tbody>
+</table>
+<p>Never document a JSON body for 204 or 304.</p>
+<h2>Error validation details</h2>
+<p>The reference FastAPI request-validation handler returns <code>422 REQUEST_VALIDATION_ERROR</code>; <code>details</code> is an array of <code>{field, message, type}</code> strings. Example:</p>
+<pre><code class="language-json">{
+  &quot;field&quot;: &quot;body.email&quot;,
+  &quot;message&quot;: &quot;value is not a valid email address&quot;,
+  &quot;type&quot;: &quot;value_error&quot;
+}
+</code></pre>
+<p>Framework-independent application <code>ValidationError</code> instead uses <code>422 VALIDATION_ERROR</code>. Preserve this distinction in compatibility mappings. Do not return raw Pydantic input, rejected secret values, SQL/provider errors, patient data, or stack traces. See <a href="Error-Catalog.html">error catalog</a> for the exact shared-code policy and Pharmville-specific proposals.</p>
+</main></body></html>

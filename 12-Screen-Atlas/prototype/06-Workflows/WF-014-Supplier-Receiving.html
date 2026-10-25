@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 014 Supplier Receiving · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-014 — Supplier Receiving</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Warehouse receiver, Warehouse receiving and Inventory. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>Authorize receiver/site and match supplier/invoice/receipt references; validate batch, manufacturing/expiry dates and actual quantities.</li>
+<li>Record quality-check outcome and usable accepted quantity. Damaged, missing or expired goods are not silently credited to orderable stock.</li>
+<li>Ask Inventory to apply one traceable receipt movement for accepted stock. Duplicated scans/import retries must reuse evidence rather than double receipt.</li>
+<li>Retain supplier/quantity/invoice discrepancies for Operations/procurement and Finance. Publication of availability waits for approved eligible stock evidence.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Warehouse receiving owns receipt evidence; Inventory applies accepted stock movement; procurement/Finance retain invoice discrepancies.</p>
+<p>Candidate existing tables: <code>procurement.goods_receipts</code>, <code>procurement.goods_receipt_items</code>, <code>procurement.goods_receipt_quality_checks</code>, <code>procurement.supplier_invoices</code>, <code>warehouse.inventory_lots</code>, <code>warehouse.stock_ledger</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: API-056 for receiving; exact receipt-to-stock atomic interface and supplier discrepancy handling remain D-024. <a href="../03-Modules/Warehouse/APIs.html">Warehouse</a> · <a href="../03-Modules/Inventory/APIs.html">Inventory</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Warehouse receiver
+  participant O as Warehouse receiving
+  participant S as Inventory
+  participant D as PostgreSQL
+  C-&gt;&gt;O: Receive supplier batch and actual count
+  O-&gt;&gt;D: Record invoice match and quality evidence
+  alt Eligible accepted quantity
+    O-&gt;&gt;S: Apply traceable receipt movement
+    S-&gt;&gt;D: Credit accepted stock once
+    O--&gt;&gt;C: Receipt result and discrepancies
+  else Failed quality or missing evidence
+    O--&gt;&gt;C: Hold or reject affected goods, no saleable credit
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-WH-01-DENY</code>, <code>TC-STO-04-DENY</code>, <code>TC-INV-02-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

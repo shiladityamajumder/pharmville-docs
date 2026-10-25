@@ -1,0 +1,103 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Finance Payments edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Finance-and-Reconciliation.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-FIN-01-01</code></td>
+<td><code>FIN-01</code></td>
+<td>Unsigned, repeated or out-of-order webhook arrives</td>
+<td>Unsigned rejected; replay has no second effect; older failure cannot undo success</td>
+<td>Finance reconciles trusted provider evidence</td>
+<td><code>TC-FIN-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-FIN-02-01</code></td>
+<td><code>FIN-02</code></td>
+<td>GSTIN/tax setup is missing</td>
+<td>Invoice pending/blocked; no invented tax document or recharge</td>
+<td>Finance/CA corrects approved tax setup</td>
+<td><code>TC-FIN-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-FIN-03-01</code></td>
+<td><code>FIN-03</code></td>
+<td>Duplicate refund races with another refund</td>
+<td>Cumulative payout cannot exceed permitted paid value; one instruction per intent</td>
+<td>Finance reloads refunded totals and reconciles unknown provider result</td>
+<td><code>TC-FIN-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-FIN-04-01</code></td>
+<td><code>FIN-04</code></td>
+<td>Unverified replacement destination is supplied</td>
+<td>No money sent; refund awaits verified details</td>
+<td>Finance obtains approved proof securely</td>
+<td><code>TC-FIN-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-FIN-05-01</code></td>
+<td><code>FIN-05</code></td>
+<td>Provider amount/currency/reference differs from order</td>
+<td>Unresolved reconciliation item, no fabricated settlement</td>
+<td>Finance investigates provider/bank and posts approved correction</td>
+<td><code>TC-FIN-05-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-FIN-06-01</code></td>
+<td><code>FIN-06</code></td>
+<td>Rider deposit is short</td>
+<td>Cash exception remains open; delivery not rewritten</td>
+<td>Finance/Operations investigates shortage</td>
+<td><code>TC-FIN-06-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-FIN-07-01</code></td>
+<td><code>FIN-07</code></td>
+<td>Same credit note intent repeats</td>
+<td>No duplicate credit or journal effect; original invoice retained</td>
+<td>Finance checks existing credit reference and policy</td>
+<td><code>TC-FIN-07-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+<h2>Additional safety and recovery tests</h2>
+<p>Concrete interruption/race assertions supplement the feature table; detailed expected results are in the <a href="LLD.html#critical-recovery-scenarios">LLD</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Scenario</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FIN-03</code></td>
+<td>Concurrent distinct refunds each request the same remaining refundable amount</td>
+<td><code>TC-FIN-03-01</code></td>
+</tr>
+<tr>
+<td><code>FIN-05</code></td>
+<td>Provider settlement evidence for the period is missing</td>
+<td><code>TC-FIN-05-01</code></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

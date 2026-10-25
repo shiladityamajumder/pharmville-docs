@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>README · Pharmville Docs</title><link rel="stylesheet" href="assets/css/documentation.css"></head><body><header><a href="index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Pharmville interactive low-fidelity wireframes</h1>
+<p>A local, connected HTML/CSS/vanilla JavaScript prototype for exploring Pharmville as a customer, staff member or rider. It contains 91 reusable screens, 35 scenarios, 13 guided journeys and mappings for all 110 existing draft feature IDs across the 18 documented module groups.</p>
+<h2>Open the prototype</h2>
+<p>From the repository root, run:</p>
+<pre><code class="language-bash">node 10-Low-Fidelity-Wireframes/server.mjs
+</code></pre>
+<p>Open <a href="http://127.0.0.1:4173/10-Low-Fidelity-Wireframes/">Choose Experience</a>. No install or backend is required to run the prototype. ES modules need the local server; GitHub’s Markdown view does not execute this app. The Node server serves only local static files on loopback. Stop it with Ctrl+C.</p>
+<h2>Explore Pharmville</h2>
+<p>The first screen is <strong>Choose how to explore Pharmville</strong>. <strong>Choose Mobile App</strong> opens its own searchable customer/rider screen selector; <strong>Choose Website</strong> opens a separate customer/staff selector. <strong>Explore Journeys</strong> opens 13 guided tasks. The complete directory is secondary.</p>
+<p>Screen URLs carry their experience, for example <code>#/mobile/customer/cart</code> and <code>#/website/customer/cart</code>; refresh, Back/Forward and internal navigation retain it. Both experiences share the same fictional records. Mobile uses bottom navigation and stacked tasks; Website uses header navigation, desktop summaries and staff sidebars.</p>
+<p>On product screens, expand <strong>What if something goes wrong?</strong> to try relevant situations and read what happened, what happens next and how to recover. Payment examples execute the existing guarded payment command; other situations preview the relevant condition and retain command checks.</p>
+<p>A pending attempt cannot be charged again; a confirmed payment cannot be relabelled pending. <strong>Load a valid fictional checkout</strong> explicitly confirms replacement of shared example records before preparing an eligible order. <strong>Review tools</strong> retains technical IDs, persona controls, preview sizes and reset.</p>
+<p>Starting a journey or selecting a screen explicitly chooses a demonstration persona; opening a protected URL does not grant that role. The Access workspace demonstrates one local identity session, derived workspace choices, staff password plus authenticator, customer/rider OTP adapters, session revocation and a proposed step-up challenge for selected elevated workspaces. It is a browser simulation, not a security control or permission grant.</p>
+<p>The shared mock domain now connects supplier proposals and purchase-order drafts to receiving, warehouse-to-store transfers and customer availability. Reverse logistics connects the customer request, pending owner eligibility, dispatch, rider custody, quarantine inspection and a separate Finance refund decision. A support case retains its own lifecycle and notification event. Procurement depth and return eligibility remain proposed; the demo does not contact suppliers, infer a return policy or restock quarantined items.</p>
+<p>The default example is an empty shopping state with no submitted order, payment, approval or stock movement. A guided journey can load a prepared fictional starting state; the app asks before replacing existing progress. Completed actions in a fixture are labelled as historical demo state.</p>
+<p>Use <strong>Reset demo data</strong> to restore the fresh shopping state for every role in this browser.</p>
+<h2>Documentation</h2>
+<ul>
+<li><a href="documentation/Screen-Inventory.html">Screen inventory</a></li>
+<li><a href="documentation/Complete-Screen-Matrix.html">Complete screen matrix</a></li>
+<li><a href="documentation/Platform-and-Screen-Coverage.html">Platform and screen verification</a></li>
+<li><a href="documentation/UX-State-Coverage.html">Per-platform scenario verification</a></li>
+<li><a href="documentation/Feature-Coverage.html">Feature coverage and blocked work</a></li>
+<li><a href="documentation/User-Flows.html">Connected user flows</a></li>
+<li><a href="documentation/Role-Workspace-Matrix.html">Role-to-workspace matrix</a></li>
+<li><a href="documentation/Prototype-Completion-Ledger.html">Prototype completion ledger</a></li>
+<li><a href="documentation/Edge-Case-Coverage.html">Scenarios and recovery</a></li>
+<li><a href="documentation/Design-Decisions.html">Design decisions and limits</a></li>
+<li><a href="documentation/Prototype-Test-Plan.html">Prototype test plan</a></li>
+<li><a href="documentation/Final-UX-Review.html">Final UX review</a></li>
+<li><a href="documentation/How-to-Run.html">Detailed preview instructions</a></li>
+</ul>
+<h2>Files and verification</h2>
+<p><code>customer/</code>, <code>staff/</code> and <code>operations/</code> export screen metadata, renderers and action handlers. <code>shared/</code> supplies controls and staff access. <code>assets/js/</code> owns the router, Experience/Review shell, guided journeys, scenarios, generated feature catalog and synthetic state; CSS is shared and responsive. <code>tools/generate-documentation.mjs</code> regenerates inventories from the implemented registry and authoritative feature source.</p>
+<p>Browser QA reuses the repository’s existing development-only Puppeteer dependency; the prototype itself has no dependencies. With the preview running, run <code>node 10-Low-Fidelity-Wireframes/tests/browser.mjs</code>. Screenshots and actual results are written to ignored <code>artifacts/</code> inside this folder. See the test plan for the precise evidence boundary.</p>
+<p>No real authentication, clinical validation, provider request, file upload, message, map, tracking stream or financial transaction occurs. Use only fictional input. CSV import and Excel-readable TSV export demonstrate tabular UX; native XLSX processing is not implemented.</p>
+<p>Real security and clinical/financial policy remain the existing engineering and owner work.</p>
+<h2>Product UX redesign</h2>
+<p>Customer navigation is shell-owned. Product discovery includes working type/price filters; desktop cart and checkout use side summaries while phones use a stacked flow. Native input errors appear beside fields. Opening a different workspace URL preserves the current persona; switch explicitly through Explore by user, Review tools, or a guided role handoff.</p>
+<p>Run <code>node 10-Low-Fidelity-Wireframes/tests/product-ux.mjs</code> for product regressions, <code>node 10-Low-Fidelity-Wireframes/tests/experience-flows.mjs</code> for experience selection and end-to-end shopping/fulfillment, <code>node 10-Low-Fidelity-Wireframes/tests/domain-workflows.mjs</code> for domain state transitions, and <code>node 10-Low-Fidelity-Wireframes/tests/extended-workflows.mjs</code> for procurement, reverse logistics and support through browser forms.</p>
+<p>Generate verified coverage after a successful experience run with <code>node 10-Low-Fidelity-Wireframes/tools/generate-experience-coverage.mjs</code>. See the <a href="documentation/Final-UX-Review.html">final UX review</a> for evidence and remaining gaps.</p>
+</main></body></html>

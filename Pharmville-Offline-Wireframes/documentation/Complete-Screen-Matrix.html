@@ -1,0 +1,1116 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Complete Screen Matrix · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Complete Screen Matrix</h1>
+<p>Generated from the implemented screen registry and authoritative <a href="../../01-Project/Features-and-Modules.html">feature inventory</a>. Every row is an actual route. A customer route is shared by the Mobile App and Desktop Website presentations; their navigation and content density change at the selected device width. Staff workspaces are desktop-first responsive websites, not separate mobile apps; the rider workspace is mobile-first.</p>
+<p>Platform labels distinguish required product experiences from responsive adaptations. “Not applicable as a standalone app” does not mean the route is unusable on a smaller screen: all routes are included in the six-width responsive browser sweep.</p>
+<p>Test IDs refer to the executable suite described in <a href="Prototype-Test-Plan.html">Prototype Test Plan</a>: BR-01 route/render smoke; BR-02 assigned scenario rendering (not an interaction claim); BR-03 six-width layout/overflow; BR-04 named task interaction assertions (only on the rows listing it); BR-05 basic labels, duplicate IDs and route links. Feature coverage status retains the product’s boundary between simulated UI, blocked decisions and backend-only behavior.</p>
+<table>
+<thead>
+<tr>
+<th>Screen ID</th>
+<th>Screen</th>
+<th>Feature IDs</th>
+<th>Role / workspace</th>
+<th>Mobile App screen / route</th>
+<th>Desktop Website screen / route</th>
+<th>Supported states</th>
+<th>Scenario IDs</th>
+<th>Test IDs</th>
+<th>Coverage status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SCR-CUS-001</code></td>
+<td>Sign in with your mobile</td>
+<td><code>ACC-01</code>, <code>ACC-05</code>, <code>AUTH-03</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/login</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/login</code></td>
+<td>Normal, Loading, Validation, Error / exception, Pending, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-OTP-003</code>, <code>SCN-OTP-004</code>, <code>SCN-OTP-005</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Interaction/state demonstrated; Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-002</code></td>
+<td>Verify your code</td>
+<td><code>ACC-01</code>, <code>AUTH-03</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/otp</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/otp</code></td>
+<td>Normal, Loading, Validation, Error / exception, Pending, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-OTP-001</code>, <code>SCN-OTP-002</code>, <code>SCN-OTP-003</code>, <code>SCN-OTP-004</code>, <code>SCN-OTP-005</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Interaction/state demonstrated; Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-003</code></td>
+<td>My profile</td>
+<td><code>ACC-02</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/profile</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/profile</code></td>
+<td>Normal, Loading, Validation, Error / exception, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-002</code>, <code>SCN-SEC-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-004</code></td>
+<td>Saved delivery addresses</td>
+<td><code>ACC-03</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/addresses</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/addresses</code></td>
+<td>Normal, Loading, Validation, Error / exception, Empty</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-SYS-002</code>, <code>SCN-ADDR-001</code>, <code>SCN-SEC-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-005</code></td>
+<td>Family and patient profiles</td>
+<td><code>ACC-04</code>, <code>RX-04</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/family</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/family</code></td>
+<td>Normal, Loading, Validation, Error / exception, Empty</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-SYS-002</code>, <code>SCN-SEC-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-006</code></td>
+<td>Privacy notice and consent</td>
+<td><code>ACC-05</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/privacy</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/privacy</code></td>
+<td>Normal, Loading, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-007</code></td>
+<td>Request account deletion</td>
+<td><code>ACC-06</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/deletion</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/deletion</code></td>
+<td>Normal, Loading, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-008</code></td>
+<td>My wishlist</td>
+<td><code>ACC-07</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/wishlist</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/wishlist</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-STK-001</code>, <code>SCN-RACE-001</code>, <code>SCN-SEC-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-009</code></td>
+<td>Pharmville shop</td>
+<td><code>CAT-01</code>, <code>CAT-04</code>, <code>CAT-06</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/home</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/home</code></td>
+<td>Normal, Loading, Empty, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-STK-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-010</code></td>
+<td>Categories and subcategories</td>
+<td><code>CAT-01</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/categories</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/categories</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-STK-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-011</code></td>
+<td>Search results and suggestions</td>
+<td><code>CAT-03</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/search</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/search</code></td>
+<td>Normal, Loading, Empty, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-STK-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-012</code></td>
+<td>Product details</td>
+<td><code>CAT-02</code>, <code>CAT-04</code>, <code>CAT-06</code>, <code>ACC-07</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/product</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/product</code></td>
+<td>Normal, Loading, Empty, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-STK-001</code>, <code>SCN-SEC-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-013</code></td>
+<td>Compare exact alternatives</td>
+<td><code>CAT-05</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/alternatives</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/alternatives</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-STK-001</code>, <code>SCN-RX-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-014</code></td>
+<td>Your cart</td>
+<td><code>CHK-01</code>, <code>CHK-05</code>, <code>CHK-06</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/cart</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/cart</code></td>
+<td>Normal, Loading, Empty, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-STK-001</code>, <code>SCN-RACE-002</code>, <code>SCN-CHK-001</code>, <code>SCN-SEC-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-015</code></td>
+<td>Checkout · delivery address</td>
+<td><code>CHK-02</code>, <code>ACC-03</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/checkout-address</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/checkout-address</code></td>
+<td>Normal, Loading, Validation, Error / exception, Empty, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-SYS-002</code>, <code>SCN-ADDR-001</code>, <code>SCN-SEC-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-016</code></td>
+<td>Checkout · choose patient</td>
+<td><code>CHK-02</code>, <code>RX-04</code>, <code>ACC-04</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/checkout-patient</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/checkout-patient</code></td>
+<td>Normal, Loading, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-SEC-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-017</code></td>
+<td>Checkout · accept current summary</td>
+<td><code>CHK-02</code>, <code>CHK-05</code>, <code>CHK-06</code>, <code>CHK-07</code>, <code>CHK-08</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/checkout-summary</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/checkout-summary</code></td>
+<td>Normal, Loading, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-CHK-001</code>, <code>SCN-STK-001</code>, <code>SCN-RACE-001</code>, <code>SCN-STK-002</code>, <code>SCN-ADDR-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-018</code></td>
+<td>Prescription upload</td>
+<td><code>RX-01</code>, <code>RX-02</code>, <code>RX-03</code>, <code>RX-04</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/prescription-upload</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/prescription-upload</code></td>
+<td>Normal, Loading, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-RX-003</code>, <code>SCN-RX-004</code>, <code>SCN-SEC-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-019</code></td>
+<td>Pharmacist review status</td>
+<td><code>RX-05</code>, <code>RX-04</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/prescription-status</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/prescription-status</code></td>
+<td>Normal, Loading, Validation, Error / exception, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-RX-001</code>, <code>SCN-RX-002</code>, <code>SCN-RX-003</code>, <code>SCN-RX-004</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-020</code></td>
+<td>Accept a revised order</td>
+<td><code>RX-05</code>, <code>CHK-06</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/revised-order</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/revised-order</code></td>
+<td>Normal, Loading, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-RX-002</code>, <code>SCN-CHK-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-021</code></td>
+<td>Choose a payment method</td>
+<td><code>CHK-03</code>, <code>CHK-04</code>, <code>CHK-07</code>, <code>CHK-08</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/payment</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/payment</code></td>
+<td>Normal, Loading, Validation, Error / exception, Pending, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-PAY-001</code>, <code>SCN-PAY-002</code>, <code>SCN-PAY-003</code>, <code>SCN-RACE-001</code>, <code>SCN-STK-002</code>, <code>SCN-STK-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-022</code></td>
+<td>Payment and order result</td>
+<td><code>CHK-03</code>, <code>CHK-07</code>, <code>ORD-01</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/payment-result</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/payment-result</code></td>
+<td>Normal, Loading, Error / exception, Pending, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-003</code>, <code>SCN-PAY-001</code>, <code>SCN-PAY-002</code>, <code>SCN-PAY-003</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-023</code></td>
+<td>Recover existing payment</td>
+<td><code>CHK-07</code>, <code>CHK-08</code>, <code>FIN-01</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/payment-recovery</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/payment-recovery</code></td>
+<td>Normal, Loading, Error / exception, Pending, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-003</code>, <code>SCN-PAY-002</code>, <code>SCN-PAY-003</code>, <code>SCN-STK-002</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-024</code></td>
+<td>My orders</td>
+<td><code>ORD-01</code>, <code>ORD-02</code>, <code>ORD-03</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/orders</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/orders</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-STK-001</code>, <code>SCN-SEC-002</code>, <code>SCN-SEC-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Interaction/state demonstrated; Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-025</code></td>
+<td>Order details and confirmation</td>
+<td><code>ORD-01</code>, <code>ORD-02</code>, <code>ORD-03</code>, <code>ORD-04</code>, <code>ORD-05</code>, <code>ORD-06</code>, <code>ORD-09</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/order-detail</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/order-detail</code></td>
+<td>Normal, Loading, Validation, Error / exception, Pending</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-SEC-001</code>, <code>SCN-PAY-003</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Interaction/state demonstrated; Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-026</code></td>
+<td>Delivery tracking and handover code</td>
+<td><code>ORD-02</code>, <code>ORD-07</code>, <code>ORD-08</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/tracking</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/tracking</code></td>
+<td>Normal, Loading, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Interaction/state demonstrated; Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-027</code></td>
+<td>Request cancellation</td>
+<td><code>ORD-04</code>, <code>ORD-06</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/cancellation</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/cancellation</code></td>
+<td>Normal, Loading, Validation, Error / exception, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-002</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-028</code></td>
+<td>Return or quality complaint</td>
+<td><code>ORD-05</code>, <code>ORD-06</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/return</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/return</code></td>
+<td>Normal, Loading, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-029</code></td>
+<td>Refund progress</td>
+<td><code>ORD-06</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/refund</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/refund</code></td>
+<td>Normal, Loading, Error / exception, Pending, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-003</code>, <code>SCN-FIN-002</code>, <code>SCN-SEC-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-030</code></td>
+<td>Invoice and billing evidence</td>
+<td><code>ORD-03</code>, <code>FIN-02</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/invoice</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/invoice</code></td>
+<td>Normal, Loading, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-ADM-001</code></td>
+<td>Role and location dashboard</td>
+<td><code>ADM-01</code></td>
+<td>Admin · admin</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/dashboard) — <code>staff/dashboard</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/dashboard</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-ADM-002</code></td>
+<td>Staff invitations and session revocation</td>
+<td><code>ADM-02</code></td>
+<td>Admin · admin</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/staff) — <code>staff/staff</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/staff</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-ADM-003</code></td>
+<td>Roles and permissions</td>
+<td><code>ADM-03</code></td>
+<td>Admin · admin</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/permissions) — <code>staff/permissions</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/permissions</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-ADM-004</code></td>
+<td>CMS draft and publication</td>
+<td><code>ADM-04</code></td>
+<td>Admin · admin</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/cms) — <code>staff/cms</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/cms</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-002</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-ADM-005</code></td>
+<td>System settings and offer proposals</td>
+<td><code>ADM-05</code>, <code>ADM-09</code></td>
+<td>Admin · admin</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/settings) — <code>staff/settings</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/settings</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-ADM-006</code></td>
+<td>Product masters and bulk import</td>
+<td><code>ADM-06</code>, <code>ADM-07</code></td>
+<td>Admin · admin</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/catalog) — <code>staff/catalog</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/catalog</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-ADM-007</code></td>
+<td>Store and warehouse masters</td>
+<td><code>ADM-08</code></td>
+<td>Admin · admin</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/locations) — <code>staff/locations</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/locations</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-OMS-001</code></td>
+<td>Order and attention queue</td>
+<td><code>OMS-01</code>, <code>OMS-06</code></td>
+<td>Order operator · orders</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/orders) — <code>staff/orders</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/orders</code></td>
+<td>Normal, Loading, Empty, Error / exception, Pending</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-PAY-002</code>, <code>SCN-PAY-003</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-OMS-002</code></td>
+<td>Order detail, revision and recovery</td>
+<td><code>OMS-02</code>, <code>OMS-05</code></td>
+<td>Order operator · orders</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/order-detail) — <code>staff/order-detail</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/order-detail</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation, Pending</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-002</code>, <code>SCN-RACE-001</code>, <code>SCN-PAY-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-OMS-003</code></td>
+<td>Licensed allocation and reassignment</td>
+<td><code>OMS-03</code>, <code>OMS-04</code></td>
+<td>Order operator · orders</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/allocation) — <code>staff/allocation</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/allocation</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-002</code>, <code>SCN-RACE-001</code>, <code>SCN-STK-003</code>, <code>SCN-STK-002</code>, <code>SCN-STK-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-OMS-004</code></td>
+<td>Assisted phone-order intake — blocked contract</td>
+<td><code>OMS-07</code></td>
+<td>Order operator · orders</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/assisted-order) — <code>staff/assisted-order</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/assisted-order</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-INV-001</code></td>
+<td>Batch stock and FEFO eligibility</td>
+<td><code>INV-01</code>, <code>INV-03</code>, <code>INV-05</code></td>
+<td>Store worker · inventory</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/inventory) — <code>staff/inventory</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/inventory</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-STK-003</code>, <code>SCN-STK-002</code>, <code>SCN-STK-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-INV-002</code></td>
+<td>Read-only stock movement ledger</td>
+<td><code>INV-02</code></td>
+<td>Store worker · inventory</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/ledger) — <code>staff/ledger</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/ledger</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-INV-003</code></td>
+<td>Stock adjustment and manager review</td>
+<td><code>INV-04</code></td>
+<td>Store worker · inventory</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/adjustment) — <code>staff/adjustment</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/adjustment</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-INV-004</code></td>
+<td>Opening stock import and Techsmith sync</td>
+<td><code>INV-06</code>, <code>INV-07</code></td>
+<td>Store worker · inventory</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/inventory-integration) — <code>staff/inventory-integration</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/inventory-integration</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-001</code>, <code>SCN-STK-003</code>, <code>SCN-EXT-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-FIN-001</code></td>
+<td>Payment records and uncertain outcome recovery</td>
+<td><code>FIN-01</code></td>
+<td>Finance · finance</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/payments) — <code>staff/payments</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/payments</code></td>
+<td>Normal, Loading, Empty, Error / exception, Pending</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-PAY-002</code>, <code>SCN-PAY-003</code>, <code>SCN-RACE-001</code>, <code>SCN-EXT-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-FIN-002</code></td>
+<td>Invoice evidence and blocked tax setup</td>
+<td><code>FIN-02</code></td>
+<td>Finance · finance</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/invoice) — <code>staff/invoice</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/invoice</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-EXT-001</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-FIN-003</code></td>
+<td>Refund request, approval and tracking</td>
+<td><code>FIN-03</code>, <code>FIN-04</code></td>
+<td>Finance · finance</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/refunds) — <code>staff/refunds</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/refunds</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation, Pending, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-001</code>, <code>SCN-FIN-002</code>, <code>SCN-EXT-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-FIN-004</code></td>
+<td>Settlement and COD reconciliation</td>
+<td><code>FIN-05</code>, <code>FIN-06</code></td>
+<td>Finance · finance</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/reconciliation) — <code>staff/reconciliation</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/reconciliation</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-001</code>, <code>SCN-FIN-001</code>, <code>SCN-EXT-001</code>, <code>SCN-WH-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-FIN-005</code></td>
+<td>Credit-note proposal and original invoice</td>
+<td><code>FIN-07</code></td>
+<td>Finance · finance</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/credit-note) — <code>staff/credit-note</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/credit-note</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-RACE-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-REP-001</code></td>
+<td>Report selection and filters</td>
+<td><code>REP-01</code>, <code>REP-02</code>, <code>REP-03</code>, <code>REP-04</code>, <code>REP-05</code>, <code>REP-06</code></td>
+<td>Report viewer · reporting</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/reports) — <code>staff/reports</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/reports</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-REP-001</code>, <code>SCN-STK-003</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-REP-002</code></td>
+<td>Report results and export job</td>
+<td><code>REP-01</code>, <code>REP-02</code>, <code>REP-03</code>, <code>REP-04</code>, <code>REP-05</code>, <code>REP-06</code>, <code>REP-07</code></td>
+<td>Report viewer · reporting</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/report-results) — <code>staff/report-results</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/report-results</code></td>
+<td>Normal, Loading, Empty, Error / exception, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-REP-001</code>, <code>SCN-REP-002</code>, <code>SCN-FIN-001</code>, <code>SCN-WH-001</code>, <code>SCN-STK-003</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-AUD-001</code></td>
+<td>Read-only audit search and export</td>
+<td><code>AUD-01</code>, <code>AUD-02</code></td>
+<td>Auditor · audit</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/audit) — <code>staff/audit</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/audit</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-REP-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-NOT-001</code></td>
+<td>Notification attempts and staff alerts</td>
+<td><code>NOT-01</code>, <code>NOT-02</code>, <code>NOT-04</code></td>
+<td>Admin · notifications</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/notifications) — <code>staff/notifications</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/notifications</code></td>
+<td>Normal, Loading, Empty, Error / exception, Pending</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-EXT-001</code>, <code>SCN-PAY-003</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-NOT-002</code></td>
+<td>Channel preferences and optional push simulation</td>
+<td><code>NOT-01</code>, <code>NOT-03</code>, <code>NOT-05</code></td>
+<td>Admin · notifications</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/notification-preferences) — <code>staff/notification-preferences</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/notification-preferences</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-REP-002</code>, <code>SCN-EXT-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Interaction/state demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-SUP-001</code></td>
+<td>Identity-aware support triage</td>
+<td><code>NOT-04</code></td>
+<td>Support · support</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/support) — <code>staff/support</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/support</code></td>
+<td>Normal, Loading, Empty, Error / exception, Validation, Pending</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-PAY-002</code>, <code>SCN-PAY-003</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-PHM-001</code></td>
+<td>Prescription review queue</td>
+<td><code>PHM-01</code></td>
+<td>Pharmacist · pharmacy</td>
+<td>Not applicable as a standalone app — responsive staff web route (pharmacy/queue) — <code>pharmacy/queue</code></td>
+<td>Required and implemented — desktop-first workspace — <code>pharmacy/queue</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-RX-003</code>, <code>SCN-RX-004</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-PHM-002</code></td>
+<td>Compare prescription and order</td>
+<td><code>PHM-02</code>, <code>PHM-04</code></td>
+<td>Pharmacist · pharmacy</td>
+<td>Not applicable as a standalone app — responsive staff web route (pharmacy/review) — <code>pharmacy/review</code></td>
+<td>Required and implemented — desktop-first workspace — <code>pharmacy/review</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-RX-003</code>, <code>SCN-RX-004</code>, <code>SCN-RX-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-PHM-003</code></td>
+<td>Record pharmacist decisions</td>
+<td><code>PHM-03</code>, <code>PHM-04</code>, <code>PHM-05</code></td>
+<td>Pharmacist · pharmacy</td>
+<td>Not applicable as a standalone app — responsive staff web route (pharmacy/decision) — <code>pharmacy/decision</code></td>
+<td>Required and implemented — desktop-first workspace — <code>pharmacy/decision</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-RX-003</code>, <code>SCN-RX-004</code>, <code>SCN-RX-001</code>, <code>SCN-RX-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-PHM-004</code></td>
+<td>Pharmacist decision history</td>
+<td><code>PHM-05</code></td>
+<td>Pharmacist · pharmacy</td>
+<td>Not applicable as a standalone app — responsive staff web route (pharmacy/history) — <code>pharmacy/history</code></td>
+<td>Required and implemented — desktop-first workspace — <code>pharmacy/history</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-STO-001</code></td>
+<td>My store incoming orders</td>
+<td><code>STO-01</code>, <code>STO-02</code></td>
+<td>Store worker · store</td>
+<td>Not applicable as a standalone app — responsive staff web route (store/queue) — <code>store/queue</code></td>
+<td>Required and implemented — desktop-first workspace — <code>store/queue</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-STK-001</code>, <code>SCN-STK-003</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-STO-002</code></td>
+<td>Exact batch pick list</td>
+<td><code>STO-02</code></td>
+<td>Store worker · store</td>
+<td>Not applicable as a standalone app — responsive staff web route (store/pick) — <code>store/pick</code></td>
+<td>Required and implemented — desktop-first workspace — <code>store/pick</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-STK-002</code>, <code>SCN-STK-001</code>, <code>SCN-STK-003</code>, <code>SCN-RX-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-STO-003</code></td>
+<td>Packing and custody handoff</td>
+<td><code>STO-02</code></td>
+<td>Store worker · store</td>
+<td>Not applicable as a standalone app — responsive staff web route (store/pack) — <code>store/pack</code></td>
+<td>Required and implemented — desktop-first workspace — <code>store/pack</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Pending, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-STK-002</code>, <code>SCN-STK-003</code>, <code>SCN-RX-001</code>, <code>SCN-RX-002</code>, <code>SCN-DLV-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-STO-004</code></td>
+<td>Store stock and replenishment</td>
+<td><code>STO-03</code>, <code>STO-05</code></td>
+<td>Store worker · store</td>
+<td>Not applicable as a standalone app — responsive staff web route (store/replenishment) — <code>store/replenishment</code></td>
+<td>Required and implemented — desktop-first workspace — <code>store/replenishment</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-STK-002</code>, <code>SCN-STK-001</code>, <code>SCN-STK-003</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-STO-005</code></td>
+<td>Receive warehouse transfer</td>
+<td><code>STO-04</code></td>
+<td>Store worker · store</td>
+<td>Not applicable as a standalone app — responsive staff web route (store/receipt) — <code>store/receipt</code></td>
+<td>Required and implemented — desktop-first workspace — <code>store/receipt</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-WH-001</code>, <code>SCN-STK-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-WH-001</code></td>
+<td>Supplier receiving</td>
+<td><code>WH-01</code></td>
+<td>Warehouse worker · warehouse</td>
+<td>Not applicable as a standalone app — responsive staff web route (warehouse/receiving) — <code>warehouse/receiving</code></td>
+<td>Required and implemented — desktop-first workspace — <code>warehouse/receiving</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-WH-001</code>, <code>SCN-STK-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-WH-002</code></td>
+<td>Replenishment and urgent-run queue</td>
+<td><code>WH-02</code>, <code>WH-03</code></td>
+<td>Warehouse worker · warehouse</td>
+<td>Not applicable as a standalone app — responsive staff web route (warehouse/replenishment) — <code>warehouse/replenishment</code></td>
+<td>Required and implemented — desktop-first workspace — <code>warehouse/replenishment</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-WH-003</code></td>
+<td>Warehouse transfer dispatch</td>
+<td><code>WH-02</code>, <code>WH-03</code></td>
+<td>Warehouse worker · warehouse</td>
+<td>Not applicable as a standalone app — responsive staff web route (warehouse/dispatch) — <code>warehouse/dispatch</code></td>
+<td>Required and implemented — desktop-first workspace — <code>warehouse/dispatch</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-STK-002</code>, <code>SCN-STK-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-WH-004</code></td>
+<td>Warehouse counts and fallback orders</td>
+<td><code>WH-04</code>, <code>WH-05</code></td>
+<td>Warehouse worker · warehouse</td>
+<td>Not applicable as a standalone app — responsive staff web route (warehouse/audit) — <code>warehouse/audit</code></td>
+<td>Required and implemented — desktop-first workspace — <code>warehouse/audit</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-STK-002</code>, <code>SCN-STK-003</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Blocked by owner decision; Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-DLV-001</code></td>
+<td>Delivery dispatch dashboard</td>
+<td><code>DLV-01</code>, <code>DLV-04</code></td>
+<td>Dispatcher · delivery</td>
+<td>Not applicable as a standalone app — responsive staff web route (delivery/dashboard) — <code>delivery/dashboard</code></td>
+<td>Required and implemented — desktop-first workspace — <code>delivery/dashboard</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Pending</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-RID-001</code>, <code>SCN-DLV-001</code>, <code>SCN-FIN-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-DLV-002</code></td>
+<td>Confirm rider assignment</td>
+<td><code>DLV-02</code>, <code>DLV-05</code></td>
+<td>Dispatcher · delivery</td>
+<td>Not applicable as a standalone app — responsive staff web route (delivery/assignment) — <code>delivery/assignment</code></td>
+<td>Required and implemented — desktop-first workspace — <code>delivery/assignment</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Pending, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-DLV-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-DLV-003</code></td>
+<td>Failed delivery resolution</td>
+<td><code>DLV-03</code></td>
+<td>Dispatcher · delivery</td>
+<td>Not applicable as a standalone app — responsive staff web route (delivery/failures) — <code>delivery/failures</code></td>
+<td>Required and implemented — desktop-first workspace — <code>delivery/failures</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-DLV-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-DLV-004</code></td>
+<td>Rider management and COD handover</td>
+<td><code>DLV-04</code>, <code>DLV-05</code></td>
+<td>Dispatcher · delivery</td>
+<td>Not applicable as a standalone app — responsive staff web route (delivery/riders) — <code>delivery/riders</code></td>
+<td>Required and implemented — desktop-first workspace — <code>delivery/riders</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Pending</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-DLV-001</code>, <code>SCN-FIN-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-RID-001</code></td>
+<td>Rider OTP sign in</td>
+<td><code>RID-01</code></td>
+<td>Rider · rider</td>
+<td>Required and implemented — mobile-first rider app — <code>rider/login</code></td>
+<td>Desktop-adapted route; primary experience is the rider mobile app — <code>rider/login</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-OTP-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-RID-002</code></td>
+<td>Duty and assigned tasks</td>
+<td><code>RID-01</code>, <code>RID-02</code></td>
+<td>Rider · rider</td>
+<td>Required and implemented — mobile-first rider app — <code>rider/tasks</code></td>
+<td>Desktop-adapted route; primary experience is the rider mobile app — <code>rider/tasks</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Pending, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-DLV-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-RID-003</code></td>
+<td>Rider pickup checklist</td>
+<td><code>RID-02</code></td>
+<td>Rider · rider</td>
+<td>Required and implemented — mobile-first rider app — <code>rider/pickup</code></td>
+<td>Desktop-adapted route; primary experience is the rider mobile app — <code>rider/pickup</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-STK-002</code>, <code>SCN-STK-003</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-RID-004</code></td>
+<td>Navigation and last-known location</td>
+<td><code>RID-02</code>, <code>RID-03</code></td>
+<td>Rider · rider</td>
+<td>Required and implemented — mobile-first rider app — <code>rider/navigation</code></td>
+<td>Desktop-adapted route; primary experience is the rider mobile app — <code>rider/navigation</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Pending</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-RID-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-RID-005</code></td>
+<td>Doorstep proof and completion</td>
+<td><code>RID-04</code>, <code>RID-05</code></td>
+<td>Rider · rider</td>
+<td>Required and implemented — mobile-first rider app — <code>rider/completion</code></td>
+<td>Desktop-adapted route; primary experience is the rider mobile app — <code>rider/completion</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception, Pending, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-OTP-001</code>, <code>SCN-RID-001</code>, <code>SCN-FIN-001</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-RID-006</code></td>
+<td>Failed attempt and rider history</td>
+<td><code>RID-06</code>, <code>RID-07</code></td>
+<td>Rider · rider</td>
+<td>Required and implemented — mobile-first rider app — <code>rider/failure</code></td>
+<td>Desktop-adapted route; primary experience is the rider mobile app — <code>rider/failure</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code>, <code>SCN-DLV-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Blocked by owner decision</td>
+</tr>
+<tr>
+<td><code>SCR-RID-007</code></td>
+<td>Daily deliveries and earnings status</td>
+<td><code>RID-07</code>, <code>RID-04</code></td>
+<td>Rider · rider</td>
+<td>Required and implemented — mobile-first rider app — <code>rider/history</code></td>
+<td>Desktop-adapted route; primary experience is the rider mobile app — <code>rider/history</code></td>
+<td>Normal, Loading, Empty, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-INPUT-001</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Blocked by owner decision; Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-ACC-001</code></td>
+<td>Unified staff identity sign-in</td>
+<td><code>AUTH-01</code>, <code>AUTH-03</code></td>
+<td>Admin · access</td>
+<td>Not applicable as a standalone app — responsive staff web route (access/login) — <code>access/login</code></td>
+<td>Required and implemented — desktop-first workspace — <code>access/login</code></td>
+<td>Normal, Validation, Error / exception, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-ACC-002</code></td>
+<td>Privileged authenticator challenge</td>
+<td><code>AUTH-01</code>, <code>AUTH-02</code></td>
+<td>Admin · access</td>
+<td>Not applicable as a standalone app — responsive staff web route (access/mfa) — <code>access/mfa</code></td>
+<td>Required and implemented — desktop-first workspace — <code>access/mfa</code></td>
+<td>Normal, Validation, Error / exception, Success, Recovery</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-OTP-001</code>, <code>SCN-OTP-002</code>, <code>SCN-OTP-005</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-ACC-003</code></td>
+<td>Identity session and access checks</td>
+<td><code>AUTH-02</code>, <code>AUTH-03</code>, <code>AUTH-04</code></td>
+<td>Admin · access</td>
+<td>Not applicable as a standalone app — responsive staff web route (access/sessions) — <code>access/sessions</code></td>
+<td>Required and implemented — desktop-first workspace — <code>access/sessions</code></td>
+<td>Normal, Validation, Error / exception, Success</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05, BR-04</td>
+<td>Mixed: Screen demonstrated; Backend-only, no direct screen</td>
+</tr>
+<tr>
+<td><code>SCR-ACC-004</code></td>
+<td>Authorized workspace selection</td>
+<td><code>AUTH-04</code></td>
+<td>Admin · access</td>
+<td>Not applicable as a standalone app — responsive staff web route (access/workspaces) — <code>access/workspaces</code></td>
+<td>Required and implemented — desktop-first workspace — <code>access/workspaces</code></td>
+<td>Normal, Validation, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-INPUT-001</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Backend-only, no direct screen</td>
+</tr>
+<tr>
+<td><code>SCR-PRO-001</code></td>
+<td>Supplier directory and proposals</td>
+<td><code>WH-01</code></td>
+<td>Procurement · procurement</td>
+<td>Not applicable as a standalone app — responsive staff web route (procurement/suppliers) — <code>procurement/suppliers</code></td>
+<td>Required and implemented — desktop-first workspace — <code>procurement/suppliers</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-PRO-002</code></td>
+<td>Replenishment demand and purchase orders</td>
+<td><code>WH-02</code>, <code>WH-01</code></td>
+<td>Procurement · procurement</td>
+<td>Not applicable as a standalone app — responsive staff web route (procurement/orders) — <code>procurement/orders</code></td>
+<td>Required and implemented — desktop-first workspace — <code>procurement/orders</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-RET-001</code></td>
+<td>Return eligibility and owner review queue</td>
+<td><code>ORD-05</code>, <code>ORD-06</code></td>
+<td>Order operator · returns</td>
+<td>Not applicable as a standalone app — responsive staff web route (staff/returns) — <code>staff/returns</code></td>
+<td>Required and implemented — desktop-first workspace — <code>staff/returns</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Mixed: Screen demonstrated; Interaction/state demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-RET-002</code></td>
+<td>Reverse pickup dispatch</td>
+<td><code>DLV-03</code>, <code>DLV-05</code></td>
+<td>Dispatcher · delivery</td>
+<td>Not applicable as a standalone app — responsive staff web route (delivery/returns) — <code>delivery/returns</code></td>
+<td>Required and implemented — desktop-first workspace — <code>delivery/returns</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-RET-003</code></td>
+<td>Rider return pickup task</td>
+<td><code>RID-02</code>, <code>RID-06</code></td>
+<td>Rider · rider</td>
+<td>Required and implemented — mobile-first rider app — <code>rider/returns</code></td>
+<td>Desktop-adapted route; primary experience is the rider mobile app — <code>rider/returns</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-RET-004</code></td>
+<td>Returned item receipt and inspection</td>
+<td><code>WH-05</code></td>
+<td>Warehouse worker · warehouse</td>
+<td>Not applicable as a standalone app — responsive staff web route (warehouse/returns) — <code>warehouse/returns</code></td>
+<td>Required and implemented — desktop-first workspace — <code>warehouse/returns</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+<tr>
+<td><code>SCR-CUS-HELP-001</code></td>
+<td>Customer help and case history</td>
+<td><code>ORD-05</code></td>
+<td>Customer · customer</td>
+<td>Required and implemented — mobile layout on this route — <code>customer/help</code></td>
+<td>Required and implemented — purpose-built desktop layout on this route — <code>customer/help</code></td>
+<td>Normal, Loading, Empty, Error / exception</td>
+<td><code>SCN-BASE-001</code>, <code>SCN-SYS-001</code>, <code>SCN-SYS-002</code>, <code>SCN-SYS-003</code>, <code>SCN-SEC-001</code>, <code>SCN-SEC-002</code>, <code>SCN-RACE-001</code>, <code>SCN-RACE-002</code></td>
+<td>BR-01, BR-02, BR-03, BR-05</td>
+<td>Screen demonstrated</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Coverage totals:</strong> 91 routes · 110 distinct feature IDs mapped · 35 scenarios · 779 screen/scenario visits in the smoke suite. The browser suite asserts core journeys and representative recovery interactions; BR-02 alone means rendered, not behaviorally verified.</p>
+</main></body></html>

@@ -1,0 +1,505 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>reverse_shipments · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>logistics.reverse_shipments</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds reverse shipments records within the logistics domain (riders, shipments, tracking and delivery). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>logistics.reverse_shipments</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Transactional</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Delivery_Operations</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>16 columns; 12 PK/FK/UQ/CHECK/exclusion constraints; 9 named PostgreSQL 18 NOT NULL constraints; 5 indexes; 3 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>carrier_id</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to carriers</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>logistics.carriers</code> via <code>fk_logistics_reverse_shipments_carrier_id_carriers</code></td>
+</tr>
+<tr>
+<td><code>carrier_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>logistics.carriers</code> via <code>fk_logistics_reverse_shipments_carrier_id_carriers_numeric</code></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_logistics_reverse_shipments_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>pickup_scheduled_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of pickup scheduled</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>received_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Time of received</td>
+<td>Support chronology, deadlines or audit evidence</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>return_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to returns</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>commerce.returns</code> via <code>fk_logistics_reverse_shipments_return_id_returns</code></td>
+</tr>
+<tr>
+<td><code>return_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>commerce.returns</code> via <code>fk_logistics_reverse_shipments_return_id_returns_numeric</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipment_number</code></td>
+<td><code>character varying(64)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores reverse shipment number for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>row_version</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td><code>1</code></td>
+<td>Change counter</td>
+<td>Detect conflicting concurrent updates</td>
+<td>Checked positive; optimistic precondition and maintenance trigger</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Current business or processing state</td>
+<td>Restricts and records allowed actions</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>tracking_number</code></td>
+<td><code>character varying(128)</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Inferred: stores tracking number for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Last update time</td>
+<td>Detect staleness and support traceability</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>uuid</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Reference linking this record to users</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>identity.users</code> via <code>fk_logistics_reverse_shipments_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the reverse shipments business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> Customer_Orders, Delivery_Operations, Rider_App. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>logistics.reverse_shipments</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_logistics_reverse_shipments_carrier_id_carriers</td>
+<td><code>carrier_id</code></td>
+<td><a href="../../Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td><code>FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_reverse_shipments_carrier_id_carriers_numeric</td>
+<td><code>carrier_id_internal_id</code></td>
+<td><a href="../../Tables/logistics/carriers.html"><code>logistics.carriers</code></a></td>
+<td><code>FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td>fk_logistics_reverse_shipments_created_by_users</td>
+<td><code>created_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_reverse_shipments_return_id_returns</td>
+<td><code>return_id</code></td>
+<td><a href="../../Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td><code>FOREIGN KEY (return_id) REFERENCES commerce.returns(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_reverse_shipments_return_id_returns_numeric</td>
+<td><code>return_id_internal_id</code></td>
+<td><a href="../../Tables/commerce/returns.html"><code>commerce.returns</code></a></td>
+<td><code>FOREIGN KEY (return_id_internal_id) REFERENCES commerce.returns(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_logistics_reverse_shipments_updated_by_users</td>
+<td><code>updated_by</code></td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<p>No inbound FK is present in the validated catalog.</p>
+<h2><code>logistics.reverse_shipments</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>carrier_id</code></td>
+<td><code>logistics.carriers</code></td>
+<td><code>fk_logistics_reverse_shipments_carrier_id_carriers</code></td>
+</tr>
+<tr>
+<td><code>carrier_id_internal_id</code></td>
+<td><code>logistics.carriers</code></td>
+<td><code>fk_logistics_reverse_shipments_carrier_id_carriers_numeric</code></td>
+</tr>
+<tr>
+<td><code>created_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_logistics_reverse_shipments_created_by_users</code></td>
+</tr>
+<tr>
+<td><code>return_id</code></td>
+<td><code>commerce.returns</code></td>
+<td><code>fk_logistics_reverse_shipments_return_id_returns</code></td>
+</tr>
+<tr>
+<td><code>return_id_internal_id</code></td>
+<td><code>commerce.returns</code></td>
+<td><code>fk_logistics_reverse_shipments_return_id_returns_numeric</code></td>
+</tr>
+<tr>
+<td><code>updated_by</code></td>
+<td><code>identity.users</code></td>
+<td><code>fk_logistics_reverse_shipments_updated_by_users</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_logistics_reverse_shipments_numeric_pair_carrier_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((carrier_id IS NULL) = (carrier_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_reverse_shipments_numeric_pair_return_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((return_id IS NULL) = (return_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_logistics_reverse_shipments_row_version_positive</code></td>
+<td>CHECK</td>
+<td><code>CHECK (row_version &gt; 0)</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_reverse_shipments_carrier_id_carriers</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (carrier_id) REFERENCES logistics.carriers(id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_reverse_shipments_carrier_id_carriers_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (carrier_id_internal_id) REFERENCES logistics.carriers(internal_id) ON DELETE SET NULL</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_reverse_shipments_created_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_reverse_shipments_return_id_returns</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (return_id) REFERENCES commerce.returns(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_reverse_shipments_return_id_returns_numeric</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (return_id_internal_id) REFERENCES commerce.returns(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_logistics_reverse_shipments_updated_by_users</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>pk_logistics_reverse_shipments</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipment_number</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (reverse_shipment_number)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_reverse_shipments_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipments_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipments_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipments_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipments_return_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL return_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipments_return_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL return_id</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipments_reverse_shipment_number_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL reverse_shipment_number</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipments_row_version_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL row_version</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipments_status_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL status</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipments_updated_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL updated_at</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_logistics_reverse_shipments_return</code></td>
+<td>btree</td>
+<td><code>(return_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_reverse_shipments_return ON logistics.reverse_shipments USING btree (return_id)</code></td>
+</tr>
+<tr>
+<td><code>ix_logistics_reverse_shipments_status</code></td>
+<td>btree</td>
+<td><code>(status)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_logistics_reverse_shipments_status ON logistics.reverse_shipments USING btree (status)</code></td>
+</tr>
+<tr>
+<td><code>pk_logistics_reverse_shipments</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_logistics_reverse_shipments ON logistics.reverse_shipments USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>reverse_shipment_number</code></td>
+<td>btree</td>
+<td><code>(reverse_shipment_number)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX reverse_shipment_number ON logistics.reverse_shipments USING btree (reverse_shipment_number)</code></td>
+</tr>
+<tr>
+<td><code>uq_logistics_reverse_shipments_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_logistics_reverse_shipments_id ON logistics.reverse_shipments USING btree (id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON logistics.reverse_shipments FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;carrier_id&quot;,&quot;carrier_id_internal_id&quot;,&quot;logistics&quot;,&quot;carriers&quot;],[&quot;return_id&quot;,&quot;return_id_internal_id&quot;,&quot;commerce&quot;,&quot;returns&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zz_record_maintenance</code></td>
+<td><code>CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON logistics.reverse_shipments FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON logistics.reverse_shipments FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;carrier_id&quot;,&quot;carrier_id_internal_id&quot;,&quot;logistics&quot;,&quot;carriers&quot;],[&quot;return_id&quot;,&quot;return_id_internal_id&quot;,&quot;commerce&quot;,&quot;returns&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

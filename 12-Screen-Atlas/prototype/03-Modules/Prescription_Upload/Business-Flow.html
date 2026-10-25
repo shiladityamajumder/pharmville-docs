@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Prescription Management business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Prescription intake. Patient/prescription linkage; shared file infrastructure controls object storage and Pharmacist Review owns clinical decisions.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Authorize customer, patient and exact order/revision linkage before creating a private JPG/PNG/PDF upload session.</li>
+<li>Use shared file upload, completion and safety checks; incomplete or unsafe evidence cannot enter review.</li>
+<li>Link only safe, permitted evidence to the owned patient/order; reuse never implies fresh clinical approval.</li>
+<li>Expose the pharmacist outcome through a filtered projection and allow corrected evidence when the workflow permits.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RX-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-RX-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>RX-02</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-RX-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>RX-03</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-RX-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>RX-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-RX-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>RX-05</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-RX-05-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Prescription-and-Pharmacy.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-004; D-006; D-010; D-024.</p>
+</main></body></html>

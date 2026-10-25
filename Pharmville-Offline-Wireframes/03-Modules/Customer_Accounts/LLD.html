@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>LLD · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Customer Accounts low level design</h1>
+<p>&lt;!-- ERD-NAV-START --&gt;</p>
+<h2>Database relationships</h2>
+<p><a href="../../04-Database/ER-Diagrams/06-customer.html"><code>customer</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/10-identity.html"><code>identity</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/03-clinical.html"><code>clinical</code> ERD</a> · <a href="../../04-Database/ER-Diagrams/Relationship-Catalog.html">FK catalog</a></p>
+<p>These diagrams show recorded PostgreSQL constraints, not approved module write ownership or authorization. See <a href="../../04-Database/Migrations.html">migration evidence</a> for the supplied source and deployment verification limits.</p>
+<p>&lt;!-- ERD-NAV-END --&gt;</p>
+<p><a href="../../00-Business-Guide/Accounts-and-Login.html">Business flow</a> · <a href="../../09-References/Coverage-and-Traceability.html">feature register</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership and recovery</a></p>
+<p>This document defines the proposed implementation for customer identity, profile, address, family, consent, and wishlist features. The feature list is inherited draft scope, not signed product approval. API routes are proposals; the SQL schema is the checked-in database contract described in <a href="../../04-Database/Migrations.html">Database migrations</a>.</p>
+<h2>Feature ownership and boundaries</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Behavior</th>
+<th>Owner</th>
+<th>Supporting component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACC-01</code></td>
+<td>Customer signup and sign-in by mobile OTP; WhatsApp delivery with SMS fallback</td>
+<td>Customer_Accounts</td>
+<td>Authentication_Access verifies challenges; Notifications delivers messages</td>
+</tr>
+<tr>
+<td><code>ACC-02</code></td>
+<td>Customer profile name, email, and phone</td>
+<td>Customer_Accounts</td>
+<td>Authentication_Access verifies sensitive contact changes</td>
+</tr>
+<tr>
+<td><code>ACC-03</code></td>
+<td>Saved delivery addresses and serviceability lookup</td>
+<td>Customer_Accounts</td>
+<td>Order_Operations or serviceability adapter evaluates delivery coverage</td>
+</tr>
+<tr>
+<td><code>ACC-04</code></td>
+<td>Family profiles for dependents</td>
+<td>Customer_Accounts</td>
+<td>Prescription_Upload consumes an explicitly selected patient</td>
+</tr>
+<tr>
+<td><code>ACC-05</code></td>
+<td>Record privacy notice and consent version</td>
+<td>Customer_Accounts</td>
+<td>Audit records access and changes</td>
+</tr>
+<tr>
+<td><code>ACC-06</code></td>
+<td>Account deletion request</td>
+<td>Customer_Accounts</td>
+<td>Compliance applies retention and legal holds</td>
+</tr>
+<tr>
+<td><code>ACC-07</code></td>
+<td>Wishlist</td>
+<td>Customer_Accounts</td>
+<td>Product_Catalog supplies product read models</td>
+</tr>
+</tbody>
+</table>
+<p>Customer_Accounts owns customer-facing profile and household data. It does not decide prescription eligibility, clinical decisions, payment policy, or legal retention. Internal IDs are never authorization evidence; every patient, address, and prescription association must be checked against the authenticated customer's ownership.</p>
+<h2>ACC-01 — customer mobile OTP signup and login</h2>
+<h3>Flow</h3>
+<ol>
+<li>An unauthenticated client submits a normalized mobile number to the OTP request operation. The server validates format and applies abuse limits by phone and network origin.</li>
+<li>The authentication component creates an OTP challenge and requests WhatsApp delivery. It requests SMS fallback only when the configured delivery policy says the primary delivery failed or timed out. A fallback must not silently create a second valid challenge unless the challenge policy explicitly permits it.</li>
+<li>The client submits the challenge reference and OTP to the separate verification operation. The server checks challenge ownership, expiry, attempt state, and one-time use.</li>
+<li>A verified number resolves an existing eligible user or creates an identity under the account-registration policy. Create <code>customer.profiles</code> only after the customer supplies its required <code>first_name</code>; OTP input alone cannot populate it. Never insert a fabricated name. Until profile completion and required consent, restrict the onboarding session to permitted onboarding actions (D-003/D-013). Suspended, closed, or locked identities do not receive a session.</li>
+<li>The server creates a session and returns it only after the account and session transaction commits.</li>
+</ol>
+<p>The OTP request is public and unauthenticated. It does not accept an OTP code. Verification is a separate public pre-login operation. Do not copy staff-session requirements onto either pre-login operation. Expiry, resend and rate-limit thresholds remain configurable policy values until Security and Product approve them.</p>
+<p>The challenge table has a recorded <code>max_attempts</code> default of 5; this observed database default is not approval of the effective security policy. Explicitly supply approved challenge policy values instead of silently assuming defaults.</p>
+<h3>Failure and retry behavior</h3>
+<p>Invalid or expired challenges are rejected without creating a session. A used challenge cannot be replayed. Resending invalidates or supersedes the previous challenge according to the configured challenge policy. Provider timeouts leave delivery pending/failed and can be retried with a provider idempotency key where supported.</p>
+<p>If delivery outcome is unknown, do not claim the OTP was delivered. Duplicate requests are rate limited and deduplicated within the configured intent window. Logs contain challenge IDs and masked phone numbers, never OTP values.</p>
+<h3>Acceptance criteria</h3>
+<ul>
+<li>Existing active and new customer paths return a session only after successful OTP verification.</li>
+<li>OTP request needs no existing session; verification requires a valid challenge and code.</li>
+<li>Wrong, expired, consumed, or superseded codes cannot create sessions.</li>
+<li>Provider failure and rate limiting return actionable safe outcomes without exposing whether a phone is registered.</li>
+<li>Challenge reuse, resend, concurrent verification, and brute-force limits are tested.</li>
+</ul>
+<h2>ACC-02 — customer profile</h2>
+<h3>Behavior and validation</h3>
+<p>An authenticated customer can read and partially update their own profile. The API derives the user ID from the session; a caller cannot select another account. <code>first_name</code> is required by the current table; <code>last_name</code>, <code>preferred_name</code>, <code>date_of_birth</code>, and <code>gender</code> are nullable schema fields.</p>
+<p>The feature requirement names name, email, and phone, but email and phone live on <code>identity.users</code>, not <code>customer.profiles</code>. Treat those identity fields as contact data and route sensitive updates through verification. No profile operation copies OTP expiry errors unless it initiates contact verification.</p>
+<p>Validate name lengths against the database limits (100 characters for first/last/preferred name), trim surrounding whitespace, reject empty required names, and validate email syntax and normalized uniqueness. Database evidence shows <code>identity.users.email_normalized</code> is unique and phone country-code/number is unique when present.</p>
+<p>Phone changes require a verified challenge before replacing the current verified number. Do not expose full phone values in logs or unrelated read models. Email verification and contact-change delivery policy remain D-023. Preserve the currently verified contact while verifying a proposed replacement.</p>
+<p>The schema has no dedicated pending-contact columns; do not invent them or overwrite the verified destination. D-023 must select a purpose-bound challenge/proof design before contact-change implementation.</p>
+<p>PATCH applies only supplied fields. Omitted fields remain unchanged; explicit <code>null</code> is accepted only for nullable fields. Return separate identity and profile <code>row_version</code> values. For profile-only writes require <code>expected_profile_version</code>; for identity changes require <code>expected_user_version</code>; a combined write must check both versions in the same transaction.</p>
+<p>A stale version returns <code>409</code> with the current safe version; it does not overwrite the concurrent edit. Persist identity and profile changes atomically when both tables change. Audit the actor, changed field names, timestamp, and outcome without recording old/new contact values in general logs.</p>
+<h3>Acceptance criteria</h3>
+<ul>
+<li>A customer can read and update only their own profile.</li>
+<li>Partial updates preserve omitted fields and validate nullability.</li>
+<li>Duplicate normalized email or phone returns a conflict without partial writes.</li>
+<li>Sensitive contact changes do not overwrite verified identity fields until the verification flow succeeds; the pending-proof contract remains D-023.</li>
+<li>Concurrent edits produce a conflict instead of a lost update.</li>
+<li>Audit and application logs do not contain OTPs or unmasked contact values.</li>
+</ul>
+<h2>Data mapping</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Tables and fields</th>
+<th>Verified constraints / limits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACC-01</code></td>
+<td><code>identity.users</code> (<code>id</code>, <code>phone_country_code</code>, <code>phone_number</code>, <code>phone_verified_at</code>, <code>status</code>, <code>row_version</code>); <code>identity.otp_challenges</code>; <code>identity.sessions</code></td>
+<td>Phone pair must be complete; phone pair is unique when present; user status is constrained. Confirm exact challenge fields in the table contract before implementing.</td>
+</tr>
+<tr>
+<td><code>ACC-02</code></td>
+<td><code>customer.profiles</code> (<code>user_id</code>, <code>first_name</code>, <code>last_name</code>, <code>preferred_name</code>, <code>row_version</code>); <code>identity.users</code> (<code>email</code>, <code>email_normalized</code>, <code>email_verified_at</code>, <code>phone_country_code</code>, <code>phone_number</code>, verification timestamps)</td>
+<td>First/last/preferred name max 100; one active profile per user; normalized email unique; phone pair unique when present.</td>
+</tr>
+<tr>
+<td><code>ACC-03</code></td>
+<td><code>customer.addresses</code>; <code>customer.profiles.default_address_id</code> and <code>user_id</code></td>
+<td>Composite foreign key ensures default address belongs to the same user. Serviceability is an external/business decision, not guaranteed by address persistence.</td>
+</tr>
+<tr>
+<td><code>ACC-04</code></td>
+<td><code>customer.family_members</code>; where clinical patient records are used, <code>clinical.patient_profiles</code></td>
+<td>Verify whether the implementation uses one or both models and their ownership constraints before associating prescriptions.</td>
+</tr>
+<tr>
+<td><code>ACC-05</code></td>
+<td><code>customer.consents</code>, <code>customer.consent_events</code>; identity terms/privacy version fields</td>
+<td>Consent text/version and purpose are product/legal controlled. Store an immutable event for grant/withdrawal.</td>
+</tr>
+<tr>
+<td><code>ACC-06</code></td>
+<td><code>identity.users.account_closed_at</code>, <code>status</code>; <code>compliance.privacy_requests</code>, legal-hold/retention records</td>
+<td>Deletion is a request workflow, not a direct cascade. Preserve records required by an approved retention or legal hold.</td>
+</tr>
+<tr>
+<td><code>ACC-07</code></td>
+<td><code>customer.wishlists</code>, <code>customer.wishlist_items</code></td>
+<td>Unique ownership/product rules are database enforced where present; product availability is read from Product_Catalog.</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../../04-Database/Tables/customer/profiles.html">customer profile schema</a>, <a href="../../04-Database/Tables/identity/users.html">identity users</a>, <a href="../../04-Database/Tables/identity/otp_challenges.html">OTP challenges</a>, <a href="../../04-Database/Tables/identity/sessions.html">sessions</a>, and <a href="../../04-Database/Module-Mapping.html">database module mapping</a>. These mappings identify schema relationships, not approved runtime write grants.</p>
+<h2>APIs and integration</h2>
+<p>Proposed contracts are indexed in <a href="APIs.html">Customer Accounts API</a> and <a href="../Authentication_Access/APIs.html">Authentication and Access API</a>. Customer_Accounts calls Authentication_Access for challenge verification and session creation; Notifications handles channel delivery.</p>
+<p>Provider callbacks must be authenticated, deduplicated, and stored before processing. User/profile writes and their audit/outbox records commit together; outbound notifications occur after commit.</p>
+<h2>Feature tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test ID</th>
+<th>Feature</th>
+<th>Scenario</th>
+<th>Expected result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TC-ACC-01-01</code></td>
+<td><code>ACC-01</code></td>
+<td>New customer verifies valid OTP</td>
+<td>One eligible customer identity and one session are created; a profile is created only after a valid first_name is supplied.</td>
+</tr>
+<tr>
+<td><code>TC-ACC-01-02</code></td>
+<td><code>ACC-01</code></td>
+<td>Request OTP with no session</td>
+<td>Request is accepted or safely rate limited; no OTP is accepted in the request body.</td>
+</tr>
+<tr>
+<td><code>TC-ACC-01-03</code></td>
+<td><code>ACC-01</code></td>
+<td>Wrong, expired, consumed, or superseded OTP</td>
+<td>Verification fails; no session is created.</td>
+</tr>
+<tr>
+<td><code>TC-ACC-01-04</code></td>
+<td><code>ACC-01</code></td>
+<td>WhatsApp failure followed by configured SMS fallback</td>
+<td>One valid challenge remains; outcome is reported accurately.</td>
+</tr>
+<tr>
+<td><code>TC-ACC-01-05</code></td>
+<td><code>ACC-01</code></td>
+<td>Concurrent verification or duplicate request</td>
+<td>At most one session-producing verification; replay is idempotent or rejected.</td>
+</tr>
+<tr>
+<td><code>TC-ACC-02-01</code></td>
+<td><code>ACC-02</code></td>
+<td>Customer reads and partially edits own profile</td>
+<td>Only submitted fields change and response is scoped to the caller.</td>
+</tr>
+<tr>
+<td><code>TC-ACC-02-02</code></td>
+<td><code>ACC-02</code></td>
+<td>Customer submits another user's ID or stale version</td>
+<td>Access is denied without leaking account existence, or <code>409</code> is returned for stale state.</td>
+</tr>
+<tr>
+<td><code>TC-ACC-02-03</code></td>
+<td><code>ACC-02</code></td>
+<td>Duplicate email/phone or invalid field length</td>
+<td>Validation/conflict is returned; identity and profile remain unchanged.</td>
+</tr>
+<tr>
+<td><code>TC-ACC-02-04</code></td>
+<td><code>ACC-02</code></td>
+<td>Email/phone change before verification</td>
+<td>Existing verified contact remains unchanged until the replacement proof is accepted; no undocumented pending-contact field is written.</td>
+</tr>
+</tbody>
+</table>
+<p>All tests above are proposed and not run. Full module edge cases are in <a href="Edge-Cases.html">Customer Accounts edge cases</a>.</p>
+<h2>Additional account feature tests</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> Existing detailed ACC-01/ACC-02 IDs above remain authoritative.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Feature/input</th>
+<th>Expected result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TC-ACC-03-OK</code></td>
+<td>Saved addresses with map pin; serviceability checked when the address is entered</td>
+<td>Owned address and map pin save; checkout checks current serviceability</td>
+</tr>
+<tr>
+<td><code>TC-ACC-03-DENY</code></td>
+<td>Serviceability lookup times out or another customer’s address is submitted</td>
+<td>Deny cross-owner address use without mutation; Address-only save may persist but serviceability is unknown; checkout is blocked; Customer retries lookup; integration owner restores service</td>
+</tr>
+<tr>
+<td><code>TC-ACC-04-OK</code></td>
+<td>Family profiles for dependents (name, age, relation)</td>
+<td>Owned dependent is available to the permitted account</td>
+</tr>
+<tr>
+<td><code>TC-ACC-04-DENY</code></td>
+<td>Another household’s patient ID is attached</td>
+<td>Association denied; no order/prescription link changed; Customer selects an authorized patient</td>
+</tr>
+<tr>
+<td><code>TC-ACC-05-OK</code></td>
+<td>Privacy notice and consent at signup</td>
+<td>Explicit choice is stored against the presented current notice version</td>
+</tr>
+<tr>
+<td><code>TC-ACC-05-DENY</code></td>
+<td>Client submits an obsolete notice version</td>
+<td>No consent to an unseen version is recorded; Customer sees current notice and chooses again</td>
+</tr>
+<tr>
+<td><code>TC-ACC-06-OK</code></td>
+<td>Account deletion request</td>
+<td>Deletion request is acknowledged and routed for retention review</td>
+</tr>
+<tr>
+<td><code>TC-ACC-06-DENY</code></td>
+<td>Legal hold exists at deletion processing</td>
+<td>Held evidence remains protected; request is pending, not completed; Privacy reviews permitted deletion and exceptions</td>
+</tr>
+<tr>
+<td><code>TC-ACC-07-OK</code></td>
+<td>Wishlist</td>
+<td>A wishlist contains the selected item once for its owner</td>
+</tr>
+<tr>
+<td><code>TC-ACC-07-DENY</code></td>
+<td>Same item is added twice</td>
+<td>One logical wishlist item; another customer’s list is unchanged; Customer reloads the saved list</td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pagination and Filtering · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Pagination and filtering</h1>
+<p><strong>Offset pagination:</strong> verified in the sibling authentication service only. Its implementation uses <code>limit=20</code>, <code>offset=0</code>, maximum <code>limit=100</code>, maximum <code>offset=100000</code>, and returns <code>{totalCount, limit, offset, hasNext}</code> in <code>meta.pagination</code>. These values are a reference, not a Pharmville policy.</p>
+<p><strong>Cursor pagination:</strong> proposed for Pharmville volatile queues and histories. It is not implemented by the reference authentication service. The response metadata is <code>{nextCursor, hasNext}</code>; <code>nextCursor</code> is null when no next page is available. The cursor is opaque, integrity-protected, bound to the authenticated scope, filter, sort and cursor-version.</p>
+<p>Do not put patient, customer, location or internal database identifiers in readable cursor contents. Cursor expiry and signing-key rotation require implementation design; do not promise snapshot isolation.</p>
+<h2>Proposed pagination request conventions</h2>
+<p>Adopt one strategy per list operation under D-024:</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Query parameters</th>
+<th>Proposed defaults and bounds</th>
+<th>Metadata</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Offset</td>
+<td><code>limit</code>, <code>offset</code></td>
+<td>Reference defaults 20/0 and maxima 100/100000; proposed for stable, low-churn lookup lists pending owner approval</td>
+<td><code>totalCount</code>, <code>limit</code>, <code>offset</code>, <code>hasNext</code></td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td><code>limit</code>, optional <code>cursor</code></td>
+<td>Proposed default 20, maximum 100 pending owner approval; omit cursor for first page</td>
+<td><code>nextCursor</code>, <code>hasNext</code></td>
+</tr>
+<tr>
+<td>No pagination</td>
+<td>None</td>
+<td>Resource/detail or bounded singleton read</td>
+<td><code>null</code></td>
+</tr>
+</tbody>
+</table>
+<p>Do not send both <code>offset</code> and <code>cursor</code>. Invalid, expired, tampered, or scope-mismatched cursors return 422 <code>VALIDATION_ERROR</code> or a more specific approved code; do not reveal the cursor’s former scope.</p>
+<h2>Initial strategy proposal by operation</h2>
+<p>These are design proposals, not evidence of existing query support. Each operation owner must confirm an allowlisted sort key, stable tie-breaker and corresponding query/index before approving the contract.</p>
+<ul>
+<li><strong>Cursor proposal:</strong> API-025, API-039, API-044, API-055, API-057, API-059, API-060, API-064, API-067, API-070, API-077, API-079, API-082–085, API-087, API-095, API-097, ACC-ROUTE-005, ACC-ROUTE-008. These are queues, histories or potentially high-volume collections.</li>
+<li><strong>Offset proposal:</strong> API-005, API-007, API-010, API-011, API-013, API-030, API-050, API-093. Confirm result stability and total-count query cost before approval.</li>
+<li><strong>No pagination proposed:</strong> single-resource reads such as API-003, API-012, API-026, API-029, API-031, API-040, API-061, API-081 and ACC-ROUTE-006. Reports with aggregate filters should define report-specific parameters, not generic pagination by default.</li>
+</ul>
+<p>API-014 is a single product/postal-code advisory lookup with pagination explicitly omitted. This list does not assert that every route is already a supported API. The owning Markdown contract and OpenAPI must identify the chosen strategy and exact filters for each list.</p>
+<p>Do not invent undocumented filter or sort fields. Where absent, the contract is incomplete pending D-024.</p>
+<h2>Filtering and ordering rules</h2>
+<ul>
+<li>Derive customer, patient, staff, store, warehouse, pharmacy, rider and organization scope from the authenticated server-side principal. A client-supplied scope may narrow an authorized result only where the operation explicitly documents it.</li>
+<li>Allowlist filter and sort properties per endpoint. Never accept SQL fragments, arbitrary column names or unbounded search strings.</li>
+<li>Use deterministic ordering; define tie-breakers using public IDs only after confirming the query and index. Do not claim snapshot consistency without implementation support.</li>
+<li>Empty collections return an empty array and pagination metadata with <code>hasNext: false</code>.</li>
+<li><code>totalCount</code> is required by offset metadata; cursor responses do not promise a total count.</li>
+<li>Filter syntax, sort allowlists, empty-page behavior, and per-operation page sizes remain open unless explicitly described in the owning contract. Missing details block implementation; do not infer performance or indexing guarantees.</li>
+</ul>
+</main></body></html>

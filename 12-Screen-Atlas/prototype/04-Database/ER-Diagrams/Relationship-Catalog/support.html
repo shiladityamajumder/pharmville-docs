@@ -1,0 +1,459 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>support · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Support foreign-key relationships</h1>
+<p>This register lists every recorded foreign-key constraint owned by child tables in the <code>support</code> schema. A row is one physical PostgreSQL FK; paired UUID/BIGINT scope constraints are not collapsed here. Cardinality is derived from child-column nullability and uniqueness, not inferred from the workflow. See the linked diagram for an at-a-glance view and each table contract for full constraints.</p>
+<table>
+<thead>
+<tr>
+<th>Relationship ID</th>
+<th>Parent</th>
+<th>Child</th>
+<th>FK columns → referenced columns</th>
+<th>Cardinality and optionality</th>
+<th>Delete/update rule</th>
+<th>Evidence</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FK-1274</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/sla_policies.html"><code>support.sla_policies</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1275</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/sla_policies.html"><code>support.sla_policies</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1276</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/sla_policies.html"><code>support.sla_policies</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1277</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td><code>approved_by_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1278</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1279</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td><code>requested_by_user_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1280</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td><code>ticket_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1281</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td><code>ticket_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1282</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_actions.html"><code>support.ticket_actions</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1283</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1284</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td><code>file_object_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1285</td>
+<td><a href="../../Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td><code>file_object_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..1 child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1286</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td><code>ticket_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1287</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td><code>ticket_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1288</td>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td><code>ticket_message_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1289</td>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td><code>ticket_message_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1290</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_attachments.html"><code>support.ticket_attachments</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1291</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td><code>author_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1292</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1293</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td><code>ticket_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1294</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td><code>ticket_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1295</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_messages.html"><code>support.ticket_messages</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1296</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_status_history.html"><code>support.ticket_status_history</code></a></td>
+<td><code>actor_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1297</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_status_history.html"><code>support.ticket_status_history</code></a></td>
+<td><code>ticket_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1298</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_status_history.html"><code>support.ticket_status_history</code></a></td>
+<td><code>ticket_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1299</td>
+<td><a href="../../Tables/support/ticket_tags.html"><code>support.ticket_tags</code></a></td>
+<td><a href="../../Tables/support/ticket_tag_assignments.html"><code>support.ticket_tag_assignments</code></a></td>
+<td><code>tag_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1300</td>
+<td><a href="../../Tables/support/ticket_tags.html"><code>support.ticket_tags</code></a></td>
+<td><a href="../../Tables/support/ticket_tag_assignments.html"><code>support.ticket_tag_assignments</code></a></td>
+<td><code>tag_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1301</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_tag_assignments.html"><code>support.ticket_tag_assignments</code></a></td>
+<td><code>ticket_id</code> → <code>id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1302</td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><a href="../../Tables/support/ticket_tag_assignments.html"><code>support.ticket_tag_assignments</code></a></td>
+<td><code>ticket_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is required; parent has 0..N child row(s)</td>
+<td>ON DELETE CASCADE; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1303</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_tags.html"><code>support.ticket_tags</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1304</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_tags.html"><code>support.ticket_tags</code></a></td>
+<td><code>deleted_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1305</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/ticket_tags.html"><code>support.ticket_tags</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1306</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>appointment_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1307</td>
+<td><a href="../../Tables/appointment/appointments.html"><code>appointment.appointments</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>appointment_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1308</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>assigned_to_user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1309</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>created_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1310</td>
+<td><a href="../../Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>diagnostic_order_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1311</td>
+<td><a href="../../Tables/diagnostics/diagnostic_orders.html"><code>diagnostics.diagnostic_orders</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>diagnostic_order_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1312</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>order_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1313</td>
+<td><a href="../../Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>order_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1314</td>
+<td><a href="../../Tables/support/sla_policies.html"><code>support.sla_policies</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>sla_policy_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1315</td>
+<td><a href="../../Tables/support/sla_policies.html"><code>support.sla_policies</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>sla_policy_id_internal_id</code> → <code>internal_id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1316</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>updated_by</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE RESTRICT; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+<tr>
+<td>FK-1317</td>
+<td><a href="../../Tables/identity/users.html"><code>identity.users</code></a></td>
+<td><a href="../../Tables/support/tickets.html"><code>support.tickets</code></a></td>
+<td><code>user_id</code> → <code>id</code></td>
+<td>Child FK is optional; parent has 0..N child row(s)</td>
+<td>ON DELETE SET NULL; ON UPDATE NO ACTION</td>
+<td>Validated standalone SQL / effective V0030 + proposed D-028; final V0030 catalog snapshot</td>
+<td><a href="../23-support.html#diagram-01">23-support.md#diagram-01</a></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

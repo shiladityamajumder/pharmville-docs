@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 010 Cancellation Return and Refund · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-010 — Cancellation Return and Refund</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Customer or operator, Order Operations and Finance. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>Authorize requested items and read current order/task state. Customer cancellation is draft before-packed; returns need approved eligibility/window/item policy.</li>
+<li>Serialize cancellation against packing and retain a reason. Accepted cancellation stops eligible work and requests safe release/compensation through Inventory.</li>
+<li>For physical return, track custody and inspect received quantities/condition. Pharmacy/Inventory decide disposition independently of refund; unsafe medicine never automatically becomes saleable.</li>
+<li>Finance checks trusted paid value, earlier refunds and approvals, then creates one refund instruction. COD needs the approved verified destination contract.</li>
+<li>Submit through the reviewed provider adapter outside locks and reconcile trusted result. Pending/refused/completed are distinct customer outcomes; immutable invoice/credit/history evidence remains.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Order Operations owns cancellation/return orchestration; Inventory owns stock disposition and Finance owns refund/credit effects.</p>
+<p>Candidate existing tables: <code>commerce.cancellations</code>, <code>commerce.cancellation_items</code>, <code>commerce.returns</code>, <code>commerce.return_items</code>, <code>payment.refunds</code>, <code>payment.refund_allocations</code>, <code>finance.credit_notes</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: API-027/API-028/API-030/API-043/API-078. Credit-note issuance remains a missing FIN-07 operation. <a href="../03-Modules/Customer_Orders/APIs.html">Customer Orders</a> · <a href="../03-Modules/Order_Operations/APIs.html">Order Operations</a> · <a href="../03-Modules/Finance_Payments/APIs.html">Finance Payments</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Customer or operator
+  participant O as Order Operations
+  participant S as Finance
+  participant D as PostgreSQL
+  C-&gt;&gt;O: Request eligible cancellation or return
+  O-&gt;&gt;D: Check state and serialize competing work
+  alt Ineligible or packing already won
+    O--&gt;&gt;C: Reason and available support path
+  else Approved request and received evidence if required
+    O-&gt;&gt;D: Record stopped work or inspected return
+    O-&gt;&gt;S: Request eligible refund with paid evidence
+    S-&gt;&gt;D: Guard refundable balance and one instruction
+    S--&gt;&gt;C: Pending or trusted completed refund
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-ORD-04-DENY</code>, <code>TC-ORD-05-DENY</code>, <code>TC-FIN-03-DENY</code>, <code>TC-FIN-04-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

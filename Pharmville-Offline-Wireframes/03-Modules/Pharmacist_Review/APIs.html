@@ -1,0 +1,2706 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>APIs · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Pharmacist Review API contracts</h1>
+<p><strong>Proposed technical blueprint · Unapproved · Not Implemented.</strong> Contract completeness is independent of approval and runtime evidence. <a href="../../05-APIs/API-Contract-Coverage.html">Coverage</a> · <a href="../../05-APIs/openapi.yaml">OpenAPI 3.1</a> · <a href="../../05-APIs/Planning-Decisions.html">decisions</a> · <a href="../../05-APIs/API-Conventions.html">DTO conventions</a>. Every CT scenario is Designed / NOT RUN.</p>
+<p>&lt;a id=&quot;pharmacist-review-api-contracts&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-060--get-v1pharmacyreviews&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-061--get-v1pharmacyreviewsreview_id&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-062--post-v1pharmacyreviewsreview_idlinesline_iddecision&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-063--post-v1meordersorder_idrevisionsrevision_idaccept&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-3&quot;&gt;&lt;/a&gt;</p>
+<h2>Operation index</h2>
+<table>
+<thead>
+<tr>
+<th>API ID</th>
+<th>Method/path</th>
+<th>Purpose</th>
+<th>Documentation status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-060</td>
+<td><code>GET /v1/pharmacy/reviews</code></td>
+<td>List current P-line review work for the authorized pharmacist.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-061</td>
+<td><code>GET /v1/pharmacy/reviews/{review_id}</code></td>
+<td>Read exact line/patient/prescription review bindings.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-062</td>
+<td><code>POST /v1/pharmacy/reviews/{review_id}/lines/{line_id}/decision</code></td>
+<td>Record one exact P-line clinical decision with immutable reviewer evidence.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-063</td>
+<td><code>POST /v1/me/orders/{order_id}/revisions/{revision_id}/accept</code></td>
+<td>Accept the exact proposed revision and its recalculated total.</td>
+<td>Complete proposed</td>
+</tr>
+</tbody>
+</table>
+<h2>Feature-to-operation coverage</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Requirement</th>
+<th>Operation coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PHM-01</td>
+<td>Review queue, oldest first, with waiting time</td>
+<td>API-060</td>
+</tr>
+<tr>
+<td>PHM-02</td>
+<td>Side-by-side view: zoomable prescription and order items</td>
+<td>API-061</td>
+</tr>
+<tr>
+<td>PHM-03</td>
+<td>Approve all, approve some, or reject with a reason</td>
+<td>API-062, API-063</td>
+</tr>
+<tr>
+<td>PHM-04</td>
+<td>Confirm a chosen alternative matches the prescription</td>
+<td>No direct operation; see <a href="../../05-APIs/Journey-API-Gaps.html">journey/API gaps</a>. Existing requirement retained; no invented CRUD completion.</td>
+</tr>
+<tr>
+<td>PHM-05</td>
+<td>Pharmacist name, registration number and time on every decision</td>
+<td>API-062</td>
+</tr>
+</tbody>
+</table>
+<h2>API-060 — GET <code>/v1/pharmacy/reviews</code></h2>
+<p><strong>List current P-line review work for the authorized pharmacist.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>List current P-line review work for the authorized pharmacist</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Pharmacist_Review</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Qualified Pharmacist</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>PHM-01</code>; <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/pharmacy/reviews</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Qualified Pharmacist</td>
+<td>clinical.reviews.read (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Restrict organization/location through active memberships and the resource FK chain; a request filter can only narrow that scope. Specialized clinical/Finance privileges cannot be obtained through general Admin access.</p>
+<p>Qualification and site role required; only P lines enter the review queue. M/O-only orders skip it.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<h3>Query parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>limit</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>20</td>
+<td>minimum=1; maximum=100</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>cursor</td>
+<td>string</td>
+<td>Optional</td>
+<td>No</td>
+<td>None</td>
+<td>minLength=1; maxLength=2048</td>
+<td>Opaque integrity-protected continuation bound to actor, filters and fixed ordering.</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>Optional</td>
+<td>No</td>
+<td>None</td>
+<td>enum=[&quot;pending&quot;, &quot;in_review&quot;, &quot;action_required&quot;, &quot;approved&quot;, &quot;partially_approved&quot;, &quot;rejected&quot;, &quot;superseded&quot;, &quot;cancelled&quot;]; minLength=1; maxLength=24</td>
+<td>clinical.order_reviews.status; character varying(24).</td>
+</tr>
+</tbody>
+</table>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>requested_at ASC, id ASC</code>. Pagination: cursor.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>ReviewListData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reviews</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=0; maxItems=100</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>reviews[].reviewId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_reviews.id; uuid.</td>
+</tr>
+<tr>
+<td><code>reviews[].orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_reviews.order_id; uuid.</td>
+</tr>
+<tr>
+<td><code>reviews[].patientId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_reviews.patient_profile_id; uuid.</td>
+</tr>
+<tr>
+<td><code>reviews[].prescriptionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_reviews.prescription_id; uuid.</td>
+</tr>
+<tr>
+<td><code>reviews[].status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;pending&quot;, &quot;in_review&quot;, &quot;action_required&quot;, &quot;approved&quot;, &quot;partially_approved&quot;, &quot;rejected&quot;, &quot;superseded&quot;, &quot;cancelled&quot;]; minLength=1; maxLength=24</td>
+<td>clinical.order_reviews.status; character varying(24).</td>
+</tr>
+<tr>
+<td><code>reviews[].reviewVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=0</td>
+<td>clinical.order_reviews.review_version; integer.</td>
+</tr>
+<tr>
+<td><code>reviews[].requestedAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>clinical.order_reviews.requested_at; timestamp with time zone.</td>
+</tr>
+</tbody>
+</table>
+<p>Pagination metadata: <code>nextCursor: string/null</code>, <code>hasNext: boolean</code>; opaque cursor is bound to principal, filters and fixed ordering. Empty list returns <code>[]</code> with hasNext false. No snapshot isolation is promised.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;reviews&quot;: [
+      {
+        &quot;reviewId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;patientId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;prescriptionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;status&quot;: &quot;pending&quot;,
+        &quot;reviewVersion&quot;: 1,
+        &quot;requestedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;
+      }
+    ]
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: {
+      &quot;nextCursor&quot;: null,
+      &quot;hasNext&quot;: false
+    }
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-060.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks clinical.reviews.read or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-060 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>Read</td>
+<td><code>assigned_to_user_id</code>, <code>id</code>, <code>order_id</code>, <code>patient_profile_id</code>, <code>prescription_document_id</code>, <code>prescription_id</code>, <code>requested_at</code>, <code>review_version</code>, <code>reviewed_by_user_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>Read</td>
+<td><code>approved_quantity</code>, <code>decided_at</code>, <code>decision</code>, <code>id</code>, <code>order_id</code>, <code>order_item_id</code>, <code>prescription_id</code>, <code>review_id</code>, <code>row_version</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>location_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Admin_CMS via Organization owner projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>user_id</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.reviews[].reviewId</td>
+<td>clinical.order_reviews.id</td>
+</tr>
+<tr>
+<td>data.reviews[].orderId</td>
+<td>clinical.order_reviews.order_id</td>
+</tr>
+<tr>
+<td>data.reviews[].patientId</td>
+<td>clinical.order_reviews.patient_profile_id</td>
+</tr>
+<tr>
+<td>data.reviews[].prescriptionId</td>
+<td>clinical.order_reviews.prescription_id</td>
+</tr>
+<tr>
+<td>data.reviews[].status</td>
+<td>clinical.order_reviews.status</td>
+</tr>
+<tr>
+<td>data.reviews[].reviewVersion</td>
+<td>clinical.order_reviews.review_version</td>
+</tr>
+<tr>
+<td>data.reviews[].requestedAt</td>
+<td>clinical.order_reviews.requested_at</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a>, <a href="../../04-Database/Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/organization/departments.html"><code>organization.departments</code></a>, <a href="../../04-Database/Tables/organization/locations.html"><code>organization.locations</code></a>, <a href="../../04-Database/Tables/organization/organizations.html"><code>organization.organizations</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Qualification and site role required; only P lines enter the review queue. M/O-only orders skip it.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>cursor; requested_at ASC, id ASC; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. Expired qualification/foreign patient/site cannot enter the queue; no general Admin override.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-060-HAPPY</code></td>
+<td>Valid Qualified Pharmacist context and documented fixture for list current p-line review work for the authorized pharmacist.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-060-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-060-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-060-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove clinical.reviews.read.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-060-RULE</code></td>
+<td>Qualification and site role required; only P lines enter the review queue. M/O-only orders skip it.</td>
+<td>Expired qualification/foreign patient/site cannot enter the queue; no general Admin override.</td>
+</tr>
+<tr>
+<td><code>CT-API-060-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-060-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-060-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-060-RECOVERY</code></td>
+<td>Dependency timeout during list current p-line review work for the authorized pharmacist.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-PHM-01-OK</code>, <code>TC-PHM-01-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-061 — GET <code>/v1/pharmacy/reviews/{review_id}</code></h2>
+<p><strong>Read exact line/patient/prescription review bindings.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Read exact line/patient/prescription review bindings</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Pharmacist_Review</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Qualified Pharmacist</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>PHM-02</code>; <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/pharmacy/reviews/{review_id}</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Qualified Pharmacist</td>
+<td>clinical.reviews.read (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Restrict organization/location through active memberships and the resource FK chain; a request filter can only narrow that scope. Specialized clinical/Finance privileges cannot be obtained through general Admin access.</p>
+<p>Authorize clinical purpose and current reviewer scope before returning metadata. Record clinical access separately through trusted audit; this response contains no prescription bytes or unscoped signed URL.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>review_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>not applicable for this singleton</code>. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>ReviewDetailData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>review</code></td>
+<td>object</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>review.reviewId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_reviews.id; uuid.</td>
+</tr>
+<tr>
+<td><code>review.orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_reviews.order_id; uuid.</td>
+</tr>
+<tr>
+<td><code>review.patientId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_reviews.patient_profile_id; uuid.</td>
+</tr>
+<tr>
+<td><code>review.prescriptionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_reviews.prescription_id; uuid.</td>
+</tr>
+<tr>
+<td><code>review.status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;pending&quot;, &quot;in_review&quot;, &quot;action_required&quot;, &quot;approved&quot;, &quot;partially_approved&quot;, &quot;rejected&quot;, &quot;superseded&quot;, &quot;cancelled&quot;]; minLength=1; maxLength=24</td>
+<td>clinical.order_reviews.status; character varying(24).</td>
+</tr>
+<tr>
+<td><code>review.reviewVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=0</td>
+<td>clinical.order_reviews.review_version; integer.</td>
+</tr>
+<tr>
+<td><code>review.requestedAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>clinical.order_reviews.requested_at; timestamp with time zone.</td>
+</tr>
+<tr>
+<td><code>lines</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minItems=0; maxItems=100</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>lines[].lineId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_review_items.id; uuid.</td>
+</tr>
+<tr>
+<td><code>lines[].orderItemId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_review_items.order_item_id; uuid.</td>
+</tr>
+<tr>
+<td><code>lines[].prescriptionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_review_items.prescription_id; uuid.</td>
+</tr>
+<tr>
+<td><code>lines[].decision</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;pending&quot;, &quot;approved&quot;, &quot;rejected&quot;, &quot;needs_new_rx&quot;]; minLength=1; maxLength=20</td>
+<td>clinical.order_review_items.decision; character varying(20).</td>
+</tr>
+<tr>
+<td><code>lines[].approvedQuantity</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,9}(\.[0-9]{1,3})?$&quot;</td>
+<td>clinical.order_review_items.approved_quantity; numeric(12,3).</td>
+</tr>
+<tr>
+<td><code>lines[].reasonCode</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=64</td>
+<td>clinical.order_review_items.reason_code; character varying(64).</td>
+</tr>
+<tr>
+<td><code>lines[].rowVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=0</td>
+<td>clinical.order_review_items.row_version; bigint.</td>
+</tr>
+<tr>
+<td><code>prescriptionDocumentId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>clinical.order_reviews.prescription_document_id; uuid.</td>
+</tr>
+<tr>
+<td><code>orderRevisionId</code></td>
+<td>string/null (uuid)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.orders.current_revision_id; uuid.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;review&quot;: {
+      &quot;reviewId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+      &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+      &quot;patientId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+      &quot;prescriptionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+      &quot;status&quot;: &quot;pending&quot;,
+      &quot;reviewVersion&quot;: 1,
+      &quot;requestedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;
+    },
+    &quot;lines&quot;: [
+      {
+        &quot;lineId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;orderItemId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;prescriptionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;decision&quot;: &quot;pending&quot;,
+        &quot;approvedQuantity&quot;: &quot;2.000&quot;,
+        &quot;reasonCode&quot;: &quot;CUSTOMER_REQUEST&quot;,
+        &quot;rowVersion&quot;: 1
+      }
+    ],
+    &quot;prescriptionDocumentId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;orderRevisionId&quot;: null
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-061.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks clinical.reviews.read or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for read exact line/patient/prescription review bindings. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-061 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>Read</td>
+<td><code>assigned_to_user_id</code>, <code>id</code>, <code>order_id</code>, <code>patient_profile_id</code>, <code>prescription_document_id</code>, <code>prescription_id</code>, <code>requested_at</code>, <code>review_version</code>, <code>reviewed_by_user_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>Read</td>
+<td><code>approved_quantity</code>, <code>decided_at</code>, <code>decision</code>, <code>id</code>, <code>order_id</code>, <code>order_item_id</code>, <code>prescription_id</code>, <code>reason_code</code>, <code>review_id</code>, <code>row_version</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>prescription_id</code>, <code>row_version</code></td>
+<td>Prescription_Upload / Intake projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>valid_until</code></td>
+<td>Prescription_Upload / Intake projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>internal_id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>status</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.review.reviewId</td>
+<td>clinical.order_reviews.id</td>
+</tr>
+<tr>
+<td>data.review.orderId</td>
+<td>clinical.order_reviews.order_id</td>
+</tr>
+<tr>
+<td>data.review.patientId</td>
+<td>clinical.order_reviews.patient_profile_id</td>
+</tr>
+<tr>
+<td>data.review.prescriptionId</td>
+<td>clinical.order_reviews.prescription_id</td>
+</tr>
+<tr>
+<td>data.review.status</td>
+<td>clinical.order_reviews.status</td>
+</tr>
+<tr>
+<td>data.review.reviewVersion</td>
+<td>clinical.order_reviews.review_version</td>
+</tr>
+<tr>
+<td>data.review.requestedAt</td>
+<td>clinical.order_reviews.requested_at</td>
+</tr>
+<tr>
+<td>data.lines[].lineId</td>
+<td>clinical.order_review_items.id</td>
+</tr>
+<tr>
+<td>data.lines[].orderItemId</td>
+<td>clinical.order_review_items.order_item_id</td>
+</tr>
+<tr>
+<td>data.lines[].prescriptionId</td>
+<td>clinical.order_review_items.prescription_id</td>
+</tr>
+<tr>
+<td>data.lines[].decision</td>
+<td>clinical.order_review_items.decision</td>
+</tr>
+<tr>
+<td>data.lines[].approvedQuantity</td>
+<td>clinical.order_review_items.approved_quantity</td>
+</tr>
+<tr>
+<td>data.lines[].reasonCode</td>
+<td>clinical.order_review_items.reason_code</td>
+</tr>
+<tr>
+<td>data.lines[].rowVersion</td>
+<td>clinical.order_review_items.row_version</td>
+</tr>
+<tr>
+<td>data.prescriptionDocumentId</td>
+<td>clinical.order_reviews.prescription_document_id</td>
+</tr>
+<tr>
+<td>data.orderRevisionId</td>
+<td>commerce.orders.current_revision_id</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Authorize clinical purpose and current reviewer scope before returning metadata. Record clinical access separately through trusted audit; this response contains no prescription bytes or unscoped signed URL.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. Wrong patient, superseded review or foreign site is hidden/blocked; reload the current review.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-061-HAPPY</code></td>
+<td>Valid Qualified Pharmacist context and documented fixture for read exact line/patient/prescription review bindings.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-061-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-061-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-061-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove clinical.reviews.read.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-061-RULE</code></td>
+<td>Authorize clinical purpose and current reviewer scope before returning metadata. Record clinical access separately through trusted audit; this response contains no prescription bytes or unscoped signed URL.</td>
+<td>Wrong patient, superseded review or foreign site is hidden/blocked; reload the current review.</td>
+</tr>
+<tr>
+<td><code>CT-API-061-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-061-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-061-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-061-RECOVERY</code></td>
+<td>Dependency timeout during read exact line/patient/prescription review bindings.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-PHM-02-OK</code>, <code>TC-PHM-02-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-062 — POST <code>/v1/pharmacy/reviews/{review_id}/lines/{line_id}/decision</code></h2>
+<p><strong>Record one exact P-line clinical decision with immutable reviewer evidence.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Record one exact P-line clinical decision with immutable reviewer evidence</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Pharmacist_Review</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Qualified assigned Pharmacist</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>PHM-03</code>, <code>PHM-05</code>, <code>RX-05</code>; <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/pharmacy/reviews/{review_id}/lines/{line_id}/decision</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Qualified assigned Pharmacist</td>
+<td>clinical.reviews.decide (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Restrict organization/location through active memberships and the resource FK chain; a request filter can only narrow that scope. Specialized clinical/Finance privileges cannot be obtained through general Admin access.</p>
+<p>Bind patient, current order revision, exact SKU/form/strength/quantity and prescription version. Map approve/reject/request_new_prescription to approved/rejected/needs_new_rx. Positive approvedQuantity required on approval; approved reason required otherwise. Parent review status derives from all current line decisions.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-062_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>review_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+<tr>
+<td>line_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>PharmacistDecisionRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>expectedReviewVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>clinical.order_reviews.review_version.</td>
+</tr>
+<tr>
+<td><code>expectedLineVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>clinical.order_review_items.row_version.</td>
+</tr>
+<tr>
+<td><code>orderRevisionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from commerce.order_revisions.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>prescriptionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from clinical.prescriptions.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>decision</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;approve&quot;, &quot;reject&quot;, &quot;request_new_prescription&quot;]</td>
+<td>Public DTO value from clinical.order_review_items.decision. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>approvedQuantity</code></td>
+<td>string</td>
+<td>Optional</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>pattern=&quot;^[0-9]+(\.[0-9]{1,3})?$&quot;</td>
+<td>Required and positive when decision=approve; maps to clinical.order_review_items.approved_quantity numeric(12,3).</td>
+</tr>
+<tr>
+<td><code>reasonCode</code></td>
+<td>string</td>
+<td>Optional</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Required for reject/request_new_prescription; controlled reason mapping remains approval-bound.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;expectedReviewVersion&quot;: 1,
+  &quot;expectedLineVersion&quot;: 1,
+  &quot;orderRevisionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+  &quot;prescriptionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+  &quot;decision&quot;: &quot;approve&quot;,
+  &quot;approvedQuantity&quot;: &quot;2.000&quot;
+}
+</code></pre>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>PharmacistDecisionData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reviewId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from clinical.order_reviews.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>lineId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from clinical.order_review_items.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>decision</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;approve&quot;, &quot;reject&quot;, &quot;request_new_prescription&quot;]</td>
+<td>Public DTO value from clinical.order_review_items.decision. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>approvedQuantity</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Public DTO value from clinical.order_review_items.approved_quantity. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>reasonCode</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Public DTO value from clinical.order_review_items.reason_code. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>reviewVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Public DTO value from clinical.order_reviews.review_version. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>lineVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Public DTO value from clinical.order_review_items.row_version. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>orderRevisionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from commerce.order_revisions.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>decidedAt</code></td>
+<td>string/null (date-time)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>Public DTO value from clinical.order_review_items.decided_at. Ownership and current-state checks apply before use.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;reviewId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;lineId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;decision&quot;: &quot;approve&quot;,
+    &quot;approvedQuantity&quot;: &quot;2.000&quot;,
+    &quot;reasonCode&quot;: null,
+    &quot;reviewVersion&quot;: 1,
+    &quot;lineVersion&quot;: 1,
+    &quot;orderRevisionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;decidedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-062.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks clinical.reviews.decide or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for record one exact p-line clinical decision with immutable reviewer evidence. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Bind patient, current order revision, exact SKU/form/strength/quantity and prescription version. Map approve/reject/request_new_prescription to approved/rejected/needs_new_rx. Positive approvedQuantity required on approval; approved reason required otherwise. Parent review status derives from all current line decisions.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Wrong patient/qualification is denied; stale review/line/revision returns STALE_VERSION. Changed evidence never inherits approval and M/O lines cannot be clinically rejected here.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>STALE_VERSION</code></td>
+<td>An expected aggregate/row version no longer matches current committed state.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the current record one exact p-line clinical decision with immutable reviewer evidence. context and re-evaluate; no partial mutation.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Wrong patient/qualification is denied; stale review/line/revision returns STALE_VERSION. Changed evidence never inherits approval and M/O lines cannot be clinically rejected here.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-062 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;STALE_VERSION&quot;,
+    &quot;message&quot;: &quot;An expected aggregate/row version no longer matches current committed state.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>Read</td>
+<td><code>assigned_to_user_id</code>, <code>id</code>, <code>order_id</code>, <code>patient_profile_id</code>, <code>prescription_document_id</code>, <code>prescription_id</code>, <code>reason_code</code>, <code>reason_code_id</code>, <code>review_version</code>, <code>reviewed_by_user_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>Read</td>
+<td><code>approved_quantity</code>, <code>decided_at</code>, <code>decision</code>, <code>id</code>, <code>order_id</code>, <code>order_item_id</code>, <code>prescription_id</code>, <code>prescription_item_id</code>, <code>reason_code</code>, <code>reason_code_id</code>, <code>review_id</code>, <code>row_version</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescriptions.html"><code>clinical.prescriptions</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>valid_until</code></td>
+<td>Prescription_Upload / Intake projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescription_items.html"><code>clinical.prescription_items</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>prescription_id</code>, <code>row_version</code></td>
+<td>Prescription_Upload / Intake projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/prescription_documents.html"><code>clinical.prescription_documents</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>prescription_id</code>, <code>row_version</code></td>
+<td>Prescription_Upload / Intake projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>user_id</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>internal_id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>prescription_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>status</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>Create/update evidence</td>
+<td><code>decision</code>, <code>approved_quantity</code>, <code>reason_code</code>, <code>decided_at</code></td>
+<td>Pharmacist_Review owns these writes; Pharmacist_Review must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>Create/update evidence</td>
+<td><code>status</code>, <code>review_version</code>, <code>reviewed_by_user_id</code>, <code>reviewed_at</code></td>
+<td>Pharmacist_Review owns these writes; Pharmacist_Review must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.expectedReviewVersion</td>
+<td>clinical.order_reviews.review_version</td>
+</tr>
+<tr>
+<td>request.expectedLineVersion</td>
+<td>clinical.order_review_items.row_version</td>
+</tr>
+<tr>
+<td>request.orderRevisionId</td>
+<td>commerce.order_revisions.id</td>
+</tr>
+<tr>
+<td>request.prescriptionId</td>
+<td>clinical.prescriptions.id</td>
+</tr>
+<tr>
+<td>request.decision</td>
+<td>clinical.order_review_items.decision</td>
+</tr>
+<tr>
+<td>request.approvedQuantity</td>
+<td>clinical.order_review_items.approved_quantity</td>
+</tr>
+<tr>
+<td>request.reasonCode</td>
+<td>clinical.order_review_items.reason_code</td>
+</tr>
+<tr>
+<td>data.reviewId</td>
+<td>clinical.order_reviews.id</td>
+</tr>
+<tr>
+<td>data.lineId</td>
+<td>clinical.order_review_items.id</td>
+</tr>
+<tr>
+<td>data.decision</td>
+<td>clinical.order_review_items.decision</td>
+</tr>
+<tr>
+<td>data.approvedQuantity</td>
+<td>clinical.order_review_items.approved_quantity</td>
+</tr>
+<tr>
+<td>data.reasonCode</td>
+<td>clinical.order_review_items.reason_code</td>
+</tr>
+<tr>
+<td>data.reviewVersion</td>
+<td>clinical.order_reviews.review_version</td>
+</tr>
+<tr>
+<td>data.lineVersion</td>
+<td>clinical.order_review_items.row_version</td>
+</tr>
+<tr>
+<td>data.orderRevisionId</td>
+<td>commerce.order_revisions.id</td>
+</tr>
+<tr>
+<td>data.decidedAt</td>
+<td>clinical.order_review_items.decided_at</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/clinical/practitioner_profiles.html"><code>clinical.practitioner_profiles</code></a>, <a href="../../04-Database/Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Bind patient, current order revision, exact SKU/form/strength/quantity and prescription version. Map approve/reject/request_new_prescription to approved/rejected/needs_new_rx. Positive approvedQuantity required on approval; approved reason required otherwise. Parent review status derives from all current line decisions.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-062 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Wrong patient/qualification is denied; stale review/line/revision returns STALE_VERSION. Changed evidence never inherits approval and M/O lines cannot be clinically rejected here.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-062-HAPPY</code></td>
+<td>Valid Qualified assigned Pharmacist context and documented fixture for record one exact p-line clinical decision with immutable reviewer evidence.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-062-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-062-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-062-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove clinical.reviews.decide.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-062-RULE</code></td>
+<td>Bind patient, current order revision, exact SKU/form/strength/quantity and prescription version. Map approve/reject/request_new_prescription to approved/rejected/needs_new_rx. Positive approvedQuantity required on approval; approved reason required otherwise. Parent review status derives from all current line decisions.</td>
+<td>Wrong patient/qualification is denied; stale review/line/revision returns STALE_VERSION. Changed evidence never inherits approval and M/O lines cannot be clinically rejected here.</td>
+</tr>
+<tr>
+<td><code>CT-API-062-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-062-CONCURRENCY</code></td>
+<td>Race two record one exact p-line clinical decision with immutable reviewer evidence. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-062-STATE</code></td>
+<td>Apply command after Wrong patient/qualification is denied; stale review/line/revision returns STALE_VERSION. Changed evidence never inherits approval and M/O lines cannot be clinically rejected here.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-062-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Wrong patient/qualification is denied; stale review/line/revision returns STALE_VERSION. Changed evidence never inherits approval and M/O lines cannot be clinically rejected here.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-PHM-03-OK</code>, <code>TC-PHM-03-DENY</code>, <code>TC-PHM-03-01</code>, <code>TC-PHM-05-OK</code>, <code>TC-PHM-05-DENY</code>, <code>TC-RX-05-OK</code>, <code>TC-RX-05-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-063 — POST <code>/v1/me/orders/{order_id}/revisions/{revision_id}/accept</code></h2>
+<p><strong>Accept the exact proposed revision and its recalculated total.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Accept the exact proposed revision and its recalculated total</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Order_Operations</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Customer</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>PHM-03</code>; <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/me/orders/{order_id}/revisions/{revision_id}/accept</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Customer</td>
+<td>orders.revision.accept.own (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Require referenced customer resources to belong to the subject; patient access additionally requires the explicit owned dependent association. Foreign records return privacy-safe 404.</p>
+<p>Customer owns order and both path IDs match. Only current proposed unexpired revision can be accepted; supersede prior accepted revision and apply exact snapshot under owner transaction. New/changed P evidence requires current review and new holds before payment/picking.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-063_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+<tr>
+<td>revision_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>RevisionAcceptanceRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>expectedOrderVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Expected current row_version; compare atomically.</td>
+</tr>
+<tr>
+<td><code>expectedRevisionNumber</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Expected immutable commerce.order_revisions.revision_number; that table has no row_version.</td>
+</tr>
+<tr>
+<td><code>accepted</code></td>
+<td>boolean</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>const=true</td>
+<td>API-only explicit acceptance guard; server derives acceptance actor/time.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;expectedOrderVersion&quot;: 4,
+  &quot;expectedRevisionNumber&quot;: 2,
+  &quot;accepted&quot;: true
+}
+</code></pre>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>OrderRevisionData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>revisionId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.order_revisions.id; uuid.</td>
+</tr>
+<tr>
+<td><code>orderId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>commerce.order_revisions.order_id; uuid.</td>
+</tr>
+<tr>
+<td><code>revisionNumber</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=0</td>
+<td>commerce.order_revisions.revision_number; integer.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;proposed&quot;, &quot;accepted&quot;, &quot;superseded&quot;, &quot;cancelled&quot;]; minLength=1; maxLength=16</td>
+<td>commerce.order_revisions.status; character varying(16).</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=3</td>
+<td>commerce.order_revisions.currency; character varying(3).</td>
+</tr>
+<tr>
+<td><code>grandTotal</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=17; pattern=&quot;^-?[0-9]{1,14}(\.[0-9]{1,2})?$&quot;</td>
+<td>commerce.order_revisions.grand_total; numeric(16,2).</td>
+</tr>
+<tr>
+<td><code>acceptedAt</code></td>
+<td>string/null (date-time)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>commerce.order_revisions.accepted_at; timestamp with time zone.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;revisionId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;orderId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;revisionNumber&quot;: 1,
+    &quot;status&quot;: &quot;proposed&quot;,
+    &quot;currency&quot;: &quot;INR&quot;,
+    &quot;grandTotal&quot;: &quot;26.25&quot;,
+    &quot;acceptedAt&quot;: null
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-063.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks orders.revision.accept.own or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for accept the exact proposed revision and its recalculated total. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Customer owns order and both path IDs match. Only current proposed unexpired revision can be accepted; supersede prior accepted revision and apply exact snapshot under owner transaction. New/changed P evidence requires current review and new holds before payment/picking.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Concurrent revision replacement/old acceptance changes nothing; compare latest basket again. No silent substitution or charging.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>STALE_VERSION</code></td>
+<td>An expected aggregate/row version no longer matches current committed state.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the current accept the exact proposed revision and its recalculated total. context and re-evaluate; no partial mutation.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Concurrent revision replacement/old acceptance changes nothing; compare latest basket again. No silent substitution or charging.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-063 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;STALE_VERSION&quot;,
+    &quot;message&quot;: &quot;An expected aggregate/row version no longer matches current committed state.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Read</td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>internal_id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>Read</td>
+<td><code>accepted_at</code>, <code>currency</code>, <code>grand_total</code>, <code>id</code>, <code>order_id</code>, <code>revision_number</code>, <code>status</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>order_id</code>, <code>prescription_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Order_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td>Read</td>
+<td><code>assigned_to_user_id</code>, <code>id</code>, <code>order_id</code>, <code>patient_profile_id</code>, <code>prescription_document_id</code>, <code>prescription_id</code>, <code>review_version</code>, <code>reviewed_by_user_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td>Read</td>
+<td><code>approved_quantity</code>, <code>decided_at</code>, <code>decision</code>, <code>id</code>, <code>order_id</code>, <code>order_item_id</code>, <code>prescription_id</code>, <code>review_id</code>, <code>row_version</code></td>
+<td>Pharmacist_Review projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>Create/update evidence</td>
+<td><code>status</code>, <code>accepted_at</code>, <code>accepted_by_user_id</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>Create/update evidence</td>
+<td><code>current_revision_id</code>, <code>subtotal</code>, <code>discount_total</code>, <code>tax_total</code>, <code>shipping_total</code>, <code>other_charges_total</code>, <code>grand_total</code>, <code>prescription_status</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>Create/update evidence</td>
+<td><code>quantity</code>, <code>unit_price</code>, <code>discount_amount</code>, <code>tax_amount</code>, <code>line_total</code>, <code>commerce_class_snapshot</code>, <code>commerce_class_version_snapshot</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_status_history.html"><code>commerce.order_status_history</code></a></td>
+<td>Create/update evidence</td>
+<td><code>order_id</code>, <code>from_status</code>, <code>to_status</code>, <code>changed_at</code>, <code>changed_by_user_id</code>, <code>reason_code</code></td>
+<td>Order_Operations owns these writes; Order_Operations must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.expectedOrderVersion</td>
+<td>commerce.orders.row_version</td>
+</tr>
+<tr>
+<td>request.expectedRevisionNumber</td>
+<td>commerce.order_revisions.revision_number</td>
+</tr>
+<tr>
+<td>request.accepted</td>
+<td>API-only explicit acceptance guard; server derives acceptance actor/time.</td>
+</tr>
+<tr>
+<td>data.revisionId</td>
+<td>commerce.order_revisions.id</td>
+</tr>
+<tr>
+<td>data.orderId</td>
+<td>commerce.order_revisions.order_id</td>
+</tr>
+<tr>
+<td>data.revisionNumber</td>
+<td>commerce.order_revisions.revision_number</td>
+</tr>
+<tr>
+<td>data.status</td>
+<td>commerce.order_revisions.status</td>
+</tr>
+<tr>
+<td>data.currency</td>
+<td>commerce.order_revisions.currency</td>
+</tr>
+<tr>
+<td>data.grandTotal</td>
+<td>commerce.order_revisions.grand_total</td>
+</tr>
+<tr>
+<td>data.acceptedAt</td>
+<td>commerce.order_revisions.accepted_at</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a>, <a href="../../04-Database/Tables/clinical/review_reason_codes.html"><code>clinical.review_reason_codes</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Customer owns order and both path IDs match. Only current proposed unexpired revision can be accepted; supersede prior accepted revision and apply exact snapshot under owner transaction. New/changed P evidence requires current review and new holds before payment/picking.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-063 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Concurrent revision replacement/old acceptance changes nothing; compare latest basket again. No silent substitution or charging.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-063-HAPPY</code></td>
+<td>Valid Customer context and documented fixture for accept the exact proposed revision and its recalculated total.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-063-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-063-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-063-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove orders.revision.accept.own.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-063-RULE</code></td>
+<td>Customer owns order and both path IDs match. Only current proposed unexpired revision can be accepted; supersede prior accepted revision and apply exact snapshot under owner transaction. New/changed P evidence requires current review and new holds before payment/picking.</td>
+<td>Concurrent revision replacement/old acceptance changes nothing; compare latest basket again. No silent substitution or charging.</td>
+</tr>
+<tr>
+<td><code>CT-API-063-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-063-CONCURRENCY</code></td>
+<td>Race two accept the exact proposed revision and its recalculated total. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-063-STATE</code></td>
+<td>Apply command after Concurrent revision replacement/old acceptance changes nothing; compare latest basket again. No silent substitution or charging.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-063-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Concurrent revision replacement/old acceptance changes nothing; compare latest basket again. No silent substitution or charging.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-PHM-03-OK</code>, <code>TC-PHM-03-DENY</code>, <code>TC-PHM-03-01</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+</main></body></html>

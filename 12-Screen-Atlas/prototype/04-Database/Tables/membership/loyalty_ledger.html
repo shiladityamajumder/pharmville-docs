@@ -1,0 +1,401 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>loyalty_ledger · Pharmville Docs</title><link rel="stylesheet" href="../../../assets/css/documentation.css"></head><body><header><a href="../../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1><code>membership.loyalty_ledger</code></h1>
+<p><strong>Canonical structure:</strong> <a href="../../../pharmville-database/pharmville_schema.sql">standalone SQL</a> and <a href="../../Schema-Catalog.json">validated catalog</a>. Generated structural sections reproduce the effective schema; business interpretation and master proposals remain separately reviewed.</p>
+<p><strong>Business purpose (Inferred):</strong> Holds loyalty ledger records within the membership domain (benefits and loyalty). Its precise write owner and lifecycle must be accepted during module implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>membership.loyalty_ledger</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Audit / History</td>
+</tr>
+<tr>
+<td>Proposed business write owner</td>
+<td>Future membership owner — Requires Decision D-027</td>
+</tr>
+<tr>
+<td>SQL ownership</td>
+<td>Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved.</td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td>internal_id</td>
+</tr>
+<tr>
+<td>Structural counts</td>
+<td>11 columns; 8 PK/FK/UQ/CHECK/exclusion constraints; 10 named PostgreSQL 18 NOT NULL constraints; 5 indexes; 3 user triggers</td>
+</tr>
+<tr>
+<td>Source / approval</td>
+<td>Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed.</td>
+</tr>
+</tbody>
+</table>
+<h2>Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Meaning</th>
+<th>Why needed</th>
+<th>Relationship / rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>No</td>
+<td><code>now()</code></td>
+<td>Row creation time</td>
+<td>Audit timeline and lifecycle</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>expires_at</code></td>
+<td><code>timestamp with time zone</code></td>
+<td>Yes</td>
+<td>—</td>
+<td>Expiration time</td>
+<td>Determine validity windows</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td><code>gen_random_uuid()</code></td>
+<td>Public identifier for this record</td>
+<td>Stable, externally shareable identity</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>idempotency_key</code></td>
+<td><code>character varying(128)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores idempotency key for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Database internal primary key</td>
+<td>Efficient internal relationships; never used as authorization proof</td>
+<td>GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key</td>
+</tr>
+<tr>
+<td><code>loyalty_account_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Reference linking this record to loyalty accounts</td>
+<td>Ensures related business data can be joined and validated</td>
+<td>FK → <code>membership.loyalty_accounts</code> via <code>fk_membership_loyalty_ledger_loyalty_account_id_loyalty_ee85</code></td>
+</tr>
+<tr>
+<td><code>loyalty_account_id_internal_id</code></td>
+<td><code>bigint</code></td>
+<td>No</td>
+<td>—</td>
+<td>Internal numeric reference to related row</td>
+<td>Maintains typed FK correspondence with public UUID reference</td>
+<td>FK → <code>membership.loyalty_accounts</code> via <code>fk_membership_loyalty_ledger_loyalty_account_id_loyalty_c32f</code></td>
+</tr>
+<tr>
+<td><code>movement_type</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores movement type for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+<tr>
+<td><code>points</code></td>
+<td><code>numeric(18,3)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores points for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>reference_id</code></td>
+<td><code>uuid</code></td>
+<td>No</td>
+<td>—</td>
+<td>Identifier associated with reference</td>
+<td>Link the event or entity to its subject; verify constraints</td>
+<td>Exact constraints below</td>
+</tr>
+<tr>
+<td><code>reference_type</code></td>
+<td><code>character varying(32)</code></td>
+<td>No</td>
+<td>—</td>
+<td>Inferred: stores reference type for this table</td>
+<td>Inferred: carries this domain attribute; meaning needs owner review</td>
+<td>Collation: default</td>
+</tr>
+</tbody>
+</table>
+<h2>Record lifecycle and users</h2>
+<ul>
+<li><strong>Created:</strong> when the loyalty ledger business process first needs a durable record; endpoint and actor require workflow review.</li>
+<li><strong>Updated:</strong> on authorized state, amount, association or lifecycle changes only. Respect version/trigger rules.</li>
+<li><strong>Candidate consuming modules:</strong> future-domain features. This is schema-level discovery, <strong>not confirmed table-level write ownership</strong>.</li>
+<li><strong>Without it:</strong> any feature that reads or writes <code>membership.loyalty_ledger</code> fails its required persistence checks; do not fall back to invented customer or payment state.</li>
+</ul>
+<p>The declared business owner above supersedes generic schema-membership guesses. <a href="../../Module-Mapping.html">Module/database map</a> distinguishes authoritative writers, consuming APIs, shared infrastructure and future-owner decisions.</p>
+<h2>Actual relationships</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Local columns</th>
+<th>References</th>
+<th>Exact rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fk_membership_loyalty_ledger_loyalty_account_id_loyalty_c32f</td>
+<td><code>loyalty_account_id_internal_id</code></td>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td><code>FOREIGN KEY (loyalty_account_id_internal_id) REFERENCES membership.loyalty_accounts(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td>fk_membership_loyalty_ledger_loyalty_account_id_loyalty_ee85</td>
+<td><code>loyalty_account_id</code></td>
+<td><a href="../../Tables/membership/loyalty_accounts.html"><code>membership.loyalty_accounts</code></a></td>
+<td><code>FOREIGN KEY (loyalty_account_id) REFERENCES membership.loyalty_accounts(id) ON DELETE RESTRICT</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Dependent tables</h3>
+<p>No inbound FK is present in the validated catalog.</p>
+<h2><code>membership.loyalty_ledger</code> — exact structural contracts</h2>
+<h3>Existing foreign-key dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Local columns</th>
+<th>References</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loyalty_account_id_internal_id</code></td>
+<td><code>membership.loyalty_accounts</code></td>
+<td><code>fk_membership_loyalty_ledger_loyalty_account_id_loyalty_c32f</code></td>
+</tr>
+<tr>
+<td><code>loyalty_account_id</code></td>
+<td><code>membership.loyalty_accounts</code></td>
+<td><code>fk_membership_loyalty_ledger_loyalty_account_id_loyalty_ee85</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing constraints</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Kind</th>
+<th>Recorded expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ck_membership_loyalty_ledger_finite_numeric_values</code></td>
+<td>CHECK</td>
+<td><code>CHECK (points IS NULL OR (points &lt;&gt; ALL (ARRAY['NaN'::numeric, 'Infinity'::numeric, '-Infinity'::numeric])))</code></td>
+</tr>
+<tr>
+<td><code>ck_membership_loyalty_ledger_numeric_pair_loyalty_account_id</code></td>
+<td>CHECK</td>
+<td><code>CHECK ((loyalty_account_id IS NULL) = (loyalty_account_id_internal_id IS NULL))</code></td>
+</tr>
+<tr>
+<td><code>ck_membership_loyalty_ledger_points_nonzero</code></td>
+<td>CHECK</td>
+<td><code>CHECK (points &lt;&gt; 0::numeric)</code></td>
+</tr>
+<tr>
+<td><code>fk_membership_loyalty_ledger_loyalty_account_id_loyalty_c32f</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (loyalty_account_id_internal_id) REFERENCES membership.loyalty_accounts(internal_id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>fk_membership_loyalty_ledger_loyalty_account_id_loyalty_ee85</code></td>
+<td>FOREIGN KEY</td>
+<td><code>FOREIGN KEY (loyalty_account_id) REFERENCES membership.loyalty_accounts(id) ON DELETE RESTRICT</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_idempotency</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (idempotency_key)</code></td>
+</tr>
+<tr>
+<td><code>pk_membership_loyalty_ledger</code></td>
+<td>PRIMARY KEY</td>
+<td><code>PRIMARY KEY (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_membership_loyalty_ledger_id</code></td>
+<td>UNIQUE</td>
+<td><code>UNIQUE (id)</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_created_at_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL created_at</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL id</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_idempotency_key_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL idempotency_key</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL internal_id</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_loyalty_account_id_internal_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL loyalty_account_id_internal_id</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_loyalty_account_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL loyalty_account_id</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_movement_type_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL movement_type</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_points_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL points</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_reference_id_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL reference_id</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_reference_type_not_null</code></td>
+<td>NOT NULL</td>
+<td><code>NOT NULL reference_type</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing indexes</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Method</th>
+<th>Columns / expression</th>
+<th>Predicate</th>
+<th>Purpose</th>
+<th>Recorded definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ix_membership_loyalty_ledger_account_time</code></td>
+<td>btree</td>
+<td><code>(loyalty_account_id, created_at)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_membership_loyalty_ledger_account_time ON membership.loyalty_ledger USING btree (loyalty_account_id, created_at)</code></td>
+</tr>
+<tr>
+<td><code>ix_membership_loyalty_ledger_reference</code></td>
+<td>btree</td>
+<td><code>(reference_type, reference_id)</code></td>
+<td>None</td>
+<td>Read/join/filter access path; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE INDEX ix_membership_loyalty_ledger_reference ON membership.loyalty_ledger USING btree (reference_type, reference_id)</code></td>
+</tr>
+<tr>
+<td><code>loyalty_ledger_idempotency</code></td>
+<td>btree</td>
+<td><code>(idempotency_key)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX loyalty_ledger_idempotency ON membership.loyalty_ledger USING btree (idempotency_key)</code></td>
+</tr>
+<tr>
+<td><code>pk_membership_loyalty_ledger</code></td>
+<td>btree</td>
+<td><code>(internal_id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX pk_membership_loyalty_ledger ON membership.loyalty_ledger USING btree (internal_id)</code></td>
+</tr>
+<tr>
+<td><code>uq_membership_loyalty_ledger_id</code></td>
+<td>btree</td>
+<td><code>(id)</code></td>
+<td>None</td>
+<td>Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans.</td>
+<td><code>CREATE UNIQUE INDEX uq_membership_loyalty_ledger_id ON membership.loyalty_ledger USING btree (id)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Existing triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Exact name</th>
+<th>Recorded definition</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aa_internal_keys</code></td>
+<td><code>CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON membership.loyalty_ledger FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;loyalty_account_id&quot;,&quot;loyalty_account_id_internal_id&quot;,&quot;membership&quot;,&quot;loyalty_accounts&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>immutable_record_guard</code></td>
+<td><code>CREATE TRIGGER immutable_record_guard BEFORE DELETE OR UPDATE ON membership.loyalty_ledger FOR EACH ROW EXECUTE FUNCTION platform.deny_mutation()</code></td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>zzzz_internal_keys</code></td>
+<td><code>CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON membership.loyalty_ledger FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[[&quot;loyalty_account_id&quot;,&quot;loyalty_account_id_internal_id&quot;,&quot;membership&quot;,&quot;loyalty_accounts&quot;]]', 'internal_id', 'id')</code></td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+<h2>Engineering interpretation</h2>
+<p>Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, validated constraints, indexes and ACL/RLS must remain intact; a business/API write owner is not an installed database grant. No clinical, financial or retention policy is inferred from a column or enum.</p>
+</main></body></html>

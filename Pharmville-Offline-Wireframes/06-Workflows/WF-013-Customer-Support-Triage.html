@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 013 Customer Support Triage · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-013 — Customer Support Triage</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Customer or support agent, Support triage and Responsible domain owner. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>Verify caller identity and support-agent scope before reading the existing reference. A screenshot or supplied phone number is not authorization.</li>
+<li>Read the current order, review, payment and delivery projections and identify the actual waiting step. Full support-ticket integration and response commitments remain D-020.</li>
+<li>Route money to Finance, clinical evidence to Pharmacy, supply to Operations and delivery attempts to dispatch. Support cannot directly mark paid, approve prescriptions or force refunds.</li>
+<li>The responsible owner performs its authorized command with evidence. Record communication and current pending/resolved outcome; a support reply alone does not close a financial exception.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Support routes work to the responsible owner and cannot mutate clinical or money truth. Ticket tables are available schema candidates, not approval of a launch integration.</p>
+<p>Candidate existing tables: <code>support.tickets</code>, <code>support.ticket_messages</code>, <code>support.ticket_actions</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: No confirmed support command endpoint. API-026/API-040/API-077 are role-permitted context reads only; D-020 must approve integration and scope. <a href="../03-Modules/Customer_Orders/APIs.html">Customer Orders</a> · <a href="../03-Modules/Order_Operations/APIs.html">Order Operations</a> · <a href="../03-Modules/Finance_Payments/APIs.html">Finance Payments</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Customer or support agent
+  participant O as Support triage
+  participant S as Responsible domain owner
+  participant D as PostgreSQL
+  C-&gt;&gt;O: Ask about existing reference
+  O-&gt;&gt;D: Verify scope and read current facts
+  O-&gt;&gt;S: Route actual domain exception
+  S-&gt;&gt;D: Investigate and apply permitted command
+  alt Evidence resolves issue
+    S--&gt;&gt;O: Recorded outcome
+    O--&gt;&gt;C: Current result and next action
+  else Evidence missing
+    O--&gt;&gt;C: Pending investigation and reference
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-CHK-03-DENY</code>, <code>TC-RX-04-DENY</code>, <code>TC-ORD-06-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

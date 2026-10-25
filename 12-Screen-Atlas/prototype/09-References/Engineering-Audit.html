@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Engineering Audit · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Engineering and architecture audit</h1>
+<p><strong>Review: 24 October 2026.</strong> Scope: effective PostgreSQL reconstruction, all 266 table references, 18 module blueprints, 110 stable features, 107 existing API operations, 14 workflows and protected wireframe preservation. This review validates planning and isolated SQL structure; application/provider/production behavior remains unverified.</p>
+<h2>Resolved findings</h2>
+<table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Evidence and result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Legacy baseline was not the effective schema</td>
+<td>V0001–V0030 replayed in private PostgreSQL; effective DDL extracted and independently installed, zero catalog differences.</td>
+</tr>
+<tr>
+<td>Final deliverable mixed models, migrations and tools</td>
+<td><code>pharmville-database/</code> contains one schema-only SQL file. Both original nested checkout and verified copy remain private outside the deliverable.</td>
+</tr>
+<tr>
+<td>Unclear schema authority/provenance</td>
+<td>Canonical SQL, derived full catalog/table register, exact checksums and executed parity evidence now agree. Previous source-name/Git assertions are archived.</td>
+</tr>
+<tr>
+<td>Supporting security/database objects were scattered</td>
+<td>All functions, sequences, role capability attributes, grants/default privileges, RLS, indexes, keys and enabled triggers are cataloged.</td>
+</tr>
+<tr>
+<td>Module documents and contracts were dispersed</td>
+<td>Canonical descriptive module directories hold domain plans and full API contracts. Shared conventions/orchestration remain central; old anchors/paths forward without changing wireframes.</td>
+</tr>
+<tr>
+<td>Traceability stopped at feature mentions</td>
+<td>Every feature links business/module/workflow/API-or-gap/database/tests/existing task; all tables have a proposed writer or an explicitly named future-owner decision.</td>
+</tr>
+<tr>
+<td>Scope could be inferred from future tables</td>
+<td>Capability matrix records MVP/Phase 2/Future/Requires Decision; no extra competitor/regulatory rules or APIs were approved.</td>
+</tr>
+</tbody>
+</table>
+<h2>Remaining implementation gates</h2>
+<ul>
+<li>D-003/D-023: reviewed staff MFA replay/session behavior and replacement-contact proof/storage.</li>
+<li>D-004/D-008/D-016: provider request/callback wire contracts, money action transitions and reconciliation rules.</li>
+<li>D-005/D-019/D-024: authoritative POS input/reconciliation, imports and exact incomplete contracts.</li>
+<li>D-006/D-009/D-010/D-011/D-012/D-013: clinical, lot/site, substitution/fulfillment, POD/privacy, tax and retention policy owner signoff.</li>
+<li>D-015/D-017/D-022: actual runtime login memberships/permissions, application data-access parity, CI/restore/load/security and operational release evidence.</li>
+<li>D-027: Product and domain leads must accept phase/accountability for preserved future domains.</li>
+</ul>
+<p>No schema/table access is treated as business write permission. No contract is Approved or Implemented from documentation alone. The ten incomplete APIs remain excluded from the 90.65% completeness numerator. Actual application, provider and security behavior requires separate execution evidence.</p>
+<p><a href="Coverage-Report.html">Coverage</a> · <a href="../04-Database/Reconciliation.html">reconciliation</a> · <a href="../05-APIs/Planning-Decisions.html">API decisions</a> · <a href="Sources-and-Decisions.html">full decision register</a> · <a href="../05-APIs/Planning-Validation.html">validation</a>. Previous audit prose remains intact under <a href="Historical/README.html">Historical</a>.</p>
+</main></body></html>

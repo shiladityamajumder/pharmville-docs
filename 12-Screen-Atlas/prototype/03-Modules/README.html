@@ -1,0 +1,146 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>README · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>🧩 Module blueprint</h1>
+<p>These 18 canonical business modules retain all existing feature IDs and stable module identifiers. Each module directory now uses its stable module ID, giving every module one canonical folder without changing runtime boundaries. The architecture remains a proposed modular NestJS monolith with explicit domain commands, one PostgreSQL structure and asynchronous integration workers. Source contracts are <strong>Proposed / Unapproved / Not Implemented</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Stable module ID</th>
+<th>Blueprint</th>
+<th>Proposed accountable role</th>
+<th>Features</th>
+<th>Surface APIs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication_Access</td>
+<td><a href="Authentication_Access/README.html">Authentication</a></td>
+<td>Security / Identity</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Customer_Accounts</td>
+<td><a href="Customer_Accounts/README.html">Customer Accounts</a></td>
+<td>Customer platform</td>
+<td>7</td>
+<td>19</td>
+</tr>
+<tr>
+<td>Product_Catalog</td>
+<td><a href="Product_Catalog/README.html">Product Catalog</a></td>
+<td>Catalog / Merchandising</td>
+<td>6</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Cart_Checkout</td>
+<td><a href="Cart_Checkout/README.html">Cart Checkout</a></td>
+<td>Commerce / Checkout</td>
+<td>8</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Prescription_Upload</td>
+<td><a href="Prescription_Upload/README.html">Prescription Management</a></td>
+<td>Prescription intake</td>
+<td>5</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Pharmacist_Review</td>
+<td><a href="Pharmacist_Review/README.html">Pharmacist Review</a></td>
+<td>Pharmacy clinical lead</td>
+<td>5</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Customer_Orders</td>
+<td><a href="Customer_Orders/README.html">Customer Orders</a></td>
+<td>Customer commerce surface</td>
+<td>9</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Order_Operations</td>
+<td><a href="Order_Operations/README.html">Order Management</a></td>
+<td>Order operations</td>
+<td>7</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td><a href="Inventory/README.html">Inventory</a></td>
+<td>Inventory control</td>
+<td>7</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Store_Operations</td>
+<td><a href="Store_Operations/README.html">Store Operations</a></td>
+<td>Store fulfillment</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td><a href="Warehouse/README.html">Warehouse</a></td>
+<td>Warehouse / Procurement</td>
+<td>5</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Finance_Payments</td>
+<td><a href="Finance_Payments/README.html">Payments</a></td>
+<td>Finance / Payments</td>
+<td>7</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Delivery_Operations</td>
+<td><a href="Delivery_Operations/README.html">Delivery</a></td>
+<td>Delivery operations</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Rider_App</td>
+<td><a href="Rider_App/README.html">Rider Operations</a></td>
+<td>Rider operations / mobile client</td>
+<td>7</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td><a href="Notifications/README.html">Notifications</a></td>
+<td>Communications / Platform</td>
+<td>5</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Admin_CMS</td>
+<td><a href="Admin_CMS/README.html">Admin</a></td>
+<td>Administration / Operations</td>
+<td>9</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Reporting</td>
+<td><a href="Reporting/README.html">Reporting</a></td>
+<td>Reporting / Finance analytics</td>
+<td>7</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Audit</td>
+<td><a href="Audit/README.html">Audit</a></td>
+<td>Security / Audit platform</td>
+<td>2</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h2>Ownership and navigation</h2>
+<p>Each module contains business flow, requirements, HLD, LLD, detailed API contracts, exact database mapping, workflows/security/test navigation, edge cases and dependencies/decisions. Shared rules remain linked centrally. Customer Orders and Rider Operations are client surfaces: Order Management, Delivery and Payments retain authoritative state. Public customer OTP routes retain their historical Customer Accounts surface while Authentication owns their execution.</p>
+<p><a href="Module-Registry.json">Module registry</a> drives validators and diagram navigation. Each canonical module directory now matches its stable module ID, so every module has one folder and existing wireframe source links resolve directly to the canonical documents. Former central API pages remain thin compatibility targets; they are not separate modules or duplicate contract authorities. Historical folder moves are recorded in <a href="../09-References/Module-Relocations.json">module relocations</a>.</p>
+<p><a href="../02-Architecture/Module-Boundaries.html">System boundaries</a> · <a href="../04-Database/Module-Mapping.html">database ownership</a> · <a href="../05-APIs/API-Contract-Coverage.html">API coverage</a> · <a href="../09-References/Coverage-and-Traceability.html">traceability</a>.</p>
+</main></body></html>

@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Planning Validation · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Architecture and API planning validation</h1>
+<blockquote>
+<p>[!NOTE]
+The dated results below are historical architecture-rework evidence. Current unified-authentication validation is recorded in <a href="../09-References/Unified-Authentication-Validation.html">Unified Authentication Validation</a>.</p>
+</blockquote>
+<p><strong>Executed checks: 24 October 2026.</strong> Tests of application/provider/production behavior remain Designed / NOT RUN. Historical validation narratives are retained under <a href="../09-References/Historical/README.html">Historical</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Evidence / result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source-chain reconstruction versus standalone install</td>
+<td>PASS: 30 source migrations applied privately; zero differences across 23 effective catalog dimensions.</td>
+</tr>
+<tr>
+<td>Independent clean PostgreSQL cluster</td>
+<td>PASS: SQL-only install creates capabilities from scratch; zero catalog differences, 266 tables empty.</td>
+</tr>
+<tr>
+<td>SQL/table documentation parity</td>
+<td>PASS: 266 table pages, all 4,438 columns/types/defaults/nullability, constraints/indexes/triggers and named NOT NULL constraints.</td>
+</tr>
+<tr>
+<td>Historical final register versus effective catalog</td>
+<td>PASS: zero differences across columns, keys/checks, indexes and triggers.</td>
+</tr>
+<tr>
+<td>ERD generation/consistency</td>
+<td>PASS: 24 schemas, 42 ER diagrams and all 1,461 physical FK labels/catalog rows.</td>
+</tr>
+<tr>
+<td>API structural validator, strict</td>
+<td>PASS: 107 operations, 107 unique operationIds, 62/62 typed body DTOs/examples and 104 JSON success DTOs/examples; three bodyless 204 results.</td>
+</tr>
+<tr>
+<td>OpenAPI 3.1 formal validator and JSON Schema 2020-12 examples</td>
+<td>PASS: zero errors; 1,828 schema/example validations, 3,606 column uses and 300 DTO-column annotations checked.</td>
+</tr>
+<tr>
+<td>Module/feature/inventory/protected-wireframe check</td>
+<td>PASS: 18 modules, 110 features, all 107 API identities, all 266 table owners, 44 masters, 70 compatibility targets and 46 protected files unchanged.</td>
+</tr>
+<tr>
+<td>Markdown/links/anchors/tables and actual Mermaid</td>
+<td>PASS: 679 Markdown pages and all relative links/anchors/tables; all 97 Mermaid diagrams parsed and rendered.</td>
+</tr>
+<tr>
+<td>Validator negative-fixture regression checks</td>
+<td>PASS: documentation malformed-fixture regression and canonical SQL/catalog tamper tests.</td>
+</tr>
+<tr>
+<td>Git boundaries and whitespace</td>
+<td>PASS: final diff inspected; whitespace clean; root and nested source Git revisions unchanged; no commit/push.</td>
+</tr>
+</tbody>
+</table>
+<p><a href="../09-References/API-Contract-Validation-Result.json">Machine-readable API proof</a>, <a href="../09-References/Database-Parity-Result.json">database proof</a> and <a href="../09-References/Architecture-Rework-Plan.html">execution ledger</a> distinguish results from remaining gates. Formal API validation used <code>openapi-spec-validator</code> 0.9.0 and <code>jsonschema</code> 4.26 with temporary validation tools; project/application dependencies were not changed. Repository commands use the available Node 22.23.4 binary; Node 24 remains the recommended development version. Actual Mermaid parsing requires a local Chromium browser.</p>
+<h2>Completeness and limits</h2>
+<p><strong>97/107 = 90.65%</strong> documentation-complete proposals; <strong>10</strong> conceptual contract gaps; <strong>0/107 = 0%</strong> approved. A structural validator passing does not close missing provider contracts, persistence or action-to-state mapping. No production database, application server, provider sandbox or product tests were executed. The database checks used only newly created disposable clusters and synthetic empty databases, with TCP disabled and no <code>.env</code> credentials.</p>
+<p>P/M/O, patient/evidence/revision binding, explicit revised-basket acceptance, one-site allocation, exact lot/license gates, trusted payment evidence, mandatory RID-04 OTP plus photo, REP-07 Excel <code>.xlsx</code> and owned invoice JSON/PDF behavior remain intact. Deferred Rx timing and external legal/clinical/financial policy remain pending named owner decisions.</p>
+</main></body></html>

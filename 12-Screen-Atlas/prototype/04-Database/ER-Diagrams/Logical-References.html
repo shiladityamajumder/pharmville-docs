@@ -1,0 +1,198 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Logical References · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Logical and polymorphic references that are not foreign keys</h1>
+<h2>Why this list is separate</h2>
+<p>These UUID columns are classified by the database project's final reference register but do not have a declared PostgreSQL FK. They are intentionally excluded from ERD relationship lines and the physical FK count. Their use may be a provider/correlation identifier or a discriminator-based reference; do not treat the UUID as proof that a target row exists.</p>
+<p>The source classification contains 35 formerly unbound UUID references. Six are classified as real domain relationships and are now present as physical FK pairs in the relationship catalog. The remaining <strong>29</strong> are listed below (10 provider/correlation references and 19 polymorphic references).</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Classification</th>
+<th>Discriminator</th>
+<th>Recorded handling and limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clinical.prescription_access_logs.request_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Request correlation; not a patient/entity key</td>
+</tr>
+<tr>
+<td><code>compliance.evidence.reference_id</code></td>
+<td>polymorphic subject</td>
+<td><code>reference_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>customer.consent_events.request_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Request correlation preserved in consent history</td>
+</tr>
+<tr>
+<td><code>finance.journal_entries.reference_id</code></td>
+<td>polymorphic subject</td>
+<td><code>reference_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>identity.login_attempts.request_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Authentication request correlation</td>
+</tr>
+<tr>
+<td><code>identity.sessions.token_family_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Opaque security token-rotation family; never a user/table key</td>
+</tr>
+<tr>
+<td><code>identity.user_roles.scope_id</code></td>
+<td>polymorphic subject</td>
+<td><code>scope_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>insurance.claims.reference_id</code></td>
+<td>polymorphic subject</td>
+<td><code>reference_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>insurance.eligibility_checks.reference_id</code></td>
+<td>polymorphic subject</td>
+<td><code>reference_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>membership.benefit_usage.reference_id</code></td>
+<td>polymorphic subject</td>
+<td><code>reference_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>membership.loyalty_ledger.reference_id</code></td>
+<td>polymorphic subject</td>
+<td><code>reference_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>notification.messages.correlation_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Cross-service notification correlation</td>
+</tr>
+<tr>
+<td><code>platform.audit_logs.request_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Cross-service audit request correlation</td>
+</tr>
+<tr>
+<td><code>platform.file_access_events.request_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Private file access request correlation</td>
+</tr>
+<tr>
+<td><code>platform.file_access_grants.subject_id</code></td>
+<td>polymorphic subject</td>
+<td><code>subject_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>platform.file_objects.owner_id</code></td>
+<td>polymorphic subject</td>
+<td><code>owner_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>platform.inbox_messages.message_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Producer message UUID; uniqueness is scoped to consumer_name</td>
+</tr>
+<tr>
+<td><code>platform.outbox_events.aggregate_id</code></td>
+<td>polymorphic subject</td>
+<td><code>aggregate_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>platform.webhook_deliveries.event_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Producer event UUID; not assumed to originate in this outbox</td>
+</tr>
+<tr>
+<td><code>platform.webhook_endpoints.owner_id</code></td>
+<td>polymorphic subject</td>
+<td><code>owner_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>pricing.pricing_evaluations.reference_id</code></td>
+<td>polymorphic subject</td>
+<td><code>reference_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>risk.assessments.request_id</code></td>
+<td>provider/correlation ID</td>
+<td>—</td>
+<td>retain UUID; not an entity primary key Risk evaluation request correlation</td>
+</tr>
+<tr>
+<td><code>risk.assessments.subject_id</code></td>
+<td>polymorphic subject</td>
+<td><code>subject_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>risk.cases.subject_id</code></td>
+<td>polymorphic subject</td>
+<td><code>subject_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>risk.signals.subject_id</code></td>
+<td>polymorphic subject</td>
+<td><code>subject_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>search.documents.entity_id</code></td>
+<td>polymorphic subject</td>
+<td><code>entity_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>search.indexing_jobs.entity_id</code></td>
+<td>polymorphic subject</td>
+<td><code>entity_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>search.query_events.selected_entity_id</code></td>
+<td>polymorphic subject</td>
+<td><code>selected_entity_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+<tr>
+<td><code>warehouse.stock_ledger.reference_id</code></td>
+<td>polymorphic subject</td>
+<td><code>reference_type</code></td>
+<td>retain public UUID plus discriminator; runtime roles deny direct writes. Trusted allowlist validates owned order/patient/prescription targets; unsupported kinds stay disabled until their domain service supplies ownership checks. No invented single-parent FK</td>
+</tr>
+</tbody>
+</table>
+<h2>Historical ORM relationships</h2>
+<p>Legacy models are privately archived and are not a second schema authority. The earlier source scan found no SQLAlchemy navigation declarations. ERDs derive physical relationships exclusively from the validated standalone SQL catalog.</p>
+<h2>Tables with no declared foreign keys</h2>
+<ul>
+<li><a href="../Tables/platform/report_definitions.html"><code>platform.report_definitions</code></a> — no FK constraint appears in the verified catalog snapshot. This is a review observation, not a claim that the design is wrong.</li>
+</ul>
+<p>The schema catalog does not establish whether every logical association is approved for enforcement. Review the database source's reference classification and service ownership before proposing new constraints. Do not draw these relationships as verified FKs.</p>
+</main></body></html>

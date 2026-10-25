@@ -1,0 +1,225 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>00 System Data Map · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>System data map</h1>
+<h2>What this map shows</h2>
+<p>Pharmville's checked-out database snapshot contains <strong>24 schemas, 268 tables, 4,485 columns, and 1,476 declared foreign keys</strong>. The map below shows representative business-domain dependencies backed by one or more declared foreign keys. Arrows point from the schema that owns the referencing (child) column to the schema containing its referenced (parent) key; they do not grant access or establish service write ownership. The <a href="15-Cross-Domain-Relationships.html">cross-domain reference register</a> lists every observed cross-schema pair.</p>
+<h2>Main domain map</h2>
+<pre><code class="language-mermaid">flowchart LR
+  identity[&quot;Identity and access&quot;]
+  customer[&quot;Customer&quot;]
+  organization[&quot;Organization&quot;]
+  catalog[&quot;Catalog and products&quot;]
+  marketplace[&quot;Marketplace&quot;]
+  pricing[&quot;Pricing&quot;]
+  commerce[&quot;Cart, checkout and orders&quot;]
+  clinical[&quot;Clinical and prescriptions&quot;]
+  appointment[&quot;Appointments&quot;]
+  diagnostics[&quot;Diagnostics&quot;]
+  payment[&quot;Payment&quot;]
+  finance[&quot;Finance&quot;]
+  warehouse[&quot;Warehouse and inventory&quot;]
+  procurement[&quot;Procurement&quot;]
+  fulfillment[&quot;Fulfillment&quot;]
+  logistics[&quot;Delivery and riders&quot;]
+  notification[&quot;Notifications&quot;]
+  support[&quot;Support&quot;]
+  compliance[&quot;Compliance&quot;]
+  platform[&quot;Platform, files, audit, reports&quot;]
+  search[&quot;Search&quot;]
+  risk[&quot;Risk&quot;]
+  insurance[&quot;Insurance&quot;]
+  membership[&quot;Membership&quot;]
+  commerce --&gt;|9 FKs| catalog
+  commerce --&gt;|2 FKs| customer
+  commerce --&gt;|6 FKs| clinical
+  commerce --&gt;|8 FKs| warehouse
+  commerce --&gt;|8 FKs| marketplace
+  commerce --&gt;|38 FKs| identity
+  commerce --&gt;|2 FKs| pricing
+  payment --&gt;|18 FKs| commerce
+  payment --&gt;|26 FKs| identity
+  finance --&gt;|8 FKs| commerce
+  finance --&gt;|2 FKs| payment
+  finance --&gt;|4 FKs| marketplace
+  fulfillment --&gt;|12 FKs| commerce
+  fulfillment --&gt;|10 FKs| warehouse
+  logistics --&gt;|10 FKs| commerce
+  logistics --&gt;|2 FKs| fulfillment
+  logistics --&gt;|4 FKs| warehouse
+  clinical --&gt;|6 FKs| commerce
+  clinical --&gt;|4 FKs| catalog
+  clinical --&gt;|2 FKs| customer
+  appointment --&gt;|6 FKs| clinical
+  diagnostics --&gt;|2 FKs| clinical
+  procurement --&gt;|12 FKs| catalog
+  procurement --&gt;|10 FKs| warehouse
+  warehouse --&gt;|6 FKs| procurement
+  warehouse --&gt;|8 FKs| catalog
+  pricing --&gt;|4 FKs| catalog
+  marketplace --&gt;|6 FKs| organization
+  notification --&gt;|4 FKs| platform
+  support --&gt;|2 FKs| commerce
+  support --&gt;|2 FKs| appointment
+  risk --&gt;|10 FKs| identity
+  platform --&gt;|44 FKs| identity
+  customer --&gt;|28 FKs| identity
+</code></pre>
+<p>The diagram focuses on cross-domain connections used to orient readers. Identity references are repeated across many tables; their exact constraints are cataloged in the detailed schema diagrams and relationship index. Appointment, diagnostics, insurance, membership, risk, search, support, notification, compliance, and platform are included because their schemas exist in the checked-out source even where their launch scope is not approved.</p>
+<h2>Database domains</h2>
+<table>
+<thead>
+<tr>
+<th>Schema</th>
+<th style="text-align:right">Tables</th>
+<th>Recorded area</th>
+<th>Detailed ER diagrams</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>appointment</code></td>
+<td style="text-align:right">9</td>
+<td>Appointments and scheduling</td>
+<td><a href="01-appointment.html">appointment</a></td>
+</tr>
+<tr>
+<td><code>catalog</code></td>
+<td style="text-align:right">19</td>
+<td>Products, medicines, and classification</td>
+<td><a href="02-catalog.html">catalog</a></td>
+</tr>
+<tr>
+<td><code>clinical</code></td>
+<td style="text-align:right">17</td>
+<td>Prescriptions and pharmacist decisions</td>
+<td><a href="03-clinical.html">clinical</a></td>
+</tr>
+<tr>
+<td><code>commerce</code></td>
+<td style="text-align:right">17</td>
+<td>Carts, checkout, orders, and returns</td>
+<td><a href="04-commerce.html">commerce</a></td>
+</tr>
+<tr>
+<td><code>compliance</code></td>
+<td style="text-align:right">8</td>
+<td>Regulatory records and retention actions</td>
+<td><a href="05-compliance.html">compliance</a></td>
+</tr>
+<tr>
+<td><code>customer</code></td>
+<td style="text-align:right">8</td>
+<td>Customer profiles and addresses</td>
+<td><a href="06-customer.html">customer</a></td>
+</tr>
+<tr>
+<td><code>diagnostics</code></td>
+<td style="text-align:right">13</td>
+<td>Tests and laboratory services</td>
+<td><a href="07-diagnostics.html">diagnostics</a></td>
+</tr>
+<tr>
+<td><code>finance</code></td>
+<td style="text-align:right">8</td>
+<td>Invoices, ledgers, and settlements</td>
+<td><a href="08-finance.html">finance</a></td>
+</tr>
+<tr>
+<td><code>fulfillment</code></td>
+<td style="text-align:right">10</td>
+<td>Picking, packing, and shipment preparation</td>
+<td><a href="09-fulfillment.html">fulfillment</a></td>
+</tr>
+<tr>
+<td><code>identity</code></td>
+<td style="text-align:right">16</td>
+<td>Accounts, sessions, and permissions</td>
+<td><a href="10-identity.html">identity</a></td>
+</tr>
+<tr>
+<td><code>insurance</code></td>
+<td style="text-align:right">8</td>
+<td>Policies and claims</td>
+<td><a href="11-insurance.html">insurance</a></td>
+</tr>
+<tr>
+<td><code>logistics</code></td>
+<td style="text-align:right">15</td>
+<td>Riders, shipments, and delivery</td>
+<td><a href="12-logistics.html">logistics</a></td>
+</tr>
+<tr>
+<td><code>marketplace</code></td>
+<td style="text-align:right">7</td>
+<td>Sellers and listings</td>
+<td><a href="13-marketplace.html">marketplace</a></td>
+</tr>
+<tr>
+<td><code>membership</code></td>
+<td style="text-align:right">6</td>
+<td>Benefits and loyalty</td>
+<td><a href="14-membership.html">membership</a></td>
+</tr>
+<tr>
+<td><code>notification</code></td>
+<td style="text-align:right">10</td>
+<td>Templates, messages, and delivery attempts</td>
+<td><a href="15-notification.html">notification</a></td>
+</tr>
+<tr>
+<td><code>organization</code></td>
+<td style="text-align:right">6</td>
+<td>Operating companies, sites, and licenses</td>
+<td><a href="16-organization.html">organization</a></td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td style="text-align:right">13</td>
+<td>Payment attempts, confirmation, and refunds</td>
+<td><a href="17-payment.html">payment</a></td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td style="text-align:right">21</td>
+<td>Configuration, files, audit, events, and reports</td>
+<td><a href="18-platform.html">platform</a></td>
+</tr>
+<tr>
+<td><code>pricing</code></td>
+<td style="text-align:right">8</td>
+<td>Prices, taxes, and promotions</td>
+<td><a href="19-pricing.html">pricing</a></td>
+</tr>
+<tr>
+<td><code>procurement</code></td>
+<td style="text-align:right">13</td>
+<td>Suppliers, purchase orders, and receiving</td>
+<td><a href="20-procurement.html">procurement</a></td>
+</tr>
+<tr>
+<td><code>risk</code></td>
+<td style="text-align:right">5</td>
+<td>Risk rules, cases, and signals</td>
+<td><a href="21-risk.html">risk</a></td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td style="text-align:right">5</td>
+<td>Search indexes and query signals</td>
+<td><a href="22-search.html">search</a></td>
+</tr>
+<tr>
+<td><code>support</code></td>
+<td style="text-align:right">8</td>
+<td>Customer support cases</td>
+<td><a href="23-support.html">support</a></td>
+</tr>
+<tr>
+<td><code>warehouse</code></td>
+<td style="text-align:right">18</td>
+<td>Stock balances, lots, and transfers</td>
+<td><a href="24-warehouse.html">warehouse</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Evidence boundary</h2>
+<p>This documentation is generated from <a href="../../pharmville-database/pharmville_schema.sql">the canonical standalone SQL</a> and its derived <a href="../Schema-Catalog.json">validated catalog</a>. A private PostgreSQL 18.6 replay through V0030 and a separate empty schema installation produced zero differences across 23 catalog dimensions. <a href="../../09-References/Database-Evidence.json">Evidence</a> records file checksums and archive provenance. No production database was inspected.</p>
+</main></body></html>

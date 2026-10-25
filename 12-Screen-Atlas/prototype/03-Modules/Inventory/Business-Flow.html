@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Inventory business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Inventory control. Lots, balances, movement ledger, holds and adjustments; stores/warehouses supply evidence and request movements.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Observe location-specific stock from approved authoritative inputs; preserve POS evidence and freshness.</li>
+<li>Select eligible unexpired lots using documented FEFO and owner-approved shelf-life rules; serialize competing reservations.</li>
+<li>Commit ledger/balance/reservation effects atomically; duplicate intent cannot move stock twice.</li>
+<li>Release expired/abandoned holds once; process approved reasoned adjustments and reconcile divergence without rewriting history.</li>
+<li>Provide low-stock/expiry projections; opening import and POS adapter formats remain explicit pending contracts.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INV-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-INV-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>INV-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-INV-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>INV-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-INV-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>INV-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-INV-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>INV-05</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-INV-05-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>INV-06</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-INV-06-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>INV-07</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-INV-07-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>, <a href="../../06-Workflows/WF-011-Inventory-Reconciliation.html">WF-011</a>, <a href="../../06-Workflows/WF-014-Supplier-Receiving.html">WF-014</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Inventory-and-Stock.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-002; D-005; D-007; D-012; D-024.</p>
+</main></body></html>

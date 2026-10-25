@@ -1,0 +1,330 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Error Catalog · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>API error catalog</h1>
+<p>The existing <code>healthcare-auth-service</code> codes are verified only for that service. For new Pharmville contracts, this catalog proposes those verified shared names where they fit the same HTTP/error semantics. D-024 must approve adoption before Pharmville implementation.</p>
+<p>Do not rename or translate a code already exposed by a deployed consumer without a versioned compatibility plan. Pharmville-specific codes below are proposals, not implemented behavior.</p>
+<h2>Shared transport and infrastructure errors</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">HTTP</th>
+<th>Canonical/reference code</th>
+<th>Category and trigger</th>
+<th><code>details</code> shape</th>
+<th>Retry and client action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">400</td>
+<td><code>BAD_REQUEST</code></td>
+<td>Malformed transport input or HTTP request rejected by framework</td>
+<td>null or safe object</td>
+<td>Correct the request; unchanged retry is not useful</td>
+</tr>
+<tr>
+<td style="text-align:right">400</td>
+<td><code>INVALID_REQUEST_ID</code>, <code>INVALID_CORRELATION_ID</code></td>
+<td>Reference middleware received a malformed UUID header</td>
+<td>null</td>
+<td>Send valid UUID or omit and let the service generate it</td>
+</tr>
+<tr>
+<td style="text-align:right">401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Credential missing, invalid, expired, or revoked</td>
+<td>null</td>
+<td>Reauthenticate; clear unusable credential</td>
+</tr>
+<tr>
+<td style="text-align:right">401</td>
+<td><code>AUTH_INVALID_CREDENTIALS</code></td>
+<td>Reference auth exception for invalid login proof</td>
+<td>null</td>
+<td>Retry only within documented throttles; do not reveal account existence</td>
+</tr>
+<tr>
+<td style="text-align:right">401</td>
+<td><code>AUTH_ACCOUNT_LOCKED</code>, <code>AUTH_ACCOUNT_DISABLED</code>, <code>AUTH_OTP_EXPIRED</code>, <code>AUTH_OTP_INVALID</code>, <code>AUTH_OTP_ATTEMPTS_EXCEEDED</code>, <code>AUTH_OTP_ALREADY_USED</code>, <code>AUTH_SESSION_REVOKED</code>, <code>AUTH_REFRESH_TOKEN_REUSE</code></td>
+<td>Specific authentication-service conditions</td>
+<td>null or safe retry state</td>
+<td>Follow the named recovery flow; no secret is returned</td>
+</tr>
+<tr>
+<td style="text-align:right">403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Authenticated principal lacks action permission</td>
+<td>null</td>
+<td>Do not retry without an authorized permission change</td>
+</tr>
+<tr>
+<td style="text-align:right">404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Missing resource or object hidden by ownership policy</td>
+<td>null</td>
+<td>Refresh authorized view; do not infer hidden-resource existence</td>
+</tr>
+<tr>
+<td style="text-align:right">404</td>
+<td><code>ROUTE_NOT_FOUND</code></td>
+<td>Unknown/disabled route in reference service</td>
+<td>null</td>
+<td>Correct path or version</td>
+</tr>
+<tr>
+<td style="text-align:right">409</td>
+<td><code>RESOURCE_CONFLICT</code></td>
+<td>Unique/business-state conflict, including reference <code>IntegrityError</code> mapping</td>
+<td>null or safe conflicting field</td>
+<td>Reload/reconcile before retry</td>
+</tr>
+<tr>
+<td style="text-align:right">409</td>
+<td><code>CONCURRENT_UPDATE_CONFLICT</code></td>
+<td>Reference ORM stale-data conflict</td>
+<td>safe current version only</td>
+<td>Fetch current representation and re-evaluate</td>
+</tr>
+<tr>
+<td style="text-align:right">422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>FastAPI request schema validation</td>
+<td>array of <code>{field, message, type}</code> strings</td>
+<td>Correct fields and submit again</td>
+</tr>
+<tr>
+<td style="text-align:right">422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Application-level semantic validation</td>
+<td>operation-specific safe object/array</td>
+<td>Correct values; do not retry unchanged</td>
+</tr>
+<tr>
+<td style="text-align:right">429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>Reference application rate-limit exception</td>
+<td>safe <code>retryAfterSeconds</code> value</td>
+<td>Honor <code>Retry-After</code>; bounded backoff with jitter</td>
+</tr>
+<tr>
+<td style="text-align:right">500</td>
+<td><code>INTERNAL_SERVER_ERROR</code></td>
+<td>Unhandled reference exception</td>
+<td>null</td>
+<td>Use request ID for support; retry only after idempotency/reconciliation check</td>
+</tr>
+<tr>
+<td style="text-align:right">500</td>
+<td><code>DATABASE_ERROR</code></td>
+<td>Non-operational SQLAlchemy failure mapped by reference handler</td>
+<td>null</td>
+<td>Treat outcome as potentially uncertain for writes; reconcile first</td>
+</tr>
+<tr>
+<td style="text-align:right">503</td>
+<td><code>DATABASE_UNAVAILABLE</code></td>
+<td>Reference operational database failure</td>
+<td>null</td>
+<td>Bounded backoff; reconcile uncertain writes</td>
+</tr>
+<tr>
+<td style="text-align:right">503</td>
+<td><code>EXTERNAL_SERVICE_ERROR</code>, <code>EXTERNAL_SERVICE_TIMEOUT</code></td>
+<td>Reference application errors for upstream failure/timeout</td>
+<td>safe dependency-independent state only</td>
+<td>Preserve pending state and reconcile; retry only with provider-safe idempotency</td>
+</tr>
+<tr>
+<td style="text-align:right">503</td>
+<td><code>INFRASTRUCTURE_UNAVAILABLE</code>, <code>RATE_LIMIT_BACKEND_ERROR</code></td>
+<td>Required infrastructure unavailable</td>
+<td>null</td>
+<td>Bounded backoff</td>
+</tr>
+<tr>
+<td style="text-align:right">504</td>
+<td><code>OPERATION_TIMEOUT</code></td>
+<td>Reference bounded-operation timeout</td>
+<td>safe operation reference if known</td>
+<td>Outcome may be uncertain; query/replay using same idempotency key</td>
+</tr>
+</tbody>
+</table>
+<p>The reference handler also maps common HTTP exceptions to <code>BAD_REQUEST</code>, <code>AUTHENTICATION_REQUIRED</code>, <code>PERMISSION_DENIED</code>, <code>ROUTE_NOT_FOUND</code>, <code>METHOD_NOT_ALLOWED</code>, <code>PAYLOAD_TOO_LARGE</code>, and <code>UNSUPPORTED_MEDIA_TYPE</code>. Validation details are generated from location, message and type and must not echo rejected secret input. Database logs may contain stack traces internally; they are never response details.</p>
+<h2>Pharmville domain proposals</h2>
+<p>These codes describe distinct business failures and remain proposed pending each owning module’s approval. Prefer the canonical shared code when the semantics match; add a domain code only when clients need a distinct recovery action.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">HTTP</th>
+<th>Proposed code</th>
+<th>Category / triggering condition</th>
+<th><code>details</code></th>
+<th>Retry and client recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Resource absent or hidden by object-level authorization</td>
+<td>null</td>
+<td>Refresh authorized list</td>
+</tr>
+<tr>
+<td style="text-align:right">409</td>
+<td><code>STALE_VERSION</code></td>
+<td>Aggregate or row version precondition is stale</td>
+<td><code>{currentVersion}</code> only if safe and approved</td>
+<td>Reload, reconcile changes, resubmit as a new intent</td>
+</tr>
+<tr>
+<td style="text-align:right">409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same key reused with a different canonical request fingerprint</td>
+<td>null</td>
+<td>Do not reuse key for different command</td>
+</tr>
+<tr>
+<td style="text-align:right">409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Command is invalid for current documented state</td>
+<td>safe current state enum if disclosure is allowed</td>
+<td>Reload; choose an allowed action</td>
+</tr>
+<tr>
+<td style="text-align:right">409</td>
+<td><code>INSUFFICIENT_STOCK</code></td>
+<td>Commit-time allocation cannot fulfill requested quantity</td>
+<td>safe item/availability data only</td>
+<td>Requote or revise cart; never assume earlier availability guarantees stock</td>
+</tr>
+<tr>
+<td style="text-align:right">412</td>
+<td><code>PRECONDITION_FAILED</code></td>
+<td>Declared <code>If-Match</code> validator no longer matches</td>
+<td>null</td>
+<td>Fetch latest representation and retry after review</td>
+</tr>
+<tr>
+<td style="text-align:right">422</td>
+<td><code>PRESCRIPTION_REVIEW_REQUIRED</code></td>
+<td>Clinical review is a prerequisite to next transition</td>
+<td>safe review reference/state only</td>
+<td>Complete review; never disclose clinical notes</td>
+</tr>
+<tr>
+<td style="text-align:right">422</td>
+<td><code>REFUND_NOT_ELIGIBLE</code></td>
+<td>Approved policy does not permit requested refund amount/state</td>
+<td>safe remaining refundable amount if approved</td>
+<td>Refresh payment/order state; escalate if needed</td>
+</tr>
+<tr>
+<td style="text-align:right">429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>Per-operation quota exceeded</td>
+<td>retry delay only</td>
+<td>Honor <code>Retry-After</code></td>
+</tr>
+<tr>
+<td style="text-align:right">503</td>
+<td><code>PROVIDER_UNAVAILABLE</code></td>
+<td>Provider could not produce a reliable outcome</td>
+<td>operation reference and <code>outcomeUnknown</code> only if approved</td>
+<td>Keep pending; reconcile before retry</td>
+</tr>
+<tr>
+<td style="text-align:right">504</td>
+<td><code>UPSTREAM_TIMEOUT</code></td>
+<td>Provider timed out after command may have been accepted</td>
+<td>operation reference; no raw payload</td>
+<td>Query/replay with same key and reconcile</td>
+</tr>
+</tbody>
+</table>
+<h2>Compatibility mappings to the authentication service</h2>
+<table>
+<thead>
+<tr>
+<th>Earlier Pharmville draft name</th>
+<th>Verified shared name / policy</th>
+<th>Compatibility note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACCESS_DENIED</code></td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Proposed alias removal for new Pharmville v1 contract only; retain/map old code if any client consumed it</td>
+</tr>
+<tr>
+<td><code>MALFORMED_REQUEST</code></td>
+<td><code>BAD_REQUEST</code></td>
+<td>Use <code>REQUEST_VALIDATION_ERROR</code> for schema-validation details</td>
+</tr>
+<tr>
+<td><code>INVALID_CREDENTIALS</code></td>
+<td><code>AUTH_INVALID_CREDENTIALS</code> where the auth module uses that verified auth exception</td>
+<td>Do not reveal which identifier or proof failed</td>
+</tr>
+<tr>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Keep for application semantic validation; <code>REQUEST_VALIDATION_ERROR</code> for framework/schema errors</td>
+<td>Both are 422 in reference behavior but carry distinct sources</td>
+</tr>
+<tr>
+<td><code>INTERNAL_ERROR</code></td>
+<td><code>INTERNAL_SERVER_ERROR</code> for an unhandled server exception</td>
+<td>Preserve the actual database-specific <code>DATABASE_ERROR</code> code where the reference handler emits it</td>
+</tr>
+<tr>
+<td><code>RATE_LIMITED</code></td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>Include <code>Retry-After</code> when known</td>
+</tr>
+<tr>
+<td><code>UPSTREAM_TIMEOUT</code></td>
+<td><code>EXTERNAL_SERVICE_TIMEOUT</code> for new shared service errors; domain-specific alias only when a consumer needs separate action</td>
+<td>Do not claim a provider request was rejected when the outcome is unknown</td>
+</tr>
+</tbody>
+</table>
+<p><code>details</code> is always nullable and operation-specific. Do not expose tokens, OTPs, patient or prescription content, SQL/stack traces, authorization internals, or raw provider secrets. All errors use the canonical envelope except documented protocol exceptions. See <a href="Standard-Responses.html">standard responses</a>.</p>
+<h2>Detailed planning transport and precondition proposals</h2>
+<p>These codes refine the current operation proposals; they are Unapproved and not evidence of sibling-service or Pharmville implementation. <code>STATE_CONFLICT</code> in older illustrative LLD examples is a legacy proposed alias; the detailed contracts consistently use <code>INVALID_STATE_TRANSITION</code>. No deployed-consumer compatibility is asserted or changed.</p>
+<table>
+<thead>
+<tr>
+<th>HTTP</th>
+<th>Proposed code</th>
+<th>Trigger</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>406</td>
+<td><code>NOT_ACCEPTABLE</code></td>
+<td>Accept requests an unsupported representation</td>
+<td>Use the operation’s declared JSON/PDF media type</td>
+</tr>
+<tr>
+<td>415</td>
+<td><code>UNSUPPORTED_MEDIA_TYPE</code></td>
+<td>Body media type is unsupported</td>
+<td>Send the declared Content-Type; no mutation before parsing</td>
+</tr>
+<tr>
+<td>428</td>
+<td><code>PRECONDITION_REQUIRED</code></td>
+<td>A conditional DELETE omits If-Match</td>
+<td>Obtain the owned row version and supply its quoted validator</td>
+</tr>
+<tr>
+<td>412</td>
+<td><code>PRECONDITION_FAILED</code></td>
+<td>A conditional DELETE supplies a stale If-Match</td>
+<td>Reload the resource and compare before retrying a new intent</td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

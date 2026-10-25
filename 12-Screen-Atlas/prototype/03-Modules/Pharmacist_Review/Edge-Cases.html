@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edge Cases · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Pharmacist Review edge cases</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Designed; NOT RUN.</strong> These are feature-specific acceptance assertions for the existing draft requirements. Policy values remain subject to <a href="../../09-References/Sources-and-Decisions.html">decisions</a>; provider behavior and application execution are not certified.</p>
+</blockquote>
+<p><a href="../../00-Business-Guide/Prescription-and-Pharmacy.html">Business explanation</a> · <a href="LLD.html">LLD and normal tests</a> · <a href="APIs.html">API</a> · <a href="../../07-Engineering/State-and-Recovery-Contracts.html">recovery contracts</a></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Feature</th>
+<th>Trigger</th>
+<th>Expected result and record impact</th>
+<th>Responsible recovery</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EC-PHM-01-01</code></td>
+<td><code>PHM-01</code></td>
+<td>No authorized pharmacist is available</td>
+<td>P remains waiting; no timeout auto-approval</td>
+<td>Pharmacy Operations assigns a licensed authorized reviewer</td>
+<td><code>TC-PHM-01-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-PHM-02-01</code></td>
+<td><code>PHM-02</code></td>
+<td>Prescription link belongs to another patient</td>
+<td>View/decision blocked and protected access audited</td>
+<td>Customer corrects evidence; Pharmacy reviews scope</td>
+<td><code>TC-PHM-02-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-PHM-03-01</code></td>
+<td><code>PHM-03</code></td>
+<td>Two pharmacists decide the same old line</td>
+<td>One current decision; stale command conflicts without overwriting history</td>
+<td>Pharmacist reloads current review</td>
+<td><code>TC-PHM-03-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-PHM-04-01</code></td>
+<td><code>PHM-04</code></td>
+<td>Alternative changes after original approval</td>
+<td>Old approval cannot authorize new SKU/quantity</td>
+<td>Pharmacy reviews new evidence; customer accepts revision</td>
+<td><code>TC-PHM-04-DENY</code></td>
+</tr>
+<tr>
+<td><code>EC-PHM-05-01</code></td>
+<td><code>PHM-05</code></td>
+<td>Unprivileged staff posts an approval</td>
+<td>No decision or approval bypass; denial is auditable</td>
+<td>Security/Pharmacy corrects entitlement and preserves original history</td>
+<td><code>TC-PHM-05-DENY</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Verification procedure</h2>
+<p>For each linked test, seed the stated current actor, scope and record version; apply the trigger; assert the visible result and authoritative rows, history and emitted events. Repeat after a lost acknowledgment where the scenario concerns replay. Normal companion tests are <code>TC-&lt;feature&gt;-OK</code> in the LLD. Use approved policy fixtures, not production assumptions.</p>
+<p>For state-changing commands also verify rollback before commit, timeout after commit, cross-object denial and conflicting versions. Run real provider signature tests only against the approved sandbox. Attach execution evidence and fixture versions before changing NOT RUN.</p>
+<h2>Additional safety and recovery tests</h2>
+<p>Concrete interruption/race assertions supplement the feature table; detailed expected results are in the <a href="LLD.html#critical-recovery-scenarios">LLD</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Scenario</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PHM-03</code></td>
+<td>Customer accepts a changed SKU/quantity revision while pharmacist submits old decision</td>
+<td><code>TC-PHM-03-01</code></td>
+</tr>
+</tbody>
+</table>
+</main></body></html>

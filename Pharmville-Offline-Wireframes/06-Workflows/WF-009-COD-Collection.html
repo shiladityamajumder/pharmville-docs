@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 009 COD Collection · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-009 — COD Collection</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Rider or cash receiver, Finance and Delivery. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>Use only approved COD eligibility and amount due for the exact order/revision/shipment. COD authorization is not already collected cash.</li>
+<li>Current assigned rider records actual collection with delivery evidence; Finance persists one collection effect per permitted intent.</li>
+<li>A cash receiver records actual handover/deposit separately under their permission. Compare collected and handed-over totals by rider/period.</li>
+<li>Keep a shortage/overage as an explicit unresolved difference. Finance/Operations investigate; delivery is not rewritten and missing cash is not force-cleared.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Finance owns amount due, actual collection and reconciliation. Delivery supplies current shipment/assignment evidence, not accounting settlement.</p>
+<p>Candidate existing tables: <code>payment.cod_collections</code>, <code>payment.reconciliation_runs</code>, <code>payment.reconciliation_items</code>, <code>logistics.shipments</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: API-067 views handover, API-073 supplies collection evidence, API-080 reconciles. Complete deposit/approval command fields remain D-007/D-024. <a href="../03-Modules/Finance_Payments/APIs.html">Finance Payments</a> · <a href="../03-Modules/Delivery_Operations/APIs.html">Delivery Operations</a> · <a href="../03-Modules/Rider_App/APIs.html">Rider App</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Rider or cash receiver
+  participant O as Finance
+  participant S as Delivery
+  participant D as PostgreSQL
+  C-&gt;&gt;O: Record actual COD collection
+  O-&gt;&gt;S: Check current assigned shipment evidence
+  O-&gt;&gt;D: Commit collection once
+  C-&gt;&gt;O: Record actual handover or deposit
+  O-&gt;&gt;D: Compare due, collected and deposited
+  alt Difference exists
+    O--&gt;&gt;C: Open cash exception for Finance
+  else Evidence matches
+    O--&gt;&gt;C: Reconciled cash outcome
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-RID-04-DENY</code>, <code>TC-DLV-04-DENY</code>, <code>TC-FIN-06-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

@@ -1,0 +1,189 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>README · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>🗄️ Database reference</h1>
+<p>&lt;!-- ERD-INDEX-LINK --&gt;</p>
+<ul>
+<li><a href="ER-Diagrams/README.html">Entity relationship diagrams</a> — verified domain diagrams, FK catalog, and evidence limits.</li>
+</ul>
+<h2>Source of truth</h2>
+<p>The <a href="../pharmville-database/pharmville_schema.sql">standalone SQL schema</a> is the authoritative effective database definition, reconstructed from V0001–V0030 with the explicitly proposed D-028 unified-identity extension, originally recovered by executing V0001–V0030 in a private disposable PostgreSQL 18.6 cluster. A second empty database installed only that file: <strong>zero unexplained structural differences across 23 catalog dimensions</strong>. No existing user database was accessed.</p>
+<table>
+<thead>
+<tr>
+<th>Structure</th>
+<th>Validated count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application schemas / tables / columns</td>
+<td>24 / 268 / 4,485</td>
+</tr>
+<tr>
+<td>Foreign keys / indexes</td>
+<td>1,476 / 1,222</td>
+</tr>
+<tr>
+<td>Functions / user triggers</td>
+<td>58 / 883</td>
+</tr>
+<tr>
+<td>Identity sequences / RLS policies</td>
+<td>267 / 3</td>
+</tr>
+<tr>
+<td>PK + UNIQUE + CHECK + FK constraints</td>
+<td>3,241</td>
+</tr>
+<tr>
+<td>PostgreSQL 18 NOT NULL constraints</td>
+<td>2,951</td>
+</tr>
+</tbody>
+</table>
+<h2>Table reference</h2>
+<p>Every table page below records exact fields/defaults/nullability, keys, all constraints, index definitions/methods/predicates, trigger definitions, incoming and outgoing relationships, classification and proposed module ownership. SQL access does not confer business write ownership. Shared platform and future domains have explicit decision owners.</p>
+<table>
+<thead>
+<tr>
+<th>Schema</th>
+<th>Tables</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>appointment</td>
+<td>9</td>
+<td><a href="ER-Diagrams/01-appointment.html">Domain map</a></td>
+</tr>
+<tr>
+<td>catalog</td>
+<td>19</td>
+<td><a href="ER-Diagrams/02-catalog.html">Domain map</a></td>
+</tr>
+<tr>
+<td>clinical</td>
+<td>17</td>
+<td><a href="ER-Diagrams/03-clinical.html">Domain map</a></td>
+</tr>
+<tr>
+<td>commerce</td>
+<td>17</td>
+<td><a href="ER-Diagrams/04-commerce.html">Domain map</a></td>
+</tr>
+<tr>
+<td>compliance</td>
+<td>8</td>
+<td><a href="ER-Diagrams/05-compliance.html">Domain map</a></td>
+</tr>
+<tr>
+<td>customer</td>
+<td>8</td>
+<td><a href="ER-Diagrams/06-customer.html">Domain map</a></td>
+</tr>
+<tr>
+<td>diagnostics</td>
+<td>13</td>
+<td><a href="ER-Diagrams/07-diagnostics.html">Domain map</a></td>
+</tr>
+<tr>
+<td>finance</td>
+<td>8</td>
+<td><a href="ER-Diagrams/08-finance.html">Domain map</a></td>
+</tr>
+<tr>
+<td>fulfillment</td>
+<td>10</td>
+<td><a href="ER-Diagrams/09-fulfillment.html">Domain map</a></td>
+</tr>
+<tr>
+<td>identity</td>
+<td>16</td>
+<td><a href="ER-Diagrams/10-identity.html">Domain map</a></td>
+</tr>
+<tr>
+<td>insurance</td>
+<td>8</td>
+<td><a href="ER-Diagrams/11-insurance.html">Domain map</a></td>
+</tr>
+<tr>
+<td>logistics</td>
+<td>15</td>
+<td><a href="ER-Diagrams/12-logistics.html">Domain map</a></td>
+</tr>
+<tr>
+<td>marketplace</td>
+<td>7</td>
+<td><a href="ER-Diagrams/13-marketplace.html">Domain map</a></td>
+</tr>
+<tr>
+<td>membership</td>
+<td>6</td>
+<td><a href="ER-Diagrams/14-membership.html">Domain map</a></td>
+</tr>
+<tr>
+<td>notification</td>
+<td>10</td>
+<td><a href="ER-Diagrams/15-notification.html">Domain map</a></td>
+</tr>
+<tr>
+<td>organization</td>
+<td>6</td>
+<td><a href="ER-Diagrams/16-organization.html">Domain map</a></td>
+</tr>
+<tr>
+<td>payment</td>
+<td>13</td>
+<td><a href="ER-Diagrams/17-payment.html">Domain map</a></td>
+</tr>
+<tr>
+<td>platform</td>
+<td>21</td>
+<td><a href="ER-Diagrams/18-platform.html">Domain map</a></td>
+</tr>
+<tr>
+<td>pricing</td>
+<td>8</td>
+<td><a href="ER-Diagrams/19-pricing.html">Domain map</a></td>
+</tr>
+<tr>
+<td>procurement</td>
+<td>13</td>
+<td><a href="ER-Diagrams/20-procurement.html">Domain map</a></td>
+</tr>
+<tr>
+<td>risk</td>
+<td>5</td>
+<td><a href="ER-Diagrams/21-risk.html">Domain map</a></td>
+</tr>
+<tr>
+<td>search</td>
+<td>5</td>
+<td><a href="ER-Diagrams/22-search.html">Domain map</a></td>
+</tr>
+<tr>
+<td>support</td>
+<td>8</td>
+<td><a href="ER-Diagrams/23-support.html">Domain map</a></td>
+</tr>
+<tr>
+<td>warehouse</td>
+<td>18</td>
+<td><a href="ER-Diagrams/24-warehouse.html">Domain map</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Planning and validation</h2>
+<ul>
+<li><a href="Installation.html">Installation and security prerequisites</a></li>
+<li><a href="Database-Objects.html">All supporting objects, sequences, functions, grants and policies</a></li>
+<li><a href="Schema-Overview.html">Schema overview</a> · <a href="Relationships.html">relationships</a> · <a href="Database-Rules.html">database rules</a></li>
+<li><a href="Master-Data-Inventory.html">Master-data classification and initial records</a></li>
+<li><a href="Module-Mapping.html">Module mapping</a> · <a href="Ownership-and-Scope.json">ownership register</a></li>
+<li><a href="Reconciliation.html">Documentation reconciliation</a> · <a href="Models-and-Parity.html">parity</a></li>
+<li><a href="ER-Diagrams/README.html">ER diagrams</a> · <a href="ER-Diagrams/Relationship-Catalog.html">full FK catalog</a></li>
+<li><a href="Schema-Catalog.json">Catalog</a> · <a href="Table-Register.json">table register</a> · <a href="../09-References/Database-Evidence.json">evidence</a></li>
+</ul>
+<p>Historical source provenance remains discoverable at <a href="Migrations.html">Migrations.md</a>. SQL-only delivery excludes transactional data and seed records. The 44 identified master tables retain explicit confirmed/proposed/open datasets; a schema install grants no business approval.</p>
+<h2>Unified identity extension</h2>
+<p><a href="Identity-Authentication-Assessment.html">Identity assessment</a> separates inherited schema from proposed D-028 additions. <a href="../09-References/Unified-Authentication-Database-Validation.json">Current isolated verification</a> compares the unchanged baseline catalog and two independent installations of current SQL across all 23 dimensions. This structural verification is not approval or application implementation. Historical source-chain parity remains preserved separately.</p>
+</main></body></html>

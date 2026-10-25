@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Operations · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Payments operations and acceptance</h1>
+<h2>Workflow and state ownership</h2>
+<p>Money, refunds, invoices, accounting and reconciliation; no direct clinical or stock approval.</p>
+<p><a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../../06-Workflows/WF-009-COD-Collection.html">WF-009</a>, <a href="../../06-Workflows/WF-010-Cancellation-Return-and-Refund.html">WF-010</a>, <a href="../../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a>. The <a href="LLD.html">LLD</a> holds module algorithms and transition cases; <a href="APIs.html">APIs</a> holds command-specific allowed/denied transitions. <a href="../../07-Engineering/State-and-Recovery-Contracts.html">Shared recovery contracts</a> define cross-owner compensation.</p>
+<h2>Authentication and authorization</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Authentication</th>
+<th>Roles / permission</th>
+<th>Command owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-075 POST <code>/v1/payments/intents</code></td>
+<td>Yes</td>
+<td>Customer; payments.initiate.own</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td>API-076 POST <code>/v1/webhooks/cashfree</code></td>
+<td>Yes</td>
+<td>Internal provider adapter; Valid provider signature + exact event/payment correlation</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td>API-077 GET <code>/v1/admin/finance/payments</code></td>
+<td>Yes</td>
+<td>Finance Officer; finance.payments.read</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td>API-078 POST <code>/v1/admin/finance/refunds</code></td>
+<td>Yes</td>
+<td>Authorized Finance Refund Officer; finance.refunds.instruct</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td>API-079 GET <code>/v1/admin/finance/settlements</code></td>
+<td>Yes</td>
+<td>Finance Reconciliation Officer; finance.settlements.read</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td>API-080 POST <code>/v1/admin/finance/cod-reconciliation</code></td>
+<td>Yes</td>
+<td>Finance Cash Reconciler; finance.cod.reconcile</td>
+<td>Finance_Payments</td>
+</tr>
+<tr>
+<td>API-081 GET <code>/v1/admin/finance/invoices/{order_id}</code></td>
+<td>Yes</td>
+<td>Finance Officer; finance.invoices.read</td>
+<td>Finance_Payments</td>
+</tr>
+</tbody>
+</table>
+<p>Resource/patient/location checks and sensitive-field filtering are endpoint-specific in <a href="APIs.html">APIs</a>; roles never replace object authorization. For file/provider callbacks, use the documented capability/signature path. <a href="../../07-Engineering/Security.html">Security</a> applies alongside the exact retained SQL ACL/RLS policies.</p>
+<h2>Designed tests and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Normal case</th>
+<th>Denied / failure evidence</th>
+<th>Execution status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FIN-01</code></td>
+<td><a href="LLD.html">TC-FIN-01-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>FIN-02</code></td>
+<td><a href="LLD.html">TC-FIN-02-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>FIN-03</code></td>
+<td><a href="LLD.html">TC-FIN-03-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>FIN-04</code></td>
+<td><a href="LLD.html">TC-FIN-04-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>FIN-05</code></td>
+<td><a href="LLD.html">TC-FIN-05-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>FIN-06</code></td>
+<td><a href="LLD.html">TC-FIN-06-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>FIN-07</code></td>
+<td><a href="LLD.html">TC-FIN-07-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<p>Each endpoint additionally defines validation, authentication, authorization, business-gate, duplicate-intent, stale-version/concurrency and recovery cases. No execution is claimed. <a href="../../07-Engineering/Testing.html">Testing strategy</a> separates schema parity from application acceptance; <a href="../../08-Development-Plan/Implementation-Plan.html">delivery tasks</a> preserve existing TASK IDs.</p>
+</main></body></html>

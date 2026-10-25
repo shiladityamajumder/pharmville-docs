@@ -1,0 +1,259 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Cart Checkout database contract</h1>
+<p><strong>Structure validated; business write assignment Proposed.</strong> Cart and checkout intent; Order Management owns orders, Inventory owns holds, Payments owns monetary truth. Read access or a contract surface does not confer write ownership. Exact operation transactions/DTO columns are in <a href="APIs.html">APIs</a>; shared audit/outbox/idempotency writes are owner-coordinated infrastructure.</p>
+<h2>Proposed owned tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Classification</th>
+<th>Write-owner approval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/cart_items.html"><code>commerce.cart_items</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/carts.html"><code>commerce.carts</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/checkouts.html"><code>commerce.checkouts</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+</tbody>
+</table>
+<h2>Contract reads and writes</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Exact read columns</th>
+<th>Exact proposed write columns</th>
+<th>Proposed data owner</th>
+<th>API IDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><code>commerce_class</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-018, API-019, API-020, API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td><code>family_member_id</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Prescription_Upload</td>
+<td>API-020, API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/cart_items.html"><code>commerce.cart_items</code></a></td>
+<td><code>cart_id</code>, <code>id</code>, <code>prescription_id</code>, <code>product_id</code>, <code>quantity</code>, <code>row_version</code>, <code>unit_price_snapshot</code></td>
+<td><code>cart_id</code>, <code>product_id</code>, <code>quantity</code>, <code>unit_price_snapshot</code></td>
+<td>Cart_Checkout</td>
+<td>API-018, API-019, API-020, API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/carts.html"><code>commerce.carts</code></a></td>
+<td><code>currency</code>, <code>expires_at</code>, <code>id</code>, <code>merged_into_cart_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td><code>currency</code>, <code>status</code>, <code>user_id</code></td>
+<td>Cart_Checkout</td>
+<td>API-018, API-019, API-020, API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/checkouts.html"><code>commerce.checkouts</code></a></td>
+<td>None</td>
+<td><code>address_id</code>, <code>cart_id</code>, <code>checkout_number</code>, <code>expires_at</code>, <code>idempotency_key</code>, <code>inventory_snapshot</code>, <code>prescription_snapshot</code>, <code>pricing_snapshot</code>, <code>serviceability_snapshot</code>, <code>status</code>, <code>user_id</code></td>
+<td>Cart_Checkout</td>
+<td>API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td>None</td>
+<td><code>commerce_class_snapshot</code>, <code>commerce_class_version_snapshot</code>, <code>discount_amount</code>, <code>line_total</code>, <code>order_id</code>, <code>product_id</code>, <code>product_snapshot</code>, <code>quantity</code>, <code>status</code>, <code>tax_amount</code>, <code>unit_mrp</code>, <code>unit_price</code></td>
+<td>Order_Operations</td>
+<td>API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td>None</td>
+<td><code>accepted_at</code>, <code>accepted_by_user_id</code>, <code>currency</code>, <code>discount_total</code>, <code>grand_total</code>, <code>line_items_snapshot</code>, <code>order_id</code>, <code>other_charges_total</code>, <code>price_snapshot</code>, <code>quote_hash</code>, <code>revision_number</code>, <code>shipping_snapshot</code>, <code>shipping_total</code>, <code>status</code>, <code>subtotal</code>, <code>tax_total</code></td>
+<td>Order_Operations</td>
+<td>API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_status_history.html"><code>commerce.order_status_history</code></a></td>
+<td>None</td>
+<td><code>changed_at</code>, <code>changed_by_user_id</code>, <code>from_status</code>, <code>order_id</code>, <code>reason_code</code>, <code>to_status</code></td>
+<td>Order_Operations</td>
+<td>API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td>None</td>
+<td><code>checkout_id</code>, <code>currency</code>, <code>current_revision_id</code>, <code>discount_total</code>, <code>grand_total</code>, <code>order_number</code>, <code>other_charges_total</code>, <code>patient_profile_id</code>, <code>shipping_address_snapshot</code>, <code>shipping_total</code>, <code>source_channel</code>, <code>status</code>, <code>subtotal</code>, <code>tax_total</code>, <code>user_id</code></td>
+<td>Order_Operations</td>
+<td>API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/customer/addresses.html"><code>customer.addresses</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Customer_Accounts</td>
+<td>API-020, API-021</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td><code>customer_user_id</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Customer_Accounts</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/serviceability_rules.html"><code>logistics.serviceability_rules</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Delivery_Operations</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Admin_CMS</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>promotion_id</code>, <code>row_version</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>status</code>, <code>valid_from</code>, <code>valid_until</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td><code>id</code>, <code>price_book_id</code>, <code>product_id</code>, <code>row_version</code>, <code>selling_price</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/promotion_redemptions.html"><code>pricing.promotion_redemptions</code></a></td>
+<td><code>coupon_code_id</code>, <code>id</code>, <code>order_id</code>, <code>promotion_id</code>, <code>promotion_version_id</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/promotion_versions.html"><code>pricing.promotion_versions</code></a></td>
+<td><code>id</code>, <code>promotion_id</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-020</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>None</td>
+<td>Finance_Payments</td>
+<td>API-020</td>
+</tr>
+</tbody>
+</table>
+<h2>Master and transaction dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Controlled table</th>
+<th>Classification</th>
+<th>Lifecycle and initial data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/patient_profiles.html"><code>clinical.patient_profiles</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/customer/family_members.html"><code>customer.family_members</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/serviceability_rules.html"><code>logistics.serviceability_rules</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/application_settings.html"><code>platform.application_settings</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/coupon_codes.html"><code>pricing.coupon_codes</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/promotions.html"><code>pricing.promotions</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+</tbody>
+</table>
+<p>Every mutation must enter the authoritative owner command with explicit scope/version, apply only that command’s invariant, and commit aggregate/audit/outbox together. External provider/file/message effects occur after commit; idempotency and recovery are per endpoint. Shared-table audit/outbox infrastructure does not acquire domain ownership. Physical SQL guards are recorded on each linked table page; application authorization remains additional.</p>
+</main></body></html>

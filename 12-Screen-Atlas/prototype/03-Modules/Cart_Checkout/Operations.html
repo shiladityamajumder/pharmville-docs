@@ -1,0 +1,105 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Operations · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Cart Checkout operations and acceptance</h1>
+<h2>Workflow and state ownership</h2>
+<p>Cart and checkout intent; Order Management owns orders, Inventory owns holds, Payments owns monetary truth.</p>
+<p><a href="../../06-Workflows/WF-003-Cart-Quote-and-Reservation.html">WF-003</a>, <a href="../../06-Workflows/WF-004-Prescription-Intake-and-Review.html">WF-004</a>, <a href="../../06-Workflows/WF-005-Payment-and-Confirmation.html">WF-005</a>, <a href="../../06-Workflows/WF-006-Licensed-Site-Allocation.html">WF-006</a>. The <a href="LLD.html">LLD</a> holds module algorithms and transition cases; <a href="APIs.html">APIs</a> holds command-specific allowed/denied transitions. <a href="../../07-Engineering/State-and-Recovery-Contracts.html">Shared recovery contracts</a> define cross-owner compensation.</p>
+<h2>Authentication and authorization</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Authentication</th>
+<th>Roles / permission</th>
+<th>Command owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-018 GET <code>/v1/me/cart</code></td>
+<td>Yes</td>
+<td>Customer; cart-checkout.read.own</td>
+<td>Cart_Checkout</td>
+</tr>
+<tr>
+<td>API-019 PUT <code>/v1/me/cart/items</code></td>
+<td>Yes</td>
+<td>Customer; cart-checkout.manage.own</td>
+<td>Cart_Checkout</td>
+</tr>
+<tr>
+<td>API-020 POST <code>/v1/checkouts/quotes</code></td>
+<td>Yes</td>
+<td>Customer; cart-checkout.manage.own</td>
+<td>Cart_Checkout</td>
+</tr>
+<tr>
+<td>API-021 POST <code>/v1/checkouts</code></td>
+<td>Yes</td>
+<td>Customer; cart-checkout.manage.own</td>
+<td>Cart_Checkout</td>
+</tr>
+</tbody>
+</table>
+<p>Resource/patient/location checks and sensitive-field filtering are endpoint-specific in <a href="APIs.html">APIs</a>; roles never replace object authorization. For file/provider callbacks, use the documented capability/signature path. <a href="../../07-Engineering/Security.html">Security</a> applies alongside the exact retained SQL ACL/RLS policies.</p>
+<h2>Designed tests and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Normal case</th>
+<th>Denied / failure evidence</th>
+<th>Execution status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CHK-01</code></td>
+<td><a href="LLD.html">TC-CHK-01-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>CHK-02</code></td>
+<td><a href="LLD.html">TC-CHK-02-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>CHK-03</code></td>
+<td><a href="LLD.html">TC-CHK-03-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>CHK-04</code></td>
+<td><a href="LLD.html">TC-CHK-04-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>CHK-05</code></td>
+<td><a href="LLD.html">TC-CHK-05-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>CHK-06</code></td>
+<td><a href="LLD.html">TC-CHK-06-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>CHK-07</code></td>
+<td><a href="LLD.html">TC-CHK-07-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+<tr>
+<td><code>CHK-08</code></td>
+<td><a href="LLD.html">TC-CHK-08-OK</a></td>
+<td><a href="Edge-Cases.html">Feature edge cases</a> and endpoint CT scenarios</td>
+<td>Designed / NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<p>Each endpoint additionally defines validation, authentication, authorization, business-gate, duplicate-intent, stale-version/concurrency and recovery cases. No execution is claimed. <a href="../../07-Engineering/Testing.html">Testing strategy</a> separates schema parity from application acceptance; <a href="../../08-Development-Plan/Implementation-Plan.html">delivery tasks</a> preserve existing TASK IDs.</p>
+</main></body></html>

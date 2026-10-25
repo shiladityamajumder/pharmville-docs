@@ -1,0 +1,60 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Business Flow · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Reporting business flow</h1>
+<p><strong>Status: Proposed workflow; not implemented.</strong> Accountable role: Reporting / Finance analytics. Report definitions, runs and scoped read-only outputs; source domains own data and correction commands.</p>
+<h2>Normal flow</h2>
+<ol>
+<li>Authorize report definition and scope; snapshot validated filters without granting arbitrary SQL.</li>
+<li>Create one export job/run and use approved read interfaces with consistent bounded queries.</li>
+<li>Generate REP-07 Excel .xlsx output; protect the stored export with expiring resource-scoped access.</li>
+<li>Audit requests/downloads and expose pending/failed outcomes; report retries cannot create business corrections.</li>
+</ol>
+<h2>Requirements and acceptance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Inherited requirement</th>
+<th>Designed acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>REP-01</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-REP-01-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>REP-02</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-REP-02-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>REP-03</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-REP-03-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>REP-04</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-REP-04-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>REP-05</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-REP-05-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>REP-06</code></td>
+<td>Should (draft)</td>
+<td><a href="LLD.html">TC-REP-06-OK / adverse cases</a></td>
+</tr>
+<tr>
+<td><code>REP-07</code></td>
+<td>Must (draft)</td>
+<td><a href="LLD.html">TC-REP-07-OK / adverse cases</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Orchestration and exceptions</h2>
+<p><a href="../../06-Workflows/WF-012-Report-Export-and-Audit.html">WF-012</a>. Exact transitions, recovery and permission checks remain in <a href="LLD.html">LLD</a>, <a href="APIs.html">endpoint contracts</a>, <a href="Edge-Cases.html">edge cases</a> and the <a href="../../07-Engineering/State-and-Recovery-Contracts.html">state/ownership contract</a>.</p>
+<p><a href="../../00-Business-Guide/Reporting-and-Audit.html">Shared business journey</a> supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-010; D-013; D-024.</p>
+</main></body></html>

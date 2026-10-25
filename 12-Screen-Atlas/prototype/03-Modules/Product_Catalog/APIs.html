@@ -1,0 +1,4612 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>APIs · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Product Catalog API contracts</h1>
+<p><strong>Proposed technical blueprint · Unapproved · Not Implemented.</strong> Contract completeness is independent of approval and runtime evidence. <a href="../../05-APIs/API-Contract-Coverage.html">Coverage</a> · <a href="../../05-APIs/openapi.yaml">OpenAPI 3.1</a> · <a href="../../05-APIs/Planning-Decisions.html">decisions</a> · <a href="../../05-APIs/API-Conventions.html">DTO conventions</a>. Every CT scenario is Designed / NOT RUN.</p>
+<p>&lt;a id=&quot;product-catalog-api-contracts&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-010--get-v1catalogcategories&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-011--get-v1catalogproducts&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-1&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-012--get-v1catalogproductsproduct_id&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-2&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-013--get-v1catalogsearch&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-3&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-014--get-v1catalogavailability&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-4&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-015--post-v1admincatalogimports&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-5&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-016--post-v1admincatalogproductsproduct_idclassification&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-6&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-6&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-6&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-6&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-6&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;api-017--post-v1admincatalogproductsproduct_idpublish&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;caller-permissions-and-dependencies-7&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;http-request-contract-7&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;success-response-illustrative-7&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;errors-concurrency-and-failure-recovery-7&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;required-verification-7&quot;&gt;&lt;/a&gt;</p>
+<h2>Operation index</h2>
+<table>
+<thead>
+<tr>
+<th>API ID</th>
+<th>Method/path</th>
+<th>Purpose</th>
+<th>Documentation status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API-010</td>
+<td><code>GET /v1/catalog/categories</code></td>
+<td>Browse the active category hierarchy.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-011</td>
+<td><code>GET /v1/catalog/products</code></td>
+<td>Browse published products in an optional category.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-012</td>
+<td><code>GET /v1/catalog/products/{product_id}</code></td>
+<td>Read a published product with safe composition and price projections.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-013</td>
+<td><code>GET /v1/catalog/search</code></td>
+<td>Search published product names and approved salt aliases.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-014</td>
+<td><code>GET /v1/catalog/availability</code></td>
+<td>Show advisory availability for one product and delivery postal code.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-015</td>
+<td><code>POST /v1/admin/catalog/imports</code></td>
+<td>Accept a clean catalog import file for row validation.</td>
+<td>Incomplete — D-019/D-024: spreadsheet columns, row atomicity and durable import result/status model are not documented.</td>
+</tr>
+<tr>
+<td>API-016</td>
+<td><code>POST /v1/admin/catalog/products/{product_id}/classification</code></td>
+<td>Approve a product commerce classification with immutable evidence.</td>
+<td>Complete proposed</td>
+</tr>
+<tr>
+<td>API-017</td>
+<td><code>POST /v1/admin/catalog/products/{product_id}/publish</code></td>
+<td>Publish an approved complete product into customer discovery.</td>
+<td>Complete proposed</td>
+</tr>
+</tbody>
+</table>
+<h2>Feature-to-operation coverage</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Requirement</th>
+<th>Operation coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAT-01</td>
+<td>Browse by category and sub-category</td>
+<td>API-010, API-011</td>
+</tr>
+<tr>
+<td>CAT-02</td>
+<td>Product page: brand, manufacturer, composition, pack size, MRP, price, images, &quot;Prescription required&quot; label</td>
+<td>API-012</td>
+</tr>
+<tr>
+<td>CAT-03</td>
+<td>Search by name, brand and composition, with typo tolerance and autosuggest</td>
+<td>API-013</td>
+</tr>
+<tr>
+<td>CAT-04</td>
+<td>Availability for the customer's pin code (in stock / out of stock)</td>
+<td>API-014</td>
+</tr>
+<tr>
+<td>CAT-05</td>
+<td>Alternative medicines: same composition, strength and dosage form, ranked by a configurable rule</td>
+<td>No direct operation; see <a href="../../05-APIs/Journey-API-Gaps.html">journey/API gaps</a>. Existing requirement retained; no invented CRUD completion.</td>
+</tr>
+<tr>
+<td>CAT-06</td>
+<td>Placeholder image when a product has none</td>
+<td>No direct operation; see <a href="../../05-APIs/Journey-API-Gaps.html">journey/API gaps</a>. Existing requirement retained; no invented CRUD completion.</td>
+</tr>
+</tbody>
+</table>
+<h2>API-010 — GET <code>/v1/catalog/categories</code></h2>
+<p><strong>Browse the active category hierarchy.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Browse the active category hierarchy</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Product_Catalog</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Public</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>CAT-01</code>; <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/catalog/categories</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NO</td>
+<td>None (purpose-bound pre-login proof where supplied)</td>
+<td>Public</td>
+<td>Published catalog read (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Public catalog access: no bearer, existing session, login challenge or role is required. Expose only the published approved safe projection; availability is advisory and never grants stock, customer or clinical access.</p>
+<p>Only is_active and nondeleted categories; parent IDs are public UUIDs; pagination does not imply a full subtree.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Pre-login/provider trust path; no bearer.</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<h3>Query parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>limit</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>20</td>
+<td>minimum=1; maximum=100</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>0</td>
+<td>minimum=0; maximum=100000</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>parentCategoryId</td>
+<td>string (uuid)</td>
+<td>Optional</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+</tbody>
+</table>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>display_order ASC, id ASC</code>. Pagination: offset.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>CatalogCategoryListData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>categories</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>categories[].categoryId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public projection of catalog.categories.id.</td>
+</tr>
+<tr>
+<td><code>categories[].name</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>catalog.categories.name.</td>
+</tr>
+<tr>
+<td><code>categories[].slug</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>Stable category code; does not expose internal_id.</td>
+</tr>
+<tr>
+<td><code>categories[].parentCategoryId</code></td>
+<td>string/null (uuid)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>catalog.categories.parent_id; null for a root.</td>
+</tr>
+<tr>
+<td><code>categories[].level</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=0</td>
+<td>catalog.categories.level.</td>
+</tr>
+<tr>
+<td><code>categories[].displayOrder</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=0</td>
+<td>catalog.categories.display_order.</td>
+</tr>
+</tbody>
+</table>
+<p>Pagination metadata: <code>totalCount: integer ≥0</code>, <code>limit: integer 1–100</code>, <code>offset: integer 0–100000</code>, <code>hasNext: boolean</code>. Empty list returns <code>[]</code> with hasNext false. No snapshot isolation is promised.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;categories&quot;: [
+      {
+        &quot;categoryId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;name&quot;: &quot;Example personal care item&quot;,
+        &quot;slug&quot;: &quot;example-personal-care-item&quot;,
+        &quot;parentCategoryId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;level&quot;: 0,
+        &quot;displayOrder&quot;: 0
+      }
+    ]
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: {
+      &quot;totalCount&quot;: 1,
+      &quot;limit&quot;: 20,
+      &quot;offset&quot;: 0,
+      &quot;hasNext&quot;: false
+    }
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-010 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Read</td>
+<td><code>display_order</code>, <code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>level</code>, <code>name</code>, <code>parent_id</code>, <code>row_version</code>, <code>slug</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.categories[].categoryId</td>
+<td>catalog.categories.id</td>
+</tr>
+<tr>
+<td>data.categories[].name</td>
+<td>catalog.categories.name</td>
+</tr>
+<tr>
+<td>data.categories[].slug</td>
+<td>catalog.categories.slug</td>
+</tr>
+<tr>
+<td>data.categories[].parentCategoryId</td>
+<td>catalog.categories.parent_id</td>
+</tr>
+<tr>
+<td>data.categories[].level</td>
+<td>catalog.categories.level</td>
+</tr>
+<tr>
+<td>data.categories[].displayOrder</td>
+<td>catalog.categories.display_order</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Only is_active and nondeleted categories; parent IDs are public UUIDs; pagination does not imply a full subtree.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>offset; display_order ASC, id ASC; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. Inactive parent/filter is not disclosed; an empty page is successful.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-010-HAPPY</code></td>
+<td>Valid Public context and documented fixture for browse the active category hierarchy.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-010-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-010-AUTH</code></td>
+<td>Call without bearer, then supply invalid purpose-bound proof if this operation accepts one.</td>
+<td>Public operation must not require bearer; invalid proof never establishes a session.</td>
+</tr>
+<tr>
+<td><code>CT-API-010-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove Published catalog read.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-010-RULE</code></td>
+<td>Only is_active and nondeleted categories; parent IDs are public UUIDs; pagination does not imply a full subtree.</td>
+<td>Inactive parent/filter is not disclosed; an empty page is successful.</td>
+</tr>
+<tr>
+<td><code>CT-API-010-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-010-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-010-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-010-RECOVERY</code></td>
+<td>Dependency timeout during browse the active category hierarchy.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-CAT-01-OK</code>, <code>TC-CAT-01-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-011 — GET <code>/v1/catalog/products</code></h2>
+<p><strong>Browse published products in an optional category.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Browse published products in an optional category</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Product_Catalog</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Public</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>CAT-01</code>; <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/catalog/products</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NO</td>
+<td>None (purpose-bound pre-login proof where supplied)</td>
+<td>Public</td>
+<td>Published catalog read (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Public catalog access: no bearer, existing session, login challenge or role is required. Expose only the published approved safe projection; availability is advisory and never grants stock, customer or clinical access.</p>
+<p>Only active, published products with approved P/M/O classification. Category filter narrows results; no unapproved clinical attributes.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Pre-login/provider trust path; no bearer.</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<h3>Query parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>limit</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>20</td>
+<td>minimum=1; maximum=100</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>0</td>
+<td>minimum=0; maximum=100000</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>categoryId</td>
+<td>string (uuid)</td>
+<td>Optional</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+</tbody>
+</table>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>name ASC, id ASC</code>. Pagination: offset.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>CatalogProductListData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>products</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>products[].productId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public projection of catalog.products.id.</td>
+</tr>
+<tr>
+<td><code>products[].name</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>catalog.products.name.</td>
+</tr>
+<tr>
+<td><code>products[].displayName</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>catalog.products.display_name.</td>
+</tr>
+<tr>
+<td><code>products[].brandName</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>Derived from catalog.brands.name; exact join/filter requires module approval.</td>
+</tr>
+<tr>
+<td><code>products[].categoryId</code></td>
+<td>string/null (uuid)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>catalog.products.category_id.</td>
+</tr>
+<tr>
+<td><code>products[].commerceClass</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;P&quot;, &quot;M&quot;, &quot;O&quot;]</td>
+<td>Approved catalog.products.commerce_class; public projection filters unknown/unapproved classes even though persistence permits null.</td>
+</tr>
+<tr>
+<td><code>products[].prescriptionRequired</code></td>
+<td>boolean</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>catalog.products.prescription_required.</td>
+</tr>
+<tr>
+<td><code>products[].packSizeDisplay</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=128</td>
+<td>catalog.products.pack_size_display.</td>
+</tr>
+<tr>
+<td><code>products[].strengthDisplay</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=128</td>
+<td>catalog.products.strength_display.</td>
+</tr>
+</tbody>
+</table>
+<p>Pagination metadata: <code>totalCount: integer ≥0</code>, <code>limit: integer 1–100</code>, <code>offset: integer 0–100000</code>, <code>hasNext: boolean</code>. Empty list returns <code>[]</code> with hasNext false. No snapshot isolation is promised.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;products&quot;: [
+      {
+        &quot;productId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;name&quot;: &quot;Example personal care item&quot;,
+        &quot;displayName&quot;: &quot;Example personal care item&quot;,
+        &quot;brandName&quot;: &quot;Synthetic demonstration brand&quot;,
+        &quot;categoryId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;commerceClass&quot;: &quot;O&quot;,
+        &quot;prescriptionRequired&quot;: false,
+        &quot;packSizeDisplay&quot;: &quot;1 unit&quot;,
+        &quot;strengthDisplay&quot;: null
+      }
+    ]
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: {
+      &quot;totalCount&quot;: 1,
+      &quot;limit&quot;: 20,
+      &quot;offset&quot;: 0,
+      &quot;hasNext&quot;: false
+    }
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-011 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Read</td>
+<td><code>brand_id</code>, <code>category_id</code>, <code>commerce_class</code>, <code>display_name</code>, <code>id</code>, <code>is_deleted</code>, <code>name</code>, <code>pack_size_display</code>, <code>prescription_required</code>, <code>row_version</code>, <code>status</code>, <code>strength_display</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>parent_id</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>name</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.products[].productId</td>
+<td>catalog.products.id</td>
+</tr>
+<tr>
+<td>data.products[].name</td>
+<td>catalog.products.name</td>
+</tr>
+<tr>
+<td>data.products[].displayName</td>
+<td>catalog.products.display_name</td>
+</tr>
+<tr>
+<td>data.products[].brandName</td>
+<td>catalog.brands.name</td>
+</tr>
+<tr>
+<td>data.products[].categoryId</td>
+<td>catalog.products.category_id</td>
+</tr>
+<tr>
+<td>data.products[].commerceClass</td>
+<td>catalog.products.commerce_class</td>
+</tr>
+<tr>
+<td>data.products[].prescriptionRequired</td>
+<td>catalog.products.prescription_required</td>
+</tr>
+<tr>
+<td>data.products[].packSizeDisplay</td>
+<td>catalog.products.pack_size_display</td>
+</tr>
+<tr>
+<td>data.products[].strengthDisplay</td>
+<td>catalog.products.strength_display</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a>, <a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a>, <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a>, <a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/organization/organizations.html"><code>organization.organizations</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Only active, published products with approved P/M/O classification. Category filter narrows results; no unapproved clinical attributes.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>offset; name ASC, id ASC; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. Invalid category UUID is 422; inactive products never leak through filters.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-011-HAPPY</code></td>
+<td>Valid Public context and documented fixture for browse published products in an optional category.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-011-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-011-AUTH</code></td>
+<td>Call without bearer, then supply invalid purpose-bound proof if this operation accepts one.</td>
+<td>Public operation must not require bearer; invalid proof never establishes a session.</td>
+</tr>
+<tr>
+<td><code>CT-API-011-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove Published catalog read.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-011-RULE</code></td>
+<td>Only active, published products with approved P/M/O classification. Category filter narrows results; no unapproved clinical attributes.</td>
+<td>Invalid category UUID is 422; inactive products never leak through filters.</td>
+</tr>
+<tr>
+<td><code>CT-API-011-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-011-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-011-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-011-RECOVERY</code></td>
+<td>Dependency timeout during browse published products in an optional category.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-CAT-01-OK</code>, <code>TC-CAT-01-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-012 — GET <code>/v1/catalog/products/{product_id}</code></h2>
+<p><strong>Read a published product with safe composition and price projections.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Read a published product with safe composition and price projections</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Product_Catalog</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Public</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>CAT-02</code>; <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/catalog/products/{product_id}</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NO</td>
+<td>None (purpose-bound pre-login proof where supplied)</td>
+<td>Public</td>
+<td>Published catalog read (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Public catalog access: no bearer, existing session, login challenge or role is required. Expose only the published approved safe projection; availability is advisory and never grants stock, customer or clinical access.</p>
+<p>Read approved content locale and current effective price book; null price means unavailable, not free. Descriptive product_type does not decide clinical review.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Pre-login/provider trust path; no bearer.</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>product_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>not applicable for this singleton</code>. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>CatalogProductDetailData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>product</code></td>
+<td>object</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>product.productId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public projection of catalog.products.id.</td>
+</tr>
+<tr>
+<td><code>product.name</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>catalog.products.name.</td>
+</tr>
+<tr>
+<td><code>product.displayName</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>catalog.products.display_name.</td>
+</tr>
+<tr>
+<td><code>product.brandName</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>Derived from catalog.brands.name; exact join/filter requires module approval.</td>
+</tr>
+<tr>
+<td><code>product.categoryId</code></td>
+<td>string/null (uuid)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>catalog.products.category_id.</td>
+</tr>
+<tr>
+<td><code>product.commerceClass</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;P&quot;, &quot;M&quot;, &quot;O&quot;]</td>
+<td>Approved catalog.products.commerce_class; public projection filters unknown/unapproved classes even though persistence permits null.</td>
+</tr>
+<tr>
+<td><code>product.prescriptionRequired</code></td>
+<td>boolean</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>catalog.products.prescription_required.</td>
+</tr>
+<tr>
+<td><code>product.packSizeDisplay</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=128</td>
+<td>catalog.products.pack_size_display.</td>
+</tr>
+<tr>
+<td><code>product.strengthDisplay</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=128</td>
+<td>catalog.products.strength_display.</td>
+</tr>
+<tr>
+<td><code>manufacturerName</code></td>
+<td>string/null</td>
+<td>Optional</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>Derived from catalog.manufacturers.name; hides license and internal organization fields.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string/null</td>
+<td>Optional</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Filtered localized projection of catalog.product_content.title/body; HTML/structured-content policy requires D-024 approval.</td>
+</tr>
+<tr>
+<td><code>contentLocale</code></td>
+<td>string/null</td>
+<td>Optional</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=16</td>
+<td>catalog.product_content.locale.</td>
+</tr>
+<tr>
+<td><code>salts</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>salts[].saltId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public catalog.salts.id reference.</td>
+</tr>
+<tr>
+<td><code>salts[].name</code></td>
+<td>string</td>
+<td>Optional</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Derived from the referenced salt master; confirm exact public label mapping under D-024.</td>
+</tr>
+<tr>
+<td><code>salts[].strength</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=128</td>
+<td>catalog.product_salts.strength.</td>
+</tr>
+<tr>
+<td><code>price</code></td>
+<td>object or null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Current approved price or null when unavailable.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;product&quot;: {
+      &quot;productId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+      &quot;name&quot;: &quot;Example personal care item&quot;,
+      &quot;displayName&quot;: &quot;Example personal care item&quot;,
+      &quot;brandName&quot;: &quot;Synthetic demonstration brand&quot;,
+      &quot;categoryId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+      &quot;commerceClass&quot;: &quot;O&quot;,
+      &quot;prescriptionRequired&quot;: false,
+      &quot;packSizeDisplay&quot;: &quot;1 unit&quot;,
+      &quot;strengthDisplay&quot;: null
+    },
+    &quot;manufacturerName&quot;: null,
+    &quot;description&quot;: &quot;Synthetic planning example; not an approved clinical claim.&quot;,
+    &quot;contentLocale&quot;: &quot;en-IN&quot;,
+    &quot;salts&quot;: [],
+    &quot;price&quot;: {
+      &quot;amount&quot;: &quot;26.25&quot;,
+      &quot;currency&quot;: &quot;INR&quot;
+    }
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for read a published product with safe composition and price projections. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-012 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Read</td>
+<td><code>brand_id</code>, <code>category_id</code>, <code>commerce_class</code>, <code>display_name</code>, <code>id</code>, <code>is_deleted</code>, <code>manufacturer_id</code>, <code>name</code>, <code>pack_size_display</code>, <code>prescription_required</code>, <code>row_version</code>, <code>status</code>, <code>strength_display</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>parent_id</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>name</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>name</code>, <code>organization_id</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_salts.html"><code>catalog.product_salts</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>product_id</code>, <code>row_version</code>, <code>salt_id</code>, <code>strength</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/salts.html"><code>catalog.salts</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_content.html"><code>catalog.product_content</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_deleted</code>, <code>locale</code>, <code>product_id</code>, <code>row_version</code>, <code>title</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>price_book_id</code>, <code>product_id</code>, <code>row_version</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>pricing domain owner (Proposed) projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/price_books.html"><code>pricing.price_books</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>status</code>, <code>valid_from</code>, <code>valid_until</code>, <code>warehouse_id</code></td>
+<td>pricing domain owner (Proposed) projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.product.productId</td>
+<td>catalog.products.id</td>
+</tr>
+<tr>
+<td>data.product.name</td>
+<td>catalog.products.name</td>
+</tr>
+<tr>
+<td>data.product.displayName</td>
+<td>catalog.products.display_name</td>
+</tr>
+<tr>
+<td>data.product.brandName</td>
+<td>catalog.brands.name</td>
+</tr>
+<tr>
+<td>data.product.categoryId</td>
+<td>catalog.products.category_id</td>
+</tr>
+<tr>
+<td>data.product.commerceClass</td>
+<td>catalog.products.commerce_class</td>
+</tr>
+<tr>
+<td>data.product.prescriptionRequired</td>
+<td>catalog.products.prescription_required</td>
+</tr>
+<tr>
+<td>data.product.packSizeDisplay</td>
+<td>catalog.products.pack_size_display</td>
+</tr>
+<tr>
+<td>data.product.strengthDisplay</td>
+<td>catalog.products.strength_display</td>
+</tr>
+<tr>
+<td>data.manufacturerName</td>
+<td>catalog.manufacturers.name</td>
+</tr>
+<tr>
+<td>data.description</td>
+<td>catalog.product_content.title</td>
+</tr>
+<tr>
+<td>data.contentLocale</td>
+<td>catalog.product_content.locale</td>
+</tr>
+<tr>
+<td>data.salts[].saltId</td>
+<td>catalog.salts.id</td>
+</tr>
+<tr>
+<td>data.salts[].name</td>
+<td>catalog.products.name</td>
+</tr>
+<tr>
+<td>data.salts[].strength</td>
+<td>catalog.product_salts.strength</td>
+</tr>
+<tr>
+<td>data.price</td>
+<td>API-only typed projection.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a>, <a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a>, <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a>, <a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/catalog/salts.html"><code>catalog.salts</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/marketplace/sellers.html"><code>marketplace.sellers</code></a>, <a href="../../04-Database/Tables/organization/organizations.html"><code>organization.organizations</code></a>, <a href="../../04-Database/Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Read approved content locale and current effective price book; null price means unavailable, not free. Descriptive product_type does not decide clinical review.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. Unpublished, deleted or unapproved product is privacy-safe 404; never expose cost price.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-012-HAPPY</code></td>
+<td>Valid Public context and documented fixture for read a published product with safe composition and price projections.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-012-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-012-AUTH</code></td>
+<td>Call without bearer, then supply invalid purpose-bound proof if this operation accepts one.</td>
+<td>Public operation must not require bearer; invalid proof never establishes a session.</td>
+</tr>
+<tr>
+<td><code>CT-API-012-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove Published catalog read.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-012-RULE</code></td>
+<td>Read approved content locale and current effective price book; null price means unavailable, not free. Descriptive product_type does not decide clinical review.</td>
+<td>Unpublished, deleted or unapproved product is privacy-safe 404; never expose cost price.</td>
+</tr>
+<tr>
+<td><code>CT-API-012-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-012-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-012-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-012-RECOVERY</code></td>
+<td>Dependency timeout during read a published product with safe composition and price projections.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-CAT-02-OK</code>, <code>TC-CAT-02-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-013 — GET <code>/v1/catalog/search</code></h2>
+<p><strong>Search published product names and approved salt aliases.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Search published product names and approved salt aliases</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Product_Catalog</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Public</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>CAT-03</code>; <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/catalog/search</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NO</td>
+<td>None (purpose-bound pre-login proof where supplied)</td>
+<td>Public</td>
+<td>Published catalog search (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Public catalog access: no bearer, existing session, login challenge or role is required. Expose only the published approved safe projection; availability is advisory and never grants stock, customer or clinical access.</p>
+<p>Trim q; search only safe approved documents, then recheck authoritative publication/classification to exclude stale indexed results.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Pre-login/provider trust path; no bearer.</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<h3>Query parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>limit</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>20</td>
+<td>minimum=1; maximum=100</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>integer</td>
+<td>Optional</td>
+<td>No</td>
+<td>0</td>
+<td>minimum=0; maximum=100000</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>q</td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>minLength=2; maxLength=120</td>
+<td>Trimmed product/salt query; minimum two characters.</td>
+</tr>
+</tbody>
+</table>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>relevance DESC, product id ASC</code>. Pagination: offset.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>CatalogSearchData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>items</code></td>
+<td>array&lt;object&gt;</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Nested typed projection.</td>
+</tr>
+<tr>
+<td><code>items[].productId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public projection of catalog.products.id.</td>
+</tr>
+<tr>
+<td><code>items[].name</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>catalog.products.name.</td>
+</tr>
+<tr>
+<td><code>items[].displayName</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>catalog.products.display_name.</td>
+</tr>
+<tr>
+<td><code>items[].brandName</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=255</td>
+<td>Derived from catalog.brands.name; exact join/filter requires module approval.</td>
+</tr>
+<tr>
+<td><code>items[].categoryId</code></td>
+<td>string/null (uuid)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>catalog.products.category_id.</td>
+</tr>
+<tr>
+<td><code>items[].commerceClass</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;P&quot;, &quot;M&quot;, &quot;O&quot;]</td>
+<td>Approved catalog.products.commerce_class; public projection filters unknown/unapproved classes even though persistence permits null.</td>
+</tr>
+<tr>
+<td><code>items[].prescriptionRequired</code></td>
+<td>boolean</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>catalog.products.prescription_required.</td>
+</tr>
+<tr>
+<td><code>items[].packSizeDisplay</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=128</td>
+<td>catalog.products.pack_size_display.</td>
+</tr>
+<tr>
+<td><code>items[].strengthDisplay</code></td>
+<td>string/null</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>maxLength=128</td>
+<td>catalog.products.strength_display.</td>
+</tr>
+</tbody>
+</table>
+<p>Pagination metadata: <code>totalCount: integer ≥0</code>, <code>limit: integer 1–100</code>, <code>offset: integer 0–100000</code>, <code>hasNext: boolean</code>. Empty list returns <code>[]</code> with hasNext false. No snapshot isolation is promised.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;items&quot;: [
+      {
+        &quot;productId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;name&quot;: &quot;Example personal care item&quot;,
+        &quot;displayName&quot;: &quot;Example personal care item&quot;,
+        &quot;brandName&quot;: &quot;Synthetic demonstration brand&quot;,
+        &quot;categoryId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+        &quot;commerceClass&quot;: &quot;O&quot;,
+        &quot;prescriptionRequired&quot;: false,
+        &quot;packSizeDisplay&quot;: &quot;1 unit&quot;,
+        &quot;strengthDisplay&quot;: null
+      }
+    ]
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: {
+      &quot;totalCount&quot;: 1,
+      &quot;limit&quot;: 20,
+      &quot;offset&quot;: 0,
+      &quot;hasNext&quot;: false
+    }
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-013 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Read</td>
+<td><code>brand_id</code>, <code>category_id</code>, <code>commerce_class</code>, <code>display_name</code>, <code>id</code>, <code>is_deleted</code>, <code>name</code>, <code>pack_size_display</code>, <code>prescription_required</code>, <code>row_version</code>, <code>status</code>, <code>strength_display</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>parent_id</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>name</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_salts.html"><code>catalog.product_salts</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>product_id</code>, <code>row_version</code>, <code>salt_id</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/salts.html"><code>catalog.salts</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/documents.html"><code>search.documents</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>row_version</code></td>
+<td>search domain owner (Proposed) projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/search/synonyms.html"><code>search.synonyms</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>search domain owner (Proposed) projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.items[].productId</td>
+<td>catalog.products.id</td>
+</tr>
+<tr>
+<td>data.items[].name</td>
+<td>catalog.products.name</td>
+</tr>
+<tr>
+<td>data.items[].displayName</td>
+<td>catalog.products.display_name</td>
+</tr>
+<tr>
+<td>data.items[].brandName</td>
+<td>catalog.brands.name</td>
+</tr>
+<tr>
+<td>data.items[].categoryId</td>
+<td>catalog.products.category_id</td>
+</tr>
+<tr>
+<td>data.items[].commerceClass</td>
+<td>catalog.products.commerce_class</td>
+</tr>
+<tr>
+<td>data.items[].prescriptionRequired</td>
+<td>catalog.products.prescription_required</td>
+</tr>
+<tr>
+<td>data.items[].packSizeDisplay</td>
+<td>catalog.products.pack_size_display</td>
+</tr>
+<tr>
+<td>data.items[].strengthDisplay</td>
+<td>catalog.products.strength_display</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a>, <a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a>, <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a>, <a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/catalog/salts.html"><code>catalog.salts</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/organization/organizations.html"><code>organization.organizations</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Trim q; search only safe approved documents, then recheck authoritative publication/classification to exclude stale indexed results.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>offset; relevance DESC, product id ASC; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. Search failure returns 503 with no fabricated match; retry GET. Empty matches return items [].</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-013-HAPPY</code></td>
+<td>Valid Public context and documented fixture for search published product names and approved salt aliases.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-013-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-013-AUTH</code></td>
+<td>Call without bearer, then supply invalid purpose-bound proof if this operation accepts one.</td>
+<td>Public operation must not require bearer; invalid proof never establishes a session.</td>
+</tr>
+<tr>
+<td><code>CT-API-013-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove Published catalog search.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-013-RULE</code></td>
+<td>Trim q; search only safe approved documents, then recheck authoritative publication/classification to exclude stale indexed results.</td>
+<td>Search failure returns 503 with no fabricated match; retry GET. Empty matches return items [].</td>
+</tr>
+<tr>
+<td><code>CT-API-013-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-013-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-013-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-013-RECOVERY</code></td>
+<td>Dependency timeout during search published product names and approved salt aliases.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-CAT-03-OK</code>, <code>TC-CAT-03-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-014 — GET <code>/v1/catalog/availability</code></h2>
+<p><strong>Show advisory availability for one product and delivery postal code.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Show advisory availability for one product and delivery postal code</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Product_Catalog</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Public</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>CAT-04</code>; <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/catalog/availability</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NO</td>
+<td>None (purpose-bound pre-login proof where supplied)</td>
+<td>Public</td>
+<td>Advisory catalog availability (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Public catalog access: no bearer, existing session, login challenge or role is required. Expose only the published approved safe projection; availability is advisory and never grants stock, customer or clinical access.</p>
+<p>Evaluate serviceability and freshness. Missing source/freshness evidence returns availability unconfirmed; do not disclose batch counts, exact locations or promise a reservation.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Pre-login/provider trust path; no bearer.</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>No request body.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Read or single-use credential semantics; no generic secret-response cache.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<h3>Query parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>productId</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+<tr>
+<td>postalCode</td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>minLength=1; maxLength=6; pattern=&quot;^[1-9][0-9]{5}$&quot;</td>
+<td>Optional allowlisted filter; does not widen authenticated scope.</td>
+</tr>
+</tbody>
+</table>
+<p>Only declared query fields are accepted. Sorting is fixed: <code>not applicable for this singleton</code>. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p><strong>No request body.</strong> JSON example: Not Applicable.</p>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>CatalogAvailabilityData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>productId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from catalog.products.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>postalCode</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>pattern=&quot;^[1-9][0-9]{5}$&quot;</td>
+<td>Public DTO value from organization.locations.postal_code. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>availability</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;in_stock&quot;, &quot;out_of_stock&quot;, &quot;unconfirmed&quot;]</td>
+<td>Derived advisory projection of authorized Inventory evidence; never reserves or guarantees stock.</td>
+</tr>
+<tr>
+<td><code>observedAt</code></td>
+<td>string/null (date-time)</td>
+<td>Required</td>
+<td>Yes</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>Derived from inventory observation evidence; null if not available.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;productId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;postalCode&quot;: &quot;201301&quot;,
+    &quot;availability&quot;: &quot;in_stock&quot;,
+    &quot;observedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared path/query/header field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-014 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Retry safe reads with bounded backoff; proof/token flows may require fresh authentication.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared path/query/header field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Read</td>
+<td><code>brand_id</code>, <code>category_id</code>, <code>commerce_class</code>, <code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>status</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>parent_id</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/stock_balances.html"><code>warehouse.stock_balances</code></a></td>
+<td>Read</td>
+<td><code>damaged_qty</code>, <code>id</code>, <code>inventory_observed_at</code>, <code>inventory_source</code>, <code>lot_id</code>, <code>on_hand_qty</code>, <code>quarantined_qty</code>, <code>reserved_qty</code>, <code>row_version</code>, <code>warehouse_id</code></td>
+<td>Inventory projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td>Read</td>
+<td><code>batch_number</code>, <code>expires_at</code>, <code>id</code>, <code>product_id</code>, <code>quality_status</code>, <code>recall_status</code>, <code>row_version</code>, <code>warehouse_id</code></td>
+<td>Inventory projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/logistics/serviceability_rules.html"><code>logistics.serviceability_rules</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>Delivery_Operations projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/locations.html"><code>organization.locations</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>organization_id</code>, <code>postal_code</code>, <code>row_version</code></td>
+<td>Admin_CMS via Organization owner projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td>Read</td>
+<td><code>expires_at</code>, <code>id</code>, <code>is_deleted</code>, <code>location_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>verification_status</code></td>
+<td>Admin_CMS via Organization owner projection / scoped joins; reading does not grant writes.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data.productId</td>
+<td>catalog.products.id</td>
+</tr>
+<tr>
+<td>data.postalCode</td>
+<td>organization.locations.postal_code</td>
+</tr>
+<tr>
+<td>data.availability</td>
+<td>Advisory projection of publication, serviceability, eligibility and fresh stock; no stock guarantee.</td>
+</tr>
+<tr>
+<td>data.observedAt</td>
+<td>Derived from inventory observation evidence; null if not available.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> Read-only operation: no domain mutation. Security/clinical/file access logging is a separate trusted append-only transaction; GET does not create cart/order/master records. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a>, <a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a>, <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a>, <a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/logistics/carriers.html"><code>logistics.carriers</code></a>, <a href="../../04-Database/Tables/organization/locations.html"><code>organization.locations</code></a>, <a href="../../04-Database/Tables/organization/organizations.html"><code>organization.organizations</code></a>, <a href="../../04-Database/Tables/procurement/suppliers.html"><code>procurement.suppliers</code></a>, <a href="../../04-Database/Tables/warehouse/bins.html"><code>warehouse.bins</code></a>, <a href="../../04-Database/Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Evaluate serviceability and freshness. Missing source/freshness evidence returns availability unconfirmed; do not disclose batch counts, exact locations or promise a reservation.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>GET retry is safe; no mutation/key.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Not Applicable to this read-only evaluation; read committed owner projections and expose freshness.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>120 reads/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed request deadline 3 seconds; safe GET retries up to 2 with jitter; no hidden partial response. No coverage yields out_of_stock or unconfirmed according to known evidence; reservation rechecks every gate.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-014-HAPPY</code></td>
+<td>Valid Public context and documented fixture for show advisory availability for one product and delivery postal code.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-014-VALIDATION</code></td>
+<td>Corrupt a concrete declared path/query/header or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-014-AUTH</code></td>
+<td>Call without bearer, then supply invalid purpose-bound proof if this operation accepts one.</td>
+<td>Public operation must not require bearer; invalid proof never establishes a session.</td>
+</tr>
+<tr>
+<td><code>CT-API-014-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove Advisory catalog availability.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-014-RULE</code></td>
+<td>Evaluate serviceability and freshness. Missing source/freshness evidence returns availability unconfirmed; do not disclose batch counts, exact locations or promise a reservation.</td>
+<td>No coverage yields out_of_stock or unconfirmed according to known evidence; reservation rechecks every gate.</td>
+</tr>
+<tr>
+<td><code>CT-API-014-DUPLICATE</code></td>
+<td>Repeat safe GET.</td>
+<td>No business writes on read.</td>
+</tr>
+<tr>
+<td><code>CT-API-014-CONCURRENCY</code></td>
+<td>Change underlying authorized rows while paging/reading.</td>
+<td>No cross-scope results; deterministic tie-breakers, documented freshness, no promised snapshot isolation.</td>
+</tr>
+<tr>
+<td><code>CT-API-014-STATE</code></td>
+<td>Read absent, expired or hidden resource according to this operation rule.</td>
+<td>Apply documented empty-list/404/blocked projection; no fabricated successful business state.</td>
+</tr>
+<tr>
+<td><code>CT-API-014-RECOVERY</code></td>
+<td>Dependency timeout during show advisory availability for one product and delivery postal code.</td>
+<td>503 and bounded safe retry; no domain mutation or hidden partial report.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-CAT-04-OK</code>, <code>TC-CAT-04-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-015 — POST <code>/v1/admin/catalog/imports</code></h2>
+<p><strong>Accept a clean catalog import file for row validation.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Accept a clean catalog import file for row validation</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Product_Catalog</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Catalog Manager</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Incomplete; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ADM-07</code>; <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/admin/catalog/imports</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Remaining contract gap:</strong> D-019/D-024: spreadsheet columns, row atomicity and durable import result/status model are not documented.</p>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Catalog Manager</td>
+<td>catalog.import (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Restrict organization/location through active memberships and the resource FK chain; a request filter can only narrow that scope. Specialized clinical/Finance privileges cannot be obtained through general Admin access.</p>
+<p>File must be privately owned, safe and a supported Excel format. Validate SKU uniqueness and approved classification/tax sources per row before publication.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-015_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>CatalogImportRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fileId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public platform.file_objects.id from a completed, privately uploaded and clean-scanned file.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;fileId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;
+}
+</code></pre>
+<p>File upload: Not Applicable to this JSON operation. Referenced file UUIDs must resolve to owned/authorized private objects; validate size/type, complete storage metadata and clean scan before use. Never accept a caller-controlled storage path/public URL.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>202</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>CatalogImportAcceptedData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>importId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Proposed API-only job reference; no catalog import-job table is documented.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;queued&quot;]</td>
+<td>Accepted for processing; does not claim import completion.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;importId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;status&quot;: &quot;queued&quot;
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-015.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks catalog.import or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for accept a clean catalog import file for row validation. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>File must be privately owned, safe and a supported Excel format. Validate SKU uniqueness and approved classification/tax sources per row before publication.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Keep invalid rows out of published catalog; retain a downloadable safe error report and retry identity.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Keep invalid rows out of published catalog; retain a downloadable safe error report and retry identity.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-015 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;REQUEST_VALIDATION_ERROR&quot;,
+    &quot;message&quot;: &quot;A declared body/path/query field violates its typed contract.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/platform/file_objects.html"><code>platform.file_objects</code></a></td>
+<td>Read</td>
+<td><code>access_type</code>, <code>classification</code>, <code>id</code>, <code>is_deleted</code>, <code>malware_scan_status</code>, <code>owner_id</code>, <code>owner_type</code>, <code>row_version</code>, <code>sha256</code>, <code>size_bytes</code>, <code>status</code></td>
+<td>Platform file service projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>status</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>product_id</code>, <code>row_version</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>pricing domain owner (Proposed) projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/platform/scheduled_jobs.html"><code>platform.scheduled_jobs</code></a></td>
+<td>Create/update evidence</td>
+<td><code>job_key</code>, <code>job_type</code>, <code>payload</code>, <code>status</code>, <code>next_run_at</code></td>
+<td>Admin_CMS / platform configuration owner owns these writes; Product_Catalog must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.fileId</td>
+<td>platform.file_objects.id</td>
+</tr>
+<tr>
+<td>data.importId</td>
+<td>Proposed API-only job reference; no catalog import-job table is documented.</td>
+</tr>
+<tr>
+<td>data.status</td>
+<td>platform.scheduled_jobs.status</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a>, <a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a>, <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a>, <a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>File must be privately owned, safe and a supported Excel format. Validate SKU uniqueness and approved classification/tax sources per row before publication.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-015 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Keep invalid rows out of published catalog; retain a downloadable safe error report and retry identity.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-015-HAPPY</code></td>
+<td>Valid Catalog Manager context and documented fixture for accept a clean catalog import file for row validation.</td>
+<td>HTTP 202; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-015-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-015-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-015-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove catalog.import.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-015-RULE</code></td>
+<td>File must be privately owned, safe and a supported Excel format. Validate SKU uniqueness and approved classification/tax sources per row before publication.</td>
+<td>Keep invalid rows out of published catalog; retain a downloadable safe error report and retry identity.</td>
+</tr>
+<tr>
+<td><code>CT-API-015-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-015-CONCURRENCY</code></td>
+<td>Race two accept a clean catalog import file for row validation. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-015-STATE</code></td>
+<td>Apply command after Keep invalid rows out of published catalog; retain a downloadable safe error report and retry identity.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-015-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Keep invalid rows out of published catalog; retain a downloadable safe error report and retry identity.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ADM-07-OK</code>, <code>TC-ADM-07-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-016 — POST <code>/v1/admin/catalog/products/{product_id}/classification</code></h2>
+<p><strong>Approve a product commerce classification with immutable evidence.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Approve a product commerce classification with immutable evidence</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Product_Catalog</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Catalog Manager with Pharmacy classification approval</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ADM-06</code>; <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/admin/catalog/products/{product_id}/classification</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Catalog Manager with Pharmacy classification approval</td>
+<td>catalog.classification.approve (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Restrict organization/location through active memberships and the resource FK chain; a request filter can only narrow that scope. Specialized clinical/Finance privileges cannot be obtained through general Admin access.</p>
+<p>Only P requires prescription and pharmacist review; M/O do not. Increment class version and retain old/new classification evidence. ReasonCode is required by the history schema and must be supplied by an approved source-change reason.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-016_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>product_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>CatalogClassificationRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>commerceClass</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;P&quot;, &quot;M&quot;, &quot;O&quot;]</td>
+<td>catalog.products.commerce_class allowed values.</td>
+</tr>
+<tr>
+<td><code>expectedRowVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Expected catalog.products.row_version.</td>
+</tr>
+<tr>
+<td><code>reasonCode</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minLength=1; maxLength=64</td>
+<td>Required catalog.product_classification_history.reason_code; approved reason vocabulary.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;commerceClass&quot;: &quot;P&quot;,
+  &quot;expectedRowVersion&quot;: 1,
+  &quot;reasonCode&quot;: &quot;SOURCE_CORRECTION&quot;
+}
+</code></pre>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>CatalogClassificationData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>productId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from catalog.products.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>commerceClass</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;P&quot;, &quot;M&quot;, &quot;O&quot;]</td>
+<td>Public DTO value from catalog.products.commerce_class. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>prescriptionRequired</code></td>
+<td>boolean</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>Typed schema; reject unknown object properties.</td>
+<td>Derived by the database invariant: true exactly when commerceClass is P.</td>
+</tr>
+<tr>
+<td><code>classificationVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>catalog.products.commerce_class_version.</td>
+</tr>
+<tr>
+<td><code>rowVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>catalog.products.row_version.</td>
+</tr>
+<tr>
+<td><code>approvedAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>catalog.products.commerce_class_approved_at.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;productId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;commerceClass&quot;: &quot;P&quot;,
+    &quot;prescriptionRequired&quot;: true,
+    &quot;classificationVersion&quot;: 1,
+    &quot;rowVersion&quot;: 1,
+    &quot;approvedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-016.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks catalog.classification.approve or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for approve a product commerce classification with immutable evidence. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Only P requires prescription and pharmacist review; M/O do not. Increment class version and retain old/new classification evidence. ReasonCode is required by the history schema and must be supplied by an approved source-change reason.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Unknown class, missing reason or stale version leaves product unchanged; invalidate dependent future quotes/clinical assumptions.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>STALE_VERSION</code></td>
+<td>An expected aggregate/row version no longer matches current committed state.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the current approve a product commerce classification with immutable evidence. context and re-evaluate; no partial mutation.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Unknown class, missing reason or stale version leaves product unchanged; invalidate dependent future quotes/clinical assumptions.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-016 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;STALE_VERSION&quot;,
+    &quot;message&quot;: &quot;An expected aggregate/row version no longer matches current committed state.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Read</td>
+<td><code>brand_id</code>, <code>category_id</code>, <code>commerce_class</code>, <code>commerce_class_approved_at</code>, <code>commerce_class_version</code>, <code>id</code>, <code>is_deleted</code>, <code>prescription_required</code>, <code>row_version</code>, <code>status</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>parent_id</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_classification_history.html"><code>catalog.product_classification_history</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>new_class</code>, <code>old_class</code>, <code>product_id</code>, <code>reason_code</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Create/update evidence</td>
+<td><code>commerce_class</code>, <code>prescription_required</code>, <code>commerce_class_version</code>, <code>commerce_class_approved_at</code>, <code>commerce_class_approved_by_user_id</code></td>
+<td>Product_Catalog owns these writes; Product_Catalog must invoke that narrow owner command.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_classification_history.html"><code>catalog.product_classification_history</code></a></td>
+<td>Create/update evidence</td>
+<td><code>product_id</code>, <code>old_class</code>, <code>new_class</code>, <code>version</code>, <code>approved_by_user_id</code>, <code>approved_at</code>, <code>reason_code</code>, <code>decision_note</code></td>
+<td>Product_Catalog owns these writes; Product_Catalog must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.commerceClass</td>
+<td>catalog.products.commerce_class</td>
+</tr>
+<tr>
+<td>request.expectedRowVersion</td>
+<td>catalog.products.row_version</td>
+</tr>
+<tr>
+<td>request.reasonCode</td>
+<td>catalog.product_classification_history.reason_code</td>
+</tr>
+<tr>
+<td>data.productId</td>
+<td>catalog.products.id</td>
+</tr>
+<tr>
+<td>data.commerceClass</td>
+<td>catalog.products.commerce_class</td>
+</tr>
+<tr>
+<td>data.prescriptionRequired</td>
+<td>catalog.products.prescription_required</td>
+</tr>
+<tr>
+<td>data.classificationVersion</td>
+<td>catalog.products.commerce_class_version</td>
+</tr>
+<tr>
+<td>data.rowVersion</td>
+<td>catalog.products.row_version</td>
+</tr>
+<tr>
+<td>data.approvedAt</td>
+<td>catalog.products.commerce_class_approved_at</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a>, <a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a>, <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a>, <a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/organization/organizations.html"><code>organization.organizations</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Only P requires prescription and pharmacist review; M/O do not. Increment class version and retain old/new classification evidence. ReasonCode is required by the history schema and must be supplied by an approved source-change reason.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-016 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Unknown class, missing reason or stale version leaves product unchanged; invalidate dependent future quotes/clinical assumptions.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-016-HAPPY</code></td>
+<td>Valid Catalog Manager with Pharmacy classification approval context and documented fixture for approve a product commerce classification with immutable evidence.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-016-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-016-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-016-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove catalog.classification.approve.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-016-RULE</code></td>
+<td>Only P requires prescription and pharmacist review; M/O do not. Increment class version and retain old/new classification evidence. ReasonCode is required by the history schema and must be supplied by an approved source-change reason.</td>
+<td>Unknown class, missing reason or stale version leaves product unchanged; invalidate dependent future quotes/clinical assumptions.</td>
+</tr>
+<tr>
+<td><code>CT-API-016-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-016-CONCURRENCY</code></td>
+<td>Race two approve a product commerce classification with immutable evidence. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-016-STATE</code></td>
+<td>Apply command after Unknown class, missing reason or stale version leaves product unchanged; invalidate dependent future quotes/clinical assumptions.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-016-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Unknown class, missing reason or stale version leaves product unchanged; invalidate dependent future quotes/clinical assumptions.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ADM-06-OK</code>, <code>TC-ADM-06-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+<h2>API-017 — POST <code>/v1/admin/catalog/products/{product_id}/publish</code></h2>
+<p><strong>Publish an approved complete product into customer discovery.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Proposed contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API name</td>
+<td>Publish an approved complete product into customer discovery</td>
+</tr>
+<tr>
+<td>Version / owner</td>
+<td>v1 / Product_Catalog</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Catalog Manager</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Documentation Complete proposed; approval Unapproved; implementation Not Implemented</td>
+</tr>
+<tr>
+<td>Requirement / workflow</td>
+<td><code>ADM-06</code>; <a href="../../06-Workflows/WF-002-Search-and-Availability.html">WF-002</a></td>
+</tr>
+<tr>
+<td>Design sources</td>
+<td><a href="HLD.html">Module HLD</a>, <a href="LLD.html">LLD</a>, <a href="Edge-Cases.html">edge cases</a>, <a href="../../07-Engineering/State-and-Recovery-Contracts.html">ownership</a></td>
+</tr>
+<tr>
+<td>Environment URL</td>
+<td><code>https://{environment}.api.pharmville.example/v1/admin/catalog/products/{product_id}/publish</code> (placeholder host from existing OpenAPI; no deployment asserted)</td>
+</tr>
+</tbody>
+</table>
+<h3>Authentication and authorization</h3>
+<table>
+<thead>
+<tr>
+<th>Authentication required</th>
+<th>Mechanism</th>
+<th>Allowed roles</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YES</td>
+<td>JWT</td>
+<td>Catalog Manager</td>
+<td>catalog.publish (Proposed grant code)</td>
+</tr>
+</tbody>
+</table>
+<p>Resolve the subject and effective action grant on the server; all supplied UUIDs are references, never authorization proof. Restrict organization/location through active memberships and the resource FK chain; a request filter can only narrow that scope. Specialized clinical/Finance privileges cannot be obtained through general Admin access.</p>
+<p>Draft/review to active only after approved class, valid product sources and applicable price/tax validation. Do not publish unknown classification or silently invent HSN/rates.</p>
+<h3>Request headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>string</td>
+<td>Required</td>
+<td>Bearer eyJ... (synthetic)</td>
+<td>JWT/workload authentication</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>media type</td>
+<td>Required</td>
+<td>application/json</td>
+<td>Declared request JSON media.</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>media type</td>
+<td>Optional</td>
+<td>application/json</td>
+<td>Defaults to application/json; unsupported media returns 406.</td>
+</tr>
+<tr>
+<td>Idempotency-Key</td>
+<td>string ≤128</td>
+<td>Required</td>
+<td>pv_api-017_7m3K9r2P6x4V8q1L</td>
+<td>One duplicate-sensitive intent.</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>strong ETag</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Use the named body version fields where present; no competing header precondition.</td>
+</tr>
+<tr>
+<td>X-Request-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcde</td>
+<td>Validate or generate; safe tracing only.</td>
+</tr>
+<tr>
+<td>X-Correlation-ID</td>
+<td>UUID</td>
+<td>Optional</td>
+<td>0192a1b2-c3d4-7e8f-9012-3456789abcdf</td>
+<td>Propagate workflow correlation.</td>
+</tr>
+<tr>
+<td>Provider signature headers</td>
+<td>provider-defined</td>
+<td>Not Applicable</td>
+<td>Omit</td>
+<td>Not a provider callback.</td>
+</tr>
+</tbody>
+</table>
+<p>Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.</p>
+<h3>Path parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>product_id</td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public UUID or approved opaque identifier; never an internal BIGINT authorization reference.</td>
+</tr>
+</tbody>
+</table>
+<h3>Query parameters</h3>
+<p>Not Applicable. No parameters in this location.</p>
+<p>Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.</p>
+<h3>Request body and uploads</h3>
+<p>DTO: <code>CatalogPublishRequest</code>. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>expectedRowVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Expected catalog.products.row_version.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;expectedRowVersion&quot;: 1
+}
+</code></pre>
+<p>File upload: <strong>Not Applicable</strong>.</p>
+<h3>Success response</h3>
+<p>HTTP <strong>200</strong>. Headers: <code>X-Request-ID</code> UUID, <code>X-Correlation-ID</code> UUID, <code>X-API-Version: v1</code>, <code>Cache-Control: no-store</code>. <code>Content-Type: application/json</code>.</p>
+<p>Data DTO: <code>CatalogPublishData</code>. The four required envelope fields and meta nullability follow <a href="../../05-APIs/Standard-Responses.html">Standard Responses</a>. The following table covers every nested data field; pagination is in <code>meta.pagination</code>, never mixed into data.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Nullable</th>
+<th>Default</th>
+<th>Validation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>productId</code></td>
+<td>string (uuid)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;uuid&quot;</td>
+<td>Public DTO value from catalog.products.id. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>enum=[&quot;active&quot;]</td>
+<td>Published projection of catalog.products.status.</td>
+</tr>
+<tr>
+<td><code>publishedAt</code></td>
+<td>string (date-time)</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>format=&quot;date-time&quot;</td>
+<td>Public DTO value from catalog.products.published_at. Ownership and current-state checks apply before use.</td>
+</tr>
+<tr>
+<td><code>rowVersion</code></td>
+<td>integer</td>
+<td>Required</td>
+<td>No</td>
+<td>None (not silently populated)</td>
+<td>minimum=1</td>
+<td>Public DTO value from catalog.products.row_version. Ownership and current-state checks apply before use.</td>
+</tr>
+</tbody>
+</table>
+<p><code>meta.pagination</code> is null.</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;productId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;status&quot;: &quot;active&quot;,
+    &quot;publishedAt&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;rowVersion&quot;: 1
+  },
+  &quot;error&quot;: null,
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Endpoint errors and recovery</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>Error Code</th>
+<th>Trigger</th>
+<th>Expected Behaviour</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>422</td>
+<td><code>REQUEST_VALIDATION_ERROR</code></td>
+<td>A declared body/path/query field violates its typed contract.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Correct the named fields; do not retry unchanged.</td>
+</tr>
+<tr>
+<td>401</td>
+<td><code>AUTHENTICATION_REQUIRED</code></td>
+<td>Missing/expired/revoked JWT credential for API-017.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Renew the appropriate credential; provider signatures use provider recovery, not customer login.</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>Caller lacks catalog.publish or active permitted organization/site role.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Obtain authorized scope through owner; never change IDs to bypass access.</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>RESOURCE_NOT_FOUND</code></td>
+<td>Target/reference for publish an approved complete product into customer discovery. is absent or hidden by ownership.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the authorized parent/queue; do not infer another actor’s record.</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Draft/review to active only after approved class, valid product sources and applicable price/tax validation. Do not publish unknown classification or silently invent HSN/rates.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Missing approvals return 422; no product becomes visible. Correct source records and republish current version.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>IDEMPOTENCY_KEY_CONFLICT</code></td>
+<td>Same actor/action/target key has a different canonical request fingerprint.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Use a new key only for a deliberately different intent; reconcile previous intent first.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>STALE_VERSION</code></td>
+<td>An expected aggregate/row version no longer matches current committed state.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Reload the current publish an approved complete product into customer discovery. context and re-evaluate; no partial mutation.</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>INVALID_STATE_TRANSITION</code></td>
+<td>Missing approvals return 422; no product becomes visible. Correct source records and republish current version.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Refresh authoritative state and follow the owner recovery path.</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>The proposed operation/actor/IP budget is exceeded.</td>
+<td>No unauthorized/partial domain effect; redact sensitive context.</td>
+<td>Honor Retry-After, then bounded backoff with jitter.</td>
+</tr>
+<tr>
+<td>503</td>
+<td><code>EXTERNAL_SERVICE_UNAVAILABLE</code></td>
+<td>Required database/owner/provider dependency for API-017 is unavailable or deadline exceeded.</td>
+<td>No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain.</td>
+<td>Replay the same key to resolve committed outcome; never blindly repeat money/stock.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative structured error (other codes use the same envelope):</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;STALE_VERSION&quot;,
+    &quot;message&quot;: &quot;An expected aggregate/row version no longer matches current committed state.&quot;,
+    &quot;details&quot;: null
+  },
+  &quot;meta&quot;: {
+    &quot;requestId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcde&quot;,
+    &quot;correlationId&quot;: &quot;0192a1b2-c3d4-7e8f-9012-3456789abcdf&quot;,
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-24T10:30:00Z&quot;,
+    &quot;pagination&quot;: null
+  }
+}
+</code></pre>
+<h3>Database mapping and ownership</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Access</th>
+<th>Exact relevant columns</th>
+<th>Owner / effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Read</td>
+<td><code>brand_id</code>, <code>category_id</code>, <code>commerce_class</code>, <code>dosage_form_id</code>, <code>id</code>, <code>is_deleted</code>, <code>manufacturer_id</code>, <code>published_at</code>, <code>row_version</code>, <code>status</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>parent_id</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>organization_id</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>row_version</code></td>
+<td>Product_Catalog projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/product_prices.html"><code>pricing.product_prices</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>product_id</code>, <code>row_version</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>pricing domain owner (Proposed) projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/pricing/tax_rules.html"><code>pricing.tax_rules</code></a></td>
+<td>Read</td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>valid_from</code>, <code>valid_until</code></td>
+<td>pricing domain owner (Proposed) projection / scoped joins; reading does not grant writes.</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Create/update evidence</td>
+<td><code>status</code>, <code>published_at</code></td>
+<td>Product_Catalog owns these writes; Product_Catalog must invoke that narrow owner command.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>DTO field</th>
+<th>Persistence mapping or explicit API-only derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request.expectedRowVersion</td>
+<td>catalog.products.row_version</td>
+</tr>
+<tr>
+<td>data.productId</td>
+<td>catalog.products.id</td>
+</tr>
+<tr>
+<td>data.status</td>
+<td>catalog.products.status</td>
+</tr>
+<tr>
+<td>data.publishedAt</td>
+<td>catalog.products.published_at</td>
+</tr>
+<tr>
+<td>data.rowVersion</td>
+<td>catalog.products.row_version</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Transaction:</strong> One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.</p>
+<p><strong>Replay evidence:</strong> <code>platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)</code>; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.</p>
+<p><strong>Audit/outbox:</strong> trusted event writer appends <code>platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)</code> and <code>platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)</code> in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.</p>
+<p><strong>Master dependencies:</strong> <a href="../../04-Database/Tables/catalog/brands.html"><code>catalog.brands</code></a>, <a href="../../04-Database/Tables/catalog/categories.html"><code>catalog.categories</code></a>, <a href="../../04-Database/Tables/catalog/commerce_classes.html"><code>catalog.commerce_classes</code></a>, <a href="../../04-Database/Tables/catalog/dosage_forms.html"><code>catalog.dosage_forms</code></a>, <a href="../../04-Database/Tables/catalog/manufacturers.html"><code>catalog.manufacturers</code></a>, <a href="../../04-Database/Tables/catalog/product_variants.html"><code>catalog.product_variants</code></a>, <a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a>, <a href="../../04-Database/Tables/identity/permissions.html"><code>identity.permissions</code></a>, <a href="../../04-Database/Tables/identity/roles.html"><code>identity.roles</code></a>, <a href="../../04-Database/Tables/identity/users.html"><code>identity.users</code></a>, <a href="../../04-Database/Tables/organization/organizations.html"><code>organization.organizations</code></a>; see <a href="../../04-Database/Master-Data-Inventory.html">master lifecycle and initial records</a>.</p>
+<h3>Operational rules</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Proposed rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business validation / transitions</td>
+<td>Draft/review to active only after approved class, valid product sources and applicable price/tax validation. Do not publish unknown classification or silently invent HSN/rates.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Required key: scope actor + API-017 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache.</td>
+</tr>
+<tr>
+<td>Optimistic locking / concurrency</td>
+<td>Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate.</td>
+</tr>
+<tr>
+<td>Pagination / filters / sorting</td>
+<td>none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from&lt;to, proposed maximum report interval 31 days where range filters apply.</td>
+</tr>
+<tr>
+<td>Rate limit (Proposed, Unapproved)</td>
+<td>30 commands/minute per principal (public reads per origin); scoped internal workloads get a reviewed capability budget. 429 includes Retry-After.</td>
+</tr>
+<tr>
+<td>Timeout / retry / partial failure</td>
+<td>Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Missing approvals return 422; no product becomes visible. Correct source records and republish current version.</td>
+</tr>
+<tr>
+<td>Security / data minimization</td>
+<td>TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Designed contract tests — NOT RUN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario ID</th>
+<th>Trigger / fixture</th>
+<th>Expected assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CT-API-017-HAPPY</code></td>
+<td>Valid Catalog Manager context and documented fixture for publish an approved complete product into customer discovery.</td>
+<td>HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes.</td>
+</tr>
+<tr>
+<td><code>CT-API-017-VALIDATION</code></td>
+<td>Corrupt a concrete declared request field/enum/version or submit an unknown property.</td>
+<td>422/400; safe field errors and no domain mutation.</td>
+</tr>
+<tr>
+<td><code>CT-API-017-AUTH</code></td>
+<td>Remove or expire the documented credential.</td>
+<td>401 with no access/effect.</td>
+</tr>
+<tr>
+<td><code>CT-API-017-SCOPE</code></td>
+<td>Use another customer/site/patient/task reference or remove catalog.publish.</td>
+<td>403/404 without existence leakage; public read exposes only published safe data.</td>
+</tr>
+<tr>
+<td><code>CT-API-017-RULE</code></td>
+<td>Draft/review to active only after approved class, valid product sources and applicable price/tax validation. Do not publish unknown classification or silently invent HSN/rates.</td>
+<td>Missing approvals return 422; no product becomes visible. Correct source records and republish current version.</td>
+</tr>
+<tr>
+<td><code>CT-API-017-DUPLICATE</code></td>
+<td>Repeat identical key/body after losing the committed response, then reuse key with changed body.</td>
+<td>One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT.</td>
+</tr>
+<tr>
+<td><code>CT-API-017-CONCURRENCY</code></td>
+<td>Race two publish an approved complete product into customer discovery. intents against the same current row/state.</td>
+<td>At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent.</td>
+</tr>
+<tr>
+<td><code>CT-API-017-STATE</code></td>
+<td>Apply command after Missing approvals return 422; no product becomes visible. Correct source records and republish current version.</td>
+<td>Reject invalid progression; preserve existing money/clinical/stock/custody evidence.</td>
+</tr>
+<tr>
+<td><code>CT-API-017-RECOVERY</code></td>
+<td>Interrupt before commit and after commit/before response; stop downstream owner processing.</td>
+<td>Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Missing approvals return 422; no product becomes visible. Correct source records and republish current version.</td>
+</tr>
+</tbody>
+</table>
+<p>Existing feature assertions: <code>TC-ADM-06-OK</code>, <code>TC-ADM-06-DENY</code>. <a href="../../09-References/Coverage-and-Traceability.html">Feature register</a> and <a href="../../07-Engineering/Testing.html">test strategy</a>. All CT scenarios are newly <strong>Designed / NOT RUN</strong>; documentation/schema validation is not application test evidence.</p>
+</main></body></html>

@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WF 012 Report Export and Audit · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>WF-012 — Report Export and Audit</h1>
+<blockquote>
+<p>[!NOTE]
+<strong>Status: Proposed orchestration; NOT RUN.</strong> Business rules and thresholds still require the applicable <a href="../09-References/Sources-and-Decisions.html">owner decisions</a>.</p>
+</blockquote>
+<h2>Actors and preconditions</h2>
+<p>Authorized report user, Reporting and Audit. Use the operation’s actual trust category: public/pre-login, owned customer session, scoped staff/service or authenticated provider evidence. Enforce current object, patient and location scope, record version and required policy before progression.</p>
+<h2>Normal path and committed outcomes</h2>
+<ol>
+<li>Authorize report purpose, permitted fields and location/date filters. Definitions distinguish pending from completed financial/operational facts.</li>
+<li>Create a scoped report run/job and read allowed owner projections; report generation has no permission to correct source transactions.</li>
+<li>Retain filters, data time and explicit incomplete/failure state. Repeated export requests must not duplicate business effects.</li>
+<li>Before download, recheck current user/role/scope and private-file grant. Audit sensitive report access with safe references; historical evidence is read-only to user roles.</li>
+</ol>
+<h2>Data ownership and API boundary</h2>
+<p>Reporting owns runs/private outputs; Audit owns append-only evidence. Domain source data is read under its approved scope.</p>
+<p>Candidate existing tables: <code>platform.report_definitions</code>, <code>platform.report_runs</code>, <code>platform.file_access_grants</code>, <code>platform.audit_logs</code>. Exact write fields and runtime grants remain per-operation review under D-024.</p>
+<p>Related proposed operations: API-082–API-088; report datasets still require exact approved field/filter schemas. <a href="../03-Modules/Reporting/APIs.html">Reporting</a> · <a href="../03-Modules/Audit/APIs.html">Audit</a>.</p>
+<h2>Sequence</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as Authorized report user
+  participant O as Reporting
+  participant S as Audit
+  participant D as PostgreSQL
+  C-&gt;&gt;O: Request scoped export and filters
+  O-&gt;&gt;D: Record run and read permitted projections
+  O-&gt;&gt;S: Append safe export event
+  C-&gt;&gt;O: Download completed report
+  alt Current access still permitted
+    O--&gt;&gt;C: Protected scoped file access
+  else Permission revoked or run incomplete
+    O--&gt;&gt;C: Denied or preparation status
+  end
+</code></pre>
+<h2>Failure, transaction and recovery boundaries</h2>
+<p>The alternative outcomes in the steps and diagram retain committed facts and name the next responsible team. Apply the <a href="../07-Engineering/State-and-Recovery-Contracts.html">state and recovery contract</a>: local state/audit/outbox commit together, external IO occurs outside locks, safe replay uses the recorded intent, and unknown money remains pending. Denied scope or stale version cannot create a partial stock, clinical or money effect.</p>
+<h2>Feature-specific verification and navigation</h2>
+<p>Designed cases: <code>TC-REP-07-DENY</code>, <code>TC-REP-05-DENY</code>, <code>TC-AUD-02-DENY</code>. Locate their owning LLD/edge pages through the <a href="../09-References/Coverage-and-Traceability.html">feature register</a>. Record fixtures, approved policies and actual execution before claiming success.</p>
+<p><a href="../00-Business-Guide/Pharmville-Complete-Business-Flow.html">Business journey</a> · <a href="../03-Modules/README.html">module designs</a> · <a href="../05-APIs/Critical-Operation-Contracts.html">operation contracts</a> · <a href="../04-Database/Module-Mapping.html">data mapping</a> · <a href="../07-Engineering/Testing.html">testing</a> · <a href="README.html">workflow index</a></p>
+</main></body></html>

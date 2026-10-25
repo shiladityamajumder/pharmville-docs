@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database · Pharmville Docs</title><link rel="stylesheet" href="../../assets/css/documentation.css"></head><body><header><a href="../../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Store Operations database contract</h1>
+<p><strong>Structure validated; business write assignment Proposed.</strong> Store pick/pack and preparation tasks; Inventory commits stock and Delivery owns custody after handoff. Read access or a contract surface does not confer write ownership. Exact operation transactions/DTO columns are in <a href="APIs.html">APIs</a>; shared audit/outbox/idempotency writes are owner-coordinated infrastructure.</p>
+<h2>Proposed owned tables</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Classification</th>
+<th>Write-owner approval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/fulfillment_events.html"><code>fulfillment.fulfillment_events</code></a></td>
+<td>Audit / History</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/fulfillment_order_items.html"><code>fulfillment.fulfillment_order_items</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/pack_tasks.html"><code>fulfillment.pack_tasks</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/package_items.html"><code>fulfillment.package_items</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/pick_task_items.html"><code>fulfillment.pick_task_items</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/pick_tasks.html"><code>fulfillment.pick_tasks</code></a></td>
+<td>Transactional</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/picking_wave_orders.html"><code>fulfillment.picking_wave_orders</code></a></td>
+<td>Mapping / Junction</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/picking_waves.html"><code>fulfillment.picking_waves</code></a></td>
+<td>Derived / Operational</td>
+<td>D-024; SQL grants reviewed independently</td>
+</tr>
+</tbody>
+</table>
+<h2>Contract reads and writes</h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Exact read columns</th>
+<th>Exact proposed write columns</th>
+<th>Proposed data owner</th>
+<th>API IDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_identifiers.html"><code>catalog.product_identifiers</code></a></td>
+<td><code>id</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-046</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Product_Catalog</td>
+<td>API-048</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_review_items.html"><code>clinical.order_review_items</code></a></td>
+<td><code>approved_quantity</code>, <code>decided_at</code>, <code>decision</code>, <code>id</code>, <code>order_id</code>, <code>order_item_id</code>, <code>prescription_id</code>, <code>review_id</code>, <code>row_version</code></td>
+<td>None</td>
+<td>Pharmacist_Review</td>
+<td>API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/clinical/order_reviews.html"><code>clinical.order_reviews</code></a></td>
+<td><code>assigned_to_user_id</code>, <code>id</code>, <code>order_id</code>, <code>patient_profile_id</code>, <code>prescription_document_id</code>, <code>prescription_id</code>, <code>review_version</code>, <code>reviewed_by_user_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Pharmacist_Review</td>
+<td>API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_items.html"><code>commerce.order_items</code></a></td>
+<td><code>id</code>, <code>order_id</code>, <code>prescription_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Order_Operations</td>
+<td>API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/order_revisions.html"><code>commerce.order_revisions</code></a></td>
+<td><code>id</code>, <code>order_id</code>, <code>status</code></td>
+<td>None</td>
+<td>Order_Operations</td>
+<td>API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/commerce/orders.html"><code>commerce.orders</code></a></td>
+<td><code>current_revision_id</code>, <code>id</code>, <code>internal_id</code>, <code>patient_profile_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Order_Operations</td>
+<td>API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/fulfillment_events.html"><code>fulfillment.fulfillment_events</code></a></td>
+<td>None</td>
+<td><code>actor_user_id</code>, <code>event_type</code>, <code>fulfillment_order_id</code>, <code>payload</code></td>
+<td>Store_Operations</td>
+<td>API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/fulfillment_orders.html"><code>fulfillment.fulfillment_orders</code></a></td>
+<td><code>id</code>, <code>order_id</code>, <code>order_revision_id</code>, <code>priority</code>, <code>row_version</code>, <code>status</code>, <code>warehouse_id</code></td>
+<td><code>status</code></td>
+<td>Store_Operations</td>
+<td>API-044, API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/pack_tasks.html"><code>fulfillment.pack_tasks</code></a></td>
+<td><code>assigned_to_user_id</code>, <code>fulfillment_order_id</code>, <code>id</code>, <code>row_version</code>, <code>status</code></td>
+<td><code>completed_at</code>, <code>fulfillment_order_id</code>, <code>started_at</code>, <code>status</code></td>
+<td>Store_Operations</td>
+<td>API-045, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/package_items.html"><code>fulfillment.package_items</code></a></td>
+<td><code>id</code>, <code>lot_id</code>, <code>order_item_id</code>, <code>package_id</code>, <code>quantity</code>, <code>row_version</code></td>
+<td><code>lot_id</code>, <code>order_item_id</code>, <code>package_id</code>, <code>quantity</code></td>
+<td>Store_Operations</td>
+<td>API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/packages.html"><code>fulfillment.packages</code></a></td>
+<td><code>fulfillment_order_id</code>, <code>id</code>, <code>pack_task_id</code>, <code>package_number</code>, <code>row_version</code>, <code>status</code>, <code>tamper_seal_number</code>, <code>weight_grams</code></td>
+<td><code>dimensions_json</code>, <code>fulfillment_order_id</code>, <code>pack_task_id</code>, <code>package_number</code>, <code>packed_at</code>, <code>packed_by_user_id</code>, <code>status</code>, <code>tamper_seal_number</code>, <code>temperature_controlled</code>, <code>weight_grams</code></td>
+<td>Store_Operations</td>
+<td>API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/pick_task_items.html"><code>fulfillment.pick_task_items</code></a></td>
+<td><code>bin_id</code>, <code>id</code>, <code>lot_id</code>, <code>order_item_id</code>, <code>pick_task_id</code>, <code>picked_qty</code>, <code>required_qty</code>, <code>row_version</code></td>
+<td><code>bin_id</code>, <code>lot_id</code>, <code>order_item_id</code>, <code>pick_task_id</code>, <code>picked_qty</code>, <code>required_qty</code></td>
+<td>Store_Operations</td>
+<td>API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/pick_tasks.html"><code>fulfillment.pick_tasks</code></a></td>
+<td><code>assigned_to_user_id</code>, <code>fulfillment_order_id</code>, <code>id</code>, <code>row_version</code>, <code>status</code></td>
+<td><code>assigned_to_user_id</code>, <code>completed_at</code>, <code>fulfillment_order_id</code>, <code>started_at</code>, <code>status</code></td>
+<td>Store_Operations</td>
+<td>API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/licenses.html"><code>organization.licenses</code></a></td>
+<td><code>expires_at</code>, <code>id</code>, <code>is_deleted</code>, <code>location_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>verification_status</code></td>
+<td>None</td>
+<td>Admin_CMS</td>
+<td>API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td><code>id</code>, <code>location_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>status</code>, <code>user_id</code></td>
+<td>None</td>
+<td>Admin_CMS</td>
+<td>API-044</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/procurement/purchase_requisition_items.html"><code>procurement.purchase_requisition_items</code></a></td>
+<td>None</td>
+<td><code>product_id</code>, <code>requested_qty</code>, <code>requisition_id</code></td>
+<td>Warehouse</td>
+<td>API-048</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/procurement/purchase_requisitions.html"><code>procurement.purchase_requisitions</code></a></td>
+<td>None</td>
+<td><code>priority</code>, <code>requested_by_user_id</code>, <code>required_by</code>, <code>requisition_number</code>, <code>status</code>, <code>warehouse_id</code></td>
+<td>Warehouse</td>
+<td>API-048</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/inventory_lots.html"><code>warehouse.inventory_lots</code></a></td>
+<td><code>batch_number</code>, <code>expires_at</code>, <code>id</code>, <code>quality_status</code>, <code>recall_status</code>, <code>row_version</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Inventory</td>
+<td>API-046, API-049</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td><code>id</code>, <code>is_active</code>, <code>is_deleted</code>, <code>product_id</code>, <code>row_version</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Warehouse</td>
+<td>API-048</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/stock_reservations.html"><code>warehouse.stock_reservations</code></a></td>
+<td><code>expires_at</code>, <code>id</code>, <code>lot_id</code>, <code>order_id</code>, <code>order_item_id</code>, <code>order_revision_id</code>, <code>quantity</code>, <code>row_version</code>, <code>status</code>, <code>warehouse_id</code></td>
+<td>None</td>
+<td>Inventory</td>
+<td>API-045, API-046, API-047</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/stock_transfer_items.html"><code>warehouse.stock_transfer_items</code></a></td>
+<td><code>id</code>, <code>lot_id</code>, <code>received_qty</code>, <code>row_version</code>, <code>transfer_id</code></td>
+<td><code>received_qty</code></td>
+<td>Warehouse</td>
+<td>API-049</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/stock_transfers.html"><code>warehouse.stock_transfers</code></a></td>
+<td><code>destination_warehouse_id</code>, <code>dispatched_at</code>, <code>id</code>, <code>received_at</code>, <code>row_version</code>, <code>source_warehouse_id</code>, <code>status</code>, <code>transfer_number</code></td>
+<td><code>received_at</code>, <code>status</code></td>
+<td>Warehouse</td>
+<td>API-049</td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td><code>id</code>, <code>is_deleted</code>, <code>location_id</code>, <code>organization_id</code>, <code>row_version</code>, <code>status</code></td>
+<td>None</td>
+<td>Warehouse</td>
+<td>API-044, API-048</td>
+</tr>
+</tbody>
+</table>
+<h2>Master and transaction dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Controlled table</th>
+<th>Classification</th>
+<th>Lifecycle and initial data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/product_identifiers.html"><code>catalog.product_identifiers</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/catalog/products.html"><code>catalog.products</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/fulfillment/package_items.html"><code>fulfillment.package_items</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/organization/memberships.html"><code>organization.memberships</code></a></td>
+<td>Mapping / Junction</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/replenishment_rules.html"><code>warehouse.replenishment_rules</code></a></td>
+<td>Configuration</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+<tr>
+<td><a href="../../04-Database/Tables/warehouse/warehouses.html"><code>warehouse.warehouses</code></a></td>
+<td>Master / Reference</td>
+<td><a href="../../04-Database/Master-Data-Inventory.html">Master planning</a></td>
+</tr>
+</tbody>
+</table>
+<p>Every mutation must enter the authoritative owner command with explicit scope/version, apply only that command’s invariant, and commit aggregate/audit/outbox together. External provider/file/message effects occur after commit; idempotency and recovery are per endpoint. Shared-table audit/outbox infrastructure does not acquire domain ownership. Physical SQL guards are recorded on each linked table page; application authorization remains additional.</p>
+</main></body></html>

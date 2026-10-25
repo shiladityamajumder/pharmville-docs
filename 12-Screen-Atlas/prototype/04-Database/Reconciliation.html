@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Reconciliation · Pharmville Docs</title><link rel="stylesheet" href="../assets/css/documentation.css"></head><body><header><a href="../index.html">← Back to interactive wireframes</a><span>Pharmville · Offline reference</span></header><main><h1>Database reconciliation</h1>
+<h2>Executed comparison</h2>
+<p>The supplied V0030 table register and the independently reconstructed catalog agree on <strong>all 266 tables, 4,438 columns, 3,198 key/check constraints, 1,204 indexes and 879 triggers</strong>. The bidirectional register comparison found <strong>zero differences</strong>, recorded in <a href="Historical-Register-Differences.json">Historical-Register-Differences.json</a>. The prior Markdown field comparison likewise found zero type/default/nullability differences; <a href="Documentation-Reconciliation.json">Documentation-Reconciliation.json</a> records the baseline. No speculative object was added to SQL.</p>
+<p>The standalone schema was installed into another empty PostgreSQL 18.6 database. Its effective catalog agrees with the migration-replayed source across all 23 compared object categories: <strong>zero unexplained structural differences</strong>. See <a href="../09-References/Database-Parity-Result.json">parity evidence</a>.</p>
+<h2>Resolved documentation discrepancies</h2>
+<table>
+<thead>
+<tr>
+<th>Difference</th>
+<th>Classification</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>healthcare_db</code> versus inspected <code>heathcare_db</code> source; stale source-Git/live-validation claims</td>
+<td>Outdated provenance</td>
+<td>Current evidence records the actual nested Git revision, directly hashed replay inputs, private archive and executed isolated replay. The 26 SQL-checksum differences from the superseded supplied-folder manifest are preserved as historical provenance, not asserted as identical inputs. The full effective table register still has zero structural differences.</td>
+</tr>
+<tr>
+<td>Table pages lacked a complete standalone ownership/classification and inbound dependency reference</td>
+<td>Existing authoritative objects plus proposed business ownership</td>
+<td>All pages regenerated from the validated catalog, preserving business descriptions and all master-data appendices. Proposed module write ownership is separate from SQL grants.</td>
+</tr>
+<tr>
+<td>Named PostgreSQL 18 NOT NULL constraints were implicit in column nullability</td>
+<td>Existing authoritative database objects</td>
+<td>All 2,929 named constraints now appear explicitly, alongside 3,198 key/check constraints.</td>
+</tr>
+<tr>
+<td>Sequences, complete functions, ACL/default privileges and RLS were distributed among source fragments</td>
+<td>Existing authoritative database objects</td>
+<td><a href="Database-Objects.html">Database objects</a> and <a href="Schema-Catalog.json">catalog</a> document every effective object.</td>
+</tr>
+<tr>
+<td>Final schema required historical migration tooling</td>
+<td>Architecture correction expressly requested</td>
+<td>Final SQL is extracted effective DDL and installs without Python, Alembic or migrations. Original sources and nested Git history remain private and intact.</td>
+</tr>
+<tr>
+<td>Source contains confirmed P/M/O bootstrap rows; final SQL must contain no records</td>
+<td>Intentional data exclusion</td>
+<td>Record definitions remain confirmed master planning; owner-controlled bootstrap is a separate prerequisite.</td>
+</tr>
+<tr>
+<td>Future service domains exist physically without committed product requirements</td>
+<td>Unresolved scope/ownership</td>
+<td>Retain every object. Mark future ownership D-027; no public APIs or product approvals inferred from table existence.</td>
+</tr>
+</tbody>
+</table>
+<h2>Authority and proposals</h2>
+<p><a href="../pharmville-database/pharmville_schema.sql">pharmville_schema.sql</a> is authoritative structure. <a href="Schema-Catalog.json">Schema-Catalog.json</a>, <a href="Table-Register.json">Table-Register.json</a>, table pages and ER diagrams are derived references. <code>npm run validate:database</code> checks structure in both directions. <code>python3 scripts/validate-database.py --fresh</code> re-executes the SQL in an independent private cluster and compares catalogs.</p>
+<p>The <a href="Master-Data-Inventory.html">master-data inventory</a>, permission assignments, runtime login provisioning, module write-owner decisions, provider contracts and future capabilities remain planning decisions. Their proposed state does not alter constraints or authorize production activation. No evidence-backed approved requirement was found missing from the effective SQL; API fields identified as proposals remain separately recorded in planning decisions.</p>
+<h2>D-028 current schema revision</h2>
+<p>The counts/source-only statements above describe the preserved V0030 historical baseline. Current canonical SQL additionally contains the explicit <strong>Proposed / Unapproved / Not Implemented</strong> unified Identity design: 268 tables, 4,485 columns, 1,476 FKs, 1,222 indexes, 58 functions, 883 user triggers, 267 identity sequences and 3 unchanged RLS policies. The baseline retained all objects; current SQL installs into two isolated empty databases with zero catalog differences. See <a href="../09-References/Unified-Authentication-Database-Validation.json">current verification</a> and <a href="Identity-Authentication-Assessment.html">identity reconciliation</a>. No production database or data migration is involved.</p>
+</main></body></html>
