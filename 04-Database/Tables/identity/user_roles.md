@@ -11,7 +11,7 @@
 | Proposed business write owner | Authentication_Access |
 | SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
 | Primary key | internal_id |
-| Structural counts | 15 columns; 11 PK/FK/UQ/CHECK/exclusion constraints; 9 named PostgreSQL 18 NOT NULL constraints; 6 indexes; 3 user triggers |
+| Structural counts | 15 columns; 12 PK/FK/UQ/CHECK/exclusion constraints; 9 named PostgreSQL 18 NOT NULL constraints; 7 indexes; 3 user triggers |
 | Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
 
 ## Fields
@@ -55,7 +55,9 @@ The declared business owner above supersedes generic schema-membership guesses. 
 
 ### Dependent tables
 
-No inbound FK is present in the validated catalog.
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`identity.sessions`](../../Tables/identity/sessions.md) | fk_identity_session_assignment_owner | `active_assignment_id, user_id` | `id, user_id` |
 
 ## `identity.user_roles` — exact structural contracts
 
@@ -83,6 +85,7 @@ No inbound FK is present in the validated catalog.
 | `fk_identity_user_roles_user_id_users` | FOREIGN KEY | `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE` |
 | `pk_identity_user_roles` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_identity_user_roles_id` | UNIQUE | `UNIQUE (id)` |
+| `uq_identity_user_roles_id_user` | UNIQUE | `UNIQUE (id, user_id)` |
 | `user_role_scope` | UNIQUE | `UNIQUE NULLS NOT DISTINCT (user_id, role_id, scope_type, scope_id)` |
 | `user_roles_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
 | `user_roles_id_not_null` | NOT NULL | `NOT NULL id` |
@@ -103,6 +106,7 @@ No inbound FK is present in the validated catalog.
 | `ix_identity_user_roles_user_id` | btree | `(user_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_identity_user_roles_user_id ON identity.user_roles USING btree (user_id)` |
 | `pk_identity_user_roles` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_identity_user_roles ON identity.user_roles USING btree (internal_id)` |
 | `uq_identity_user_roles_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_identity_user_roles_id ON identity.user_roles USING btree (id)` |
+| `uq_identity_user_roles_id_user` | btree | `(id, user_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_identity_user_roles_id_user ON identity.user_roles USING btree (id, user_id)` |
 | `user_role_scope` | btree | `(user_id, role_id, scope_type, scope_id) NULLS NOT DISTINCT` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX user_role_scope ON identity.user_roles USING btree (user_id, role_id, scope_type, scope_id) NULLS NOT DISTINCT` |
 
 ### Existing triggers

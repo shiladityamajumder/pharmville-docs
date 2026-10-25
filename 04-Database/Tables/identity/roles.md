@@ -159,3 +159,13 @@ Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, va
 | Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
 | Seed status | Explicit rows above are Confirmed domain values or Proposed initial records, never observed production/seed data. No live row existence or seed execution was verified. |
 | Pending decisions | D-024 ownership/lifecycle approval; D-003 exact role/grant and identity lifecycle approval. |
+
+
+### Additional candidate requiring separate approval
+
+The inherited 16 role codes above remain unchanged. support_agent (Support) is an additional **Proposed** candidate, not an existing/approved seed record; D-020/D-027 must approve support scope and D-003 its login policy before any assignment. Ops Manager delivery-dispatch, Receiving Staff, Report Viewer and notification-template maintenance are scoped capabilities/aliases, not invented role records. [Canonical matrix](../../../01-Project/User-Roles.md).
+
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| support_agent | Support | Additional scoped support candidate; no clinical, financial or evidence mutation grant. | Proposed | D-020/D-027; unified role/workspace policy; separate approval required |

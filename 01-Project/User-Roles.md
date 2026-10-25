@@ -1,47 +1,51 @@
-# User roles and access
+# User roles and authorized workspaces
 
-## Proposed role-to-module access matrix
+**Proposed defaults, not approved grants.** The [unified Identity architecture](../03-Modules/Authentication/Unified-Identity-Architecture.md) owns authentication and backend authorization for every person. Role names are not login databases, identities, app-specific accounts or PostgreSQL runtime roles. D-003/D-024 must approve permissions and method policy; D-020 covers Support.
 
-**Not an approved grant list.** Names are business roles inferred from inherited user journeys and database schemas. The exact `identity.roles`/user_roles/role_permissions seeded values and live runtime grants must be reviewed separately. Do not grant these based on this table alone.
+## Role-to-workspace access matrix
 
-| Module | Potential actors | Authorization invariant |
-| --- | --- | --- |
-| Customer_Accounts | Customer; delegated family account under approved consent | Customer sees own account only; family permission explicit |
-| Product_Catalog | Public/customer browse; catalog manager publishes | Anonymous published reads only; staff can modify after approval |
-| Cart_Checkout | Customer | Only own cart and patient/address scope; server calculates price |
-| Prescription_Upload | Customer/patient; pharmacist permitted reviewer | Private object grants + scan/consent, never public URL |
-| Customer_Orders | Customer; service operator | Customer own order; staff scoped by support/store permissions |
-| Admin_CMS | Platform admin; catalog/content manager | Explicit privileged write; site/organization scope |
-| Order_Operations | Order operator; authorized store dispatcher | Org/site/order queue permission; no unilateral clinical override |
-| Store_Operations | Store picker/packer; authorized supervisor | Only assigned site/task and eligible lot |
-| Inventory | Inventory operator; scoped system integration | Store/site scoped write; trusted POS correlation; no stale observation |
-| Warehouse | Warehouse supervisor; receiving staff | Source/destination warehouse and lot access |
-| Pharmacist_Review | Qualified pharmacist with approved site role | Prescriptions and decisions limited to patient, line and licensed location |
-| Delivery_Operations | Dispatcher; operations manager | Only authorized shipment and route assignment |
-| Rider_App | Assigned rider | Only assigned shipment, limited address; cannot mark arbitrary delivery |
-| Finance_Payments | Customer payment intent; finance officer; verified gateway adapter | Provider callbacks signature/replay checked; staff refunds separately approved |
-| Reporting | Authorized report viewer/exporter | Rows and exports scoped to role/organization |
-| Audit | Auditor/security reviewer | Read-only restricted evidence; investigators need accountable access |
-| Authentication_Access | Customer/staff/rider/identity administrator | Sessions and roles managed through trusted, audited authority |
-| Notifications | Customer preferences; staff template manager; integration worker | Consented channels; send after commit only |
+| Role / proposed code | Workspace / navigation permission | Login Method | MFA | Permission Scope | Restrictions |
+| --- | --- | --- | --- | --- | --- |
+| Customer / `customer` | Customer website/app / `workspace.customer.enter` | Verified phone OTP | No mandatory MFA in inherited customer flow | Own customer/patient/address/order resources only | No staff powers; private evidence needs ownership/consent |
+| Super Admin / `super_admin` | Administration / `workspace.administration.enter` | Password + authenticator | Required by AUTH-01 | Explicit global IAM/admin permissions | No clinical/finance bypass; cannot edit own role to escalate |
+| Central Admin / `central_admin` | Administration / `workspace.administration.enter` | Password + authenticator | Required by AUTH-01 | Approved organization/global administrative scope | Global role edits require global IAM policy authority |
+| Pharmacist / `licensed_pharmacist` | Pharmacist workbench / `workspace.pharmacist.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Assigned licensed site, permitted patient/order/P lines | Reviewer qualification and clinical evidence remain independently required |
+| Store Manager / `store_manager` | Store operations / `workspace.store.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Assigned store locations and approved supervisor actions | No other store stock or unilateral pharmacy/finance override |
+| Store Staff / `store_staff` | Store operations / `workspace.store.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Assigned store and current pick/pack tasks | No manager adjustment approval from staff menu |
+| Warehouse Manager / `warehouse_manager` | Warehouse operations / `workspace.warehouse.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Assigned warehouse/location and approved supervisor actions | Resolve warehouse UUID to organization/location; no arbitrary source/destination |
+| Warehouse Staff / Receiving Staff / `warehouse_staff` | Warehouse operations / `workspace.warehouse.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Assigned receiving/transfer/picking work | Receiving evidence does not authorize financial settlement |
+| Inventory Operator / Controller / `inventory_controller` | Inventory workspace / `workspace.inventory.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Granted organization/location/warehouse stock actions | Reason/approval/lot/POS guards still apply |
+| Order Operations / Operations Manager / `ops_manager` | Order operations / `workspace.orders.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Granted organization/site/order queues | No unilateral clinical or money status changes |
+| Delivery Dispatcher (capability of Ops Manager) / `ops_manager` | Delivery dispatch / `workspace.delivery.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Granted organization/location shipments and assignment actions | Requires its own entry and dispatch permissions; Orders does not imply Delivery |
+| Rider / `delivery_rider` | Rider application / `workspace.rider.enter` | Verified phone OTP, as RID-01 | No new mandatory MFA; stronger actions require reviewed policy | Current assignment/shift and minimal delivery details | Cannot select another rider; mandatory delivery OTP + photo unchanged |
+| Finance Manager / `finance_manager` | Finance workspace / `workspace.finance.enter` | Password + authenticator | Required by AUTH-01 | Explicit organization/site finance/refund/settlement grants | No raw prescription access; approval/amount policies remain |
+| Finance Executive / `finance_executive` | Finance workspace / `workspace.finance.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Granted finance tasks and scoped reports | No manager override or self-approved refund |
+| Catalog Manager / `catalog_manager` | Catalog management / `workspace.catalog.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Granted catalog publication/import/classification actions | P/M/O approval and source validation remain separate |
+| CMS Manager / `cms_manager` | CMS/content management / `workspace.cms.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Granted content/template publication scope | No implicit IAM, catalog classification or finance grant |
+| Auditor / Security Reviewer / `auditor` | Audit workspace / `workspace.audit.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Read-limited evidence/export purpose and scope | Append-only history; no business corrections or blanket patient access |
+| Support (additional candidate; D-003/D-020) / `support_agent` | Support workspace / `workspace.support.enter` | Password + authenticator proposed | Proposed staff default; D-003 approval | Approved case/organization and limited customer projections | Outside the inherited 16-role proposal; no grant until support scope approved |
 
-**Database evidence:** the final snapshot contains four restricted capability groups and three RLS policies; actual service DB credentials and privilege grants need a target-runtime validation.
+The existing role master proposes 16 distinct codes. This table adds no live role: Delivery Dispatcher and Order Operations are separate permission-filtered views of the existing Ops Manager candidate, not a forced new role. Inventory Operator aliases Inventory Controller. Pharmacist aliases Licensed Pharmacist; receiving staff aliases Warehouse Staff; Security Reviewer aliases Auditor. Support is an explicit additional candidate requiring D-003/D-020, not an invented seventeenth approved role. Report viewer/exporter and notification template administration are explicit capabilities of approved scoped roles, never automatic new identities. Doctor/lab/insurance/membership roles remain future-scope decisions D-018/D-027; table existence grants no workspace.
 
-Existing row-level policies
+## Authentication, authorization and navigation
 
-## Role and object-level authorization
+All roles use one `identity.users.id`. Multiple active `identity.user_roles` rows carry role, scope and validity; role permissions are explicit allowlists. Each context uses one assignment and one workspace. The backend determines eligible panels from navigation AND action permissions; arbitrary role/panel names in a request are rejected. Menus may hide actions for usability, but every API checks authorization independently.
 
-Role-based access control (RBAC) grants only actions relevant to a staff/customer role; object-level authorization further verifies that the exact record belongs to that actor's patient, store, assigned rider task or finance scope.
+- **Default:** keep the current context only while valid. On a fresh session, exactly one ready choice may be a default hint; otherwise return null and a chooser. No hint authorizes entry.
+- **Multiple roles:** show permitted contexts for the same identity. Customer OTP cannot unlock a privileged context; password plus authenticator is mandatory for the documented privileged roles.
+- **Switching:** submit the server-issued context selector and current ETag. Recheck assignment, membership, organization/site, method freshness and policy; atomically advance session context generation.
+- **Organizations/locations:** reselect an authorized context. A supplied scope UUID is only a target. Do not combine permissions from one assignment with a resource in another assignment's scope.
+- **Denied panel:** return 403 `AUTH_WORKSPACE_FORBIDDEN`, no data/grant. Use privacy-safe 404 for hidden business objects.
+- **Role removal:** deny the removed context at the next authoritative check after revocation commits; clear it and expose other valid choices. See the exact [consistency/locking policy](../03-Modules/Authentication/Unified-Identity-Architecture.md#authorization-consistency-and-revocation).
+- **Suspension/closure:** revoke sessions/proofs, block all protected business operations and reauthentication. Reopening needs the reviewed Identity process.
+- **Expiry/replay:** 401 requires fresh authentication; replay revokes the refresh family. Switching old tabs fails with a context-generation conflict.
+- **Step-up:** challenge only for an already granted target, bind it to session/assignment/policy, and verify missing password/TOTP proofs. A completed challenge alone does not bypass context activation.
+- **No assignment:** remain in account-access state, display no business panel, allow only identity/workspace/credential/step-up/logout controls as eligible. Do not create a default staff/customer grant.
 
-| Role category | Permitted examples | Explicit denial |
-| --- | --- | --- |
-| Customer | Own cart/order/address/dependent patient and own invoice | Other customers' prescriptions/orders |
-| Store or warehouse staff | Assigned site queue, stocked batches, pick/pack with approval gates | Other site inventory or pharmacist decisions |
-| Pharmacist | Authorized P-line review and private Rx read with access log | M/O clinical decisions, unrelated patient evidence |
-| Ops/delivery | Eligible site/rider assignment and delivery exceptions | Unilateral refund, P-line approval |
-| Finance | Assigned settlement/refund/COD tasks and scoped finance reports | Raw Rx documents or unapproved high-value overrides |
-| Catalog/CMS | Draft/import/publish through explicit approval | Unapproved P/M/O class or hidden policy changes |
-| Auditor/support | Read-limited cases and compliant exports | Mutating immutable history or arbitrary finance access |
-| Workers | Narrow provider/webhook/notification/report capabilities | Migration owner / unrestricted SQL |
+## Resource and database boundaries
 
-Current DB roles are separate NOLOGIN runtime capabilities and have only selective RLS. Build a reviewed explicit `(role, action, resource_scope)` matrix with owner decision D-003 before production; never authorize solely from an internal integer ID. See Source Role List.
+Customer access is limited to owned resources and explicitly permitted dependents. Store/Warehouse access requires exact assigned site/task. Pharmacy retains reviewer/site/patient/evidence and P-line constraints; M/O-only orders skip mandatory review. Finance sees scoped money facts and approved reports, not prescriptions. Auditor is read-only; Support cannot refund, dispense or alter evidence. Notifications/Reports use narrowly scoped workloads, not human role impersonation.
+
+Existing SQL uses null/null for global grants and supports a `warehouse` UUID scope in its stock RLS helper. Organization/location/warehouse hierarchies are validated on the backend; polymorphic scope fields are not FKs. PostgreSQL's four NOLOGIN capability groups and three RLS policies are defense in depth, separate from business-role/workspace grants. No menu, role code, membership or integer ID replaces the explicit endpoint permission/resource check.
+
+[Machine-readable proposed policy](../03-Modules/Authentication/Workspace-Access-Policy.json) · [master roles](../04-Database/Tables/identity/roles.md#master-data-planning) · [security](../07-Engineering/Security.md).

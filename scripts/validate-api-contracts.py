@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import json
 import argparse
+import datetime
+import uuid
 import re
 import sys
 from pathlib import Path
@@ -53,8 +55,15 @@ def schema_errors(doc: dict, schema: dict, value, location: str) -> list[str]:
     errors: list[str] = []
     for branch in schema.get("allOf", []):
         errors.extend(schema_errors(doc, branch, value, location))
-    if "oneOf" in schema and not any(not schema_errors(doc, branch, value, location) for branch in schema["oneOf"]):
-        errors.append(f"{location}: value does not match any oneOf schema")
+    if "oneOf" in schema and sum(not schema_errors(doc, branch, value, location) for branch in schema["oneOf"]) != 1:
+        errors.append(f"{location}: value must match exactly one oneOf schema")
+    if "anyOf" in schema and not any(not schema_errors(doc, branch, value, location) for branch in schema["anyOf"]):
+        errors.append(f"{location}: value does not match any anyOf schema")
+    if "not" in schema and not schema_errors(doc, schema["not"], value, location):
+        errors.append(f"{location}: value matches forbidden schema")
+    if "if" in schema:
+        selected = "then" if not schema_errors(doc, schema["if"], value, location) else "else"
+        if selected in schema: errors.extend(schema_errors(doc, schema[selected], value, location))
     if "const" in schema and value != schema["const"]:
         errors.append(f"{location}: expected constant {schema['const']!r}")
     if "enum" in schema and value not in schema["enum"]:
@@ -70,7 +79,28 @@ def schema_errors(doc: dict, schema: dict, value, location: str) -> list[str]:
     if valid_types and not any(type_checks[t](value) for t in valid_types if t in type_checks):
         errors.append(f"{location}: expected {valid_types}, got {type(value).__name__}")
         return errors
+    if isinstance(value, str):
+        if len(value) < schema.get("minLength", 0) or len(value) > schema.get("maxLength", float("inf")):
+            errors.append(f"{location}: string length outside bounds")
+        if "pattern" in schema and not re.search(schema["pattern"], value): errors.append(f"{location}: pattern mismatch")
+        try:
+            if schema.get("format") == "uuid": uuid.UUID(value)
+            if schema.get("format") == "date-time":
+                parsed = datetime.datetime.fromisoformat(value.replace("Z", "+00:00"))
+                if parsed.tzinfo is None: raise ValueError("Missing timezone")
+            if schema.get("format") == "date": datetime.date.fromisoformat(value)
+        except ValueError: errors.append(f"{location}: invalid {schema['format']} format")
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        if value < schema.get("minimum", -float("inf")) or value > schema.get("maximum", float("inf")):
+            errors.append(f"{location}: number outside bounds")
+    if isinstance(value, list):
+        if len(value) < schema.get("minItems", 0) or len(value) > schema.get("maxItems", float("inf")):
+            errors.append(f"{location}: array length outside bounds")
+        if schema.get("uniqueItems") and len({json.dumps(x, sort_keys=True) for x in value}) != len(value):
+            errors.append(f"{location}: duplicate array items")
     if isinstance(value, dict):
+        if len(value) < schema.get("minProperties", 0) or len(value) > schema.get("maxProperties", float("inf")):
+            errors.append(f"{location}: object field count outside bounds")
         for field in schema.get("required", []):
             if field not in value:
                 errors.append(f"{location}: missing required field {field}")
@@ -337,7 +367,7 @@ def main() -> int:
         return 1
     historical_ids = {api_id for api_id in spec_ids if re.fullmatch(r"API-\d{3}", api_id)}
     additional_refs = len(spec_ids - historical_ids)
-    print(f"API contract structure passed: {len(actual)} method/path operations, {len(historical_ids)} historical API IDs, {additional_refs} additional references, {len(operation_ids)} unique operationIds.")
+    print(f"API contract structure passed: {len(actual)} method/path operations, {len(historical_ids)} numbered API IDs (original API-001–097 preserved), {additional_refs} additional references, {len(operation_ids)} unique operationIds.")
     print("JSON code examples parse. Note: this structural check does not establish DTO approval or runtime behavior.")
     print(
         "Contract completeness audit: "

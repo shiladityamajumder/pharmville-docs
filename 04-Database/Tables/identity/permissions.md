@@ -213,3 +213,43 @@ Public UUID aliases and BIGINT FK crosswalks are distinct fields. SQL guards, va
 | Initial load order | Load referenced master identities first; resolve UUID/BIGINT crosswalks through documented triggers; then load this master and dependent mappings. Deployment/operational owner verifies required fields, exact CHECKs and active uniqueness. |
 | Seed status | Explicit rows above are Confirmed domain values or Proposed initial records, never observed production/seed data. No live row existence or seed execution was verified. |
 | Pending decisions | D-024 ownership/lifecycle approval; D-003 exact role/grant and identity lifecycle approval. |
+
+
+### Unified workspace and Identity permission proposals
+
+These additional controlled values fit existing code/resource/action columns. They are **Proposed**, not inserted, approved or inferred existing data. auth.self is an intrinsic owned-session control capability, not a staff role grant; it cannot authorize business resources. Workspace entry also requires action permission, live scope and sufficient proof.
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| workspace.customer.enter | workspace.customer.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.administration.enter | workspace.administration.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.pharmacist.enter | workspace.pharmacist.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.store.enter | workspace.store.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.warehouse.enter | workspace.warehouse.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.inventory.enter | workspace.inventory.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.orders.enter | workspace.orders.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.delivery.enter | workspace.delivery.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.rider.enter | workspace.rider.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.finance.enter | workspace.finance.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.catalog.enter | workspace.catalog.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.cms.enter | workspace.cms.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.audit.enter | workspace.audit.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| workspace.support.enter | workspace.support.enter | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| auth.self | auth.self | Read/control own valid session without business authority | Proposed | D-028; workspace policy and API-100–110 |
+| identity.roles.manage | identity.roles.manage | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+| identity.user_roles.manage | identity.user_roles.manage | Explicit backend capability; resource/action are code prefix/suffix | Proposed | D-028; workspace policy and API-100–110 |
+
+
+### IAM administration read permissions
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| identity.roles.read | Role policy read | Global IAM policy visibility; does not grant returned permissions. | Proposed | API-111 / D-028 |
+| identity.user_roles.read | Scoped assignment read | Target assignment visibility contained by the actor delegation scope. | Proposed | API-112 / D-028 |
+
+
+### Identity-wide status authority
+
+| Code | Name | Description | Status | Source |
+| --- | --- | --- | --- | --- |
+| identity.accounts.manage | Shared identity status administration | Explicit global authority for API-034 status changes; organization-scoped offboarding cannot suspend a multi-role person. | Proposed | D-028 / AUTH-04 / retained API-034 status field; no automatic grant |

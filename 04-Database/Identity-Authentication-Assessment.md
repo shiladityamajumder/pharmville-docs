@@ -1,0 +1,23 @@
+# Identity persistence assessment
+
+**Proposed / Unapproved / Not Implemented — D-028.** [SQL](../pharmville-database/pharmville_schema.sql) is the standalone structural authority. The inherited V0030 catalog remains historical evidence; [current validation](../09-References/Unified-Authentication-Database-Validation.json) records the explicit additive proposal. No seed records or existing database were changed.
+
+| Capability | Existing evidence | Proposed change / remaining service invariant |
+| --- | --- | --- |
+| One identity | users unique phone/email; user_profiles; customer/practitioner/rider extensions | Reuse users.id. Unique contacts do not prove person equivalence; no unverified merges. |
+| Multi-role/scoped grants | user_roles user/role, activity, validity and polymorphic scope; role_permissions | Preserve NULL/NULL global and warehouse target semantics. Validate organization/location/warehouse existence, membership and containment in the owner transaction. No new scope table. |
+| Session context | sessions expiry/revocation/family/hash and row version | Add method timestamps, active assignment/workspace, generation and policy version. Composite FK binds assignment to subject; guard requires next context generation. No SQL trigger grants permissions. |
+| Login/MFA challenges | otp_challenges has attempt and consumption state; no general durable chain | Add authentication_challenges with hashed token, expiry, purpose/factor, parent, OTP/factor/session links and server-only JSON binding. Unique child/OTP link; composite FKs prevent factor/session ownership substitution. Owner validates nullability per purpose and identity/version freshness. |
+| MFA replay | mfa_factors has encrypted secret and verification state | Add last_accepted_totp_counter and nonnegative/backwards guard. Proof command locks factor and requires strictly greater matched counter; equality on an unrelated row update is allowed, not valid proof. |
+| Refresh replay | sessions only stores current token hash | Add session_refresh_tokens retained hash lineage with unique child, same-session parent FK, expiry, consumed/revoked state. Command serializes session rotation and keeps current hash consistent; arbitrary SQL inserts do not enforce a sole active leaf. |
+| Password and audit | users hash/status/lock; password_history; login_attempts; audit/outbox | No new password/role account tables. Hash policy, limits, history count, recovery and retention remain D-003 configuration approvals. Never persist raw proofs or tokens. |
+| Revocation | active assignments, sessions revoked_at, user status, role/permission soft-delete | Live primary DB authorization and ordered locking through effect commit; no positive cache. Assignment deactivation clears matching context and increments generation. Revoke all sessions/proofs on suspension/password change. |
+| RLS/grants | Existing 3 policies and four NOLOGIN capability roles | Unchanged. Proposed owners do not receive SQL DML grants automatically. D-024 reviews runtime capability and scope enforcement. |
+
+## Lifecycle, data boundaries and decisions
+
+New challenge and refresh rows are transactional security state, not master data and not deployment seeds. Both use UUID public aliases, internal identity PKs, row versions and maintenance triggers. Challenges may carry encrypted normalized identifiers only for pending proof; keyed digests index destinations. No raw password, OTP, refresh token or authenticator secret belongs in binding_json, audit or examples. Retention/purge must preserve replay detection for the entire credential acceptance horizon; exact windows and encryption keys require Security approval.
+
+Password/OTP proof failures commit attempt and safe login audit outcomes even when authentication is denied. Successful proof consumption, successor/session creation, factor counter and credential lineage commit atomically. OTP delivery and recovery notices use outbox after commit. Incomplete first customer onboarding may expose identity/logout without an invented customer profile or workspace.
+
+D-003 remains open for exact MFA defaults, enrollment/bootstrap/assisted recovery, hashing parameters, security lifetimes, session/rate budgets and cookie choice. D-023 remains open for replacement-contact proof. D-024 remains open for owners/contracts/runtime grants. D-028 adds the unified context/challenge/lineage proposal. All four require approval; none is marked implemented. See [architecture](../03-Modules/Authentication/Unified-Identity-Architecture.md) and [per-operation mappings](../05-APIs/API-Database-Feature-Matrix.md).

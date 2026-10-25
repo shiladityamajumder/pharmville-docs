@@ -6,16 +6,16 @@
 
 ## Source of truth
 
-The [standalone SQL schema](../pharmville-database/pharmville_schema.sql) is the authoritative effective database definition, reconstructed by executing V0001–V0030 in a private disposable PostgreSQL 18.6 cluster. A second empty database installed only that file: **zero unexplained structural differences across 23 catalog dimensions**. No existing user database was accessed.
+The [standalone SQL schema](../pharmville-database/pharmville_schema.sql) is the authoritative effective database definition, reconstructed from V0001–V0030 with the explicitly proposed D-028 unified-identity extension, originally recovered by executing V0001–V0030 in a private disposable PostgreSQL 18.6 cluster. A second empty database installed only that file: **zero unexplained structural differences across 23 catalog dimensions**. No existing user database was accessed.
 
 | Structure | Validated count |
 | --- | --- |
-| Application schemas / tables / columns | 24 / 266 / 4,438 |
-| Foreign keys / indexes | 1,461 / 1,204 |
-| Functions / user triggers | 56 / 879 |
-| Identity sequences / RLS policies | 265 / 3 |
-| PK + UNIQUE + CHECK + FK constraints | 3,198 |
-| PostgreSQL 18 NOT NULL constraints | 2,929 |
+| Application schemas / tables / columns | 24 / 268 / 4,485 |
+| Foreign keys / indexes | 1,476 / 1,222 |
+| Functions / user triggers | 58 / 883 |
+| Identity sequences / RLS policies | 267 / 3 |
+| PK + UNIQUE + CHECK + FK constraints | 3,241 |
+| PostgreSQL 18 NOT NULL constraints | 2,951 |
 
 ## Table reference
 
@@ -32,7 +32,7 @@ Every table page below records exact fields/defaults/nullability, keys, all cons
 | diagnostics | 13 | [Domain map](ER-Diagrams/07-diagnostics.md) |
 | finance | 8 | [Domain map](ER-Diagrams/08-finance.md) |
 | fulfillment | 10 | [Domain map](ER-Diagrams/09-fulfillment.md) |
-| identity | 14 | [Domain map](ER-Diagrams/10-identity.md) |
+| identity | 16 | [Domain map](ER-Diagrams/10-identity.md) |
 | insurance | 8 | [Domain map](ER-Diagrams/11-insurance.md) |
 | logistics | 15 | [Domain map](ER-Diagrams/12-logistics.md) |
 | marketplace | 7 | [Domain map](ER-Diagrams/13-marketplace.md) |
@@ -60,3 +60,7 @@ Every table page below records exact fields/defaults/nullability, keys, all cons
 - [Catalog](Schema-Catalog.json) · [table register](Table-Register.json) · [evidence](../09-References/Database-Evidence.json)
 
 Historical source provenance remains discoverable at [Migrations.md](Migrations.md). SQL-only delivery excludes transactional data and seed records. The 44 identified master tables retain explicit confirmed/proposed/open datasets; a schema install grants no business approval.
+
+## Unified identity extension
+
+[Identity assessment](Identity-Authentication-Assessment.md) separates inherited schema from proposed D-028 additions. [Current isolated verification](../09-References/Unified-Authentication-Database-Validation.json) compares the unchanged baseline catalog and two independent installations of current SQL across all 23 dimensions. This structural verification is not approval or application implementation. Historical source-chain parity remains preserved separately.

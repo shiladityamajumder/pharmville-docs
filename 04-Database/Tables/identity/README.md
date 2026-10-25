@@ -14,3 +14,6 @@
 - [user_profiles](./user_profiles.md)
 - [user_roles](./user_roles.md)
 - [users](./users.md)
+
+- [authentication_challenges](./authentication_challenges.md) — proposed durable proofs
+- [session_refresh_tokens](./session_refresh_tokens.md) — proposed retained refresh lineage

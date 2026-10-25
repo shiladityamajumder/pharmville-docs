@@ -51,3 +51,8 @@ All proposals are **Unapproved / Not Implemented**. This register refines existi
 ## Review deliverable
 
 Owners can approve small vertical slices using the operation contract, typed OpenAPI, exact mapping, master prerequisites and CT scenarios together. Record approver/date/evidence per operation before changing approval status. Real provider sandbox, database-backed application tests and production seed execution remain separate evidence; no test result is asserted here.
+
+
+## Unified authentication reconciliation
+
+D-028 explicitly proposes durable challenge/refresh persistence and session context, resolving the *documentation/persistence design* gaps in API-089/090. Those two contracts can be complete proposed without D-003/D-024/D-028 approval; no security policy or implementation is approved. API-098–112 add the minimum separated credential, context and grant commands traced to ACC-01/AUTH-01–04/ADM-03. D-023 profile/contact replacement remains incomplete. Authenticator-loss assisted recovery remains a blocked procedure under D-003; these proposals do not manufacture a reset API.

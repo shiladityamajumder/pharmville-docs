@@ -40590,4 +40590,107 @@ ALTER DEFAULT PRIVILEGES FOR ROLE CURRENT_USER REVOKE ALL ON FUNCTIONS FROM PUBL
 
 
 
+-- Proposed unified identity persistence (D-028); not a production upgrade.
+-- These objects extend the effective V0030 definition on a fresh database only.
+ALTER TABLE identity.user_roles ADD CONSTRAINT uq_identity_user_roles_id_user UNIQUE (id, user_id);
+ALTER TABLE identity.mfa_factors ADD COLUMN last_accepted_totp_counter bigint;
+ALTER TABLE identity.mfa_factors ADD CONSTRAINT ck_identity_mfa_counter_nonnegative CHECK (last_accepted_totp_counter IS NULL OR last_accepted_totp_counter >= 0);
+ALTER TABLE identity.sessions
+ ADD COLUMN authenticated_at timestamp with time zone,
+ ADD COLUMN password_verified_at timestamp with time zone,
+ ADD COLUMN otp_verified_at timestamp with time zone,
+ ADD COLUMN mfa_verified_at timestamp with time zone,
+ ADD COLUMN active_assignment_id uuid,
+ ADD COLUMN active_workspace_code character varying(64),
+ ADD COLUMN context_version bigint DEFAULT 1 NOT NULL,
+ ADD COLUMN authentication_policy_version character varying(64);
+ALTER TABLE identity.sessions ADD CONSTRAINT ck_identity_session_context_version CHECK (context_version > 0);
+ALTER TABLE identity.sessions ADD CONSTRAINT ck_identity_session_context_pair CHECK ((active_assignment_id IS NULL) = (active_workspace_code IS NULL));
+ALTER TABLE identity.sessions ADD CONSTRAINT ck_identity_session_workspace_nonblank CHECK (active_workspace_code IS NULL OR length(btrim(active_workspace_code)) > 0);
+ALTER TABLE identity.sessions ADD CONSTRAINT fk_identity_session_assignment_owner FOREIGN KEY (active_assignment_id, user_id) REFERENCES identity.user_roles(id, user_id) DEFERRABLE INITIALLY DEFERRED;
+CREATE INDEX ix_identity_sessions_active_assignment ON identity.sessions (active_assignment_id) WHERE active_assignment_id IS NOT NULL;
+CREATE INDEX ix_identity_sessions_token_family ON identity.sessions (token_family_id);
+CREATE TABLE identity.authentication_challenges (
+ internal_id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+ id uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+ user_id uuid REFERENCES identity.users(id) ON DELETE CASCADE,
+ session_id uuid REFERENCES identity.sessions(id) ON DELETE CASCADE,
+ parent_challenge_id uuid REFERENCES identity.authentication_challenges(id),
+ otp_challenge_id uuid REFERENCES identity.otp_challenges(id),
+ mfa_factor_id uuid REFERENCES identity.mfa_factors(id),
+ purpose character varying(32) NOT NULL CHECK (purpose IN ('login','step_up','mfa_enrollment','password_recovery')),
+ factor_type character varying(16) NOT NULL CHECK (factor_type IN ('otp','password','totp')),
+ token_hash character varying(255) NOT NULL UNIQUE,
+ identifier_encrypted bytea,
+ identity_version bigint CHECK (identity_version IS NULL OR identity_version > 0),
+ policy_version character varying(64) NOT NULL,
+ binding_json jsonb DEFAULT '{}'::jsonb NOT NULL CHECK (jsonb_typeof(binding_json) = 'object'),
+ requested_context_hash character varying(255),
+ expires_at timestamp with time zone NOT NULL,
+ attempts integer DEFAULT 0 NOT NULL CHECK (attempts >= 0),
+ max_attempts integer NOT NULL CHECK (max_attempts > 0 AND attempts <= max_attempts),
+ consumed_at timestamp with time zone,
+ blocked_at timestamp with time zone,
+ created_at timestamp with time zone DEFAULT now() NOT NULL,
+ updated_at timestamp with time zone DEFAULT now() NOT NULL,
+ created_by uuid REFERENCES identity.users(id),
+ updated_by uuid REFERENCES identity.users(id),
+ row_version bigint DEFAULT 1 NOT NULL CHECK (row_version > 0),
+ CONSTRAINT ck_identity_challenge_expiry CHECK (expires_at > created_at),
+ CONSTRAINT ck_identity_challenge_session CHECK (purpose NOT IN ('step_up','mfa_enrollment') OR (user_id IS NOT NULL AND session_id IS NOT NULL)),
+ CONSTRAINT ck_identity_challenge_not_self_parent CHECK (parent_challenge_id IS NULL OR parent_challenge_id <> id)
+);
+CREATE UNIQUE INDEX uq_identity_challenge_child ON identity.authentication_challenges(parent_challenge_id) WHERE parent_challenge_id IS NOT NULL;
+CREATE UNIQUE INDEX uq_identity_challenge_otp ON identity.authentication_challenges(otp_challenge_id) WHERE otp_challenge_id IS NOT NULL;
+CREATE INDEX ix_identity_challenges_user_pending ON identity.authentication_challenges(user_id, expires_at) WHERE consumed_at IS NULL AND blocked_at IS NULL;
+CREATE INDEX ix_identity_challenges_session ON identity.authentication_challenges(session_id) WHERE session_id IS NOT NULL;
+CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.authentication_challenges FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned');
+CREATE TABLE identity.session_refresh_tokens (
+ internal_id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+ id uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+ session_id uuid NOT NULL REFERENCES identity.sessions(id) ON DELETE CASCADE,
+ token_hash character varying(255) NOT NULL UNIQUE,
+ parent_token_id uuid REFERENCES identity.session_refresh_tokens(id),
+ expires_at timestamp with time zone NOT NULL,
+ consumed_at timestamp with time zone,
+ revoked_at timestamp with time zone,
+ created_at timestamp with time zone DEFAULT now() NOT NULL,
+ updated_at timestamp with time zone DEFAULT now() NOT NULL,
+ created_by uuid REFERENCES identity.users(id),
+ updated_by uuid REFERENCES identity.users(id),
+ row_version bigint DEFAULT 1 NOT NULL CHECK (row_version > 0),
+ CONSTRAINT ck_identity_refresh_expiry CHECK (expires_at > created_at),
+ CONSTRAINT ck_identity_refresh_not_self_parent CHECK (parent_token_id IS NULL OR parent_token_id <> id)
+);
+CREATE UNIQUE INDEX uq_identity_refresh_child ON identity.session_refresh_tokens(parent_token_id) WHERE parent_token_id IS NOT NULL;
+CREATE INDEX ix_identity_refresh_session ON identity.session_refresh_tokens(session_id, created_at);
+CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.session_refresh_tokens FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned');
+-- Grants remain default-denied; D-024 must review the runtime writer capability.
+
+-- D-028 proposed cross-record ownership and monotonic security state guards.
+ALTER TABLE identity.sessions ADD CONSTRAINT uq_sessions_id_user UNIQUE (id,user_id);
+ALTER TABLE identity.mfa_factors ADD CONSTRAINT uq_mfa_factors_id_user UNIQUE (id,user_id);
+ALTER TABLE identity.authentication_challenges ADD CONSTRAINT ck_auth_challenge_factor_owner CHECK (mfa_factor_id IS NULL OR user_id IS NOT NULL);
+ALTER TABLE identity.authentication_challenges ADD CONSTRAINT fk_auth_challenge_session_owner FOREIGN KEY (session_id,user_id) REFERENCES identity.sessions(id,user_id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE identity.authentication_challenges ADD CONSTRAINT fk_auth_challenge_factor_owner FOREIGN KEY (mfa_factor_id,user_id) REFERENCES identity.mfa_factors(id,user_id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE identity.session_refresh_tokens ADD CONSTRAINT uq_refresh_token_id_session UNIQUE (id,session_id);
+ALTER TABLE identity.session_refresh_tokens ADD CONSTRAINT fk_refresh_parent_same_session FOREIGN KEY (parent_token_id,session_id) REFERENCES identity.session_refresh_tokens(id,session_id) DEFERRABLE INITIALLY DEFERRED;
+CREATE FUNCTION identity.guard_session_context() RETURNS trigger LANGUAGE plpgsql AS $guard$
+BEGIN
+ IF (NEW.active_assignment_id,NEW.active_workspace_code,NEW.context_version) IS DISTINCT FROM (OLD.active_assignment_id,OLD.active_workspace_code,OLD.context_version) AND NEW.context_version <> OLD.context_version + 1 THEN
+  RAISE EXCEPTION 'Context changes require the next generation' USING ERRCODE='40001';
+ END IF;
+ RETURN NEW;
+END;
+$guard$;
+CREATE TRIGGER ab_session_context BEFORE UPDATE ON identity.sessions FOR EACH ROW EXECUTE FUNCTION identity.guard_session_context();
+CREATE FUNCTION identity.guard_totp_counter() RETURNS trigger LANGUAGE plpgsql AS $guard$
+BEGIN
+ IF OLD.last_accepted_totp_counter IS NOT NULL AND (NEW.last_accepted_totp_counter IS NULL OR NEW.last_accepted_totp_counter < OLD.last_accepted_totp_counter) THEN
+  RAISE EXCEPTION 'TOTP counter cannot move backwards' USING ERRCODE='23514';
+ END IF;
+ RETURN NEW;
+END;
+$guard$;
+CREATE TRIGGER ab_totp_counter BEFORE UPDATE ON identity.mfa_factors FOR EACH ROW EXECUTE FUNCTION identity.guard_totp_counter();
 COMMIT;

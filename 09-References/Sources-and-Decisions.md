@@ -56,6 +56,7 @@ No signed client PRD is checked into this documentation repository. Sibling appl
 | D-025 | Standalone effective-schema consolidation authorized by this rework; executed private PostgreSQL parity evidence recorded. Runtime provisioning, approved bootstrap data and production release remain open. | DBA and DevOps |
 | D-026 | Module directory normalization retains stable IDs/contracts; validate domain-owner acceptance separately from navigation changes. | Tech lead and module owners |
 | D-027 | Assign accountable future-domain owners and phase for appointment, diagnostics, insurance, membership, marketplace, support, risk and broader clinical-care tables; retain all physical objects without inferring launch scope. | Product owner and relevant Clinical/Finance/Operations leads |
+| D-028 | Approve unified Identity, scoped workspaces, additive proof/session persistence, API-098–112 and the scoped-offboarding versus identity-wide status boundary; Open / Unapproved / Not Implemented. | Security architect, Product owner, Backend/PostgreSQL leads and QA |
 
 Decisions D-004 through D-013, D-016, and D-017 need evidence before production. D-001, D-002, D-003, D-005, D-015, D-019, and D-021 affect kickoff scope or architecture.
 
@@ -84,8 +85,15 @@ Until then the Business Guide explains the detailed path and labels the deferred
 
 ## Detailed API and master-data planning refinement
 
-The [planning decision register](../05-APIs/Planning-Decisions.md) refines existing D-001–D-024 with operation-specific blockers and compatible database proposals. [API coverage](../05-APIs/API-Contract-Coverage.md) now separates documentation-complete proposed contracts (97/107) from evidenced approval (0/107). [Master inventory](../04-Database/Master-Data-Inventory.md) records classifications and initial records without changing source SQL, product requirements or approval status.
+The [planning decision register](../05-APIs/Planning-Decisions.md) refines existing D-001–D-024 with operation-specific blockers and compatible database proposals. [API coverage](../05-APIs/API-Contract-Coverage.md) records the historical 97/107 baseline; current unified-Identity coverage is 114/122 complete proposed and 0/122 approved. [Master inventory](../04-Database/Master-Data-Inventory.md) records classifications and initial records without changing source SQL, product requirements or approval status.
 
 ## Architecture rework evidence and remaining gates
 
 D-015 source selection and fresh empty-schema reconstruction are resolved by inspected source and [zero-difference catalog evidence](Database-Parity-Result.json). Earlier missing-source/no-nested-Git statements describe the historical pre-rework checkout and are superseded by [current provenance](../04-Database/Migrations.md). D-025 is user-authorized consolidation, not approval of runtime memberships, master datasets, clinical/financial policies or production deployment. D-026 preserves all 18 IDs and every existing API contract. D-027 is Open: domain leads must accept future ownership before implementation.
+
+
+## D-028 — Unified Identity and scoped workspaces
+
+**Open / Proposed / Pending Approval / Not Implemented. Owners: Security architect, Product owner, PostgreSQL/Backend leads and QA.** Review [unified architecture](../03-Modules/Authentication/Unified-Identity-Architecture.md), [persistence assessment](../04-Database/Identity-Authentication-Assessment.md), API-098–112, permission-derived navigation, live revocation ordering and compatibility impact. The two transactional security tables, method/context session fields and replay/ownership guards are explicit additive schema proposals; structural SQL execution is not business approval.
+
+D-003 remains unresolved for MFA defaults, bootstrap/assisted recovery, credential/session/rate/freshness budgets and transport. D-023 remains unresolved for replacement contacts. D-024 remains unresolved for each contract, owner and runtime SQL grant. Support role/navigation permission defaults are proposals, not approved grants or seed records. Existing 107 API identities remain; see [current coverage](../05-APIs/API-Contract-Coverage.md).

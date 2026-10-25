@@ -7,30 +7,30 @@ Generated from [Schema-Catalog.json](Schema-Catalog.json) after fresh installati
 | Category | Effective objects |
 | --- | --- |
 | collations | 0 |
-| columns | 4438 |
-| constraints | 3198 |
+| columns | 4485 |
+| constraints | 3241 |
 | default_privileges | 1 |
 | domain_constraints | 0 |
 | extensions | 2 |
-| functions | 56 |
+| functions | 58 |
 | grants | 24 |
-| indexes | 1204 |
-| not_null_constraints | 2929 |
+| indexes | 1222 |
+| not_null_constraints | 2951 |
 | policies | 3 |
 | procedures | 0 |
 | role_memberships | 0 |
 | rules | 0 |
 | runtime_roles | 4 |
 | schemas | 24 |
-| sequences | 265 |
+| sequences | 267 |
 | statistics | 0 |
-| table_storage | 266 |
-| tables | 266 |
-| triggers | 879 |
+| table_storage | 268 |
+| tables | 268 |
+| triggers | 883 |
 | types | 0 |
 | views | 0 |
 
-PostgreSQL 18 records 2,929 NOT NULL constraints separately from the 3,198 PK/FK/UNIQUE/CHECK constraints. Table/composite types and extension-owned routines/types are implicit supporting objects, not extra application-defined types. Sequence current values and records are excluded. Source namespace inspection found only the 24 application namespaces plus public (no application tables in public). The 1,461 FKs create 5,844 internal triggers in addition to 879 user triggers.
+PostgreSQL 18 records 2,951 NOT NULL constraints separately from the 3,241 PK/FK/UNIQUE/CHECK constraints. Table/composite types and extension-owned routines/types are implicit supporting objects, not extra application-defined types. Sequence current values and records are excluded. Source namespace inspection found only the 24 application namespaces plus public (no application tables in public). The 1,476 FKs create 5,904 internal triggers in addition to 883 user triggers.
 
 ## Extensions
 
@@ -101,7 +101,7 @@ Policies protect only the tables where RLS is enabled; they are additional to ap
 
 ## Identity sequences
 
-All 265 sequences preserve type, bounds, increment, start, cache, cycle and column dependency. The default/identity columns are documented on the owning table pages. No sequence current value is exported.
+All 267 sequences preserve type, bounds, increment, start, cache, cycle and column dependency. The default/identity columns are documented on the owning table pages. No sequence current value is exported.
 
 | Sequence | Type | Exact generation parameters | Owning table / column | Dependency |
 | --- | --- | --- | --- | --- |
@@ -216,6 +216,7 @@ All 265 sequences preserve type, bounds, increment, start, cache, cycle and colu
 | `fulfillment.picking_waves_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `fulfillment.picking_waves.internal_id` | i |
 | `identity.api_client_secrets_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.api_client_secrets.internal_id` | i |
 | `identity.api_clients_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.api_clients.internal_id` | i |
+| `identity.authentication_challenges_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.authentication_challenges.internal_id` | i |
 | `identity.login_attempts_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.login_attempts.internal_id` | i |
 | `identity.mfa_factors_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.mfa_factors.internal_id` | i |
 | `identity.otp_challenges_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.otp_challenges.internal_id` | i |
@@ -223,6 +224,7 @@ All 265 sequences preserve type, bounds, increment, start, cache, cycle and colu
 | `identity.permissions_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.permissions.internal_id` | i |
 | `identity.role_permissions_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.role_permissions.internal_id` | i |
 | `identity.roles_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.roles.internal_id` | i |
+| `identity.session_refresh_tokens_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.session_refresh_tokens.internal_id` | i |
 | `identity.sessions_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.sessions.internal_id` | i |
 | `identity.trusted_devices_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.trusted_devices.internal_id` | i |
 | `identity.user_profiles_internal_id_seq` | bigint | start=1; increment=1; max=9223372036854775807; min=1; cache=1; cycle=false | `identity.user_profiles.internal_id` | i |
@@ -373,7 +375,7 @@ All 265 sequences preserve type, bounds, increment, start, cache, cycle and colu
 
 ## Functions
 
-All 56 definitions retain volatility, SECURITY DEFINER, search_path and execution behavior. The [table references](README.md#table-reference) document each installed user trigger: O = origin enabled, D = disabled, R = replica, A = always. Helper existence grants no service authorization; function ACLs are recorded above.
+All 58 definitions retain volatility, SECURITY DEFINER, search_path and execution behavior. The [table references](README.md#table-reference) document each installed user trigger: O = origin enabled, D = disabled, R = replica, A = always. Helper existence grants no service authorization; function ACLs are recorded above.
 
 ### `catalog.apply_classification()`
 
@@ -1016,6 +1018,38 @@ BEGIN
  END IF;
  RETURN NEW;
 END $function$
+```
+
+### `identity.guard_session_context()`
+
+```sql
+CREATE OR REPLACE FUNCTION identity.guard_session_context()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+ IF (NEW.active_assignment_id,NEW.active_workspace_code,NEW.context_version) IS DISTINCT FROM (OLD.active_assignment_id,OLD.active_workspace_code,OLD.context_version) AND NEW.context_version <> OLD.context_version + 1 THEN
+  RAISE EXCEPTION 'Context changes require the next generation' USING ERRCODE='40001';
+ END IF;
+ RETURN NEW;
+END;
+$function$
+```
+
+### `identity.guard_totp_counter()`
+
+```sql
+CREATE OR REPLACE FUNCTION identity.guard_totp_counter()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+ IF OLD.last_accepted_totp_counter IS NOT NULL AND (NEW.last_accepted_totp_counter IS NULL OR NEW.last_accepted_totp_counter < OLD.last_accepted_totp_counter) THEN
+  RAISE EXCEPTION 'TOTP counter cannot move backwards' USING ERRCODE='23514';
+ END IF;
+ RETURN NEW;
+END;
+$function$
 ```
 
 ### `logistics.audit_otp_outcome()`

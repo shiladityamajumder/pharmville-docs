@@ -99,13 +99,16 @@ for(const [name,definition]of Object.entries(rawRegister)){
  }
 }
 relationships.sort((a,b)=>a.child.localeCompare(b.child)||a.constraint.localeCompare(b.constraint));
-relationships.forEach((relation,index)=>relation.id=`FK-${String(index+1).padStart(4,'0')}`);
+const priorInventory=JSON.parse(fs.readFileSync(path.join(erdRoot,'ERD-Inventory.json'),'utf8'));
+const priorIds=new Map(priorInventory.relationships.map(r=>[r.child+'.'+r.constraint,r.id]));
+let nextId=Math.max(...priorInventory.relationships.map(r=>Number(r.id.slice(3))));
+for(const r of relationships)r.id=priorIds.get(r.child+'.'+r.constraint)||'FK-'+String(++nextId).padStart(4,'0');
 const sourceColumns=new Set([...currentTables.values()].flatMap(table=>Object.keys(table.columns)));
 const schemas=[...new Set([...currentTables.values()].map(table=>table.schema))].sort();
-if(schemas.length!==24||currentTables.size!==266||relationships.length!==1461)fail(`Unexpected source inventory: ${schemas.length} schemas, ${currentTables.size} tables, ${relationships.length} FKs.`);
+if(schemas.length!==24||currentTables.size!==evidence.counts.tables||relationships.length!==evidence.counts.f)fail(`Unexpected source inventory: ${schemas.length} schemas, ${currentTables.size} tables, ${relationships.length} FKs.`);
 const totalColumns=[...currentTables.values()].reduce((sum,table)=>sum+Object.keys(table.columns).length,0);
-if(totalColumns!==4438)fail(`Unexpected source column count: ${totalColumns}`);
-for(const relation of relationships) relation.sourceMigration='Validated standalone SQL / effective V0030';
+if(totalColumns!==evidence.counts.columns)fail(`Unexpected source column count: ${totalColumns}`);
+for(const relation of relationships) relation.sourceMigration='Validated standalone SQL / effective V0030 + proposed D-028';
 const logicalReferences=Object.entries(rawLogicalReferences).map(([column,item])=>({column,...item}));
 const nonForeignReferences=logicalReferences.filter(item=>item.category!=='real domain FK');
 const noFkTables=[...currentTables.values()].filter(table=>table.foreignKeys.length===0).map(table=>table.name);
@@ -178,7 +181,7 @@ const schemaLink=(schema,display=schema)=>`[${display}](${schemaPageNames[schema
 const exactSourcePhrase='Validated standalone SQL / PostgreSQL 18 effective catalog';
 
 // Machine-readable evidence cache: key columns, exact FK definitions and non-FK references.
-const inventory={source:{git_head:sourceHead,migration_baseline:'V0001-V0030',catalog_sha256:evidence.register_sha256,checked_on:evidence.checked_on,live_database_inspected:evidence.live_database_inspected,source_directory:evidence.source_directory,source_kind:evidence.source_kind,documentation_baseline:evidence.documentation_baseline},counts:{schemas:schemas.length,tables:currentTables.size,columns:totalColumns,foreign_keys:relationships.length,cross_schema_foreign_keys:crossSchemaRelationships.length,diagrams:diagrams.length,orm_relationship_declarations:0},schemas:schemaStats,tables:[...currentTables.values()].sort((a,b)=>a.name.localeCompare(b.name)).map(table=>({name:table.name,primary_keys:table.primaryKeys,unique_keys:table.uniqueKeys,diagram:diagramForChild.get(table.name),foreign_key_count:table.foreignKeys.length,key_columns:[...new Set([...table.primaryKeys.flat(),...table.uniqueKeys.flat(),...table.foreignKeys.flatMap(item=>item.childColumns)])].sort().map(column=>({name:column,...table.columns[column]}))})),relationships:relationships.map(item=>({id:item.id,constraint:item.constraint,child:item.child,parent:item.parent,child_columns:item.childColumns,parent_columns:item.parentColumns,required:item.required,child_unique:item.childUnique,on_delete:item.deleteRule,on_update:item.updateRule,match:item.matchType,migration:item.sourceMigration,diagram:`${schemaPageNames[item.childSchema]}#${item.diagram}`})),non_foreign_uuid_references:nonForeignReferences.map(item=>({column:item.column,category:item.category,decision:item.decision,reason:item.reason||'',discriminator:item.discriminator||''})),tables_without_foreign_keys:noFkTables};
+const inventory={source:{git_head:sourceHead,migration_baseline:'V0001-V0030 + proposed D-028',catalog_sha256:evidence.register_sha256,checked_on:evidence.checked_on,live_database_inspected:evidence.live_database_inspected,source_directory:evidence.source_directory,source_kind:evidence.source_kind,documentation_baseline:evidence.documentation_baseline},counts:{schemas:schemas.length,tables:currentTables.size,columns:totalColumns,foreign_keys:relationships.length,cross_schema_foreign_keys:crossSchemaRelationships.length,diagrams:diagrams.length,orm_relationship_declarations:0},schemas:schemaStats,tables:[...currentTables.values()].sort((a,b)=>a.name.localeCompare(b.name)).map(table=>({name:table.name,primary_keys:table.primaryKeys,unique_keys:table.uniqueKeys,diagram:diagramForChild.get(table.name),foreign_key_count:table.foreignKeys.length,key_columns:[...new Set([...table.primaryKeys.flat(),...table.uniqueKeys.flat(),...table.foreignKeys.flatMap(item=>item.childColumns)])].sort().map(column=>({name:column,...table.columns[column]}))})),relationships:relationships.map(item=>({id:item.id,constraint:item.constraint,child:item.child,parent:item.parent,child_columns:item.childColumns,parent_columns:item.parentColumns,required:item.required,child_unique:item.childUnique,on_delete:item.deleteRule,on_update:item.updateRule,match:item.matchType,migration:item.sourceMigration,diagram:`${schemaPageNames[item.childSchema]}#${item.diagram}`})),non_foreign_uuid_references:nonForeignReferences.map(item=>({column:item.column,category:item.category,decision:item.decision,reason:item.reason||'',discriminator:item.discriminator||''})),tables_without_foreign_keys:noFkTables};
 write('ERD-Inventory.json',JSON.stringify(inventory,null,2));
 
 const workflowMap=new Map();
@@ -197,7 +200,7 @@ const mainMap=`# System data map
 
 ## What this map shows
 
-Pharmville's checked-out database snapshot contains **24 schemas, 266 tables, 4,438 columns, and 1,461 declared foreign keys**. The map below shows representative business-domain dependencies backed by one or more declared foreign keys. Arrows point from the schema that owns the referencing (child) column to the schema containing its referenced (parent) key; they do not grant access or establish service write ownership. The [cross-domain reference register](15-Cross-Domain-Relationships.md) lists every observed cross-schema pair.
+Pharmville's checked-out database snapshot contains **${schemas.length} schemas, ${currentTables.size} tables, ${totalColumns.toLocaleString('en-US')} columns, and ${relationships.length.toLocaleString('en-US')} declared foreign keys**. The map below shows representative business-domain dependencies backed by one or more declared foreign keys. Arrows point from the schema that owns the referencing (child) column to the schema containing its referenced (parent) key; they do not grant access or establish service write ownership. The [cross-domain reference register](15-Cross-Domain-Relationships.md) lists every observed cross-schema pair.
 
 ## Main domain map
 
@@ -450,7 +453,7 @@ ${schemaDocs.map(item=>`| \`${item.schema}\` | ${item.tables} | ${item.foreignKe
 
 ## Evidence and limitations
 
-The generator verifies the standalone SQL, derived catalog/table register and logical-reference decision checksums against [Database-Evidence.json](../../09-References/Database-Evidence.json). All 266 table pages and 4,438 columns are validated against the effective catalog. Private PostgreSQL fresh-install parity is recorded separately; no production connection is used.
+The generator verifies the standalone SQL, derived catalog/table register and logical-reference decision checksums against [Database-Evidence.json](../../09-References/Database-Evidence.json). All ${currentTables.size} table pages and ${totalColumns.toLocaleString('en-US')} columns are validated against the effective catalog. Private PostgreSQL fresh-install parity is recorded separately; no production connection is used.
 
 These ERDs cover every physical foreign key in the validated effective V0030 schema. SQL installation and zero catalog differences were verified in isolated disposable databases. Future proposals, business ownership approval and production deployment are separate states. The archived migration sources and nested Git history remain intact.
 

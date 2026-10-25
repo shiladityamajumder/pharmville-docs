@@ -6,6 +6,10 @@
 
 | Planning concern | Canonical reference |
 | --- | --- |
+| Unified Identity, scoped sessions and revocation | [Canonical architecture](Unified-Identity-Architecture.md) |
+| Role/workspace defaults and permissions | [Access matrix](../../01-Project/User-Roles.md) |
+| Legacy adapters and new API rollout | [Compatibility](API-Compatibility.md) |
+| Identity persistence changes and decisions | [Assessment](../../04-Database/Identity-Authentication-Assessment.md) |
 | Scope, requirements and business flow | [Business flow](Business-Flow.md) |
 | Components, boundaries and design | [HLD](HLD.md) · [LLD](LLD.md) |
 | Operation contracts and DTOs | [APIs](APIs.md) |
@@ -80,3 +84,8 @@ Client-supplied actor, role and location are never trusted as authorisation cont
 - 🧪 [QA scenarios](../../07-Engineering/Testing.md)
 - 🗓️ [Development tasks](../../08-Development-Plan/Implementation-Plan.md)
 - End-to-end flows: [workflows](../../06-Workflows/README.md)
+
+
+## Unified authentication source of truth
+
+**Proposed / Unapproved / Not Implemented.** All people share Identity; application panels consume verified workspace projections. Start with [unified architecture](Unified-Identity-Architecture.md), [role/workspace policy](../../01-Project/User-Roles.md), [API compatibility](API-Compatibility.md) and [database assessment](../../04-Database/Identity-Authentication-Assessment.md). Historical Customer/Admin contract surfaces are adapters; Authentication owns credential and grant commands.

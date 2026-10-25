@@ -14,7 +14,7 @@ Auditors need read-only, scoped, purpose-based export and access logging. Retent
 
 **Customer:** request OTP to verified number, enforce per-phone/IP rate limits, validate single-use short-lived challenge, issue short access plus rotating refresh session, store login history and allow safe device revocation. UI should not reveal whether a number exists before verification.
 
-**Routine staff and rider:** proposed OTP to registered device, bound to scope, role and current shift where required.
+**Routine staff and rider:** inherited planning proposed OTP for both. Rider phone OTP remains unchanged. D-028 explicitly proposes password + authenticator as the routine staff default; this change is unapproved under D-003, and the canonical role/workspace matrix records that status. Scope, role and current shift remain server checks.
 
 **Privileged Super Admin/Central Admin/Finance Manager:** checklist specifies password + authenticator TOTP with different session/lockout protections, despite an earlier blanket OTP-only statement. Do not silently implement both schemes without D-003 signoff.
 
@@ -147,3 +147,8 @@ Test abuse against a synthetic staging database. Do not consider a passed local 
 **Audit:** record who, action, resource, time, allowed/denied outcome and correlation ID, with minimal protected data. Do not claim the current SQL-only controls by themselves provide a compliant healthcare application.
 
 Exact RLS policies · database security
+
+
+## Unified identity and workspace access
+
+**Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.** [Unified Identity policy](../03-Modules/Authentication/Unified-Identity-Architecture.md) is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. [Role/workspace matrix](../01-Project/User-Roles.md) defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.

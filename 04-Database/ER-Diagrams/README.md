@@ -5,7 +5,7 @@
 - [System data map](00-System-Data-Map.md) for the major stored-data areas and representative links.
 - [ERD coverage report](ERD-Coverage-Report.md) for measured scope, evidence status, gaps, and validation limits.
 - [Cross-domain relationships](15-Cross-Domain-Relationships.md) for all 92 observed schema-to-schema FK pairs.
-- [Relationship catalog](Relationship-Catalog.md) for all 1461 physical FK constraints, split by child schema.
+- [Relationship catalog](Relationship-Catalog.md) for all 1476 physical FK constraints, split by child schema.
 - [Logical references](Logical-References.md) for UUID/polymorphic references that are not declared foreign keys.
 - [Machine-readable ERD inventory](ERD-Inventory.json) for reproducible table keys and relationship data.
 
@@ -20,7 +20,7 @@
 - [diagnostics — Tests and laboratory services](07-diagnostics.md) (13 tables, 79 FK constraints)
 - [finance — Invoices, ledgers, and settlements](08-finance.md) (8 tables, 45 FK constraints)
 - [fulfillment — Picking, packing, and shipment preparation](09-fulfillment.md) (10 tables, 70 FK constraints)
-- [identity — Accounts, sessions, and permissions](10-identity.md) (14 tables, 45 FK constraints)
+- [identity — Accounts, sessions, and permissions](10-identity.md) (16 tables, 60 FK constraints)
 - [insurance — Policies and claims](11-insurance.md) (8 tables, 42 FK constraints)
 - [logistics — Riders, shipments, and delivery](12-logistics.md) (15 tables, 84 FK constraints)
 - [marketplace — Sellers and listings](13-marketplace.md) (7 tables, 45 FK constraints)

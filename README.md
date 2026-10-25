@@ -24,7 +24,7 @@ Pharmville connects a customer web experience, protected staff/admin workspaces 
 | 🗓️ Development | Turn reviewed requirements into delivery slices | [Implementation plan](08-Development-Plan/Implementation-Plan.md) |
 
 <!-- ERD-INDEX-LINK -->
-**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams derive from the validated standalone SQL/catalog; all 1,461 physical foreign keys are accounted for.
+**Database ER diagrams:** [browse the verified domain maps and complete FK catalog](04-Database/ER-Diagrams/README.md). The diagrams derive from the validated standalone SQL/catalog; all 1,476 physical foreign keys are accounted for.
 
 ## Product flow
 
@@ -36,11 +36,11 @@ A request, a confirmed payment and a dispatched parcel are different milestones;
 
 The repository retains **110 draft feature IDs, 18 module groups and 14 technical workflows**. Business approval, proposed design, inspected database evidence and executed product tests are separate statuses. Feature-specific tests are **Designed / NOT RUN**; the [coverage report](09-References/Coverage-Report.md) records measured documentation results and remaining gaps.
 
-The [standalone SQL](pharmville-database/pharmville_schema.sql) installs the effective V0030 structure without historical tooling. Isolated PostgreSQL 18.6 comparisons found zero differences across 23 catalog dimensions. All 266 table pages match the validated catalog. The original sources, local files and nested Git history remain private and intact outside this deliverable. [Installation](04-Database/Installation.md) separates empty-schema setup from runtime provisioning and approved bootstrap data.
+The [standalone SQL](pharmville-database/pharmville_schema.sql) installs the effective V0030 structure plus the explicit Proposed / Unapproved D-028 unified-Identity extension without historical tooling. Isolated PostgreSQL 18.6 comparisons found zero differences across 23 catalog dimensions. All 268 table pages match the validated catalog. The original sources, local files and nested Git history remain private and intact outside this deliverable. [Installation](04-Database/Installation.md) separates empty-schema setup from runtime provisioning and approved bootstrap data.
 
 ## Detailed API and master-data blueprint
 
-[API planning coverage](05-APIs/API-Contract-Coverage.md) records 97/107 documentation-complete proposals (90.65%), 10 incomplete and 0 approved. The [API/database/feature matrix](05-APIs/API-Database-Feature-Matrix.md), [master inventory](04-Database/Master-Data-Inventory.md), [owner decisions](05-APIs/Planning-Decisions.md) and [validation evidence](05-APIs/Planning-Validation.md) explain the build contract and remaining gaps across all modules.
+[API planning coverage](05-APIs/API-Contract-Coverage.md) records 114/122 documentation-complete proposals (93.44%), 8 incomplete and 0 approved; all original 107 operations are preserved and 15 additions are explicit Identity proposals. The [API/database/feature matrix](05-APIs/API-Database-Feature-Matrix.md), [master inventory](04-Database/Master-Data-Inventory.md), [owner decisions](05-APIs/Planning-Decisions.md) and [current authentication validation](09-References/Unified-Authentication-Validation.md) explain the build contract and remaining gaps across all modules.
 
 ## Start development and maintain documentation
 
@@ -64,7 +64,7 @@ Explore the connected customer, staff and rider experiences through local graysc
 01-Project/              Stable requirements and phased capability decisions
 02-Architecture/         System, module boundaries and interactions
 03-Modules/              18 canonical business-module blueprints
-04-Database/             Catalog, 266 table references, masters and parity
+04-Database/             Catalog, 268 table references, masters and parity
 05-APIs/                 Shared conventions, OpenAPI, coverage and indexes
 06-Workflows/            14 cross-module orchestration contracts
 07-Engineering/          Security, testing, reliability and operations
@@ -76,3 +76,7 @@ scripts/                Documentation/catalog generation and validation
 ```
 
 Use [the module index](03-Modules/README.md) as the primary module source. Compatibility pages preserve old paths/anchors. [Capability scope](01-Project/Capability-Scope.md), [module ownership](02-Architecture/Module-Boundaries.md) and [requirement-to-delivery trace](09-References/Feature-Delivery-Traceability.md) identify what to build, who owns it and which decisions remain open. [Execution ledger](09-References/Architecture-Rework-Plan.md) records verified outcomes and remaining gates.
+
+## Unified authentication planning
+
+[One Identity architecture](03-Modules/Authentication/Unified-Identity-Architecture.md) serves every person with multiple scoped assignments, backend-derived workspaces and step-up authentication. [Role/workspace matrix](01-Project/User-Roles.md) and [API compatibility](03-Modules/Authentication/API-Compatibility.md) preserve Customer/Rider OTP and privileged password/authenticator rules. [Current review record](09-References/Unified-Authentication-Validation.md) distinguishes passed SQL/documentation checks from the unavailable formal OpenAPI validator and open D-003/D-023/D-024/D-028 decisions. No application implementation or approved grants are claimed.

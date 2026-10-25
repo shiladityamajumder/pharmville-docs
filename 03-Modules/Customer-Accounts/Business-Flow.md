@@ -26,3 +26,8 @@
 [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md), [WF-003](../../06-Workflows/WF-003-Cart-Quote-and-Reservation.md). Exact transitions, recovery and permission checks remain in [LLD](LLD.md), [endpoint contracts](APIs.md), [edge cases](Edge-Cases.md) and the [state/ownership contract](../../07-Engineering/State-and-Recovery-Contracts.md).
 
 [Shared business journey](../../00-Business-Guide/Accounts-and-Login.md) supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-003; D-010; D-023; D-024.
+
+
+## Unified identity and workspace access
+
+**Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.** [Unified Identity policy](../Authentication/Unified-Identity-Architecture.md) is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. [Role/workspace matrix](../../01-Project/User-Roles.md) defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.

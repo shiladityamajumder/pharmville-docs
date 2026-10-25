@@ -10,6 +10,7 @@ The `identity` schema stores accounts, sessions, and permissions. The names and 
 |---|---|---|
 | [`api_client_secrets`](../Tables/identity/api_client_secrets.md) | Holds api client secrets records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/api_client_secrets.md) |
 | [`api_clients`](../Tables/identity/api_clients.md) | Holds api clients records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/api_clients.md) |
+| [`authentication_challenges`](../Tables/identity/authentication_challenges.md) | Durable single-use, purpose-bound proofs for unified login, step-up, authenticator enrollment and password recovery; server-resolved identity, policy and context binding. (inferred meaning) | [Table contract](../Tables/identity/authentication_challenges.md) |
 | [`login_attempts`](../Tables/identity/login_attempts.md) | Holds login attempts records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/login_attempts.md) |
 | [`mfa_factors`](../Tables/identity/mfa_factors.md) | Holds mfa factors records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/mfa_factors.md) |
 | [`otp_challenges`](../Tables/identity/otp_challenges.md) | Holds otp challenges records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/otp_challenges.md) |
@@ -17,6 +18,7 @@ The `identity` schema stores accounts, sessions, and permissions. The names and 
 | [`permissions`](../Tables/identity/permissions.md) | Holds permissions records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/permissions.md) |
 | [`role_permissions`](../Tables/identity/role_permissions.md) | Holds role permissions records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/role_permissions.md) |
 | [`roles`](../Tables/identity/roles.md) | Holds roles records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/roles.md) |
+| [`session_refresh_tokens`](../Tables/identity/session_refresh_tokens.md) | Hashed refresh credential lineage retained to detect spent-token replay and revoke the owning session family. (inferred meaning) | [Table contract](../Tables/identity/session_refresh_tokens.md) |
 | [`sessions`](../Tables/identity/sessions.md) | Holds sessions records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/sessions.md) |
 | [`trusted_devices`](../Tables/identity/trusted_devices.md) | Holds trusted devices records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/trusted_devices.md) |
 | [`user_profiles`](../Tables/identity/user_profiles.md) | Holds user profiles records within the identity domain (accounts, sessions, and role permissions). Its precise write owner and lifecycle must be accepted during module implementation. (inferred meaning) | [Table contract](../Tables/identity/user_profiles.md) |
@@ -29,7 +31,120 @@ These diagrams show declared PostgreSQL foreign keys from focused source tables.
 
 <a id="diagram-01"></a>
 
-### Diagram 01 — role_permissions, permissions, roles, user_roles, users, api_clients, api_client_secrets, mfa_factors
+### Diagram 01 — authentication_challenges, mfa_factors, otp_challenges, session_refresh_tokens, sessions, user_roles, roles, users
+
+This focused view contains every declared FK owned by the listed focus tables. Referenced tables outside that set appear as context. Parallel FK constraints are distinguished by their stable IDs; search those IDs in the [relationship catalog](Relationship-Catalog/identity.md) for exact columns and actions.
+
+```mermaid
+erDiagram
+    identity__authentication_challenges {
+        uuid created_by FK
+        uuid id FK, UK
+        bigint internal_id PK, UK
+        uuid mfa_factor_id FK
+        uuid otp_challenge_id FK
+        uuid parent_challenge_id FK
+        uuid session_id FK
+        varchar token_hash UK
+        uuid updated_by FK
+        uuid user_id FK
+    }
+    identity__mfa_factors {
+        uuid created_by FK
+        varchar factor_type UK
+        uuid id FK, UK
+        bigint internal_id PK, UK
+        varchar label UK
+        uuid updated_by FK
+        uuid user_id FK, UK
+    }
+    identity__otp_challenges {
+        uuid created_by FK
+        uuid id FK, UK
+        bigint internal_id PK, UK
+        uuid updated_by FK
+    }
+    identity__roles {
+        uuid created_by FK
+        uuid deleted_by FK
+        uuid id FK, UK
+        bigint internal_id PK, FK, UK
+        uuid updated_by FK
+    }
+    identity__session_refresh_tokens {
+        uuid created_by FK
+        uuid id FK, UK
+        bigint internal_id PK, UK
+        uuid parent_token_id FK
+        uuid session_id FK, UK
+        varchar token_hash UK
+        uuid updated_by FK
+    }
+    identity__sessions {
+        uuid active_assignment_id FK
+        uuid created_by FK
+        uuid id FK, UK
+        bigint internal_id PK, UK
+        varchar refresh_token_hash UK
+        uuid updated_by FK
+        uuid user_id FK, UK
+    }
+    identity__user_roles {
+        uuid created_by FK
+        uuid id FK, UK
+        bigint internal_id PK, UK
+        uuid role_id FK, UK
+        bigint role_id_internal_id FK
+        uuid scope_id UK
+        varchar scope_type UK
+        uuid updated_by FK
+        uuid user_id FK, UK
+    }
+    identity__users {
+        uuid created_by FK
+        varchar email_normalized UK
+        uuid id PK, FK, UK
+        uuid updated_by FK
+    }
+    identity__users o|--o{ identity__authentication_challenges : "FK-1462 FK-1467 FK-1468"
+    identity__mfa_factors o|--o{ identity__authentication_challenges : "FK-1463 FK-1469"
+    identity__otp_challenges o|--o{ identity__authentication_challenges : "FK-1464"
+    identity__authentication_challenges o|--o{ identity__authentication_challenges : "FK-1465"
+    identity__sessions o|--o{ identity__authentication_challenges : "FK-1466 FK-1470"
+    identity__users o|--o{ identity__mfa_factors : "FK-0666 FK-0667"
+    identity__users ||--o{ identity__mfa_factors : "FK-0668"
+    identity__users o|--o{ identity__otp_challenges : "FK-0669 FK-0670"
+    identity__session_refresh_tokens o|--o{ identity__session_refresh_tokens : "FK-1471 FK-1473"
+    identity__users o|--o{ identity__session_refresh_tokens : "FK-1472 FK-1475"
+    identity__sessions ||--o{ identity__session_refresh_tokens : "FK-1474"
+    identity__user_roles o|--o{ identity__sessions : "FK-1476"
+    identity__users o|--o{ identity__sessions : "FK-0684 FK-0685"
+    identity__users ||--o{ identity__sessions : "FK-0686"
+    identity__users o|--o{ identity__user_roles : "FK-0696 FK-0699"
+    identity__roles ||--o{ identity__user_roles : "FK-0697 FK-0698"
+    identity__users ||--o{ identity__user_roles : "FK-0700"
+    identity__users o|--o{ identity__roles : "FK-0681 FK-0682 FK-0683"
+    identity__users o|--o{ identity__users : "FK-0701 FK-0702"
+```
+
+**Entity name mapping**
+
+| Mermaid name | PostgreSQL table |
+|---|---|
+| `identity__authentication_challenges` | [`identity.authentication_challenges`](../Tables/identity/authentication_challenges.md) |
+| `identity__mfa_factors` | [`identity.mfa_factors`](../Tables/identity/mfa_factors.md) |
+| `identity__otp_challenges` | [`identity.otp_challenges`](../Tables/identity/otp_challenges.md) |
+| `identity__roles` | [`identity.roles`](../Tables/identity/roles.md) |
+| `identity__session_refresh_tokens` | [`identity.session_refresh_tokens`](../Tables/identity/session_refresh_tokens.md) |
+| `identity__sessions` | [`identity.sessions`](../Tables/identity/sessions.md) |
+| `identity__user_roles` | [`identity.user_roles`](../Tables/identity/user_roles.md) |
+| `identity__users` | [`identity.users`](../Tables/identity/users.md) |
+
+Coverage: 8 focus tables, 8 entities, 33 FK constraints (33 unique IDs).
+
+<a id="diagram-02"></a>
+
+### Diagram 02 — role_permissions, permissions, api_clients, api_client_secrets, trusted_devices, login_attempts, password_history, user_profiles
 
 This focused view contains every declared FK owned by the listed focus tables. Referenced tables outside that set appear as context. Parallel FK constraints are distinguished by their stable IDs; search those IDs in the [relationship catalog](Relationship-Catalog/identity.md) for exact columns and actions.
 
@@ -50,14 +165,15 @@ erDiagram
         bigint internal_id PK, FK, UK
         uuid updated_by FK
     }
-    identity__mfa_factors {
-        uuid created_by FK
-        varchar factor_type UK
+    identity__login_attempts {
         uuid id UK
         bigint internal_id PK, UK
-        varchar label UK
-        uuid updated_by FK
-        uuid user_id FK, UK
+        uuid user_id FK
+    }
+    identity__password_history {
+        uuid id UK
+        bigint internal_id PK, UK
+        uuid user_id FK
     }
     identity__permissions {
         uuid created_by FK
@@ -82,86 +198,6 @@ erDiagram
         uuid id FK, UK
         bigint internal_id PK, FK, UK
         uuid updated_by FK
-    }
-    identity__user_roles {
-        uuid created_by FK
-        uuid id UK
-        bigint internal_id PK, UK
-        uuid role_id FK, UK
-        bigint role_id_internal_id FK
-        uuid scope_id UK
-        varchar scope_type UK
-        uuid updated_by FK
-        uuid user_id FK, UK
-    }
-    identity__users {
-        uuid created_by FK
-        varchar email_normalized UK
-        uuid id PK, FK, UK
-        uuid updated_by FK
-    }
-    identity__users o|--o{ identity__role_permissions : "FK-0675 FK-0680"
-    identity__permissions ||--o{ identity__role_permissions : "FK-0676 FK-0677"
-    identity__roles ||--o{ identity__role_permissions : "FK-0678 FK-0679"
-    identity__users o|--o{ identity__permissions : "FK-0672 FK-0673 FK-0674"
-    identity__users o|--o{ identity__roles : "FK-0681 FK-0682 FK-0683"
-    identity__users o|--o{ identity__user_roles : "FK-0696 FK-0699"
-    identity__roles ||--o{ identity__user_roles : "FK-0697 FK-0698"
-    identity__users ||--o{ identity__user_roles : "FK-0700"
-    identity__users o|--o{ identity__users : "FK-0701 FK-0702"
-    identity__users o|--o{ identity__api_clients : "FK-0662 FK-0663 FK-0664"
-    identity__api_clients ||--o{ identity__api_client_secrets : "FK-0658 FK-0659"
-    identity__users o|--o{ identity__api_client_secrets : "FK-0660 FK-0661"
-    identity__users o|--o{ identity__mfa_factors : "FK-0666 FK-0667"
-    identity__users ||--o{ identity__mfa_factors : "FK-0668"
-```
-
-**Entity name mapping**
-
-| Mermaid name | PostgreSQL table |
-|---|---|
-| `identity__api_client_secrets` | [`identity.api_client_secrets`](../Tables/identity/api_client_secrets.md) |
-| `identity__api_clients` | [`identity.api_clients`](../Tables/identity/api_clients.md) |
-| `identity__mfa_factors` | [`identity.mfa_factors`](../Tables/identity/mfa_factors.md) |
-| `identity__permissions` | [`identity.permissions`](../Tables/identity/permissions.md) |
-| `identity__role_permissions` | [`identity.role_permissions`](../Tables/identity/role_permissions.md) |
-| `identity__roles` | [`identity.roles`](../Tables/identity/roles.md) |
-| `identity__user_roles` | [`identity.user_roles`](../Tables/identity/user_roles.md) |
-| `identity__users` | [`identity.users`](../Tables/identity/users.md) |
-
-Coverage: 8 focus tables, 8 entities, 29 FK constraints (29 unique IDs).
-
-<a id="diagram-02"></a>
-
-### Diagram 02 — user_profiles, sessions, trusted_devices, otp_challenges, login_attempts, password_history
-
-This focused view contains every declared FK owned by the listed focus tables. Referenced tables outside that set appear as context. Parallel FK constraints are distinguished by their stable IDs; search those IDs in the [relationship catalog](Relationship-Catalog/identity.md) for exact columns and actions.
-
-```mermaid
-erDiagram
-    identity__login_attempts {
-        uuid id UK
-        bigint internal_id PK, UK
-        uuid user_id FK
-    }
-    identity__otp_challenges {
-        uuid created_by FK
-        uuid id UK
-        bigint internal_id PK, UK
-        uuid updated_by FK
-    }
-    identity__password_history {
-        uuid id UK
-        bigint internal_id PK, UK
-        uuid user_id FK
-    }
-    identity__sessions {
-        uuid created_by FK
-        uuid id UK
-        bigint internal_id PK, UK
-        varchar refresh_token_hash UK
-        uuid updated_by FK
-        uuid user_id FK
     }
     identity__trusted_devices {
         uuid created_by FK
@@ -197,32 +233,39 @@ erDiagram
         uuid updated_by FK
         uuid uploaded_by_user_id FK
     }
+    identity__users o|--o{ identity__role_permissions : "FK-0675 FK-0680"
+    identity__permissions ||--o{ identity__role_permissions : "FK-0676 FK-0677"
+    identity__roles ||--o{ identity__role_permissions : "FK-0678 FK-0679"
+    identity__users o|--o{ identity__permissions : "FK-0672 FK-0673 FK-0674"
+    identity__users o|--o{ identity__api_clients : "FK-0662 FK-0663 FK-0664"
+    identity__api_clients ||--o{ identity__api_client_secrets : "FK-0658 FK-0659"
+    identity__users o|--o{ identity__api_client_secrets : "FK-0660 FK-0661"
+    identity__users o|--o{ identity__trusted_devices : "FK-0687 FK-0688"
+    identity__users ||--o{ identity__trusted_devices : "FK-0689"
+    identity__users o|--o{ identity__login_attempts : "FK-0665"
+    identity__users ||--o{ identity__password_history : "FK-0671"
     platform__file_objects o|--o{ identity__user_profiles : "FK-0690 FK-0691"
     identity__users o|--o{ identity__user_profiles : "FK-0692 FK-0693 FK-0694"
     identity__users ||--o{ identity__user_profiles : "FK-0695"
-    identity__users o|--o{ identity__sessions : "FK-0684 FK-0685"
-    identity__users ||--o{ identity__sessions : "FK-0686"
-    identity__users o|--o{ identity__trusted_devices : "FK-0687 FK-0688"
-    identity__users ||--o{ identity__trusted_devices : "FK-0689"
-    identity__users o|--o{ identity__otp_challenges : "FK-0669 FK-0670"
-    identity__users o|--o{ identity__login_attempts : "FK-0665"
-    identity__users ||--o{ identity__password_history : "FK-0671"
 ```
 
 **Entity name mapping**
 
 | Mermaid name | PostgreSQL table |
 |---|---|
+| `identity__api_client_secrets` | [`identity.api_client_secrets`](../Tables/identity/api_client_secrets.md) |
+| `identity__api_clients` | [`identity.api_clients`](../Tables/identity/api_clients.md) |
 | `identity__login_attempts` | [`identity.login_attempts`](../Tables/identity/login_attempts.md) |
-| `identity__otp_challenges` | [`identity.otp_challenges`](../Tables/identity/otp_challenges.md) |
 | `identity__password_history` | [`identity.password_history`](../Tables/identity/password_history.md) |
-| `identity__sessions` | [`identity.sessions`](../Tables/identity/sessions.md) |
+| `identity__permissions` | [`identity.permissions`](../Tables/identity/permissions.md) |
+| `identity__role_permissions` | [`identity.role_permissions`](../Tables/identity/role_permissions.md) |
+| `identity__roles` | [`identity.roles`](../Tables/identity/roles.md) |
 | `identity__trusted_devices` | [`identity.trusted_devices`](../Tables/identity/trusted_devices.md) |
 | `identity__user_profiles` | [`identity.user_profiles`](../Tables/identity/user_profiles.md) |
 | `identity__users` | [`identity.users`](../Tables/identity/users.md) |
 | `platform__file_objects` | [`platform.file_objects`](../Tables/platform/file_objects.md) |
 
-Coverage: 6 focus tables, 8 entities, 16 FK constraints (16 unique IDs).
+Coverage: 8 focus tables, 11 entities, 27 FK constraints (27 unique IDs).
 
 ## How the tables connect
 

@@ -28,3 +28,8 @@ Resource/patient/location checks and sensitive-field filtering are endpoint-spec
 | `AUTH-04` | [TC-AUTH-04-OK](LLD.md) | [Feature edge cases](Edge-Cases.md) and endpoint CT scenarios | Designed / NOT RUN |
 
 Each endpoint additionally defines validation, authentication, authorization, business-gate, duplicate-intent, stale-version/concurrency and recovery cases. No execution is claimed. [Testing strategy](../../07-Engineering/Testing.md) separates schema parity from application acceptance; [delivery tasks](../../08-Development-Plan/Implementation-Plan.md) preserve existing TASK IDs.
+
+
+## Context and credential lifecycle
+
+**Proposed / Unapproved / Not Implemented.** Apply the [live authorization consistency policy](Unified-Identity-Architecture.md#authorization-consistency-and-revocation) to every protected operation. Unavailable primary policy fails closed. Revoke matching context on role removal; revoke all sessions/proofs on suspension or password change; refresh never extends method freshness. First enrollment requires fresh phone OTP and password with staff eligibility; factor replacement requires existing MFA. Assisted factor-loss recovery is pending Security approval, never OTP-only reset.

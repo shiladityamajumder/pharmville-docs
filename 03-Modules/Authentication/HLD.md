@@ -65,3 +65,8 @@ Client-supplied actor, role and location are never trusted as authorisation cont
 - [Implementation plan](../../08-Development-Plan/Implementation-Plan.md)
 
 **Dependencies:** all cross-module references require ownership and permission checks; see master dependency register.
+
+
+## Identity components and boundaries
+
+**Proposed / Unapproved / Not Implemented.** The common Login Facade invokes Challenge/Proof, Session/Refresh, Policy/Scoped-Grant and Workspace Projection components in the existing modular monolith. Customer Accounts supplies onboarding/profile/consent; Admin supplies assignment administration UI; every module applies the same live authorization gate before resource access. No separate identity store, role-specific auth service or client-chosen role is introduced. [Component, scope and revocation design](Unified-Identity-Architecture.md).

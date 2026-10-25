@@ -1,5 +1,8 @@
 # Architecture and API planning validation
 
+> [!NOTE]
+> The dated results below are historical architecture-rework evidence. Current unified-authentication validation is recorded in [Unified Authentication Validation](../09-References/Unified-Authentication-Validation.md).
+
 **Executed checks: 24 October 2026.** Tests of application/provider/production behavior remain Designed / NOT RUN. Historical validation narratives are retained under [Historical](../09-References/Historical/README.md).
 
 | Check | Evidence / result |

@@ -12,7 +12,7 @@ Module test cases · DB schema/release policy
 
 ## Migration and SQL validation plan
 
-Use `npm run validate:database` and `python3 scripts/validate-database.py --fresh` against newly initialized private PostgreSQL 18.6 only. Verify full catalog parity, all 266 empty tables, constraints, crosswalks, capability roles, grants and RLS. Legacy ORM/runner tests are archived historical evidence. A future populated-database upgrade and earlier-engine compatibility need a separate approved test design.
+Use `npm run validate:database` and `python3 scripts/validate-database.py --fresh` against newly initialized private PostgreSQL 18.6 only. Verify full catalog parity, all 268 empty tables, constraints, crosswalks, capability roles, grants and RLS. Legacy ORM/runner tests are archived historical evidence. A future populated-database upgrade and earlier-engine compatibility need a separate approved test design.
 
 Exercise all existing PK/FK/UNIQUE/CHECK/index/trigger/RLS semantics through their canonical service operations.
 
@@ -137,3 +137,9 @@ The [master register](../09-References/Coverage-and-Traceability.md) owns featur
 Use [state and recovery contracts](State-and-Recovery-Contracts.md) for commit/rollback, replay, stale-version and compensation expectations. Kill a worker before commit and after commit/before acknowledgment; verify one effect, recoverable queued work and honest customer status.
 
 Last-unit, review-versus-revision, cancellation-versus-packing, duplicate-refund and COD-shortage tests need real restricted-role database fixtures.
+
+## Unified Identity acceptance slice — Designed / NOT RUN
+
+Use the endpoint-specific CT-API scenarios in [Authentication](../03-Modules/Authentication/APIs.md), [Customer adapters](../03-Modules/Customer-Accounts/APIs.md) and [Admin](../03-Modules/Admin/APIs.md), traced to AUTH-01–04, ACC-01/02 and ADM-02/03. Cover: uniform unknown-identifier responses; Customer/Rider OTP and required privileged MFA; multi-role/site selection without scope union; challenge/factor/refresh replay; context ETags and stale tabs; membership/role/account revocation under commit ordering; missing-workspace fallback; scoped offboarding without global identity suspension; conditional global authority for API-034 status; locked/suspended recovery and factor replacement without MFA bypass; first-profile dependency with no fabricated name. Verify audit redaction and provider fallback. Application/security/provider results remain unexecuted.
+
+[Current evidence](../09-References/Unified-Authentication-Validation.md) records only actual isolated SQL/constraint, schema/example and documentation validations. The absent optional formal OpenAPI validator is not reported as passed; historical meta-schema results do not cover D-028.

@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 
 const erdRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.resolve(erdRoot,'../..');
+const evidence=JSON.parse(fs.readFileSync(path.join(root,'09-References/Database-Evidence.json'),'utf8'));
 const errors=[];
 const check=(condition,message)=>{if(!condition)errors.push(message);};
 const inventoryPath=path.join(erdRoot,'ERD-Inventory.json');
@@ -15,9 +16,9 @@ const diagramIds=new Map();
 const counts={schemas:0,diagrams:0,diagramRelationshipIds:0,catalogRows:0};
 
 check(inventory.counts.schemas===24,'Inventory must cover 24 schemas.');
-check(inventory.counts.tables===266&&inventory.tables.length===266,'Inventory must contain all 266 source tables.');
-check(inventory.counts.columns===4438,'Inventory must report 4,438 source columns.');
-check(inventory.counts.foreign_keys===1461&&relationshipIds.length===1461,'Inventory must contain all 1,461 declared FKs.');
+check(inventory.counts.tables===evidence.counts.tables&&inventory.tables.length===evidence.counts.tables,'Inventory must contain all current catalog tables.');
+check(inventory.counts.columns===evidence.counts.columns,'Inventory must report the current catalog column count.');
+check(inventory.counts.foreign_keys===evidence.counts.f&&relationshipIds.length===evidence.counts.f,'Inventory must contain all current catalog FKs.');
 check(inventory.counts.cross_schema_foreign_keys===894,'Inventory cross-schema FK count differs from the verified snapshot.');
 check(inventory.counts.orm_relationship_declarations===0,'ORM relationship scan result differs from the recorded source review.');
 check(new Set(relationshipIds).size===relationshipIds.length,'Relationship IDs are not unique.');

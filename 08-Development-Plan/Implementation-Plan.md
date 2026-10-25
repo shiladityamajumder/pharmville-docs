@@ -330,3 +330,10 @@ Resolve [module API readiness](../03-Modules/Warehouse/APIs.md), [write ownershi
 | `TASK-066` | [`WH-03`](../09-References/Coverage-and-Traceability.md) | `TC-WH-03-OK` and `TC-WH-03-DENY` in [LLD](../03-Modules/Warehouse/LLD.md) and [edge cases](../03-Modules/Warehouse/Edge-Cases.md), reviewed and executed against approved fixtures |
 | `TASK-067` | [`WH-04`](../09-References/Coverage-and-Traceability.md) | `TC-WH-04-OK` and `TC-WH-04-DENY` in [LLD](../03-Modules/Warehouse/LLD.md) and [edge cases](../03-Modules/Warehouse/Edge-Cases.md), reviewed and executed against approved fixtures |
 | `TASK-068` | [`WH-05`](../09-References/Coverage-and-Traceability.md) | `TC-WH-05-OK` and `TC-WH-05-DENY` in [LLD](../03-Modules/Warehouse/LLD.md) and [edge cases](../03-Modules/Warehouse/Edge-Cases.md), reviewed and executed against approved fixtures |
+
+
+## Unified identity delivery slice — Proposed, not started
+
+Under existing TASK-102–TASK-105 / AUTH-01–04, sequence: approve D-028 schema/context design and D-003 policy → implement shared challenge/proof/session/refresh commands → preserve legacy adapters → add current identity/workspaces/context/step-up → enrollment/password/recovery gates → live authorization integration for every protected module. ADM-03 assignment/permission administration delegates Identity commands, with no client-selected authority. Customer ACC-01 onboarding and Rider RID-01 OTP remain their existing business journeys.
+
+Acceptance evidence must include the designed cases in [Authentication contracts](../03-Modules/Authentication/APIs.md) and [Admin contracts](../03-Modules/Admin/APIs.md), plus primary-database revocation races, cross-scope failures and wireframe preservation. SQL rehearsal validates structure only; application/security/provider tests remain unexecuted. D-023 contact replacement and D-003 assisted authenticator-loss procedure remain release gates for those flows.

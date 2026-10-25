@@ -21,3 +21,7 @@ There are **no data/seed INSERTs** in the standalone deployment script. INSERT s
 Run `npm run validate:database` for checksum and full documentation/catalog comparison. Run `python3 scripts/validate-database.py --fresh` to initialize a private disposable PostgreSQL cluster, install the one SQL file, compare all 23 catalog dimensions and stop that cluster. It never reads `.env`, connects to a supplied production URL, or runs the archived application. PostgreSQL binaries must be available (or `--pg-bin` must name their directory). Run `python3 scripts/generate-database-docs.py`, then `npm run generate:erd` only when intentionally updating derived references.
 
 The checked-in [parity evidence](../09-References/Database-Parity-Result.json) records the executed source-chain-versus-standalone comparison. No production database was queried.
+
+## D-028 current schema revision
+
+The counts/source-only statements above describe the preserved V0030 historical baseline. Current canonical SQL additionally contains the explicit **Proposed / Unapproved / Not Implemented** unified Identity design: 268 tables, 4,485 columns, 1,476 FKs, 1,222 indexes, 58 functions, 883 user triggers, 267 identity sequences and 3 unchanged RLS policies. The baseline retained all objects; current SQL installs into two isolated empty databases with zero catalog differences. See [current verification](../09-References/Unified-Authentication-Database-Validation.json) and [identity reconciliation](Identity-Authentication-Assessment.md). No production database or data migration is involved.

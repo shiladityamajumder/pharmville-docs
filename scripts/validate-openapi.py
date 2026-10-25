@@ -19,7 +19,7 @@ def main():
   for error in Draft202012Validator(schema,resolver=resolver,format_checker=FormatChecker()).iter_errors(value):errors.append(where+': '+error.message)
  for error in OpenAPIV31SpecValidator(spec).iter_errors():errors.append('OpenAPI 3.1 meta-schema: '+str(error))
  counts['openapi_meta_schema_errors']=len(errors)
- before=json.loads((ROOT/'09-References/Architecture-Rework-API-Baseline.json').read_text());expected={(x['method'],x['path'],x['id'],x['operationId'])for x in before};actual=set()
+ before=json.loads((ROOT/'09-References/Architecture-Rework-API-Baseline.json').read_text());expected={(x['method'],x['path'],x['id'],x['operationId'])for x in before};actual=set();expected|={(x['method'],x['path'],x['id'],x['operationId'])for x in json.loads((ROOT/'09-References/Unified-Authentication-API-Proposals.json').read_text())}
  for path,methods in spec['paths'].items():
   for method,o in methods.items():
    if method not in ['get','post','put','patch','delete']:continue
@@ -69,7 +69,7 @@ def main():
   elif isinstance(value,list):
    for x in value:walk(x)
  walk(spec['components']);counts['tables_classified']=len(owned)
- report={'result':'FAIL'if errors else'PASS','counts':dict(counts),'errors':errors,'limitations':['No application/provider/production tests executed.','SQL parity independently validated; runtime/business approvals remain open.','Ten conceptual contract gaps remain excluded despite structurally valid schemas.']}
+ report={'result':'FAIL'if errors else'PASS','counts':dict(counts),'errors':errors,'limitations':['No application/provider/production tests executed.','SQL parity independently validated; runtime/business approvals remain open.','Eight conceptual contract gaps remain excluded despite structurally valid schemas.']}
  if args.report:args.report.write_text(json.dumps(report,indent=2)+'\n')
  print(json.dumps(report,indent=2));return bool(errors)
 if __name__=='__main__':sys.exit(main())

@@ -20,25 +20,25 @@
 
 | API ID | Method/path | Purpose | Documentation status |
 | --- | --- | --- | --- |
-| API-001 | `POST /v1/auth/customer/otp/request` | Issue a purpose-bound customer login challenge without revealing account existence. | Complete proposed |
-| API-002 | `POST /v1/auth/customer/otp/verify` | Consume a valid login challenge and establish exactly one customer session. | Complete proposed |
-| API-003 | `GET /v1/me` | Return the authenticated customer profile and separate identity/profile versions. | Complete proposed |
-| API-004 | `PATCH /v1/me` | Patch own profile while protecting verified contact replacement. | Incomplete — D-023: exact replacement proof DTO/storage is absent. Profile-only subset proposed, full route incomplete. |
-| API-005 | `GET /v1/me/addresses` | List only active addresses belonging to the session customer. | Complete proposed |
-| API-006 | `POST /v1/me/addresses` | Create an owned delivery address without asserting serviceability. | Complete proposed |
-| API-007 | `GET /v1/me/patients` | List owned dependent associations with no private clinical history. | Complete proposed |
-| API-008 | `POST /v1/me/patients` | Create a family association and linked patient identity for the customer. | Complete proposed |
-| API-009 | `POST /v1/me/consents` | Record an explicit consent choice against a published purpose/version. | Complete proposed |
-| ACC-ROUTE-005 | `GET /v1/me/consents` | List own consent choices and their policy versions. | Complete proposed |
-| ACC-ROUTE-001 | `PATCH /v1/me/addresses/{addressId}` | Edit an owned address with optimistic locking. | Complete proposed |
-| ACC-ROUTE-002 | `DELETE /v1/me/addresses/{addressId}` | Soft-delete an owned address without erasing order evidence. | Complete proposed |
-| ACC-ROUTE-007 | `POST /v1/me/deletion-requests` | Create a privacy deletion request without immediate data erasure. | Complete proposed |
-| ACC-ROUTE-006 | `GET /v1/me/deletion-requests/{requestId}` | Read own privacy deletion request status. | Complete proposed |
-| ACC-ROUTE-003 | `PATCH /v1/me/patients/{patientId}` | Edit demographic attributes of an owned family association. | Complete proposed |
-| ACC-ROUTE-004 | `DELETE /v1/me/patients/{patientId}` | Soft-remove a family association while retaining patient evidence. | Complete proposed |
-| ACC-ROUTE-008 | `GET /v1/me/wishlist/items` | List the owned default wishlist’s product references. | Complete proposed |
-| ACC-ROUTE-009 | `POST /v1/me/wishlist/items` | Add one published product to the owned default wishlist. | Complete proposed |
-| ACC-ROUTE-010 | `DELETE /v1/me/wishlist/items/{itemId}` | Remove one owned wishlist item idempotently. | Complete proposed |
+| API-001 | `POST /v1/auth/customer/otp/request` | Issue a purpose-bound customer login challenge without revealing account existence | Complete proposed |
+| API-002 | `POST /v1/auth/customer/otp/verify` | Consume a valid login challenge and establish exactly one customer session | Complete proposed |
+| API-003 | `GET /v1/me` | Return the authenticated customer profile and separate identity/profile versions | Complete proposed |
+| API-004 | `PATCH /v1/me` | Patch own profile while protecting verified contact replacement | Incomplete — D-023: exact replacement proof DTO/storage is absent. Profile-only subset proposed, full route incomplete. |
+| API-005 | `GET /v1/me/addresses` | List only active addresses belonging to the session customer | Complete proposed |
+| API-006 | `POST /v1/me/addresses` | Create an owned delivery address without asserting serviceability | Complete proposed |
+| API-007 | `GET /v1/me/patients` | List owned dependent associations with no private clinical history | Complete proposed |
+| API-008 | `POST /v1/me/patients` | Create a family association and linked patient identity for the customer | Complete proposed |
+| API-009 | `POST /v1/me/consents` | Record an explicit consent choice against a published purpose/version | Complete proposed |
+| ACC-ROUTE-005 | `GET /v1/me/consents` | List own consent choices and their policy versions | Complete proposed |
+| ACC-ROUTE-001 | `PATCH /v1/me/addresses/{addressId}` | Edit an owned address with optimistic locking | Complete proposed |
+| ACC-ROUTE-002 | `DELETE /v1/me/addresses/{addressId}` | Soft-delete an owned address without erasing order evidence | Complete proposed |
+| ACC-ROUTE-007 | `POST /v1/me/deletion-requests` | Create a privacy deletion request without immediate data erasure | Complete proposed |
+| ACC-ROUTE-006 | `GET /v1/me/deletion-requests/{requestId}` | Read own privacy deletion request status | Complete proposed |
+| ACC-ROUTE-003 | `PATCH /v1/me/patients/{patientId}` | Edit demographic attributes of an owned family association | Complete proposed |
+| ACC-ROUTE-004 | `DELETE /v1/me/patients/{patientId}` | Soft-remove a family association while retaining patient evidence | Complete proposed |
+| ACC-ROUTE-008 | `GET /v1/me/wishlist/items` | List the owned default wishlist’s product references | Complete proposed |
+| ACC-ROUTE-009 | `POST /v1/me/wishlist/items` | Add one published product to the owned default wishlist | Complete proposed |
+| ACC-ROUTE-010 | `DELETE /v1/me/wishlist/items/{itemId}` | Remove one owned wishlist item idempotently | Complete proposed |
 
 ## Feature-to-operation coverage
 
@@ -54,67 +54,57 @@
 
 ## API-001 — POST `/v1/auth/customer/otp/request`
 
-**Issue a purpose-bound customer login challenge without revealing account existence.**
+**Issue a purpose-bound customer login challenge without revealing account existence. Proposed / Unapproved / Not Implemented.**
 
-| Property | Proposed contract |
+| Identification | Contract |
 | --- | --- |
-| API name | Issue a purpose-bound customer login challenge without revealing account existence |
-| Version / owner | v1 / Authentication_Access |
+| Owner / version | Authentication_Access / v1; Shared identity service; no app-specific account. |
 | Consumer | Public |
-| Status | Documentation Complete proposed; approval Unapproved; implementation Not Implemented |
-| Requirement / workflow | `ACC-01`, `AUTH-03`; [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) |
-| Design sources | [Module HLD](HLD.md), [LLD](LLD.md), [edge cases](Edge-Cases.md), [ownership](../../07-Engineering/State-and-Recovery-Contracts.md) |
-| Environment URL | `https://{environment}.api.pharmville.example/v1/auth/customer/otp/request` (placeholder host from existing OpenAPI; no deployment asserted) |
-
+| Features / workflow | `ACC-01`, `AUTH-03`; [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) |
+| Full environment URL | https://{environment}.api.pharmville.example/v1/auth/customer/otp/request |
+| Approval dependencies | D-003 security/bootstrap/recovery; D-024 contract review; D-028 unified architecture. D-023 contact change remains separate. |
 
 ### Authentication and authorization
 
-| Authentication required | Mechanism | Allowed roles | Required permission |
+| Authentication required | Mechanism | Allowed roles | Permission / scope |
 | --- | --- | --- | --- |
-| NO | None (purpose-bound pre-login proof where supplied) | Public | Public challenge issuance; no role grant (Proposed grant code) |
+| NO | None (purpose-bound pre-login proof where supplied) | Public | Public challenge issuance; no role grant |
 
+Customer OTP adapter to the central challenge issuer. Preserve phoneCountryCode/phoneNumber and response challengeId. Create a linked authentication_challenges row whose otp_challenge_id resolves legacy challengeId; store encrypted destination only in that protected row. Same neutral delivery behavior for unknown accounts. Authentication_Access owns proof delivery; this route never creates a separate customer login database or trusts a role.
 
-Public pre-login issuance: no bearer, existing role or profile is required. Bind the login challenge to the normalized destination hash and purpose; throttle by destination/network origin and do not disclose account existence.
-
-Normalize phone, hash destination, queue one login OTP; return neutral 202 for existing/new eligible destinations. Do not return the code or raw destination. Preserve the inherited delivery rule: WhatsApp is primary, SMS only under configured fallback; do not replace that with a new channel policy.
+No bearer authentication is required. Supplied proof is purpose-bound and validated by the backend; unknown identifiers never expose account/role/factor state.
 
 ### Request headers
 
 | Header | Type | Required | Example | Purpose |
 | --- | --- | --- | --- | --- |
-| Authorization | string | Not Applicable | Omit | Pre-login/provider trust path; no bearer. |
-| Content-Type | media type | Required | application/json | Declared request JSON media. |
-| Accept | media type | Optional | application/json | Defaults to application/json; unsupported media returns 406. |
-| Idempotency-Key | string ≤128 | Required | pv_api-001_7m3K9r2P6x4V8q1L | One duplicate-sensitive intent. |
-| If-Match | strong ETag | Not Applicable | Omit | Use the named body version fields where present; no competing header precondition. |
-| X-Request-ID | UUID | Optional | 0192a1b2-c3d4-7e8f-9012-3456789abcde | Validate or generate; safe tracing only. |
-| X-Correlation-ID | UUID | Optional | 0192a1b2-c3d4-7e8f-9012-3456789abcdf | Propagate workflow correlation. |
-| Provider signature headers | provider-defined | Not Applicable | Omit | Not a provider callback. |
+| Authorization | string | Not Applicable | Omit | Existing human session only where specified; never client role. |
+| Content-Type | media type | Required | application/json | Exact declared JSON body media. |
+| Accept | media type | Optional | application/json | JSON default; unsupported media 406. |
+| Idempotency-Key | string | Required | pv_api-001_7m3K9r2P6x4V8q1L | Required for this duplicate-sensitive effect. |
+| If-Match | string | Not Applicable | Omit | No secret-response cache or alternate role/context channel. |
+| X-Request-ID | string | Optional | 0192a1b2-c3d4-7e8f-9012-3456789abcde | Optional UUID; validate or generate server value. |
+| X-Correlation-ID | string | Optional | 0192a1b2-c3d4-7e8f-9012-3456789abcde | Optional UUID; validate and propagate across committed events. |
+| Provider signature headers | provider-defined | Not Applicable | Omit | Human identity operation, not a provider callback. |
 
-
-Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.
+Authorization headers are represented by OpenAPI security, not duplicated header parameters. No role/panel/organization header grants authority. JSON/Accept/trace validation is independent of credential verification.
 
 ### Path parameters
 
-Not Applicable. No parameters in this location.
-
+Not Applicable. No path parameters.
 
 ### Query parameters
 
-Not Applicable. No parameters in this location.
-
-
-Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.
+Not Applicable. No query parameters.
 
 ### Request body and uploads
 
-DTO: `CustomerOtpRequest`. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.
+DTO: `CustomerOtpRequest`. Unknown properties are rejected. Conditional proof/action fields must match the stored challenge and declared oneOf/allOf rules; a client cannot choose a weaker factor.
 
 | Field | Type | Required | Nullable | Default | Validation | Description |
 | --- | --- | --- | --- | --- | --- | --- |
-| `phoneCountryCode` | string | Required | No | None (not silently populated) | pattern="^\\+[1-9][0-9]{0,2}$" | Public DTO value from identity.users.phone_country_code. Ownership and current-state checks apply before use. |
-| `phoneNumber` | string | Required | No | None (not silently populated) | pattern="^[0-9]{4,14}$" | Synthetic example; limits and challenge delivery require D-003. |
-
+| `phoneCountryCode` | string | Required | No | None | pattern="^\\+[1-9][0-9]{0,2}$" | Typed phoneCountryCode; source and conditional use below. |
+| `phoneNumber` | string | Required | No | None | pattern="^[0-9]{4,14}$" | Synthetic example; limits and challenge delivery require D-003. |
 
 ```json
 {
@@ -123,22 +113,19 @@ DTO: `CustomerOtpRequest`. Reject unknown properties. Required is structural; co
 }
 ```
 
-File upload: **Not Applicable**.
+File uploads: **Not Applicable**.
 
 ### Success response
 
-HTTP **202**. Headers: `X-Request-ID` UUID, `X-Correlation-ID` UUID, `X-API-Version: v1`, `Cache-Control: no-store`. `Content-Type: application/json`.
+HTTP **202**. JSON envelope `success/data/error/meta`; X-Request-ID, X-Correlation-ID, X-API-Version, Cache-Control response headers. Cache-Control is no-store. Numeric durations/examples are synthetic, not approved security settings.
 
-Data DTO: `OtpChallengeData`. The four required envelope fields and meta nullability follow [Standard Responses](../../05-APIs/Standard-Responses.md). The following table covers every nested data field; pagination is in `meta.pagination`, never mixed into data.
+Data DTO: `OtpChallengeData`.
 
 | Field | Type | Required | Nullable | Default | Validation | Description |
 | --- | --- | --- | --- | --- | --- | --- |
-| `challengeId` | string (uuid) | Required | No | None (not silently populated) | format="uuid" | Opaque public challenge UUID; identity.otp_challenges.id. |
-| `expiresAt` | string (date-time) | Required | No | None (not silently populated) | format="date-time" | identity.otp_challenges.expires_at. |
-| `deliveryStatus` | string | Required | No | None (not silently populated) | enum=["queued"] | Neutral response; does not reveal whether an account exists. |
-
-
-`meta.pagination` is null.
+| `challengeId` | string | Required | No | None | format="uuid" | Opaque public challenge UUID; identity.otp_challenges.id. |
+| `expiresAt` | string | Required | No | None | format="date-time" | identity.otp_challenges.expires_at. |
+| `deliveryStatus` | string | Required | No | None | enum=["queued"] | Neutral response; does not reveal whether an account exists. |
 
 ```json
 {
@@ -159,27 +146,27 @@ Data DTO: `OtpChallengeData`. The four required envelope fields and meta nullabi
 }
 ```
 
+`meta.pagination` is null.
+
 ### Endpoint errors and recovery
 
 | HTTP Status | Error Code | Trigger | Expected Behaviour | Recovery |
 | --- | --- | --- | --- | --- |
-| 422 | `REQUEST_VALIDATION_ERROR` | A declared body/path/query field violates its typed contract. | No unauthorized/partial domain effect; redact sensitive context. | Correct the named fields; do not retry unchanged. |
-| 422 | `VALIDATION_ERROR` | Normalize phone, hash destination, queue one login OTP; return neutral 202 for existing/new eligible destinations. Do not return the code or raw destination. Preserve the inherited delivery rule: WhatsApp is primary, SMS only under configured fallback; do not replace that with a new channel policy. | No unauthorized/partial domain effect; redact sensitive context. | Expired or rate-limited challenge must not create a session; wait for Retry-After or request a new challenge. |
-| 409 | `IDEMPOTENCY_KEY_CONFLICT` | Same actor/action/target key has a different canonical request fingerprint. | No unauthorized/partial domain effect; redact sensitive context. | Use a new key only for a deliberately different intent; reconcile previous intent first. |
-| 409 | `INVALID_STATE_TRANSITION` | Expired or rate-limited challenge must not create a session; wait for Retry-After or request a new challenge. | No unauthorized/partial domain effect; redact sensitive context. | Refresh authoritative state and follow the owner recovery path. |
-| 429 | `RATE_LIMIT_EXCEEDED` | The proposed operation/actor/IP budget is exceeded. | No unauthorized/partial domain effect; redact sensitive context. | Honor Retry-After, then bounded backoff with jitter. |
-| 503 | `EXTERNAL_SERVICE_UNAVAILABLE` | Required database/owner/provider dependency for API-001 is unavailable or deadline exceeded. | No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain. | Replay the same key to resolve committed outcome; never blindly repeat money/stock. |
-
-
-Representative structured error (other codes use the same envelope):
+| 400 | BAD_REQUEST | Malformed JSON or invalid UUID tracing header. Correct transport before retry; no domain mutation. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 406 | NOT_ACCEPTABLE | Requested Accept media type is unsupported. Correct transport before retry; no domain mutation. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 409 | IDEMPOTENCY_KEY_CONFLICT | IDEMPOTENCY_KEY_CONFLICT: Same actor/action/target key has a different canonical request fingerprint. Recovery: Use a new key only for a deliberately different intent; reconcile previous intent first.; INVALID_STATE_TRANSITION: Expired or rate-limited challenge must not create a session; wait for Retry-After or request a new challenge. Recovery: Refresh authoritative state and follow the owner recovery path. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 415 | UNSUPPORTED_MEDIA_TYPE | Request body media type is unsupported. Correct transport before retry; no domain mutation. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 422 | REQUEST_VALIDATION_ERROR | REQUEST_VALIDATION_ERROR: A declared body/path/query field violates its typed contract. Recovery: Correct the named fields; do not retry unchanged.; VALIDATION_ERROR: Normalize phone, hash destination, queue one login OTP; return neutral 202 for existing/new eligible destinations. Do not return the code or raw destination. Preserve the inherited delivery rule: WhatsApp is primary, SMS only under configured fallback; do not replace that with a new channel policy. Recovery: Expired or rate-limited challenge must not create a session; wait for Retry-After or request a new challenge. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 429 | RATE_LIMIT_EXCEEDED | RATE_LIMIT_EXCEEDED: The proposed operation/actor/IP budget is exceeded. Recovery: Honor Retry-After, then bounded backoff with jitter. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 503 | EXTERNAL_SERVICE_UNAVAILABLE | EXTERNAL_SERVICE_UNAVAILABLE: Required database/owner/provider dependency for API-001 is unavailable or deadline exceeded. Recovery: Retry with the same Idempotency-Key/body to recover the committed challenge; honor Retry-After. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
 
 ```json
 {
   "success": false,
   "data": null,
   "error": {
-    "code": "REQUEST_VALIDATION_ERROR",
-    "message": "A declared body/path/query field violates its typed contract.",
+    "code": "BAD_REQUEST",
+    "message": "Malformed JSON or invalid UUID tracing header.",
     "details": null
   },
   "meta": {
@@ -194,121 +181,93 @@ Representative structured error (other codes use the same envelope):
 
 ### Database mapping and ownership
 
-| Table | Access | Exact relevant columns | Owner / effect |
+| Table | Exact columns read | Exact proposed columns written | Owner |
 | --- | --- | --- | --- |
-| [`identity.otp_challenges`](../../04-Database/Tables/identity/otp_challenges.md) | Read | `attempts`, `blocked_at`, `consumed_at`, `created_by`, `destination_hash`, `expires_at`, `id`, `otp_hash`, `purpose`, `row_version`, `updated_by` | Authentication_Access projection / scoped joins; reading does not grant writes. |
-| [`identity.users`](../../04-Database/Tables/identity/users.md) | Read | `created_by`, `id`, `phone_country_code`, `phone_number`, `row_version`, `status`, `updated_by` | Authentication_Access projection / scoped joins; reading does not grant writes. |
-| [`identity.otp_challenges`](../../04-Database/Tables/identity/otp_challenges.md) | Create/update evidence | `channel`, `destination_hash`, `purpose`, `otp_hash`, `expires_at`, `max_attempts` | Authentication_Access owns these writes; Authentication_Access must invoke that narrow owner command. |
+| [`identity.authentication_challenges`](../../04-Database/Tables/identity/authentication_challenges.md) | `attempts`, `binding_json`, `blocked_at`, `consumed_at`, `created_at`, `created_by`, `expires_at`, `factor_type`, `id`, `identifier_encrypted`, `identity_version`, `max_attempts`, `mfa_factor_id`, `otp_challenge_id`, `parent_challenge_id`, `policy_version`, `purpose`, `requested_context_hash`, `row_version`, `session_id`, `token_hash`, `updated_at`, `updated_by`, `user_id` | `attempts`, `binding_json`, `blocked_at`, `consumed_at`, `expires_at`, `factor_type`, `identifier_encrypted`, `identity_version`, `max_attempts`, `mfa_factor_id`, `otp_challenge_id`, `parent_challenge_id`, `policy_version`, `purpose`, `requested_context_hash`, `session_id`, `token_hash`, `user_id` | Authentication_Access |
+| [`identity.otp_challenges`](../../04-Database/Tables/identity/otp_challenges.md) | `attempts`, `blocked_at`, `consumed_at`, `created_by`, `destination_hash`, `expires_at`, `id`, `otp_hash`, `purpose`, `row_version`, `updated_by` | `channel`, `destination_hash`, `purpose`, `otp_hash`, `expires_at`, `max_attempts` | Authentication_Access |
+| [`identity.users`](../../04-Database/Tables/identity/users.md) | `created_by`, `id`, `phone_country_code`, `phone_number`, `row_version`, `status`, `updated_by`, `locked_until`, `account_closed_at`, `failed_login_count` | None | Authentication_Access |
 
-| DTO field | Persistence mapping or explicit API-only derivation |
+Master dependencies: `identity.users`. No seed records or blanket SQL grants are created. See [the persistence assessment](../../04-Database/Identity-Authentication-Assessment.md) and exact DTO/source map below.
+
+| DTO projection | Database/source rule |
 | --- | --- |
-| request.phoneCountryCode | identity.users.phone_country_code |
-| request.phoneNumber | identity.users.phone_number |
-| data.challengeId | identity.otp_challenges.id |
-| data.expiresAt | identity.otp_challenges.expires_at |
-| data.deliveryStatus | API-only neutral delivery-queue acknowledgment; not proof of recipient delivery. |
+| data.challengeId | Operation-specific safe projection from the exact read/write columns above; no raw row serialization. |
+| data.expiresAt | authentication_challenges.expires_at for proof operations or identity.sessions.expires_at for session projection. |
+| data.deliveryStatus | Operation-specific safe projection from the exact read/write columns above; no raw row serialization. |
 
-**Transaction:** One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.
-
-**Replay evidence:** `platform.idempotency_keys(scope, idempotency_key, request_hash, request_metadata, response_code, response_body, expires_at, locked_until)`; purpose-scoped trusted writer. Sensitive credentials/capabilities are excluded from response_body; retain stable references and regenerate permitted short-lived capabilities only within the original session/expiry.
-
-**Audit/outbox:** trusted event writer appends `platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)` and `platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)` in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.
-
-**Master dependencies:** [`identity.users`](../../04-Database/Tables/identity/users.md); see [master lifecycle and initial records](../../04-Database/Master-Data-Inventory.md).
+Request proof fields are transient verification inputs, never persisted raw. Identifiers are normalized/encrypted; only keyed token/OTP/refresh hashes and encrypted MFA secrets are stored in their exact columns. Role/scope target IDs are looked up, not accepted as authority. Actor/version/audit fields are server supplied.
 
 ### Operational rules
 
-| Concern | Proposed rule |
-| --- | --- |
-| Business validation / transitions | Normalize phone, hash destination, queue one login OTP; return neutral 202 for existing/new eligible destinations. Do not return the code or raw destination. Preserve the inherited delivery rule: WhatsApp is primary, SMS only under configured fallback; do not replace that with a new channel policy. |
-| Idempotency | Required key: scope actor + API-001 + target, SHA-256 canonical request fingerprint; same key/body returns original status/stable references; changed body returns 409. Expiry is configured to cover the full retry window; keys remain locked while pending. Store no cleartext tokens, OTP, private URL or clinical body in response cache. |
-| Optimistic locking / concurrency | Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate. |
-| Pagination / filters / sorting | none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from<to, proposed maximum report interval 31 days where range filters apply. |
-| Rate limit (Proposed, Unapproved) | 3 challenges / 15 minutes per destination hash and 10/minute per network origin; Security must approve D-003. |
-| Timeout / retry / partial failure | Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. Expired or rate-limited challenge must not create a session; wait for Retry-After or request a new challenge. |
-| Security / data minimization | TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs. |
+1. Customer OTP adapter to the central challenge issuer. Preserve phoneCountryCode/phoneNumber and response challengeId. Create a linked authentication_challenges row whose otp_challenge_id resolves legacy challengeId; store encrypted destination only in that protected row. Same neutral delivery behavior for unknown accounts.
+2. Authentication_Access owns proof delivery; this route never creates a separate customer login database or trusts a role.
 
+Perform success mutations, proof/counter/refresh/assignment state and audit in one owner transaction. Commit failed-proof counters/lockout and replay revocation even when returning an authentication error; do not roll those evidence updates back. Recheck grants under ordered locks before commit; retain non-secret audit/outbox atomically. Pagination/sorting use only declared parameters; otherwise Not Applicable. Retry reads with bounded backoff. Never blindly retry a proof/refresh after an uncertain response; reauthenticate/reload. Rate/expiry/password/TOTP/timeout budgets are reviewed D-003 configuration; missing security policy fails closed. No partial success for credential/grant changes, no audit token/secret contents, no provider side effect before commit.
 
-### Designed contract tests — NOT RUN
+### Designed contract tests
 
-| Scenario ID | Trigger / fixture | Expected assertion |
+| Scenario | Expected effect / recovery | Status |
 | --- | --- | --- |
-| `CT-API-001-HAPPY` | Valid Public context and documented fixture for issue a purpose-bound customer login challenge without revealing account existence. | HTTP 202; match the named DTO/example, committed owner fields and scope; no unrelated table writes. |
-| `CT-API-001-VALIDATION` | Corrupt a concrete declared request field/enum/version or submit an unknown property. | 422/400; safe field errors and no domain mutation. |
-| `CT-API-001-AUTH` | Call without bearer, then supply invalid purpose-bound proof if this operation accepts one. | Public operation must not require bearer; invalid proof never establishes a session. |
-| `CT-API-001-SCOPE` | Use another customer/site/patient/task reference or remove Public challenge issuance; no role grant. | 403/404 without existence leakage; public read exposes only published safe data. |
-| `CT-API-001-RULE` | Normalize phone, hash destination, queue one login OTP; return neutral 202 for existing/new eligible destinations. Do not return the code or raw destination. Preserve the inherited delivery rule: WhatsApp is primary, SMS only under configured fallback; do not replace that with a new channel policy. | Expired or rate-limited challenge must not create a session; wait for Retry-After or request a new challenge. |
-| `CT-API-001-DUPLICATE` | Repeat identical key/body after losing the committed response, then reuse key with changed body. | One domain effect and stable result; changed fingerprint 409 IDEMPOTENCY_KEY_CONFLICT. |
-| `CT-API-001-CONCURRENCY` | Race two issue a purpose-bound customer login challenge without revealing account existence. intents against the same current row/state. | At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent. |
-| `CT-API-001-STATE` | Apply command after Expired or rate-limited challenge must not create a session; wait for Retry-After or request a new challenge. | Reject invalid progression; preserve existing money/clinical/stock/custody evidence. |
-| `CT-API-001-RECOVERY` | Interrupt before commit and after commit/before response; stop downstream owner processing. | Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. Expired or rate-limited challenge must not create a session; wait for Retry-After or request a new challenge. |
-
-Existing feature assertions: `TC-ACC-01-01`, `TC-ACC-01-02`, `TC-AUTH-03-OK`, `TC-AUTH-03-DENY`. [Feature register](../../09-References/Coverage-and-Traceability.md) and [test strategy](../../07-Engineering/Testing.md). All CT scenarios are newly **Designed / NOT RUN**; documentation/schema validation is not application test evidence.
-
+| `CT-API-001-01` | Preserve the adapter DTO and identity subject; the shared authorizer still checks current scope. | Designed / NOT RUN |
+| `CT-API-001-02` | Reject cross-subject, wrong-purpose or replayed proof/session input with no unauthorized state. | Designed / NOT RUN |
+| `CT-API-001-03` | Race completion/revocation/version change; recover through the documented common lifecycle. | Designed / NOT RUN |
+| `CT-API-001-VALIDATION` | Reject undeclared role/panel/body fields and invalid DTO/conditional proof combinations. No privileged state. | Designed / NOT RUN |
+| `CT-API-001-AUTHORIZATION` | No bearer needed; forged, expired, wrong-purpose or replayed proof never grants a session/workspace. | Designed / NOT RUN |
+| `CT-API-001-RECOVERY` | Dependency/audit failure produces no unaudited successful credential/grant effect; preserve failed-attempt counters and use the exact recovery path. | Designed / NOT RUN |
 
 ## API-002 — POST `/v1/auth/customer/otp/verify`
 
-**Consume a valid login challenge and establish exactly one customer session.**
+**Consume a valid login challenge and establish exactly one customer session. Proposed / Unapproved / Not Implemented.**
 
-| Property | Proposed contract |
+| Identification | Contract |
 | --- | --- |
-| API name | Consume a valid login challenge and establish exactly one customer session |
-| Version / owner | v1 / Authentication_Access |
+| Owner / version | Authentication_Access / v1; Shared identity service; no app-specific account. |
 | Consumer | Public |
-| Status | Documentation Complete proposed; approval Unapproved; implementation Not Implemented |
-| Requirement / workflow | `ACC-01`, `AUTH-03`; [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) |
-| Design sources | [Module HLD](HLD.md), [LLD](LLD.md), [edge cases](Edge-Cases.md), [ownership](../../07-Engineering/State-and-Recovery-Contracts.md) |
-| Environment URL | `https://{environment}.api.pharmville.example/v1/auth/customer/otp/verify` (placeholder host from existing OpenAPI; no deployment asserted) |
-
+| Features / workflow | `ACC-01`, `AUTH-03`; [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md) |
+| Full environment URL | https://{environment}.api.pharmville.example/v1/auth/customer/otp/verify |
+| Approval dependencies | D-003 security/bootstrap/recovery; D-024 contract review; D-028 unified architecture. D-023 contact change remains separate. |
 
 ### Authentication and authorization
 
-| Authentication required | Mechanism | Allowed roles | Required permission |
+| Authentication required | Mechanism | Allowed roles | Permission / scope |
 | --- | --- | --- | --- |
-| NO | None (purpose-bound pre-login proof where supplied) | Public | Valid customer-login proof; no existing access session (Proposed grant code) |
+| NO | None (purpose-bound pre-login proof where supplied) | Public | Valid customer-login proof; no existing access session |
 
+Customer OTP adapter consumes the linked durable OTP/authentication challenge and creates the shared session/refresh lineage atomically. A successful proof alone does not grant staff permissions. For legacy navigation, backend may activate only an actually granted Customer context after all current checks. No Customer assignment gives account-access state, not a fabricated role. Multi-role clients discover/switch through unified routes.
 
-Public pre-login verification: no bearer or existing role required. Resolve the user only through the purpose-bound destination challenge after valid one-time proof; caller-supplied user IDs cannot select the identity. New identity sessions remain limited to approved onboarding until a real profile is complete.
-
-Lock and validate login challenge purpose, digest, expiry, attempts and consumption; resolve or create eligible customer identity and one session. New users have restricted onboarding permission until profile completion supplies a real first_name; do not insert a blank/placeholder profile. Locked/suspended/closed identities get no session.
+No bearer authentication is required. Supplied proof is purpose-bound and validated by the backend; unknown identifiers never expose account/role/factor state.
 
 ### Request headers
 
 | Header | Type | Required | Example | Purpose |
 | --- | --- | --- | --- | --- |
-| Authorization | string | Not Applicable | Omit | Pre-login/provider trust path; no bearer. |
-| Content-Type | media type | Required | application/json | Declared request JSON media. |
-| Accept | media type | Optional | application/json | Defaults to application/json; unsupported media returns 406. |
-| Idempotency-Key | string ≤128 | Not Applicable | Omit | Read or single-use credential semantics; no generic secret-response cache. |
-| If-Match | strong ETag | Not Applicable | Omit | Use the named body version fields where present; no competing header precondition. |
-| X-Request-ID | UUID | Optional | 0192a1b2-c3d4-7e8f-9012-3456789abcde | Validate or generate; safe tracing only. |
-| X-Correlation-ID | UUID | Optional | 0192a1b2-c3d4-7e8f-9012-3456789abcdf | Propagate workflow correlation. |
-| Provider signature headers | provider-defined | Not Applicable | Omit | Not a provider callback. |
+| Authorization | string | Not Applicable | Omit | Existing human session only where specified; never client role. |
+| Content-Type | media type | Required | application/json | Exact declared JSON body media. |
+| Accept | media type | Optional | application/json | JSON default; unsupported media 406. |
+| Idempotency-Key | string | Not Applicable | Omit | No secret-response cache or alternate role/context channel. |
+| If-Match | string | Not Applicable | Omit | No secret-response cache or alternate role/context channel. |
+| X-Request-ID | string | Optional | 0192a1b2-c3d4-7e8f-9012-3456789abcde | Optional UUID; validate or generate server value. |
+| X-Correlation-ID | string | Optional | 0192a1b2-c3d4-7e8f-9012-3456789abcde | Optional UUID; validate and propagate across committed events. |
+| Provider signature headers | provider-defined | Not Applicable | Omit | Human identity operation, not a provider callback. |
 
-
-Transport failures: 400 BAD_REQUEST for malformed JSON/UUID trace headers, 406 NOT_ACCEPTABLE for unsupported Accept, 415 UNSUPPORTED_MEDIA_TYPE for an unsupported body media type. No business mutation occurs before validation. These transport outcomes are also declared in OpenAPI.
+Authorization headers are represented by OpenAPI security, not duplicated header parameters. No role/panel/organization header grants authority. JSON/Accept/trace validation is independent of credential verification.
 
 ### Path parameters
 
-Not Applicable. No parameters in this location.
-
+Not Applicable. No path parameters.
 
 ### Query parameters
 
-Not Applicable. No parameters in this location.
-
-
-Only declared query fields are accepted. Sorting is Not Applicable for this command. Pagination: none.
+Not Applicable. No query parameters.
 
 ### Request body and uploads
 
-DTO: `CustomerOtpVerification`. Reject unknown properties. Required is structural; conditional requirements follow the business rules below. Omission preserves existing values on PATCH; explicit null is accepted only for nullable fields.
+DTO: `CustomerOtpVerification`. Unknown properties are rejected. Conditional proof/action fields must match the stored challenge and declared oneOf/allOf rules; a client cannot choose a weaker factor.
 
 | Field | Type | Required | Nullable | Default | Validation | Description |
 | --- | --- | --- | --- | --- | --- | --- |
-| `challengeId` | string (uuid) | Required | No | None (not silently populated) | format="uuid" | identity.otp_challenges.id; purpose-bound public challenge. |
-| `code` | string | Required | No | None (not silently populated) | minLength=1; maxLength=6; pattern="^[0-9]{6}$" | Secret; configured challenge format, never logged. Proposed six digits. |
-
+| `challengeId` | string | Required | No | None | format="uuid" | identity.otp_challenges.id; purpose-bound public challenge. |
+| `code` | string | Required | No | None | minLength=1; maxLength=6; pattern="^[0-9]{6}$"; writeOnly=true | Secret; configured challenge format, never logged. Proposed six digits. |
 
 ```json
 {
@@ -317,25 +276,22 @@ DTO: `CustomerOtpVerification`. Reject unknown properties. Required is structura
 }
 ```
 
-File upload: **Not Applicable**.
+File uploads: **Not Applicable**.
 
 ### Success response
 
-HTTP **200**. Headers: `X-Request-ID` UUID, `X-Correlation-ID` UUID, `X-API-Version: v1`, `Cache-Control: no-store`. `Content-Type: application/json`.
+HTTP **200**. JSON envelope `success/data/error/meta`; X-Request-ID, X-Correlation-ID, X-API-Version, Cache-Control response headers. Cache-Control is no-store. Numeric durations/examples are synthetic, not approved security settings.
 
-Data DTO: `SessionData`. The four required envelope fields and meta nullability follow [Standard Responses](../../05-APIs/Standard-Responses.md). The following table covers every nested data field; pagination is in `meta.pagination`, never mixed into data.
+Data DTO: `SessionData`.
 
 | Field | Type | Required | Nullable | Default | Validation | Description |
 | --- | --- | --- | --- | --- | --- | --- |
-| `accessToken` | string | Required | No | None (not silently populated) | minLength=1; maxLength=4096 | Write-only bearer credential in transit; never persist cleartext. |
-| `tokenType` | string | Required | No | None (not silently populated) | enum=["Bearer"] | API transport constant Bearer. |
-| `expiresIn` | integer | Required | No | None (not silently populated) | minimum=1 | Configured token lifetime in seconds; sample is not an approved lifetime. |
-| `refreshToken` | string | Required | No | None (not silently populated) | minLength=1; maxLength=4096 | Rotating opaque credential; only a hash is stored in identity.sessions. |
-| `sessionId` | string (uuid) | Required | No | None (not silently populated) | format="uuid" | identity.sessions.id |
-| `userId` | string (uuid) | Required | No | None (not silently populated) | format="uuid" | identity.users.id |
-
-
-`meta.pagination` is null.
+| `accessToken` | string | Required | No | None | minLength=1; maxLength=4096 | Write-only bearer credential in transit; never persist cleartext. |
+| `tokenType` | string | Required | No | None | enum=["Bearer"] | Typed tokenType; source and conditional use below. |
+| `expiresIn` | integer | Required | No | None | minimum=1 | Configured token lifetime in seconds; sample is not an approved lifetime. |
+| `refreshToken` | string | Required | No | None | minLength=1; maxLength=4096 | Rotating opaque credential; only a hash is stored in identity.sessions. |
+| `sessionId` | string | Required | No | None | format="uuid" | identity.sessions.id |
+| `userId` | string | Required | No | None | format="uuid" | identity.users.id |
 
 ```json
 {
@@ -359,27 +315,28 @@ Data DTO: `SessionData`. The four required envelope fields and meta nullability 
 }
 ```
 
+`meta.pagination` is null.
+
 ### Endpoint errors and recovery
 
 | HTTP Status | Error Code | Trigger | Expected Behaviour | Recovery |
 | --- | --- | --- | --- | --- |
-| 422 | `REQUEST_VALIDATION_ERROR` | A declared body/path/query field violates its typed contract. | No unauthorized/partial domain effect; redact sensitive context. | Correct the named fields; do not retry unchanged. |
-| 422 | `VALIDATION_ERROR` | Check purpose, digest, expiry, attempts and consumption under a row lock. Only a valid proof can upsert a customer and consume the challenge; concurrent verification has one winner. Customer provisioning may use an empty first_name only if Product accepts that pending-profile convention; otherwise no new account is provisioned and onboarding remains blocked. | No unauthorized/partial domain effect; redact sensitive context. | A consumed, expired or wrong-purpose OTP cannot establish a second session; request fresh proof. Roll back all successful-consumption effects together. |
-| 409 | `INVALID_STATE_TRANSITION` | A consumed, expired or wrong-purpose OTP cannot establish a second session; request fresh proof. Roll back all successful-consumption effects together. | No unauthorized/partial domain effect; redact sensitive context. | Refresh authoritative state and follow the owner recovery path. |
-| 429 | `RATE_LIMIT_EXCEEDED` | The proposed operation/actor/IP budget is exceeded. | No unauthorized/partial domain effect; redact sensitive context. | Honor Retry-After, then bounded backoff with jitter. |
-| 503 | `EXTERNAL_SERVICE_UNAVAILABLE` | Required database/owner/provider dependency for API-002 is unavailable or deadline exceeded. | No unauthorized/partial domain effect; retain pending committed intent when outcome is uncertain. | Retry safe reads with bounded backoff; proof/token flows may require fresh authentication. |
-| 401 | `AUTH_INVALID_CREDENTIALS` | Login/OTP/MFA proof is invalid, expired, consumed or belongs to a disabled account; no account-existence disclosure. | No unauthorized/partial domain effect; redact sensitive context. | Obtain fresh proof within configured limits; no session is created. |
-
-
-Representative structured error (other codes use the same envelope):
+| 400 | BAD_REQUEST | Malformed JSON or invalid UUID tracing header. Correct transport before retry; no domain mutation. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 401 | AUTH_INVALID_CREDENTIALS | Invalid or expired purpose-bound proof; no session created. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 406 | NOT_ACCEPTABLE | Requested Accept media type is unsupported. Correct transport before retry; no domain mutation. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 409 | INVALID_STATE_TRANSITION | INVALID_STATE_TRANSITION: A consumed, expired or wrong-purpose OTP cannot establish a second session; request fresh proof. Roll back all successful-consumption effects together. Recovery: Refresh authoritative state and follow the owner recovery path. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 415 | UNSUPPORTED_MEDIA_TYPE | Request body media type is unsupported. Correct transport before retry; no domain mutation. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 422 | REQUEST_VALIDATION_ERROR | REQUEST_VALIDATION_ERROR: A declared body/path/query field violates its typed contract. Recovery: Correct the named fields; do not retry unchanged.; VALIDATION_ERROR: Check purpose, digest, expiry, attempts and consumption under a row lock. Only a valid proof can upsert a customer and consume the challenge; concurrent verification has one winner. OTP proof creates or reuses shared Identity only. Required profile/name/consent completion is a separate Customer Accounts command; never insert a fabricated first_name or grant a business workspace before those gates. Recovery: A consumed, expired or wrong-purpose OTP cannot establish a second session; request fresh proof. Roll back all successful-consumption effects together. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 429 | RATE_LIMIT_EXCEEDED | RATE_LIMIT_EXCEEDED: The proposed operation/actor/IP budget is exceeded. Recovery: Honor Retry-After, then bounded backoff with jitter. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
+| 503 | EXTERNAL_SERVICE_UNAVAILABLE | EXTERNAL_SERVICE_UNAVAILABLE: Required database/owner/provider dependency for API-002 is unavailable or deadline exceeded. Recovery: Retry safe reads with bounded backoff; proof/token flows may require fresh authentication. | No unauthorized state or credential; retain audited failed-attempt/replay evidence where specified. | Use the common lifecycle recovery; no authority from caller role/panel. |
 
 ```json
 {
   "success": false,
   "data": null,
   "error": {
-    "code": "REQUEST_VALIDATION_ERROR",
-    "message": "A declared body/path/query field violates its typed contract.",
+    "code": "BAD_REQUEST",
+    "message": "Malformed JSON or invalid UUID tracing header.",
     "details": null
   },
   "meta": {
@@ -394,61 +351,54 @@ Representative structured error (other codes use the same envelope):
 
 ### Database mapping and ownership
 
-| Table | Access | Exact relevant columns | Owner / effect |
+| Table | Exact columns read | Exact proposed columns written | Owner |
 | --- | --- | --- | --- |
-| [`identity.otp_challenges`](../../04-Database/Tables/identity/otp_challenges.md) | Read | `attempts`, `blocked_at`, `consumed_at`, `created_by`, `destination_hash`, `expires_at`, `id`, `otp_hash`, `purpose`, `row_version`, `updated_by` | Authentication_Access projection / scoped joins; reading does not grant writes. |
-| [`identity.users`](../../04-Database/Tables/identity/users.md) | Read | `created_by`, `id`, `row_version`, `status`, `updated_by` | Authentication_Access projection / scoped joins; reading does not grant writes. |
-| [`customer.profiles`](../../04-Database/Tables/customer/profiles.md) | Read | `created_by`, `deleted_by`, `id`, `is_deleted`, `row_version`, `updated_by`, `user_id` | Customer_Accounts projection / scoped joins; reading does not grant writes. |
-| [`identity.otp_challenges`](../../04-Database/Tables/identity/otp_challenges.md) | Create/update evidence | `attempts`, `consumed_at`, `blocked_at` | Authentication_Access owns these writes; Authentication_Access must invoke that narrow owner command. |
-| [`identity.users`](../../04-Database/Tables/identity/users.md) | Create/update evidence | `phone_country_code`, `phone_number`, `phone_verified_at`, `status`, `last_login_at` | Authentication_Access owns these writes; Authentication_Access must invoke that narrow owner command. |
-| [`identity.sessions`](../../04-Database/Tables/identity/sessions.md) | Create/update evidence | `user_id`, `refresh_token_hash`, `token_family_id`, `expires_at` | Authentication_Access owns these writes; Authentication_Access must invoke that narrow owner command. |
+| [`identity.login_attempts`](../../04-Database/Tables/identity/login_attempts.md) | None | `user_id`, `login_identifier_hash`, `success`, `failure_code`, `ip_address`, `user_agent`, `request_id` | Authentication_Access |
+| [`customer.profiles`](../../04-Database/Tables/customer/profiles.md) | `created_by`, `deleted_by`, `id`, `is_deleted`, `row_version`, `updated_by`, `user_id` | None | Customer_Accounts |
+| [`identity.authentication_challenges`](../../04-Database/Tables/identity/authentication_challenges.md) | `attempts`, `binding_json`, `blocked_at`, `consumed_at`, `created_at`, `created_by`, `expires_at`, `factor_type`, `id`, `identifier_encrypted`, `identity_version`, `max_attempts`, `mfa_factor_id`, `otp_challenge_id`, `parent_challenge_id`, `policy_version`, `purpose`, `requested_context_hash`, `row_version`, `session_id`, `token_hash`, `updated_at`, `updated_by`, `user_id` | `attempts`, `binding_json`, `blocked_at`, `consumed_at`, `expires_at`, `factor_type`, `identifier_encrypted`, `identity_version`, `max_attempts`, `mfa_factor_id`, `otp_challenge_id`, `parent_challenge_id`, `policy_version`, `purpose`, `requested_context_hash`, `session_id`, `token_hash`, `user_id` | Authentication_Access |
+| [`identity.otp_challenges`](../../04-Database/Tables/identity/otp_challenges.md) | `attempts`, `blocked_at`, `consumed_at`, `created_by`, `destination_hash`, `expires_at`, `id`, `otp_hash`, `purpose`, `row_version`, `updated_by` | `attempts`, `consumed_at`, `blocked_at` | Authentication_Access |
+| [`identity.permissions`](../../04-Database/Tables/identity/permissions.md) | `id`, `code`, `resource`, `action`, `is_deleted` | None | Authentication_Access |
+| [`identity.role_permissions`](../../04-Database/Tables/identity/role_permissions.md) | `role_id`, `permission_id`, `row_version` | None | Authentication_Access |
+| [`identity.roles`](../../04-Database/Tables/identity/roles.md) | `id`, `code`, `is_deleted`, `row_version` | None | Authentication_Access |
+| [`identity.session_refresh_tokens`](../../04-Database/Tables/identity/session_refresh_tokens.md) | `consumed_at`, `created_at`, `created_by`, `expires_at`, `id`, `parent_token_id`, `revoked_at`, `row_version`, `session_id`, `token_hash`, `updated_at`, `updated_by` | `session_id`, `token_hash`, `parent_token_id`, `expires_at`, `consumed_at`, `revoked_at` | Authentication_Access |
+| [`identity.sessions`](../../04-Database/Tables/identity/sessions.md) | `id`, `user_id`, `revoked_at`, `expires_at`, `context_version`, `active_assignment_id`, `active_workspace_code`, `password_verified_at`, `otp_verified_at`, `mfa_verified_at`, `authentication_policy_version`, `token_family_id`, `refresh_token_hash`, `row_version` | `authenticated_at`, `password_verified_at`, `otp_verified_at`, `mfa_verified_at`, `authentication_policy_version`, `context_version`, `active_assignment_id`, `active_workspace_code` | Authentication_Access |
+| [`identity.user_roles`](../../04-Database/Tables/identity/user_roles.md) | `id`, `user_id`, `role_id`, `is_active`, `scope_type`, `scope_id`, `valid_from`, `valid_until`, `row_version` | None | Authentication_Access |
+| [`identity.users`](../../04-Database/Tables/identity/users.md) | `id`, `status`, `row_version`, `locked_until`, `account_closed_at`, `phone_verified_at`, `email_verified_at`, `failed_login_count` | `phone_country_code`, `phone_number`, `phone_verified_at`, `status`, `last_login_at` | Authentication_Access |
+| [`organization.locations`](../../04-Database/Tables/organization/locations.md) | `id`, `organization_id`, `location_type`, `is_active`, `is_deleted` | None | Admin_CMS |
+| [`organization.memberships`](../../04-Database/Tables/organization/memberships.md) | `user_id`, `organization_id`, `location_id`, `status`, `row_version` | None | Admin_CMS |
+| [`organization.organizations`](../../04-Database/Tables/organization/organizations.md) | `id`, `status`, `is_deleted` | None | Admin_CMS |
+| [`warehouse.warehouses`](../../04-Database/Tables/warehouse/warehouses.md) | `id`, `location_id`, `organization_id`, `status`, `is_deleted` | None | Warehouse |
 
-| DTO field | Persistence mapping or explicit API-only derivation |
+Master dependencies: `customer.profiles`, `identity.users`. No seed records or blanket SQL grants are created. See [the persistence assessment](../../04-Database/Identity-Authentication-Assessment.md) and exact DTO/source map below.
+
+| DTO projection | Database/source rule |
 | --- | --- |
-| request.challengeId | identity.otp_challenges.id |
-| request.code | Write-only OTP proof checked against identity.otp_challenges.otp_hash; no cleartext storage. |
-| data.accessToken | API-only signed access JWT; never a persisted cleartext database field. |
-| data.tokenType | API transport constant Bearer. |
-| data.expiresIn | API-only configured JWT lifetime, checked against session expiry. |
-| data.refreshToken | Secret compared to identity.sessions.refresh_token_hash; rotate, never store cleartext. |
-| data.sessionId | identity.sessions.id |
-| data.userId | identity.users.id |
+| data.accessToken | Operation-specific safe projection from the exact read/write columns above; no raw row serialization. |
+| data.tokenType | Operation-specific safe projection from the exact read/write columns above; no raw row serialization. |
+| data.expiresIn | Operation-specific safe projection from the exact read/write columns above; no raw row serialization. |
+| data.refreshToken | Operation-specific safe projection from the exact read/write columns above; no raw row serialization. |
+| data.sessionId | identity.sessions.id; ownership checked against user_id. |
+| data.userId | identity.users.id; shared subject, not a role-specific account. |
 
-**Transaction:** One owner transaction validates current state and persists the stated domain write set plus redacted audit/outbox and permitted replay metadata; commit before network IO. Server fills actual required defaults, public UUIDs, actor/time and row_version only where the table defines them; numeric crosswalk columns remain trigger/DB-owned. Refer to linked structural CHECK/UNIQUE/FK/trigger contracts; no migration or grant is changed.
-
-**Audit/outbox:** trusted event writer appends `platform.audit_logs(actor_type, actor_user_id, action, resource_type, resource_id, occurred_at, request_id, metadata_json)` and `platform.outbox_events(aggregate_type, aggregate_id, event_type, event_version, payload, headers, occurred_at, available_at)` in the relevant owner transaction. Payload contains safe references/version/outcome, never secrets or clinical file content. Sending/retrying an event does not repeat the domain command.
-
-**Master dependencies:** [`customer.profiles`](../../04-Database/Tables/customer/profiles.md), [`identity.users`](../../04-Database/Tables/identity/users.md); see [master lifecycle and initial records](../../04-Database/Master-Data-Inventory.md).
+Request proof fields are transient verification inputs, never persisted raw. Identifiers are normalized/encrypted; only keyed token/OTP/refresh hashes and encrypted MFA secrets are stored in their exact columns. Role/scope target IDs are looked up, not accepted as authority. Actor/version/audit fields are server supplied.
 
 ### Operational rules
 
-| Concern | Proposed rule |
-| --- | --- |
-| Business validation / transitions | Lock and validate login challenge purpose, digest, expiry, attempts and consumption; resolve or create eligible customer identity and one session. New users have restricted onboarding permission until profile completion supplies a real first_name; do not insert a blank/placeholder profile. Locked/suspended/closed identities get no session. |
-| Idempotency | No generic key: single-use proof/rotating credential replay is validated by the identity owner. Never cache bearer/refresh secrets in idempotency_keys. |
-| Optimistic locking / concurrency | Check named expected versions atomically with the owner write; lock aggregate and dependent rows in deterministic table/ID order. No version column is invented; absent row_version uses explicit row lock/current-state predicate. |
-| Pagination / filters / sorting | none; Not Applicable for singleton/command; only declared filter fields. Inclusive from/exclusive to, UTC, from<to, proposed maximum report interval 31 days where range filters apply. |
-| Rate limit (Proposed, Unapproved) | 5 proof/refresh attempts per minute per challenge/session and origin, plus approved lockout/attempt policy D-003. |
-| Timeout / retry / partial failure | Proposed admission deadline 5 seconds; provider/network IO outside DB locks. Deadline after commit may be uncertain: resolve same intent/proof through owner recovery. Separate owner transactions use persisted outbox/saga steps; no distributed atomicity is implied. A consumed, expired or wrong-purpose OTP cannot establish a second session; request fresh proof. Roll back all successful-consumption effects together. |
-| Security / data minimization | TLS; no internal BIGINT IDs, credential digests, raw provider payloads, private prescription bytes or unscoped file URLs in projections. Session issuance/refresh returns only explicitly declared credentials over TLS; never log/cache these in generic replay rows. Validate active grants again at command/file access time. Input secrets are write-only and redacted from audit/logs. |
+1. Customer OTP adapter consumes the linked durable OTP/authentication challenge and creates the shared session/refresh lineage atomically. A successful proof alone does not grant staff permissions.
+2. For legacy navigation, backend may activate only an actually granted Customer context after all current checks. No Customer assignment gives account-access state, not a fabricated role. Multi-role clients discover/switch through unified routes.
 
+Perform success mutations, proof/counter/refresh/assignment state and audit in one owner transaction. Commit failed-proof counters/lockout and replay revocation even when returning an authentication error; do not roll those evidence updates back. Recheck grants under ordered locks before commit; retain non-secret audit/outbox atomically. Pagination/sorting use only declared parameters; otherwise Not Applicable. Retry reads with bounded backoff. Never blindly retry a proof/refresh after an uncertain response; reauthenticate/reload. Rate/expiry/password/TOTP/timeout budgets are reviewed D-003 configuration; missing security policy fails closed. No partial success for credential/grant changes, no audit token/secret contents, no provider side effect before commit.
 
-### Designed contract tests — NOT RUN
+### Designed contract tests
 
-| Scenario ID | Trigger / fixture | Expected assertion |
+| Scenario | Expected effect / recovery | Status |
 | --- | --- | --- |
-| `CT-API-002-HAPPY` | Valid Public context and documented fixture for consume a valid login challenge and establish exactly one customer session. | HTTP 200; match the named DTO/example, committed owner fields and scope; no unrelated table writes. |
-| `CT-API-002-VALIDATION` | Corrupt a concrete declared request field/enum/version or submit an unknown property. | 422/400; safe field errors and no domain mutation. |
-| `CT-API-002-AUTH` | Call without bearer, then supply invalid purpose-bound proof if this operation accepts one. | Public operation must not require bearer; invalid proof never establishes a session. |
-| `CT-API-002-SCOPE` | Use another customer/site/patient/task reference or remove Valid customer-login proof; no existing access session. | 403/404 without existence leakage; public read exposes only published safe data. |
-| `CT-API-002-RULE` | Lock and validate login challenge purpose, digest, expiry, attempts and consumption; resolve or create eligible customer identity and one session. New users have restricted onboarding permission until profile completion supplies a real first_name; do not insert a blank/placeholder profile. Locked/suspended/closed identities get no session. | A consumed, expired or wrong-purpose OTP cannot establish a second session; request fresh proof. Roll back all successful-consumption effects together. |
-| `CT-API-002-DUPLICATE` | Replay consumed/rotated proof. | No second session/effect; honor identity/provider replay policy. |
-| `CT-API-002-CONCURRENCY` | Race two consume a valid login challenge and establish exactly one customer session. intents against the same current row/state. | At most one incompatible effect; stale named version is 409 or stale If-Match 412. No invented row_version where absent. |
-| `CT-API-002-STATE` | Apply command after A consumed, expired or wrong-purpose OTP cannot establish a second session; request fresh proof. Roll back all successful-consumption effects together. | Reject invalid progression; preserve existing money/clinical/stock/custody evidence. |
-| `CT-API-002-RECOVERY` | Interrupt before commit and after commit/before response; stop downstream owner processing. | Rollback before commit; after commit resolve saved reference and resume only the pending owner/outbox step. A consumed, expired or wrong-purpose OTP cannot establish a second session; request fresh proof. Roll back all successful-consumption effects together. |
-
-Existing feature assertions: `TC-ACC-01-01`, `TC-ACC-01-02`, `TC-AUTH-03-OK`, `TC-AUTH-03-DENY`. [Feature register](../../09-References/Coverage-and-Traceability.md) and [test strategy](../../07-Engineering/Testing.md). All CT scenarios are newly **Designed / NOT RUN**; documentation/schema validation is not application test evidence.
-
+| `CT-API-002-01` | Preserve the adapter DTO and identity subject; the shared authorizer still checks current scope. | Designed / NOT RUN |
+| `CT-API-002-02` | Reject cross-subject, wrong-purpose or replayed proof/session input with no unauthorized state. | Designed / NOT RUN |
+| `CT-API-002-03` | Race completion/revocation/version change; recover through the documented common lifecycle. | Designed / NOT RUN |
+| `CT-API-002-VALIDATION` | Reject undeclared role/panel/body fields and invalid DTO/conditional proof combinations. No privileged state. | Designed / NOT RUN |
+| `CT-API-002-AUTHORIZATION` | No bearer needed; forged, expired, wrong-purpose or replayed proof never grants a session/workspace. | Designed / NOT RUN |
+| `CT-API-002-RECOVERY` | Dependency/audit failure produces no unaudited successful credential/grant effect; preserve failed-attempt counters and use the exact recovery path. | Designed / NOT RUN |
 
 ## API-003 — GET `/v1/me`
 

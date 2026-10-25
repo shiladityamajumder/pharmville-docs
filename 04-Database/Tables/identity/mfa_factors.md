@@ -11,7 +11,7 @@
 | Proposed business write owner | Authentication_Access |
 | SQL ownership | Dedicated installation role; no automatic module DML grants. Existing RLS/ACL/default-denial preserved. |
 | Primary key | internal_id |
-| Structural counts | 14 columns; 7 PK/FK/UQ/CHECK/exclusion constraints; 8 named PostgreSQL 18 NOT NULL constraints; 4 indexes; 3 user triggers |
+| Structural counts | 15 columns; 9 PK/FK/UQ/CHECK/exclusion constraints; 8 named PostgreSQL 18 NOT NULL constraints; 5 indexes; 4 user triggers |
 | Source / approval | Fresh PostgreSQL 18 catalog parity verified; module ownership/production enablement remains Proposed. |
 
 ## Fields
@@ -26,6 +26,7 @@
 | `id` | `uuid` | No | `gen_random_uuid()` | Public identifier for this record | Stable, externally shareable identity | Exact constraints below |
 | `internal_id` | `bigint` | No | — | Database internal primary key | Efficient internal relationships; never used as authorization proof | GENERATED ALWAYS AS IDENTITY; see sequence catalog; Primary key |
 | `label` | `character varying(64)` | No | `'default'::character varying` | Inferred: stores label for this table | Inferred: carries this domain attribute; meaning needs owner review | Collation: default |
+| `last_accepted_totp_counter` | `bigint` | Yes | — | Last accepted totp counter | Supports the documented owner workflow or referential invariant. | Exact constraints below |
 | `row_version` | `bigint` | No | `1` | Change counter | Detect conflicting concurrent updates | Checked positive; optimistic precondition and maintenance trigger |
 | `secret_encrypted` | `bytea` | Yes | — | Inferred: stores secret encrypted for this table | Inferred: carries this domain attribute; meaning needs owner review | Exact constraints below |
 | `updated_at` | `timestamp with time zone` | No | `now()` | Last update time | Detect staleness and support traceability | Exact constraints below |
@@ -52,7 +53,10 @@ The declared business owner above supersedes generic schema-membership guesses. 
 
 ### Dependent tables
 
-No inbound FK is present in the validated catalog.
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`identity.authentication_challenges`](../../Tables/identity/authentication_challenges.md) | authentication_challenges_mfa_factor_id_fkey | `mfa_factor_id` | `id` |
+| [`identity.authentication_challenges`](../../Tables/identity/authentication_challenges.md) | fk_auth_challenge_factor_owner | `mfa_factor_id, user_id` | `id, user_id` |
 
 ## `identity.mfa_factors` — exact structural contracts
 
@@ -68,12 +72,14 @@ No inbound FK is present in the validated catalog.
 
 | Exact name | Kind | Recorded expression |
 | --- | --- | --- |
+| `ck_identity_mfa_counter_nonnegative` | CHECK | `CHECK (last_accepted_totp_counter IS NULL OR last_accepted_totp_counter >= 0)` |
 | `ck_identity_mfa_factors_row_version_positive` | CHECK | `CHECK (row_version > 0)` |
 | `fk_identity_mfa_factors_created_by_users` | FOREIGN KEY | `FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 | `fk_identity_mfa_factors_updated_by_users` | FOREIGN KEY | `FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT` |
 | `fk_identity_mfa_factors_user_id_users` | FOREIGN KEY | `FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE` |
 | `pk_identity_mfa_factors` | PRIMARY KEY | `PRIMARY KEY (internal_id)` |
 | `uq_identity_mfa_factors_id` | UNIQUE | `UNIQUE (id)` |
+| `uq_mfa_factors_id_user` | UNIQUE | `UNIQUE (id, user_id)` |
 | `user_mfa_factor` | UNIQUE | `UNIQUE (user_id, factor_type, label)` |
 | `mfa_factors_created_at_not_null` | NOT NULL | `NOT NULL created_at` |
 | `mfa_factors_factor_type_not_null` | NOT NULL | `NOT NULL factor_type` |
@@ -91,6 +97,7 @@ No inbound FK is present in the validated catalog.
 | `ix_identity_mfa_factors_user_id` | btree | `(user_id)` | None | Read/join/filter access path; Performance effectiveness requires measured query plans. | `CREATE INDEX ix_identity_mfa_factors_user_id ON identity.mfa_factors USING btree (user_id)` |
 | `pk_identity_mfa_factors` | btree | `(internal_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX pk_identity_mfa_factors ON identity.mfa_factors USING btree (internal_id)` |
 | `uq_identity_mfa_factors_id` | btree | `(id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_identity_mfa_factors_id ON identity.mfa_factors USING btree (id)` |
+| `uq_mfa_factors_id_user` | btree | `(id, user_id)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX uq_mfa_factors_id_user ON identity.mfa_factors USING btree (id, user_id)` |
 | `user_mfa_factor` | btree | `(user_id, factor_type, label)` | None | Enforces primary/unique identity or a scoped uniqueness invariant; Performance effectiveness requires measured query plans. | `CREATE UNIQUE INDEX user_mfa_factor ON identity.mfa_factors USING btree (user_id, factor_type, label)` |
 
 ### Existing triggers
@@ -98,6 +105,7 @@ No inbound FK is present in the validated catalog.
 | Exact name | Recorded definition | Enabled |
 | --- | --- | --- |
 | `aa_internal_keys` | `CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON identity.mfa_factors FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` | O |
+| `ab_totp_counter` | `CREATE TRIGGER ab_totp_counter BEFORE UPDATE ON identity.mfa_factors FOR EACH ROW EXECUTE FUNCTION identity.guard_totp_counter()` | O |
 | `zz_record_maintenance` | `CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.mfa_factors FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')` | O |
 | `zzzz_internal_keys` | `CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON identity.mfa_factors FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')` | O |
 

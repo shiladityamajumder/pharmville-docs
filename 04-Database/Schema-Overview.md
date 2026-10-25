@@ -17,7 +17,7 @@ The [canonical SQL](../pharmville-database/pharmville_schema.sql) and [derived c
 | diagnostics | 13 | [ER reference](ER-Diagrams/07-diagnostics.md) |
 | finance | 8 | [ER reference](ER-Diagrams/08-finance.md) |
 | fulfillment | 10 | [ER reference](ER-Diagrams/09-fulfillment.md) |
-| identity | 14 | [ER reference](ER-Diagrams/10-identity.md) |
+| identity | 16 | [ER reference](ER-Diagrams/10-identity.md) |
 | insurance | 8 | [ER reference](ER-Diagrams/11-insurance.md) |
 | logistics | 15 | [ER reference](ER-Diagrams/12-logistics.md) |
 | marketplace | 7 | [ER reference](ER-Diagrams/13-marketplace.md) |

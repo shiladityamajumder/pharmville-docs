@@ -663,3 +663,8 @@ All 266 physical tables have a proposed accountable write owner below. Future ow
 | [`warehouse.stock_transfers`](Tables/warehouse/stock_transfers.md) | Transactional | Warehouse | Store_Operations, Warehouse |
 | [`warehouse.warehouses`](Tables/warehouse/warehouses.md) | Master / Reference | Warehouse | Inventory, Order_Operations, Reporting, Store_Operations, Warehouse |
 | [`warehouse.zones`](Tables/warehouse/zones.md) | Master / Reference | Warehouse | No current API; retain for future/operational scope |
+
+
+## Unified Identity ownership extension — D-028
+
+Authentication_Access owns [authentication_challenges](Tables/identity/authentication_challenges.md), [session_refresh_tokens](Tables/identity/session_refresh_tokens.md) and shared identity/session/grant commands. Customer Accounts and Admin are historical API surfaces invoking those commands. Rider is a consumer of the same identity and OTP policy. Exact current read/write columns and API IDs are in [Authentication database contract](../03-Modules/Authentication/Database.md). No new SQL runtime grants are implied.

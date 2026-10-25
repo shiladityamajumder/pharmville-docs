@@ -8,7 +8,7 @@ All routes in this package are **proposed Pharmville contracts**. No Pharmville 
 
 The historical API identifier range API-001–API-097 is preserved. The five historical account references API-005–API-009 are now listed as individual routes in [Customer Accounts](../03-Modules/Customer-Accounts/APIs.md). Ten additional account operations use stable `ACC-ROUTE-*` documentation references and do not consume historical IDs.
 
-The complete mapping contains 107 HTTP operations and is recorded in the [API contract coverage ledger](API-Contract-Coverage.md).
+The complete mapping preserves 107 existing HTTP operations and adds 15 explicit unified-Identity proposals (122 total) and is recorded in the [API contract coverage ledger](API-Contract-Coverage.md).
 
 ## Domain contracts
 
@@ -70,3 +70,6 @@ The preserved 107-operation inventory now has **97 documentation-complete propos
 ## Standard problem response behavior
 
 Use the existing four-field response envelope and the [error catalog](Error-Catalog.md). Each endpoint supplies its applicable error triggers and recovery; protected failures redact patient, credential, provider and hidden-resource information. HTTP 204 has no body. Shared envelope reuse does not replace an operation DTO.
+
+
+[Unified Identity architecture](../03-Modules/Authentication/Unified-Identity-Architecture.md) · [compatibility and rollout](../03-Modules/Authentication/API-Compatibility.md) · [workspace matrix](../01-Project/User-Roles.md).

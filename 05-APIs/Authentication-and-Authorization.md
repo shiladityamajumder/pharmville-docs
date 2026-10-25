@@ -7,9 +7,9 @@
 | Caller | Credential | Server checks |
 | --- | --- | --- |
 | Public customer OTP or login | No existing access token; purpose-bound OTP/MFA challenge where applicable | Challenge purpose, expiry, attempt limit, replay state, rate limits, and account state |
-| Customer `/v1/me/*` | Bearer access JWT or approved secure session cookie | Authenticated subject owns resource; dependent patient association and consent where applicable |
+| Customer `/v1/me/*` | Bearer access JWT (cookie alternative requires D-003 approval) | Authenticated subject owns resource; dependent patient association and consent where applicable |
 | Staff, admin, pharmacist, finance | Bearer access JWT or approved secure session cookie | Explicit permission, active role, organization and location scope; clinical/finance-specific qualifications |
-| Rider | Staff/rider credential | Active shift and current task assignment; location and proof access limited to assigned work |
+| Rider | Shared Identity session; Rider phone OTP retained | Active shift and current task assignment; location and proof access limited to assigned work |
 | Internal service | Service identity with narrowly scoped capability | Trusted workload identity, capability allowlist and private network boundary; never a caller-supplied actor ID |
 | Payment provider webhook | Provider signature over the exact raw request bytes, event identity and provider-approved replay controls | Signature/timestamp policy from D-016; correlate and validate payment, order, amount and currency before effect |
 
@@ -36,3 +36,12 @@ Refresh must require the approved refresh credential, not an access token or use
 The reference authentication service returns `X-Request-ID` and `X-Correlation-ID` when values exist in request context. For proposed Pharmville JSON responses, return the same headers when available and also include their values in the standard envelope. `Location`, `ETag`, `Retry-After`, and cache headers are operation-specific.
 
 Sensitive, private, financial, and clinical responses use `Cache-Control: no-store` unless a reviewed policy says otherwise.
+
+
+## Unified identity and workspace access
+
+**Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.** [Unified Identity policy](../03-Modules/Authentication/Unified-Identity-Architecture.md) is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. [Role/workspace matrix](../01-Project/User-Roles.md) defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.
+
+## Unified access failures and recovery
+
+For protected human business operations, an expired/revoked session returns 401; a stale context generation returns 401 `AUTH_CONTEXT_STALE` and permits recovery only through API-100 then current-credential refresh (or fresh authentication). Missing/forbidden business workspace or action returns 403 without protected data; target-specific checks may use privacy-safe 404. Context activation's stale If-Match returns 412, and missing required precondition returns 428. Step-up never grants a missing assignment. Unavailable authoritative session/grant/scope policy returns 503 with no positive-cache or JWT-role fallback. These codes use the existing ErrorEnvelope; each operation's specific business errors remain in its contract. Public proofs do not require bearer credentials; service identities and provider signatures retain their separate policies.

@@ -1,0 +1,49 @@
+{
+  "removed": [
+    {
+      "path": "03-Modules/Authentication_Access/README.md",
+      "replacement": "03-Modules/Authentication/README.md",
+      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+    },
+    {
+      "path": "03-Modules/Authentication_Access/HLD.md",
+      "replacement": "03-Modules/Authentication/HLD.md",
+      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+    },
+    {
+      "path": "03-Modules/Authentication_Access/LLD.md",
+      "replacement": "03-Modules/Authentication/LLD.md",
+      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+    },
+    {
+      "path": "05-APIs/Authentication_Access.md",
+      "replacement": "03-Modules/Authentication/APIs.md",
+      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+    },
+    {
+      "path": "03-Modules/Customer_Accounts/README.md",
+      "replacement": "03-Modules/Customer-Accounts/README.md",
+      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+    },
+    {
+      "path": "03-Modules/Customer_Accounts/HLD.md",
+      "replacement": "03-Modules/Customer-Accounts/HLD.md",
+      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+    },
+    {
+      "path": "03-Modules/Customer_Accounts/LLD.md",
+      "replacement": "03-Modules/Customer-Accounts/LLD.md",
+      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+    },
+    {
+      "path": "05-APIs/Customer_Accounts.md",
+      "replacement": "03-Modules/Customer-Accounts/APIs.md",
+      "reason": "Compatibility-only links/anchors; no unique content, incoming Markdown links, script path dependencies or protected references."
+    }
+  ],
+  "retained": [
+    "03-Modules/Authentication_Access/Edge-Cases.md",
+    "03-Modules/Customer_Accounts/Edge-Cases.md"
+  ],
+  "retention_reason": "Protected wireframe references require these compatibility paths and anchors."
+}

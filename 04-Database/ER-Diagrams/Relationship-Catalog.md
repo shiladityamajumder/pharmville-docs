@@ -2,7 +2,7 @@
 
 ## Scope and evidence
 
-The validated standalone SQL catalog contains **1461 declared foreign-key constraints**. The catalog keeps every physical constraint as its own row, including the paired public UUID and internal BIGINT relationships. It records source columns, referenced columns, nullability, uniqueness-based cardinality, delete/update actions, and the owning schema diagram.
+The validated standalone SQL catalog contains **1476 declared foreign-key constraints**. The catalog keeps every physical constraint as its own row, including the paired public UUID and internal BIGINT relationships. It records source columns, referenced columns, nullability, uniqueness-based cardinality, delete/update actions, and the owning schema diagram.
 
 The records are derived from the validated standalone-schema catalog, checked against [Database-Evidence.json](../../09-References/Database-Evidence.json). The [installation and provenance reference](../Migrations.md) distinguishes executed isolated parity from production deployment.
 
@@ -19,7 +19,7 @@ The records are derived from the validated standalone-schema catalog, checked ag
 | `diagnostics` | 13 | 79 | [diagnostics foreign keys](Relationship-Catalog/diagnostics.md) |
 | `finance` | 8 | 45 | [finance foreign keys](Relationship-Catalog/finance.md) |
 | `fulfillment` | 10 | 70 | [fulfillment foreign keys](Relationship-Catalog/fulfillment.md) |
-| `identity` | 14 | 45 | [identity foreign keys](Relationship-Catalog/identity.md) |
+| `identity` | 16 | 60 | [identity foreign keys](Relationship-Catalog/identity.md) |
 | `insurance` | 8 | 42 | [insurance foreign keys](Relationship-Catalog/insurance.md) |
 | `logistics` | 15 | 84 | [logistics foreign keys](Relationship-Catalog/logistics.md) |
 | `marketplace` | 7 | 45 | [marketplace foreign keys](Relationship-Catalog/marketplace.md) |

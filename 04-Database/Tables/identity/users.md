@@ -331,6 +331,9 @@ The declared business owner above supersedes generic schema-membership guesses. 
 | [`identity.api_clients`](../../Tables/identity/api_clients.md) | fk_identity_api_clients_created_by_users | `created_by` | `id` |
 | [`identity.api_clients`](../../Tables/identity/api_clients.md) | fk_identity_api_clients_deleted_by_users | `deleted_by` | `id` |
 | [`identity.api_clients`](../../Tables/identity/api_clients.md) | fk_identity_api_clients_updated_by_users | `updated_by` | `id` |
+| [`identity.authentication_challenges`](../../Tables/identity/authentication_challenges.md) | authentication_challenges_created_by_fkey | `created_by` | `id` |
+| [`identity.authentication_challenges`](../../Tables/identity/authentication_challenges.md) | authentication_challenges_updated_by_fkey | `updated_by` | `id` |
+| [`identity.authentication_challenges`](../../Tables/identity/authentication_challenges.md) | authentication_challenges_user_id_fkey | `user_id` | `id` |
 | [`identity.login_attempts`](../../Tables/identity/login_attempts.md) | fk_identity_login_attempts_user_id_users | `user_id` | `id` |
 | [`identity.mfa_factors`](../../Tables/identity/mfa_factors.md) | fk_identity_mfa_factors_created_by_users | `created_by` | `id` |
 | [`identity.mfa_factors`](../../Tables/identity/mfa_factors.md) | fk_identity_mfa_factors_updated_by_users | `updated_by` | `id` |
@@ -346,6 +349,8 @@ The declared business owner above supersedes generic schema-membership guesses. 
 | [`identity.roles`](../../Tables/identity/roles.md) | fk_identity_roles_created_by_users | `created_by` | `id` |
 | [`identity.roles`](../../Tables/identity/roles.md) | fk_identity_roles_deleted_by_users | `deleted_by` | `id` |
 | [`identity.roles`](../../Tables/identity/roles.md) | fk_identity_roles_updated_by_users | `updated_by` | `id` |
+| [`identity.session_refresh_tokens`](../../Tables/identity/session_refresh_tokens.md) | session_refresh_tokens_created_by_fkey | `created_by` | `id` |
+| [`identity.session_refresh_tokens`](../../Tables/identity/session_refresh_tokens.md) | session_refresh_tokens_updated_by_fkey | `updated_by` | `id` |
 | [`identity.sessions`](../../Tables/identity/sessions.md) | fk_identity_sessions_created_by_users | `created_by` | `id` |
 | [`identity.sessions`](../../Tables/identity/sessions.md) | fk_identity_sessions_updated_by_users | `updated_by` | `id` |
 | [`identity.sessions`](../../Tables/identity/sessions.md) | fk_identity_sessions_user_id_users | `user_id` | `id` |

@@ -23,3 +23,8 @@
 [WF-001](../../06-Workflows/WF-001-Identity-and-Session.md). Exact transitions, recovery and permission checks remain in [LLD](LLD.md), [endpoint contracts](APIs.md), [edge cases](Edge-Cases.md) and the [state/ownership contract](../../07-Engineering/State-and-Recovery-Contracts.md).
 
 [Shared business journey](../../00-Business-Guide/Accounts-and-Login.md) supplies cross-module actor context without creating another requirement inventory. Approval dependencies: D-003; D-023; D-024.
+
+
+## Common login and authorized workspace journey
+
+**Proposed / Unapproved / Not Implemented.** Enter phone/email at one entry point → neutral challenge → OTP or password proof → required authenticator proof → authenticated identity → permission-filtered workspace chooser → step-up if necessary → explicit active context. Customer/rider OTP remains valid for those grants; no privileged access follows from OTP alone. Switching sites repeats grant and resource checks. No workspace routes to account access/help/logout, not to an administrative panel. [Role matrix](../../01-Project/User-Roles.md).

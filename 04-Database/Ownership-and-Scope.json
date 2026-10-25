@@ -836,6 +836,17 @@
     "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
     "consuming_modules": []
   },
+  "identity.authentication_challenges": {
+    "owner": "Authentication_Access",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Authentication_Access",
+      "Customer_Accounts",
+      "Admin_CMS",
+      "Rider_App"
+    ]
+  },
   "identity.login_attempts": {
     "owner": "Authentication_Access",
     "classification": "Audit / History",
@@ -891,6 +902,17 @@
       "Admin_CMS",
       "Authentication_Access",
       "Delivery_Operations"
+    ]
+  },
+  "identity.session_refresh_tokens": {
+    "owner": "Authentication_Access",
+    "classification": "Transactional",
+    "owner_status": "Proposed; requires D-024/D-027 review; SQL grants remain independent",
+    "consuming_modules": [
+      "Authentication_Access",
+      "Customer_Accounts",
+      "Admin_CMS",
+      "Rider_App"
     ]
   },
   "identity.sessions": {

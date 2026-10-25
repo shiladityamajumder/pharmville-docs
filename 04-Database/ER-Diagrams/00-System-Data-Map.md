@@ -2,7 +2,7 @@
 
 ## What this map shows
 
-Pharmville's checked-out database snapshot contains **24 schemas, 266 tables, 4,438 columns, and 1,461 declared foreign keys**. The map below shows representative business-domain dependencies backed by one or more declared foreign keys. Arrows point from the schema that owns the referencing (child) column to the schema containing its referenced (parent) key; they do not grant access or establish service write ownership. The [cross-domain reference register](15-Cross-Domain-Relationships.md) lists every observed cross-schema pair.
+Pharmville's checked-out database snapshot contains **24 schemas, 268 tables, 4,485 columns, and 1,476 declared foreign keys**. The map below shows representative business-domain dependencies backed by one or more declared foreign keys. Arrows point from the schema that owns the referencing (child) column to the schema containing its referenced (parent) key; they do not grant access or establish service write ownership. The [cross-domain reference register](15-Cross-Domain-Relationships.md) lists every observed cross-schema pair.
 
 ## Main domain map
 
@@ -83,7 +83,7 @@ The diagram focuses on cross-domain connections used to orient readers. Identity
 | `diagnostics` | 13 | Tests and laboratory services | [diagnostics](07-diagnostics.md) |
 | `finance` | 8 | Invoices, ledgers, and settlements | [finance](08-finance.md) |
 | `fulfillment` | 10 | Picking, packing, and shipment preparation | [fulfillment](09-fulfillment.md) |
-| `identity` | 14 | Accounts, sessions, and permissions | [identity](10-identity.md) |
+| `identity` | 16 | Accounts, sessions, and permissions | [identity](10-identity.md) |
 | `insurance` | 8 | Policies and claims | [insurance](11-insurance.md) |
 | `logistics` | 15 | Riders, shipments, and delivery | [logistics](12-logistics.md) |
 | `marketplace` | 7 | Sellers and listings | [marketplace](13-marketplace.md) |

@@ -1,5 +1,8 @@
 # Schema parity and historical models
 
+> [!NOTE]
+> The source-chain reconstruction below describes the preserved V0030 baseline. Current standalone SQL/catalog also contain the explicitly **Proposed / Unapproved / Not Implemented D-028** unified Identity extension. [Current isolated verification](../09-References/Unified-Authentication-Database-Validation.json) records 142 additive catalog objects, no changed/removed existing definitions and zero differences between two fresh current-schema installations. [Identity assessment](Identity-Authentication-Assessment.md) separates those additions from historical provenance; no new migration or seed records are introduced.
+
 **Validated:** all 30 historical migrations were applied to a newly initialized private PostgreSQL 18.6 database. `pg_dump --schema-only --no-owner` captured effective DDL; only dump-generated psql restriction tokens/banner metadata were removed and installation-role default privileges were made portable with `CURRENT_USER`. The SQL was installed into a second newly created empty database.
 
 The comparison reports **zero differences** across extensions, runtime capability roles, non-owner/column grants, default privileges, schemas, tables/storage/RLS, columns, sequences/ownership, all keys/checks/NOT NULL constraints, indexes and predicates, functions, triggers/enabled states, policies, views, types/domains, collations, procedures, rules, extended statistics and role memberships. Empty categories were checked, not omitted. Catalog queries normalize only equivalent VARCHAR/TEXT literal-array casts and routine line endings. Data, sequence current values, server catalog OIDs, install-role names and pg_dump formatting are outside structural parity.

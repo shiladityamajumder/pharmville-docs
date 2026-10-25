@@ -1,0 +1,205 @@
+[
+  {
+    "id": "API-098",
+    "method": "post",
+    "path": "/v1/auth/login/initiate",
+    "operationId": "API_098_UnifiedIdentity",
+    "features": [
+      "ACC-01",
+      "AUTH-03"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-099",
+    "method": "post",
+    "path": "/v1/auth/login/verify",
+    "operationId": "API_099_UnifiedIdentity",
+    "features": [
+      "ACC-01",
+      "AUTH-01",
+      "AUTH-02",
+      "AUTH-03"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-100",
+    "method": "get",
+    "path": "/v1/auth/identity",
+    "operationId": "API_100_UnifiedIdentity",
+    "features": [
+      "AUTH-02",
+      "AUTH-04",
+      "ACC-02"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-101",
+    "method": "get",
+    "path": "/v1/auth/workspaces",
+    "operationId": "API_101_UnifiedIdentity",
+    "features": [
+      "AUTH-04",
+      "ADM-03"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-102",
+    "method": "post",
+    "path": "/v1/auth/context",
+    "operationId": "API_102_UnifiedIdentity",
+    "features": [
+      "AUTH-04",
+      "AUTH-02"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-103",
+    "method": "post",
+    "path": "/v1/auth/step-up",
+    "operationId": "API_103_UnifiedIdentity",
+    "features": [
+      "AUTH-01",
+      "AUTH-02",
+      "AUTH-04"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-104",
+    "method": "post",
+    "path": "/v1/auth/mfa/enrollment",
+    "operationId": "API_104_UnifiedIdentity",
+    "features": [
+      "AUTH-01",
+      "AUTH-02"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-105",
+    "method": "post",
+    "path": "/v1/auth/credentials/password",
+    "operationId": "API_105_UnifiedIdentity",
+    "features": [
+      "AUTH-01",
+      "AUTH-02"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-106",
+    "method": "post",
+    "path": "/v1/auth/recovery/request",
+    "operationId": "API_106_UnifiedIdentity",
+    "features": [
+      "AUTH-02",
+      "AUTH-03"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-107",
+    "method": "post",
+    "path": "/v1/auth/recovery/complete",
+    "operationId": "API_107_UnifiedIdentity",
+    "features": [
+      "AUTH-01",
+      "AUTH-02",
+      "AUTH-03"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-108",
+    "method": "put",
+    "path": "/v1/admin/roles/{role_id}/permissions",
+    "operationId": "API_108_UnifiedIdentity",
+    "features": [
+      "ADM-03",
+      "AUTH-04"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-109",
+    "method": "post",
+    "path": "/v1/admin/users/{user_id}/role-assignments",
+    "operationId": "API_109_UnifiedIdentity",
+    "features": [
+      "ADM-02",
+      "ADM-03",
+      "AUTH-04"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-110",
+    "method": "patch",
+    "path": "/v1/admin/role-assignments/{assignment_id}",
+    "operationId": "API_110_UnifiedIdentity",
+    "features": [
+      "ADM-02",
+      "ADM-03",
+      "AUTH-02",
+      "AUTH-04"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-111",
+    "method": "get",
+    "path": "/v1/admin/roles/{role_id}/permissions",
+    "operationId": "API_111_UnifiedIdentity",
+    "features": [
+      "ADM-03",
+      "AUTH-04"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  },
+  {
+    "id": "API-112",
+    "method": "get",
+    "path": "/v1/admin/users/{user_id}/role-assignments",
+    "operationId": "API_112_UnifiedIdentity",
+    "features": [
+      "ADM-03",
+      "AUTH-04"
+    ],
+    "status": "complete-proposed",
+    "approval": "unapproved",
+    "implementation": "not-implemented"
+  }
+]

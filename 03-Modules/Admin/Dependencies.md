@@ -25,3 +25,8 @@ D-001; D-003; D-012; D-024. See the [business decision register](../../09-Refere
 | Runtime/provider/application evidence | Not executed; schema-only parity is independently validated |
 
 [Journey gaps](../../05-APIs/Journey-API-Gaps.md) preserve proposed missing commands without expanding the 107-operation denominator. No provider, financial or clinical dependency is implicitly approved.
+
+
+## IAM administration dependency
+
+API-111 supplies the current role policy/ETag for API-108. API-112 supplies contained target assignment versions for API-110. API-033/034 and API-108–112 are Admin surfaces delegated to Authentication_Access, not Admin-owned identity writes. Permission defaults and delegation allowlists require D-003/D-024/D-028 approval.

@@ -46,7 +46,7 @@ flowchart LR
 
 ## Database ownership and transactions
 
-[Ownership-and-Scope.json](../04-Database/Ownership-and-Scope.json) assigns every one of the 266 tables a proposed domain owner, shared infrastructure owner or explicit future-owner decision. Domain write owners enforce invariants; HTTP surface ownership and SQL access alone do not grant writes. Customer Orders delegates to Order Management, Delivery and Payments; Rider Operations is an assigned-task client. Authentication owns OTP execution even though the historical customer OTP contracts stay on the Customer Accounts surface.
+[Ownership-and-Scope.json](../04-Database/Ownership-and-Scope.json) assigns every one of the 268 tables a proposed domain owner, shared infrastructure owner or explicit future-owner decision. Domain write owners enforce invariants; HTTP surface ownership and SQL access alone do not grant writes. Customer Orders delegates to Order Management, Delivery and Payments; Rider Operations is an assigned-task client. Authentication owns OTP execution even though the historical customer OTP contracts stay on the Customer Accounts surface.
 
 Within one process/database, orchestration calls the responsible module command with the existing transaction context when atomicity is required. Do not independently commit Inventory, clinical or money rows inside another owner's transaction. Stable command DTOs and return results are internal contracts; an internal HTTP route does not imply a microservice. No module obtains unrestricted shared ORM writes.
 
@@ -61,3 +61,7 @@ Appointment, diagnostics, insurance, membership, support, risk and marketplace o
 ## Cross-module contract evidence
 
 [Fourteen workflows](../06-Workflows/README.md) specify orchestration and recovery. [API matrix](../05-APIs/API-Database-Feature-Matrix.md) covers every route and exact table dependencies; [feature delivery trace](../09-References/Feature-Delivery-Traceability.md) connects all 110 requirements to workflows, designed tests and stable tasks. Detailed auth, allowed transitions, idempotency and recovery remain endpoint-specific. Documentation completeness, approval and implementation are independent states.
+
+## Shared Identity and scoped workspace boundary
+
+Authentication_Access is the sole proposed credential/session/grant command owner. Customer, Staff/Admin, Pharmacist and Rider panels consume one identity and verified workspace projection; Customer Accounts owns onboarding/profile/consent and Admin delegates Identity administration. [Unified design](../03-Modules/Authentication/Unified-Identity-Architecture.md) defines stronger-workspace proof, assignment scope, live revocation and the distinction between scoped offboarding and globally authorized identity suspension. PostgreSQL runtime capabilities remain separate from business roles.

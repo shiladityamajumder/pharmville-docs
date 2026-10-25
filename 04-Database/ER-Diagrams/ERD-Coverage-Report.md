@@ -5,14 +5,14 @@
 | Measure | Result | Evidence status |
 |---|---:|---|
 | PostgreSQL schemas | 24 | Confirmed in checked-out catalog snapshot |
-| Tables | 266 | Confirmed in checked-out catalog snapshot |
-| Columns | 4,438 | Confirmed in checked-out catalog snapshot |
-| Declared foreign keys | 1,461 | Parsed from catalog constraint definitions |
+| Tables | 268 | Confirmed in checked-out catalog snapshot |
+| Columns | 4,485 | Confirmed in checked-out catalog snapshot |
+| Declared foreign keys | 1,476 | Parsed from catalog constraint definitions |
 | Cross-schema foreign keys | 894 | Computed from FK child/parent schemas |
 | Cross-schema schema pairs | 92 | Computed from FK inventory |
 | Focused domain ER diagrams | 42 | Generated; 18 max entities per diagram |
-| Tables represented as focus entities | 266 / 266 | Every table appears as a focus table once |
-| Foreign keys represented by diagram IDs and catalog rows | 1461 / 1461 | Complete in snapshot scope |
+| Tables represented as focus entities | 268 / 268 | Every table appears as a focus table once |
+| Foreign keys represented by diagram IDs and catalog rows | 1476 / 1476 | Complete in snapshot scope |
 | Tables with no declared FK | 1 | See [logical-reference review](Logical-References.md) |
 | SQLAlchemy ORM `relationship()` declarations | 0 | Historical scan only; archived models are not schema authority |
 | Non-FK UUID references | 29 | Classified separately; see [Logical References](Logical-References.md) |
@@ -30,7 +30,7 @@
 | `diagnostics` | 13 | 79 | 43 | 2 ([details](07-diagnostics.md)) |
 | `finance` | 8 | 45 | 31 | 1 ([details](08-finance.md)) |
 | `fulfillment` | 10 | 70 | 46 | 2 ([details](09-fulfillment.md)) |
-| `identity` | 14 | 45 | 2 | 2 ([details](10-identity.md)) |
+| `identity` | 16 | 60 | 2 | 2 ([details](10-identity.md)) |
 | `insurance` | 8 | 42 | 28 | 1 ([details](11-insurance.md)) |
 | `logistics` | 15 | 84 | 51 | 2 ([details](12-logistics.md)) |
 | `marketplace` | 7 | 45 | 31 | 1 ([details](13-marketplace.md)) |
@@ -56,7 +56,7 @@
 
 ## Evidence and limitations
 
-The generator verifies the standalone SQL, derived catalog/table register and logical-reference decision checksums against [Database-Evidence.json](../../09-References/Database-Evidence.json). All 266 table pages and 4,438 columns are validated against the effective catalog. Private PostgreSQL fresh-install parity is recorded separately; no production connection is used.
+The generator verifies the standalone SQL, derived catalog/table register and logical-reference decision checksums against [Database-Evidence.json](../../09-References/Database-Evidence.json). All 268 table pages and 4,485 columns are validated against the effective catalog. Private PostgreSQL fresh-install parity is recorded separately; no production connection is used.
 
 These ERDs cover every physical foreign key in the validated effective V0030 schema. SQL installation and zero catalog differences were verified in isolated disposable databases. Future proposals, business ownership approval and production deployment are separate states. The archived migration sources and nested Git history remain intact.
 

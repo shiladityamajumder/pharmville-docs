@@ -6159,6 +6159,80 @@
       "zzzz_internal_keys": "[\"CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON identity.api_clients FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')\", \"O\"]"
     }
   },
+  "identity.authentication_challenges": {
+    "columns": {
+      "attempts": "{\"type\": \"integer\", \"default\": \"0\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "binding_json": "{\"type\": \"jsonb\", \"default\": \"'{}'::jsonb\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "blocked_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "consumed_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "created_at": "{\"type\": \"timestamp with time zone\", \"default\": \"now()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "created_by": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "expires_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "factor_type": "{\"type\": \"character varying(16)\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": \"default\", \"generated\": \"\"}",
+      "id": "{\"type\": \"uuid\", \"default\": \"gen_random_uuid()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "identifier_encrypted": "{\"type\": \"bytea\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "identity_version": "{\"type\": \"bigint\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "internal_id": "{\"type\": \"bigint\", \"default\": null, \"identity\": \"a\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "max_attempts": "{\"type\": \"integer\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "mfa_factor_id": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "otp_challenge_id": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "parent_challenge_id": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "policy_version": "{\"type\": \"character varying(64)\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": \"default\", \"generated\": \"\"}",
+      "purpose": "{\"type\": \"character varying(32)\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": \"default\", \"generated\": \"\"}",
+      "requested_context_hash": "{\"type\": \"character varying(255)\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": \"default\", \"generated\": \"\"}",
+      "row_version": "{\"type\": \"bigint\", \"default\": \"1\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "session_id": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "token_hash": "{\"type\": \"character varying(255)\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": \"default\", \"generated\": \"\"}",
+      "updated_at": "{\"type\": \"timestamp with time zone\", \"default\": \"now()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "updated_by": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "user_id": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}"
+    },
+    "constraints": {
+      "authentication_challenges_attempts_check": "[\"c\", \"CHECK (attempts >= 0)\", false, false, true, false]",
+      "authentication_challenges_binding_json_check": "[\"c\", \"CHECK (jsonb_typeof(binding_json) = 'object'::text)\", false, false, true, false]",
+      "authentication_challenges_check": "[\"c\", \"CHECK (max_attempts > 0 AND attempts <= max_attempts)\", false, false, true, false]",
+      "authentication_challenges_created_by_fkey": "[\"f\", \"FOREIGN KEY (created_by) REFERENCES identity.users(id)\", false, false, true, true]",
+      "authentication_challenges_factor_type_check": "[\"c\", \"CHECK (factor_type::text = ANY (ARRAY['otp'::text, 'password'::text, 'totp'::text]))\", false, false, true, false]",
+      "authentication_challenges_id_key": "[\"u\", \"UNIQUE (id)\", false, false, true, true]",
+      "authentication_challenges_identity_version_check": "[\"c\", \"CHECK (identity_version IS NULL OR identity_version > 0)\", false, false, true, false]",
+      "authentication_challenges_mfa_factor_id_fkey": "[\"f\", \"FOREIGN KEY (mfa_factor_id) REFERENCES identity.mfa_factors(id)\", false, false, true, true]",
+      "authentication_challenges_otp_challenge_id_fkey": "[\"f\", \"FOREIGN KEY (otp_challenge_id) REFERENCES identity.otp_challenges(id)\", false, false, true, true]",
+      "authentication_challenges_parent_challenge_id_fkey": "[\"f\", \"FOREIGN KEY (parent_challenge_id) REFERENCES identity.authentication_challenges(id)\", false, false, true, true]",
+      "authentication_challenges_pkey": "[\"p\", \"PRIMARY KEY (internal_id)\", false, false, true, true]",
+      "authentication_challenges_purpose_check": "[\"c\", \"CHECK (purpose::text = ANY (ARRAY['login'::text, 'step_up'::text, 'mfa_enrollment'::text, 'password_recovery'::text]))\", false, false, true, false]",
+      "authentication_challenges_row_version_check": "[\"c\", \"CHECK (row_version > 0)\", false, false, true, false]",
+      "authentication_challenges_session_id_fkey": "[\"f\", \"FOREIGN KEY (session_id) REFERENCES identity.sessions(id) ON DELETE CASCADE\", false, false, true, true]",
+      "authentication_challenges_token_hash_key": "[\"u\", \"UNIQUE (token_hash)\", false, false, true, true]",
+      "authentication_challenges_updated_by_fkey": "[\"f\", \"FOREIGN KEY (updated_by) REFERENCES identity.users(id)\", false, false, true, true]",
+      "authentication_challenges_user_id_fkey": "[\"f\", \"FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE\", false, false, true, true]",
+      "ck_auth_challenge_factor_owner": "[\"c\", \"CHECK (mfa_factor_id IS NULL OR user_id IS NOT NULL)\", false, false, true, false]",
+      "ck_identity_challenge_expiry": "[\"c\", \"CHECK (expires_at > created_at)\", false, false, true, false]",
+      "ck_identity_challenge_not_self_parent": "[\"c\", \"CHECK (parent_challenge_id IS NULL OR parent_challenge_id <> id)\", false, false, true, false]",
+      "ck_identity_challenge_session": "[\"c\", \"CHECK ((purpose::text <> ALL (ARRAY['step_up'::text, 'mfa_enrollment'::text])) OR user_id IS NOT NULL AND session_id IS NOT NULL)\", false, false, true, false]",
+      "fk_auth_challenge_factor_owner": "[\"f\", \"FOREIGN KEY (mfa_factor_id, user_id) REFERENCES identity.mfa_factors(id, user_id) DEFERRABLE INITIALLY DEFERRED\", true, true, true, true]",
+      "fk_auth_challenge_session_owner": "[\"f\", \"FOREIGN KEY (session_id, user_id) REFERENCES identity.sessions(id, user_id) DEFERRABLE INITIALLY DEFERRED\", true, true, true, true]"
+    },
+    "indexes": {
+      "authentication_challenges_id_key": "[\"CREATE UNIQUE INDEX authentication_challenges_id_key ON identity.authentication_challenges USING btree (id)\", true, true, true, false, null, null]",
+      "authentication_challenges_pkey": "[\"CREATE UNIQUE INDEX authentication_challenges_pkey ON identity.authentication_challenges USING btree (internal_id)\", true, true, true, false, null, null]",
+      "authentication_challenges_token_hash_key": "[\"CREATE UNIQUE INDEX authentication_challenges_token_hash_key ON identity.authentication_challenges USING btree (token_hash)\", true, true, true, false, null, null]",
+      "ix_identity_challenges_session": "[\"CREATE INDEX ix_identity_challenges_session ON identity.authentication_challenges USING btree (session_id) WHERE session_id IS NOT NULL\", true, true, false, false, null, null]",
+      "ix_identity_challenges_user_pending": "[\"CREATE INDEX ix_identity_challenges_user_pending ON identity.authentication_challenges USING btree (user_id, expires_at) WHERE consumed_at IS NULL AND blocked_at IS NULL\", true, true, false, false, null, null]",
+      "uq_identity_challenge_child": "[\"CREATE UNIQUE INDEX uq_identity_challenge_child ON identity.authentication_challenges USING btree (parent_challenge_id) WHERE parent_challenge_id IS NOT NULL\", true, true, true, false, null, null]",
+      "uq_identity_challenge_otp": "[\"CREATE UNIQUE INDEX uq_identity_challenge_otp ON identity.authentication_challenges USING btree (otp_challenge_id) WHERE otp_challenge_id IS NOT NULL\", true, true, true, false, null, null]"
+    },
+    "pk": [
+      {
+        "column": "internal_id",
+        "identity_always": true,
+        "type": "BIGINT"
+      }
+    ],
+    "public_uuid_column": "id",
+    "triggers": {
+      "zz_record_maintenance": "[\"CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.authentication_challenges FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')\", \"O\"]"
+    }
+  },
   "identity.login_attempts": {
     "columns": {
       "created_at": "{\"type\": \"timestamp with time zone\", \"default\": \"now()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
@@ -6207,6 +6281,7 @@
       "id": "{\"type\": \"uuid\", \"default\": \"gen_random_uuid()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
       "internal_id": "{\"type\": \"bigint\", \"default\": null, \"identity\": \"a\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
       "label": "{\"type\": \"character varying(64)\", \"default\": \"'default'::character varying\", \"identity\": \"\", \"not_null\": true, \"collation\": \"default\", \"generated\": \"\"}",
+      "last_accepted_totp_counter": "{\"type\": \"bigint\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
       "row_version": "{\"type\": \"bigint\", \"default\": \"1\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
       "secret_encrypted": "{\"type\": \"bytea\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
       "updated_at": "{\"type\": \"timestamp with time zone\", \"default\": \"now()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
@@ -6215,18 +6290,21 @@
       "verified_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}"
     },
     "constraints": {
+      "ck_identity_mfa_counter_nonnegative": "[\"c\", \"CHECK (last_accepted_totp_counter IS NULL OR last_accepted_totp_counter >= 0)\", false, false, true, false]",
       "ck_identity_mfa_factors_row_version_positive": "[\"c\", \"CHECK (row_version > 0)\", false, false, true, false]",
       "fk_identity_mfa_factors_created_by_users": "[\"f\", \"FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT\", false, false, true, true]",
       "fk_identity_mfa_factors_updated_by_users": "[\"f\", \"FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT\", false, false, true, true]",
       "fk_identity_mfa_factors_user_id_users": "[\"f\", \"FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE\", false, false, true, true]",
       "pk_identity_mfa_factors": "[\"p\", \"PRIMARY KEY (internal_id)\", false, false, true, true]",
       "uq_identity_mfa_factors_id": "[\"u\", \"UNIQUE (id)\", false, false, true, true]",
+      "uq_mfa_factors_id_user": "[\"u\", \"UNIQUE (id, user_id)\", false, false, true, true]",
       "user_mfa_factor": "[\"u\", \"UNIQUE (user_id, factor_type, label)\", false, false, true, true]"
     },
     "indexes": {
       "ix_identity_mfa_factors_user_id": "[\"CREATE INDEX ix_identity_mfa_factors_user_id ON identity.mfa_factors USING btree (user_id)\", true, true, false, false, null, null]",
       "pk_identity_mfa_factors": "[\"CREATE UNIQUE INDEX pk_identity_mfa_factors ON identity.mfa_factors USING btree (internal_id)\", true, true, true, false, null, null]",
       "uq_identity_mfa_factors_id": "[\"CREATE UNIQUE INDEX uq_identity_mfa_factors_id ON identity.mfa_factors USING btree (id)\", true, true, true, false, null, null]",
+      "uq_mfa_factors_id_user": "[\"CREATE UNIQUE INDEX uq_mfa_factors_id_user ON identity.mfa_factors USING btree (id, user_id)\", true, true, true, false, null, null]",
       "user_mfa_factor": "[\"CREATE UNIQUE INDEX user_mfa_factor ON identity.mfa_factors USING btree (user_id, factor_type, label)\", true, true, true, false, null, null]"
     },
     "pk": [
@@ -6239,6 +6317,7 @@
     "public_uuid_column": "id",
     "triggers": {
       "aa_internal_keys": "[\"CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON identity.mfa_factors FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')\", \"O\"]",
+      "ab_totp_counter": "[\"CREATE TRIGGER ab_totp_counter BEFORE UPDATE ON identity.mfa_factors FOR EACH ROW EXECUTE FUNCTION identity.guard_totp_counter()\", \"O\"]",
       "zz_record_maintenance": "[\"CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.mfa_factors FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')\", \"O\"]",
       "zzzz_internal_keys": "[\"CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON identity.mfa_factors FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')\", \"O\"]"
     }
@@ -6465,8 +6544,63 @@
       "zzzz_internal_keys": "[\"CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON identity.roles FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')\", \"O\"]"
     }
   },
+  "identity.session_refresh_tokens": {
+    "columns": {
+      "consumed_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "created_at": "{\"type\": \"timestamp with time zone\", \"default\": \"now()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "created_by": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "expires_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "id": "{\"type\": \"uuid\", \"default\": \"gen_random_uuid()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "internal_id": "{\"type\": \"bigint\", \"default\": null, \"identity\": \"a\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "parent_token_id": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "revoked_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "row_version": "{\"type\": \"bigint\", \"default\": \"1\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "session_id": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "token_hash": "{\"type\": \"character varying(255)\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": \"default\", \"generated\": \"\"}",
+      "updated_at": "{\"type\": \"timestamp with time zone\", \"default\": \"now()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
+      "updated_by": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}"
+    },
+    "constraints": {
+      "ck_identity_refresh_expiry": "[\"c\", \"CHECK (expires_at > created_at)\", false, false, true, false]",
+      "ck_identity_refresh_not_self_parent": "[\"c\", \"CHECK (parent_token_id IS NULL OR parent_token_id <> id)\", false, false, true, false]",
+      "fk_refresh_parent_same_session": "[\"f\", \"FOREIGN KEY (parent_token_id, session_id) REFERENCES identity.session_refresh_tokens(id, session_id) DEFERRABLE INITIALLY DEFERRED\", true, true, true, true]",
+      "session_refresh_tokens_created_by_fkey": "[\"f\", \"FOREIGN KEY (created_by) REFERENCES identity.users(id)\", false, false, true, true]",
+      "session_refresh_tokens_id_key": "[\"u\", \"UNIQUE (id)\", false, false, true, true]",
+      "session_refresh_tokens_parent_token_id_fkey": "[\"f\", \"FOREIGN KEY (parent_token_id) REFERENCES identity.session_refresh_tokens(id)\", false, false, true, true]",
+      "session_refresh_tokens_pkey": "[\"p\", \"PRIMARY KEY (internal_id)\", false, false, true, true]",
+      "session_refresh_tokens_row_version_check": "[\"c\", \"CHECK (row_version > 0)\", false, false, true, false]",
+      "session_refresh_tokens_session_id_fkey": "[\"f\", \"FOREIGN KEY (session_id) REFERENCES identity.sessions(id) ON DELETE CASCADE\", false, false, true, true]",
+      "session_refresh_tokens_token_hash_key": "[\"u\", \"UNIQUE (token_hash)\", false, false, true, true]",
+      "session_refresh_tokens_updated_by_fkey": "[\"f\", \"FOREIGN KEY (updated_by) REFERENCES identity.users(id)\", false, false, true, true]",
+      "uq_refresh_token_id_session": "[\"u\", \"UNIQUE (id, session_id)\", false, false, true, true]"
+    },
+    "indexes": {
+      "ix_identity_refresh_session": "[\"CREATE INDEX ix_identity_refresh_session ON identity.session_refresh_tokens USING btree (session_id, created_at)\", true, true, false, false, null, null]",
+      "session_refresh_tokens_id_key": "[\"CREATE UNIQUE INDEX session_refresh_tokens_id_key ON identity.session_refresh_tokens USING btree (id)\", true, true, true, false, null, null]",
+      "session_refresh_tokens_pkey": "[\"CREATE UNIQUE INDEX session_refresh_tokens_pkey ON identity.session_refresh_tokens USING btree (internal_id)\", true, true, true, false, null, null]",
+      "session_refresh_tokens_token_hash_key": "[\"CREATE UNIQUE INDEX session_refresh_tokens_token_hash_key ON identity.session_refresh_tokens USING btree (token_hash)\", true, true, true, false, null, null]",
+      "uq_identity_refresh_child": "[\"CREATE UNIQUE INDEX uq_identity_refresh_child ON identity.session_refresh_tokens USING btree (parent_token_id) WHERE parent_token_id IS NOT NULL\", true, true, true, false, null, null]",
+      "uq_refresh_token_id_session": "[\"CREATE UNIQUE INDEX uq_refresh_token_id_session ON identity.session_refresh_tokens USING btree (id, session_id)\", true, true, true, false, null, null]"
+    },
+    "pk": [
+      {
+        "column": "internal_id",
+        "identity_always": true,
+        "type": "BIGINT"
+      }
+    ],
+    "public_uuid_column": "id",
+    "triggers": {
+      "zz_record_maintenance": "[\"CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.session_refresh_tokens FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')\", \"O\"]"
+    }
+  },
   "identity.sessions": {
     "columns": {
+      "active_assignment_id": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "active_workspace_code": "{\"type\": \"character varying(64)\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": \"default\", \"generated\": \"\"}",
+      "authenticated_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "authentication_policy_version": "{\"type\": \"character varying(64)\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": \"default\", \"generated\": \"\"}",
+      "context_version": "{\"type\": \"bigint\", \"default\": \"1\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
       "created_at": "{\"type\": \"timestamp with time zone\", \"default\": \"now()\", \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
       "created_by": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
       "device_id": "{\"type\": \"character varying(255)\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": \"default\", \"generated\": \"\"}",
@@ -6476,6 +6610,9 @@
       "internal_id": "{\"type\": \"bigint\", \"default\": null, \"identity\": \"a\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}",
       "ip_address": "{\"type\": \"inet\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
       "last_seen_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "mfa_verified_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "otp_verified_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
+      "password_verified_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
       "refresh_token_hash": "{\"type\": \"character varying(255)\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": \"default\", \"generated\": \"\"}",
       "revoke_reason": "{\"type\": \"character varying(255)\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": \"default\", \"generated\": \"\"}",
       "revoked_at": "{\"type\": \"timestamp with time zone\", \"default\": null, \"identity\": \"\", \"not_null\": false, \"collation\": null, \"generated\": \"\"}",
@@ -6487,22 +6624,30 @@
       "user_id": "{\"type\": \"uuid\", \"default\": null, \"identity\": \"\", \"not_null\": true, \"collation\": null, \"generated\": \"\"}"
     },
     "constraints": {
+      "ck_identity_session_context_pair": "[\"c\", \"CHECK ((active_assignment_id IS NULL) = (active_workspace_code IS NULL))\", false, false, true, false]",
+      "ck_identity_session_context_version": "[\"c\", \"CHECK (context_version > 0)\", false, false, true, false]",
+      "ck_identity_session_workspace_nonblank": "[\"c\", \"CHECK (active_workspace_code IS NULL OR length(btrim(active_workspace_code::text)) > 0)\", false, false, true, false]",
       "ck_identity_sessions_expires_after_created": "[\"c\", \"CHECK (expires_at > created_at)\", false, false, true, false]",
       "ck_identity_sessions_row_version_positive": "[\"c\", \"CHECK (row_version > 0)\", false, false, true, false]",
+      "fk_identity_session_assignment_owner": "[\"f\", \"FOREIGN KEY (active_assignment_id, user_id) REFERENCES identity.user_roles(id, user_id) DEFERRABLE INITIALLY DEFERRED\", true, true, true, true]",
       "fk_identity_sessions_created_by_users": "[\"f\", \"FOREIGN KEY (created_by) REFERENCES identity.users(id) ON DELETE RESTRICT\", false, false, true, true]",
       "fk_identity_sessions_updated_by_users": "[\"f\", \"FOREIGN KEY (updated_by) REFERENCES identity.users(id) ON DELETE RESTRICT\", false, false, true, true]",
       "fk_identity_sessions_user_id_users": "[\"f\", \"FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE\", false, false, true, true]",
       "pk_identity_sessions": "[\"p\", \"PRIMARY KEY (internal_id)\", false, false, true, true]",
       "sessions_refresh_token_hash": "[\"u\", \"UNIQUE (refresh_token_hash)\", false, false, true, true]",
-      "uq_identity_sessions_id": "[\"u\", \"UNIQUE (id)\", false, false, true, true]"
+      "uq_identity_sessions_id": "[\"u\", \"UNIQUE (id)\", false, false, true, true]",
+      "uq_sessions_id_user": "[\"u\", \"UNIQUE (id, user_id)\", false, false, true, true]"
     },
     "indexes": {
+      "ix_identity_sessions_active_assignment": "[\"CREATE INDEX ix_identity_sessions_active_assignment ON identity.sessions USING btree (active_assignment_id) WHERE active_assignment_id IS NOT NULL\", true, true, false, false, null, null]",
       "ix_identity_sessions_device_id": "[\"CREATE INDEX ix_identity_sessions_device_id ON identity.sessions USING btree (device_id)\", true, true, false, false, null, null]",
       "ix_identity_sessions_expires_at": "[\"CREATE INDEX ix_identity_sessions_expires_at ON identity.sessions USING btree (expires_at)\", true, true, false, false, null, null]",
+      "ix_identity_sessions_token_family": "[\"CREATE INDEX ix_identity_sessions_token_family ON identity.sessions USING btree (token_family_id)\", true, true, false, false, null, null]",
       "ix_identity_sessions_user_id": "[\"CREATE INDEX ix_identity_sessions_user_id ON identity.sessions USING btree (user_id)\", true, true, false, false, null, null]",
       "pk_identity_sessions": "[\"CREATE UNIQUE INDEX pk_identity_sessions ON identity.sessions USING btree (internal_id)\", true, true, true, false, null, null]",
       "sessions_refresh_token_hash": "[\"CREATE UNIQUE INDEX sessions_refresh_token_hash ON identity.sessions USING btree (refresh_token_hash)\", true, true, true, false, null, null]",
-      "uq_identity_sessions_id": "[\"CREATE UNIQUE INDEX uq_identity_sessions_id ON identity.sessions USING btree (id)\", true, true, true, false, null, null]"
+      "uq_identity_sessions_id": "[\"CREATE UNIQUE INDEX uq_identity_sessions_id ON identity.sessions USING btree (id)\", true, true, true, false, null, null]",
+      "uq_sessions_id_user": "[\"CREATE UNIQUE INDEX uq_sessions_id_user ON identity.sessions USING btree (id, user_id)\", true, true, true, false, null, null]"
     },
     "pk": [
       {
@@ -6514,6 +6659,7 @@
     "public_uuid_column": "id",
     "triggers": {
       "aa_internal_keys": "[\"CREATE TRIGGER aa_internal_keys BEFORE INSERT OR UPDATE ON identity.sessions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')\", \"O\"]",
+      "ab_session_context": "[\"CREATE TRIGGER ab_session_context BEFORE UPDATE ON identity.sessions FOR EACH ROW EXECUTE FUNCTION identity.guard_session_context()\", \"O\"]",
       "zz_record_maintenance": "[\"CREATE TRIGGER zz_record_maintenance BEFORE UPDATE ON identity.sessions FOR EACH ROW EXECUTE FUNCTION platform.maintain_record('versioned')\", \"O\"]",
       "zzzz_internal_keys": "[\"CREATE TRIGGER zzzz_internal_keys BEFORE INSERT OR UPDATE ON identity.sessions FOR EACH ROW EXECUTE FUNCTION platform.maintain_internal_keys('[]', 'internal_id', 'id')\", \"O\"]"
     }
@@ -6644,6 +6790,7 @@
       "fk_identity_user_roles_user_id_users": "[\"f\", \"FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE\", false, false, true, true]",
       "pk_identity_user_roles": "[\"p\", \"PRIMARY KEY (internal_id)\", false, false, true, true]",
       "uq_identity_user_roles_id": "[\"u\", \"UNIQUE (id)\", false, false, true, true]",
+      "uq_identity_user_roles_id_user": "[\"u\", \"UNIQUE (id, user_id)\", false, false, true, true]",
       "user_role_scope": "[\"u\", \"UNIQUE NULLS NOT DISTINCT (user_id, role_id, scope_type, scope_id)\", false, false, true, true]"
     },
     "indexes": {
@@ -6652,6 +6799,7 @@
       "ix_identity_user_roles_user_id": "[\"CREATE INDEX ix_identity_user_roles_user_id ON identity.user_roles USING btree (user_id)\", true, true, false, false, null, null]",
       "pk_identity_user_roles": "[\"CREATE UNIQUE INDEX pk_identity_user_roles ON identity.user_roles USING btree (internal_id)\", true, true, true, false, null, null]",
       "uq_identity_user_roles_id": "[\"CREATE UNIQUE INDEX uq_identity_user_roles_id ON identity.user_roles USING btree (id)\", true, true, true, false, null, null]",
+      "uq_identity_user_roles_id_user": "[\"CREATE UNIQUE INDEX uq_identity_user_roles_id_user ON identity.user_roles USING btree (id, user_id)\", true, true, true, false, null, null]",
       "user_role_scope": "[\"CREATE UNIQUE INDEX user_role_scope ON identity.user_roles USING btree (user_id, role_id, scope_type, scope_id) NULLS NOT DISTINCT\", true, true, true, true, null, null]"
     },
     "pk": [

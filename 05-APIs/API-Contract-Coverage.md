@@ -1,18 +1,20 @@
 # API contract completeness ledger
 
-The denominator is the preserved **107 existing HTTP operations**: API-001–API-097 plus ten ACC-ROUTE references. No new path, method, historical ID or account-route reference was added or removed. All contracts remain **Proposed / Unapproved / Not Implemented**. Documentation completeness does not require prior approval; actual approval requires evidence under D-024. [Operation traceability](API-Database-Feature-Matrix.md) · [master data](../04-Database/Master-Data-Inventory.md) · [decisions](Planning-Decisions.md) · [journey gaps](Journey-API-Gaps.md).
+The inherited baseline is **107 operations** (API-001–097 and ten ACC-ROUTE references), all preserved. D-028 adds **15 explicitly proposed operations API-098–112**, yielding **122**. All contracts remain **Proposed / Unapproved / Not Implemented**. Documentation completeness does not require prior approval; actual approval requires evidence under D-024. [Operation traceability](API-Database-Feature-Matrix.md) · [master data](../04-Database/Master-Data-Inventory.md) · [decisions](Planning-Decisions.md) · [journey gaps](Journey-API-Gaps.md).
 
 ## Baseline and final planning measure
 
 | Measure | Baseline | Current proposal |
 | --- | --- | --- |
-| Inventoried operations | 107 | 107 |
-| Documentation-complete proposed contracts | 0 / 107 (0%) | 97 / 107 (90.65%) |
-| Remaining incomplete contracts | 107 | 10 |
-| Approved complete contracts, evidenced signoff | 0 / 107 (0%) | 0 / 107 (0%) |
+| Inventoried operations | 107 | 122 (107 preserved + 15 proposed) |
+| Documentation-complete proposed contracts | 0 / 107 (0%) | 114 / 122 (93.44%); original cohort 99 / 107 (92.52%) |
+| Remaining incomplete contracts | 107 | 8 |
+| Approved complete contracts, evidenced signoff | 0 / 107 (0%) | 0 / 122 (0%) |
 | Verified implementations / executed application contract tests | 0 | 0 |
 
-Baseline evidence was the inherited ledger and OpenAPI: 62 body operations, 24 typed request schemas, 16 request examples, 22 concrete success DTOs/examples. The current spec has typed request DTOs and examples for every body operation and concrete success DTOs/examples for all 104 JSON-success operations; the other three operations are bodyless DELETE 204 responses. Those structural numbers include incomplete conceptual contracts and are **not** the planning-completeness numerator.
+Baseline evidence was the inherited ledger and OpenAPI: 62 body operations, 24 typed request schemas, 16 request examples, 22 concrete success DTOs/examples. The current spec has typed request DTOs and examples for every body operation and concrete success DTOs/examples for all 119 JSON-success operations; the other three operations are bodyless DELETE 204 responses. Those structural numbers include incomplete conceptual contracts and are **not** the planning-completeness numerator.
+
+The unified-authentication rework started from **97/107 complete proposed**, with 0 approved. API-089/090 now have concrete durable proof/replay persistence designs, making the original cohort 99/107; 15 additional Identity proposals yield 114/122. The zero numerator in the historical baseline column predates that earlier contract-planning work.
 
 ## Counting rule
 
@@ -24,9 +26,9 @@ Unknown external wire payload, missing persistence for a required contract conce
 
 | Module | Existing operations | Complete proposed | Incomplete | Approval |
 | --- | --- | --- | --- | --- |
-| Admin_CMS | 7 | 7 | 0 | 0 approved |
+| Admin_CMS | 12 | 12 | 0 | 0 approved |
 | Audit | 2 | 2 | 0 | 0 approved |
-| Authentication_Access | 5 | 3 | 2 | 0 approved |
+| Authentication_Access | 15 | 15 | 0 | 0 approved |
 | Cart_Checkout | 4 | 4 | 0 | 0 approved |
 | Customer_Accounts | 19 | 18 | 1 | 0 approved |
 | Customer_Orders | 7 | 7 | 0 | 0 approved |
@@ -55,8 +57,6 @@ Unknown external wire payload, missing persistence for a required contract conce
 | [API-076](../03-Modules/Payments/APIs.md) | `POST /v1/webhooks/cashfree` | D-016: signature header names, wire schema, canonicalization and acknowledgment status are unknown. Conceptual DTO is explicitly not a provider wire contract. | Finance_Payments; Security/provider/Finance where referenced |
 | [API-079](../03-Modules/Payments/APIs.md) | `GET /v1/admin/finance/settlements` | D-008/D-016: settle-vs-reconcile dataset definition and provider report layout need Finance approval. | Finance_Payments; Security/provider/Finance where referenced |
 | [API-080](../03-Modules/Payments/APIs.md) | `POST /v1/admin/finance/cod-reconciliation` | D-007/D-008: exact handover/deposit evidence and independent approval model are missing. | Finance_Payments; Security/provider/Finance where referenced |
-| [API-089](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/login` | D-003: challenge replay prevention and exact MFA enrollment/recovery/session-limits policy require reviewed persistence/credential design. | Authentication_Access; Security/provider/Finance where referenced |
-| [API-090](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/mfa/verify` | D-003: exact single-use authenticator/challenge persistence is absent in schema documentation. | Authentication_Access; Security/provider/Finance where referenced |
 
 ## Operation-level ledger
 
@@ -151,8 +151,8 @@ Unknown external wire payload, missing persistence for a required contract conce
 | [API-086](../03-Modules/Reporting/APIs.md) | `POST /v1/admin/reports/exports` | ReportExportRequest | ReportRunData / 202 | Complete proposed | Unapproved / Not Implemented |
 | [API-087](../03-Modules/Audit/APIs.md) | `GET /v1/admin/audit/events` | No request body | AuditListData / 200 | Complete proposed | Unapproved / Not Implemented |
 | [API-088](../03-Modules/Audit/APIs.md) | `POST /v1/admin/audit/exports` | AuditExportRequest | ReportRunData / 202 | Complete proposed | Unapproved / Not Implemented |
-| [API-089](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/login` | StaffLoginRequest | StaffChallengeData / 200 | Incomplete | Unapproved / Not Implemented |
-| [API-090](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/mfa/verify` | StaffMfaRequest | SessionData / 200 | Incomplete | Unapproved / Not Implemented |
+| [API-089](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/login` | StaffLoginRequest | StaffChallengeData / 200 | Complete proposed | Unapproved / Not Implemented |
+| [API-090](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/staff/mfa/verify` | StaffMfaRequest | SessionData / 200 | Complete proposed | Unapproved / Not Implemented |
 | [API-091](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/sessions/refresh` | SessionRefreshRequest | SessionData / 200 | Complete proposed | Unapproved / Not Implemented |
 | [API-092](../03-Modules/Authentication/APIs.md) | `POST /v1/auth/sessions/revoke` | SessionRevocationRequest | SessionRevocationData / 200 | Complete proposed | Unapproved / Not Implemented |
 | [API-093](../03-Modules/Authentication/APIs.md) | `GET /v1/auth/permissions` | No request body | EffectivePermissionListData / 200 | Complete proposed | Unapproved / Not Implemented |
@@ -170,6 +170,27 @@ Unknown external wire payload, missing persistence for a required contract conce
 | [ACC-ROUTE-009](../03-Modules/Customer-Accounts/APIs.md) | `POST /v1/me/wishlist/items` | WishlistItemCreate | WishlistItemData / 201 | Complete proposed | Unapproved / Not Implemented |
 | [ACC-ROUTE-010](../03-Modules/Customer-Accounts/APIs.md) | `DELETE /v1/me/wishlist/items/{itemId}` | No request body | No response body / 204 | Complete proposed | Unapproved / Not Implemented |
 
+| API | Route | Request | Success | Planning | Approval / implementation |
+| --- | --- | --- | --- | --- | --- |
+| API-098 | `POST /v1/auth/login/initiate` | Typed operation DTO / example | 202 | Complete proposed | Unapproved / Not Implemented |
+| API-099 | `POST /v1/auth/login/verify` | Typed operation DTO / example | 200 | Complete proposed | Unapproved / Not Implemented |
+| API-100 | `GET /v1/auth/identity` | No request body | 200 | Complete proposed | Unapproved / Not Implemented |
+| API-101 | `GET /v1/auth/workspaces` | No request body | 200 | Complete proposed | Unapproved / Not Implemented |
+| API-102 | `POST /v1/auth/context` | Typed operation DTO / example | 200 | Complete proposed | Unapproved / Not Implemented |
+| API-103 | `POST /v1/auth/step-up` | Typed operation DTO / example | 200 | Complete proposed | Unapproved / Not Implemented |
+| API-104 | `POST /v1/auth/mfa/enrollment` | Typed operation DTO / example | 200 | Complete proposed | Unapproved / Not Implemented |
+| API-105 | `POST /v1/auth/credentials/password` | Typed operation DTO / example | 200 | Complete proposed | Unapproved / Not Implemented |
+| API-106 | `POST /v1/auth/recovery/request` | Typed operation DTO / example | 202 | Complete proposed | Unapproved / Not Implemented |
+| API-107 | `POST /v1/auth/recovery/complete` | Typed operation DTO / example | 200 | Complete proposed | Unapproved / Not Implemented |
+| API-108 | `PUT /v1/admin/roles/{role_id}/permissions` | Typed operation DTO / example | 200 | Complete proposed | Unapproved / Not Implemented |
+| API-109 | `POST /v1/admin/users/{user_id}/role-assignments` | Typed operation DTO / example | 201 | Complete proposed | Unapproved / Not Implemented |
+| API-110 | `PATCH /v1/admin/role-assignments/{assignment_id}` | Typed operation DTO / example | 200 | Complete proposed | Unapproved / Not Implemented |
+
+| API | Route | Request | Success | Planning | Approval / implementation |
+| --- | --- | --- | --- | --- | --- |
+| API-111 | `GET /v1/admin/roles/{role_id}/permissions` | No request body | Typed role/assignment DTO / 200 | Complete proposed | Unapproved / Not Implemented |
+| API-112 | `GET /v1/admin/users/{user_id}/role-assignments` | No request body | Typed role/assignment DTO / 200 | Complete proposed | Unapproved / Not Implemented |
+
 ## Validation interpretation
 
-[Validation evidence](Planning-Validation.md) records actual commands, schema/example/link/column checks and limits. The repository API validator audits structural DTO coverage; it does not read every `x-documentation-status` blocker and cannot establish semantic planning completion or approval. A passing structural strict mode does not promote the ten explicit exclusions above. Provider-specific signature/acknowledgment evidence, target database parity and live tests remain unverified.
+[Validation evidence](Planning-Validation.md) records actual commands, schema/example/link/column checks and limits. The repository API validator audits structural DTO coverage; it does not read every `x-documentation-status` blocker and cannot establish semantic planning completion or approval. A passing structural strict mode does not promote the eight explicit exclusions above. Provider-specific signature/acknowledgment evidence, provider/runtime behavior and live application tests remain unverified; isolated schema parity is verified.

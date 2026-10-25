@@ -53,7 +53,9 @@ The declared business owner above supersedes generic schema-membership guesses. 
 
 ### Dependent tables
 
-No inbound FK is present in the validated catalog.
+| Referencing table | Constraint | Local columns | Referenced columns |
+| --- | --- | --- | --- |
+| [`identity.authentication_challenges`](../../Tables/identity/authentication_challenges.md) | authentication_challenges_otp_challenge_id_fkey | `otp_challenge_id` | `id` |
 
 ## `identity.otp_challenges` — exact structural contracts
 

@@ -64,3 +64,8 @@ Technical workflows: [WF-001](../06-Workflows/WF-001-Identity-and-Session.md).
 Feature references: `ACC-01`, `ACC-02`, `ACC-03`, `ACC-04`, `ACC-05`, `ACC-06`, `ACC-07`, `AUTH-01`, `AUTH-02`, `AUTH-03`, `AUTH-04`.
 
 [Business Guide](README.md) · [Complete journey](Pharmville-Complete-Business-Flow.md)
+
+
+## Unified identity and workspace access
+
+**Proposed / Unapproved / Not Implemented — D-003/D-024/D-028.** [Unified Identity policy](../03-Modules/Authentication/Unified-Identity-Architecture.md) is the canonical authentication, scoped authorization, context-switch, step-up and revocation design. [Role/workspace matrix](../01-Project/User-Roles.md) defines proposed defaults without granting permissions. Customer and Rider phone OTP and AUTH-01 password/authenticator requirements remain. Account, role and panel are separate: menus and client role strings never authorize an API. No grant means account access only; suspension/expiry deny protected operations. Existing service identities/provider signatures remain separate trust types.

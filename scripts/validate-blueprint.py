@@ -17,6 +17,7 @@ def main():
   for name in ['README.md','Business-Flow.md','HLD.md','LLD.md','APIs.md','Database.md','Operations.md','Edge-Cases.md','Dependencies.md']:check((ROOT/'03-Modules'/m['directory']/name).is_file(),f"{m['id']}: missing {name}")
  spec=yaml.safe_load((ROOT/'05-APIs/openapi.yaml').read_text());ops=[(p,v,o)for p,x in spec['paths'].items()for v,o in x.items()if v in ['get','post','put','patch','delete']]
  before=json.loads((ROOT/'09-References/Architecture-Rework-API-Baseline.json').read_text());identity=lambda x:(x['method'],x['path'],x['operationId'],x['id'])
+ proposals=json.loads((ROOT/'09-References/Unified-Authentication-API-Proposals.json').read_text());before=before+proposals
  actual=[{'method':v,'path':p,'operationId':o['operationId'],'id':o['x-api-id']}for p,v,o in ops];check({identity(x)for x in actual}=={identity(x)for x in before},'Existing API inventory changed')
  owned=json.loads((ROOT/'04-Database/Ownership-and-Scope.json').read_text());tables=json.loads((ROOT/'04-Database/Table-Register.json').read_text());check(set(owned)==set(tables),'Table ownership is incomplete')
  masters={t for t,d in owned.items()if d['classification']=='Master / Reference'};check(len(masters)==44,'Master inventory count changed without reconciliation')

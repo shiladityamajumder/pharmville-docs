@@ -49,7 +49,7 @@ All routes below are **Proposed REST v1 contracts**. The database repository doe
 
 Writes require validated body, stable intent key, expected current version when appropriate, auditable actor identity and an explicit outcome. Reads use safe pagination and permission-filtered fields. `401` indicates no valid session; `403/404` denied scope; `409` conflict; `422` business validation; `503` unknown upstream outcome. Read [api conventions](../../05-APIs/README.md) before implementing the endpoint.
 
-**Business gate:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
+**Business gate:** One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity. For actual response fields, see the linked illustrative contract and approve a typed OpenAPI schema before implementation.
 
 ## Authentication & Authorization — business logic and invariants
 
@@ -60,7 +60,7 @@ Writes require validated body, stable intent key, expected current version when 
 1. Authenticate the actor and resolve server-owned tenant/location/patient permission.
 2. Re-read the relevant product, order, document, stock or ledger state from the owning tables.
 3. Reject incomplete or stale input; validate the latest accepted revision and current classification where relevant.
-4. Apply the module invariant: **OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.**
+4. Apply the module invariant: **One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity.**
 5. In a transaction, persist the minimal authoritative rows, version and audit outcome; publish notifications after commit.
 6. Return a scoped read model; expose only approved information to the caller.
 
@@ -96,7 +96,7 @@ Unknown business thresholds (expiry freshness, COD cap, review deadlines, refund
 
 ### Boundaries
 
-OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`.
+One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity. Public controllers must not call database workflow functions with arbitrary SQL and must not accept a caller-supplied `actor_user_id`.
 
 Network IO belongs outside long-lived locks. Modules should depend on domain interfaces, not on each other's ORM entities. Consult Dependencies and [architecture overview](../../02-Architecture/System-HLD.md).
 
@@ -123,7 +123,7 @@ Proposed owning service: `Authentication_Access`. Main read concerns: otp, privi
 
 Use one transaction per domain state transition, use an outbox for reliable cross-module publication, and make any external retry idempotent.
 
-**Safety:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.
+**Safety:** One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity.
 
 Internal ID strategy: `identity.users.id` is UUID; most other tables have BIGINT internal PK with original immutable UUID alias. Never cast UUID to BIGINT or expose DB internal IDs as authorization tokens. All schema changes require new forward-only SQL migration under the source repo and a fresh PG15/PG18 parity test. Related [migration strategy](../../04-Database/Migrations.md).
 
@@ -146,7 +146,7 @@ Use the owning service interface for business changes rather than making uncontr
 
 Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; failures must remain visible.
 
-**Data-access contract:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
+**Data-access contract:** One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity.. Related: [module dependencies](../../02-Architecture/Module-Dependencies.md) and [database usage](../../04-Database/Module-Mapping.md).
 
 ## Authentication & Authorization — domain objects and DTO boundaries
 
@@ -156,7 +156,7 @@ Build independent adapters for Cashfree, POS/Techsmith, MSG91 and driver APIs; f
 | --- | --- | --- |
 | `Authentication_AccessCommand` | Authenticated HTTP request and expected version | Includes actor context, idempotency key and validated business input |
 | `Authentication_AccessAggregate` | Domain rows listed in Database Usage | Represents the current authoritative business facts |
-| `Authentication_AccessPolicy` | Approved master/role records and product rules | OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. |
+| `Authentication_AccessPolicy` | Approved master/role records and product rules | One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity. |
 | `Authentication_AccessReadModel` | Role-filtered current state | Removes protected fields and translates internal statuses |
 | `Authentication_AccessEvent` | Committed state transition and audit ID | Events carry references and versions, not clinical documents |
 
@@ -166,7 +166,7 @@ Any DTO field not directly supported by a confirmed column must be labelled prop
 
 ## Authentication & Authorization — failure handling
 
-**Primary rule:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.
+**Primary rule:** One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity.
 
 - **Missing or invalid input:** respond with a field-specific problem code; do not leak sensitive data and do not write partial state.
 - **Unauthorized object or location:** return `403` or privacy-safe `404`; record the attempted privileged action.
@@ -265,7 +265,7 @@ HLD · States · Permissions
 | Override / refund / pharmacist action | Specialized staff permission and documented approval reason | Distinct privilege, immutable audit evidence |
 | Export / sensitive view | Purpose-limited role, retention and access logging | Recheck at download/stream time |
 
-**Core constraint:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. A customer cannot infer another customer's resource existence.
+**Core constraint:** One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity. A customer cannot infer another customer's resource existence.
 
 Do not connect app runtime through migration-owner credentials. Consult [roles and permissions](../../07-Engineering/Security.md).
 
@@ -284,7 +284,7 @@ Do not connect app runtime through migration-owner credentials. Consult [roles a
 
 ### Interactions and acceptance basis
 
-The user performs: OTP login; validate session; require scope; revoke token. Server-side enforcement must preserve this invariant: **OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.**
+The user performs: OTP login; validate session; require scope; revoke token. Server-side enforcement must preserve this invariant: **One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity.**
 
 A feature becomes implementation-ready only after its inputs (especially any dependency listed above), permissions, workflow outcome, API body and database transaction are resolved. Confirm business thresholds before coding: a field existing in SQL is not proof that its value was approved.
 
@@ -326,7 +326,7 @@ sequenceDiagram
 
 For each mutation: authenticate actor, validate inputs, read affected rows with a lock/version check, verify policy, update the minimum relevant rows and immutable audit/outbox in one transaction. A remote gateway, storage or GPS call should be performed outside the locked transaction and reconciled on callback/timeout. Use PostgreSQL to reject invalid writes even if application validation is bypassed.
 
-**Module invariant:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.
+**Module invariant:** One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity.
 
 **Timeouts/retries:** configure per provider, use exponential backoff with caps for safe reads and idempotent messages; never blindly repeat charge/refund/cash state changes. A dead-letter queue is an optional BullMQ operating pattern because BullMQ/Redis are selected in the checklist, but exact job topology needs signoff.
 
@@ -344,7 +344,7 @@ flowchart TD
   D --> E["Committed scoped session"]
 ```
 
-**Module-specific invariant:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.
+**Module-specific invariant:** One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity.
 
 Each transition must record the prior state, target state, reason where required, actor, accepted version and timestamp. A second command on the same state must either replay the prior idempotent result or fail with `409`. A failed external callback cannot roll an accepted state backward; reconcile with authoritative provider evidence.
 
@@ -373,7 +373,7 @@ This flow shows command gates, not an entity enum. Legal entity transitions and 
 - Verify concurrency and duplicate idempotency behavior against an isolated PostgreSQL database installed from the canonical SQL.
 - Verify safe retry when callbacks or files arrive late or malformed.
 - Verify audit and notification records are based on committed state and contain no confidential payloads.
-- Verify this invariant: **OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.**
+- Verify this invariant: **One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity.**
 
 Coverage state: **Designed, not executed for the proposed application**. Link individual results to the associated test ID and requirement before go-live. Read [test strategy](../../07-Engineering/Testing.md).
 
@@ -384,7 +384,7 @@ Coverage state: **Designed, not executed for the proposed application**. Link in
 | Input | Required fields, type, size, allowed format and business master codes | `400/422`; no write |
 | Actor | Session validity, role, location, customer/patient/parcel ownership | `401/403/404`; audit |
 | Version | Accepted order revision or row version matches, if state-changing | `409`; fetch current state |
-| Domain | OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime. | Explicit blocked/pending/error status |
+| Domain | One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity. | Explicit blocked/pending/error status |
 | Database | FK, PK, UNIQUE, CHECK, trigger and RLS outcome | Safe conflict/business error; rollback |
 | Integration | Authenticated provider/callback, idempotency key and settled evidence | Keep pending; reconciliation task |
 
@@ -404,6 +404,11 @@ The requested action is first validated against user scope, current state and ap
 
 **Alternative paths:** missing required input keeps the process actionable; a stale or duplicate request is deduplicated; another actor's update returns a version conflict; external unavailability produces a pending/blocked state. Prescriptions, inventory, payments and logistics never independently set the whole order to delivered.
 
-**Module-specific rule:** OTP for routine identities, password plus TOTP for privileged staff where decided; session lock/revocation and location roles checked by every service. Do not use the migration owner in application runtime.
+**Module-specific rule:** One Identity preserves Customer/Rider OTP and AUTH-01 password plus TOTP. Proposed staff defaults require D-003 approval; every service enforces live session, grant and scope checks. The installation owner is not a runtime identity.
 
 See [state transitions](../../07-Engineering/State-and-Recovery-Contracts.md) and [unified order](../../00-Business-Guide/Pharmville-Complete-Business-Flow.md).
+
+
+## Unified command algorithms
+
+**Proposed / Unapproved / Not Implemented.** Login resolves identifier syntax privately, creates durable proof state and consumes a locked challenge once. Password-to-TOTP successor creation is atomic. Factor proof advances a locked counter strictly; refresh consumes one hash and creates one child, retaining spent hashes. Context selection rechecks signed selector binding plus current grant/scope/method freshness and compares ctx ETag before advancing generation. Revocation serializes with protected mutations. Exact fields, DTOs, errors and designed tests are in [contracts](APIs.md); [persistence invariants](../../04-Database/Identity-Authentication-Assessment.md) distinguish SQL constraints from command checks.

@@ -21,3 +21,8 @@ D-003; D-023; D-024. See the [business decision register](../../09-References/So
 | Runtime/provider/application evidence | Not executed; schema-only parity is independently validated |
 
 [Journey gaps](../../05-APIs/Journey-API-Gaps.md) preserve proposed missing commands without expanding the 107-operation denominator. No provider, financial or clinical dependency is implicitly approved.
+
+
+## Unified IAM approval dependencies
+
+**Proposed / Unapproved / Not Implemented.** Security/Product own D-003 strength, single-session interpretation, bootstrap/recovery and abuse budgets; Customer Accounts/Security own D-023 contact replacement; Tech lead/module owners/QA own D-024 contracts and runtime permissions; Security/DBA/Product own D-028 persistence, context policy and additional API approval. Rider OTP, P/M/O clinical review and delivery evidence rules remain unchanged. [Compatibility](API-Compatibility.md) defines client migration without runtime deprecation.
